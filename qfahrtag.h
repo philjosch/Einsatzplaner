@@ -15,11 +15,11 @@ private:
     int Art;
     bool Wichtig;
     QString Anlass;
-    QString Wagen;
-    QString Tf;
-    QString Zf;
-    QString Zub;
-    QString Service;
+    QString wagen;
+    QList<QString> *Tf;
+    QList<QString> *Zf;
+    QList<QString> *Zub;
+    QList<QString> *Service;
     QTime ZeitTf;
     QTime ZeitZ;
     QString Reservierungen;
@@ -33,13 +33,14 @@ public slots:
     int getArt();
     bool getWichtig();
     QString getAnlass();
-    // Get Wagenreihung
-    QString getTextTf();
-    QString getTextZf();
-    QString getTextZub();
-    QString getTextService();
+    QString getWagenreihung();
     QTime getTimeTf();
     QTime getTimeZ();
+
+    QList<QString>* getTf();
+    QList<QString>* getZf();
+    QList<QString>* getZub();
+    QList<QString>* getService();
     QString getReservierungen();
     QString getBemerkungen();
 
@@ -50,13 +51,14 @@ public slots:
     void setArt(int art);
     void setWichtig(bool wichtig);
     void setAnlass(QString anlass);
-    // Set Wagenreihung
-    void setTextTf(QString text);
-    void setTextZf(QString text);
-    void setTextZub(QString text);
-    void setTextService(QString text);
+    void setWagenreihung(QString wagenreihung);
     void setTimeTf(QTime zeit);
     void setTimeZ(QTime zeit);
+
+    void setTf(QList<QString> *text);
+    void setZf(QList<QString> *text);
+    void setZub(QList<QString> *text);
+    void setService(QList<QString> *text);
     void setTextReservierungen(QString text);
     void setTextBemerkungen(QString text);
 

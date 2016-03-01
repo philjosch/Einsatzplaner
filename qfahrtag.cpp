@@ -4,10 +4,16 @@
 QFahrtag::QFahrtag()
 {
     Datum = QDate::currentDate();
+    ZeitTf = QTime::fromString("08:00", "hh:mm");
+    ZeitZ = QTime::fromString("08:00", "hh:mm");
     Art = 0;
     Wichtig = false;
+    wagen = "";
     QString Anlass = "";
-
+    Tf = new QList<QString>();
+    Zf = new QList<QString>();
+    Zub = new QList<QString>();
+    Service = new QList<QString>();
 }
 
 QFahrtag::~QFahrtag()
@@ -38,22 +44,27 @@ QString QFahrtag::getAnlass()
     return(Anlass);
 }
 
-QString QFahrtag::getTextTf()
+QString QFahrtag::getWagenreihung()
+{
+    return(wagen);
+}
+
+QList<QString> *QFahrtag::getTf()
 {
     return(Tf);
 }
 
-QString QFahrtag::getTextZf()
+QList<QString> *QFahrtag::getZf()
 {
     return(Zf);
 }
 
-QString QFahrtag::getTextZub()
+QList<QString> *QFahrtag::getZub()
 {
     return(Zub);
 }
 
-QString QFahrtag::getTextService()
+QList<QString> *QFahrtag::getService()
 {
     return(Service);
 }
@@ -100,22 +111,27 @@ void QFahrtag::setAnlass(QString anlass)
     Anlass = anlass;
 }
 
-void QFahrtag::setTextTf(QString text)
+void QFahrtag::setWagenreihung(QString wagenreihung)
+{
+    wagen = wagenreihung;
+}
+
+void QFahrtag::setTf(QList<QString> *text)
 {
     Tf = text;
 }
 
-void QFahrtag::setTextZf(QString text)
+void QFahrtag::setZf(QList<QString> *text)
 {
     Zf = text;
 }
 
-void QFahrtag::setTextZub(QString text)
+void QFahrtag::setZub(QList<QString> *text)
 {
     Zub = text;
 }
 
-void QFahrtag::setTextService(QString text)
+void QFahrtag::setService(QList<QString> *text)
 {
     Service = text;
 }
@@ -123,4 +139,9 @@ void QFahrtag::setTextService(QString text)
 void QFahrtag::setTimeTf(QTime zeit)
 {
     ZeitTf = zeit;
+}
+
+void QFahrtag::setTimeZ(QTime zeit)
+{
+    ZeitZ = zeit;
 }
