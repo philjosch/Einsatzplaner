@@ -60,7 +60,7 @@ public slots:
     void setZub(QList<QString> *text);
     void setService(QList<QString> *text);
     void setTextReservierungen(QString text);
-    void setTextBemerkungen(QString text);
+    void setBemerkungen(QString text);
 
 };
 

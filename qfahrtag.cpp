@@ -145,3 +145,7 @@ void QFahrtag::setTimeZ(QTime zeit)
 {
     ZeitZ = zeit;
 }
+void QFahrtag::setBemerkungen(QString text)
+{
+    Bemerkungen = text;
+}

@@ -13,12 +13,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
     export.cpp \
     qfahrtag.cpp \
-    planerfahrtage.cpp
+    planerfahrtage.cpp \
+    manager.cpp
 
 HEADERS  += \
     export.h \
     qfahrtag.h \
-    planerfahrtage.h
+    planerfahrtage.h \
+    manager.h
 
 FORMS    += \
     export.ui \
@@ -30,7 +32,10 @@ DISTFILES += \
     Info.plist
 
 
-#macx {
+macx {
+    QMAKE_INFO_PLIST = Info.plist
+}
+
 #    # Name of the application signing certificate
 #    APPCERT = "3rd Party Mac Developer Application: <yourcompany>"
 
@@ -79,5 +84,5 @@ DISTFILES += \
 #    product.commands += productbuild –component $${TARGET}.app /Applications –sign $${INSTALLERCERT} $${TARGET}.pkg;
 
 #    QMAKE_EXTRA_TARGETS += codesign product copyfiles
-#}
+
 

@@ -1,6 +1,7 @@
 #include "planerfahrtage.h"
-#include "ui_mainwindow.h"
+#include "ui_planerfahrtage.h"
 #include <QMessageBox>
+#include <QFileDialog>
 #include "export.h"
 #include "qfahrtag.h"
 #include <QListWidgetItem>
@@ -12,13 +13,16 @@ PlanerFahrtage::PlanerFahrtage(QWidget *parent) :
     ui(new Ui::PlanerFahrtage)
 {
     ui->setupUi(this);
-    saved = false;
+    fahrplanManager = new Manager(ui->ListeZuege);
+    path = "";
+    saved = true;
     uebernehmen = false;
 //    connect(ui->ListeZuege, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(bearbeiten(QListWidgetItem*)));
-//    connect(ui->TextAnlass, SIGNAL(textChanged(QString)), this, SLOT(unSichern()));
 
     Farben << QColor(255, 255, 255) << QColor(205,92,92) << QColor(238,130,238) << QColor(211, 211, 211) << QColor(154, 205, 50) << QColor(255, 165, 0) << QColor(135, 206, 250);
 
+    changeSizeOfTableReservierungen();
+    this->update();
 }
 
 PlanerFahrtage::~PlanerFahrtage()
@@ -26,8 +30,43 @@ PlanerFahrtage::~PlanerFahrtage()
     delete ui;
 }
 
+void PlanerFahrtage::on_actionQuit_triggered() {
+    if (! saved) {
+        int answ = QMessageBox::question(this, tr("Beenden?"), tr("Möchten Sie das Prgramm wirklich beenden? Die Ungesicherteren Information gehen verloren!"), QMessageBox::Close, QMessageBox::Save);
+        if (answ == QMessageBox::Save) {
+            speichern();
+        } else if (answ == QMessageBox::Close) {
+            saved = true;
+        }
+    }
+    if (saved) {
+        close();
+    }
+}
+void PlanerFahrtage::speichern() {
+    if (path == "") {
+        speichernUnter();
+    }
+    if (path != "") {
+        saved = true;
+    }
+}
+void PlanerFahrtage::speichernUnter() {
+    path = QFileDialog::getSaveFileName(this, tr("Speichern unter..."), "Einsatzplan.ako", tr("AkO-Dateien (*.ako)"));
+}
+
+
+void PlanerFahrtage::on_actionAbout_triggered() {
+    QMessageBox::information(this, "Info", "Keine Informationen zu Einsatzplaner gefunden!", QMessageBox::Abort);
+}
+void PlanerFahrtage::on_actionPreferences_triggered() {
+    QMessageBox::information(this, "Info", "Es gibt noch keine Einstellungen!", QMessageBox::Abort);
+}
+
+
 void PlanerFahrtage::createEmptyForm() {
     // Listen und Formulare leeren
+    // Rahmendaten
     ui->dateZug->setDate(QDate::currentDate());
     ui->comboArt->setCurrentIndex(-1);
     ui->textAnlass->clear();
@@ -37,10 +76,19 @@ void PlanerFahrtage::createEmptyForm() {
     ui->comboTimeTfM->setCurrentIndex(0);
     ui->comboTimeZH->setCurrentIndex(3);
     ui->comboTimeZM->setCurrentIndex(0);
+
+    // Fahrplan
+    // ¡Empty!
+
+    // Personal
     ui->listTf->clear();
     ui->listZf->clear();
     ui->listZub->clear();
     ui->listService->clear();
+    ui->textBemerkungen->clear();
+
+    // Reservierungen
+    ui->tableReservierungen->setRowCount(0);
 
 
     // Listen und Formulare mit Standard Werten füllen
@@ -54,12 +102,15 @@ void PlanerFahrtage::createEmptyForm() {
 
 void PlanerFahrtage::on_ButtonAdd_clicked ()
 {
-    QFahrtag *neu_Fahrtag = new QFahrtag();
-    QListWidgetItem *neu_Feld = new QListWidgetItem();
-    neu_Feld->setText(neu_Fahrtag->getDatum().toString("dddd d. M. yyyy"));
-    ui->ListeZuege->addItem(neu_Feld);
-    Fahrtage.insert(neu_Feld, neu_Fahrtag);
 
+    QFahrtag *neuerFahrtag = new QFahrtag();
+    QListWidgetItem *neuesFeld = new QListWidgetItem();
+    neuesFeld->setText(neuerFahrtag->getDatum().toString("dddd d. M. yyyy"));
+    ui->ListeZuege->addItem(neuesFeld);
+//    Fahrtage.insert(neu_Feld, neu_Fahrtag);
+    fahrplanManager->addFahrtag(neuerFahrtag, neuesFeld);
+
+    saved = false;
     aktualisieren();
 }
 void PlanerFahrtage::on_ListeZuege_itemClicked(QListWidgetItem *item)
@@ -72,7 +123,6 @@ void PlanerFahrtage::on_ListeZuege_itemDoubleClicked(QListWidgetItem *item)
     setState(true);
     ZugSichern();
     aktuellerZug = NULL;
-    createEmptyForm();
     ZugLaden(item);
     uebernehmen = true;
 
@@ -80,11 +130,11 @@ void PlanerFahrtage::on_ListeZuege_itemDoubleClicked(QListWidgetItem *item)
 
 void PlanerFahrtage::ZugLaden(QListWidgetItem* zug) {
     aktuellerZug = zug;
-
-    QFahrtag *akt = Fahrtage[zug];
-
+//    QFahrtag *akt = Fahrtage[zug];
+    createEmptyForm();
+    QFahrtag *akt = fahrplanManager->getFahrtag(zug);
+    // Rahmendaten
     ui->dateZug->setDate(akt->getDatum());
-    ui->textAnlass->clear();
     ui->textAnlass->insertPlainText(akt->getAnlass());
     ui->comboArt->setCurrentIndex(akt->getArt());
     ui->checkWichtig->setChecked(akt->getWichtig());
@@ -94,84 +144,133 @@ void PlanerFahrtage::ZugLaden(QListWidgetItem* zug) {
     ui->comboTimeZH->setCurrentText(akt->getTimeZ().toString("hh"));
     ui->comboTimeZM->setCurrentText(akt->getTimeZ().toString("mm"));
 
+    // Fahrplan
+    // ¡Empty!
 
+    // Peronal
     if (akt->getTf()->size() > 0) {
         ui->listTf->clear();
         ui->listTf->addItems(QStringList(*akt->getTf()));
+        for(int i = 0; i < ui->listTf->count(); i++) {
+            ui->listTf->item(i)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
+        }
     }
     if (akt->getZf()->size() > 0) {
         ui->listZf->clear();
         ui->listZf->addItems(QStringList(*akt->getZf()));
+        for(int i = 0; i < ui->listTf->count(); i++) {
+            ui->listZf->item(i)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
+        }
     }
     if (akt->getZub()->size() > 0) {
         ui->listZub->clear();
         ui->listZub->addItems(QStringList(*akt->getZub()));
+        for(int i = 0; i < ui->listTf->count(); i++) {
+            ui->listZub->item(i)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
+        }
     }
     if (akt->getService()->size() > 0) {
         ui->listService->clear();
         ui->listService->addItems(QStringList(*akt->getService()));
+        for(int i = 0; i < ui->listTf->count(); i++) {
+            ui->listService->item(i)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
+        }
     }
+
+    // Reservierungen
+//    ui->tableReservierungen->
     uebernehmen = true;
     aktualisieren();
 }
 
-void PlanerFahrtage::ZugSichern()
-{
+
+void PlanerFahrtage::saveRahmendaten() {
     if (uebernehmen) {
-    QFahrtag *akt = Fahrtage[aktuellerZug];
+//        QFahrtag *akt = Fahrtage[aktuellerZug];
+        QFahrtag *akt = fahrplanManager->getFahrtag(aktuellerZug);
+        akt->setDatum(ui->dateZug->date());
+        akt->setArt(ui->comboArt->currentIndex());
+        akt->setAnlass(ui->textAnlass->toPlainText());
+        akt->setWichtig(ui->checkWichtig->isChecked());
+        akt->setWagenreihung(ui->comboWagenreihung->currentText());
+        akt->setTimeTf(QTime::fromString(ui->comboTimeTfH->currentText()+":"+ui->comboTimeTfM->currentText(), "hh:mm"));
+        akt->setTimeZ(QTime::fromString(ui->comboTimeZH->currentText()+":"+ui->comboTimeZM->currentText(), "hh:mm"));
+        saved = false;
 
-    akt->setDatum(ui->dateZug->date());
-    akt->setArt(ui->comboArt->currentIndex());
-    akt->setAnlass(ui->textAnlass->toPlainText());
-    akt->setWichtig(ui->checkWichtig->isChecked());
-    akt->setWagenreihung(ui->comboWagenreihung->currentText());
-    akt->setTimeTf(QTime::fromString(ui->comboTimeTfH->currentText()+":"+ui->comboTimeTfM->currentText(), "hh:mm"));
-    akt->setTimeZ(QTime::fromString(ui->comboTimeZH->currentText()+":"+ui->comboTimeZM->currentText(), "hh:mm"));
+        QListWidgetItem *item = fahrplanManager->getListItem(akt);
+        item->setText(akt->getDatum().toString("dddd d. M. yyyy") + (akt->getWichtig() ? " WICHTIG!" : ""));
+        item->setBackgroundColor(Farben.at(akt->getArt()));
+        fahrplanManager->updateFahrtag(akt);
+        ui->ListeZuege->setCurrentItem(item);
 
-    QList<QString>* tf = new QList<QString>();
-    for(int i = 0; i < ui->listTf->count(); i++) {
-        tf->append(ui->listTf->item(i)->text());
-    }
-    akt->setTf(tf);
-    QList<QString>* zf = new QList<QString>();
-    for(int i = 0; i < ui->listZf->count(); i++) {
-        zf->append(ui->listZf->item(i)->text());
-    }
-    akt->setZf(zf);
-    QList<QString>* zub = new QList<QString>();
-    for(int i = 0; i < ui->listZub->count(); i++) {
-        zub->append(ui->listZub->item(i)->text());
-    }
-    akt->setZub(zub);
-    QList<QString>* service = new QList<QString>();
-    for(int i = 0; i < ui->listService->count(); i++) {
-        service->append(ui->listService->item(i)->text());
-    }
-    akt->setService(service);
-
-    aktualisieren();
-
+//        aktualisieren();
     }
 }
 
-void PlanerFahrtage::aktualisieren()
-{
-
+void PlanerFahrtage::saveFahrplan() {
     if (uebernehmen) {
-    foreach(QListWidgetItem *zug, Fahrtage.keys()) {
-
-        QFahrtag *akt = Fahrtage[zug];
-        zug->setText(akt->getDatum().toString("dddd d. M. yyyy"));
-        zug->setBackgroundColor(Farben.at(akt->getArt()));
-
+        saved = false;
+        aktualisieren();
     }
-    ui->ListeZuege->sortItems();
-    }
-
 }
 
-void PlanerFahrtage::setState(bool aktiv)
-{
+void PlanerFahrtage::savePersonal() {
+    if (uebernehmen) {
+//        QFahrtag *akt = Fahrtage[aktuellerZug];
+        QFahrtag *akt = fahrplanManager->getFahrtag(aktuellerZug);
+        // Liste mit Peronal Speichern
+        QList<QString>* tf = new QList<QString>();
+        for(int i = 0; i < ui->listTf->count(); i++) {
+            if (ui->listTf->item(i)->text() != "(Name eingeben)")
+                tf->append(ui->listTf->item(i)->text());
+        }
+        akt->setTf(tf);
+        QList<QString>* zf = new QList<QString>();
+        for(int i = 0; i < ui->listZf->count(); i++) {
+            if (ui->listZf->item(i)->text() != "(Name eingeben)")
+                zf->append(ui->listZf->item(i)->text());
+        }
+        akt->setZf(zf);
+        QList<QString>* zub = new QList<QString>();
+        for(int i = 0; i < ui->listZub->count(); i++) {
+            if (ui->listZub->item(i)->text() != "(Name eingeben)")
+                zub->append(ui->listZub->item(i)->text());
+        }
+        akt->setZub(zub);
+        QList<QString>* service = new QList<QString>();
+        for(int i = 0; i < ui->listService->count(); i++) {
+            if (ui->listService->item(i)->text() != "(Name eingeben)")
+                service->append(ui->listService->item(i)->text());
+        }
+        akt->setService(service);
+
+        akt->setBemerkungen(ui->textBemerkungen->toPlainText());
+        saved = false;
+        aktualisieren();
+    }
+}
+
+void PlanerFahrtage::saveReservierungen() {
+    if (uebernehmen) {
+//        QFahrtag *akt = Fahrtage[aktuellerZug];
+        QFahrtag *akt = fahrplanManager->getFahrtag(aktuellerZug);
+        saved = false;
+        aktualisieren();
+    }
+}
+
+void PlanerFahrtage::ZugSichern() {
+    if (uebernehmen) {
+        saveRahmendaten();
+        saveFahrplan();
+        savePersonal();
+        saveReservierungen();
+    }
+}
+
+void PlanerFahrtage::aktualisieren() { }
+
+void PlanerFahrtage::setState(bool aktiv) {
     /* Rahmendaten */
     ui->dateZug->setEnabled(aktiv);
     ui->comboArt->setEnabled(aktiv);
@@ -238,40 +337,44 @@ void PlanerFahrtage::on_toolButtonListServiceAdd_clicked() { addEmptyRowToListWi
 void PlanerFahrtage::on_toolButtonTableReservierungenDelete_clicked() {
     if (ui->tableReservierungen->rowCount() > 1) {
         ui->tableReservierungen->removeRow(ui->tableReservierungen->currentRow());
+        update();
+        changeSizeOfTableReservierungen();
     }
 }
-void PlanerFahrtage::on_toolButtonTableReservierungenAdd_clicked() { ui->tableReservierungen->insertRow(0); }
+void PlanerFahrtage::on_toolButtonTableReservierungenAdd_clicked() { ui->tableReservierungen->insertRow(0); update(); changeSizeOfTableReservierungen();}
 
 void PlanerFahrtage::changeSizeOfTableReservierungen() {
-    int width = ui->tableReservierungen->size().width();
-    ui->tableReservierungen->setColumnWidth(0, width * .22);
-    ui->tableReservierungen->setColumnWidth(1, width * .22);
-    ui->tableReservierungen->setColumnWidth(2, width * .22);
-    ui->tableReservierungen->setColumnWidth(3, width * .22);
+    int width = ui->tableReservierungen->size().width() - ui->tableReservierungen->verticalHeader()->width();
+    ui->tableReservierungen->setColumnWidth(0, width * .16);
+    ui->tableReservierungen->setColumnWidth(1, width * .16);
+    ui->tableReservierungen->setColumnWidth(2, width * .16);
+    ui->tableReservierungen->setColumnWidth(3, width * .16);
+    ui->tableReservierungen->setColumnWidth(4, width * .16);
+    ui->tableReservierungen->setColumnWidth(5, width * .16);
 }
 void PlanerFahrtage::resizeEvent(QResizeEvent *event) { changeSizeOfTableReservierungen(); }
 
-void PlanerFahrtage::on_comboTimeTfH_currentIndexChanged(int index) { ZugSichern(); }
-void PlanerFahrtage::on_comboTimeTfM_currentTextChanged(QString string) { ZugSichern(); }
-void PlanerFahrtage::on_comboTimeZH_currentIndexChanged(int index) { ZugSichern(); }
-void PlanerFahrtage::on_comboTimeZM_currentTextChanged(QString string) { ZugSichern(); }
-void PlanerFahrtage::on_comboArt_currentIndexChanged(int index) { ZugSichern(); }
-void PlanerFahrtage::on_comboWagenreihung_currentTextChanged(QString string) { ZugSichern(); }
+// Sichern der Daten, wenn Eingaben verändert wurden
+void PlanerFahrtage::on_dateZug_dateChanged(const QDate &date) { saveRahmendaten(); }
+void PlanerFahrtage::on_comboArt_currentIndexChanged(int index) { saveRahmendaten(); }
+void PlanerFahrtage::on_textAnlass_textChanged() { saveRahmendaten(); }
+void PlanerFahrtage::on_checkWichtig_stateChanged(int arg1) { saveRahmendaten(); }
+void PlanerFahrtage::on_comboWagenreihung_currentTextChanged(QString string) { saveRahmendaten(); }
+void PlanerFahrtage::on_comboTimeTfH_currentIndexChanged(int index) { saveRahmendaten(); }
+void PlanerFahrtage::on_comboTimeTfM_currentTextChanged(QString string) { saveRahmendaten(); }
+void PlanerFahrtage::on_comboTimeZH_currentIndexChanged(int index) { saveRahmendaten(); }
+void PlanerFahrtage::on_comboTimeZM_currentTextChanged(QString string) { saveRahmendaten(); }
 
-void PlanerFahrtage::on_dateZug_dateChanged(const QDate &date) { ZugSichern(); }
+// Fahrplan
+//¡EMPTY!
 
-void PlanerFahrtage::on_checkWichtig_stateChanged(int arg1) { ZugSichern(); }
+// Personal
+void PlanerFahrtage::on_listTf_itemChanged(QListWidgetItem *item) { savePersonal(); }
+void PlanerFahrtage::on_listZf_itemChanged(QListWidgetItem *item) { savePersonal(); }
+void PlanerFahrtage::on_listZub_itemChanged(QListWidgetItem *item) { savePersonal(); }
+void PlanerFahrtage::on_listService_itemChanged(QListWidgetItem *item) { savePersonal(); }
 
-void PlanerFahrtage::on_textAnlass_textChanged() { ZugSichern(); }
-
-void PlanerFahrtage::on_listTf_itemChanged(QListWidgetItem *item) { ZugSichern(); }
-void PlanerFahrtage::on_listZf_itemChanged(QListWidgetItem *item) { ZugSichern(); }
-void PlanerFahrtage::on_listZub_itemChanged(QListWidgetItem *item) { ZugSichern(); }
-void PlanerFahrtage::on_listService_itemChanged(QListWidgetItem *item) { ZugSichern(); }
-
-void PlanerFahrtage::on_tableReservierungen_cellChanged(int row, int column) { ZugSichern(); }
-
-
-
+// Reservierungen
+void PlanerFahrtage::on_tableReservierungen_cellChanged(int row, int column) { saveReservierungen(); }
 
 

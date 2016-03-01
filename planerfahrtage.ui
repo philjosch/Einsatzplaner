@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1272</width>
-    <height>1039</height>
+    <width>1074</width>
+    <height>910</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -708,7 +708,7 @@ Zub, Service</string>
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <property name="documentMode">
        <bool>false</bool>
@@ -1163,7 +1163,7 @@ Zub, Service</string>
         <item row="0" column="0" colspan="4">
          <widget class="QTableWidget" name="tableReservierungen">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="alternatingRowColors">
            <bool>true</bool>
@@ -1184,19 +1184,10 @@ Zub, Service</string>
            <bool>true</bool>
           </attribute>
           <attribute name="horizontalHeaderDefaultSectionSize">
-           <number>183</number>
-          </attribute>
-          <attribute name="horizontalHeaderMinimumSectionSize">
-           <number>100</number>
+           <number>120</number>
           </attribute>
           <attribute name="verticalHeaderCascadingSectionResizes">
            <bool>true</bool>
-          </attribute>
-          <attribute name="verticalHeaderDefaultSectionSize">
-           <number>73</number>
-          </attribute>
-          <attribute name="verticalHeaderMinimumSectionSize">
-           <number>48</number>
           </attribute>
           <column>
            <property name="text">
@@ -1205,7 +1196,17 @@ Zub, Service</string>
           </column>
           <column>
            <property name="text">
-            <string>Sitzplätze</string>
+            <string>Anzahl Sitzplätze</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Klasse</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Zugewiesene\nSitzplätze</string>
            </property>
           </column>
           <column>
@@ -1221,6 +1222,70 @@ Zub, Service</string>
          </widget>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Seite</string>
+       </attribute>
+       <widget class="QTreeWidget" name="treeWidget">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>170</y>
+          <width>601</width>
+          <height>321</height>
+         </rect>
+        </property>
+        <column>
+         <property name="text">
+          <string>1</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>2</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>34</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>45</string>
+         </property>
+        </column>
+        <item>
+         <property name="text">
+          <string>Neues Element</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Neues Element</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Neues Element</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>Neues untergeordnetes Element</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+        </item>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -1316,14 +1381,17 @@ Zub, Service</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1272</width>
+     <width>1074</width>
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuActionHilfe">
+   <widget class="QMenu" name="menuMain">
     <property name="title">
      <string>Einsatzplaner</string>
     </property>
+    <addaction name="actionAbout"/>
+    <addaction name="actionPreferences"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuAnicht">
     <property name="title">
@@ -1332,7 +1400,21 @@ Zub, Service</string>
     <addaction name="actionFahrtage"/>
     <addaction name="actionKalender"/>
    </widget>
-   <addaction name="menuActionHilfe"/>
+   <widget class="QMenu" name="menuDatei">
+    <property name="title">
+     <string>Datei</string>
+    </property>
+    <addaction name="actionNeu"/>
+    <addaction name="separator"/>
+    <addaction name="actionSpeicher"/>
+    <addaction name="actionSpeichernUnter"/>
+    <addaction name="separator"/>
+    <addaction name="actionOeffnen"/>
+    <addaction name="separator"/>
+    <addaction name="actionDrucken"/>
+   </widget>
+   <addaction name="menuMain"/>
+   <addaction name="menuDatei"/>
    <addaction name="menuAnicht"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -1488,6 +1570,63 @@ Zub, Service</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+K</string>
+   </property>
+  </action>
+  <action name="actionNeu">
+   <property name="text">
+    <string>Neu</string>
+   </property>
+  </action>
+  <action name="actionSpeicher">
+   <property name="text">
+    <string>Speicher</string>
+   </property>
+  </action>
+  <action name="actionSpeichernUnter">
+   <property name="text">
+    <string>Speichern unter ...</string>
+   </property>
+  </action>
+  <action name="actionOeffnen">
+   <property name="text">
+    <string>Öffnen</string>
+   </property>
+  </action>
+  <action name="actionDrucken">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Drucken</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>quit</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::TextHeuristicRole</enum>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>Über Einsatzplaner</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>config</string>
+   </property>
+  </action>
+  <action name="actionAboutQt">
+   <property name="text">
+    <string>about.*</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::TextHeuristicRole</enum>
    </property>
   </action>
  </widget>

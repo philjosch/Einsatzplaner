@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "qfahrtag.h"
 #include <QListWidgetItem>
+#include <manager.h>
 
 namespace Ui {
 class PlanerFahrtage;
@@ -20,9 +21,11 @@ public:
 private:
     Ui::PlanerFahrtage *ui;
     bool saved;
+    QString path;
     bool uebernehmen;
     QListWidgetItem *aktuellerZug;
     QHash<QListWidgetItem*, QFahrtag*> Fahrtage;
+    Manager *fahrplanManager;
     QList<QColor> Farben;
 
 private slots:
@@ -33,6 +36,10 @@ private slots:
     void aktualisieren();
     void ZugLaden(QListWidgetItem *zug);
     void ZugSichern();
+    void saveRahmendaten();
+    void saveFahrplan();
+    void savePersonal();
+    void saveReservierungen();
     void deleteSelectedRowFromListWidget(QListWidget* curr);
     void addEmptyRowToListWidget(QListWidget* curr);
 
@@ -67,6 +74,13 @@ private slots:
     void on_tableReservierungen_cellChanged(int row, int column);
     void on_ListeZuege_itemDoubleClicked(QListWidgetItem *item);
     void on_ListeZuege_itemClicked(QListWidgetItem *item);
+
+    void on_actionQuit_triggered();
+    void on_actionAbout_triggered();
+    void on_actionPreferences_triggered();
+    void speichern();
+    void speichernUnter();
+
 };
 
 #endif // PLANERFAHRTAGE_H
