@@ -5,7 +5,7 @@
 #include <QMapIterator>
 #include <QList>
 
-#include <QListWidget>
+#include <QListView>
 #include <QListWidgetItem>
 #include <fahrtag.h>
 
