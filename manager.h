@@ -17,15 +17,16 @@ public:
 public slots:
     void addFahrtag(QFahrtag *fahrtag, QListWidgetItem *item);
     void updateFahrtag(QFahrtag *fahrtag);
-    void removeFahrtag(QFahrtag *fahrtag);
+    void removeFahrtag(QFahrtag fahrtag);
     QFahrtag* getFahrtag(QListWidgetItem *item);
     QList<QFahrtag*> getFahrtage();
-    QListWidgetItem* getListItem(QFahrtag *fahrtag);
-
+//    QListWidgetItem *getListItem(QFahrtag fahrtag);
+    void showDate(QDate date);
+    void showAll();
 
 private:
     QListWidget *liste;
-    QMap<QFahrtag*, QListWidgetItem*> *mapFahrtage;
+    QMap<QListWidgetItem*, QFahrtag*> *mapFahrtage;
     QList<QFahrtag*> *fahrtage; // Aufsteigend sortiert nach Datum
 
 

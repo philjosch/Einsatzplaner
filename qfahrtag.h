@@ -3,14 +3,18 @@
 
 #include <QObject>
 #include <QDate>
+#include "managerreservierungen.h"
 
 class QFahrtag
 {
 
 public:
-    QFahrtag();
+    QFahrtag(QListWidgetItem *listItem, QListWidget *liste);
     ~QFahrtag();
+
 private:
+    QListWidgetItem *listItem;
+    QListWidget *liste;
     QDate Datum;
     int Art;
     bool Wichtig;
@@ -24,6 +28,7 @@ private:
     QTime ZeitZ;
     QString Reservierungen;
     QString Bemerkungen;
+    ManagerReservierungen *reservierungen;
 
 private slots:
     void weiterleiten();
@@ -43,6 +48,9 @@ public slots:
     QList<QString>* getService();
     QString getReservierungen();
     QString getBemerkungen();
+    ManagerReservierungen* getManager();
+    QListWidgetItem *getListItem() const;
+
 
 
 

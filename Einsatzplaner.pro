@@ -14,13 +14,20 @@ SOURCES += main.cpp\
     export.cpp \
     qfahrtag.cpp \
     planerfahrtage.cpp \
-    manager.cpp
+    manager.cpp \
+    planerfahrtageactions.cpp \
+    planerfahrtagemenu.cpp \
+    planerfahrtagereservierungen.cpp \
+    reservierung.cpp \
+    managerreservierungen.cpp
 
 HEADERS  += \
     export.h \
     qfahrtag.h \
     planerfahrtage.h \
-    manager.h
+    manager.h \
+    reservierung.h \
+    managerreservierungen.h
 
 FORMS    += \
     export.ui \
@@ -34,6 +41,11 @@ DISTFILES += \
 
 macx {
     QMAKE_INFO_PLIST = Info.plist
+
+    # Bundle identifier for your application
+    BUNDLEID = de.philipp-schepper.Einsatzplaner
+#    ICON = MyApp.icns
+
 }
 
 #    # Name of the application signing certificate

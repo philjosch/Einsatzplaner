@@ -1,11 +1,13 @@
 #include "qfahrtag.h"
 #include <QDate>
 
-QFahrtag::QFahrtag()
+QFahrtag::QFahrtag(QListWidgetItem *listItem, QListWidget *liste)
 {
+    this->listItem = listItem;
+    this->liste = liste;
     Datum = QDate::currentDate();
-    ZeitTf = QTime::fromString("08:00", "hh:mm");
-    ZeitZ = QTime::fromString("08:00", "hh:mm");
+    ZeitTf = QTime::fromString("08:15", "hh:mm");
+    ZeitZ = QTime::fromString("08:45", "hh:mm");
     Art = 0;
     Wichtig = false;
     wagen = "";
@@ -14,11 +16,17 @@ QFahrtag::QFahrtag()
     Zf = new QList<QString>();
     Zub = new QList<QString>();
     Service = new QList<QString>();
+    reservierungen = new ManagerReservierungen(liste);
 }
 
 QFahrtag::~QFahrtag()
 {
 
+}
+
+QListWidgetItem *QFahrtag::getListItem() const
+{
+    return listItem;
 }
 
 void weiterleiten()
@@ -87,6 +95,11 @@ QString QFahrtag::getReservierungen()
 QString QFahrtag::getBemerkungen()
 {
     return(Bemerkungen);
+}
+
+ManagerReservierungen *QFahrtag::getManager()
+{
+    return reservierungen;
 }
 
 
