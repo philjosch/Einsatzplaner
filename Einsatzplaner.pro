@@ -12,22 +12,22 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     export.cpp \
-    qfahrtag.cpp \
     planerfahrtage.cpp \
     manager.cpp \
     planerfahrtageactions.cpp \
     planerfahrtagemenu.cpp \
     planerfahrtagereservierungen.cpp \
     reservierung.cpp \
-    managerreservierungen.cpp
+    managerreservierungen.cpp \
+    fahrtag.cpp
 
 HEADERS  += \
     export.h \
-    qfahrtag.h \
     planerfahrtage.h \
     manager.h \
     reservierung.h \
-    managerreservierungen.h
+    managerreservierungen.h \
+    fahrtag.h
 
 FORMS    += \
     export.ui \

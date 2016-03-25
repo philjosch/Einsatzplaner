@@ -1,19 +1,19 @@
-#ifndef QFAHRTAG_H
-#define QFAHRTAG_H
+#ifndef FAHRTAG_H
+#define FAHRTAG_H
 
 #include <QObject>
 #include <QDate>
 #include "managerreservierungen.h"
 
-class QFahrtag
-{
 
+class Fahrtag
+{
 public:
-    QFahrtag(QListWidgetItem *listItem, QListWidget *liste);
-    ~QFahrtag();
+    Fahrtag(QListWidgetItem *item, QListWidget *liste);
+    ~Fahrtag();
 
 private:
-    QListWidgetItem *listItem;
+    QListWidgetItem *item;
     QListWidget *liste;
     QDate Datum;
     int Art;
@@ -30,9 +30,12 @@ private:
     QString Bemerkungen;
     ManagerReservierungen *reservierungen;
 
-private slots:
-    void weiterleiten();
 public slots:
+    // Wichtiges
+    void update();
+
+
+
     // GETTER
     QDate getDatum();
     int getArt();
@@ -49,7 +52,9 @@ public slots:
     QString getReservierungen();
     QString getBemerkungen();
     ManagerReservierungen* getManager();
-    QListWidgetItem *getListItem() const;
+
+    QListWidgetItem *getItem();
+
 
 
 
@@ -69,7 +74,9 @@ public slots:
     void setService(QList<QString> *text);
     void setTextReservierungen(QString text);
     void setBemerkungen(QString text);
+    void setHidden(bool hide); // Durchreichen zu item
+
 
 };
 
-#endif // QFAHRTAG_H
+#endif // FAHRTAG_H
