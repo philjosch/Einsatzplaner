@@ -32,6 +32,8 @@ private slots:
     void on_ListeZuege_itemClicked(QListWidgetItem *item);
     void setState(bool aktiv);
     void on_ButtonAdd_clicked();
+    void on_ButtonRemove_clicked();
+
     void createEmptyForm();
 //    void bearbeiten(QListWidgetItem *zug);
     void aktualisieren();

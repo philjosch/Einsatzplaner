@@ -22,6 +22,15 @@ void PlanerFahrtage::on_ButtonAdd_clicked () {
     saved = false;
     aktualisieren();
 }
+void PlanerFahrtage::on_ButtonRemove_clicked() {
+    if (QMessageBox::question(this, "Bitte bestätigen!", "Möchten Sie das wirklich löschen?") == QMessageBox::Yes) {
+        fahrplanManager->removeFahrtag(fahrplanManager->getFahrtag(aktuellerZug));
+        saved = false;
+    }
+    if (ui->ListeZuege->count() < 1)
+        ui->ButtonRemove->setEnabled(false);
+
+}
 
 void PlanerFahrtage::on_ListeZuege_itemSelectionChanged()
 {
