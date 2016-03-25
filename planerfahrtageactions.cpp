@@ -3,28 +3,30 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include "export.h"
-#include "qfahrtag.h"
+#include "fahrtag.h"
 #include <QListWidgetItem>
 #include <QDate>
 #include <QTime>
 
 
 void PlanerFahrtage::on_ButtonAdd_clicked () {
+    QListWidgetItem *neuesFeld = new QListWidgetItem("Test");
+    Fahrtag *neuerFahrtag = new Fahrtag(neuesFeld, ui->listRes);
 
-    QFahrtag *neuerFahrtag = new QFahrtag(ui->listRes);
-    QListWidgetItem *neuesFeld = new QListWidgetItem();
-    neuesFeld->setText(neuerFahrtag->getDatum().toString("dddd d. M. yyyy"));
+    QVariant v = qVariantFromValue((void *) neuerFahrtag);
+    neuesFeld->setData(Qt::UserRole, v);
+
     ui->ListeZuege->addItem(neuesFeld);
-//    Fahrtage.insert(neu_Feld, neu_Fahrtag);
-    fahrplanManager->addFahrtag(neuerFahrtag, neuesFeld);
-
+    fahrplanManager->addFahrtag(neuerFahrtag);
+    ui->ButtonRemove->setEnabled(true);
     saved = false;
     aktualisieren();
 }
 
 void PlanerFahrtage::on_ListeZuege_itemSelectionChanged()
 {
-    on_ListeZuege_itemClicked(ui->ListeZuege->currentItem());
+    if (ui->ListeZuege->count() > 0)
+        on_ListeZuege_itemClicked(ui->ListeZuege->currentItem());
 }
 
 void PlanerFahrtage::on_ListeZuege_itemClicked(QListWidgetItem *item)
@@ -33,7 +35,8 @@ void PlanerFahrtage::on_ListeZuege_itemClicked(QListWidgetItem *item)
     setState(true);
     ZugSichern();
     aktuellerZug = NULL;
-    ZugLaden(item);
+    if (item != NULL)
+        ZugLaden(item);
     uebernehmen = true;
 
 }

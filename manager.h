@@ -7,7 +7,7 @@
 
 #include <QListWidget>
 #include <QListWidgetItem>
-#include <qfahrtag.h>
+#include <fahrtag.h>
 
 
 class Manager
@@ -15,19 +15,17 @@ class Manager
 public:
     Manager(QListWidget *listWidget);
 public slots:
-    void addFahrtag(QFahrtag *fahrtag, QListWidgetItem *item);
-    void updateFahrtag(QFahrtag *fahrtag);
-    void removeFahrtag(QFahrtag fahrtag);
-    QFahrtag* getFahrtag(QListWidgetItem *item);
-    QList<QFahrtag*> getFahrtage();
-//    QListWidgetItem *getListItem(QFahrtag fahrtag);
+    void addFahrtag(Fahrtag *fahrtag);
+    void updateFahrtag(Fahrtag *fahrtag);
+    void removeFahrtag(Fahrtag *fahrtag);
+    Fahrtag* getFahrtag(QListWidgetItem *item);
+    QList<Fahrtag *> *getFahrtage();
     void showDate(QDate date);
     void showAll();
 
 private:
     QListWidget *liste;
-    QMap<QListWidgetItem*, QFahrtag*> *mapFahrtage;
-    QList<QFahrtag*> *fahrtage; // Aufsteigend sortiert nach Datum
+    QList<Fahrtag*> *fahrtage; // Aufsteigend sortiert nach Datum
 
 
 

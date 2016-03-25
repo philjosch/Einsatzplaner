@@ -3,7 +3,6 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include "export.h"
-#include "qfahrtag.h"
 #include <QListWidgetItem>
 #include <QDate>
 #include <QTime>

@@ -4,20 +4,19 @@
 
 Manager::Manager(QListWidget *listWidget) {
     liste = listWidget;
-    mapFahrtage = new QMap<QListWidgetItem*,QFahrtag*>();
-    fahrtage = new QList<QFahrtag*>();
+    fahrtage = new QList<Fahrtag*>();
 }
 
-void Manager::addFahrtag(QFahrtag *fahrtag, QListWidgetItem *item) {
+void Manager::addFahrtag(Fahrtag *fahrtag) {
     fahrtage->append(fahrtag);
-    mapFahrtage->insert(item, fahrtag);
     updateFahrtag(fahrtag);
     showAll();
-    liste->setCurrentItem(item);
+    liste->setCurrentItem(fahrtag->getItem());
 }
 
-void Manager::updateFahrtag(QFahrtag *fahrtag) {
+void Manager::updateFahrtag(Fahrtag *fahrtag) {
     // Nach vorne bewegen
+    fahrtag->update();
     int i = fahrtage->indexOf(fahrtag);
     while (i > 0 && fahrtage->at(i)->getDatum() < fahrtage->at(i-1)->getDatum()) {
         swap(i-1, i);
@@ -38,36 +37,25 @@ void Manager::swap(int i, int j /* i < j*/) {
     fahrtage->swap(i, j);
 }
 
-void Manager::removeFahrtag(QFahrtag fahrtag) {
-    fahrtage->removeOne(&fahrtag);
-/*
-    mapFahrtage->value(&fahrtag);
-    QListWidgetItem * defaultValue = new QListWidgetItem();
-    liste->removeItemWidget(mapFahrtage->value(&fahrtag, defaultValue));
-    mapFahrtage->remove(&fahrtag);
-    fahrtage->removeOne(&fahrtag);
-*/
+void Manager::removeFahrtag(Fahrtag *fahrtag) {
+    liste->takeItem(liste->row(fahrtag->getItem()));
+    fahrtage->removeOne(fahrtag);
 }
 
-QFahrtag* Manager::getFahrtag(QListWidgetItem *item) {
-    return mapFahrtage->value(item, new QFahrtag(new QListWidget()));
+Fahrtag* Manager::getFahrtag(QListWidgetItem *item) {
+    return (Fahrtag*) item->data(Qt::UserRole).value<void *>();
 }
-QList<QFahrtag*> Manager::getFahrtage() {
-    return mapFahrtage->values();
+QList<Fahrtag*> *Manager::getFahrtage() {
+    return fahrtage;
 }
-/*
-QListWidgetItem* Manager::getListItem(QFahrtag fahrtag) {
-    return mapFahrtage->key(&fahrtag, new QListWidgetItem());
-}
-*/
 void Manager::showDate(QDate date) {
     for(int i = 0; i < fahrtage->length(); i++) {
-        mapFahrtage->key(fahrtage->at(i))->setHidden(fahrtage->at(i)->getDatum()!=(date));
+        fahrtage->at(i)->setHidden(fahrtage->at(i)->getDatum()!=(date));
     }
 }
 
 void Manager::showAll() {
     for(int i = 0; i < fahrtage->length(); i++) {
-        mapFahrtage->key(fahrtage->at(i))->setHidden(false);
+        fahrtage->at(i)->setHidden(false);
     }
 }

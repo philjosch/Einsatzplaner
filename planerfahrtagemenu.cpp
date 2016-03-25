@@ -1,6 +1,5 @@
 #include "planerfahrtage.h"
 #include <QMessageBox>
-#include "qfahrtag.h"
 #include <QListWidgetItem>
 
 

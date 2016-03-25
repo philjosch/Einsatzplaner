@@ -2,7 +2,6 @@
 #define PLANERFAHRTAGE_H
 #include <QListWidgetItem>
 #include <QMainWindow>
-#include "qfahrtag.h"
 #include <QListWidgetItem>
 #include <manager.h>
 
@@ -23,7 +22,6 @@ private:
     QString path;
     bool uebernehmen;
     QListWidgetItem *aktuellerZug;
-    QHash<QListWidgetItem*, QFahrtag*> Fahrtage;
     Manager *fahrplanManager;
     QList<QColor> Farben;
 

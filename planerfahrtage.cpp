@@ -3,7 +3,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include "export.h"
-#include "qfahrtag.h"
+#include "fahrtag.h"
 #include <QListWidgetItem>
 #include <QDate>
 #include <QTime>
@@ -106,7 +106,7 @@ void PlanerFahrtage::createEmptyForm() {
 void PlanerFahrtage::ZugLaden(QListWidgetItem* zug) {
     aktuellerZug = zug;
     createEmptyForm();
-    QFahrtag *akt = fahrplanManager->getFahrtag(zug);
+    Fahrtag *akt = fahrplanManager->getFahrtag(zug);
     // Rahmendaten
     ui->dateZug->setDate(akt->getDatum());
     ui->textAnlass->insertPlainText(akt->getAnlass());
@@ -157,7 +157,7 @@ void PlanerFahrtage::ZugLaden(QListWidgetItem* zug) {
 /* Sichern der Daten eines Fahrtages */
 void PlanerFahrtage::saveRahmendaten() {
     if (uebernehmen) {
-        QFahrtag *akt = fahrplanManager->getFahrtag(aktuellerZug);
+        Fahrtag *akt = fahrplanManager->getFahrtag(aktuellerZug);
         akt->setDatum(ui->dateZug->date());
         akt->setArt(ui->comboArt->currentIndex());
         akt->setAnlass(ui->textAnlass->toPlainText());
@@ -167,9 +167,9 @@ void PlanerFahrtage::saveRahmendaten() {
         akt->setTimeZ(QTime::fromString(ui->comboTimeZH->currentText()+":"+ui->comboTimeZM->currentText(), "hh:mm"));
         saved = false;
 
-        QListWidgetItem *item = akt->getListItem();
-        item->setText(akt->getDatum().toString("dddd d. M. yyyy") + (akt->getWichtig() ? " "+tr("WICHTIG!") : ""));
+        QListWidgetItem *item = akt->getItem();
         item->setBackgroundColor(Farben.at(akt->getArt()));
+
         fahrplanManager->updateFahrtag(akt);
         ui->ListeZuege->setCurrentItem(item);
 //        aktualisieren();
@@ -185,7 +185,7 @@ void PlanerFahrtage::saveFahrplan() {
 
 void PlanerFahrtage::savePersonal() {
     if (uebernehmen) {
-        QFahrtag *akt = fahrplanManager->getFahrtag(aktuellerZug);
+        Fahrtag *akt = fahrplanManager->getFahrtag(aktuellerZug);
         // Liste mit Peronal Speichern
         QList<QString>* tf = new QList<QString>();
         for(int i = 0; i < ui->listTf->count(); i++) {
