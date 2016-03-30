@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 
-QT       += core gui widgets
+QT       += core gui widgets printsupport
 
 TARGET = Einsatzplaner
 TEMPLATE = app
@@ -13,21 +13,25 @@ TEMPLATE = app
 SOURCES += main.cpp\
     export.cpp \
     planerfahrtage.cpp \
-    manager.cpp \
-    planerfahrtageactions.cpp \
-    planerfahrtagemenu.cpp \
+    planerfahrtagerahmendaten.cpp \
+    planerfahrtagefahrplan.cpp \
+    planerfahrtagepersonal.cpp \
     planerfahrtagereservierungen.cpp \
+    planerfahrtageeinausgabe.cpp \
+    planerfahrtagehilfsmethoden.cpp \
+    planerfahrtagemenu.cpp \
     reservierung.cpp \
     managerreservierungen.cpp \
-    fahrtag.cpp
+    fahrtag.cpp \
+    managerzuege.cpp
 
 HEADERS  += \
     export.h \
     planerfahrtage.h \
-    manager.h \
     reservierung.h \
     managerreservierungen.h \
-    fahrtag.h
+    fahrtag.h \
+    managerzuege.h
 
 FORMS    += \
     export.ui \
@@ -35,16 +39,19 @@ FORMS    += \
 
 CONFIG += console
 
-DISTFILES += \
-    Info.plist
+OTHER_FILES += Info.plist \
+    Einsatzplaner.icns
 
 
 macx {
     QMAKE_INFO_PLIST = Info.plist
 
+    DISTFILES += Info.plist
+
     # Bundle identifier for your application
-    BUNDLEID = de.philipp-schepper.Einsatzplaner
-#    ICON = MyApp.icns
+    BUNDLEID = de.philipp-schepper.einsatzplaner
+    ICON = Einsatzplaner.icns
+##    codesign.commands += macdeployqt $${TARGET}.app;
 
 }
 
@@ -72,7 +79,6 @@ macx {
 #                 $${ENTITLEMENTS}
 
 #    codesign.depends  += all
-#    codesign.commands += macdeployqt $${TARGET}.app;
 
 #    # Remove unneeded frameworks (uncomment and change to suit your application)
 #    #codesign.commands += rm -r $${TARGET}.app/Contents/Frameworks/QtDeclarative.framework;
@@ -96,5 +102,3 @@ macx {
 #    product.commands += productbuild –component $${TARGET}.app /Applications –sign $${INSTALLERCERT} $${TARGET}.pkg;
 
 #    QMAKE_EXTRA_TARGETS += codesign product copyfiles
-
-

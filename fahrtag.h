@@ -26,15 +26,22 @@ private:
     QList<QString> *Service;
     QTime ZeitTf;
     QTime ZeitZ;
-    QString Reservierungen;
     QString Bemerkungen;
     ManagerReservierungen *reservierungen;
+    bool benoetigeTf;
+    bool benoetigeZf;
+    bool benoetigeZub;
+    bool benoetigeService;
 
 public slots:
     // Wichtiges
     void update();
 
+    QJsonObject toJson();
+    QJsonArray qListToJsonArray(QList<QString> *list);
+    QList<QString> *jsonArrayToQList(QJsonArray array);
 
+    void fromJson(QJsonObject o);
 
     // GETTER
     QDate getDatum();
@@ -49,12 +56,15 @@ public slots:
     QList<QString>* getZf();
     QList<QString>* getZub();
     QList<QString>* getService();
-    QString getReservierungen();
     QString getBemerkungen();
     ManagerReservierungen* getManager();
 
     QListWidgetItem *getItem();
 
+    bool getBenoetigeTf() const;
+    bool getBenoetigeZf() const;
+    bool getBenoetigeZub() const;
+    bool getBenoetigeService() const;
 
 
 
@@ -72,10 +82,13 @@ public slots:
     void setZf(QList<QString> *text);
     void setZub(QList<QString> *text);
     void setService(QList<QString> *text);
-    void setTextReservierungen(QString text);
     void setBemerkungen(QString text);
     void setHidden(bool hide); // Durchreichen zu item
 
+    void setBenoetigeTf(bool value);
+    void setBenoetigeZf(bool value);
+    void setBenoetigeZub(bool value);
+    void setBenoetigeService(bool value);
 
 };
 

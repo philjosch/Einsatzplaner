@@ -3,13 +3,13 @@
 
 #include <QObject>
 #include <QList>
+#include <QListWidgetItem>
+#include <QJsonObject>
 
 class Reservierung
 {
 public:
-    Reservierung();
-
-
+    Reservierung(QListWidgetItem *item);
 
     void setName(const QString &value);
     void setAnzahl(int value);
@@ -21,10 +21,33 @@ public:
     void setStartHp(const QString &value, int pos);
     void setEndeZug(const QString &value, int pos);
     void setEndeHp(const QString &value, int pos);
+    void setAutoPlatz(bool value);
     void setSitzplatz(const QString &value);
     void setSonstiges(const QString &value);
+    void setListItem(QListWidgetItem *value);
+
+    void update();
+
+    QJsonObject toJson();
+    void fromJson(QJsonObject json);
+
+    QString getName() const;
+    int getAnzahl() const;
+    QString getKlasse() const;
+    bool getFahrrad() const;
+    QString getMail() const;
+    QString getTelefon() const;
+    QList<QString> getStartZug() const;
+    QList<QString> getStartHp() const;
+    QList<QString> getEndeZug() const;
+    QList<QString> getEndeHp() const;
+    bool getAutoPlatz() const;
+    QString getSitzplatz() const;
+    QString getSonstiges() const;
+
 
 private:
+    QListWidgetItem *listItem;
     QString name;
     int anzahl;
     QString klasse;
@@ -35,6 +58,7 @@ private:
     QList<QString> startHp;
     QList<QString> endeZug;
     QList<QString> endeHp;
+    bool autoPlatz;
     QString sitzplatz;
     QString sonstiges;
 

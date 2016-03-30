@@ -3,8 +3,12 @@
 
 #include <QListWidget>
 #include "reservierung.h"
+#include <QJsonObject>
 
 class ManagerReservierungen {
+
+public:
+    QList<Reservierung *> *getReservierungen() const;
 
 public slots:
     ManagerReservierungen(QListWidget *liste);
@@ -13,14 +17,20 @@ public slots:
     void catching(); // Verbindet die Objekte mit der Liste
 
     void add(); // Fügt eine neue Reservierung hinzu, dabei wird auch ein neues Objekt in die Liste eingefügt
-    void remove(QListWidgetItem item); // Fügt eine neue Reservierung hinzu, dabei wird auch ein neues Objekt in die Liste eingefügt
+    void remove(QListWidgetItem *item); // Fügt eine neue Reservierung hinzu, dabei wird auch ein neues Objekt in die Liste eingefügt
 
     void verteileSitzplaetze(); // Ein Algorithmus, der die Sitzplätze der einzelnen Reservierungen verteilt. Muss erst noch entwickelt werden
-    Reservierung* getReservierung(QListWidgetItem item);
+    Reservierung *getReservierung(QListWidgetItem *item);
+    Reservierung *getCurrentReservierung();
+
+    int getGesamtzahl();
+
+    QJsonArray toJson();
+    void fromJson(QJsonArray json);
 
 private:
     QListWidget *liste; // Hier wird die verknüpfte Liste zur Darstellung gespeichert
-    QList<Reservierung*> *reservierungen;
+    QList<Reservierung *> *reservierungen;
     QMap<QListWidgetItem*, Reservierung*> *map; // Hier werden die Reservierungen gespeichert
 
 };

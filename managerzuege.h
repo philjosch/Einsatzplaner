@@ -1,5 +1,5 @@
-#ifndef MANAGER_H
-#define MANAGER_H
+#ifndef MANAGERZUEGE_H
+#define MANAGERZUEGE_H
 
 #include <QMap>
 #include <QMapIterator>
@@ -8,22 +8,28 @@
 #include <QListView>
 #include <QListWidgetItem>
 #include <fahrtag.h>
+#include <QJsonArray>
 
 
-class Manager
+class ManagerZuege
 {
 public:
-    Manager(QListWidget *listWidget);
+    ManagerZuege(QListWidget *listWidget, QListWidget *reservierungen);
 public slots:
-    void addFahrtag(Fahrtag *fahrtag);
+    Fahrtag *addFahrtag();
     void updateFahrtag(Fahrtag *fahrtag);
     void removeFahrtag(Fahrtag *fahrtag);
     Fahrtag* getFahrtag(QListWidgetItem *item);
     QList<Fahrtag *> *getFahrtage();
-    void showDate(QDate date);
+    bool showDate(QDate date);
     void showAll();
 
+    QJsonArray toJson();
+    void fromJson(QJsonArray a);
+
+
 private:
+    QListWidget *resListWidget;
     QListWidget *liste;
     QList<Fahrtag*> *fahrtage; // Aufsteigend sortiert nach Datum
 
@@ -36,4 +42,4 @@ private slots:
 
 };
 
-#endif // MANAGER_H
+#endif // ManagerZuege_H

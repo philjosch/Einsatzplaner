@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1429</width>
-    <height>1035</height>
+    <width>1581</width>
+    <height>1107</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -33,22 +33,27 @@
         </property>
         <item>
          <property name="text">
-          <string>221, 204, 208</string>
+          <string>309, 221, 204, 208</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>221, 204, 202</string>
+          <string>309, 221, 204, 202, 208</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>221, 204, 202, 208</string>
+          <string>309, 221, 204, 202, 208, 201</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>221, 204, 217</string>
+          <string>309, 221, 204, 217, 202, 208, 201</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>309, 221, 204, 217</string>
          </property>
         </item>
        </widget>
@@ -673,7 +678,12 @@ Zub, Service</string>
         </item>
         <item>
          <property name="text">
-          <string>Bahnhofsfest</string>
+          <string>Museumszug mit ELF Schnupperkurs</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">ELF Schnupperkurs</string>
          </property>
         </item>
         <item>
@@ -683,7 +693,7 @@ Zub, Service</string>
         </item>
         <item>
          <property name="text">
-          <string notr="true">ELF Schnupperkurs</string>
+          <string>Bahnhofsfest</string>
          </property>
         </item>
         <item>
@@ -694,6 +704,48 @@ Zub, Service</string>
        </widget>
       </item>
      </layout>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="ButtonExport">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="toolTip">
+       <string notr="true"/>
+      </property>
+      <property name="statusTip">
+       <string notr="true"/>
+      </property>
+      <property name="whatsThis">
+       <string notr="true"/>
+      </property>
+      <property name="accessibleName">
+       <string notr="true"/>
+      </property>
+      <property name="accessibleDescription">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Exportieren</string>
+      </property>
+      <property name="shortcut">
+       <string>Ctrl+E</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="3">
+     <widget class="Line" name="line_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="3">
+     <widget class="Line" name="line_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
     </item>
     <item row="4" column="2">
      <widget class="QPushButton" name="ButtonNachher">
@@ -745,48 +797,6 @@ Zub, Service</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0" colspan="3">
-     <widget class="Line" name="line_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="3">
-     <widget class="Line" name="line_3">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QPushButton" name="ButtonExport">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="toolTip">
-       <string notr="true"/>
-      </property>
-      <property name="statusTip">
-       <string notr="true"/>
-      </property>
-      <property name="whatsThis">
-       <string notr="true"/>
-      </property>
-      <property name="accessibleName">
-       <string notr="true"/>
-      </property>
-      <property name="accessibleDescription">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>Exportieren</string>
-      </property>
-      <property name="shortcut">
-       <string>Ctrl+E</string>
-      </property>
-     </widget>
-    </item>
     <item row="2" column="0" colspan="3">
      <widget class="QTabWidget" name="tabEingabeWizard">
       <property name="enabled">
@@ -796,7 +806,7 @@ Zub, Service</string>
        <enum>QTabWidget::North</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="documentMode">
        <bool>false</bool>
@@ -818,75 +828,6 @@ Zub, Service</string>
         <string>Fahrplan</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_12" columnstretch="1,1,4">
-        <item row="1" column="1">
-         <widget class="QToolButton" name="toolButton_2">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>+</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="QListWidget" name="listWidget">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <item>
-           <property name="text">
-            <string>Zug 2201 SSWN-SOTW</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Zug 2202 SOTW-SSWN</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Zug 2203 SSWN-SOTW</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Zug 2204 SOTW-SSWN</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Zug 2205 SSWN-SOTW</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Zug 2206 SOTW-SSWN</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QToolButton" name="toolButton">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>-</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="2" rowspan="2">
          <widget class="QTableWidget" name="tableWidget">
           <row>
@@ -986,6 +927,75 @@ Zub, Service</string>
           </item>
          </widget>
         </item>
+        <item row="1" column="1">
+         <widget class="QToolButton" name="toolButton_2">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>+</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QListWidget" name="listWidget">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <item>
+           <property name="text">
+            <string>Zug 2201 SSWN-SOTW</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Zug 2202 SOTW-SSWN</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Zug 2203 SSWN-SOTW</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Zug 2204 SOTW-SSWN</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Zug 2205 SSWN-SOTW</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Zug 2206 SOTW-SSWN</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QToolButton" name="toolButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>-</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tabPersonal">
@@ -995,19 +1005,73 @@ Zub, Service</string>
        <attribute name="title">
         <string>Personal</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_6" rowstretch="1,0,1" columnstretch="1,1,1,1">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
+       <layout class="QGridLayout" name="gridLayout_4">
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="1" column="0" colspan="2">
+           <widget class="QCheckBox" name="checkTf">
+            <property name="text">
+             <string>Personal benötigt</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QPushButton" name="pushButtonListTfAdd">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="statusTip">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="text">
+             <string>+</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="pushButtonListTfDelete">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="statusTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
            <widget class="QListWidget" name="listTf">
             <property name="enabled">
              <bool>true</bool>
@@ -1023,38 +1087,6 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QToolButton" name="toolButtonListTfDelete">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QToolButton" name="toolButtonListTfAdd">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>+</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0" colspan="2">
            <widget class="QLabel" name="LabelTf">
             <property name="toolTip">
@@ -1064,7 +1096,7 @@ Zub, Service</string>
              <string>Wahts This</string>
             </property>
             <property name="text">
-             <string>Tf, Tb</string>
+             <string>Triebfahrzeugführer (Tf), -begleiter (Tb)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -1074,22 +1106,45 @@ Zub, Service</string>
          </layout>
         </item>
         <item row="0" column="1">
-         <layout class="QGridLayout" name="gridLayout_4">
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="1" column="0" colspan="2">
+           <widget class="QCheckBox" name="checkZub">
+            <property name="text">
+             <string>Personal benötigt</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QListWidget" name="listZub">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="verticalScrollMode">
+             <enum>QAbstractItemView::ScrollPerPixel</enum>
+            </property>
+            <property name="horizontalScrollMode">
+             <enum>QAbstractItemView::ScrollPerPixel</enum>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0" colspan="2">
-           <widget class="QLabel" name="LabelZf">
+           <widget class="QLabel" name="LabelZb">
             <property name="toolTip">
              <string/>
             </property>
             <property name="text">
-             <string>Zugführer (Zf)</string>
+             <string>Zub, Zs, Begl o.b.A</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QToolButton" name="toolButtonListZfAdd">
+          <item row="2" column="0">
+           <widget class="QPushButton" name="pushButtonListZubAdd">
             <property name="enabled">
              <bool>true</bool>
             </property>
@@ -1098,14 +1153,65 @@ Zub, Service</string>
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="statusTip">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Name hinzufügen</string>
             </property>
             <property name="text">
              <string>+</string>
             </property>
            </widget>
           </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="pushButtonListZubDelete">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="statusTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="1" column="0" colspan="2">
+           <widget class="QCheckBox" name="checkZf">
+            <property name="text">
+             <string>Personal benötigt</string>
+            </property>
+           </widget>
+          </item>
           <item row="2" column="0">
-           <widget class="QToolButton" name="toolButtonListZfDelete">
+           <widget class="QPushButton" name="pushButtonListZfAdd">
             <property name="enabled">
              <bool>true</bool>
             </property>
@@ -1115,12 +1221,52 @@ Zub, Service</string>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="statusTip">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="text">
+             <string>+</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="pushButtonListZfDelete">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="statusTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
             <property name="text">
              <string>-</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2">
+          <item row="3" column="0" colspan="2">
            <widget class="QListWidget" name="listZf">
             <property name="enabled">
              <bool>true</bool>
@@ -1139,76 +1285,31 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
-         </layout>
-        </item>
-        <item row="0" column="2">
-         <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="0" colspan="2">
-           <widget class="QLabel" name="LabelZb">
+           <widget class="QLabel" name="LabelZf">
             <property name="toolTip">
              <string/>
             </property>
             <property name="text">
-             <string>Zub, Zs, Begl o.b.A</string>
+             <string>Zugführer (Zf)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="QListWidget" name="listZub">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="verticalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
-            </property>
-            <property name="horizontalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QToolButton" name="toolButtonListZubDelete">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QToolButton" name="toolButtonListZubAdd">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>+</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
-        <item row="0" column="3">
+        <item row="1" column="1">
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="1" column="0" colspan="2">
+           <widget class="QCheckBox" name="checkService">
+            <property name="text">
+             <string>Personal benötigt</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
            <widget class="QListWidget" name="listService">
             <property name="enabled">
              <bool>true</bool>
@@ -1221,38 +1322,6 @@ Zub, Service</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QToolButton" name="toolButtonListServiceDelete">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QToolButton" name="toolButtonListServiceAdd">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>+</string>
             </property>
            </widget>
           </item>
@@ -1269,9 +1338,72 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="pushButtonListServiceDelete">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="statusTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QPushButton" name="pushButtonListServiceAdd">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="statusTip">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="text">
+             <string>+</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
-        <item row="2" column="0" colspan="4">
+        <item row="2" column="0" colspan="2">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="2">
          <layout class="QGridLayout" name="gridLayout_7">
           <item row="0" column="0">
            <widget class="QLabel" name="LabelBemerkungen">
@@ -1325,13 +1457,6 @@ Zub, Service</string>
           </item>
          </layout>
         </item>
-        <item row="1" column="0" colspan="4">
-         <widget class="Line" name="line">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tabReservierungen">
@@ -1341,20 +1466,18 @@ Zub, Service</string>
        <attribute name="title">
         <string>Reservierungen</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_13" columnstretch="1,0,2">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
+       <layout class="QGridLayout" name="gridLayout_10" columnstretch="0,0,1">
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_10">
-          <item row="2" column="1">
-           <widget class="QToolButton" name="toolResAdd">
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Reservierungen:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="toolResAdd">
             <property name="enabled">
              <bool>true</bool>
             </property>
@@ -1365,40 +1488,33 @@ Zub, Service</string>
              </sizepolicy>
             </property>
             <property name="text">
-             <string>+</string>
+             <string>Neue Reservierung</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2">
+          <item row="1" column="1">
+           <widget class="QPushButton" name="toolResDelete">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Reservierung stornieren</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
            <widget class="QListWidget" name="listRes">
             <property name="enabled">
              <bool>true</bool>
             </property>
             <property name="sortingEnabled">
              <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QToolButton" name="toolResDelete">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>Reservierungen:</string>
             </property>
            </widget>
           </item>
@@ -1432,222 +1548,8 @@ Zub, Service</string>
          </widget>
         </item>
         <item row="0" column="2">
-         <layout class="QGridLayout" name="gridLayout_11" rowstretch="0,0,0,0,0,0,0,0,0,0,1" columnstretch="0,1,1">
-          <item row="3" column="1" colspan="2">
-           <widget class="QCheckBox" name="checkResFahrrad">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>Fahrräder</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="label_15">
-            <property name="text">
-             <string>Ausstieg:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Anzahl Sitzplätze:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="label_14">
-            <property name="text">
-             <string>Einstieg:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Klasse:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="0">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>Sonstiges:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Name:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>Kontakt:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" colspan="2">
-           <widget class="QLineEdit" name="lineResName">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QComboBox" name="comboResStart1Zug">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="currentIndex">
-             <number>1</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>2201 SSWN-SOTW</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2202 SOTW-SSWN</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2203 SSWN-SOTW</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2204 SOTW-SSWN</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2205 SSWN-SOTW</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2206 SOTW-SSWN</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="6" column="2">
-           <widget class="QComboBox" name="comboResStart1Hp">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="currentIndex">
-             <number>10</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>Schwarzerden</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Oberkirchen (Süd)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Haupersweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Osterbrücken</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Marth</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Niederkirchen</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Werschweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dörrenbach</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Fürth (Ostertal)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler-Wingertsweiher</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="1" colspan="2">
-           <widget class="QSpinBox" name="spinResAnzahl">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1" colspan="2">
+         <layout class="QGridLayout" name="gridLayout_11" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="0,0,0">
+          <item row="3" column="2">
            <widget class="QComboBox" name="comboResKlasse">
             <property name="enabled">
              <bool>true</bool>
@@ -1677,7 +1579,7 @@ Zub, Service</string>
             </item>
            </widget>
           </item>
-          <item row="5" column="1" colspan="2">
+          <item row="1" column="2">
            <widget class="QLineEdit" name="lineResTelefon">
             <property name="enabled">
              <bool>true</bool>
@@ -1693,20 +1595,67 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1" colspan="2">
-           <widget class="QLineEdit" name="lineResMail">
-            <property name="enabled">
-             <bool>true</bool>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Ausstieg:</string>
             </property>
-            <property name="inputMethodHints">
-             <set>Qt::ImhEmailCharactersOnly</set>
-            </property>
-            <property name="placeholderText">
-             <string>E-Mail</string>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
             </property>
            </widget>
           </item>
-          <item row="7" column="1">
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Sitzplätze:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Sonstiges:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QLineEdit" name="lineResName">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Name:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="1" colspan="2">
+           <widget class="QPlainTextEdit" name="plainResSonstiges">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
            <widget class="QComboBox" name="comboResEnde1Zug">
             <property name="enabled">
              <bool>true</bool>
@@ -1746,7 +1695,10 @@ Zub, Service</string>
             </item>
            </widget>
           </item>
-          <item row="7" column="2">
+          <item row="10" column="1" colspan="2">
+           <widget class="QLineEdit" name="lineResSitze"/>
+          </item>
+          <item row="8" column="2">
            <widget class="QComboBox" name="comboResEnde1Hp">
             <property name="enabled">
              <bool>true</bool>
@@ -1811,37 +1763,7 @@ Zub, Service</string>
             </item>
            </widget>
           </item>
-          <item row="10" column="1" colspan="2">
-           <widget class="QPlainTextEdit" name="plainResSonstiges">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="1">
-           <widget class="QRadioButton" name="radioResAuto">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Automatische Sitzplatzwahl</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="2">
-           <widget class="QRadioButton" name="radioResManu">
-            <property name="text">
-             <string>Sitzplätze manuell festlegen</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="1" colspan="2">
-           <widget class="QLineEdit" name="lineResSitze"/>
-          </item>
-          <item row="8" column="0" rowspan="2">
+          <item row="9" column="0" rowspan="2">
            <widget class="QLabel" name="label_12">
             <property name="text">
              <string>Sitzplätze</string>
@@ -1851,17 +1773,197 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="spinResAnzahl">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1">
+           <widget class="QCheckBox" name="checkResAuto">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Automatische Sitzplatzwahl</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineResMail">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="inputMethodHints">
+             <set>Qt::ImhEmailCharactersOnly</set>
+            </property>
+            <property name="placeholderText">
+             <string>E-Mail</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Kontakt:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="3">
+           <widget class="Line" name="line_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="checkResFahrrad">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Fahrräder</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="3">
+           <widget class="Line" name="line_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1" rowspan="2">
+           <widget class="QComboBox" name="comboResStart1Zug">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="currentIndex">
+             <number>1</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>2201 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2202 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2203 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2204 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2205 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2206 SOTW-SSWN</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="6" column="0" rowspan="2">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Einstieg:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2" rowspan="2">
+           <widget class="QComboBox" name="comboResStart1Hp">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="currentIndex">
+             <number>10</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Schwarzerden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Oberkirchen (Süd)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Haupersweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Osterbrücken</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Marth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Niederkirchen</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Werschweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Dörrenbach</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Fürth (Ostertal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler-Wingertsweiher</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler</string>
+             </property>
+            </item>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
-      </widget>
-      <widget class="QWidget" name="tab">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <attribute name="title">
-        <string>Seite</string>
-       </attribute>
       </widget>
      </widget>
     </item>
@@ -1872,9 +1974,12 @@ Zub, Service</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1429</width>
+     <width>1581</width>
      <height>22</height>
     </rect>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
    </property>
    <widget class="QMenu" name="menuMain">
     <property name="title">
@@ -1889,7 +1994,6 @@ Zub, Service</string>
      <string>Ansicht</string>
     </property>
     <addaction name="actionFahrtage"/>
-    <addaction name="actionKalender"/>
    </widget>
    <widget class="QMenu" name="menuDatei">
     <property name="title">
@@ -1897,10 +2001,10 @@ Zub, Service</string>
     </property>
     <addaction name="actionNeu"/>
     <addaction name="separator"/>
+    <addaction name="actionOeffnen"/>
+    <addaction name="separator"/>
     <addaction name="actionSpeichern"/>
     <addaction name="actionSpeichernUnter"/>
-    <addaction name="separator"/>
-    <addaction name="actionOeffnen"/>
     <addaction name="separator"/>
     <addaction name="actionDrucken"/>
    </widget>
@@ -1931,50 +2035,26 @@ Zub, Service</string>
     <number>1</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
-    <layout class="QGridLayout" name="gridLayout_8">
+    <layout class="QGridLayout" name="gridLayout_8" rowstretch="0,0,0,1,0,0">
      <property name="leftMargin">
-      <number>5</number>
+      <number>0</number>
      </property>
      <property name="topMargin">
-      <number>6</number>
+      <number>0</number>
      </property>
      <property name="rightMargin">
-      <number>5</number>
+      <number>0</number>
      </property>
      <property name="bottomMargin">
-      <number>6</number>
+      <number>0</number>
      </property>
      <property name="horizontalSpacing">
-      <number>-1</number>
+      <number>0</number>
      </property>
      <property name="verticalSpacing">
-      <number>5</number>
+      <number>6</number>
      </property>
-     <item row="2" column="0">
-      <widget class="QPushButton" name="ButtonAdd">
-       <property name="text">
-        <string>+</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="ButtonRemove">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>-</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QPushButton" name="pushListeShowAll">
-       <property name="text">
-        <string>Alle Fahrtage anzeigen</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="2">
+     <item row="3" column="0">
       <widget class="QListWidget" name="ListeZuege">
        <property name="minimumSize">
         <size>
@@ -1998,44 +2078,21 @@ Zub, Service</string>
         <string notr="true"/>
        </property>
        <property name="sortingEnabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDockWidget" name="dockKalender">
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-     <horstretch>1</horstretch>
-     <verstretch>1</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="windowTitle">
-    <string>Kalender</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>1</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents_3">
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <property name="spacing">
-      <number>0</number>
-     </property>
      <item row="1" column="0">
+      <widget class="QPushButton" name="ButtonAdd">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>Neuen Fahrtag anlegen</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
       <widget class="QCalendarWidget" name="calendarDock">
        <property name="minimumSize">
         <size>
@@ -2043,12 +2100,39 @@ Zub, Service</string>
          <height>200</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Auf Datum doppelklicken, um Fahrtag zu erstellen</string>
+       </property>
+       <property name="minimumDate">
+        <date>
+         <year>2016</year>
+         <month>1</month>
+         <day>1</day>
+        </date>
+       </property>
+       <property name="maximumDate">
+        <date>
+         <year>2999</year>
+         <month>12</month>
+         <day>31</day>
+        </date>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" rowspan="2">
+      <widget class="QPushButton" name="ButtonRemove">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>-</string>
+       </property>
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="pushListeShowAll">
        <property name="text">
-        <string>Gehe zu Heute</string>
+        <string>Alle Fahrtage anzeigen</string>
        </property>
       </widget>
      </item>
@@ -2064,6 +2148,9 @@ Zub, Service</string>
    </property>
    <property name="text">
     <string>Fahrtage</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
    </property>
   </action>
   <action name="actionKalender">
@@ -2081,44 +2168,56 @@ Zub, Service</string>
    </property>
   </action>
   <action name="actionNeu">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Neu</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
   <action name="actionSpeichern">
    <property name="text">
     <string>Speichern</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actionSpeichernUnter">
    <property name="text">
-    <string>Speichern unter ...</string>
+    <string>Speichern unter...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="actionOeffnen">
    <property name="text">
-    <string>Öffnen</string>
+    <string>Öffnen...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionDrucken">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
-    <string>Drucken</string>
+    <string>Drucken...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionQuit">
    <property name="text">
     <string>quit</string>
    </property>
-   <property name="menuRole">
-    <enum>QAction::TextHeuristicRole</enum>
-   </property>
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>Über Einsatzplaner</string>
+    <string>about.*</string>
    </property>
    <property name="menuRole">
     <enum>QAction::AboutRole</enum>
@@ -2140,7 +2239,11 @@ Zub, Service</string>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
+  <tabstop>calendarDock</tabstop>
+  <tabstop>ButtonAdd</tabstop>
+  <tabstop>pushListeShowAll</tabstop>
   <tabstop>ListeZuege</tabstop>
+  <tabstop>ButtonRemove</tabstop>
   <tabstop>dateZug</tabstop>
   <tabstop>comboArt</tabstop>
   <tabstop>textAnlass</tabstop>
@@ -2151,38 +2254,48 @@ Zub, Service</string>
   <tabstop>comboTimeZH</tabstop>
   <tabstop>comboTimeZM</tabstop>
   <tabstop>tabEingabeWizard</tabstop>
-  <tabstop>toolButtonListTfDelete</tabstop>
-  <tabstop>toolButtonListTfAdd</tabstop>
+  <tabstop>toolButton_2</tabstop>
+  <tabstop>listWidget</tabstop>
+  <tabstop>toolButton</tabstop>
+  <tabstop>tableWidget</tabstop>
+  <tabstop>checkTf</tabstop>
+  <tabstop>pushButtonListTfAdd</tabstop>
   <tabstop>listTf</tabstop>
-  <tabstop>toolButtonListZfDelete</tabstop>
-  <tabstop>toolButtonListZfAdd</tabstop>
-  <tabstop>listZf</tabstop>
-  <tabstop>toolButtonListZubDelete</tabstop>
-  <tabstop>toolButtonListZubAdd</tabstop>
+  <tabstop>pushButtonListTfDelete</tabstop>
+  <tabstop>checkZub</tabstop>
+  <tabstop>pushButtonListZubAdd</tabstop>
   <tabstop>listZub</tabstop>
-  <tabstop>toolButtonListServiceDelete</tabstop>
-  <tabstop>toolButtonListServiceAdd</tabstop>
+  <tabstop>pushButtonListZubDelete</tabstop>
+  <tabstop>checkZf</tabstop>
+  <tabstop>pushButtonListZfAdd</tabstop>
+  <tabstop>listZf</tabstop>
+  <tabstop>pushButtonListZfDelete</tabstop>
+  <tabstop>checkService</tabstop>
+  <tabstop>pushButtonListServiceAdd</tabstop>
   <tabstop>listService</tabstop>
+  <tabstop>pushButtonListServiceDelete</tabstop>
   <tabstop>textBemerkungen</tabstop>
   <tabstop>toolResAdd</tabstop>
   <tabstop>listRes</tabstop>
   <tabstop>toolResDelete</tabstop>
   <tabstop>lineResName</tabstop>
+  <tabstop>lineResMail</tabstop>
+  <tabstop>lineResTelefon</tabstop>
   <tabstop>spinResAnzahl</tabstop>
   <tabstop>comboResKlasse</tabstop>
   <tabstop>checkResFahrrad</tabstop>
-  <tabstop>lineResMail</tabstop>
-  <tabstop>lineResTelefon</tabstop>
+  <tabstop>comboResStart1Zug</tabstop>
+  <tabstop>comboResStart1Hp</tabstop>
+  <tabstop>comboResEnde1Zug</tabstop>
+  <tabstop>comboResEnde1Hp</tabstop>
+  <tabstop>checkResAuto</tabstop>
+  <tabstop>lineResSitze</tabstop>
   <tabstop>plainResSonstiges</tabstop>
   <tabstop>pushResAllAuto</tabstop>
   <tabstop>pushResVerteilung</tabstop>
   <tabstop>ButtonVorher</tabstop>
   <tabstop>ButtonExport</tabstop>
   <tabstop>ButtonNachher</tabstop>
-  <tabstop>ButtonAdd</tabstop>
-  <tabstop>ButtonRemove</tabstop>
-  <tabstop>calendarDock</tabstop>
-  <tabstop>pushButton</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -2215,86 +2328,6 @@ Zub, Service</string>
     <hint type="destinationlabel">
      <x>-1</x>
      <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>dockKalender</sender>
-   <signal>visibilityChanged(bool)</signal>
-   <receiver>actionKalender</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>147</x>
-     <y>897</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionKalender</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>dockKalender</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>147</x>
-     <y>897</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>calendarDock</receiver>
-   <slot>showToday()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>155</x>
-     <y>1013</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>155</x>
-     <y>937</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioResManu</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>radioResAuto</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1308</x>
-     <y>532</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1083</x>
-     <y>538</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioResAuto</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>radioResManu</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1025</x>
-     <y>540</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1269</x>
-     <y>534</y>
     </hint>
    </hints>
   </connection>

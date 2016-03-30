@@ -1,233 +1,186 @@
 #include "planerfahrtage.h"
 #include "ui_planerfahrtage.h"
 #include <QMessageBox>
-#include <QFileDialog>
-#include "export.h"
 #include "fahrtag.h"
 #include <QListWidgetItem>
 #include <QDate>
 #include <QTime>
+#include <QList>
 
-PlanerFahrtage::PlanerFahrtage(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::PlanerFahrtage)
+PlanerFahrtage::PlanerFahrtage(QWidget *parent) : QMainWindow(parent), ui(new Ui::PlanerFahrtage)
 {
     ui->setupUi(this);
-    fahrplanManager = new Manager(ui->ListeZuege);
+    zugManager = new ManagerZuege(ui->ListeZuege, ui->listRes);
     path = "";
     saved = true;
     uebernehmen = false;
-//    connect(ui->ListeZuege, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(bearbeiten(QListWidgetItem*)));
-
-    Farben << QColor(255, 255, 255) << QColor(205,92,92) << QColor(238,130,238) << QColor(211, 211, 211) << QColor(154, 205, 50) << QColor(255, 165, 0) << QColor(135, 206, 250);
-
     setState(false);
+    createEmptyForm();
+    ui->tabEingabeWizard->removeTab(0); // Löscht den Fahrplan-Tab, da dieser im Moment nicht benötigt wird
 }
 
 PlanerFahrtage::~PlanerFahrtage()
 {
     delete ui;
 }
-void PlanerFahrtage::closeEinsatzPlaner() {
-    if (! saved) {
-        int answ = QMessageBox::question(this, tr("Beenden?"), tr("Möchten Sie das Prgramm wirklich beenden? Die ungesicherten Information gehen verloren!"), QMessageBox::Save, QMessageBox::Close, QMessageBox::Cancel);
-        if (answ == QMessageBox::Save) {
-            speichern();
-        } else if (answ == QMessageBox::Close) {
-            saved = true;
-        }
-    }
 
-
-    if (saved) {
-        close();
-    }
-
-}
-
-void PlanerFahrtage::closeEvent(QCloseEvent *event) {
-    closeEinsatzPlaner();
-
-
-    if (saved) {
-        event->accept();
-    } else {
-        event->ignore();
+QString PlanerFahrtage::getArt(int i)
+{
+    switch (i) {
+        case 0: return "Museumszug";
+        case 1: return "Sonderzug";
+        case 2: return "Nikolauszug";
+        case 3: return "Museumszug mit ELF";
+        case 4: return "ELF-Schnupperkurs";
+        case 5: return "Bahnhofsfest";
+        case 6: return "Ausbildung";
+        default:
+            return "Sonstiges";
     }
 }
 
+QColor PlanerFahrtage::getFarbe(int i)
+{
 
-/* Fahrtag bearbeiten */
-void PlanerFahrtage::createEmptyForm() {
-    /* Alles leeren */
+    QList<QColor> f = QList<QColor>();
+/*    f.append(QColor(255, 255, 255));
+    f.append(QColor(205,92,92));
+    f.append(QColor(238,130,238));
+    f.append(QColor(119, 65, 119));
+    f.append(QColor(211, 211, 211));
+    f.append(QColor(154, 205, 50));
+    f.append(QColor(255, 165, 0));
+    f.append(QColor(135, 206, 250));*/
+    f.append(QColor("#ffffff"));
+    f.append(QColor("#99c9de"));
+    f.append(QColor("#b7a0e3"));
+    f.append(QColor("#ffe9d1"));
+    f.append(QColor("#ffc789"));
+    f.append(QColor("#d3f7a7"));
+    f.append(QColor("#fff5ac"));
+    f.append(QColor("#f2a4c3"));
+    return f.at(i);
 
-    // Rahmendaten
-    ui->dateZug->setDate(QDate::currentDate());
-    ui->comboArt->setCurrentIndex(-1);
-    ui->textAnlass->clear();
-    ui->checkWichtig->setChecked(false);
-    ui->comboWagenreihung->setCurrentIndex(-1);
-    ui->comboTimeTfH->setCurrentIndex(3);
-    ui->comboTimeTfM->setCurrentIndex(0);
-    ui->comboTimeZH->setCurrentIndex(3);
-    ui->comboTimeZM->setCurrentIndex(0);
-
-    // Fahrplan
-
-    // Personal
-    ui->listTf->clear();
-    ui->listZf->clear();
-    ui->listZub->clear();
-    ui->listService->clear();
-    ui->textBemerkungen->clear();
-
-    // Reservierungen
-    ui->listRes->clear();
-    ui->lineResName->clear();
-    ui->spinResAnzahl->setValue(1);
-    ui->checkResFahrrad->setChecked(false);
-    ui->lineResMail->clear();
-    ui->lineResTelefon->clear();
-    ui->comboResKlasse->setCurrentIndex(3);
-    ui->comboResStart1Zug->setCurrentIndex(1);
-    ui->comboResStart1Hp->setCurrentIndex(10);
-    ui->comboResEnde1Zug->setCurrentIndex(2);
-    ui->comboResEnde1Hp->setCurrentIndex(10);
-    ui->lineResSitze->clear();
-    ui->plainResSonstiges->clear();
-
-    /* Mit Standard-Werten füllen */
-    addEmptyRowToListWidget(ui->listTf);
-    addEmptyRowToListWidget(ui->listZf);
-    addEmptyRowToListWidget(ui->listZub);
-    addEmptyRowToListWidget(ui->listService);
 }
 
-void PlanerFahrtage::ZugLaden(QListWidgetItem* zug) {
-    aktuellerZug = zug;
-    createEmptyForm();
-    Fahrtag *akt = fahrplanManager->getFahrtag(zug);
-    // Rahmendaten
-    ui->dateZug->setDate(akt->getDatum());
-    ui->textAnlass->insertPlainText(akt->getAnlass());
-    ui->comboArt->setCurrentIndex(akt->getArt());
-    ui->checkWichtig->setChecked(akt->getWichtig());
-    ui->comboWagenreihung->setCurrentText(akt->getWagenreihung());
-    ui->comboTimeTfH->setCurrentText(akt->getTimeTf().toString("hh"));
-    ui->comboTimeTfM->setCurrentText(akt->getTimeTf().toString("mm"));
-    ui->comboTimeZH->setCurrentText(akt->getTimeZ().toString("hh"));
-    ui->comboTimeZM->setCurrentText(akt->getTimeZ().toString("mm"));
-    // Fahrplan
-    // Peronal
-    if (akt->getTf()->size() > 0) {
-        ui->listTf->clear();
-        ui->listTf->addItems(QStringList(*akt->getTf()));
-        for(int i = 0; i < ui->listTf->count(); i++) {
-            ui->listTf->item(i)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
-        }
-    }
-    if (akt->getZf()->size() > 0) {
-        ui->listZf->clear();
-        ui->listZf->addItems(QStringList(*akt->getZf()));
-        for(int i = 0; i < ui->listTf->count(); i++) {
-            ui->listZf->item(i)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
-        }
-    }
-    if (akt->getZub()->size() > 0) {
-        ui->listZub->clear();
-        ui->listZub->addItems(QStringList(*akt->getZub()));
-        for(int i = 0; i < ui->listTf->count(); i++) {
-            ui->listZub->item(i)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
-        }
-    }
-    if (akt->getService()->size() > 0) {
-        ui->listService->clear();
-        ui->listService->addItems(QStringList(*akt->getService()));
-        for(int i = 0; i < ui->listTf->count(); i++) {
-            ui->listService->item(i)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
-        }
-    }
+/* ENDE DES BEREICHS MIT KONSTRUKTOR UND STATISCHEN METHODEN */
 
-    // Reservierungen
+// Tag im Kalender aktiviert -> Zug Laden
+void PlanerFahrtage::on_calendarDock_activated(const QDate &date)
+{
+    on_ButtonAdd_clicked();
+}
+
+// Anzeigen des gewählten Tages im Kalender
+void PlanerFahrtage::on_calendarDock_clicked(const QDate &date)
+{
+    if (! zugManager->showDate(date))
+    {
+        ui->ListeZuege->clearSelection();
+        setState(false);
+    }
+}
+void PlanerFahrtage::on_pushListeShowAll_clicked()
+{
+    zugManager->showAll();
+    ui->ListeZuege->setCurrentRow(0);
+}
+
+void PlanerFahrtage::on_ListeZuege_itemSelectionChanged()
+{
+    if (ui->ListeZuege->count() > 0)
+        on_ListeZuege_itemClicked(ui->ListeZuege->currentItem());
+}
+void PlanerFahrtage::on_ListeZuege_itemClicked(QListWidgetItem *item)
+{
+    uebernehmen = false;
+    setState(true);
+    ZugSichern();
+    aktuellerZug = NULL;
+    if (item != NULL)
+        ZugLaden(item);
     uebernehmen = true;
-    aktualisieren();
 }
 
-
-/* Sichern der Daten eines Fahrtages */
-void PlanerFahrtage::saveRahmendaten() {
-    if (uebernehmen) {
-        Fahrtag *akt = fahrplanManager->getFahrtag(aktuellerZug);
-        akt->setDatum(ui->dateZug->date());
-        akt->setArt(ui->comboArt->currentIndex());
-        akt->setAnlass(ui->textAnlass->toPlainText());
-        akt->setWichtig(ui->checkWichtig->isChecked());
-        akt->setWagenreihung(ui->comboWagenreihung->currentText());
-        akt->setTimeTf(QTime::fromString(ui->comboTimeTfH->currentText()+":"+ui->comboTimeTfM->currentText(), "hh:mm"));
-        akt->setTimeZ(QTime::fromString(ui->comboTimeZH->currentText()+":"+ui->comboTimeZM->currentText(), "hh:mm"));
-        saved = false;
-
-        QListWidgetItem *item = akt->getItem();
-        item->setBackgroundColor(Farben.at(akt->getArt()));
-
-        fahrplanManager->updateFahrtag(akt);
-        ui->ListeZuege->setCurrentItem(item);
-//        aktualisieren();
+void PlanerFahrtage::on_ButtonAdd_clicked ()
+{
+    on_ListeZuege_itemClicked(zugManager->addFahrtag()->getItem());
+    ui->dateZug->setDate(ui->calendarDock->selectedDate());
+    ui->ButtonRemove->setEnabled(true);
+    ui->ButtonExport->setEnabled(true);
+    ui->comboArt->setFocus();
+    setSaved(false);
+}
+void PlanerFahrtage::on_ButtonRemove_clicked()
+{
+    if (QMessageBox::question(this, "Bitte bestätigen!", "Möchten Sie den Fahrtag wirklich löschen?") == QMessageBox::Yes)
+    {
+        zugManager->removeFahrtag(aktuellerZug);
+        setSaved(false);
+    }
+    if (ui->ListeZuege->count() < 1)
+    {
+        setState(false);
+        ui->ButtonNachher->setEnabled(false);
+        ui->ButtonVorher->setEnabled(false);
+        ui->ButtonRemove->setEnabled(false);
+        ui->ButtonExport->setEnabled(false);
     }
 }
 
-void PlanerFahrtage::saveFahrplan() {
-    if (uebernehmen) {
-        saved = false;
-//        aktualisieren();
-    }
+void PlanerFahrtage::ZugLaden(QListWidgetItem* zug)
+{
+    aktuellerZug = zugManager->getFahrtag(zug);
+    createEmptyForm();
+    // Rahmendaten
+    ui->dateZug->setDate(aktuellerZug->getDatum());
+    ui->textAnlass->insertPlainText(aktuellerZug->getAnlass());
+    ui->comboArt->setCurrentIndex(aktuellerZug->getArt());
+    ui->checkWichtig->setChecked(aktuellerZug->getWichtig());
+    ui->comboWagenreihung->setCurrentText(aktuellerZug->getWagenreihung());
+    ui->comboTimeTfH->setCurrentText(aktuellerZug->getTimeTf().toString("hh"));
+    ui->comboTimeTfM->setCurrentText(aktuellerZug->getTimeTf().toString("mm"));
+    ui->comboTimeZH->setCurrentText(aktuellerZug->getTimeZ().toString("hh"));
+    ui->comboTimeZM->setCurrentText(aktuellerZug->getTimeZ().toString("mm"));
+
+    /* Personal */
+    // CheckBoxes, ob noch Personal benötigt wird
+    ui->checkTf->setChecked(aktuellerZug->getBenoetigeTf());
+    ui->checkZf->setChecked(aktuellerZug->getBenoetigeZf());
+    ui->checkZub->setChecked(aktuellerZug->getBenoetigeZub());
+    ui->checkService->setChecked(aktuellerZug->getBenoetigeService());
+    // Laden der einzelnen Listenelemente
+    qListToListWidget(aktuellerZug->getTf(), ui->listTf);
+    qListToListWidget(aktuellerZug->getZf(), ui->listZf);
+    qListToListWidget(aktuellerZug->getZub(), ui->listZub);
+    qListToListWidget(aktuellerZug->getService(), ui->listService);
+    // Löschen-Buttons aktivieren, wenn nötig
+    ui->pushButtonListTfDelete->setEnabled(aktuellerZug->getTf()->length() > 0);
+    ui->pushButtonListZfDelete->setEnabled(aktuellerZug->getZf()->length() > 0);
+    ui->pushButtonListZubDelete->setEnabled(aktuellerZug->getZub()->length() > 0);
+    ui->pushButtonListServiceDelete->setEnabled(aktuellerZug->getService()->length() > 0);
+    // Einsetzen der Bemerkungen
+    ui->textBemerkungen->insertPlainText(aktuellerZug->getBemerkungen());
+
+    /* Reservierungen */
+    setStateRes(false); // Eingabemaske für Reservierungen deaktivieren
+    aktuellerZug->getManager()->catching(); // Die Daten vom Manager in die Liste laden
+    ui->toolResDelete->setEnabled(aktuellerZug->getManager()->getGesamtzahl() > 0);
+
+    /* Sonstige Anpassungen */
+    // Den Fokus auf das Feld mit dem Anlass legen
+    ui->textAnlass->setFocus();
+    // Buttons für weiter und zurück aktivieren/Deaktivieren
+    ui->ButtonVorher->setEnabled(ui->ListeZuege->currentRow() > 0);
+    ui->ButtonNachher->setEnabled(ui->ListeZuege->currentRow()+1 < ui->ListeZuege->count());
+
+    uebernehmen = true;
 }
 
-void PlanerFahrtage::savePersonal() {
-    if (uebernehmen) {
-        Fahrtag *akt = fahrplanManager->getFahrtag(aktuellerZug);
-        // Liste mit Peronal Speichern
-        QList<QString>* tf = new QList<QString>();
-        for(int i = 0; i < ui->listTf->count(); i++) {
-            if (ui->listTf->item(i)->text() != tr("(Name eingeben)"))
-                tf->append(ui->listTf->item(i)->text());
-        }
-        akt->setTf(tf);
-        QList<QString>* zf = new QList<QString>();
-        for(int i = 0; i < ui->listZf->count(); i++) {
-            if (ui->listZf->item(i)->text() != tr("(Name eingeben)"))
-                zf->append(ui->listZf->item(i)->text());
-        }
-        akt->setZf(zf);
-        QList<QString>* zub = new QList<QString>();
-        for(int i = 0; i < ui->listZub->count(); i++) {
-            if (ui->listZub->item(i)->text() != tr("(Name eingeben)"))
-                zub->append(ui->listZub->item(i)->text());
-        }
-        akt->setZub(zub);
-        QList<QString>* service = new QList<QString>();
-        for(int i = 0; i < ui->listService->count(); i++) {
-            if (ui->listService->item(i)->text() != tr("(Name eingeben)"))
-                service->append(ui->listService->item(i)->text());
-        }
-        akt->setService(service);
-
-        akt->setBemerkungen(ui->textBemerkungen->toPlainText());
-        saved = false;
-//        aktualisieren();
-    }
-}
-
-void PlanerFahrtage::saveReservierungen() {
-    if (uebernehmen) {
-//        QFahrtag *akt = fahrplanManager->getFahrtag(aktuellerZug);
-        saved = false;
-        aktualisieren();
-    }
-}
-
-void PlanerFahrtage::ZugSichern() {
-    if (uebernehmen) {
+void PlanerFahrtage::ZugSichern()
+{
+    if (uebernehmen)
+    {
         saveRahmendaten();
         saveFahrplan();
         savePersonal();
@@ -235,62 +188,15 @@ void PlanerFahrtage::ZugSichern() {
     }
 }
 
-void PlanerFahrtage::aktualisieren() { }
-
-
-/* Speichern einer Datei */
-void PlanerFahrtage::speichern() {
-    if (path == "") {
-        speichernUnter();
-    }
-    if (path != "") {
-        ZugSichern();
-        // Alle Daten in JSON umwandeln und dann in die Datei schreiben
-        saved = true;
-    }
-}
-
-void PlanerFahrtage::speichernUnter() {
-    path = QFileDialog::getSaveFileName(this, tr("Speichern unter..."), "Einsatzplan.ako", tr("AkO-Dateien (*.ako)"));
-    setWindowFilePath(path);
-    if (path != "") {
-        speichern();
-    }
-}
-
-
-
-void PlanerFahrtage::setState(bool aktiv) {
-    /* Rahmendaten */
-    ui->dateZug->setEnabled(aktiv);
-    ui->comboArt->setEnabled(aktiv);
-    ui->comboWagenreihung->setEnabled(aktiv);
-    ui->checkWichtig->setEnabled(aktiv);
-    ui->textAnlass->setEnabled(aktiv);
-    ui->textBemerkungen->setEnabled(aktiv);
-    ui->comboTimeTfH->setEnabled(aktiv);
-    ui->comboTimeTfM->setEnabled(aktiv);
-    ui->comboTimeZH->setEnabled(aktiv);
-    ui->comboTimeZM->setEnabled(aktiv);
-    /* Fahrplan */
-//    ui->tabFahrplan->setEnabled(aktiv);
-    /* Personal */
-    ui->tabPersonal->setEnabled(aktiv);
-    /* Reservierungen */
-    ui->tabReservierungen->setEnabled(aktiv);
-}
-
-/* Methoden, um Listen zu manipulieren */
-void PlanerFahrtage::deleteSelectedRowFromListWidget(QListWidget* curr)
+// Vorherigen Fahrtag auswählen
+void PlanerFahrtage::on_ButtonVorher_clicked()
 {
-    if (curr->count() > 1) {
-        curr->takeItem(ui->listTf->currentRow());
-    }
+    zugManager->showAll();
+    ui->ListeZuege->setCurrentRow(ui->ListeZuege->currentRow()-1);
 }
-void PlanerFahrtage::addEmptyRowToListWidget(QListWidget* curr)
+// Nächsten Fahrtag auswählen
+void PlanerFahrtage::on_ButtonNachher_clicked()
 {
-    curr->addItem("(Name eingeben)");
-    curr->item(curr->count()-1)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
+    zugManager->showAll();
+    ui->ListeZuege->setCurrentRow(ui->ListeZuege->currentRow()+1);
 }
-
-

@@ -2,195 +2,345 @@
 <ui version="4.0">
  <class>Export</class>
  <widget class="QDialog" name="Export">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>840</width>
-    <height>561</height>
+    <width>400</width>
+    <height>555</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Dialog</string>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="1,1,1,1">
+  <property name="minimumSize">
+   <size>
+    <width>400</width>
+    <height>400</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>400</width>
+    <height>1000</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Exportieren</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,1,0,0">
+   <property name="horizontalSpacing">
+    <number>0</number>
+   </property>
+   <property name="verticalSpacing">
+    <number>6</number>
+   </property>
    <item row="0" column="0">
-    <widget class="QComboBox" name="ComboStart">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="currentIndex">
-      <number>4</number>
-     </property>
-     <item>
-      <property name="text">
-       <string>Ab Datum</string>
-      </property>
+    <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,1,1" columnstretch="0,1,1">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Ab:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
      </item>
-     <item>
-      <property name="text">
-       <string>Dieses Jahr</string>
-      </property>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboAb">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="currentIndex">
+        <number>3</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Heute</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Datum</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Diesem Jahr</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Alle vergangenen Termine</string>
+        </property>
+       </item>
+      </widget>
      </item>
-     <item>
-      <property name="text">
-       <string>Letzte x Termine</string>
-      </property>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Bis:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
      </item>
-     <item>
-      <property name="text">
-       <string>Ab Heute</string>
-      </property>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="comboBis">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="currentIndex">
+        <number>3</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Heute</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Datum</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Ende diesen Jahres</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Alle zukünftigen Termine</string>
+        </property>
+       </item>
+      </widget>
      </item>
-     <item>
-      <property name="text">
-       <string>Ab: Immer</string>
-      </property>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Art:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
      </item>
-    </widget>
+     <item row="2" column="1" colspan="2">
+      <widget class="QComboBox" name="ComboArt">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="currentIndex">
+        <number>8</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Museumsfahrten</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Sonderzüge</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Nikolauszüge</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Museumszug mit ELF</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ELF Schnupperkurs</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Bahnhofsfest</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Ausbildung</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Sonstiges</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Alle Fahrten</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QDateEdit" name="dateAb">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="maximumDate">
+        <date>
+         <year>2100</year>
+         <month>12</month>
+         <day>31</day>
+        </date>
+       </property>
+       <property name="minimumDate">
+        <date>
+         <year>1999</year>
+         <month>11</month>
+         <day>27</day>
+        </date>
+       </property>
+       <property name="displayFormat">
+        <string>dd.MM.yyyy</string>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="date">
+        <date>
+         <year>2016</year>
+         <month>1</month>
+         <day>1</day>
+        </date>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QDateEdit" name="dateBis">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="maximumDate">
+        <date>
+         <year>2100</year>
+         <month>12</month>
+         <day>31</day>
+        </date>
+       </property>
+       <property name="minimumDate">
+        <date>
+         <year>1999</year>
+         <month>11</month>
+         <day>27</day>
+        </date>
+       </property>
+       <property name="displayFormat">
+        <string>dd.MM.yyyy</string>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="date">
+        <date>
+         <year>2016</year>
+         <month>3</month>
+         <day>1</day>
+        </date>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="EditAb">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-    </widget>
+   <item row="2" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="0">
+      <widget class="QPushButton" name="buttonDrucken">
+       <property name="text">
+        <string>Drucken</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="buttonPDF">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>Als PDF sichern</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="checkSingle">
+       <property name="layoutDirection">
+        <enum>Qt::RightToLeft</enum>
+       </property>
+       <property name="text">
+        <string>Einzelansicht</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QCheckBox" name="checkListe">
+       <property name="text">
+        <string>Übersichtsliste</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="0" column="2">
-    <widget class="QComboBox" name="ComboBis">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="currentIndex">
-      <number>4</number>
-     </property>
-     <item>
-      <property name="text">
-       <string>Bis Datum</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Dieses Jahr</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Nächste x Termine</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Bis heute</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Bis immer</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QLineEdit" name="EditBis">
-     <property name="enabled">
-      <bool>false</bool>
+   <item row="3" column="0">
+    <widget class="QPushButton" name="buttonClose">
+     <property name="text">
+      <string>Fenster schließen</string>
      </property>
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QComboBox" name="ComboArt">
-     <property name="enabled">
-      <bool>false</bool>
+    <widget class="QListWidget" name="listZuege">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::MultiSelection</enum>
      </property>
-     <item>
-      <property name="text">
-       <string>Alle Fahrten</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Museumsfahrten</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Sonderzüge</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Ausbildung</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Nikolauszüge</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>ELF Schnupperkurs</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Sonstiges</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="1" column="1" colspan="3">
-    <widget class="QPushButton" name="ButtonShow">
-     <property name="text">
-      <string>Anzeigen</string>
+     <property name="verticalScrollMode">
+      <enum>QAbstractItemView::ScrollPerPixel</enum>
      </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="4">
-    <widget class="QTextEdit" name="textEdit">
-     <property name="styleSheet">
-      <string notr="true">table {
-background-color: green;
-}</string>
-     </property>
-     <property name="undoRedoEnabled">
-      <bool>false</bool>
-     </property>
-     <property name="textInteractionFlags">
-      <set>Qt::NoTextInteraction</set>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QPushButton" name="ButtonDrucken">
-     <property name="text">
-      <string>Drucken</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="2">
-    <widget class="QPushButton" name="ButtonPDF">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="text">
-      <string>Als PDF sichern</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3">
-    <widget class="QPushButton" name="ButtonCSV">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>Als CSV Sichern</string>
+     <property name="horizontalScrollMode">
+      <enum>QAbstractItemView::ScrollPerPixel</enum>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonClose</sender>
+   <signal>clicked()</signal>
+   <receiver>Export</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>329</x>
+     <y>635</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>372</x>
+     <y>646</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
