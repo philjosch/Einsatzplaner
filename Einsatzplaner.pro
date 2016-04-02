@@ -10,6 +10,8 @@ QT       += core gui widgets printsupport
 TARGET = Einsatzplaner
 TEMPLATE = app
 
+VERSION = 0.1
+
 SOURCES += main.cpp\
     export.cpp \
     planerfahrtage.cpp \
@@ -39,18 +41,24 @@ FORMS    += \
 
 CONFIG += console
 
-OTHER_FILES += Info.plist \
-    Einsatzplaner.icns
 
+win32 {
+    OTHER_FILES += keks.ico
+    DISTFILES += icon.rc
+
+    RC_FILE = icon.rc
+}
 
 macx {
+    OTHER_FILES += Info.plist keks.icns
+
     QMAKE_INFO_PLIST = Info.plist
 
     DISTFILES += Info.plist
 
     # Bundle identifier for your application
     BUNDLEID = de.philipp-schepper.einsatzplaner
-    ICON = Einsatzplaner.icns
+    ICON = keks.icns
 ##    codesign.commands += macdeployqt $${TARGET}.app;
 
 }
@@ -102,3 +110,4 @@ macx {
 #    product.commands += productbuild –component $${TARGET}.app /Applications –sign $${INSTALLERCERT} $${TARGET}.pkg;
 
 #    QMAKE_EXTRA_TARGETS += codesign product copyfiles
+

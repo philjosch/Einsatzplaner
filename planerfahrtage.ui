@@ -2177,6 +2177,9 @@ Zub, Service</string>
    <property name="shortcut">
     <string>Ctrl+N</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionSpeichern">
    <property name="text">
@@ -2184,6 +2187,9 @@ Zub, Service</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionSpeichernUnter">
@@ -2193,6 +2199,9 @@ Zub, Service</string>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionOeffnen">
    <property name="text">
@@ -2200,6 +2209,9 @@ Zub, Service</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionDrucken">
@@ -2212,12 +2224,24 @@ Zub, Service</string>
   </action>
   <action name="actionQuit">
    <property name="text">
-    <string>quit</string>
+    <string>Einsatzplaner beenden</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
    </property>
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>about.*</string>
+    <string>Über Einsatzplaner</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
    <property name="menuRole">
     <enum>QAction::AboutRole</enum>
@@ -2225,7 +2249,16 @@ Zub, Service</string>
   </action>
   <action name="actionPreferences">
    <property name="text">
-    <string>config</string>
+    <string>Einstellungen...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+,</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
    </property>
   </action>
   <action name="actionAboutQt">

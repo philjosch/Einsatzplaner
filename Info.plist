@@ -20,7 +20,7 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>CFBundleIconFile</key>
-	<string>Einsatzplaner.icns</string>
+        <string>@ICON@</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleGetInfoString</key>
@@ -28,13 +28,13 @@
 	<key>CFBundleName</key>
 	<string>Einsatzplaner</string>
         <key>CFBundleShortVersionString</key>
-        <string>0.1</string>
+        <string>@SHORT_VERSION@</string>
         <key>CFBundleVersion</key>
         <string>1.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleExecutable</key>
-	<string>Einsatzplaner</string>
+        <string>@EXECUTABLE@</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>de_DE</string>
 	<key>CFBundleLocalizations</key>
