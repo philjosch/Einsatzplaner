@@ -1625,8 +1625,8 @@ body {
 }
 
 body {
-    background-color: #0e0e10;
-    background-image: linear-gradient(to top, #0e0e10, #484852), url("../../images/bg.jpg");
+    background-color: #595958;
+/*    background-image: linear-gradient(to top, #0e0e10, #484852), url("../../images/bg.jpg"); */
     background-size: auto, cover;
     background-attachment: fixed, fixed;
     background-position: center, center;
@@ -3119,8 +3119,8 @@ body.is-menu-visible #menu .inner {
     
     #banner {
         padding: 7em 0 8.25em 0 ;
-        background-color: #2e3141;
-        background-image: linear-gradient(to top, #0e0e10, #484852), url("../../images/bg.jpg");
+        background-color: #595958;
+/*        background-image: linear-gradient(to top, #0e0e10, #484852), url("../../images/bg.jpg"); */
         background-size: auto, cover;
         background-position: center, center;
         margin-bottom: -6.5em;
@@ -3388,7 +3388,6 @@ body.is-loading #banner p {
 }
 
 .wrapper.spotlight .image {
-				border-radius: 100%;
                 margin: 0 3em 2em 0;
                 width: 22em;
                 overflow: hidden;
@@ -3396,7 +3395,6 @@ body.is-loading #banner p {
 }
 
 .wrapper.spotlight .image img {
-    border-radius: 100%;
     width: 100%;
 }
 
@@ -3606,8 +3604,8 @@ body.is-loading #banner p {
 @media screen {
     
     #footer {
-        background-color: #0e0e10;
-        background-image: linear-gradient(to top, #0e0e10, #484852), url("../../images/bg.jpg");
+        background-color: #595958;
+/*        background-image: linear-gradient(to top, #0e0e10, #484852), url("../../images/bg.jpg"); */
         background-size: auto, cover;
         background-position: center, center;
         margin-top: -6.5em;
