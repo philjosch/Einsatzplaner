@@ -38,15 +38,15 @@ FORMS    += \
     export.ui \
     planerfahrtage.ui
 
-CONFIG += console
+CONFIG -= console
 
 
 win32 {
 
     RC_ICONS = keks.ico
     QMAKE_TARGET_COMPANY = Philipp Schepper
-    QMAKE_TARGET_DESCRIPTION = "Ein Programm für Museumseisenbahnen"
-    QMAKE_TARGET_COPYRIGHT = "Rechte bei Philipp Schepper 2016"
+    QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
+    QMAKE_TARGET_COPYRIGHT = Rechte bei Philipp Schepper 2016
     QMAKE_TARGET_PRODUCT = Einsatzplaner
 #    RC_CODEPAGE =
     RC_ICONS = keks.ico
