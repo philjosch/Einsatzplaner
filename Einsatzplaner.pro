@@ -4,13 +4,10 @@
 #
 #-------------------------------------------------
 
-
 QT       += core gui widgets printsupport
 
 TARGET = Einsatzplaner
 TEMPLATE = app
-
-VERSION = 0.1
 
 SOURCES += main.cpp\
     export.cpp \
@@ -39,17 +36,24 @@ FORMS    += \
     export.ui \
     planerfahrtage.ui
 
-CONFIG += console
+CONFIG -= console
 
 
 win32 {
-    OTHER_FILES += keks.ico
-    DISTFILES += icon.rc
-
-    RC_FILE = icon.rc
+    RC_ICONS = keks.ico
+    QMAKE_TARGET_COMPANY = Philipp Schepper
+    QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
+    QMAKE_TARGET_COPYRIGHT = Rechte bei Philipp Schepper 2016
+    QMAKE_TARGET_PRODUCT = Einsatzplaner
+    RC_ICONS = keks.ico
+#    RC_LANG = German
+    VERSION = 0.1.2.1
+#    OTHER_FILES += keks.ico
 }
 
 macx {
+    VERSION = 0.1.2
+
     OTHER_FILES += Info.plist keks.icns
 
     QMAKE_INFO_PLIST = Info.plist
@@ -110,4 +114,3 @@ macx {
 #    product.commands += productbuild –component $${TARGET}.app /Applications –sign $${INSTALLERCERT} $${TARGET}.pkg;
 
 #    QMAKE_EXTRA_TARGETS += codesign product copyfiles
-
