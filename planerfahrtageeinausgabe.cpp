@@ -15,7 +15,7 @@ void PlanerFahrtage::on_ButtonExport_clicked()
 
 void PlanerFahrtage::setSaved(bool save)
 {
-    saved = save;
+//    saved = save;
     setWindowModified(! save);
 }
 

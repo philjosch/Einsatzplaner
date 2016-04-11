@@ -3,7 +3,7 @@
  <class>Export</class>
  <widget class="QDialog" name="Export">
   <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
+   <enum>Qt::NonModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -33,6 +33,9 @@
   </property>
   <property name="windowTitle">
    <string>Exportieren</string>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,1,0,0">
    <property name="horizontalSpacing">

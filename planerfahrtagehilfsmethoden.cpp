@@ -62,6 +62,7 @@ void PlanerFahrtage::setState(bool aktiv)
 }
 void PlanerFahrtage::setStateRes(bool aktiv)
 {
+    ui->pushResVerteilung->setEnabled(aktiv);
     ui->lineResName->setEnabled(aktiv);
     ui->lineResMail->setEnabled(aktiv);
     ui->lineResTelefon->setEnabled(aktiv);

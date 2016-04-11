@@ -77,8 +77,6 @@ int ManagerReservierungen::getGesamtzahl()
 }
 
 
-
-
 QJsonArray ManagerReservierungen::toJson() {
     QJsonArray o = QJsonArray();
     for(int i = 0; i < reservierungen->length(); i++) {
@@ -92,6 +90,27 @@ void ManagerReservierungen::fromJson(QJsonArray json) {
         Reservierung *res = new Reservierung(NULL);
         res->fromJson(json.at(i).toObject());
         reservierungen->append(res);
+    }
+}
+
+void ManagerReservierungen::sortName()
+{
+    // Liste nach Name sortieren
+    for(int i = 1; i < reservierungen->length(); i++) {
+        while (i > 0 && reservierungen->at(i-1)->getName() > reservierungen->at(i)->getName()) {
+            reservierungen->swap(i, i-1);
+        }
+    }
+}
+
+void ManagerReservierungen::sortPlatz()
+{
+    // Liste nach Sitzplatz sortieren
+    // Liste nach Name sortieren
+    for(int i = 1; i < reservierungen->length(); i++) {
+        while (i > 0 && reservierungen->at(i-1)->getSitzplatz() > reservierungen->at(i)->getSitzplatz()) {
+            reservierungen->swap(i, i-1);
+        }
     }
 }
 

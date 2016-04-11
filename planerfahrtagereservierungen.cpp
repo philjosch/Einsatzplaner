@@ -7,6 +7,8 @@
 #include <QDate>
 #include <QTime>
 
+#include "reservierungenuebersicht.h"
+
 
 void PlanerFahrtage::saveReservierungen()
 {
@@ -27,6 +29,8 @@ void PlanerFahrtage::saveReservierungen()
         res->setAutoPlatz(ui->checkResAuto->isChecked());
         res->setSitzplatz(ui->lineResSitze->text());
         res->setSonstiges(ui->plainResSonstiges->toPlainText());
+
+        windowReservierungen->reservierungChanged();
     }
 }
 
@@ -36,6 +40,8 @@ void PlanerFahrtage::on_toolResAdd_clicked()
 //    saveReservierungen();
     aktuellerZug->getManager()->add();
     ui->toolResDelete->setEnabled(true);
+//    ui->pushResAllAuto->setEnabled(true);
+    ui->pushResVerteilung->setEnabled(true);
     ui->lineResName->setFocus();
 }
 void PlanerFahrtage::on_toolResDelete_clicked()
@@ -44,6 +50,8 @@ void PlanerFahrtage::on_toolResDelete_clicked()
     aktuellerZug->getManager()->remove(ui->listRes->currentItem());
     if (ui->listRes->count() < 1) {
         ui->toolResDelete->setEnabled(false);
+//        ui->pushResAllAuto->setEnabled(false);
+        ui->pushResVerteilung->setEnabled(false);
         setStateRes(false);
     }
 }
@@ -84,13 +92,20 @@ void PlanerFahrtage::on_listRes_itemChanged(QListWidgetItem *item)
     ui->lineResName->setText(item->text());
 }
 
-// Atmatische Verteilung der Sitzplätze (fehlt)
+// Automatische Verteilung der Sitzplätze (fehlt)
 void PlanerFahrtage::on_pushResAllAuto_clicked()
 {
 }
-// Anzeigen einer Sitzplatzverteilung,anhand der Wagenreihung, ... (fehlt)
+// Anzeigen einer Sitzplatzverteilung,anhand der Wagenreihung, ... (kommt)
 void PlanerFahrtage::on_pushResVerteilung_clicked()
 {
+    if (windowReservierungen->isHidden()) {
+        windowReservierungen->show();
+        ui->pushResVerteilung->setText(tr("Sitzplatzverteilung verbergen"));
+    } else {
+        windowReservierungen->hide();
+        ui->pushResVerteilung->setText(tr("Sitzplatzverteilung anzeigen"));
+    }
 }
 
 /* Änderungen bei der Eingabe direkt speichern */
@@ -111,4 +126,3 @@ void PlanerFahrtage::on_checkResAuto_stateChanged(int arg1)
 }
 void PlanerFahrtage::on_lineResSitze_textChanged(const QString &arg1) { saveReservierungen(); }
 void PlanerFahrtage::on_plainResSonstiges_textChanged() { saveReservierungen(); }
-

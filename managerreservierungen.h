@@ -28,10 +28,14 @@ public slots:
     QJsonArray toJson();
     void fromJson(QJsonArray json);
 
+    void sortName();
+    void sortPlatz();
+
 private:
     QListWidget *liste; // Hier wird die verknüpfte Liste zur Darstellung gespeichert
     QList<Reservierung *> *reservierungen;
     QMap<QListWidgetItem*, Reservierung*> *map; // Hier werden die Reservierungen gespeichert
+
 
 };
 

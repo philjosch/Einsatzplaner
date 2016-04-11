@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     reservierung.cpp \
     managerreservierungen.cpp \
     fahrtag.cpp \
-    managerzuege.cpp
+    managerzuege.cpp \
+    reservierungenuebersicht.cpp
 
 HEADERS  += \
     export.h \
@@ -33,11 +34,13 @@ HEADERS  += \
     reservierung.h \
     managerreservierungen.h \
     fahrtag.h \
-    managerzuege.h
+    managerzuege.h \
+    reservierungenuebersicht.h
 
 FORMS    += \
     export.ui \
-    planerfahrtage.ui
+    planerfahrtage.ui \
+    reservierungenuebersicht.ui
 
 CONFIG += console
 
