@@ -7,6 +7,7 @@ ManagerReservierungen::ManagerReservierungen(QListWidget *liste)
     this->liste = liste;
     map = new QMap<QListWidgetItem*, Reservierung*>();
     reservierungen = new QList<Reservierung*>();
+    automatisch = false;
 }
 
 void ManagerReservierungen::releasing()
@@ -79,20 +80,46 @@ int ManagerReservierungen::getGesamtzahl()
 
 
 
-QJsonArray ManagerReservierungen::toJson() {
-    QJsonArray o = QJsonArray();
+QJsonObject ManagerReservierungen::toJson() {
+    QJsonArray a = QJsonArray();
     for(int i = 0; i < reservierungen->length(); i++) {
-        o.append(reservierungen->at(i)->toJson());
+        a.append(reservierungen->at(i)->toJson());
     }
+    QJsonObject o = QJsonObject();
+    o.insert("auto", automatisch);
+    o.insert("res", a);
     return o;
 }
 
+void ManagerReservierungen::fromJson(QJsonObject json) {
+//    reservierungen->clear();
+    QJsonArray a = json.value("res").toArray();
+    for(int i = 0; i < a.size(); i++) {
+        Reservierung *res = new Reservierung(NULL);
+        res->fromJson(a.at(i).toObject());
+        reservierungen->append(res);
+    }
+    automatisch = json.value("auto").toBool(false);
+}
+
 void ManagerReservierungen::fromJson(QJsonArray json) {
+    reservierungen->clear();
+    automatisch = false;
     for(int i = 0; i < json.size(); i++) {
         Reservierung *res = new Reservierung(NULL);
         res->fromJson(json.at(i).toObject());
         reservierungen->append(res);
     }
+}
+
+bool ManagerReservierungen::getAutomatisch() const
+{
+    return automatisch;
+}
+
+void ManagerReservierungen::setAutomatisch(bool value)
+{
+    automatisch = value;
 }
 
 QList<Reservierung *> *ManagerReservierungen::getReservierungen() const

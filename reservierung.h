@@ -21,7 +21,7 @@ public:
     void setStartHp(const QString &value, int pos);
     void setEndeZug(const QString &value, int pos);
     void setEndeHp(const QString &value, int pos);
-    void setAutoPlatz(bool value);
+//    void setAutoPlatz(bool value);
     void setSitzplatz(const QString &value);
     void setSonstiges(const QString &value);
     void setListItem(QListWidgetItem *value);
@@ -41,7 +41,7 @@ public:
     QList<QString> getStartHp() const;
     QList<QString> getEndeZug() const;
     QList<QString> getEndeHp() const;
-    bool getAutoPlatz() const;
+//    bool getAutoPlatz() const;
     QString getSitzplatz() const;
     QString getSonstiges() const;
 
@@ -58,7 +58,7 @@ private:
     QList<QString> startHp;
     QList<QString> endeZug;
     QList<QString> endeHp;
-    bool autoPlatz;
+//    bool autoPlatz;
     QString sitzplatz;
     QString sonstiges;
 

@@ -10,6 +10,10 @@ class ManagerReservierungen {
 public:
     QList<Reservierung *> *getReservierungen() const;
 
+    void setAutomatisch(bool value);
+
+    bool getAutomatisch() const;
+
 public slots:
     ManagerReservierungen(QListWidget *liste);
 
@@ -25,13 +29,17 @@ public slots:
 
     int getGesamtzahl();
 
-    QJsonArray toJson();
+    QJsonObject toJson();
+    void fromJson(QJsonObject json);
     void fromJson(QJsonArray json);
+
 
 private:
     QListWidget *liste; // Hier wird die verknüpfte Liste zur Darstellung gespeichert
     QList<Reservierung *> *reservierungen;
     QMap<QListWidgetItem*, Reservierung*> *map; // Hier werden die Reservierungen gespeichert
+
+    bool automatisch;
 
 };
 

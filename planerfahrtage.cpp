@@ -166,6 +166,7 @@ void PlanerFahrtage::ZugLaden(QListWidgetItem* zug)
     setStateRes(false); // Eingabemaske für Reservierungen deaktivieren
     aktuellerZug->getManager()->catching(); // Die Daten vom Manager in die Liste laden
     ui->toolResDelete->setEnabled(aktuellerZug->getManager()->getGesamtzahl() > 0);
+    ui->checkResAuto->setChecked(aktuellerZug->getManager()->getAutomatisch());
 
     /* Sonstige Anpassungen */
     // Den Fokus auf das Feld mit dem Anlass legen

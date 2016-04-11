@@ -15,6 +15,66 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_9" rowstretch="0,0,1,0,0">
+    <item row="4" column="1">
+     <widget class="QPushButton" name="ButtonExport">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="toolTip">
+       <string notr="true"/>
+      </property>
+      <property name="statusTip">
+       <string notr="true"/>
+      </property>
+      <property name="whatsThis">
+       <string notr="true"/>
+      </property>
+      <property name="accessibleName">
+       <string notr="true"/>
+      </property>
+      <property name="accessibleDescription">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Exportieren</string>
+      </property>
+      <property name="shortcut">
+       <string>Ctrl+E</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QPushButton" name="ButtonVorher">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="toolTip">
+       <string notr="true"/>
+      </property>
+      <property name="statusTip">
+       <string notr="true"/>
+      </property>
+      <property name="whatsThis">
+       <string notr="true"/>
+      </property>
+      <property name="accessibleName">
+       <string notr="true"/>
+      </property>
+      <property name="accessibleDescription">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Vorheriger Fahrtag</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="3">
+     <widget class="Line" name="line_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0" colspan="3">
      <layout class="QGridLayout" name="layoutRahmendaten" rowstretch="0,0,0,0" columnstretch="0,1,0,1">
       <item row="1" column="3">
@@ -705,98 +765,6 @@ Zub, Service</string>
       </item>
      </layout>
     </item>
-    <item row="4" column="1">
-     <widget class="QPushButton" name="ButtonExport">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="toolTip">
-       <string notr="true"/>
-      </property>
-      <property name="statusTip">
-       <string notr="true"/>
-      </property>
-      <property name="whatsThis">
-       <string notr="true"/>
-      </property>
-      <property name="accessibleName">
-       <string notr="true"/>
-      </property>
-      <property name="accessibleDescription">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>Exportieren</string>
-      </property>
-      <property name="shortcut">
-       <string>Ctrl+E</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="3">
-     <widget class="Line" name="line_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="3">
-     <widget class="Line" name="line_3">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="2">
-     <widget class="QPushButton" name="ButtonNachher">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="toolTip">
-       <string notr="true"/>
-      </property>
-      <property name="statusTip">
-       <string notr="true"/>
-      </property>
-      <property name="whatsThis">
-       <string notr="true"/>
-      </property>
-      <property name="accessibleName">
-       <string notr="true"/>
-      </property>
-      <property name="accessibleDescription">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>Nächster Fahrtag</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QPushButton" name="ButtonVorher">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="toolTip">
-       <string notr="true"/>
-      </property>
-      <property name="statusTip">
-       <string notr="true"/>
-      </property>
-      <property name="whatsThis">
-       <string notr="true"/>
-      </property>
-      <property name="accessibleName">
-       <string notr="true"/>
-      </property>
-      <property name="accessibleDescription">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>Vorheriger Fahrtag</string>
-      </property>
-     </widget>
-    </item>
     <item row="2" column="0" colspan="3">
      <widget class="QTabWidget" name="tabEingabeWizard">
       <property name="enabled">
@@ -1006,6 +974,21 @@ Zub, Service</string>
         <string>Personal</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>12</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <property name="spacing">
+         <number>6</number>
+        </property>
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="1" column="0" colspan="2">
@@ -1466,9 +1449,73 @@ Zub, Service</string>
        <attribute name="title">
         <string>Reservierungen</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_10" columnstretch="0,0,1">
+       <layout class="QGridLayout" name="gridLayout_11" columnstretch="1,0,2">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>12</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <property name="horizontalSpacing">
+         <number>6</number>
+        </property>
+        <property name="verticalSpacing">
+         <number>-1</number>
+        </property>
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_6">
+         <layout class="QGridLayout" name="gridLayout_6" rowstretch="0,0,1,0,0,0">
+          <item row="4" column="0" colspan="2">
+           <widget class="QPushButton" name="pushResAllAuto">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Sitzplätze automatisch verteilen</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <widget class="QPushButton" name="pushResVerteilung">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Sitzplatzverteilung anzeigen</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QListWidget" name="listRes">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sortingEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="toolResDelete">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Reservierung stornieren</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_7">
             <property name="text">
@@ -1492,49 +1539,13 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QPushButton" name="toolResDelete">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Reservierung stornieren</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QListWidget" name="listRes">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sortingEnabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="0" colspan="2">
-           <widget class="QPushButton" name="pushResAllAuto">
+           <widget class="QCheckBox" name="checkResAuto">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="text">
-             <string>Alle Sitzplätze verteilen</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" colspan="2">
-           <widget class="QPushButton" name="pushResVerteilung">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Sitzplatzverteilung anzeigen</string>
+             <string>Automatische Sitzplatzverteilung aktivieren</string>
             </property>
            </widget>
           </item>
@@ -1548,84 +1559,8 @@ Zub, Service</string>
          </widget>
         </item>
         <item row="0" column="2">
-         <layout class="QGridLayout" name="gridLayout_11" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="0,0,0">
-          <item row="3" column="2">
-           <widget class="QComboBox" name="comboResKlasse">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="currentIndex">
-             <number>3</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>1. Klasse</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2. Klasse</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>3. Klasse</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2./3. Klasse</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLineEdit" name="lineResTelefon">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="inputMethodHints">
-             <set>Qt::ImhDigitsOnly</set>
-            </property>
-            <property name="echoMode">
-             <enum>QLineEdit::Normal</enum>
-            </property>
-            <property name="placeholderText">
-             <string>Telefon Nummer</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="label_15">
-            <property name="text">
-             <string>Ausstieg:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Sitzplätze:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="0">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>Sonstiges:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" colspan="2">
+         <layout class="QGridLayout" name="gridLayout_10" rowstretch="0,0,0,0,0,0,0,0,0,1" columnstretch="0,1,1">
+          <item row="0" column="1">
            <widget class="QLineEdit" name="lineResName">
             <property name="enabled">
              <bool>true</bool>
@@ -1638,30 +1573,49 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_8">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Name:</string>
+             <string>Kontakt:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
             </property>
            </widget>
           </item>
-          <item row="11" column="1" colspan="2">
-           <widget class="QPlainTextEdit" name="plainResSonstiges">
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineResMail">
             <property name="enabled">
              <bool>true</bool>
             </property>
+            <property name="inputMethodHints">
+             <set>Qt::ImhEmailCharactersOnly</set>
+            </property>
+            <property name="placeholderText">
+             <string>E-Mail</string>
+            </property>
            </widget>
           </item>
-          <item row="8" column="1">
-           <widget class="QComboBox" name="comboResEnde1Zug">
+          <item row="8" column="1" colspan="2">
+           <widget class="QLineEdit" name="lineResSitze"/>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Einstieg:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QComboBox" name="comboResStart1Zug">
             <property name="enabled">
              <bool>true</bool>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>1</number>
             </property>
             <item>
              <property name="text">
@@ -1695,10 +1649,7 @@ Zub, Service</string>
             </item>
            </widget>
           </item>
-          <item row="10" column="1" colspan="2">
-           <widget class="QLineEdit" name="lineResSitze"/>
-          </item>
-          <item row="8" column="2">
+          <item row="6" column="2">
            <widget class="QComboBox" name="comboResEnde1Hp">
             <property name="enabled">
              <bool>true</bool>
@@ -1763,140 +1714,37 @@ Zub, Service</string>
             </item>
            </widget>
           </item>
-          <item row="9" column="0" rowspan="2">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Sitzplätze</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QSpinBox" name="spinResAnzahl">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="1">
-           <widget class="QCheckBox" name="checkResAuto">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Automatische Sitzplatzwahl</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineResMail">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="inputMethodHints">
-             <set>Qt::ImhEmailCharactersOnly</set>
-            </property>
-            <property name="placeholderText">
-             <string>E-Mail</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>Kontakt:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="3">
-           <widget class="Line" name="line_5">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QCheckBox" name="checkResFahrrad">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>Fahrräder</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0" colspan="3">
-           <widget class="Line" name="line_6">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1" rowspan="2">
-           <widget class="QComboBox" name="comboResStart1Zug">
+          <item row="3" column="2">
+           <widget class="QComboBox" name="comboResKlasse">
             <property name="enabled">
              <bool>true</bool>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>3</number>
             </property>
             <item>
              <property name="text">
-              <string>2201 SSWN-SOTW</string>
+              <string>1. Klasse</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>2202 SOTW-SSWN</string>
+              <string>2. Klasse</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>2203 SSWN-SOTW</string>
+              <string>3. Klasse</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>2204 SOTW-SSWN</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2205 SSWN-SOTW</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2206 SOTW-SSWN</string>
+              <string>2./3. Klasse</string>
              </property>
             </item>
            </widget>
           </item>
-          <item row="6" column="0" rowspan="2">
-           <widget class="QLabel" name="label_14">
-            <property name="text">
-             <string>Einstieg:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="2" rowspan="2">
+          <item row="5" column="2">
            <widget class="QComboBox" name="comboResStart1Hp">
             <property name="enabled">
              <bool>true</bool>
@@ -1961,10 +1809,195 @@ Zub, Service</string>
             </item>
            </widget>
           </item>
+          <item row="6" column="1">
+           <widget class="QComboBox" name="comboResEnde1Zug">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="currentIndex">
+             <number>2</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>2201 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2202 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2203 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2204 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2205 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2206 SOTW-SSWN</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="3">
+           <widget class="Line" name="line_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Sitzplätze</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Name:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="checkResFahrrad">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Fahrräder</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Sonstiges:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1" colspan="2">
+           <widget class="QPlainTextEdit" name="plainResSonstiges">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Sitzplätze:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="lineResTelefon">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="inputMethodHints">
+             <set>Qt::ImhDigitsOnly</set>
+            </property>
+            <property name="echoMode">
+             <enum>QLineEdit::Normal</enum>
+            </property>
+            <property name="placeholderText">
+             <string>Telefon Nummer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Ausstieg:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="spinResAnzahl">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0" colspan="3">
+           <widget class="Line" name="line_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="3">
+     <widget class="Line" name="line_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <widget class="QPushButton" name="ButtonNachher">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="toolTip">
+       <string notr="true"/>
+      </property>
+      <property name="statusTip">
+       <string notr="true"/>
+      </property>
+      <property name="whatsThis">
+       <string notr="true"/>
+      </property>
+      <property name="accessibleName">
+       <string notr="true"/>
+      </property>
+      <property name="accessibleDescription">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Nächster Fahrtag</string>
+      </property>
      </widget>
     </item>
    </layout>
@@ -2321,7 +2354,6 @@ Zub, Service</string>
   <tabstop>comboResStart1Hp</tabstop>
   <tabstop>comboResEnde1Zug</tabstop>
   <tabstop>comboResEnde1Hp</tabstop>
-  <tabstop>checkResAuto</tabstop>
   <tabstop>lineResSitze</tabstop>
   <tabstop>plainResSonstiges</tabstop>
   <tabstop>pushResAllAuto</tabstop>
@@ -2361,6 +2393,22 @@ Zub, Service</string>
     <hint type="destinationlabel">
      <x>-1</x>
      <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkResAuto</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>pushResAllAuto</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>506</x>
+     <y>924</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>550</x>
+     <y>956</y>
     </hint>
    </hints>
   </connection>

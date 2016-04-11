@@ -143,7 +143,10 @@ void Fahrtag::fromJson(QJsonObject o)
     ZeitTf = QTime::fromString(o.value("zeitTf").toString(), "hh:mm");
     ZeitZ = QTime::fromString(o.value("zeitZ").toString(), "hh:mm");
     Bemerkungen = o.value("bemerkungen").toString();
-    reservierungen->fromJson(o.value("manager").toArray());
+    if (o.value("manager").isArray())
+        reservierungen->fromJson(o.value("manager").toArray());
+    else
+        reservierungen->fromJson(o.value("manager").toObject());
     update();
 }
 

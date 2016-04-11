@@ -8,7 +8,7 @@ Reservierung::Reservierung(QListWidgetItem *item) {
     fahrrad = false;
     mail = "";
     telefon = "";
-    autoPlatz = false;
+//    autoPlatz = false;
     sitzplatz = "";
     sonstiges = "";
     startZug.insert(0, "2202 SOTW-SSWN");
@@ -38,7 +38,7 @@ QJsonObject Reservierung::toJson() {
     object.insert("startHp", startHp.at(0));
     object.insert("endeZug", endeZug.at(0));
     object.insert("endeHp", endeHp.at(0));
-    object.insert("autoplatz", autoPlatz);
+//    object.insert("autoplatz", autoPlatz);
     object.insert("sitzplatz", sitzplatz);
     object.insert("sonstiges", sonstiges);
     object.insert("sonstiges", sonstiges);
@@ -61,7 +61,7 @@ void Reservierung::fromJson(QJsonObject json) {
     startHp.insert(0, json.value("startHp").toString());
     endeZug.insert(0, json.value("endeZug").toString());
     endeHp.insert(0, json.value("endeHp").toString());
-    autoPlatz = json.value("autoplatz").toBool();
+//    autoPlatz = json.value("autoplatz").toBool();
     sitzplatz = json.value("sitzplatz").toString();
     sonstiges = json.value("sonstiges").toString();
 //    update();
@@ -119,12 +119,12 @@ void Reservierung::setEndeHp(const QString &value, int pos)
 {
     endeHp[pos] = value;
 }
-
+/*
 void Reservierung::setAutoPlatz(bool value)
 {
     autoPlatz = value;
 }
-
+*/
 void Reservierung::setSitzplatz(const QString &value)
 {
     sitzplatz = value;
@@ -193,12 +193,12 @@ QList<QString> Reservierung::getEndeHp() const
 {
     return endeHp;
 }
-
+/*
 bool Reservierung::getAutoPlatz() const
 {
     return autoPlatz;
 }
-
+*/
 QString Reservierung::getSitzplatz() const
 {
     return sitzplatz;

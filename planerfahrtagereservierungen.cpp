@@ -24,7 +24,7 @@ void PlanerFahrtage::saveReservierungen()
         res->setStartHp(ui->comboResStart1Hp->currentText(), 0);
         res->setEndeZug(ui->comboResEnde1Zug->currentText(), 0);
         res->setEndeHp(ui->comboResEnde1Hp->currentText(), 0);
-        res->setAutoPlatz(ui->checkResAuto->isChecked());
+//        res->setAutoPlatz(ui->checkResAuto->isChecked());
         res->setSitzplatz(ui->lineResSitze->text());
         res->setSonstiges(ui->plainResSonstiges->toPlainText());
     }
@@ -68,8 +68,8 @@ void PlanerFahrtage::on_listRes_itemSelectionChanged()
         ui->comboResStart1Hp->setCurrentText(res->getStartHp().at(0));
         ui->comboResEnde1Zug->setCurrentText(res->getEndeZug().at(0));
         ui->comboResEnde1Hp->setCurrentText(res->getEndeHp().at(0));
-        ui->checkResAuto->setChecked(res->getAutoPlatz());
-        ui->lineResSitze->setEnabled(! res->getAutoPlatz());
+//        ui->checkResAuto->setChecked(res->getAutoPlatz());
+//        ui->lineResSitze->setEnabled(! res->getAutoPlatz());
         ui->lineResSitze->setText(res->getSitzplatz());
         ui->plainResSonstiges->clear();
         ui->plainResSonstiges->insertPlainText(res->getSonstiges());
@@ -82,6 +82,15 @@ void PlanerFahrtage::on_listRes_itemChanged(QListWidgetItem *item)
 {
     ui->listRes->setCurrentItem(item);
     ui->lineResName->setText(item->text());
+}
+// Aktivieren der automatischen Sitzplatzverteilung
+void PlanerFahrtage::on_checkResAuto_stateChanged(int arg1)
+{
+    if (uebernehmen) {
+        aktuellerZug->getManager()->setAutomatisch(ui->checkResAuto->isChecked());
+        setSaved(false);
+    }
+    ui->pushResAllAuto->setEnabled(ui->checkResAuto->isChecked());
 }
 
 // Atmatische Verteilung der Sitzplätze (fehlt)
@@ -104,11 +113,6 @@ void PlanerFahrtage::on_comboResStart1Zug_currentIndexChanged(int index) { saveR
 void PlanerFahrtage::on_comboResStart1Hp_currentIndexChanged(int index) { saveReservierungen(); }
 void PlanerFahrtage::on_comboResEnde1Zug_currentIndexChanged(int index) { saveReservierungen(); }
 void PlanerFahrtage::on_comboResEnde1Hp_currentIndexChanged(int index) { saveReservierungen(); }
-void PlanerFahrtage::on_checkResAuto_stateChanged(int arg1)
-{
-    ui->lineResSitze->setEnabled(! ui->checkResAuto->isChecked());
-    saveReservierungen();
-}
 void PlanerFahrtage::on_lineResSitze_textChanged(const QString &arg1) { saveReservierungen(); }
 void PlanerFahrtage::on_plainResSonstiges_textChanged() { saveReservierungen(); }
 
