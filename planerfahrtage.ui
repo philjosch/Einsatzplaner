@@ -1476,19 +1476,13 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="toolResAdd">
+          <item row="2" column="0" colspan="2">
+           <widget class="QListWidget" name="listRes">
             <property name="enabled">
              <bool>true</bool>
             </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Neue Reservierung</string>
+            <property name="sortingEnabled">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -1508,16 +1502,6 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QListWidget" name="listRes">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sortingEnabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="0" colspan="2">
            <widget class="QPushButton" name="pushResAllAuto">
             <property name="enabled">
@@ -1528,10 +1512,26 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="toolResAdd">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Neue Reservierung</string>
+            </property>
+           </widget>
+          </item>
           <item row="4" column="0" colspan="2">
            <widget class="QPushButton" name="pushResVerteilung">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Sitzplatzverteilung anzeigen</string>
@@ -1696,7 +1696,11 @@ Zub, Service</string>
            </widget>
           </item>
           <item row="10" column="1" colspan="2">
-           <widget class="QLineEdit" name="lineResSitze"/>
+           <widget class="QLineEdit" name="lineResSitze">
+            <property name="placeholderText">
+             <string>204: 1-5, 7</string>
+            </property>
+           </widget>
           </item>
           <item row="8" column="2">
            <widget class="QComboBox" name="comboResEnde1Hp">
@@ -1986,7 +1990,10 @@ Zub, Service</string>
      <string>Einsatzplaner</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionAboutQt_2"/>
+    <addaction name="separator"/>
     <addaction name="actionPreferences"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuAnicht">
@@ -1994,6 +2001,7 @@ Zub, Service</string>
      <string>Ansicht</string>
     </property>
     <addaction name="actionFahrtage"/>
+    <addaction name="actionReservierungen"/>
    </widget>
    <widget class="QMenu" name="menuDatei">
     <property name="title">
@@ -2267,6 +2275,25 @@ Zub, Service</string>
    </property>
    <property name="menuRole">
     <enum>QAction::TextHeuristicRole</enum>
+   </property>
+  </action>
+  <action name="actionReservierungen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Übersicht über Sitzplatzverteilung</string>
+   </property>
+  </action>
+  <action name="actionAboutQt_2">
+   <property name="text">
+    <string>Über Qt</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutQtRole</enum>
    </property>
   </action>
  </widget>

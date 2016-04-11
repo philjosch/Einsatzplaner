@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <managerzuege.h>
+#include "reservierungenuebersicht.h"
 
 namespace Ui {
 class PlanerFahrtage;
@@ -27,6 +28,8 @@ private:
     bool uebernehmen;
     Fahrtag *aktuellerZug;
     ManagerZuege *zugManager;
+    ReservierungenUebersicht *windowReservierungen;
+
 
     // Erstellen von Fahrtagen und Aufruf zum Bearbeiten
     void ZugLaden(QListWidgetItem *zug);

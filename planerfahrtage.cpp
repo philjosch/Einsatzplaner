@@ -16,6 +16,7 @@ PlanerFahrtage::PlanerFahrtage(QWidget *parent) : QMainWindow(parent), ui(new Ui
     uebernehmen = false;
     setState(false);
     createEmptyForm();
+    windowReservierungen = new ReservierungenUebersicht(NULL, this);
     ui->tabEingabeWizard->removeTab(0); // Löscht den Fahrplan-Tab, da dieser im Moment nicht benötigt wird
 }
 
@@ -173,6 +174,8 @@ void PlanerFahrtage::ZugLaden(QListWidgetItem* zug)
     // Buttons für weiter und zurück aktivieren/Deaktivieren
     ui->ButtonVorher->setEnabled(ui->ListeZuege->currentRow() > 0);
     ui->ButtonNachher->setEnabled(ui->ListeZuege->currentRow()+1 < ui->ListeZuege->count());
+
+    windowReservierungen->setManager(aktuellerZug->getManager());
 
     uebernehmen = true;
 }
