@@ -91,6 +91,7 @@ void PlanerFahrtage::on_checkResAuto_stateChanged(int arg1)
         setSaved(false);
     }
     ui->pushResAllAuto->setEnabled(ui->checkResAuto->isChecked());
+    ui->lineResSitze->setEnabled(! ui->checkResAuto->isChecked());
 }
 
 // Atmatische Verteilung der Sitzplätze (fehlt)

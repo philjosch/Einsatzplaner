@@ -72,7 +72,7 @@ void PlanerFahrtage::setStateRes(bool aktiv)
     ui->comboResStart1Hp->setEnabled(aktiv);
     ui->comboResStart1Zug->setEnabled(aktiv);
 //    ui->checkResAuto->setEnabled(false);
-    ui->lineResSitze->setEnabled(aktiv);
+    ui->lineResSitze->setEnabled(aktiv && (! ui->checkResAuto->isChecked()));
     ui->plainResSonstiges->setEnabled(aktiv);
 }
 
