@@ -9,6 +9,8 @@ QT       += core gui widgets printsupport
 TARGET = Einsatzplaner
 TEMPLATE = app
 
+QMAKE_CXXFLAGS_WARN_OFF -= -Wunused-parameter
+
 SOURCES += main.cpp\
     export.cpp \
     planerfahrtage.cpp \
@@ -22,7 +24,8 @@ SOURCES += main.cpp\
     reservierung.cpp \
     managerreservierungen.cpp \
     fahrtag.cpp \
-    managerzuege.cpp
+    managerzuege.cpp \
+    wagen.cpp
 
 HEADERS  += \
     export.h \
@@ -30,7 +33,8 @@ HEADERS  += \
     reservierung.h \
     managerreservierungen.h \
     fahrtag.h \
-    managerzuege.h
+    managerzuege.h \
+    wagen.h
 
 FORMS    += \
     export.ui \

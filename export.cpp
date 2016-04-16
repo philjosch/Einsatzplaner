@@ -176,7 +176,7 @@ QTextDocument *Export::createDocSingle(QPrinter *printer)
             a += "<p><b>Triebfahrzeugführer (Tf), Triebfahrzeugbegleiter(Tb):</b><br/>"+listToString(f->getTf(), " | ")+(f->getBenoetigeTf() ?" | <b>Tf, Tb werden benötigt!</b>":" ") +"</p>";
             a += "<p><b>Zugführer:</b><br/>"+listToString(f->getZf(), " | ")+(f->getBenoetigeZf() ?" | <b>Zugführer wird benötigt!</b>":" ") +"</p>";
             a += "<p><b>Zugbegleiter und Begleiter ohne besondere Aufgaben:</b><br/>"+listToString(f->getZub(), " | ")+(f->getBenoetigeZub() ?" | <b>Zugbegleiter werden benötigt!</b>":" ") +"</p>";
-            a += "<p><b>Service:</b><br/>"+listToString(f->getService(), " | ")+(f->getBenoetigeService() ?" | <b>Service-Personal benötigt!</b>":" ") +"</p>";
+            a += "<p><b>Service:</b><br/>"+listToString(f->getService(), " | ")+(f->getBenoetigeService() ?" | <b>Service-Personal wird benötigt!</b>":" ") +"</p>";
             if (f->getBemerkungen()!= "") {
                 a += "<p>Bemerkungen:<br/>"+f->getBemerkungen()+"</p>";
             }

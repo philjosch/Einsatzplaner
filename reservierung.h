@@ -6,6 +6,11 @@
 #include <QListWidgetItem>
 #include <QJsonObject>
 
+class Reservierung;
+
+#include "wagen.h"
+
+
 class Reservierung
 {
 public:
@@ -45,6 +50,14 @@ public:
     QString getSitzplatz() const;
     QString getSonstiges() const;
 
+    void setPlaetze(Wagen *value1, QList<int> *value2);
+    QList<int> *getPlaetze() const;
+
+    Wagen *getWagen() const;
+
+public slots:
+    void takePlatz();
+
 
 private:
     QListWidgetItem *listItem;
@@ -61,6 +74,9 @@ private:
 //    bool autoPlatz;
     QString sitzplatz;
     QString sonstiges;
+
+    Wagen *wagen;
+    QList<int> *plaetze;
 
 };
 

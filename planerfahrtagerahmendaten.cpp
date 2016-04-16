@@ -25,7 +25,19 @@ void PlanerFahrtage::saveRahmendaten()
 }
 
 void PlanerFahrtage::on_dateZug_dateChanged(const QDate &date) { saveRahmendaten(); }
-void PlanerFahrtage::on_comboArt_currentIndexChanged(int index) { saveRahmendaten(); }
+void PlanerFahrtage::on_comboArt_currentIndexChanged(int index) {
+    saveRahmendaten();
+    switch (index)
+    {
+    case 1: limitReservierungen(1); break;
+    case 4: limitReservierungen(2); break;
+    case 5: limitReservierungen(0); break;
+    case 6: limitReservierungen(0); break;
+    default: limitReservierungen(-1);
+    }
+    // Die automatische Sitzplatzverteilung wird nur bei den Nikolauszügen unterstützt!!
+    setAutoEnabled(index == 2);
+}
 void PlanerFahrtage::on_textAnlass_textChanged() { saveRahmendaten(); }
 void PlanerFahrtage::on_checkWichtig_stateChanged(int arg1) { saveRahmendaten(); }
 void PlanerFahrtage::on_comboWagenreihung_currentTextChanged(QString string) { saveRahmendaten(); }

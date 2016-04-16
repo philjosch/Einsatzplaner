@@ -30,6 +30,48 @@ void PlanerFahrtage::saveReservierungen()
     }
 }
 
+void PlanerFahrtage::limitReservierungen(int anzahl)
+{
+    if (aktuellerZug == NULL) return;
+    switch (anzahl) {
+    case -1:
+            if (aktuellerZug->getManager()->getReservierungen()->length() > 0) {
+                ui->toolResDelete->setEnabled(true);
+            }
+            ui->toolResAdd->setEnabled(true);
+            ui->listRes->setEnabled(true);
+            break;
+    case 0:
+            if (! aktuellerZug->getManager()->setMaximum(0)) {
+                // Nachricht konnte nicht verändert werden, da zu viele Resrvierungen eingetragen sind
+            }
+            aktuellerZug->getManager()->setMinimum(0);
+
+            if (aktuellerZug->getManager()->getReservierungen()->length() == 0) {
+                setStateRes(false);
+                ui->toolResDelete->setEnabled(false);
+                ui->toolResAdd->setEnabled(false);
+            }
+            break;
+    case 1:
+            if (! aktuellerZug->getManager()->setMaximum(1)) {
+                // Nachricht konnte nicht verändert werden, da zu viele Resrvierungen eingetragen sind
+            }
+            aktuellerZug->getManager()->setMinimum(1);
+
+            if (aktuellerZug->getManager()->getReservierungen()->length() == 1) {
+                ui->toolResAdd->setEnabled(false);
+                ui->toolResDelete->setEnabled(false);
+            }
+    }
+}
+
+void PlanerFahrtage::setAutoEnabled(bool aktiv)
+{
+    ui->checkResAuto->setChecked(aktiv);
+    ui->checkResAuto->setEnabled(aktiv);
+}
+
 // Inzufügen von Reservierungen und löschen
 void PlanerFahrtage::on_toolResAdd_clicked()
 {
@@ -97,6 +139,14 @@ void PlanerFahrtage::on_checkResAuto_stateChanged(int arg1)
 // Atmatische Verteilung der Sitzplätze (fehlt)
 void PlanerFahrtage::on_pushResAllAuto_clicked()
 {
+    QTime t;
+    t.start();
+    QList<Wagen*> *wagen = new QList<Wagen*>();
+    wagen->append(new Wagen(204));
+    wagen->append(new Wagen(217));
+    aktuellerZug->getManager()->verteileSitzplaetze(wagen);
+    QMessageBox::information(this, "", QString::number(t.elapsed()), QMessageBox::Ok);
+
 }
 // Anzeigen einer Sitzplatzverteilung,anhand der Wagenreihung, ... (fehlt)
 void PlanerFahrtage::on_pushResVerteilung_clicked()

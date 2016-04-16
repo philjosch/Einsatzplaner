@@ -130,6 +130,7 @@ void PlanerFahrtage::on_ButtonRemove_clicked()
 
 void PlanerFahrtage::ZugLaden(QListWidgetItem* zug)
 {
+    uebernehmen = false;
     aktuellerZug = zugManager->getFahrtag(zug);
     createEmptyForm();
     // Rahmendaten
@@ -167,6 +168,7 @@ void PlanerFahrtage::ZugLaden(QListWidgetItem* zug)
     aktuellerZug->getManager()->catching(); // Die Daten vom Manager in die Liste laden
     ui->toolResDelete->setEnabled(aktuellerZug->getManager()->getGesamtzahl() > 0);
     ui->checkResAuto->setChecked(aktuellerZug->getManager()->getAutomatisch());
+    on_comboArt_currentIndexChanged(aktuellerZug->getArt()); // Modifiziert die Eingabemaske
 
     /* Sonstige Anpassungen */
     // Den Fokus auf das Feld mit dem Anlass legen

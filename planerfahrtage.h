@@ -44,6 +44,8 @@ private:
 
     // Verändern der Reservierungen
     void saveReservierungen();
+    void limitReservierungen(int anzahl);
+    void setAutoEnabled(bool aktiv);
 
     // Ein-/Ausgabe
     void setSaved(bool save);
