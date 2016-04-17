@@ -15,10 +15,15 @@ class Wagen
 {
 public:
     Wagen(int nummer);
+    Wagen();
 
     int getNummer() const;
 
     QList<int> *getExtra() const;
+
+    static int klasse(int nummer);
+
+    int getAnzahlBisEnde();
 
 public slots:
     void verlasse(QList<int> *liste);
@@ -41,6 +46,7 @@ private:
     int row2;
 
     QList<int> *extra;
+
 
 };
 

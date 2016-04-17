@@ -171,174 +171,22 @@ QList<Reservierung *> *ManagerReservierungen::getReservierungen() const
     return reservierungen;
 }
 
-
-
-void ManagerReservierungen::verteileSitzplaetze(QList<Wagen*> *wagen)
+void ManagerReservierungen::verteileSitzplaetze(QList<Wagen*> *ersteKlasseWagen, QList<Wagen*> *andereKlasseWagen)
 {
-    // Hier werden die Sitzplätze verteilt
-    count = 0;
-    gradeE = 0;
-    found = false;
-    minimum_grad = 1215752192;
-    this->wagen = wagen;
-    aktWagen = 0;
-    lll = new QSet<int>(); // Erster wert gibt die Sortierung an
-    for (int i = 0; i < reservierungen->length(); ++i) {
-        lll->insert(i);
+    // Verteilen der Reservierungen auf die Gruppen 1. und 2./3. Klasse
+    QList<Reservierung*> *ersteKlasseReservierung = new QList<Reservierung*>();
+    QList<Reservierung*> *andereKlasseReservierung = new QList<Reservierung*>();
 
-/*        int j = i;
-        while (j > 0 && ((reservierungen->at(j-1)->getAnzahl() < reservierungen->at(j)->getAnzahl()) || ((reservierungen->at(j-1)->getAnzahl()%4) > (reservierungen->at(j)->getAnzahl() %4)))) {
-            int help = lll->value(j-1);
-            lll->insert(j-1, lll->value(j));
-            lll->insert(j, help);
-//            lll->swap(j, j-1);
-            --j;
-        }
-  */
-    }
-    // Sortieren von l:
-
-/*    int i;
-    // Sortieren nach der Größe der Reservierung
-    for (int i = 1; i < lll->length(); ++i) {
-        int j = i;
-        while (j > 0 && ((reservierungen->at(j-1)->getAnzahl() < reservierungen->at(j)->getAnzahl()) || ((reservierungen->at(j-1)->getAnzahl()%4) > (reservierungen->at(j)->getAnzahl() %4)))) {
-            lll->swap(j, j-1);
-            --j;
-        }
-    }
-  */ /*  for (int i = 1; i < l->length(); ++i) {
-        int j = i;
-        while (j > 0 && (l->at(j-1)->getAnzahl()%4 > l->at(j)->getAnzahl() %4 || (false))) {
-            l->swap(j, j-1);
-            --j;
-        }
-    }
-*/
-    QTime t;
-    t.start();
-    verteileSitzplaetze();
-    qDebug("Time elapsed: %d ms", t.elapsed());
-    qDebug("Counting: %d ", count);
-}
-
-void ManagerReservierungen::verteileSitzplaetze()
-{
-//    count ++;
-//    qDebug("%f %f %d", grade(), minimum_grad, lll->length());
-    double gg = gradeE;
-    if (gg >= minimum_grad) {
-//        count += 1;
-        return;
-    }
-    if (lll->isEmpty()) {
-        qDebug("Gefunden");
-        found = true;
-        count += 1;
-        for (int i = 0; i < reservierungen->length(); ++i) {
-            reservierungen->at(i)->takePlatz();
-        }
-        minimum_grad = gg;
-        return;
-    }
-
-    QList<Reservierung *> *lLoc = new QList<Reservierung*>();
-
-    QSet<int> *anzahl = new QSet<int>();
-
-    QList<double> *h = new QList<double>();
-
-    foreach(const int i, *lll) {
-        Reservierung *res = reservierungen->at(i);
-        if (! anzahl->contains(res->getAnzahl())) {
-            anzahl->insert(res->getAnzahl()); // Keine Alternativen verfolgen, die äquivalente Belegungen erzeugen
-            if (platziere(res)) {
-                int a = gradeYes(res);
-                if ((gg+a) <= minimum_grad) {
-                    h->append(a);
-                    lLoc->append(res);
-
-                    for (int j = h->length()-1; j > 0 &&
-                         (h->at(j-1) > h->at(j) ||
-                            (h->at(j-1) > h->at(j)*1.5 && lLoc->at(j-1)->getAnzahl() < lLoc->at(j)->getAnzahl())
-                          ); j--) {
-                        lLoc->swap(j, j-1);
-                        h->swap(j, j-1);
-                    }
-                }
-                dePlatziere(res);
-            }
-
-        }
-    }
-
-    for (int i = 0; i < lLoc->length() && !found; ++i) {
-        Reservierung *res = lLoc->at(i);
-        if (platziere(res)) {
-            double a = gradeYes(res);
-            gradeE += a;
-            int index = reservierungen->indexOf(res);
-            lll->remove(index);
-            verteileSitzplaetze();
-            gradeE -= a;
-            dePlatziere(res);
-            lll->insert(index);
-        }
-    }
-}
-
-double ManagerReservierungen::grade()
-{
-    count ++;
-    double summe = 0;
-    for (int i = 0; i < reservierungen->length(); ++i) {
-        Reservierung *res = reservierungen->at(i);
-        if (lll->contains(i)) {
-            summe += gradeNo(res);
+    foreach (Reservierung *res, *reservierungen) {
+        if (res->isErsteKlasse()) {
+            ersteKlasseReservierung->append(res);
         } else {
-            summe += gradeYes(res);
+            andereKlasseReservierung->append(res);
         }
     }
-    return summe;
-}
-double ManagerReservierungen::gradeYes(Reservierung *res) {
-    return res->getWagen()->getStrafpunkte(res->getPlaetze());
-}
 
-double ManagerReservierungen::gradeNo(Reservierung *res) {
-    // ACHTUNG NUR FÜR 204 und 217 geeignet!!
-    double summe = minimum2((4 - ((res->getAnzahl()%10) % 4))% 4, (6 - ((res->getAnzahl()%10) % 6))%6);
-    //            summe += (res->getAnzahl() % 4);
-    // Konservative Schranke nach unten 2/5 der Plätze wird auf die "falsche" Seite gesetzt
-    summe += (double(res->getAnzahl()) * 0.4);
-    return summe;
+    Verteiler *verteilerErste = new Verteiler(ersteKlasseWagen, ersteKlasseReservierung);
+    verteilerErste->verteile();
+    Verteiler *verteilerAndere = new Verteiler(andereKlasseWagen, andereKlasseReservierung);
+    verteilerAndere->verteile();
 }
-
-int ManagerReservierungen::minimum2(int a, int b) {
-    if (a < b) return a;
-    return b;
-}
-
-bool ManagerReservierungen::platziere(Reservierung *res)
-{
-    if (wagen->at(aktWagen)->getFreiePlaetze() >= res->getAnzahl()) {
-        res->setPlaetze(wagen->at(aktWagen), wagen->at(aktWagen)->besetze(res));
-        if (wagen->at(aktWagen)->getFreiePlaetze() == 0) {
-            ++aktWagen;
-        }
-        return true;
-    }
-    return false;
-}
-
-void ManagerReservierungen::dePlatziere(Reservierung *res)
-{
-    if (aktWagen >= wagen->length() || (wagen->at(aktWagen)->isEmpty() && aktWagen > 0)) {
-        --aktWagen;
-    }
-    wagen->at(aktWagen)->verlasse(res->getPlaetze());
-/*    if ((wagen->at(aktWagen)->isEmpty() && aktWagen > 0)) {
-        --aktWagen;
-    }*/
-}
-

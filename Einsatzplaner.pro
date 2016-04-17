@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     managerreservierungen.cpp \
     fahrtag.cpp \
     managerzuege.cpp \
-    wagen.cpp
+    wagen.cpp \
+    verteiler.cpp
 
 HEADERS  += \
     export.h \
@@ -34,7 +35,8 @@ HEADERS  += \
     managerreservierungen.h \
     fahrtag.h \
     managerzuege.h \
-    wagen.h
+    wagen.h \
+    verteiler.h
 
 FORMS    += \
     export.ui \

@@ -39,6 +39,7 @@ public:
     QString getName() const;
     int getAnzahl() const;
     QString getKlasse() const;
+    bool isErsteKlasse() const;
     bool getFahrrad() const;
     QString getMail() const;
     QString getTelefon() const;
@@ -51,15 +52,15 @@ public:
     QString getSonstiges() const;
 
     void setPlaetze(Wagen *value1, QList<int> *value2);
-    QList<int> *getPlaetze() const;
+    QList<int> *getPlaetze();
 
     Wagen *getWagen() const;
 
-public slots:
+
     void takePlatz();
 
-
 private:
+
     QListWidgetItem *listItem;
     QString name;
     int anzahl;

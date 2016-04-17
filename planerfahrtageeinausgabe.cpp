@@ -21,26 +21,20 @@ void PlanerFahrtage::setSaved(bool save)
 
 void PlanerFahrtage::oeffnen()
 {
-    if (! saved)
-    {
-        int answ = QMessageBox::question(this, tr("Datei öffnen?"), tr("Möchten Sie wirklich eine Datei öffnen? Die ungesicherten Information gehen verloren!"), QMessageBox::Save, QMessageBox::Close, QMessageBox::Cancel);
-        if (answ == QMessageBox::Save)
-        {
+    if (! saved) {
+        int answ = QMessageBox::question(this, tr("Datei öffnen?"), tr("Möchten Sie wirklich eine bestehende Datei öffnen? Die ungesicherten Information gehen dann verloren!"), QMessageBox::Save, QMessageBox::Close, QMessageBox::Cancel);
+        if (answ == QMessageBox::Save) {
             speichern();
-        } else if (answ == QMessageBox::Close)
-        {
+        } else if (answ == QMessageBox::Close) {
             setSaved(true);
         }
     }
 
-    if (saved)
-    {
+    if (saved) {
         QString path1 = QFileDialog::getOpenFileName(this, tr("Datei öffnen..."), QDir::homePath(), tr("AkO-Dateien (*.ako)"));
-        if (path1 != "")
-        {
+        if (path1 != "") {
             QFile datei(path1);
-            if (!datei.open(QIODevice::ReadOnly))
-            {
+            if (!datei.open(QIODevice::ReadOnly)) {
                 QMessageBox::information(this, "Fehler", "Die Datei unter dem angegebenen Pfad konnte nicht geöffnet werden!", QMessageBox::Ok);
                 return;
             }
@@ -57,20 +51,14 @@ void PlanerFahrtage::oeffnen()
 
 void PlanerFahrtage::speichern()
 {
-    if (path == "")
-    {
+    if (path == "") {
         speichernUnter();
-    }
-    else
-    {
+    } else {
         ZugSichern();
         QFile datei(path);
-        if (!datei.open(QIODevice::WriteOnly))
-        {
+        if (!datei.open(QIODevice::WriteOnly)) {
             QMessageBox::information(this, "Fehler", "Die Datei konnte nicht unter dem angegebenen Pfad gesichert werden!", QMessageBox::Ok);
-        }
-        else
-        {
+        } else {
             QJsonObject o = toJson();
             QJsonDocument saveDoc = QJsonDocument(o);
             datei.write(saveDoc.toJson());
@@ -97,14 +85,12 @@ void PlanerFahrtage::fromJson(QJsonObject o)
     ui->ListeZuege->clear();
     zugManager = new ManagerZuege(ui->ListeZuege, ui->listRes);
     zugManager->fromJson(o.value("manager").toArray());
-    for(int i = 0; i < zugManager->getFahrtage()->length(); i++)
-    {
+    for(int i = 0; i < zugManager->getFahrtage()->length(); i++) {
         Fahrtag *t = zugManager->getFahrtage()->at(i);
         t->getItem()->setBackgroundColor(getFarbe(t->getArt()));
         zugManager->updateFahrtag(t);
     }
-    if (ui->ListeZuege->count() > 0)
-    {
+    if (ui->ListeZuege->count() > 0) {
         ui->ButtonExport->setEnabled(true);
         ui->ButtonRemove->setEnabled(true);
     }

@@ -2,6 +2,7 @@
 #include "wagen.h"
 
 Reservierung::Reservierung(QListWidgetItem *item) {
+    //wagen = Wagen(0);
     listItem = item;
     name = "(Neue Reservierung)";
     anzahl = 1;
@@ -160,6 +161,11 @@ QString Reservierung::getKlasse() const
     return klasse;
 }
 
+bool Reservierung::isErsteKlasse() const
+{
+    return (klasse == "1. Klasse");
+}
+
 bool Reservierung::getFahrrad() const
 {
     return fahrrad;
@@ -215,6 +221,8 @@ QString Reservierung::getSonstiges() const
 void Reservierung::takePlatz()
 {
     // Muss noch etwas optimiert werden, in dem gruppen Zusammegefasst werden
+    if (wagen == NULL) return;
+//    if (plaetze == NULL) return;
     sitzplatz = QString::number(wagen->getNummer())+": ";
     for(int i=0; i<plaetze->size(); ++i) {
         sitzplatz += QString::number(plaetze->at(i));
@@ -228,7 +236,7 @@ Wagen *Reservierung::getWagen() const
     return wagen;
 }
 
-QList<int> *Reservierung::getPlaetze() const
+QList<int> *Reservierung::getPlaetze()
 {
     return plaetze;
 }
@@ -237,6 +245,7 @@ void Reservierung::setPlaetze(Wagen *value1, QList<int> *value2)
 {
     wagen = value1;
     plaetze = value2;
+//    takePlatz();
 }
 
 

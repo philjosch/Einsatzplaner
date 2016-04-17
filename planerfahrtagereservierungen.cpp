@@ -136,18 +136,20 @@ void PlanerFahrtage::on_checkResAuto_stateChanged(int arg1)
     ui->lineResSitze->setEnabled(! ui->checkResAuto->isChecked());
 }
 
-// Atmatische Verteilung der Sitzplätze (fehlt)
+// Atmatische Verteilung der Sitzplätze
 void PlanerFahrtage::on_pushResAllAuto_clicked()
 {
+    if (ui->comboWagenreihung->currentText() == "") {
+        QMessageBox::warning(this, "Keine Wagen", "Bitte wählen Sie eine Wagenreihung aus!", QMessageBox::Ok);
+        return;
+    }
     QTime t;
     t.start();
-    QList<Wagen*> *wagen = new QList<Wagen*>();
-    wagen->append(new Wagen(204));
-    wagen->append(new Wagen(217));
-    aktuellerZug->getManager()->verteileSitzplaetze(wagen);
-    QMessageBox::information(this, "", QString::number(t.elapsed()), QMessageBox::Ok);
-
+    aktuellerZug->verteileSitzplaetze();
+    QMessageBox::information(this, "Fertig", "Die Sitzplätze wurden verteilt. Benötigte Zeit: "+QString::number(t.elapsed()/1000)+" s.", QMessageBox::Ok);
+    setSaved(false);
 }
+
 // Anzeigen einer Sitzplatzverteilung,anhand der Wagenreihung, ... (fehlt)
 void PlanerFahrtage::on_pushResVerteilung_clicked()
 {

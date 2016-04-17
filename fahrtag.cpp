@@ -150,6 +150,23 @@ void Fahrtag::fromJson(QJsonObject o)
     update();
 }
 
+void Fahrtag::verteileSitzplaetze()
+{
+
+    QStringList l = wagen.split(",");
+    QList<Wagen*> *andereKlasse = new QList<Wagen*>();
+    QList<Wagen*> *ersteKlasse = new QList<Wagen*>();
+    foreach (QString w, l) {
+        switch (Wagen::klasse(w.toInt())) {
+        case 1: ersteKlasse->append(new Wagen(w.toInt())); break;
+        case 2: andereKlasse->append(new Wagen(w.toInt())); break;
+        case 3: andereKlasse->append(new Wagen(w.toInt())); break;
+        default: break;
+        }
+    }
+    reservierungen->verteileSitzplaetze(ersteKlasse, andereKlasse);
+}
+
 
 
 
@@ -174,6 +191,28 @@ QString Fahrtag::getAnlass()
 QString Fahrtag::getWagenreihung()
 {
     return(wagen);
+}
+
+QList<Wagen *> *Fahrtag::getErsteKlasseWagen()
+{
+    QStringList l = wagen.split(",");
+    QList<Wagen*> *wa = new QList<Wagen*>();
+    foreach (QString w, l) {
+        if (Wagen::klasse(w.toInt()) == 1)
+            wa->append(new Wagen(w.toInt()));
+    }
+    return wa;
+}
+
+QList<Wagen *> *Fahrtag::getAndereKlasseWagen()
+{
+    QStringList l = wagen.split(",");
+    QList<Wagen*> *wa = new QList<Wagen*>();
+    foreach (QString w, l) {
+        if (Wagen::klasse(w.toInt()) == 1)
+            wa->append(new Wagen(w.toInt()));
+    }
+    return wa;
 }
 
 QList<QString> *Fahrtag::getTf()

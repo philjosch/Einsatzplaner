@@ -1,5 +1,10 @@
 #include "wagen.h"
 #include <QSet>
+#include "math.h"
+
+Wagen::Wagen() {
+    Wagen(0);
+}
 
 Wagen::Wagen(int nummer)
 {
@@ -18,9 +23,9 @@ Wagen::Wagen(int nummer)
         bewertung = QVector<int>(size);
         row2 = 3;
         *extra << 2 << 2 << 5 << 5;
-        for (int i =  0; i <  2; i++) { sitzGruppen[i] =  1; bewertung[i] = 0; } // 2
-        for (int i =  2; i <  6; i++) { sitzGruppen[i] =  2; bewertung[i] = 0; } // 4
-        for (int i =  6; i < 11; i++) { sitzGruppen[i] =  3; bewertung[i] = 1; } // 5
+        for (int i =  0; i <  5; i++) { sitzGruppen[i] =  1; bewertung[i] = 0; } // 5
+        for (int i =  5; i <  7; i++) { sitzGruppen[i] =  2; bewertung[i] = 0; } // 2
+        for (int i =  7; i < 11; i++) { sitzGruppen[i] =  3; bewertung[i] = 1; } // 4
         for (int i = 11; i < 17; i++) { sitzGruppen[i] =  4; bewertung[i] = 1; } // 6
         for (int i = 17; i < 23; i++) { sitzGruppen[i] =  5; bewertung[i] = 1; } // 6
         for (int i = 23; i < 27; i++) { sitzGruppen[i] =  6; bewertung[i] = 0; } // 4
@@ -29,8 +34,8 @@ Wagen::Wagen(int nummer)
         for (int i = 37; i < 43; i++) { sitzGruppen[i] =  9; bewertung[i] = 1; } // 6
         for (int i = 43; i < 47; i++) { sitzGruppen[i] = 10; bewertung[i] = 0; } // 4
         for (int i = 47; i < 51; i++) { sitzGruppen[i] = 11; bewertung[i] = 0; } // 4
-        for (int i = 51; i < 53; i++) { sitzGruppen[i] = 12; bewertung[i] = 0; } // 2
-        for (int i = 53; i < 58; i++) { sitzGruppen[i] = 13; bewertung[i] = 1; } // 5
+        for (int i = 51; i < 56; i++) { sitzGruppen[i] = 12; bewertung[i] = 0; } // 5
+        for (int i = 56; i < 58; i++) { sitzGruppen[i] = 13; bewertung[i] = 1; } // 2
         for (int i = 58; i < 60; i++) { sitzGruppen[i] = 14; bewertung[i] = 1; } // 2
         // C3YG
         break;
@@ -41,9 +46,9 @@ Wagen::Wagen(int nummer)
         bewertung = QVector<int>(size);
         row2 = 3;
         *extra << 2 << 2 << 5 << 5;
-        for (int i =  0; i <  2; i++) { sitzGruppen[i] =  1; bewertung[i] = 0; } // 2
-        for (int i =  2; i <  6; i++) { sitzGruppen[i] =  2; bewertung[i] = 0; } // 4
-        for (int i =  6; i < 11; i++) { sitzGruppen[i] =  3; bewertung[i] = 1; } // 5
+        for (int i =  0; i <  5; i++) { sitzGruppen[i] =  1; bewertung[i] = 0; } // 5
+        for (int i =  5; i <  7; i++) { sitzGruppen[i] =  2; bewertung[i] = 0; } // 2
+        for (int i =  7; i < 11; i++) { sitzGruppen[i] =  3; bewertung[i] = 1; } // 4
         for (int i = 11; i < 17; i++) { sitzGruppen[i] =  4; bewertung[i] = 1; } // 6
         for (int i = 17; i < 23; i++) { sitzGruppen[i] =  5; bewertung[i] = 1; } // 6
         for (int i = 23; i < 27; i++) { sitzGruppen[i] =  6; bewertung[i] = 0; } // 4
@@ -122,7 +127,8 @@ void Wagen::verlasse(QList<int> *liste)
 {
     for (int i = 0; i < liste->length(); ++i) {
         verteilung[liste->at(i)] = NULL;
-        aktuellePosition--;
+//        aktuellePosition--;
+        aktuellePosition = liste->first();
     }
 }
 
@@ -156,6 +162,27 @@ QList<int> *Wagen::getExtra() const
     return extra;
 }
 
+int Wagen::klasse(int nummer)
+{
+    switch(nummer) {
+    case 217: return 1;
+    case 204: return 1;
+    case 201: return 2;
+    case 202: return 2;
+    case 208: return 3;
+    default: return 0;
+    }
+}
+
+int Wagen::getAnzahlBisEnde()
+{
+    int i = aktuellePosition;
+    while (i < sitzGruppen.length() && sitzGruppen.at(i) == sitzGruppen.at(aktuellePosition)) {
+        i++;
+    }
+    return i-aktuellePosition;
+}
+
 int Wagen::getNummer() const
 {
     return nummer;
@@ -164,21 +191,30 @@ int Wagen::getNummer() const
 double Wagen::getStrafpunkte(QList<int> *liste)
 {
     Reservierung *referenz = verteilung[liste->at(0)];
-    int zaehler = 0;
+    if (referenz->getName() == "EXTRA!-!-!-") return 0;
+    double zaehler = 0;
     QSet<int> gruppen = QSet<int>();
     for (int i = 0; i < liste->length(); ++i) {
         gruppen.insert(sitzGruppen.at(liste->at(i)));
     }
+    if (gruppen.size() > 1)
+        zaehler += ((double)gruppen.size()*(double)gruppen.size() / liste->length());
 
     for (int i = sitzGruppen.indexOf(sitzGruppen.at(liste->first()));
          i <= sitzGruppen.lastIndexOf(sitzGruppen.at(liste->last()), sitzGruppen.length()-1); ++i) {
-        if ((verteilung[i] != referenz) && (gruppen.contains(sitzGruppen[i]))) {
-            ++zaehler;
+        if ((verteilung[i] != referenz) && (gruppen.contains(sitzGruppen[i])) && (verteilung[i] == NULL || verteilung[i]->getName()!="EXTRA!-!-!-")) {
+            zaehler += 1;
+//            ++zaehler;
+        }
+        if ((verteilung[i] != referenz) && (gruppen.contains(sitzGruppen[i])) && (verteilung[i] != NULL && verteilung[i]->getName()=="EXTRA!-!-!-")) {
+            zaehler += 0;
         }
         if (referenz == verteilung[i]) {
-            zaehler += bewertung[i];
+//            zaehler += bewertung[i];
         }
     }
+    zaehler = (double)zaehler;
+//    zaehler += gruppen.size();
     return zaehler;
 }
 // KOMBINATION AUF getStrafpunkte UND besetze

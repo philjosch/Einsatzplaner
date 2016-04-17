@@ -43,12 +43,18 @@ public slots:
 
     void fromJson(QJsonObject o);
 
+    void verteileSitzplaetze();
+
     // GETTER
     QDate getDatum();
     int getArt();
     bool getWichtig();
     QString getAnlass();
     QString getWagenreihung();
+
+    QList<Wagen*> *getErsteKlasseWagen();
+    QList<Wagen*> *getAndereKlasseWagen();
+
     QTime getTimeTf();
     QTime getTimeZ();
 
