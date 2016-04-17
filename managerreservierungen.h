@@ -5,6 +5,7 @@
 #include "reservierung.h"
 #include <QJsonObject>
 #include "wagen.h"
+#include <QForeachContainer>
 
 class ManagerReservierungen {
 
@@ -32,7 +33,7 @@ public slots:
     bool remove(QListWidgetItem *item); // Fügt eine neue Reservierung hinzu, dabei wird auch ein neues Objekt in die Liste eingefügt
 
     void verteileSitzplaetze(QList<Wagen *> *wagen); // Ein Algorithmus, der die Sitzplätze der einzelnen Reservierungen verteilt. Muss erst noch entwickelt werden
-    void verteileSitzplaetze(QList<Reservierung *> *liste);
+    void verteileSitzplaetze();
     Reservierung *getReservierung(QListWidgetItem *item);
     Reservierung *getCurrentReservierung();
 
@@ -55,12 +56,22 @@ private:
 
     int anzahl;
 
-    int grade(QList<Reservierung *> *liste);
+    double gradeE;
+    double grade();
+    double gradeYes(Reservierung *res);
+    double gradeNo(Reservierung *res);
     bool platziere(Reservierung *res);
     void dePlatziere(Reservierung *res);
-    int minimum_grad;
+    double minimum_grad;
     int aktWagen;
     QList<Wagen*> *wagen;
+
+    int count;
+    bool found;
+
+    int minimum2(int a, int b);
+
+    QSet<int> *lll;
 
 };
 

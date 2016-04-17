@@ -18,11 +18,13 @@ public:
 
     int getNummer() const;
 
+    QList<int> *getExtra() const;
+
 public slots:
     void verlasse(QList<int> *liste);
     QList<int> *besetze(Reservierung *r);
 
-    int getStrafpunkte(QList<int> *liste);
+    double getStrafpunkte(QList<int> *liste);
     int getFreiePlaetze();
     bool isEmpty();
 
@@ -37,6 +39,8 @@ private:
     int nummer;
     int row1;
     int row2;
+
+    QList<int> *extra;
 
 };
 

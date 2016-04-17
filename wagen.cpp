@@ -8,6 +8,7 @@ Wagen::Wagen(int nummer)
     this->nummer = nummer;
     size = 0;
     row1 = 2;
+    extra = new QList<int>();
 
     switch (nummer) {
     case 208:
@@ -16,6 +17,7 @@ Wagen::Wagen(int nummer)
         verteilung = QVector<Reservierung*>(size);
         bewertung = QVector<int>(size);
         row2 = 3;
+        *extra << 2 << 2 << 5 << 5;
         for (int i =  0; i <  2; i++) { sitzGruppen[i] =  1; bewertung[i] = 0; } // 2
         for (int i =  2; i <  6; i++) { sitzGruppen[i] =  2; bewertung[i] = 0; } // 4
         for (int i =  6; i < 11; i++) { sitzGruppen[i] =  3; bewertung[i] = 1; } // 5
@@ -38,6 +40,7 @@ Wagen::Wagen(int nummer)
         verteilung = QVector<Reservierung*>(size);
         bewertung = QVector<int>(size);
         row2 = 3;
+        *extra << 2 << 2 << 5 << 5;
         for (int i =  0; i <  2; i++) { sitzGruppen[i] =  1; bewertung[i] = 0; } // 2
         for (int i =  2; i <  6; i++) { sitzGruppen[i] =  2; bewertung[i] = 0; } // 4
         for (int i =  6; i < 11; i++) { sitzGruppen[i] =  3; bewertung[i] = 1; } // 5
@@ -60,6 +63,7 @@ Wagen::Wagen(int nummer)
         verteilung = QVector<Reservierung*>(size);
         bewertung = QVector<int>(size);
         row2 = 2;
+        *extra << 3;
         for (int i =  0; i <  4; i++) { sitzGruppen[i] = 1; bewertung[i] = 1; } // 4
         for (int i =  4; i < 10; i++) { sitzGruppen[i] = 2; bewertung[i] = 0; } // 6
         for (int i = 10; i < 16; i++) { sitzGruppen[i] = 3; bewertung[i] = 1; } // 6
@@ -105,17 +109,6 @@ Wagen::Wagen(int nummer)
         for (int i = 36; i < 40; i++) { sitzGruppen[i] = 10; bewertung[i] = 1; } // 4
         // WG3YG neu
         break;
-/*    case 666:
-        size = 16;
-        sitzGruppen = QVector<int>(size);
-        verteilung = QVector<Reservierung*>(size);
-        bewertung = QVector<int>(size);
-        for (int i =  0; i <  4; i++) { sitzGruppen[i] =  1; bewertung[i] = 0; } // 4
-        for (int i =  4; i <  8; i++) { sitzGruppen[i] =  2; bewertung[i] = 1; } // 4
-        for (int i =  8; i < 12; i++) { sitzGruppen[i] =  3; bewertung[i] = 1; } // 4
-        for (int i = 12; i < 16; i++) { sitzGruppen[i] =  4; bewertung[i] = 0; } // 4
-        //TEST
-        break;  */
     default:
         size = 0;
         sitzGruppen = QVector<int>(size);
@@ -137,13 +130,13 @@ QList<int> *Wagen::besetze(Reservierung *r)
 {
     QList<int> *l = new QList<int>();
     for (int i = 0; i < r->getAnzahl(); ++i) {
-        if (verteilung[aktuellePosition] == NULL) {
+//        if (verteilung[aktuellePosition] == NULL) {
             verteilung[aktuellePosition] = r;
             l->append(aktuellePosition++);
-        } else {
-            aktuellePosition++;
-            i--;
-        }
+  //      } else {
+    //        aktuellePosition++;
+      //      i--;
+        //}
     }
     return l;
 }
@@ -158,12 +151,17 @@ bool Wagen::isEmpty()
     return aktuellePosition == 0;
 }
 
+QList<int> *Wagen::getExtra() const
+{
+    return extra;
+}
+
 int Wagen::getNummer() const
 {
     return nummer;
 }
 
-int Wagen::getStrafpunkte(QList<int> *liste)
+double Wagen::getStrafpunkte(QList<int> *liste)
 {
     Reservierung *referenz = verteilung[liste->at(0)];
     int zaehler = 0;
@@ -172,18 +170,15 @@ int Wagen::getStrafpunkte(QList<int> *liste)
         gruppen.insert(sitzGruppen.at(liste->at(i)));
     }
 
-    for (int i = 0; i < size; ++i) {
+    for (int i = sitzGruppen.indexOf(sitzGruppen.at(liste->first()));
+         i <= sitzGruppen.lastIndexOf(sitzGruppen.at(liste->last()), sitzGruppen.length()-1); ++i) {
         if ((verteilung[i] != referenz) && (gruppen.contains(sitzGruppen[i]))) {
             ++zaehler;
         }
         if (referenz == verteilung[i]) {
-    //        zaehler += bewertung[i];
+            zaehler += bewertung[i];
         }
     }
     return zaehler;
 }
-
-
-
-
-
+// KOMBINATION AUF getStrafpunkte UND besetze

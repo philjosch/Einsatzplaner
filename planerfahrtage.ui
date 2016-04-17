@@ -994,7 +994,7 @@ Zub, Service</string>
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="checkTf">
             <property name="text">
-             <string>Personal benötigt</string>
+             <string>Personal wird benötigt</string>
             </property>
            </widget>
           </item>
@@ -1093,7 +1093,7 @@ Zub, Service</string>
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="checkZub">
             <property name="text">
-             <string>Personal benötigt</string>
+             <string>Personal wird benötigt</string>
             </property>
            </widget>
           </item>
@@ -1189,7 +1189,7 @@ Zub, Service</string>
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="checkZf">
             <property name="text">
-             <string>Personal benötigt</string>
+             <string>Personal wird benötigt</string>
             </property>
            </widget>
           </item>
@@ -1288,7 +1288,7 @@ Zub, Service</string>
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="checkService">
             <property name="text">
-             <string>Personal benötigt</string>
+             <string>Personal wird benötigt</string>
             </property>
            </widget>
           </item>
@@ -1469,8 +1469,48 @@ Zub, Service</string>
          <number>-1</number>
         </property>
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_6" rowstretch="0,0,1,0,0,0">
-          <item row="4" column="0" colspan="2">
+         <layout class="QGridLayout" name="gridLayout_6" rowstretch="0,0,1,0,0,0,0,0,0">
+          <item row="6" column="0" colspan="2">
+           <widget class="QCheckBox" name="checkResAuto">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Automatische Sitzplatzverteilung aktivieren</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="labelAnteilOther">
+            <property name="text">
+             <string>0/0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="labelAnteilFirst">
+            <property name="text">
+             <string>0/0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="toolResAdd">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Neue Reservierung</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0" colspan="2">
            <widget class="QPushButton" name="pushResAllAuto">
             <property name="enabled">
              <bool>false</bool>
@@ -1480,7 +1520,7 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="0" colspan="2">
+          <item row="8" column="0" colspan="2">
            <widget class="QPushButton" name="pushResVerteilung">
             <property name="enabled">
              <bool>false</bool>
@@ -1523,29 +1563,40 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="toolResAdd">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_16">
             <property name="text">
-             <string>Neue Reservierung</string>
+             <string>2./3. Klasse:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
-          <item row="3" column="0" colspan="2">
-           <widget class="QCheckBox" name="checkResAuto">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_10">
             <property name="text">
-             <string>Automatische Sitzplatzverteilung aktivieren</string>
+             <string>1. Klasse:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>Gesamt:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="labelAnteilAll">
+            <property name="text">
+             <string>0/0</string>
             </property>
            </widget>
           </item>
@@ -1560,19 +1611,6 @@ Zub, Service</string>
         </item>
         <item row="0" column="2">
          <layout class="QGridLayout" name="gridLayout_10" rowstretch="0,0,0,0,0,0,0,0,0,1" columnstretch="0,1,1">
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineResName">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_11">
             <property name="text">
@@ -1720,21 +1758,11 @@ Zub, Service</string>
              <bool>true</bool>
             </property>
             <property name="currentIndex">
-             <number>3</number>
+             <number>1</number>
             </property>
             <item>
              <property name="text">
               <string>1. Klasse</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2. Klasse</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>3. Klasse</string>
              </property>
             </item>
             <item>
@@ -1962,6 +1990,19 @@ Zub, Service</string>
             </property>
            </widget>
           </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QLineEdit" name="lineResName">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -2158,7 +2199,7 @@ Zub, Service</string>
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>-</string>
+        <string>Fahrtag löschen</string>
        </property>
       </widget>
      </item>
