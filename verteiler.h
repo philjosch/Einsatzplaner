@@ -13,7 +13,7 @@ class Verteiler
 public:
     Verteiler(QList<Wagen*> *wagen, QList<Reservierung*> *reservierungen);
 public slots:
-    void verteile();
+    bool verteile();
 
 private:
 

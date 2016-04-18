@@ -23,13 +23,15 @@ Verteiler::Verteiler(QList<Wagen *> *wagen, QList<Reservierung *> *reservierunge
 
 }
 
-void Verteiler::verteile()
+bool Verteiler::verteile()
 {
+    if (rest->isEmpty()) return false;
     verteile(0);
     qDebug("%d", count);
 /*    foreach (Reservierung *res, *reservierungen) {
         res->takePlatz();
     }*/
+    return found;
 }
 
 void Verteiler::verteile(int bewertung)
@@ -41,14 +43,13 @@ void Verteiler::verteile(int bewertung)
 
     if (rest->isEmpty()) {
         qDebug("gefunden");
-        if (bewertung == obereGrenze) {
-            found = true;
-            return;
-        }
-        obereGrenze = bewertung;
         foreach (Reservierung *res, *reservierungen) {
             res->takePlatz();
         }
+        if (bewertung == obereGrenze) {
+            found = true;
+        }
+        obereGrenze = bewertung;
 //        found = true;
         return;
     }
@@ -79,17 +80,19 @@ void Verteiler::verteile(int bewertung)
         }
         dePlatziere(res);
     }
+    if (einzelneBewertung->isEmpty()) return;
+
     Reservierung *extra = new Reservierung(NULL);
     extra->setName("EXTRA!-!-!-");
     extra->setAnzahl(0);
-    if (einzelneBewertung->length() > 0 && einzelneBewertung->first() != 0) {
+    if (einzelneBewertung->length() > 0 && einzelneBewertung->first() >= 0.1) {
         // Es gibt kein Element, dass passt
         int a = wagen->at(aktuellerWagen)->getAnzahlBisEnde();
-        if (a <= puffer) {
+        if (a <= puffer && ! anzahl->contains(a)) {
             puffer -= a;
             extra->setAnzahl(a);
             lokaleListe->insert(0, extra);
-            einzelneBewertung->insert(0, a);
+            einzelneBewertung->insert(0, a*0.9);
             reservierungen->append(extra);
             rest->insert(reservierungen->length()-1);
             int j = 0;
@@ -120,11 +123,12 @@ void Verteiler::verteile(int bewertung)
             dePlatziere(res);
             rest->insert(index);
         }
-    }
-    if (extra->getAnzahl() != 0) {
-        rest->remove(reservierungen->length()-1);
-        reservierungen->removeLast();
-        puffer += extra->getAnzahl();
+        if (extra == res) {
+            rest->remove(reservierungen->length()-1);
+            reservierungen->removeLast();
+            puffer += extra->getAnzahl();
+        }
+
     }
 }
 

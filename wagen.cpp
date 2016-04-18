@@ -1,6 +1,7 @@
 #include "wagen.h"
 #include <QSet>
 #include "math.h"
+#include <cmath>
 
 Wagen::Wagen() {
     Wagen(0);
@@ -187,7 +188,70 @@ int Wagen::getNummer() const
 {
     return nummer;
 }
+double Wagen::getStrafpunkte(QList<int> *liste)
+{
+    Reservierung *res = verteilung.at(liste->first());
+    if (res->getName() == "EXTRA!-!-!-") return res->getAnzahl()*0.9;
 
+    // Berechnung der Strafpunkte
+    double sp1 = 0;
+    double sp2 = 0;
+    double sp3 = 0;
+
+     // Sp 1
+    int anzahl = res->getAnzahl();
+    double maxB = ceil(anzahl / (double)max(2*row1, 2*row2));
+
+    QSet<int> gruppen = QSet<int>();
+    for (int i = 0; i < liste->length(); ++i) {
+        gruppen.insert(sitzGruppen.at(liste->at(i)));
+    }
+    double benoetigt = gruppen.size();
+    if (benoetigt > maxB) {
+        sp1 += benoetigt - maxB;
+//        qDebug("Wird benötigt");
+    }
+
+    // Sp 2
+    int a = sitzGruppen.indexOf(sitzGruppen.at(liste->first()));
+    int b = sitzGruppen.indexOf(sitzGruppen.at(liste->last()));
+    int ueV = 0;
+    int sgV = 0;
+    int ueH = 0;
+    int sgH = 0;
+    while(a < sitzGruppen.length() && sitzGruppen.at(a) == sitzGruppen.at(liste->first())) {
+        if (verteilung.at(a) != res)
+            ++ueV;
+        ++a;
+        ++sgV;
+    }
+    while(b < sitzGruppen.length() && sitzGruppen.at(b) == sitzGruppen.at(liste->last())) {
+        if (verteilung.at(b) != res)
+            ++ueH;
+        ++b;
+        ++sgH;
+    }
+    int mult = 0;
+    if (ueV != 0){
+        sp2 += 1 + ceil(std::abs(sgV * 0.5 - ueV)) * 0.5 + (sgV - ueV) * 0.5;
+        mult += 1;
+    }
+    if ((sitzGruppen.at(liste->first()) != sitzGruppen.at(liste->last())) && (ueH != 0)){
+        sp2 += 1 + ceil(std::abs(sgH * 0.5 - ueH)) * 0.5 + (sgH - ueH) * 0.5;
+        mult += 1;
+    }
+    sp2 *= mult;
+
+
+
+    // Gewichtung der einzelnen Strafpunkte
+    double weight1 = 10;
+    double weight2 = 2;
+    double weight3 = 1;
+
+    return weight1 * sp1 + weight2 * sp2 + weight3 * sp3;
+}
+/*
 double Wagen::getStrafpunkte(QList<int> *liste)
 {
     Reservierung *referenz = verteilung[liste->at(0)];
@@ -217,4 +281,6 @@ double Wagen::getStrafpunkte(QList<int> *liste)
 //    zaehler += gruppen.size();
     return zaehler;
 }
+*/
+
 // KOMBINATION AUF getStrafpunkte UND besetze

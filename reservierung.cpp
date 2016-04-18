@@ -1,5 +1,6 @@
 #include "reservierung.h"
 #include "wagen.h"
+#include <QDebug>
 
 Reservierung::Reservierung(QListWidgetItem *item) {
     //wagen = Wagen(0);
@@ -220,12 +221,13 @@ QString Reservierung::getSonstiges() const
 
 void Reservierung::takePlatz()
 {
+//    qDebug() << name;
     // Muss noch etwas optimiert werden, in dem gruppen Zusammegefasst werden
     if (wagen == NULL) return;
-//    if (plaetze == NULL) return;
+    if (plaetze == NULL) return;
     sitzplatz = QString::number(wagen->getNummer())+": ";
     for(int i=0; i<plaetze->size(); ++i) {
-        sitzplatz += QString::number(plaetze->at(i));
+        sitzplatz += QString::number(plaetze->at(i)+1);
         if(i<plaetze->size()-1)
             sitzplatz += "," ;
     }
