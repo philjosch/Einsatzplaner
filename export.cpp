@@ -160,7 +160,7 @@ QTextDocument *Export::createDocSingle(QPrinter *printer)
     a += "<style type=\"text/css\">";
     a += "body{float: none} body,td,th,p { font-size: 80%;}";
     a += "table {border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;} h1.pb { page-break-before: always; }";
-    a +=" table th, table td {            border-width: 1px; border-collapse: collapse;            padding: 0px;            border-style: solid;            border-color: black; }";
+    a +=" table th, table td { border-width: 1px; border-collapse: collapse; padding: 0px; border-style: solid; border-color: black; }";
     a+="</style>";
     bool first = false;
     for(int i = 0; i < manager->getFahrtage()->length(); i++) {
@@ -173,15 +173,32 @@ QTextDocument *Export::createDocSingle(QPrinter *printer)
             }
             a += "<p><b>Wagenreihung:</b> "+f->getWagenreihung()+"</p>";
             a += "<p><b>Dienstbeginn</b>:<br/>Tf, Tb: "+f->getTimeTf().toString("hh:mm")+"<br/>Zf/Zub/Service: "+f->getTimeZ().toString("hh:mm")+"</p>";
-            a += "<p><b>Triebfahrzeugführer (Tf), Triebfahrzeugbegleiter(Tb):</b><br/>"+listToString(f->getTf(), " | ")+(f->getBenoetigeTf() ?" | <b>Tf, Tb werden benötigt!</b>":" ") +"</p>";
-            a += "<p><b>Zugführer:</b><br/>"+listToString(f->getZf(), " | ")+(f->getBenoetigeZf() ?" | <b>Zugführer wird benötigt!</b>":" ") +"</p>";
-            a += "<p><b>Zugbegleiter und Begleiter ohne besondere Aufgaben:</b><br/>"+listToString(f->getZub(), " | ")+(f->getBenoetigeZub() ?" | <b>Zugbegleiter werden benötigt!</b>":" ") +"</p>";
-            a += "<p><b>Service:</b><br/>"+listToString(f->getService(), " | ")+(f->getBenoetigeService() ?" | <b>Service-Personal benötigt!</b>":" ") +"</p>";
+
+            a += "<p><b>Triebfahrzeugführer (Tf), Triebfahrzeugbegleiter(Tb)";
+            a += (f->getBenoetigeTf() ?" werden benötigt": "");
+            a += ":</b><br/>"+listToString(f->getTf(), " | ")+"</p>";
+
+            if (f->getArt() != 3) {
+                a += "<p><b>Zugführer";
+                a += (f->getBenoetigeZf() ?" wird benötigt":"");
+                a += ":</b><br/>"+listToString(f->getZf(), " | ")+"</p>";
+
+                a += "<p><b>Zugbegleiter und Begleiter ohne besondere Ausbildung";
+                a += (f->getBenoetigeZub() ?" werden benötigt":"");
+                a += ":</b><br/>"+listToString(f->getZub(), " | ")+"</p>";
+
+                a += "<p><b>Service-Personal";
+                a += (f->getBenoetigeService() ?" wird benötigt":"");
+                a += ":</b><br/>"+listToString(f->getService(), " | ") +"</p>";
+            }
             if (f->getBemerkungen()!= "") {
                 a += "<p>Bemerkungen:<br/>"+f->getBemerkungen()+"</p>";
             }
-            a += "<p><b>Reservierungen:</b><br/>Bereits "+QString::number(f->getManager()->getGesamtzahl())+" Plätze belegt.</p>";
-            if (f->getArt() <= 3) {
+            a += "<p><b>Reservierungen:</b><br/>Bereits "+QString::number(f->getManager()->getGesamtzahl());
+            a += (f->getManager()->getGesamtzahl() == 1 ? " Platz " :  " Plätze ");
+            a += "belegt.</p>";
+
+            if (f->getManager()->getReservierungen()->length() > 0) {
                 a +="<table><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
                 for (int j = 0; j < f->getManager()->getReservierungen()->length(); j++) {
                     a += stringFromReservierung(f->getManager()->getReservierungen()->at(j));
@@ -217,7 +234,7 @@ QTextDocument *Export::createDocListe(QPrinter *printer)
     a += "<style type='text/css'>";
     a += "body, tr, td, p { font-size: 80%;}";
     a += "table {border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse; }";
-    a += "table th, table td {            border-width: 1px; border-collapse: collapse;            padding: 0px;            border-style: solid;            border-color: black; }";
+    a += "table th, table td {border-width: 1px; border-collapse: collapse; padding: 0px;border-style: solid;border-color: black; }";
     a += "table tr { page-break-inside: avoid;}";
     a +="</style>";
     a += "<h3 page-break-before='always'>Übersicht über die Fahrtage</h3>";
@@ -225,21 +242,25 @@ QTextDocument *Export::createDocListe(QPrinter *printer)
     for(int i = 0; i < manager->getFahrtage()->length(); i++) {
         Fahrtag *f = manager->getFahrtage()->at(i);
         if (isAllowed(f)) {
-            a+= "<tr bgcolor='"+PlanerFahrtage::getFarbe(f->getArt()).name()+"'>";
-            a+= (f->getWichtig() ? "<td bgcolor='red'>": "<td>" );
-            a+= "<b>"+f->getDatum().toString("dddd d.M.yyyy")+"</b><br/>("+PlanerFahrtage::getArt(f->getArt())+")<br/>"+f->getAnlass()+"</td>";
-            a+= (f->getBenoetigeTf()?"<td><b>Lokführer werden benötigt!</b><br/>":"<td>")+listToString(f->getTf(), "<br/>")+"</td>";
-            a+= (f->getBenoetigeTf()?"<td><u><b>Zugführer wird benötigt!</b><br/>":"<td><u>")+listToString(f->getZf(), "<br/>")+"</u><br/>";
-
-            a+= (f->getBenoetigeTf()?"<b>Zugbegleiter werden benötigt!</b><br/>":" ")+listToString(f->getZub(), "<br/>")+"</td>";
-            a+= (f->getBenoetigeTf()?"<td><b>Service-Personal wird benötigt!</b><br/>":"<td>")+listToString(f->getService(), "<br/>")+"</td>";
-            a+= "<td>Tf/Tb: "+f->getTimeTf().toString("hh:mm")+"<br/>Zf/Zub/Service: "+f->getTimeZ().toString("hh:mm")+"</td>";
-            a+= "<td>"+f->getWagenreihung()+"<br/>";
-            if (f->getArt() <= 3) {
-                a += QString::number(f->getManager()->getGesamtzahl());
-                a+= " reservierte Sitzplätze<br/>";
+            a += "<tr bgcolor='"+PlanerFahrtage::getFarbe(f->getArt()).name()+"'>";
+            a += (f->getWichtig() ? "<td bgcolor='red'>": "<td>" );
+            a += "<b>"+f->getDatum().toString("dddd d.M.yyyy")+"</b><br/>("+PlanerFahrtage::getArt(f->getArt())+")<br/>"+f->getAnlass()+"</td>";
+            a += (f->getBenoetigeTf()?"<td><b>Lokführer werden benötigt!</b><br/>":"<td>")+listToString(f->getTf(), "|<br/>")+"</td>";
+            if (f->getArt() != 3) {
+                a += (f->getBenoetigeTf()?"<td><u><b>Zugführer wird benötigt!</b><br/>":"<td><u>")+listToString(f->getZf(), "|<br/>")+"</u><br/>";
+                a += (f->getBenoetigeTf()?"<b>Zugbegleiter werden benötigt!</b><br/>":" ")+listToString(f->getZub(), "|<br/>")+"</td>";
+                a += (f->getBenoetigeTf()?"<td><b>Service-Personal wird benötigt!</b><br/>":"<td>")+listToString(f->getService(), "<br/>")+"</td>";
             }
-            a+= f->getBemerkungen()+"</td></tr>";
+            a += "<td>Tf/Tb: "+f->getTimeTf().toString("hh:mm")+"<br/>";
+            if (f->getArt() != 3) a += "Zf/Zub/Service: "+f->getTimeZ().toString("hh:mm");
+            a += "</td>";
+            a += "<td>"+f->getWagenreihung()+(f->getWagenreihung() != "" ? "<br/>": "");
+            if (f->getArt() <= 3 && f->getManager()->getGesamtzahl() > 0) {
+                a += QString::number(f->getManager()->getGesamtzahl());
+                a += (f->getManager()->getGesamtzahl() == 1 ? " reservierter Sitzplatz": " reservierte Sitzplätze");
+                a += "<br/>";
+            }
+            a += f->getBemerkungen()+"</td></tr>";
         }
     }
     a += "</tbody></table>";
