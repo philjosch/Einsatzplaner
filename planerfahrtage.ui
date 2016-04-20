@@ -25,6 +25,9 @@
         <property name="editable">
          <bool>true</bool>
         </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
         <property name="insertPolicy">
          <enum>QComboBox::InsertAlphabetically</enum>
         </property>
@@ -38,22 +41,27 @@
         </item>
         <item>
          <property name="text">
-          <string>309, 221, 204, 202, 208</string>
+          <string>309, 221, 204, 208, 202</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>309, 221, 204, 202, 208, 201</string>
+          <string>309, 221, 204, 208, 202, 201</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>309, 221, 204, 217, 202, 208, 201</string>
+          <string>309, 221, 204, 217, 208, 202, 201</string>
          </property>
         </item>
         <item>
          <property name="text">
           <string>309, 221, 204, 217</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>309, 221, 217</string>
          </property>
         </item>
        </widget>
