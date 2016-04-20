@@ -221,9 +221,7 @@ QString Export::stringFromReservierung(Reservierung *res)
     a += "<td>"+res->getStartZug().at(0)+" "+res->getStartHp().at(0)+"<br/>->"+res->getEndeZug().at(0)+" "+res->getEndeHp().at(0)+"</td>";
     a += (res->getFahrrad() ? "<td>Fahrrad!<br/>" : "<td>")+res->getSonstiges()+"</td></tr>";
     return a;
-
 }
-
 
 QTextDocument *Export::createDocListe(QPrinter *printer)
 {
@@ -268,7 +266,6 @@ QTextDocument *Export::createDocListe(QPrinter *printer)
     doc->setHtml(a);
 
     return doc;
-
 }
 
 QString Export::listToString(QList<QString> *liste, QString deliminiter)
@@ -292,7 +289,3 @@ bool Export::isAllowedSingle(Fahrtag *f)
 {
     return map->key(f, new QListWidgetItem())->isSelected() && ! map->key(f, new QListWidgetItem())->isHidden();
 }
-
-
-
-

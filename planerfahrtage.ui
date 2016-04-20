@@ -2133,7 +2133,7 @@ Zub, Service</string>
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>-</string>
+        <string>Fahrtag löschen</string>
        </property>
       </widget>
      </item>

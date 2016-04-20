@@ -11,19 +11,19 @@ Fahrtag::Fahrtag(QListWidgetItem *item, QListWidget *liste)
     QVariant v = qVariantFromValue((void *) this);
     item->setData(Qt::UserRole, v);
 
-
-    Datum = QDate::currentDate();
-    ZeitTf = QTime::fromString("08:15", "hh:mm");
-    ZeitZ = QTime::fromString("08:45", "hh:mm");
-    Art = 0;
-    Wichtig = false;
+    datum = QDate::currentDate();
+    zeitTf = QTime::fromString("08:15", "hh:mm");
+    zeitZ = QTime::fromString("08:45", "hh:mm");
+    art = 0;
+    wichtig = false;
     wagen = "";
-    Anlass = "";
-    Tf = new QList<QString>();
-    Zf = new QList<QString>();
-    Zub = new QList<QString>();
-    Service = new QList<QString>();
+    anlass = "";
+    tf = new QList<QString>();
+    zf = new QList<QString>();
+    zub = new QList<QString>();
+    service = new QList<QString>();
     reservierungen = new ManagerReservierungen(liste);
+    bemerkungen = "";
 
     benoetigeTf = true;
     benoetigeZf = true;
@@ -87,21 +87,21 @@ void Fahrtag::update() {
 QJsonObject Fahrtag::toJson()
 {
     QJsonObject o = QJsonObject();
-    o.insert("datum", Datum.toString("yyyy-M-d"));
-    o.insert("art", Art);
-    o.insert("wichtig", Wichtig);
-    o.insert("anlass", Anlass);
+    o.insert("datum", datum.toString("yyyy-M-d"));
+    o.insert("art", art);
+    o.insert("wichtig", wichtig);
+    o.insert("anlass", anlass);
     o.insert("wagen", wagen);
-    o.insert("tf", qListToJsonArray(Tf));
-    o.insert("zf", qListToJsonArray(Zf));
-    o.insert("zub", qListToJsonArray(Zub));
+    o.insert("tf", qListToJsonArray(tf));
+    o.insert("zf", qListToJsonArray(zf));
+    o.insert("zub", qListToJsonArray(zub));
     o.insert("bTf", benoetigeTf);
     o.insert("bZf", benoetigeZf);
     o.insert("bZub", benoetigeZub);
     o.insert("bService", benoetigeService);
     o.insert("service", qListToJsonArray(Service));
-    o.insert("zeitTf", ZeitTf.toString("hh:mm"));
-    o.insert("zeitZ", ZeitZ.toString("hh:mm"));
+    o.insert("zeitTf", zeitTf.toString("hh:mm"));
+    o.insert("zeitZ", zeitZ.toString("hh:mm"));
     o.insert("bemerkungen", Bemerkungen);
     o.insert("manager", reservierungen->toJson());
     return o;
@@ -122,50 +122,47 @@ QList<QString> *Fahrtag::jsonArrayToQList(QJsonArray array) {
     return list;
 }
 
-
 void Fahrtag::fromJson(QJsonObject o)
 {
-    Datum = QDate::fromString(o.value("datum").toString(), "yyyy-M-d");
-    Art = o.value("art").toInt();
-    Wichtig = o.value("wichtig").toBool();
-    Anlass = o.value("anlass").toString();
+    datum = QDate::fromString(o.value("datum").toString(), "yyyy-M-d");
+    art = o.value("art").toInt();
+    wichtig = o.value("wichtig").toBool();
+    anlass = o.value("anlass").toString();
     wagen = o.value("wagen").toString();
-    Tf = jsonArrayToQList(o.value("tf").toArray());
-    Zf = jsonArrayToQList(o.value("zf").toArray());
-    Zub = jsonArrayToQList(o.value("zub").toArray());
+    tf = jsonArrayToQList(o.value("tf").toArray());
+    zf = jsonArrayToQList(o.value("zf").toArray());
+    zub = jsonArrayToQList(o.value("zub").toArray());
     Service = jsonArrayToQList(o.value("service").toArray());
-    if (! o.value("bTf").isUndefined()) {
+    sf (! o.value("bTf").isUndefined()) {
         benoetigeTf = o.value("bTf").toBool();
         benoetigeZf = o.value("bZf").toBool();
         benoetigeZub = o.value("bZub").toBool();
         benoetigeService = o.value("bService").toBool();
     }
-    ZeitTf = QTime::fromString(o.value("zeitTf").toString(), "hh:mm");
-    ZeitZ = QTime::fromString(o.value("zeitZ").toString(), "hh:mm");
-    Bemerkungen = o.value("bemerkungen").toString();
+    zeitTf = QTime::fromString(o.value("zeitTf").toString(), "hh:mm");
+    zeitZ = QTime::fromString(o.value("zeitZ").toString(), "hh:mm");
+    bemerkungen = o.value("bemerkungen").toString();
     reservierungen->fromJson(o.value("manager").toArray());
     update();
 }
 
 
-
-
 // GETTER
 QDate Fahrtag::getDatum()
 {
-    return (Datum);
+    return (datum);
 }
 int Fahrtag::getArt()
 {
-    return (Art);
+    return (art);
 }
 bool Fahrtag::getWichtig()
 {
-    return(Wichtig);
+    return(wichtig);
 }
 QString Fahrtag::getAnlass()
 {
-    return(Anlass);
+    return(anlass);
 }
 
 QString Fahrtag::getWagenreihung()
@@ -175,37 +172,37 @@ QString Fahrtag::getWagenreihung()
 
 QList<QString> *Fahrtag::getTf()
 {
-    return(Tf);
+    return(tf);
 }
 
 QList<QString> *Fahrtag::getZf()
 {
-    return(Zf);
+    return(zf);
 }
 
 QList<QString> *Fahrtag::getZub()
 {
-    return(Zub);
+    return(zub);
 }
 
 QList<QString> *Fahrtag::getService()
 {
-    return(Service);
+    return(service);
 }
 
 QTime Fahrtag::getTimeTf()
 {
-    return(ZeitTf);
+    return(zeitTf);
 }
 
 QTime Fahrtag::getTimeZ()
 {
-    return(ZeitZ);
+    return(zeitZ);
 }
 
 QString Fahrtag::getBemerkungen()
 {
-    return(Bemerkungen);
+    return(bemerkungen);
 }
 
 ManagerReservierungen *Fahrtag::getManager()
@@ -222,22 +219,22 @@ QListWidgetItem *Fahrtag::getItem()
 // SETTER
 void Fahrtag::setDatum(QDate datum)
 {
-    Datum = datum;
+    this->datum = datum;
 }
 
 void Fahrtag::setArt(int art)
 {
-    Art = art;
+    this->art = art;
 }
 
 void Fahrtag::setWichtig(bool wichtig)
 {
-    Wichtig = wichtig;
+    this->wichtig = wichtig;
 }
 
 void Fahrtag::setAnlass(QString anlass)
 {
-    Anlass = anlass;
+    this->anlass = anlass;
 }
 
 void Fahrtag::setWagenreihung(QString wagenreihung)
@@ -247,36 +244,36 @@ void Fahrtag::setWagenreihung(QString wagenreihung)
 
 void Fahrtag::setTf(QList<QString> *text)
 {
-    Tf = text;
+    this->tf = text;
 }
 
 void Fahrtag::setZf(QList<QString> *text)
 {
-    Zf = text;
+    this->zf = text;
 }
 
 void Fahrtag::setZub(QList<QString> *text)
 {
-    Zub = text;
+    this->zub = text;
 }
 
 void Fahrtag::setService(QList<QString> *text)
 {
-    Service = text;
+    this->service = text;
 }
 
 void Fahrtag::setTimeTf(QTime zeit)
 {
-    ZeitTf = zeit;
+    this->zeitTf = zeit;
 }
 
 void Fahrtag::setTimeZ(QTime zeit)
 {
-    ZeitZ = zeit;
+    this->zeitZ = zeit;
 }
 void Fahrtag::setBemerkungen(QString text)
 {
-    Bemerkungen = text;
+    this->bemerkungen = text;
 }
 
 void Fahrtag::setHidden(bool hide)
