@@ -1,0 +1,213 @@
+{
+    "manager": [
+        {
+            "anlass": "",
+            "art": 2,
+            "bService": true,
+            "bTf": true,
+            "bZf": true,
+            "bZub": true,
+            "bemerkungen": "",
+            "datum": "2016-4-14",
+            "manager": {
+                "auto": true,
+                "res": [
+                    {
+                        "anzahl": 4,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "4",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    },
+                    {
+                        "anzahl": 2,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "2-2",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    },
+                    {
+                        "anzahl": 5,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "5",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    },
+                    {
+                        "anzahl": 9,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "9",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    },
+                    {
+                        "anzahl": 7,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "7-1",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    },
+                    {
+                        "anzahl": 3,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "3",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    },
+                    {
+                        "anzahl": 8,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "8",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    },
+                    {
+                        "anzahl": 2,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "2-1",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    },
+                    {
+                        "anzahl": 6,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "6-2",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    },
+                    {
+                        "anzahl": 6,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "6-1",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    },
+                    {
+                        "anzahl": 7,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "7-2",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    },
+                    {
+                        "anzahl": 10,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "10",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    },
+                    {
+                        "anzahl": 11,
+                        "endeHp": "Ottweiler",
+                        "endeZug": "2203 SSWN-SOTW",
+                        "fahrrad": false,
+                        "klasse": "2./3. Klasse",
+                        "mail": "",
+                        "name": "11",
+                        "sitzplatz": "",
+                        "sonstiges": "",
+                        "startHp": "Ottweiler",
+                        "startZug": "2202 SOTW-SSWN",
+                        "telefon": ""
+                    }
+                ]
+            },
+            "service": [
+            ],
+            "tf": [
+            ],
+            "wagen": "309, 221, 204, 202, 208",
+            "wichtig": false,
+            "zeitTf": "08:15",
+            "zeitZ": "08:45",
+            "zf": [
+            ],
+            "zub": [
+            ]
+        }
+    ]
+}
