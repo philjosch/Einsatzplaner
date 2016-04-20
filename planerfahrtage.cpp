@@ -41,26 +41,16 @@ QString PlanerFahrtage::getArt(int i)
 
 QColor PlanerFahrtage::getFarbe(int i)
 {
-
-    QList<QColor> f = QList<QColor>();
-/*    f.append(QColor(255, 255, 255));
-    f.append(QColor(205,92,92));
-    f.append(QColor(238,130,238));
-    f.append(QColor(119, 65, 119));
-    f.append(QColor(211, 211, 211));
-    f.append(QColor(154, 205, 50));
-    f.append(QColor(255, 165, 0));
-    f.append(QColor(135, 206, 250));*/
-    f.append(QColor("#ffffff"));
-    f.append(QColor("#99c9de"));
-    f.append(QColor("#b7a0e3"));
-    f.append(QColor("#ffe9d1"));
-    f.append(QColor("#ffc789"));
-    f.append(QColor("#d3f7a7"));
-    f.append(QColor("#fff5ac"));
-    f.append(QColor("#f2a4c3"));
-    return f.at(i);
-
+    switch (i) {
+    case 0:     return "#ffffff"; // Museumszug
+    case 1:     return "#ffc789"; // Sonderzug
+    case 2:     return "#b7a0e3"; // Nikolausfahrt
+    case 3:     return "#afcad6"; // Museumszug mit ELF
+    case 4:     return "#99c9de"; // ELF-Schnupperkurs
+    case 5:     return "#d3f7a7"; // Bahnhofsfest
+    case 6:     return "#fff5ac"; // Ausbildung
+    default:    return "#f2a4c3"; // Sonstiges
+    }
 }
 
 /* ENDE DES BEREICHS MIT KONSTRUKTOR UND STATISCHEN METHODEN */
