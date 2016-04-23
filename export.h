@@ -29,6 +29,22 @@ private slots:
     void on_buttonDrucken_clicked();
     void on_buttonPDF_clicked();
 
+
+    void on_dateBis_dateChanged(const QDate &date);
+
+    void on_dateAb_dateChanged(const QDate &date);
+
+    void on_listZuege_itemSelectionChanged();
+
+private:
+    Ui::Export *ui;
+    ManagerZuege *manager;
+    QMap<QListWidgetItem*, Fahrtag*> *map;
+
+    QString style = "body{float: none} body,td,th,p { font-size: 80%;}\
+table {border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;} h1.pb { page-break-before: always; }\
+table th, table td { border-width: 1px; border-collapse: collapse; padding: 0px; border-style: solid; border-color: black; }";
+
     QTextDocument *createDocSingle(QPrinter *printer);
     QTextDocument *createDocListe(QPrinter *printer);
     QString listToString(QList<QString> *liste, QString deliminiter = ", ");
@@ -38,14 +54,8 @@ private slots:
 
     QString stringFromReservierung(Reservierung *res);
 
-    void on_dateBis_dateChanged(const QDate &date);
-
-    void on_dateAb_dateChanged(const QDate &date);
-
-private:
-    Ui::Export *ui;
-    ManagerZuege *manager;
-    QMap<QListWidgetItem*, Fahrtag*> *map;
+    void printListView(QPrinter *printer);
+    void printSingleView(QPrinter *printer);
 };
 
 #endif // EXPORT_H

@@ -23,6 +23,8 @@ Export::Export(ManagerZuege *manager, QWidget *parent) : QDialog(parent), ui(new
         ui->listZuege->insertItem(i, item);
         map->insert(item, f);
     }
+    ui->comboAb->setCurrentIndex(0);
+    update();
 }
 
 Export::~Export()
@@ -73,7 +75,7 @@ void Export::update() {
             break;
         }
 
-        // Testen, ob bis datum stimmt
+        // Testen, ob Bis-Datum stimmt
         bool bis = false;
         switch (ui->comboBis->currentIndex()) {
         case 0:
@@ -101,26 +103,12 @@ void Export::update() {
 void Export::on_buttonDrucken_clicked()
 {
     QPrinter printer;
-    if (ui->checkSingle->isChecked()) {
-        printer.setPageOrientation(QPageLayout::Portrait);
-        printer.setPageMargins(20, 15, 20, 20, QPrinter::Millimeter);
-
-        QPrintDialog *dlg = new QPrintDialog(&printer, this);
-        if (dlg->exec() == QDialog::Accepted) {
-            QTextDocument *document = createDocSingle(&printer);
-            document->print(&printer);
-        }
+    if (ui->checkSingle->isChecked() && QPrintDialog(&printer, this).exec() == QDialog::Accepted) {
+        printSingleView(&printer);
     }
 
-    if (ui->checkListe->isChecked()) {
-        printer.setPageOrientation(QPageLayout::Landscape);
-        printer.setPageMargins(15, 20, 15, 20, QPrinter::Millimeter);
-
-        QPrintDialog *dlg = new QPrintDialog(&printer, this);
-        if (dlg->exec() == QDialog::Accepted) {
-            QTextDocument *document = createDocListe(&printer);
-            document->print(&printer);
-        }
+    if (ui->checkListe->isChecked() && QPrintDialog(&printer, this).exec() == QDialog::Accepted) {
+        printListView(&printer);
     }
 }
 
@@ -128,27 +116,38 @@ void Export::on_buttonPDF_clicked()
 {
     QPrinter printer(QPrinter::PrinterResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setPageMargins(20, 15, 20, 20, QPrinter::Millimeter);
-    QString path;
-    if (ui->checkSingle->isChecked()) {
-        printer.setPageOrientation(QPageLayout::Portrait);
-        QTextDocument *document = createDocSingle(&printer);
-        path = QFileDialog::getSaveFileName(this, "Datei speichern unter...", QDir::homePath()+"/Einzelansichten.pdf", "PDF-Dateien (*.pdf)");
-        if (path != "") {
-            printer.setOutputFileName(path);
-            document->print(&printer);
-        }
+
+    QString path = QDir::currentPath();
+    QFileDialog f(this, Qt::Dialog);
+
+    if (ui->checkSingle->isChecked() && (ui->listZuege->selectedItems().length() > 0) &&
+            ((path = f.getSaveFileName(this, "Datei speichern unter...", QDir::currentPath()+"/Einzelansichten.pdf", "PDF-Dateien (*.pdf)")) != "")) {
+        printer.setOutputFileName(path);
+//        QDir::setPath(path);
+        printSingleView(&printer);
+        QDir::setCurrent(f.directory().absolutePath());
     }
-    if (ui->checkListe->isChecked()) {
-        printer.setPageMargins(15, 20, 15, 20, QPrinter::Millimeter);
-        printer.setPageOrientation(QPageLayout::Landscape);
-        QTextDocument *document = createDocListe(&printer);
-        path = QFileDialog::getSaveFileName(this, "Datei speichern unter...", QDir::homePath()+"/Listenansicht.pdf", "PDF-Dateien (*.pdf)");
-        if (path != "") {
-            printer.setOutputFileName(path);
-            document->print(&printer);
-        }
+    if (ui->checkListe->isChecked() && ((path = f.getSaveFileName(this, "Datei speichern unter...", QDir::currentPath()+"/Listenansicht.pdf", "PDF-Dateien (*.pdf)")) != "")) {
+        printer.setOutputFileName(path);
+        printListView(&printer);
+        QDir::setCurrent(f.directory().absolutePath());
     }
+}
+
+void Export::printListView(QPrinter *printer)
+{
+    printer->setPageMargins(15, 20, 15, 20, QPrinter::Millimeter);
+    printer->setPageOrientation(QPageLayout::Landscape);
+    QTextDocument *document = createDocListe(printer);
+    document->print(printer);
+}
+
+void Export::printSingleView(QPrinter *printer)
+{
+    printer->setPageMargins(20, 15, 20, 20, QPrinter::Millimeter);
+    printer->setPageOrientation(QPageLayout::Portrait);
+    QTextDocument *document = createDocSingle(printer);
+    document->print(printer);
 }
 
 QTextDocument *Export::createDocSingle(QPrinter *printer)
@@ -287,5 +286,11 @@ bool Export::isAllowed(Fahrtag *f)
 
 bool Export::isAllowedSingle(Fahrtag *f)
 {
-    return map->key(f, new QListWidgetItem())->isSelected() && ! map->key(f, new QListWidgetItem())->isHidden();
+    return map->key(f, new QListWidgetItem())->isSelected() && isAllowed(f);
+}
+
+void Export::on_listZuege_itemSelectionChanged()
+{
+    // Sobald ein Fahrtag ausgewählt wird, wird die Einzelansicht aktiviert, wenn kein Tag gewählt ist, wird sie deaktiviert
+    ui->checkSingle->setChecked(ui->listZuege->selectedItems().length() != 0);
 }
