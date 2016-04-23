@@ -81,7 +81,7 @@ void Fahrtag::setBenoetigeService(bool value)
 // Wichtiges
 void Fahrtag::update() {
     item->setText(getDatum().toString("dddd d. M. yyyy") + (getWichtig() ? " WICHTIG!" : ""));
-    item->setToolTip(Anlass);
+    item->setToolTip(anlass);
 }
 
 QJsonObject Fahrtag::toJson()
@@ -99,10 +99,10 @@ QJsonObject Fahrtag::toJson()
     o.insert("bZf", benoetigeZf);
     o.insert("bZub", benoetigeZub);
     o.insert("bService", benoetigeService);
-    o.insert("service", qListToJsonArray(Service));
+    o.insert("service", qListToJsonArray(service));
     o.insert("zeitTf", zeitTf.toString("hh:mm"));
     o.insert("zeitZ", zeitZ.toString("hh:mm"));
-    o.insert("bemerkungen", Bemerkungen);
+    o.insert("bemerkungen", bemerkungen);
     o.insert("manager", reservierungen->toJson());
     return o;
 }
@@ -132,8 +132,8 @@ void Fahrtag::fromJson(QJsonObject o)
     tf = jsonArrayToQList(o.value("tf").toArray());
     zf = jsonArrayToQList(o.value("zf").toArray());
     zub = jsonArrayToQList(o.value("zub").toArray());
-    Service = jsonArrayToQList(o.value("service").toArray());
-    sf (! o.value("bTf").isUndefined()) {
+    service = jsonArrayToQList(o.value("service").toArray());
+    if (! o.value("bTf").isUndefined()) {
         benoetigeTf = o.value("bTf").toBool();
         benoetigeZf = o.value("bZf").toBool();
         benoetigeZub = o.value("bZub").toBool();
