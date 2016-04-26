@@ -2,6 +2,8 @@
 #
 # Project created by QtCreator 2015-03-06T16:57:47
 #
+# All Rights by Philipp Schepper 2016
+#
 #-------------------------------------------------
 
 QT       += core gui widgets printsupport
@@ -47,12 +49,12 @@ win32 {
     QMAKE_TARGET_PRODUCT = Einsatzplaner
     RC_ICONS = keks.ico
 #    RC_LANG = German
-    VERSION = 0.1.2.1
+    VERSION = 0.2.0.1
 #    OTHER_FILES += keks.ico
 }
 
 macx {
-    VERSION = 0.1.2
+    VERSION = 0.2.0
 
     OTHER_FILES += Info.plist keks.icns
 
@@ -63,7 +65,7 @@ macx {
     # Bundle identifier for your application
     BUNDLEID = de.philipp-schepper.einsatzplaner
     ICON = keks.icns
-##    codesign.commands += macdeployqt $${TARGET}.app;
+    codesign.commands += macdeployqt $${TARGET}.app;
 
 }
 
