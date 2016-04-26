@@ -21,26 +21,24 @@ void PlanerFahrtage::setSaved(bool save)
 
 void PlanerFahrtage::oeffnen()
 {
-    if (! saved)
-    {
+    if (! saved) {
         int answ = QMessageBox::question(this, tr("Datei öffnen?"), tr("Möchten Sie wirklich eine Datei öffnen? Die ungesicherten Information gehen verloren!"), QMessageBox::Save, QMessageBox::Close, QMessageBox::Cancel);
-        if (answ == QMessageBox::Save)
-        {
+        if (answ == QMessageBox::Save) {
             speichern();
-        } else if (answ == QMessageBox::Close)
-        {
+        } else if (answ == QMessageBox::Close) {
             setSaved(true);
         }
     }
 
-    if (saved)
-    {
-        QString path1 = QFileDialog::getOpenFileName(this, tr("Datei öffnen..."), QDir::homePath(), tr("AkO-Dateien (*.ako)"));
-        if (path1 != "")
-        {
+    if (saved) {
+        QFileDialog f(this, Qt::Dialog);
+        QMessageBox::information(this, "", QDir::currentPath(), QMessageBox::Ok);
+        QString path1 = f.getOpenFileName(this, tr("Datei öffnen..."), QDir::currentPath(), tr("AkO-Dateien (*.ako)"));
+        if (path1 != "") {
+            QDir::setCurrent(f.directory().absolutePath());
+            QMessageBox::information(this, "", QDir::currentPath(), QMessageBox::Ok);
             QFile datei(path1);
-            if (!datei.open(QIODevice::ReadOnly))
-            {
+            if (!datei.open(QIODevice::ReadOnly)) {
                 QMessageBox::information(this, "Fehler", "Die Datei unter dem angegebenen Pfad konnte nicht geöffnet werden!", QMessageBox::Ok);
                 return;
             }
@@ -57,20 +55,14 @@ void PlanerFahrtage::oeffnen()
 
 void PlanerFahrtage::speichern()
 {
-    if (path == "")
-    {
+    if (path == "") {
         speichernUnter();
-    }
-    else
-    {
+    } else {
         ZugSichern();
         QFile datei(path);
-        if (!datei.open(QIODevice::WriteOnly))
-        {
-            QMessageBox::information(this, "Fehler", "Die Datei konnte nicht unter dem angegebenen Pfad gesichert werden!", QMessageBox::Ok);
-        }
-        else
-        {
+        if (!datei.open(QIODevice::WriteOnly)) {
+            QMessageBox::warning(this, "Fehler", "Die Datei konnte nicht unter dem angegebenen Pfad gesichert werden!", QMessageBox::Ok);
+        } else {
             QJsonObject o = toJson();
             QJsonDocument saveDoc = QJsonDocument(o);
             datei.write(saveDoc.toJson());
@@ -81,9 +73,13 @@ void PlanerFahrtage::speichern()
 }
 void PlanerFahrtage::speichernUnter()
 {
-    path = QFileDialog::getSaveFileName(this, tr("Speichern unter..."), QDir::homePath()+"/Einsatzplan.ako", tr("AkO-Dateien (*.ako)"));
-    setWindowFilePath(path);
-    if (path != "") speichern();
+    QFileDialog f(this, Qt::Dialog);
+    path = f.getSaveFileName(this, tr("Speichern unter..."), QDir::currentPath()+"/Einsatzplan.ako", tr("AkO-Dateien (*.ako)"));
+    if (path != "") {
+        setWindowFilePath(path);
+        speichern();
+        QDir::setCurrent(f.directory().absolutePath());
+    }
 }
 
 QJsonObject PlanerFahrtage::toJson()
