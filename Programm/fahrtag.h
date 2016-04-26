@@ -34,6 +34,7 @@ private:
     bool benoetigeService;
 
     QJsonArray qListToJsonArray(QList<QString> *list);
+    QList<QString> *jsonArrayToQList(QJsonArray array);
 
 
 public slots:
@@ -41,7 +42,6 @@ public slots:
     void update();
 
     QJsonObject toJson();
-    QList<QString> *jsonArrayToQList(QJsonArray array);
 
     void fromJson(QJsonObject o);
 

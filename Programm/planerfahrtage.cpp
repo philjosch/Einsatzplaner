@@ -6,6 +6,7 @@
 #include <QDate>
 #include <QTime>
 #include <QList>
+#include <QDir>
 
 PlanerFahrtage::PlanerFahrtage(QWidget *parent) : QMainWindow(parent), ui(new Ui::PlanerFahrtage)
 {
@@ -16,7 +17,8 @@ PlanerFahrtage::PlanerFahrtage(QWidget *parent) : QMainWindow(parent), ui(new Ui
     uebernehmen = false;
     setState(false);
     createEmptyForm();
-    ui->tabEingabeWizard->removeTab(0); // Löscht den Fahrplan-Tab, da dieser im Moment nicht benötigt wird
+    ui->tabEingabeWizard->removeTab(0); // Löscht den Fahrplan-Tab, da dieser im Moment nicht benötigt wird    
+    QDir::setCurrent(QDir::homePath());
 }
 
 PlanerFahrtage::~PlanerFahrtage()
