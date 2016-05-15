@@ -49,12 +49,12 @@ win32 {
     QMAKE_TARGET_PRODUCT = Einsatzplaner
     RC_ICONS = keks.ico
 #    RC_LANG = German
-    VERSION = 0.2.0.1
+    VERSION = 1.0.0.1
 #    OTHER_FILES += keks.ico
 }
 
 macx {
-    VERSION = 0.2.0
+    VERSION = 1.0.0
 
     OTHER_FILES += Info.plist keks.icns
 
