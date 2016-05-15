@@ -24,3 +24,6 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui \
     arbeitseinatz.ui \
     personal.ui
+macx {
+    codesign.commands += macdeployqt $${TARGET}.app;
+}
