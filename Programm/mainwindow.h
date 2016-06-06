@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "fahrtag.h"
+#include "fahrtagwindow.h"
+#include "activity.h"
+#include "activitywindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +21,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+public slots:
+    void openFahrtag(Fahrtag *f);
+    void openActivity(Activity *a);
 };
 
 #endif // MAINWINDOW_H
