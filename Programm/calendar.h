@@ -25,6 +25,7 @@ public slots:
     void nextMonth();
     void prevMonth();
     void goTo(QDate date);
+    void goToday();
     bool removeSelected();
 
     Fahrtag *newFahrtag();
