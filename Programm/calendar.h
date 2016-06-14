@@ -6,6 +6,7 @@
 #include "manager.h"
 #include "activity.h"
 #include "fahrtag.h"
+#include "calendarday.h"
 
 namespace Ui {
 class Calendar;
@@ -35,6 +36,7 @@ signals:
 
 private:
     Ui::Calendar *ui;
+    QList<CalendarDay*> *tage;
 };
 
 #endif // CALENDAR_H
