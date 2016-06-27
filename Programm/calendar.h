@@ -21,7 +21,6 @@ public:
     ~Calendar();
 
 public slots:
-    void showList(bool visible);
     void nextMonth();
     void prevMonth();
     void goTo(QDate date);
@@ -30,6 +29,7 @@ public slots:
 
     Fahrtag *newFahrtag();
     Activity *newActivity();
+    bool removeActivity(Activity *a);
 
 signals:
     void showFahrtag(Fahrtag*);

@@ -37,11 +37,6 @@ Calendar::~Calendar()
     delete ui;
 }
 
-void Calendar::showList(bool visible)
-{
-
-}
-
 void Calendar::nextMonth()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addMonths(1));
@@ -120,4 +115,9 @@ Activity *Calendar::newActivity()
     // Hier muss die Anbindung an die GUI implementiert werden
     emit showActivity(a);
     return a;
+}
+
+bool Calendar::removeActivity(Activity *a)
+{
+
 }
