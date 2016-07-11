@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     personalwindow.cpp \
     fahrtag.cpp \
     calendar.cpp \
-    calendarday.cpp
+    calendarday.cpp \
+    aactivity.cpp
 
 HEADERS  += mainwindow.h \
     person.h \
@@ -43,7 +44,8 @@ HEADERS  += mainwindow.h \
     personalwindow.h \
     fahrtag.h \
     calendar.h \
-    calendarday.h
+    calendarday.h \
+    aactivity.h
 
 FORMS    += mainwindow.ui \
     managerreservierungen.ui \

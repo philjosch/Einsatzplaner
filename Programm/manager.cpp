@@ -2,7 +2,7 @@
 
 Manager::Manager()
 {
-    activities = new QList<Activity*>();
+    activities = new QList<AActivity*>();
 }
 
 QJsonObject Manager::toJson()
@@ -15,34 +15,34 @@ void Manager::fromJson(QJsonObject *o)
 
 }
 
-Fahrtag *Manager::newFahrtag()
+Fahrtag *Manager::newFahrtag(QDate *datum)
 {
-    Fahrtag *f = new Fahrtag();
+    Fahrtag *f = new Fahrtag(datum);
     activities->append(f);
     update(activities->length()-1);
     return f;
 }
 
-Activity *Manager::newActivity()
+Activity *Manager::newActivity(QDate *datum)
 {
-    Activity *a = new Activity();
+    Activity *a = new Activity(datum);
     activities->append(a);
     update(activities->length()-1);
     return a;
 }
 
-bool Manager::removeActivity(Activity *a)
+bool Manager::removeActivity(AActivity *a)
 {
     return activities->removeOne(a);
 }
 
-void Manager::addActivity(Activity *a)
+void Manager::addActivity(AActivity *a)
 {
     activities->append(a);
     update(activities->length()-1);
 }
 
-void Manager::activityChanged(Activity *a)
+void Manager::activityChanged(AActivity *a)
 {
     int pos = activities->indexOf(a);
     if (pos >= 0)

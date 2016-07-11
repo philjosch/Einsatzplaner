@@ -7,7 +7,7 @@ namespace Ui {
 class ManagerReservierungen;
 }
 
-class ManagerReservierungen : public QFrame
+class ManagerReservierungen: public QFrame
 {
     Q_OBJECT
 

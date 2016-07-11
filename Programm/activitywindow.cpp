@@ -1,11 +1,12 @@
 #include "activitywindow.h"
 #include "ui_activitywindow.h"
 
-ActivityWindow::ActivityWindow(QWidget *parent) :
+ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) :
     QMainWindow(parent),
     ui(new Ui::ActivityWindow)
 {
     ui->setupUi(this);
+    activity = a;
 }
 
 ActivityWindow::~ActivityWindow()

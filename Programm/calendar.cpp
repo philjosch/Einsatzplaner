@@ -7,6 +7,10 @@ Calendar::Calendar(QWidget *parent) :
     ui(new Ui::Calendar)
 {
     ui->setupUi(this);
+
+    listitem = new QMap<AActivity*, QListWidgetItem*>();
+    calendaritem = new QMap<AActivity*, QListWidgetItem*>();
+
     connect(ui->buttonAddActivity, SIGNAL(clicked(bool)), this, SLOT(newActivity()));
     connect(ui->buttonAddFahrtag, SIGNAL(clicked(bool)), this, SLOT(newFahrtag()));
     connect(ui->buttonNext, SIGNAL(clicked(bool)), this, SLOT(nextMonth()));
@@ -103,7 +107,15 @@ bool Calendar::removeSelected()
 
 Fahrtag *Calendar::newFahrtag()
 {
-    Fahrtag *f = Manager::newFahrtag();
+    Fahrtag *f = Manager::newFahrtag(new QDate());
+    connect(f, SIGNAL(fahrtagModified(AActivity*)), this, SLOT(activityChanged(AActivity*)));
+    ui->listWidget->insertItem(0, f->getListString());
+    QListWidgetItem *i = ui->listWidget->item(0);
+    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), SLOT(clickedItem(QListWidgetItem*)));
+    listitem->insert(f, ui->listWidget->item(0));
+    int pos = getItemFromDate(f->getDatum());
+    calendaritem->insert(f, tage->at(pos)->insert(f));
+
     // Hier muss Implementiert werden
     emit showFahrtag(f);
     return f;
@@ -111,13 +123,52 @@ Fahrtag *Calendar::newFahrtag()
 
 Activity *Calendar::newActivity()
 {
-    Activity *a = Manager::newActivity();
+    Activity *a = Manager::newActivity(new QDate());
+    connect(a, SIGNAL(activityModified(AActivity*)), this, SLOT(activityChanged(AActivity*)));
     // Hier muss die Anbindung an die GUI implementiert werden
     emit showActivity(a);
     return a;
 }
 
-bool Calendar::removeActivity(Activity *a)
+bool Calendar::removeActivity(AActivity *a)
 {
 
+}
+
+void Calendar::activityChanged(AActivity *a)
+{
+//    QMessageBox::information(this, "test", "test", QMessageBox::Ok);
+    calendaritem->value(a)->setText(a->getListStringShort());
+    listitem->value(a)->setText(a->getListString());
+}
+
+void Calendar::clickedItem(QListWidgetItem *i)
+{
+    if (calendaritem->values().contains(i)) {
+        AActivity *a = calendaritem->key(i);
+        if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
+            emit showFahrtag(f);
+        } else {
+            Activity *c = dynamic_cast<Activity*>(a);
+            emit showActivity(c);
+        }
+        // Element liegt im Kalender
+    } else {
+        AActivity *a = listitem->key(i);
+        if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
+            emit showFahrtag(f);
+        } else {
+            Activity *c = dynamic_cast<Activity*>(a);
+            emit showActivity(c);
+        }
+    }
+}
+
+int Calendar::getItemFromDate(QDate *date)
+{
+    int year = ui->dateSelector->date().year();
+    int month = ui->dateSelector->date().month();
+    int wochentag = QDate(year, month, 1).dayOfWeek();
+
+    return wochentag -1 + date->day();
 }

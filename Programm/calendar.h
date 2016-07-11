@@ -3,6 +3,7 @@
 
 #include <QFrame>
 #include <QDate>
+#include <QListWidgetItem>
 #include "manager.h"
 #include "activity.h"
 #include "fahrtag.h"
@@ -29,15 +30,23 @@ public slots:
 
     Fahrtag *newFahrtag();
     Activity *newActivity();
-    bool removeActivity(Activity *a);
+    bool removeActivity(AActivity *a);
+
+    void activityChanged(AActivity *a);
+
+    void clickedItem(QListWidgetItem *i);
 
 signals:
     void showFahrtag(Fahrtag*);
     void showActivity(Activity*);
 
 private:
+    int getItemFromDate(QDate *date);
     Ui::Calendar *ui;
     QList<CalendarDay*> *tage;
+
+    QMap<AActivity*, QListWidgetItem*> *calendaritem;
+    QMap<AActivity*, QListWidgetItem*> *listitem;
 };
 
 #endif // CALENDAR_H

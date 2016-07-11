@@ -3,7 +3,8 @@
 
 #include <QFrame>
 #include <QDate>
-#include "activity.h"
+#include <QListWidgetItem>
+#include "aactivity.h"
 #include "fahrtag.h"
 
 namespace Ui {
@@ -17,9 +18,11 @@ class CalendarDay : public QFrame
 public:
     explicit CalendarDay(QWidget *parent = 0);
     ~CalendarDay();
-    void show(QDate datum, QList<Activity> *objekte);
+    void show(QDate datum, QList<AActivity> *objekte);
     void show(QDate datum);
     void setGray(bool gray);
+
+    QListWidgetItem *insert(AActivity *a);
 
 private:
     Ui::CalendarDay *ui;

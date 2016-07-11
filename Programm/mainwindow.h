@@ -2,10 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "aactivity.h"
 #include "fahrtag.h"
 #include "fahrtagwindow.h"
 #include "activity.h"
 #include "activitywindow.h"
+#include <QMap>
+
 
 namespace Ui {
 class MainWindow;
@@ -21,6 +24,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QMap<AActivity*, QMainWindow*> *fenster;
 
 public slots:
     void openFahrtag(Fahrtag *f);

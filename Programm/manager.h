@@ -16,16 +16,16 @@ public:
     void fromJson(QJsonObject *o);
 
 public slots:
-    Fahrtag *newFahrtag();
-    Activity *newActivity();
+    Fahrtag *newFahrtag(QDate *datum);
+    Activity *newActivity(QDate *datum);
 
-    bool removeActivity(Activity *a);
-    void addActivity(Activity *a);
+    bool removeActivity(AActivity *a);
+    void addActivity(AActivity *a);
 
-    void activityChanged(Activity *a);
+    void activityChanged(AActivity *a);
 
 private:
-    QList<Activity*> *activities;
+    QList<AActivity*> *activities;
     void update(int pos);
 };
 

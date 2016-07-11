@@ -2,6 +2,7 @@
 #define ACTIVITYWINDOW_H
 
 #include <QMainWindow>
+#include "activity.h"
 
 namespace Ui {
 class ActivityWindow;
@@ -12,7 +13,7 @@ class ActivityWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit ActivityWindow(QWidget *parent = 0);
+    explicit ActivityWindow(QWidget *parent, Activity *a);
     ~ActivityWindow();
 
 private slots:
@@ -22,6 +23,7 @@ private slots:
 
 private:
     Ui::ActivityWindow *ui;
+    Activity *activity;
 };
 
 #endif // ACTIVITYWINDOW_H
