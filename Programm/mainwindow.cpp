@@ -18,6 +18,26 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+QString MainWindow::getFarbeZug(Fahrtag::Art cat)
+{
+    switch (cat) {
+    case Fahrtag::Museumszug:           return "#fffff0f"; // Museumszug
+    case Fahrtag::Sonderzug:            return "#ffc789"; // Sonderzug
+    case Fahrtag::Nikolauszug:          return "#b7a0e3"; // Nikolausfahrt
+    case Fahrtag::ELFundMuseumszug:     return "#afcad6"; // Museumszug mit ELF
+    case Fahrtag::Schnupperkurs:        return "#99c9de"; // ELF-Schnupperkurs
+    case Fahrtag::Bahnhofsfest:         return "#d3f7a7"; // Bahnhofsfest
+//    case ???:     return "#fff5ac"; // Ausbildung
+    case Fahrtag::Sonstiges:            return "#f2a4c3"; // Sonstiges
+    default:                            return "#dddddd";
+    }
+}
+
+QString MainWindow::getFarbeArbeit()
+{
+    return "#cccccc";
+}
+
 void MainWindow::openFahrtag(Fahrtag *f)
 {
     if (fenster->contains(f)) {

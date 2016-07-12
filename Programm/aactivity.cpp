@@ -112,8 +112,12 @@ QString AActivity::getListString()
 {
     return datum->toString("dddd dd.MM.yyyy");
 }
-
+/*
 QString AActivity::getListStringShort()
 {
+    if (anlass.length() == 0) {
+        return "Aktivität - "+ort;
+    }
     return anlass;
 }
+*/

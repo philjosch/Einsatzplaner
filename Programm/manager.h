@@ -24,7 +24,7 @@ public slots:
 
     void activityChanged(AActivity *a);
 
-private:
+protected:
     QList<AActivity*> *activities;
     void update(int pos);
 };

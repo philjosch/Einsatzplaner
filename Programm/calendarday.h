@@ -22,10 +22,14 @@ public:
     void show(QDate datum);
     void setGray(bool gray);
 
+    QListWidgetItem *get(AActivity *a);
+    bool remove(AActivity *a);
+
     QListWidgetItem *insert(AActivity *a);
 
 private:
     Ui::CalendarDay *ui;
+    QMap<AActivity*, QListWidgetItem*> *liste;
 };
 
 #endif // CALENDARDAY_H

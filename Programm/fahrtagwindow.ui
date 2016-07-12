@@ -696,11 +696,6 @@ Zub, Service</string>
         </item>
         <item>
          <property name="text">
-          <string notr="true">Ausbildung</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
           <string>Bahnhofsfest</string>
          </property>
         </item>

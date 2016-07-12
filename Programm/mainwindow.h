@@ -22,6 +22,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    static QString getFarbeZug(Fahrtag::Art cat);
+    static QString getFarbeArbeit();
+
 private:
     Ui::MainWindow *ui;
     QMap<AActivity*, QMainWindow*> *fenster;

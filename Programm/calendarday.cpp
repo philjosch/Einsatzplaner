@@ -6,6 +6,7 @@ CalendarDay::CalendarDay(QWidget *parent) :
     ui(new Ui::CalendarDay)
 {
     ui->setupUi(this);
+    liste = new QMap<AActivity*, QListWidgetItem*>();
 }
 
 CalendarDay::~CalendarDay()
@@ -30,10 +31,23 @@ void CalendarDay::setGray(bool gray)
         ui->label->setStyleSheet("QLabel {color: black;}");
 }
 
+QListWidgetItem *CalendarDay::get(AActivity *a)
+{
+    return liste->value(a);
+}
+
+bool CalendarDay::remove(AActivity *a)
+{
+    ui->listWidget->takeItem(ui->listWidget->row(liste->value(a)));
+    liste->remove(a);
+    return true;
+}
+
 QListWidgetItem *CalendarDay::insert(AActivity *a)
 {
-    ui->listWidget->insertItem(0, a->getListString());
+    ui->listWidget->insertItem(0, a->getListStringShort());
     QListWidgetItem* item = ui->listWidget->item(0);
-    item->setText(a->getListString());
+//    item->setText(a->getListString());
+    liste->insert(a, item);
     return item;
 }

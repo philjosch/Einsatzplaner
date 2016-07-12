@@ -43,7 +43,7 @@ public:
     void setPersonen(QMap<Person *, QList<QObject *> *> *value);
 
     QString getListString();
-    QString getListStringShort();
+    virtual QString getListStringShort() = 0;
 
 protected:
     QDate *datum;

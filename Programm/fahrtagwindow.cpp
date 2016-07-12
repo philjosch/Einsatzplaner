@@ -8,7 +8,7 @@ FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) :
     ui->setupUi(this);
     fahrtag = f;
     loadData();
-//    f->setDatum(new QDate(2016, 7, 12));// DEBUGGING
+    ui->dateDate->setFocus();
 }
 
 FahrtagWindow::~FahrtagWindow()
@@ -23,6 +23,7 @@ void FahrtagWindow::on_dateDate_dateChanged(const QDate &date)
 
 void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
 {
+    fahrtag->setArt((Fahrtag::Art)index);
 }
 
 void FahrtagWindow::on_textAnlass_textChanged()

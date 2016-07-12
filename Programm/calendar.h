@@ -35,18 +35,24 @@ public slots:
     void activityChanged(AActivity *a);
 
     void clickedItem(QListWidgetItem *i);
+    void clickedItemCalendar(QListWidgetItem *i);
 
 signals:
     void showFahrtag(Fahrtag*);
     void showActivity(Activity*);
 
-private:
+protected:
     int getItemFromDate(QDate *date);
+    int getPosInCalendar(QDate *date);
+    void insert(AActivity *a);
+    void setListItemC(QListWidgetItem *i, AActivity *a);
+    void setListItem(QListWidgetItem *i, AActivity *a);
     Ui::Calendar *ui;
     QList<CalendarDay*> *tage;
 
-    QMap<AActivity*, QListWidgetItem*> *calendaritem;
-    QMap<AActivity*, QListWidgetItem*> *listitem;
+    QMap<AActivity*, CalendarDay*> *calendaritem; // Gibt an, in welchem Tag die Elemente momentan angezeigt werden
+    QMap<QListWidgetItem*, AActivity*> *calendarEntries; // Gibt an, welche Aktivität zu den einzelnen Kalendereinträgen gehört
+    QMap<AActivity*, QListWidgetItem*> *listitem; // Gitb an, welcher Aktivität welches Listenelement in der gesamtListe zugeordnet ist
 };
 
 #endif // CALENDAR_H

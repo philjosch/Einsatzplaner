@@ -39,7 +39,7 @@ bool Manager::removeActivity(AActivity *a)
 void Manager::addActivity(AActivity *a)
 {
     activities->append(a);
-    update(activities->length()-1);
+//    update(activities->length()-1);
 }
 
 void Manager::activityChanged(AActivity *a)

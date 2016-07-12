@@ -16,6 +16,9 @@ public:
     QString getListString();
     QString getListStringShort();
 
+    Fahrtag::Art getArt() const;
+    void setArt(const Fahrtag::Art &value);
+
 signals:
     void fahrtagModified(AActivity *a);
     void activityChanged(AActivity *a);
@@ -23,6 +26,8 @@ signals:
 public slots:
     void handleActivity(AActivity *a);
 
+private:
+    Fahrtag::Art art;
 };
 
 #endif // FAHRTAG_H

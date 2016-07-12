@@ -11,7 +11,7 @@ Activity::~Activity()
 
 QString Activity::getListStringShort() {
     if (anlass == "") {
-        return "Aktivität - "+ort;
+        return "Aktivität";
     }
     return anlass;
 }
