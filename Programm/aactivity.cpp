@@ -107,11 +107,12 @@ void AActivity::setPersonen(QMap<Person *, QList<QObject *> *> *value)
     personen = value;
     emit activityChanged(this);
 }
-
+/*
 QString AActivity::getListString()
 {
     return datum->toString("dddd dd.MM.yyyy");
 }
+*/
 /*
 QString AActivity::getListStringShort()
 {

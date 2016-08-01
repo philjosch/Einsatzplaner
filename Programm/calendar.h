@@ -52,7 +52,7 @@ protected:
 
     QMap<AActivity*, CalendarDay*> *calendaritem; // Gibt an, in welchem Tag die Elemente momentan angezeigt werden
     QMap<QListWidgetItem*, AActivity*> *calendarEntries; // Gibt an, welche Aktivität zu den einzelnen Kalendereinträgen gehört
-    QMap<AActivity*, QListWidgetItem*> *listitem; // Gitb an, welcher Aktivität welches Listenelement in der gesamtListe zugeordnet ist
+    QMap<AActivity*, QListWidgetItem*> *listitem; // Gibt an, welcher Aktivität welches Listenelement in der gesamtListe zugeordnet ist
 };
 
 #endif // CALENDAR_H

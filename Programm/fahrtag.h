@@ -21,7 +21,7 @@ public:
 
 signals:
     void fahrtagModified(AActivity *a);
-    void activityChanged(AActivity *a);
+//    void activityChanged(AActivity *a);
 
 public slots:
     void handleActivity(AActivity *a);

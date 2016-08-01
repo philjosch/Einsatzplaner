@@ -21,7 +21,7 @@ MainWindow::~MainWindow()
 QString MainWindow::getFarbeZug(Fahrtag::Art cat)
 {
     switch (cat) {
-    case Fahrtag::Museumszug:           return "#fffff0f"; // Museumszug
+    case Fahrtag::Museumszug:           return "#ffffff"; // Museumszug
     case Fahrtag::Sonderzug:            return "#ffc789"; // Sonderzug
     case Fahrtag::Nikolauszug:          return "#b7a0e3"; // Nikolausfahrt
     case Fahrtag::ELFundMuseumszug:     return "#afcad6"; // Museumszug mit ELF

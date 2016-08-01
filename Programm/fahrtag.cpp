@@ -9,7 +9,7 @@ Fahrtag::Fahrtag(QDate *date): ManagerReservierungen(), AActivity(date)
 
 QString Fahrtag::getListString()
 {
-    return datum->toString("dddd dd.MM.yyyy");
+    return datum->toString("dddd dd.MM.yyyy")+" – Fahrtag";
 }
 
 

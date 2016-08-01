@@ -168,13 +168,11 @@ void Calendar::activityChanged(AActivity *a)
         if (calendaritem->contains(a)) {
             CalendarDay *pos_alt = calendaritem->value(a);
             if ( ! (pos_neu == pos_alt)) {
-                listitem->value(a)->setText(a->getListString());
                 calendaritem->value(a)->remove(a);
                 calendaritem->insert(a, pos_neu);
                 calendarEntries->insert(pos_neu->insert(a), a);
             }
         } else {
-            listitem->value(a)->setText(a->getListString());
             calendaritem->insert(a, pos_neu);
             calendarEntries->insert(pos_neu->insert(a), a);
         }
@@ -183,21 +181,33 @@ void Calendar::activityChanged(AActivity *a)
         calendaritem->value(a)->remove(a);
     }
     setListItem(listitem->value(a), a);
+
     // Richtiges positionieren des elementes in der Übersichts liste
-    int i = activities->indexOf(a);
-    while (i > 0 && activities->at(i-1)->getDatum() > activities->at(i)->getDatum()) {
-        QMessageBox::information(this, "", "");
+/*    int i = activities->indexOf(a);
+    while (i > 0) {
+        QMessageBox::information(this, "", activities->at(i-1)->getDatum()->toString("dd.MM.yyyy"));
+        QMessageBox::information(this, "", activities->at(i)->getDatum()->toString("dd.MM.yyyy"));
+        if (activities->at(i-1)->getDatum() > activities->at(i)->getDatum()) {
+            QMessageBox::information(this, "", "bla bla bla");
+        }
+        break;
+    } */
+/*
+    while ((i > 0) && (activities->at(i-1)->getDatum() > activities->at(i)->getDatum())) {
         activities->swap(i-1, i);
         ui->listWidget->insertItem(i, ui->listWidget->takeItem(i-1));
         ui->listWidget->insertItem(i-1, ui->listWidget->takeItem(i));
         i--;
     }
-    while (i < activities->length()-1 && activities->at(i)->getDatum() > activities->at(i+1)->getDatum()) {
+  */
+/*
+    while ((i < activities->length()-1) && (activities->at(i)->getDatum() > activities->at(i+1)->getDatum())) {
         activities->swap(i, i+1);
         ui->listWidget->insertItem(i+1, ui->listWidget->takeItem(i));
         ui->listWidget->insertItem(i, ui->listWidget->takeItem(i+1));
         i++;
     }
+    */
 }
 
 void Calendar::clickedItem(QListWidgetItem *i)

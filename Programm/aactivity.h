@@ -42,7 +42,7 @@ public:
     QMap<Person *, QList<QObject *> *> *getPersonen() const;
     void setPersonen(QMap<Person *, QList<QObject *> *> *value);
 
-    QString getListString();
+    virtual QString getListString() = 0;
     virtual QString getListStringShort() = 0;
 
 protected:

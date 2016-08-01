@@ -16,6 +16,11 @@ QString Activity::getListStringShort() {
     return anlass;
 }
 
+QString Activity::getListString()
+{
+    return datum->toString("dddd dd.MM.yyyy")+" – Aktivität";
+}
+
 void Activity::handleActivity(AActivity *a)
 {
     emit activityModified(a);

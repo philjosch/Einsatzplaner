@@ -19,7 +19,7 @@ Fahrtag *Manager::newFahrtag(QDate *datum)
 {
     Fahrtag *f = new Fahrtag(datum);
     activities->append(f);
-    update(activities->length()-1);
+//    update(activities->length()-1);
     return f;
 }
 
@@ -27,7 +27,7 @@ Activity *Manager::newActivity(QDate *datum)
 {
     Activity *a = new Activity(datum);
     activities->append(a);
-    update(activities->length()-1);
+//    update(activities->length()-1);
     return a;
 }
 
@@ -44,9 +44,9 @@ void Manager::addActivity(AActivity *a)
 
 void Manager::activityChanged(AActivity *a)
 {
-    int pos = activities->indexOf(a);
+/*    int pos = activities->indexOf(a);
     if (pos >= 0)
-        update(pos);
+        update(pos);*/
 }
 
 void Manager::update(int pos)
