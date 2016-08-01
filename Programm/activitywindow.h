@@ -25,7 +25,7 @@ private slots:
 
     void on_lineOrt_textChanged(const QString &arg1);
 
-    void on_plainTextEdit_textChanged();
+    void on_plainAnlass_textChanged();
 
     void on_plainBeschreibung_textChanged();
 
@@ -40,6 +40,8 @@ private slots:
 private:
     Ui::ActivityWindow *ui;
     Activity *activity;
+
+    void loadData();
 };
 
 #endif // ACTIVITYWINDOW_H

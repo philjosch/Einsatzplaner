@@ -23,6 +23,7 @@ Calendar::Calendar(QWidget *parent) :
 
     connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), SLOT(clickedItem(QListWidgetItem*)));
 
+    // Setup fuer die Darstellung des Kalenders
     tage = new QList<CalendarDay*>();
     tage->append(ui->day1_1);    tage->append(ui->day2_1);    tage->append(ui->day3_1);    tage->append(ui->day4_1);
     tage->append(ui->day5_1);    tage->append(ui->day6_1);    tage->append(ui->day7_1);
@@ -36,6 +37,9 @@ Calendar::Calendar(QWidget *parent) :
     tage->append(ui->day5_5);    tage->append(ui->day6_5);    tage->append(ui->day7_5);
     tage->append(ui->day1_6);    tage->append(ui->day2_6);    tage->append(ui->day3_6);    tage->append(ui->day4_6);
     tage->append(ui->day5_6);    tage->append(ui->day6_6);    tage->append(ui->day7_6);
+    for(CalendarDay *c: *tage) {
+        connect(c, SIGNAL(clickedItem(QListWidgetItem*)), this, SLOT(clickedItemCalendar(QListWidgetItem*)));
+    }
     goToday();
 
 }
@@ -101,6 +105,7 @@ void Calendar::goTo(QDate date)
     for(int i = 0; i < calendaritem->keys().length(); i++) {
         calendaritem->value(calendaritem->keys().at(i))->remove(calendaritem->keys().at(i));
     }
+    calendarEntries->clear();
     for(int i = 0; i < activities->length(); i++) {
         AActivity *a = activities->at(i);
         int pos = getPosInCalendar(a->getDatum());
@@ -108,9 +113,10 @@ void Calendar::goTo(QDate date)
             calendarEntries->insert(tage->at(pos)->insert(a), a);
             calendaritem->insert(a, tage->at(pos));
             activityChanged(a);
+//        } else if (calendaritem->contains(a)) {
+  //          calendaritem->remove(a);
         }
     }
-    calendarEntries->clear();
 }
 
 void Calendar::goToday()
@@ -155,17 +161,22 @@ Activity *Calendar::newActivity()
 
 bool Calendar::removeActivity(AActivity *a)
 {
-
+    return false;
 }
 
 void Calendar::activityChanged(AActivity *a)
 {
-//    QMessageBox::information(this, "test", "test", QMessageBox::Ok);
     int pos = getPosInCalendar(a->getDatum());
-//    QMessageBox::information(this, "", QString::number(pos));
     if (pos < 42 && pos >= 0) {
-        CalendarDay *pos_neu = tage->at(pos);
+        /* Element befindet sich nach Aktualiserung im Kalender
+         * -> Befindet sich schon jetzt im Kalender
+         * ---> Position veröndert
+         * ---> Position nciht verändert
+         * -> Befindet sich im Moment nicht im Kalender
+         * */
         if (calendaritem->contains(a)) {
+            // Element ist bereits im Kalender
+            CalendarDay *pos_neu = tage->at(pos);
             CalendarDay *pos_alt = calendaritem->value(a);
             if ( ! (pos_neu == pos_alt)) {
                 calendaritem->value(a)->remove(a);
@@ -173,16 +184,22 @@ void Calendar::activityChanged(AActivity *a)
                 calendarEntries->insert(pos_neu->insert(a), a);
             }
         } else {
+            // Element ist nciht im Kalender und muss eingefügt werden
+            CalendarDay *pos_neu = tage->at(pos);
             calendaritem->insert(a, pos_neu);
             calendarEntries->insert(pos_neu->insert(a), a);
         }
         setListItemC(calendaritem->value(a)->get(a), a);
     } else {
-        calendaritem->value(a)->remove(a);
+        // Element befindet sich nicht im Kalender
+        if (calendaritem->contains(a)) {
+            calendaritem->value(a)->remove(a);
+            calendaritem->remove(a);
+        }
     }
-    setListItem(listitem->value(a), a);
 
     // Richtiges positionieren des elementes in der Übersichts liste
+    setListItem(listitem->value(a), a);
 /*    int i = activities->indexOf(a);
     while (i > 0) {
         QMessageBox::information(this, "", activities->at(i-1)->getDatum()->toString("dd.MM.yyyy"));
@@ -191,16 +208,16 @@ void Calendar::activityChanged(AActivity *a)
             QMessageBox::information(this, "", "bla bla bla");
         }
         break;
-    } */
-/*
+    }
+
     while ((i > 0) && (activities->at(i-1)->getDatum() > activities->at(i)->getDatum())) {
         activities->swap(i-1, i);
         ui->listWidget->insertItem(i, ui->listWidget->takeItem(i-1));
         ui->listWidget->insertItem(i-1, ui->listWidget->takeItem(i));
         i--;
     }
-  */
-/*
+
+
     while ((i < activities->length()-1) && (activities->at(i)->getDatum() > activities->at(i+1)->getDatum())) {
         activities->swap(i, i+1);
         ui->listWidget->insertItem(i+1, ui->listWidget->takeItem(i));
@@ -246,9 +263,16 @@ int Calendar::getItemFromDate(QDate *date)
 int Calendar::getPosInCalendar(QDate *date)
 {
     QDate ref = QDate(ui->dateSelector->date().year(), ui->dateSelector->date().month(), 1);
+    // Eintrag auch anzeigen, wenn er im vorherigen Monat liegt
     if (*date < ref) {
         return -1;
-    } else if (*date >= ref.addMonths(1)) {
+    } else if (date->month() == ref.month()+1) {
+        if (date->day()+ref.dayOfWeek()+ref.daysInMonth()-2 < 42) {
+            return date->day()+ref.dayOfWeek()+ref.daysInMonth()-2;
+        } else {
+            return -1;
+        }
+    } else if (*date > ref.addMonths(1)) {
         return -1;
     } else {
         return getItemFromDate(date)-1;
@@ -265,7 +289,8 @@ void Calendar::insert(AActivity *a)
     // Einfügen in den Kalender mit allem drum und dran
     int pos = getPosInCalendar(a->getDatum());
     if (pos != -1) {
-        calendarEntries->insert(tage->at(pos)->insert(a), a);
+        QListWidgetItem *i = tage->at(pos)->insert(a);
+        calendarEntries->insert(i, a);
         calendaritem->insert(a, tage->at(pos));
     }
 }
@@ -283,4 +308,9 @@ void Calendar::setListItemC(QListWidgetItem *i, AActivity *a)
 void Calendar::setListItem(QListWidgetItem *i, AActivity *a)
 {
     i->setText(a->getListString());
+    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
+        i->setBackgroundColor(MainWindow::getFarbeZug(f->getArt()));
+    } else if (Activity *c = dynamic_cast<Activity*>(a)) {
+        i->setBackgroundColor(MainWindow::getFarbeArbeit());
+    }
 }

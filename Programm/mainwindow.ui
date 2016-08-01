@@ -91,6 +91,38 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuBearbeiten">
+    <property name="title">
+     <string>Bearbeiten</string>
+    </property>
+    <addaction name="actionNeuer_Fahrtag"/>
+    <addaction name="actionNeuer_Arbeitseinsatz"/>
+   </widget>
+   <widget class="QMenu" name="menuDatei">
+    <property name="title">
+     <string>Datei</string>
+    </property>
+    <addaction name="actionNeu"/>
+    <addaction name="separator"/>
+    <addaction name="action_fnnen"/>
+    <addaction name="separator"/>
+    <addaction name="actionSpeichern"/>
+    <addaction name="actionSpecihern_unter"/>
+    <addaction name="separator"/>
+    <addaction name="actionSchlie_en"/>
+    <addaction name="separator"/>
+    <addaction name="actionDrucken"/>
+   </widget>
+   <widget class="QMenu" name="menuAnsicht">
+    <property name="title">
+     <string>Ansicht</string>
+    </property>
+    <addaction name="actionPersonal_bersicht"/>
+    <addaction name="actionExport"/>
+   </widget>
+   <addaction name="menuDatei"/>
+   <addaction name="menuBearbeiten"/>
+   <addaction name="menuAnsicht"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -101,6 +133,97 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionNeuer_Fahrtag">
+   <property name="text">
+    <string>Neuer Fahrtag</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl++</string>
+   </property>
+  </action>
+  <action name="actionNeuer_Arbeitseinsatz">
+   <property name="text">
+    <string>Neuer Arbeitseinsatz</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt++</string>
+   </property>
+  </action>
+  <action name="actionNeu">
+   <property name="text">
+    <string>Neu</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="action_fnnen">
+   <property name="text">
+    <string>Öffnen …</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSpeichern">
+   <property name="text">
+    <string>Speichern</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSpecihern_unter">
+   <property name="text">
+    <string>Speichern unter …</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionSchlie_en">
+   <property name="text">
+    <string>Schließen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionDrucken">
+   <property name="text">
+    <string>Drucken …</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionPersonal_bersicht">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Personalübersicht</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Export</string>
+   </property>
+  </action>
+  <action name="actionHauptfenster">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Hauptfenster</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -112,5 +235,22 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionDrucken</sender>
+   <signal>triggered()</signal>
+   <receiver>buttonExport</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>592</x>
+     <y>709</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

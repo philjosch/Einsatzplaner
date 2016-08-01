@@ -7,6 +7,7 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) :
 {
     ui->setupUi(this);
     activity = a;
+    loadData();
 }
 
 ActivityWindow::~ActivityWindow()
@@ -34,9 +35,9 @@ void ActivityWindow::on_lineOrt_textChanged(const QString &arg1)
     activity->setOrt(arg1);
 }
 
-void ActivityWindow::on_plainTextEdit_textChanged()
+void ActivityWindow::on_plainAnlass_textChanged()
 {
-    activity->setAnlass(ui->plainTextEdit->toPlainText());
+    activity->setAnlass(ui->plainAnlass->toPlainText());
 }
 
 void ActivityWindow::on_plainBeschreibung_textChanged()
@@ -67,4 +68,18 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
      * denn die veränderte Spalte muss eingefügt werden
      * und die Liste muss up-todate gehalten werden
      * */
+}
+
+void ActivityWindow::loadData()
+{
+    // Allgemeine Daten von AActivity
+    ui->dateDatum->setDate(* activity->getDatum());
+    ui->lineOrt->setText(activity->getOrt());
+    ui->plainAnlass->clear();
+    ui->plainAnlass->insertPlainText(activity->getAnlass());
+    ui->plainBeschreibung->setPlainText(activity->getBemerkungen());
+    ui->timeBeginn->setTime(* activity->getZeitAnfang());
+    ui->timeEnde->setTime(* activity->getZeitEnde());
+    ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
+    // Tabelle laden und alles einfügen
 }

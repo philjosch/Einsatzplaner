@@ -26,7 +26,10 @@ public:
     bool remove(AActivity *a);
 
     QListWidgetItem *insert(AActivity *a);
-
+signals:
+    void clickedItem(QListWidgetItem *);
+private slots:
+    void handler(QListWidgetItem *a);
 private:
     Ui::CalendarDay *ui;
     QMap<AActivity*, QListWidgetItem*> *liste;

@@ -19,15 +19,45 @@ public:
     Fahrtag::Art getArt() const;
     void setArt(const Fahrtag::Art &value);
 
+    QTime *getZeitTf() const;
+    void setZeitTf(QTime *value);
+
+    bool getWichtig() const;
+    void setWichtig(bool value);
+
+    bool getBenoetigeTf() const;
+    void setBenoetigeTf(bool value);
+
+    bool getBenoetigeZf() const;
+    void setBenoetigeZf(bool value);
+
+    bool getBenoetigeZub() const;
+    void setBenoetigeZub(bool value);
+
+    bool getBenoetigeService() const;
+    void setBenoetigeService(bool value);
+
 signals:
     void fahrtagModified(AActivity *a);
-//    void activityChanged(AActivity *a);
 
-public slots:
+private slots:
     void handleActivity(AActivity *a);
+    void handleEmit();
 
-private:
+protected:
+    /*
+listTf
+listZf
+listeZub
+listeService
+*/
     Fahrtag::Art art;
+    QTime *zeitTf;
+    bool wichtig;
+    bool benoetigeTf;
+    bool benoetigeZf;
+    bool benoetigeZub;
+    bool benoetigeService;
 };
 
 #endif // FAHRTAG_H

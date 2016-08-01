@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "fahrtag.h"
 #include <QListWidgetItem>
+#include <QPushButton>
 
 namespace Ui {
 class FahrtagWindow;
@@ -54,11 +55,25 @@ private slots:
 
     void on_checkBoxBenoetigt_stateChanged(int arg1);
 
+    void on_buttonTfAdd_clicked();
+    void on_buttonTfDelete_clicked();
+
+    void on_buttonZfAdd_clicked();
+    void on_buttonZfDelete_clicked();
+
+    void on_buttonZubAdd_clicked();
+    void on_buttonZubDelete_clicked();
+
+    void on_buttonServiceAdd_clicked();
+    void on_buttonServiceDelete_clicked();
+
 private:
     Ui::FahrtagWindow *ui;
     Fahrtag *fahrtag;
 
     void loadData();
+    void addItemTolist(QListWidget *l, QPushButton *b);
+    void deleteItemFromList(QListWidget *l, QPushButton *b);
 };
 
 #endif // FAHRTAGWINDOW_H

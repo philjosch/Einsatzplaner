@@ -25,3 +25,8 @@ void Activity::handleActivity(AActivity *a)
 {
     emit activityModified(a);
 }
+
+void Activity::handleEmit()
+{
+    handleActivity(this);
+}

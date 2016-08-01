@@ -7,6 +7,7 @@ CalendarDay::CalendarDay(QWidget *parent) :
 {
     ui->setupUi(this);
     liste = new QMap<AActivity*, QListWidgetItem*>();
+    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(handler(QListWidgetItem*)));
 }
 
 CalendarDay::~CalendarDay()
@@ -38,16 +39,23 @@ QListWidgetItem *CalendarDay::get(AActivity *a)
 
 bool CalendarDay::remove(AActivity *a)
 {
+
     ui->listWidget->takeItem(ui->listWidget->row(liste->value(a)));
     liste->remove(a);
+
     return true;
+
 }
 
 QListWidgetItem *CalendarDay::insert(AActivity *a)
 {
     ui->listWidget->insertItem(0, a->getListStringShort());
     QListWidgetItem* item = ui->listWidget->item(0);
-//    item->setText(a->getListString());
     liste->insert(a, item);
     return item;
+}
+
+void CalendarDay::handler(QListWidgetItem *a)
+{
+    emit clickedItem(a);
 }

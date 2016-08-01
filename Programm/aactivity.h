@@ -13,7 +13,7 @@ public:
     AActivity(QDate *date);
     ~AActivity();
 
-    static AActivity *fromJson(QJsonObject *o);
+    void fromJson(QJsonObject *o);
     QJsonObject *toJson();
 
     enum Category { Tf, Tb, Zf, Service, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
@@ -55,10 +55,9 @@ protected:
     QMap<Person *, QList<QObject *> *> *personen;
     bool personalBenoetigt;
 
-signals:
-    virtual void activityChanged(AActivity *a) = 0;
 private slots:
     virtual void handleActivity(AActivity* a) = 0;
+    virtual void handleEmit() = 0;
 
 };
 

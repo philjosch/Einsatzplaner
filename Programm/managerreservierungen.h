@@ -15,8 +15,14 @@ public:
     explicit ManagerReservierungen(QWidget *parent = 0);
     ~ManagerReservierungen();
 
+    QString getWagenreihung() const;
+    void setWagenreihung(const QString &value);
+
 private:
     Ui::ManagerReservierungen *ui;
+
+protected:
+    QString wagenreihung;
 };
 
 #endif // MANAGERRESERVIERUNGEN_H

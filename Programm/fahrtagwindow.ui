@@ -82,7 +82,7 @@
          <string notr="true"/>
         </property>
         <property name="statusTip">
-         <string notr="true"/>
+         <string notr="true">Der Dienstbeginn für Zf, Zub, Service und weiteres Personal</string>
         </property>
         <property name="whatsThis">
          <string notr="true"/>
@@ -94,8 +94,7 @@
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>Dienstbeginn Zf, 
-Zub, Service</string>
+         <string>Dienstbeginn sonst</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -720,7 +719,7 @@ Zub, Service</string>
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="documentMode">
        <bool>false</bool>
@@ -1271,6 +1270,9 @@ Zub, Service</string>
         </item>
         <item row="0" column="1" colspan="3">
          <widget class="QPlainTextEdit" name="plainBeschreibung">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1306,6 +1308,9 @@ Zub, Service</string>
         </item>
         <item row="1" column="1">
          <widget class="QTimeEdit" name="timeBeginn">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="time">
            <time>
             <hour>10</hour>
@@ -1413,8 +1418,43 @@ Zub, Service</string>
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFahrtag">
+    <property name="title">
+     <string>Fahrtag</string>
+    </property>
+    <addaction name="actionSchlie_en"/>
+    <addaction name="separator"/>
+    <addaction name="actionL_schen"/>
+    <addaction name="separator"/>
+    <addaction name="actionDrucken"/>
+   </widget>
+   <addaction name="menuFahrtag"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSchlie_en">
+   <property name="text">
+    <string>Schließen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionL_schen">
+   <property name="text">
+    <string>Löschen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionDrucken">
+   <property name="text">
+    <string>Drucken</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1425,5 +1465,22 @@ Zub, Service</string>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionSchlie_en</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>FahrtagWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>522</x>
+     <y>451</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

@@ -21,8 +21,9 @@ public:
     QString getListString();
 signals:
     void activityModified(AActivity *a);
-//    void activityChanged(AActivity *a);
 private slots:
-    void handleActivity(AActivity *a);    
+    void handleActivity(AActivity *a);
+    void handleEmit();
+
 };
 #endif // ACTIVITY_H

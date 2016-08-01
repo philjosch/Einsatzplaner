@@ -1,8 +1,16 @@
 #include "aactivity.h"
+#include <QMap>
 
 AActivity::AActivity(QDate *date)
 {
     datum = date;
+    ort = "";
+    zeitAnfang = new QTime(10, 0);
+    zeitEnde = new QTime(16, 0);
+    anlass = "";
+    bemerkungen = "";
+    personen = new QMap<Person *, QList<QObject *> *>();
+    personalBenoetigt = true;
 }
 
 AActivity::~AActivity()
@@ -10,7 +18,7 @@ AActivity::~AActivity()
     // Löscht das Objekt und entfernt alle Verbindungen zu den personen
 }
 
-AActivity *AActivity::fromJson(QJsonObject *o)
+void AActivity::fromJson(QJsonObject *o)
 {
 
 }
@@ -28,7 +36,7 @@ QDate *AActivity::getDatum() const
 void AActivity::setDatum(QDate *value)
 {
     datum = value;
-    emit activityChanged(this);
+    handleEmit();
 }
 
 QString AActivity::getOrt() const
@@ -39,7 +47,6 @@ QString AActivity::getOrt() const
 void AActivity::setOrt(const QString &value)
 {
     ort = value;
-    emit activityChanged(this);
 }
 
 QTime *AActivity::getZeitAnfang() const
@@ -50,7 +57,6 @@ QTime *AActivity::getZeitAnfang() const
 void AActivity::setZeitAnfang(QTime *value)
 {
     zeitAnfang = value;
-    emit activityChanged(this);
 }
 
 QTime *AActivity::getZeitEnde() const
@@ -61,7 +67,6 @@ QTime *AActivity::getZeitEnde() const
 void AActivity::setZeitEnde(QTime *value)
 {
     zeitEnde = value;
-    emit activityChanged(this);
 }
 
 QString AActivity::getAnlass() const
@@ -72,7 +77,7 @@ QString AActivity::getAnlass() const
 void AActivity::setAnlass(const QString &value)
 {
     anlass = value;
-    emit activityChanged(this);
+    handleEmit();
 }
 
 QString AActivity::getBemerkungen() const
@@ -83,7 +88,7 @@ QString AActivity::getBemerkungen() const
 void AActivity::setBemerkungen(const QString &value)
 {
     bemerkungen = value;
-    emit activityChanged(this);
+    handleEmit();
 }
 
 bool AActivity::getPersonalBenoetigt() const
@@ -94,7 +99,7 @@ bool AActivity::getPersonalBenoetigt() const
 void AActivity::setPersonalBenoetigt(bool value)
 {
     personalBenoetigt = value;
-    emit activityChanged(this);
+    handleEmit();
 }
 
 QMap<Person *, QList<QObject *> *> *AActivity::getPersonen() const
@@ -105,7 +110,7 @@ QMap<Person *, QList<QObject *> *> *AActivity::getPersonen() const
 void AActivity::setPersonen(QMap<Person *, QList<QObject *> *> *value)
 {
     personen = value;
-    emit activityChanged(this);
+    handleEmit();
 }
 /*
 QString AActivity::getListString()
