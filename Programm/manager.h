@@ -11,9 +11,12 @@ class Manager
 {
 public:
     Manager();
-    void fetchPersonal(ManagerPersonal *m);
+//    void fetchPersonal(ManagerPersonal *m);
     QJsonObject toJson();
     void fromJson(QJsonObject *o);
+
+    void setPersonal(ManagerPersonal *value);
+    ManagerPersonal *getPersonal() const;
 
 public slots:
     Fahrtag *newFahrtag(QDate *datum);
@@ -27,6 +30,8 @@ public slots:
 protected:
     QList<AActivity*> *activities;
     void update(int pos);
+    ManagerPersonal *personal;
+
 };
 
 #endif // MANAGER_H

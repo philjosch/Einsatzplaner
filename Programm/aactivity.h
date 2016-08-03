@@ -1,16 +1,20 @@
 #ifndef AACTIVITY_H
 #define AACTIVITY_H
 
+
 #include <QDate>
 #include <QTime>
-#include "person.h"
 #include <QObject>
+#include "managerpersonal.h"
+//#include "person.h"
+
+class Person;
 
 class AActivity
 {
 
 public:
-    AActivity(QDate *date);
+    AActivity(QDate *date, ManagerPersonal *p);
     ~AActivity();
 
     void fromJson(QJsonObject *o);
@@ -40,6 +44,8 @@ public:
     void setPersonalBenoetigt(bool value);
 
     QMap<Person *, QList<QObject *> *> *getPersonen() const;
+    ManagerPersonal::Misstake addPerson(Person *p, QString *s, QTime *start, QTime *ende);
+    bool removePerson(Person *p);
     void setPersonen(QMap<Person *, QList<QObject *> *> *value);
 
     virtual QString getListString() = 0;
@@ -54,6 +60,8 @@ protected:
     QString bemerkungen;
     QMap<Person *, QList<QObject *> *> *personen;
     bool personalBenoetigt;
+
+    ManagerPersonal *personal;
 
 private slots:
     virtual void handleActivity(AActivity* a) = 0;

@@ -13,6 +13,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionNeuer_Fahrtag, SIGNAL(triggered(bool)), ui->calendar, SLOT(newFahrtag()));
 
     fenster = new QMap<AActivity*, QMainWindow*>();
+    ui->calendar->setPersonal(new ManagerPersonal());
+
+    personalfenster = new PersonalWindow(this, ui->calendar->getPersonal());
+    personalfenster->hide();
 }
 
 MainWindow::~MainWindow()
@@ -66,4 +70,12 @@ void MainWindow::openActivity(Activity *a)
         fenster->insert(a, w);
         w->show();
     }
+}
+
+void MainWindow::on_buttonPersonal_clicked()
+{
+    personalfenster->show();
+    personalfenster->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    personalfenster->raise();
+    personalfenster->activateWindow();
 }

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "activity.h"
+#include "person.h"
 
 namespace Ui {
 class ActivityWindow;

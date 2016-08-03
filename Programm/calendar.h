@@ -13,7 +13,7 @@ namespace Ui {
 class Calendar;
 }
 
-class Calendar : public QFrame, Manager
+class Calendar : public QFrame, public Manager
 {
     Q_OBJECT
 

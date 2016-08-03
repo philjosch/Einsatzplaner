@@ -15,7 +15,7 @@ public:
 
     enum Category { Tf, Tb, Zf, Service, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
 
-    Activity(QDate *date);
+    Activity(QDate *date, ManagerPersonal *p);
     ~Activity();
     QString getListStringShort();
     QString getListString();

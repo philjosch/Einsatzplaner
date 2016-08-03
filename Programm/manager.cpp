@@ -17,7 +17,7 @@ void Manager::fromJson(QJsonObject *o)
 
 Fahrtag *Manager::newFahrtag(QDate *datum)
 {
-    Fahrtag *f = new Fahrtag(datum);
+    Fahrtag *f = new Fahrtag(datum, personal);
     activities->append(f);
 //    update(activities->length()-1);
     return f;
@@ -25,7 +25,7 @@ Fahrtag *Manager::newFahrtag(QDate *datum)
 
 Activity *Manager::newActivity(QDate *datum)
 {
-    Activity *a = new Activity(datum);
+    Activity *a = new Activity(datum, personal);
     activities->append(a);
 //    update(activities->length()-1);
     return a;
@@ -70,4 +70,14 @@ void Manager::update(int pos)
         }
     }
 
+}
+
+ManagerPersonal *Manager::getPersonal() const
+{
+    return personal;
+}
+
+void Manager::setPersonal(ManagerPersonal *value)
+{
+    personal = value;
 }

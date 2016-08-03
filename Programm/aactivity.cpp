@@ -1,7 +1,7 @@
 #include "aactivity.h"
 #include <QMap>
 
-AActivity::AActivity(QDate *date)
+AActivity::AActivity(QDate *date, ManagerPersonal *p)
 {
     datum = date;
     ort = "";
@@ -11,6 +11,7 @@ AActivity::AActivity(QDate *date)
     bemerkungen = "";
     personen = new QMap<Person *, QList<QObject *> *>();
     personalBenoetigt = true;
+    personal = p;
 }
 
 AActivity::~AActivity()
@@ -105,6 +106,16 @@ void AActivity::setPersonalBenoetigt(bool value)
 QMap<Person *, QList<QObject *> *> *AActivity::getPersonen() const
 {
     return personen;
+}
+
+bool AActivity::removePerson(Person *p)
+{
+
+}
+
+ManagerPersonal::Misstake AActivity::addPerson(Person *p, QString *s, QTime *start, QTime *ende)
+{
+
 }
 
 void AActivity::setPersonen(QMap<Person *, QList<QObject *> *> *value)

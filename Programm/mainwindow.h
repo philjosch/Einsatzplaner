@@ -7,6 +7,7 @@
 #include "fahrtagwindow.h"
 #include "activity.h"
 #include "activitywindow.h"
+#include "personalwindow.h"
 #include <QMap>
 
 
@@ -29,9 +30,13 @@ private:
     Ui::MainWindow *ui;
     QMap<AActivity*, QMainWindow*> *fenster;
 
+    PersonalWindow *personalfenster;
+
 public slots:
     void openFahrtag(Fahrtag *f);
     void openActivity(Activity *a);
+private slots:
+    void on_buttonPersonal_clicked();
 };
 
 #endif // MAINWINDOW_H

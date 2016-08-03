@@ -1,6 +1,6 @@
 #include "activity.h"
 
-Activity::Activity(QDate *date): AActivity(date)
+Activity::Activity(QDate *date, ManagerPersonal *p): AActivity(date, p)
 {
 }
 

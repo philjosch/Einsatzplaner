@@ -9,7 +9,7 @@ class Fahrtag : public ManagerReservierungen, public AActivity
     Q_OBJECT
 
 public:
-    Fahrtag(QDate *date);
+    Fahrtag(QDate *date, ManagerPersonal *p);
 
     enum Art { Museumszug, Sonderzug, Nikolauszug, Schnupperkurs, ELFundMuseumszug, Bahnhofsfest, Sonstiges=100 };
 

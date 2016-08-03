@@ -1,5 +1,6 @@
 #include "activitywindow.h"
 #include "ui_activitywindow.h"
+#include <QMessageBox>
 
 ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) :
     QMainWindow(parent),
@@ -68,6 +69,12 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
      * denn die veränderte Spalte muss eingefügt werden
      * und die Liste muss up-todate gehalten werden
      * */
+    // Alle Zeilen wieder laden und in der Liste speichern
+//    QMap<Person *, Container*> *liste = new QMap<Person*,Container*>();
+//    for(int i = 0; i < ui->tablePersonen->rowCount(); i++) {
+
+//    }
+    QMessageBox::information(this, "", "");
 }
 
 void ActivityWindow::loadData()

@@ -1,7 +1,7 @@
 #include "fahrtag.h"
 
 
-Fahrtag::Fahrtag(QDate *date): ManagerReservierungen(), AActivity(date)
+Fahrtag::Fahrtag(QDate *date, ManagerPersonal *p): ManagerReservierungen(), AActivity(date, p)
 {
     art = Fahrtag::Museumszug;
     wichtig = false;
