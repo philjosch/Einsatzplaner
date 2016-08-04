@@ -5,8 +5,9 @@
 #include <QObject>
 #include "aactivity.h"
 
-class Person
+class Person : public QObject
 {
+    Q_OBJECT
 
 public:
     Person(QString name);
@@ -21,12 +22,6 @@ public:
     int getSumKilometer();
     int getAnzahl();
 
-/*    QString getVorname() const;
-    void setVorname(const QString &value);
-
-    QString getNachname() const;
-    void setNachname(const QString &value);
-*/
     bool getAusbildungTf() const;
     void setAusbildungTf(bool value);
 
@@ -74,6 +69,8 @@ private:
      * in dem eine Veranstlltung verändert wurde,
      * dann muss manuell neuberechnet werden */
 
+signals:
+    void nameChanged(Person*, QString);// Person ist die Person und QString gibt den !ALTEN! NAmen an
 };
 
 #endif // PERSON_H

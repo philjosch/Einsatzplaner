@@ -7,10 +7,13 @@ class Person;
 #include <QObject>
 #include <QSet>
 
-class ManagerPersonal
+class ManagerPersonal :  public QObject
 {
+    Q_OBJECT
+
 public:
     ManagerPersonal();
+    ~ManagerPersonal();
 
     enum Misstake { OK, PersonNichtGefunden, FalscheQualifikation};
 
@@ -21,11 +24,25 @@ public:
     bool removePerson(QString name);
     bool removePerson(Person *p);
 
+    bool pruefeStunden(Person *p);
+
+    static int mindestStunden;
+    static int mindestStundenTf;
+    static int mindestStundenZf;
+
+    QSetIterator<Person *> getPersonen() const;
+
+public slots:
+    void personChangedName(Person *p, QString alt);
+    void reloadSettings();
+
 private:
-    QSet<Person*> *personen;
+    QSet<Person *> *personen;
     QHash<QString, Person*> *personenSorted;
 
     QString getGoodName(QString name); // Wandlet einen Namen in das Format Vorname Nachname um
+
+
 };
 
 #endif // MANAGERPERSONAL_H

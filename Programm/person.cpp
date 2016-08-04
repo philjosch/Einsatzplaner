@@ -1,12 +1,11 @@
 #include "person.h"
 #include <QMap>
 
-Person::Person(QString name)
+Person::Person(QString name) : QObject()
 {
     this->name = name;
-/*    this->vorname = name;
-    this->nachname = nachname;
-  */  this->ausbildungTf = false;
+    strecke = 0;
+    this->ausbildungTf = false;
     this->ausbildungZf = false;
     this->ausbildungRangierer = false;
     timeTf = 0;
@@ -18,29 +17,9 @@ Person::Person(QString name)
     timeSum = 0;
     sumKilometer = 0;
     valuesInvalid = true;
-}
 
-/*
-QString Person::getVorname() const
-{
-    return vorname;
+    activities = new QMap<AActivity *, AActivity::Category>();
 }
-
-void Person::setVorname(const QString &value)
-{
-    vorname = value;
-}
-
-QString Person::getNachname() const
-{
-    return nachname;
-}
-
-void Person::setNachname(const QString &value)
-{
-    nachname = value;
-}
-*/
 
 bool Person::getAusbildungTf() const
 {
@@ -114,6 +93,7 @@ bool Person::removeActivity(AActivity *a)
         valuesInvalid = true;
         return true;
     }
+    return false;
 }
 
 QString Person::getName() const
@@ -123,7 +103,9 @@ QString Person::getName() const
 
 void Person::setName(const QString &value)
 {
+    QString old = name;
     name = value;
+    emit nameChanged(this, old);
 }
 
 int Person::getTimeTf()

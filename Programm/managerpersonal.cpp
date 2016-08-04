@@ -1,11 +1,22 @@
 #include "managerpersonal.h"
 #include "person.h"
 #include <QList>
+#include <QObject>
+#include <QSetIterator>
+
+int ManagerPersonal::mindestStunden = 10;
+int ManagerPersonal::mindestStundenTf = 0;
+int ManagerPersonal::mindestStundenZf = 0;
 
 ManagerPersonal::ManagerPersonal()
 {
     personen = new QSet<Person*>();
     personenSorted = new QHash<QString, Person*>();
+}
+
+ManagerPersonal::~ManagerPersonal()
+{
+
 }
 
 Person *ManagerPersonal::getPerson(QString name)
@@ -30,6 +41,7 @@ Person *ManagerPersonal::registerPerson(QString name)
         Person *neu = new Person(name);
         personen->insert(neu);
         personenSorted->insert(name, neu);
+        connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
         return neu;
     }
     return nullptr;
@@ -52,6 +64,34 @@ bool ManagerPersonal::removePerson(Person *p)
         return true;
     }
     return false;
+}
+
+bool ManagerPersonal::pruefeStunden(Person *p)
+{
+    if ((p->getTimeSum() < mindestStunden) || (p->getTimeTf() < mindestStundenTf) || (p->getTimeZf() < mindestStundenZf) ) {
+        return false;
+    }
+    return true;
+}
+
+void ManagerPersonal::personChangedName(Person *p, QString alt)
+{
+    personenSorted->remove(alt);
+    personenSorted->insert(p->getName(), p);
+}
+
+void ManagerPersonal::reloadSettings()
+{
+    // Einstellungen neu laden, betrifft besonders die Zeiten, ab wann man nicht genug stunden hat
+/*    mindestStunden = 10;
+    mindestStundenTf = 0;
+    mindestStundenZf = 0;*/
+}
+
+QSetIterator<Person *> ManagerPersonal::getPersonen() const
+{
+    QSetIterator<Person*> i(*personen);
+    return i;
 }
 
 QString ManagerPersonal::getGoodName(QString name)

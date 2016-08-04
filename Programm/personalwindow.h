@@ -27,7 +27,22 @@ private slots:
 
     void on_pushAdd_clicked();
 
+    void on_lineName_textChanged(const QString &arg1);
+
+    void on_spinKm_valueChanged(int arg1);
+
+    void on_checkTf_clicked(bool checked);
+
+    void on_checkZf_clicked(bool checked);
+
+    void on_checkRangierer_clicked(bool checked);
+
+    void on_pushDelete_clicked();
+
+    void on_listWidget_itemClicked(QListWidgetItem *item);
+
 private:
+    static const QString nichtGenugStunden;
     Ui::PersonalWindow *ui;
     ManagerPersonal *manager;
 
@@ -35,6 +50,8 @@ private:
 
     QHash<QListWidgetItem*, Person*> *itemToPerson;
     QHash<Person*, QListWidgetItem*> *personToItem;
-};
 
+
+    bool enabled; // Gibt an, ob das Formualr aktiviert ist oder nicht, und ob Änderungen übernommen werden
+};
 #endif // PERSONALWINDOW_H
