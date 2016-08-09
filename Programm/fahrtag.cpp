@@ -16,6 +16,19 @@ Fahrtag::Fahrtag(QDate *date, ManagerPersonal *p): ManagerReservierungen(), AAct
     // Listen für Tf, Zf, Zub und Servie müssen noch initalisiert werden
 }
 
+QString Fahrtag::getStringFromArt(Fahrtag::Art art)
+{
+    switch (art) {
+    case Museumszug: return "Museumszug";
+    case Sonderzug: return "Sonderzug";
+    case Nikolauszug: return "Nikolauszug";
+    case Schnupperkurs: return "Ehrenlokführer Schnupperkurs";
+    case Bahnhofsfest: return "BAhnhofsfest";
+    case ELFundMuseumszug: return "Museumszug mit Schnupperkurs";
+    default: return "Sonstiges";
+    }
+}
+
 QString Fahrtag::getListString()
 {
     return datum->toString("dddd dd.MM.yyyy")+" – Fahrtag";

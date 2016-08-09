@@ -6,9 +6,11 @@ FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) :
     ui(new Ui::FahrtagWindow)
 {
     ui->setupUi(this);
+    ui->frameReservierungen = f;
     fahrtag = f;
     loadData();
     ui->dateDate->setFocus();
+    setWindowTitle(Fahrtag::getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum()->toString("dddd dd. MM. yyyy"));
 }
 
 FahrtagWindow::~FahrtagWindow()
@@ -19,11 +21,13 @@ FahrtagWindow::~FahrtagWindow()
 void FahrtagWindow::on_dateDate_dateChanged(const QDate &date)
 {
     fahrtag->setDatum(new QDate(date.year(), date.month(), date.day()));
+    setWindowTitle(Fahrtag::getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum()->toString("dddd dd. MM. yyyy"));
 }
 
 void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
 {
     fahrtag->setArt((Fahrtag::Art)index);
+    setWindowTitle(Fahrtag::getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum()->toString("dddd dd. MM. yyyy"));
 }
 
 void FahrtagWindow::on_textAnlass_textChanged()
