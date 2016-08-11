@@ -126,6 +126,7 @@ void Calendar::goToday()
 
 bool Calendar::removeSelected()
 {
+    QMessageBox::information(this, "Fehler", "Noch nicht implementiert");
     return false;
 }
 
@@ -161,6 +162,7 @@ Activity *Calendar::newActivity()
 
 bool Calendar::removeActivity(AActivity *a)
 {
+    QMessageBox::information(this, "Fehler", "Diese Funktion kann im MOment nicht genutzt werden!\nWir bitten um Entschuldigung!");
     return false;
 }
 

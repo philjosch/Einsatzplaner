@@ -20,8 +20,8 @@ public:
     QString getWagenreihung() const;
     void setWagenreihung(const QString &value);
 
-    QString getStringFromPlaetze(QMap<int, QList<int> *> *liste);
-    QMap<int, QList<int>*> *getPlaetzeFromString(QString plaetze);
+    static QString getStringFromPlaetze(QMap<int, QList<int> *> *liste);
+    static QMap<int, QList<int>*> *getPlaetzeFromString(QString plaetze);
 
 public slots:
     void verteileSitzplaetze();

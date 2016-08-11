@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include"calendar.h"
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,6 +18,35 @@ MainWindow::MainWindow(QWidget *parent) :
 
     personalfenster = new PersonalWindow(this, ui->calendar->getPersonal());
     personalfenster->hide();
+
+
+
+//    QMap<int, QList<int>*> *map = new QMap<int, QList<int>*>();
+//    QList<int> *l1 = new QList<int>();
+//    l1->append(1);
+//    l1->append(2);
+//    l1->append(3);
+//    l1->append(4);
+//    map->insert(201, l1);
+//    QList<int> *l2 = new QList<int>();
+//    l2->append(4);
+//    l2->append(5);
+//    l2->append(6);
+//    l2->append(8);
+//    l2->append(10);
+//    l2->append(11);
+//    l2->append(12);
+//    l2->append(14);
+//    map->insert(204, l2);
+//    QString ref = "201: 1-3, 4";
+//    QString test = ManagerReservierungen::getStringFromPlaetze(map);
+
+//    QMessageBox::information(this, "", ref+"\n"+test);
+
+//    QMessageBox::information(this, "", ref+"\n"+ManagerReservierungen::getStringFromPlaetze(
+//                                 ManagerReservierungen::getPlaetzeFromString(ref)
+//                                 ));
+
 }
 
 MainWindow::~MainWindow()

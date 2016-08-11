@@ -9,6 +9,7 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) :
     ui->setupUi(this);
     activity = a;
     loadData();
+    setWindowTitle("Arbeitseinsatz am "+activity->getDatum()->toString("dddd dd. MM. yyyy"));
 }
 
 ActivityWindow::~ActivityWindow()
@@ -29,6 +30,7 @@ void ActivityWindow::on_buttonRemove_clicked()
 void ActivityWindow::on_dateDatum_dateChanged(const QDate &date)
 {
     activity->setDatum(new QDate(date.year(), date.month(), date.day()));
+    setWindowTitle("Arbeitseinsatz am "+activity->getDatum()->toString("dddd dd. MM. yyyy"));
 }
 
 void ActivityWindow::on_lineOrt_textChanged(const QString &arg1)
@@ -38,7 +40,7 @@ void ActivityWindow::on_lineOrt_textChanged(const QString &arg1)
 
 void ActivityWindow::on_plainAnlass_textChanged()
 {
-    activity->setAnlass(ui->plainAnlass->toPlainText());
+    activity->setAnlass(ui->lineAnlass->text());
 }
 
 void ActivityWindow::on_plainBeschreibung_textChanged()
@@ -74,7 +76,7 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
 //    for(int i = 0; i < ui->tablePersonen->rowCount(); i++) {
 
 //    }
-    QMessageBox::information(this, "", "");
+    QMessageBox::information(this, "Fehler", "Noch nicht implementiert!");
 }
 
 void ActivityWindow::loadData()
@@ -82,11 +84,11 @@ void ActivityWindow::loadData()
     // Allgemeine Daten von AActivity
     ui->dateDatum->setDate(* activity->getDatum());
     ui->lineOrt->setText(activity->getOrt());
-    ui->plainAnlass->clear();
-    ui->plainAnlass->insertPlainText(activity->getAnlass());
+    ui->lineAnlass->setText(activity->getAnlass());
     ui->plainBeschreibung->setPlainText(activity->getBemerkungen());
     ui->timeBeginn->setTime(* activity->getZeitAnfang());
     ui->timeEnde->setTime(* activity->getZeitEnde());
     ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
     // Tabelle laden und alles einfügen
+    // Fehlt //
 }

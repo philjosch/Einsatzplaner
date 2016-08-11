@@ -32,22 +32,62 @@ void ManagerReservierungen::setWagenreihung(const QString &value)
 }
 
 QString ManagerReservierungen::getStringFromPlaetze(QMap<int, QList<int> *> *liste)
-{/*
+{
     QString s = "";
-    for(int i: liste) {
+    for(int i: liste->keys()) {
         s += QString::number(i)+": ";
-        for (int j : liste->value(i)) {
-            s += QString::number(j);
-            if (j != liste->value(i)->last()) s += ", ";
+        int old = -1;
+        bool strich = false;
+        for (int j : * liste->value(i)) {
+            if (old+1 == j) {
+                if (strich && (j == liste->value(i)->last())) {
+                    s += QString::number(j);
+                } else if (! strich) {
+                    s += "-";
+                    strich = true;
+                }
+            } else {
+                if (strich)
+                    s += QString::number(old);
+                if (j != liste->value(i)->first()) s += ", ";
+                s += QString::number(j);
+                strich = false;
+            }
+            old = j;
+
         }
         s += "; ";
-    }*/
-    return "";
+    }
+    if (s != "") {
+        s = s.left(s.size()-2);
+    }
+    return s;
 }
 
 QMap<int, QList<int> *> *ManagerReservierungen::getPlaetzeFromString(QString plaetze)
 {
-
+    QMap<int, QList<int>*> *map = new QMap<int, QList<int>*>();
+    QStringList l1;
+    l1 = plaetze.split(QRegExp("\\s*;\\s*"));
+    for (QString s1: l1) {
+        QStringList l2a = s1.split(QRegExp("\\s*:\\s*"));
+        int wagen = l2a.at(0).toInt();
+        QStringList l2 = l2a.at(1).split(QRegExp("\\s*,\\s+"));
+        QMessageBox::warning(nullptr, "", "c");
+        QList<int> *l = new QList<int>();
+        for (QString s2: l2) {
+            if (s2.contains(QRegExp("\\s*-\\s*"))) {
+                QStringList l3 = s2.split(QRegExp("\\s*-\\s*"));
+                for (int i = l3.at(0).toInt(); i <= l3.at(1).toInt(); i++) {
+                    l->append(i);
+                }
+            } else {
+                l->append(s2.toInt());
+            }
+        }
+        map->insert(wagen, l);
+    }
+    return map;
 }
 
 void ManagerReservierungen::verteileSitzplaetze()
@@ -263,5 +303,5 @@ void ManagerReservierungen::on_plainSonstiges_textChanged()
 
 void ManagerReservierungen::on_listRes_itemClicked(QListWidgetItem *item)
 {
-    loadReservierung(itemToRes->value(ui->listRes->currentItem()));
+    loadReservierung(itemToRes->value(item));
 }
