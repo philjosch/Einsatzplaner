@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "activity.h"
 #include "person.h"
+#include <QSet>
 
 namespace Ui {
 class ActivityWindow;
@@ -26,7 +27,7 @@ private slots:
 
     void on_lineOrt_textChanged(const QString &arg1);
 
-    void on_plainAnlass_textChanged();
+    void on_lineAnlass_textChanged();
 
     void on_plainBeschreibung_textChanged();
 
@@ -43,6 +44,9 @@ private:
     Activity *activity;
 
     void loadData();
+
+
+    QSet<QString> *namen;
 };
 
 #endif // ACTIVITYWINDOW_H

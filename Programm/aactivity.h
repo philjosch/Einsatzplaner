@@ -21,6 +21,7 @@ public:
     QJsonObject *toJson();
 
     enum Category { Tf, Tb, Zf, Service, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
+    static Category getCategoryFromString(QString s);
 
     QDate *getDatum() const;
     void setDatum(QDate *value);
@@ -44,8 +45,10 @@ public:
     void setPersonalBenoetigt(bool value);
 
     QMap<Person *, QList<QObject *> *> *getPersonen() const;
-    ManagerPersonal::Misstake addPerson(Person *p, QString *s, QTime *start, QTime *ende);
+    ManagerPersonal::Misstake addPerson(Person *p, QString s, QTime *start, QTime *ende);
+    ManagerPersonal::Misstake addPerson(QString p, QString s, QTime *start, QTime *ende);
     bool removePerson(Person *p);
+    bool removePerson(QString p);
     void setPersonen(QMap<Person *, QList<QObject *> *> *value);
 
     virtual QString getListString() = 0;

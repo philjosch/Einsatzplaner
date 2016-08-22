@@ -15,7 +15,7 @@ public:
     ManagerPersonal();
     ~ManagerPersonal();
 
-    enum Misstake { OK, PersonNichtGefunden, FalscheQualifikation};
+    enum Misstake { OK, PersonNichtGefunden, FalscheQualifikation, SonstigerFehler};
 
     Person *getPerson(QString name);
     bool personExists(QString name); // Prüft, ob die Person im System registriert ist
