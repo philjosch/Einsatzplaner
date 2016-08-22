@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1045</width>
-    <height>903</height>
+    <width>771</width>
+    <height>651</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,6 +17,21 @@
    <layout class="QGridLayout" name="gridLayout_6" rowstretch="0,1">
     <item row="0" column="0">
      <layout class="QGridLayout" name="layoutRahmendaten" rowstretch="0,0,0,0" columnstretch="0,1,0,1">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>6</number>
+      </property>
       <item row="1" column="3">
        <widget class="QComboBox" name="comboWagenreihung">
         <property name="enabled">
@@ -179,6 +194,18 @@
       </item>
       <item row="3" column="3">
        <layout class="QGridLayout" name="layoutTimeZ" rowminimumheight="0">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <property name="spacing">
          <number>0</number>
         </property>
@@ -447,6 +474,18 @@
       </item>
       <item row="2" column="3">
        <layout class="QGridLayout" name="layoutTimeTf" rowminimumheight="0">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <property name="spacing">
          <number>0</number>
         </property>
@@ -719,7 +758,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="documentMode">
        <bool>false</bool>
@@ -745,7 +784,7 @@
          <number>0</number>
         </property>
         <property name="topMargin">
-         <number>12</number>
+         <number>6</number>
         </property>
         <property name="rightMargin">
          <number>0</number>
@@ -753,8 +792,26 @@
         <property name="bottomMargin">
          <number>0</number>
         </property>
+        <property name="spacing">
+         <number>6</number>
+        </property>
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_3">
+         <layout class="QGridLayout" name="gridTf">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="checkTf">
             <property name="text">
@@ -853,7 +910,22 @@
          </layout>
         </item>
         <item row="0" column="1">
-         <layout class="QGridLayout" name="gridLayout_5">
+         <layout class="QGridLayout" name="gridZub">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="checkZub">
             <property name="text">
@@ -949,7 +1021,22 @@
          </layout>
         </item>
         <item row="1" column="0">
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridZf">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="checkZf">
             <property name="text">
@@ -1048,7 +1135,22 @@
          </layout>
         </item>
         <item row="1" column="1">
-         <layout class="QGridLayout" name="gridLayout_2">
+         <layout class="QGridLayout" name="gridService">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="checkService">
             <property name="text">
@@ -1151,7 +1253,22 @@
          </widget>
         </item>
         <item row="3" column="0" colspan="2">
-         <layout class="QGridLayout" name="gridLayout_7">
+         <layout class="QGridLayout" name="gridBemerkungen">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="LabelBemerkungen">
             <property name="toolTip">
@@ -1414,7 +1531,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1045</width>
+     <width>771</width>
      <height>22</height>
     </rect>
    </property>
