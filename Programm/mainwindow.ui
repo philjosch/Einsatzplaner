@@ -217,7 +217,7 @@
   </action>
   <action name="actionPersonal_bersicht">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Personalübersicht</string>
@@ -228,7 +228,7 @@
   </action>
   <action name="actionExport">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Export</string>
@@ -270,6 +270,38 @@
     <hint type="destinationlabel">
      <x>592</x>
      <y>709</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPersonal_bersicht</sender>
+   <signal>triggered()</signal>
+   <receiver>buttonPersonal</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>565</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>316</x>
+     <y>565</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExport</sender>
+   <signal>triggered()</signal>
+   <receiver>buttonExport</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>482</x>
+     <y>565</y>
     </hint>
    </hints>
   </connection>

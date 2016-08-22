@@ -26,9 +26,9 @@ public:
 
     bool pruefeStunden(Person *p);
 
-    static int mindestStunden;
-    static int mindestStundenTf;
-    static int mindestStundenZf;
+    static double mindestStunden;
+    static double mindestStundenTf;
+    static double mindestStundenZf;
 
     QSetIterator<Person *> getPersonen() const;
 

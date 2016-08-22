@@ -19,6 +19,8 @@ public:
     ~Activity();
     QString getListStringShort();
     QString getListString();
+
+    QList<int> *getIndividual(Person *person);
 signals:
     void activityModified(AActivity *a);
 private slots:

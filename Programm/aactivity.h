@@ -22,6 +22,7 @@ public:
 
     enum Category { Tf, Tb, Zf, Service, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
     static Category getCategoryFromString(QString s);
+    static QString getStringFromCategory(Category c);
 
     QDate *getDatum() const;
     void setDatum(QDate *value);
@@ -44,15 +45,18 @@ public:
     bool getPersonalBenoetigt() const;
     void setPersonalBenoetigt(bool value);
 
-    QMap<Person *, QList<QObject *> *> *getPersonen() const;
+    QMap<Person *, QList<int> *> *getPersonen() const;
+    virtual QList<int> *getIndividual(Person *person) = 0;
     ManagerPersonal::Misstake addPerson(Person *p, QString s, QTime *start, QTime *ende);
     ManagerPersonal::Misstake addPerson(QString p, QString s, QTime *start, QTime *ende);
     bool removePerson(Person *p);
     bool removePerson(QString p);
-    void setPersonen(QMap<Person *, QList<QObject *> *> *value);
+    void setPersonen(QMap<Person *, QList<int>*> *value);
 
     virtual QString getListString() = 0;
     virtual QString getListStringShort() = 0;
+
+    ManagerPersonal *getPersonal() const;
 
 protected:
     QDate *datum;
@@ -61,7 +65,7 @@ protected:
     QTime *zeitEnde;
     QString anlass;
     QString bemerkungen;
-    QMap<Person *, QList<QObject *> *> *personen;
+    QMap<Person *, QList<int> *> *personen; // QList enthält: Beginn, Ende, Aufgabe; Die Zeit in msec kodiert seit anfang des Tages
     bool personalBenoetigt;
 
     ManagerPersonal *personal;

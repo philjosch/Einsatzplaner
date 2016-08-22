@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QSetIterator>
 
-int ManagerPersonal::mindestStunden = 10;
-int ManagerPersonal::mindestStundenTf = 0;
-int ManagerPersonal::mindestStundenZf = 0;
+double ManagerPersonal::mindestStunden = 10.f;
+double ManagerPersonal::mindestStundenTf = 0.f;
+double ManagerPersonal::mindestStundenZf = 0.f;
 
 ManagerPersonal::ManagerPersonal()
 {

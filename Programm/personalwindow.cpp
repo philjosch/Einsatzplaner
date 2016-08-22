@@ -17,7 +17,6 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) :
 
 
     manager = m;
-//    setWindowFilePath(parent->windowFilePath());
     setWindowTitle("Personalmanagement");
 
     itemToPerson = new QHash<QListWidgetItem*, Person*>();
@@ -60,14 +59,44 @@ void PersonalWindow::showPerson(Person *p)
     ui->checkRangierer->setChecked(p->getAusbildungRangierer());
 
     // Tabellendaten laden und einfügen
-    ui->lineTf->setText(QString::number(p->getTimeBuero()));
-    ui->lineZf->setText(QString::number(p->getTimeBuero()));
-    ui->lineService->setText(QString::number(p->getTimeBuero()));
-    ui->lineWerkstatt->setText(QString::number(p->getTimeBuero()));
+    while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
+    QListIterator<AActivity*> *i = p->getActivities();
+    while(i->hasNext()) {
+        AActivity *a = i->next();
+        // Datum
+        ui->tabelle->insertRow(0);
+        QTableWidgetItem *i0 = new QTableWidgetItem(a->getDatum()->toString("dd.MM.yyyy"));
+        ui->tabelle->setItem(0, 0, i0);
+
+        QList<int> *l = a->getIndividual(p);
+
+        // Aufgabe
+        AActivity::Category cat = (AActivity::Category) l->at(2);
+        QTableWidgetItem *i1 = new QTableWidgetItem(AActivity::getStringFromCategory(cat));
+        ui->tabelle->setItem(0, 1, i1);
+
+        // Einsatzstunden
+        QTime start = QTime::fromMSecsSinceStartOfDay(l->at(0));
+        QTime ende = QTime::fromMSecsSinceStartOfDay(l->at(1));
+
+        QTime duration = QTime::fromMSecsSinceStartOfDay(start.msecsTo(ende));
+
+        QTableWidgetItem *i2 = new QTableWidgetItem(duration.toString("hh:mm"));
+        ui->tabelle->setItem(0, 2, i2);
+
+        // Beschreibung
+        QTableWidgetItem *i3 = new QTableWidgetItem(a->getAnlass());
+        ui->tabelle->setItem(0, 3, i3);
+    }
+
+    ui->lineTf->setText(QString::number(p->getTimeTf()));
+    ui->lineZf->setText(QString::number(p->getTimeZf()));
+    ui->lineService->setText(QString::number(p->getTimeService()));
+    ui->lineWerkstatt->setText(QString::number(p->getTimeWerkstatt()));
     ui->lineBuero->setText(QString::number(p->getTimeBuero()));
     ui->lineGesamt->setText(QString::number(p->getTimeSum()));
 
-    ui->lineBuero->setText(QString::number(p->getTimeBuero()));
+    ui->lineStrecke->setText(QString::number(p->getSumKilometer()));
 
     enabled = true;
 }
@@ -89,6 +118,7 @@ void PersonalWindow::refreshGesamt()
     ui->tabelleGesamt->setSortingEnabled(false);
     while(i.hasNext()) {
         Person *p = i.next();
+        p->berechne();
         QString farbe = "#ffffff";
         if (! manager->pruefeStunden(p)) {
             farbe = nichtGenugStunden;
@@ -115,7 +145,7 @@ void PersonalWindow::refreshGesamt()
 
 void PersonalWindow::refreshEinzel()
 {
-    // heir müssen nur die Farben angepasst werden
+    // hier müssen nur die Farben angepasst werden
     for(int i = 0; i < ui->listWidget->count(); i++) {
         QListWidgetItem *item = ui->listWidget->item(i);
         Person *p = itemToPerson->value(item);
@@ -188,12 +218,18 @@ void PersonalWindow::on_pushDelete_clicked()
         enabled = false;
         QListWidgetItem *i = ui->listWidget->selectedItems().at(0);
         Person *p = itemToPerson->value(i);
+        if (p->getAnzahl() > 0) {
+            QMessageBox::information(this, "Warnung", "Die ausgewählte Person kann nciht gelöscht werden, da Sie noch bei Aktivitäten eingetragen ist.\nBitte lösen Sie diese Verbindung bevor Sie die Person löschen!");
+            enabled = true;
+            return;
+        }
         if (p == aktuellePerson) {
             aktuellePerson = nullptr;
         }
         itemToPerson->remove(i);
         personToItem->remove(p);
         manager->removePerson(p);
+        delete p;
         ui->listWidget->takeItem(ui->listWidget->row(i));
 
         if (ui->listWidget->count() == 0) {

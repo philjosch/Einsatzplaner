@@ -52,6 +52,12 @@
         <property name="statusTip">
          <string>Tf, Tb, Zf, Service, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges</string>
         </property>
+        <property name="sortingEnabled">
+         <bool>true</bool>
+        </property>
+        <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+         <bool>true</bool>
+        </attribute>
         <column>
          <property name="text">
           <string>Name</string>

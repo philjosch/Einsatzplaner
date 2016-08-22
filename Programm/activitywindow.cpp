@@ -65,10 +65,12 @@ void ActivityWindow::on_buttonRemove_clicked()
 {
     int i = ui->tablePersonen->currentRow();
     if (i == -1) return;
-    QString n = ui->tablePersonen->item(i, 1)->text();
-    namen->remove(n);
-    ui->tablePersonen->removeRow(ui->tablePersonen->currentRow());
-    ui->buttonRemove->setEnabled(ui->tablePersonen->rowCount() > 0);
+    QString n = ui->tablePersonen->item(i, 0)->text();
+    if (activity->removePerson(n)) {
+        namen->remove(n);
+        ui->tablePersonen->removeRow(ui->tablePersonen->currentRow());
+        ui->buttonRemove->setEnabled(ui->tablePersonen->rowCount() > 0);
+    }
 }
 
 void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
@@ -79,12 +81,6 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
      * denn die veränderte Spalte muss eingefügt werden
      * und die Liste muss up-todate gehalten werden
      * */
-    // Alle Zeilen wieder laden und in der Liste speichern
-//    QMap<Person *, Container*> *liste = new QMap<Person*,Container*>();
-//    for(int i = 0; i < ui->tablePersonen->rowCount(); i++) {
-
-//    }
-
 
      // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
     if (column == 0) {
@@ -145,10 +141,10 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
     case ManagerPersonal::OK:
         break;
     case ManagerPersonal::PersonNichtGefunden:
-        QMessageBox::warning(this, "Fehler", "DIe eingegebene Person konnte im System nicht gefunden werden.");
+        QMessageBox::warning(this, "Fehler", "Die eingegebene Person konnte im System nicht gefunden werden.");
         break;
     case ManagerPersonal::FalscheQualifikation:
-        QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nciht von der angegebenen Person übernomme werden, da dies eine Aufgabe ist, die eine Asbildung voraussetzt.");
+        QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
         break;
     default:
         QMessageBox::warning(this, "Sonstiger Fehler", "Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!");

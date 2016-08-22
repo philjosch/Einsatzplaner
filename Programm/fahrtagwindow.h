@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "fahrtag.h"
 #include <QListWidgetItem>
+#include <QTableWidgetItem>
 #include <QPushButton>
 
 namespace Ui {
@@ -67,13 +68,26 @@ private slots:
     void on_buttonServiceAdd_clicked();
     void on_buttonServiceDelete_clicked();
 
+    void on_tablePersonen_cellChanged(int row, int column);
+
+    void on_buttonInsert_clicked();
+
+    void on_buttonRemove_clicked();
+
 private:
     Ui::FahrtagWindow *ui;
     Fahrtag *fahrtag;
 
+    bool nehme;
+    QMap<QListWidgetItem *, QString> *listeMitNamen;
+
+    QMap<QListWidgetItem*, QTableWidgetItem*> *listToTable;
+
     void loadData();
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);
+
+    QSet<QString> *namen;
 };
 
 #endif // FAHRTAGWINDOW_H

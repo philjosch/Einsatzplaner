@@ -1,24 +1,34 @@
 #include "aactivity.h"
 #include <QMap>
+#include "person.h"
+#include <QDebug>
 
 AActivity::Category AActivity::getCategoryFromString(QString s)
 {
     s = s.toUpper();
-    switch (s) {
-    case "TF": return Tf;
-    case "TB": return Tb;
-    case "ZF": return Zf;
-    case "SERVICE": return Service;
-    case "BEGLEITER": true;
-    case "ZUB": return Begleiter;
-    case "BÜRO": true;
-    case "BUERO": return Buero;
-    case "WERKSTATT": return Werkstatt;
-    case "VORBEREITEN": true;
-    case "ZUG VORBEREITEN": true;
-    case "ZUGVORBEREITEN": return ZugVorbereiten;
-    default:
-        return Sonstiges;
+    if (s=="TF") return Tf;
+    if (s=="TB") return Tb;
+    if (s=="ZF") return Zf;
+    if (s=="SERVICE") return Service;
+    if (s=="BEGLEITER" || s=="ZUB") return Begleiter;
+    if (s=="BÜRO" || s=="BUERO") return Buero;
+    if (s=="WERKSTATT") return Werkstatt;
+    if (s=="VORBEREITEN" || s=="ZUG VORBEREITEN" || s=="ZUGVORBEREITEN") return ZugVorbereiten;
+    return Sonstiges;
+}
+
+QString AActivity::getStringFromCategory(AActivity::Category c)
+{
+    switch (c) {
+    case Tf: return "Tf";
+    case Tb: return "Tb";
+    case Zf: return "Zf";
+    case Service: return "Service";
+    case Begleiter: return "Begleiter";
+    case Buero: return "Büro";
+    case Werkstatt: return "Werkstatt";
+    case ZugVorbereiten: return "Zug Vorbereiten";
+    default: return "Sonstiges";
     }
 }
 
@@ -30,7 +40,7 @@ AActivity::AActivity(QDate *date, ManagerPersonal *p)
     zeitEnde = new QTime(16, 0);
     anlass = "";
     bemerkungen = "";
-    personen = new QMap<Person *, QList<QObject *> *>();
+    personen = new QMap<Person *, QList<int> *>();
     personalBenoetigt = true;
     personal = p;
 }
@@ -124,7 +134,7 @@ void AActivity::setPersonalBenoetigt(bool value)
     handleEmit();
 }
 
-QMap<Person *, QList<QObject *> *> *AActivity::getPersonen() const
+QMap<Person *, QList<int> *> *AActivity::getPersonen() const
 {
     return personen;
 }
@@ -132,6 +142,7 @@ QMap<Person *, QList<QObject *> *> *AActivity::getPersonen() const
 bool AActivity::removePerson(Person *p)
 {
 
+    return p->removeActivity(this);
 }
 
 bool AActivity::removePerson(QString p)
@@ -148,21 +159,40 @@ ManagerPersonal::Misstake AActivity::addPerson(Person *p, QString s, QTime *star
    /*
     * angabe über aufgabe prüfen
     * p. ob person geeignet
-    * plausibilität start ende
     * person hinzufügen
     */
     AActivity::Category kat = AActivity::getCategoryFromString(s);
     switch (kat) {
-    case Tf: //prüefe
-    case Tb: //pruefe
-    case Zf: //pruefe
+    case Tf:
+        if (! p->getAusbildungTf()) {
+            return ManagerPersonal::FalscheQualifikation;
+        }
+        break;
+    case Tb:
+        // Ein Tb muss auch Lokführer sein, diese muss noch abgeklärt werden: Issue #9
+        if (! p->getAusbildungTf()) {
+            return ManagerPersonal::FalscheQualifikation;
+        }
+        break;
+    case Zf:
+        if (! p->getAusbildungZf()) {
+            return ManagerPersonal::FalscheQualifikation;
+        }
+        break;
     default:
         break;
     }
 
+    // jetzt ist alles richtig und die person kann registiert werden.
+    p->addActivity(this, kat);
 
+    QList<int> *liste = new QList<int>();
+    liste->append(start->msecsSinceStartOfDay());
+    liste->append(ende->msecsSinceStartOfDay());
+    liste->append((int)kat);
+    personen->insert(p, liste);
 
-    return ManagerPersonal::SonstigerFehler;
+    return ManagerPersonal::OK;
 }
 
 ManagerPersonal::Misstake AActivity::addPerson(QString p, QString s, QTime *start, QTime *ende)
@@ -174,23 +204,13 @@ ManagerPersonal::Misstake AActivity::addPerson(QString p, QString s, QTime *star
     return ManagerPersonal::PersonNichtGefunden;
 }
 
-void AActivity::setPersonen(QMap<Person *, QList<QObject *> *> *value)
+void AActivity::setPersonen(QMap<Person *, QList<int> *> *value)
 {
     personen = value;
     handleEmit();
 }
-/*
-QString AActivity::getListString()
+
+ManagerPersonal *AActivity::getPersonal() const
 {
-    return datum->toString("dddd dd.MM.yyyy");
+    return personal;
 }
-*/
-/*
-QString AActivity::getListStringShort()
-{
-    if (anlass.length() == 0) {
-        return "Aktivität - "+ort;
-    }
-    return anlass;
-}
-*/

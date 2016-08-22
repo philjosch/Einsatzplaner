@@ -1,5 +1,6 @@
 #include "person.h"
 #include <QMap>
+#include <QListIterator>
 
 Person::Person(QString name) : QObject()
 {
@@ -8,14 +9,14 @@ Person::Person(QString name) : QObject()
     this->ausbildungTf = false;
     this->ausbildungZf = false;
     this->ausbildungRangierer = false;
-    timeTf = 0;
-    timeZf = 0;
-    timeZub = 0;
-    timeService = 0;
-    timeBuero = 0;
-    timeWerkstatt = 0;
-    timeSum = 0;
-    sumKilometer = 0;
+    timeTf = 0.f;
+    timeZf = 0.f;
+    timeZub = 0.f;
+    timeService = 0.f;
+    timeBuero = 0.f;
+    timeWerkstatt = 0.f;
+    timeSum = 0.f;
+    sumKilometer = 0.f;
     valuesInvalid = true;
 
     activities = new QMap<AActivity *, AActivity::Category>();
@@ -71,17 +72,40 @@ void Person::berechne()
     timeBuero = 0;
     timeWerkstatt = 0;
     timeSum = 0;
-    sumKilometer = 0;
-    // hier werden die einzelnen Zeiten berechnet und dann in den Variablen gespeichert
-    valuesInvalid = false;
 
+    for(AActivity *a: activities->keys()) {
+        AActivity::Category cat = activities->value(a);
+        QList<int> *l = a->getIndividual(this);
+
+        // Einsatzstunden
+        QTime start = QTime::fromMSecsSinceStartOfDay(l->at(0));
+        QTime ende = QTime::fromMSecsSinceStartOfDay(l->at(1));
+        int duration = start.msecsTo(ende);
+        switch (cat) {
+        case AActivity::Tf: timeTf += duration;  break;
+        case AActivity::Zf: timeZf += duration;  break;
+        case AActivity::Begleiter: timeZub += duration;  break;
+        case AActivity::Service: timeService += duration;  break;
+        case AActivity::Buero: timeBuero += duration;  break;
+        case AActivity::Werkstatt: timeWerkstatt += duration;  break;
+        default: break;
+        }
+        timeSum += duration;
+    }
+    timeTf = timeTf/(3600000);
+    timeZf = timeZf/(3600000);
+    timeZub = timeZub/(3600000);
+    timeService = timeService/(3600000);
+    timeBuero = timeBuero/(3600000);
+    timeWerkstatt = timeWerkstatt/(3600000);
+    timeSum = timeSum/(3600000);
+
+    sumKilometer = getAnzahl()*strecke;
+    valuesInvalid = false;
 }
 
 bool Person::addActivity(AActivity *a, AActivity::Category category)
 {
-    if (activities->contains(a)) {
-        return false;
-    }
     activities->insert(a, category);
     valuesInvalid = true;
     return true;
@@ -96,6 +120,12 @@ bool Person::removeActivity(AActivity *a)
     return false;
 }
 
+QListIterator<AActivity *> *Person::getActivities()
+{
+    QListIterator<AActivity*> *i = new QListIterator<AActivity*>(activities->keys());
+    return i;
+}
+
 QString Person::getName() const
 {
     return name;
@@ -108,58 +138,55 @@ void Person::setName(const QString &value)
     emit nameChanged(this, old);
 }
 
-int Person::getTimeTf()
+double Person::getTimeTf()
 {
     if (valuesInvalid) berechne();
     return timeTf;
 }
 
-int Person::getTimeZf()
+double Person::getTimeZf()
 {
     if (valuesInvalid) berechne();
     return timeZf;
 }
 
-int Person::getTimeZub()
+double Person::getTimeZub()
 {
     if (valuesInvalid) berechne();
     return timeZub;
 }
 
-int Person::getTimeService()
+double Person::getTimeService()
 {
     if (valuesInvalid) berechne();
     return timeService;
 }
 
-int Person::getTimeBuero()
+double Person::getTimeBuero()
 {
     if (valuesInvalid) berechne();
     return timeBuero;
 }
 
-int Person::getTimeWerkstatt()
+double Person::getTimeWerkstatt()
 {
     if (valuesInvalid) berechne();
     return timeWerkstatt;
 }
 
-int Person::getTimeSum()
+double Person::getTimeSum()
 {
     if (valuesInvalid) berechne();
     return timeSum;
 }
 
-int Person::getSumKilometer()
+double Person::getSumKilometer()
 {
     if (valuesInvalid) berechne();
     return sumKilometer;
 }
 
-int Person::getAnzahl()
+double Person::getAnzahl()
 {
     return activities->size();
 }
-
-
-

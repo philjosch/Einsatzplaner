@@ -38,6 +38,24 @@ public:
     bool getBenoetigeService() const;
     void setBenoetigeService(bool value);
 
+    QMap<QString, QString> *getListTf() const;
+    bool removeTf(QString p);
+    bool addTf(QString p, QString bemerkungen);
+
+    QMap<QString, QString> *getListZf() const;
+    bool removeZf(QString p);
+    bool addZf(QString p, QString bemerkungen);
+
+    QMap<QString, QString> *getListZub() const;
+    bool removeZub(QString p);
+    bool addZub(QString p, QString bemerkungen);
+
+    QMap<QString, QString> *getListService() const;
+    bool removeService(QString p);
+    bool addService(QString p, QString bemerkungen);
+
+    QList<int> *getIndividual(Person *person);
+
 signals:
     void fahrtagModified(AActivity *a);
 
@@ -46,12 +64,23 @@ private slots:
     void handleEmit();
 
 protected:
-    /*
-listTf
-listZf
-listeZub
-listeService
-*/
+    /* Fahrtag erweitert personen um ein weiteres Feld:
+     * 0: Beginn in msek seit Tagesbeginn
+     * 1: Ende in msec seit Tagesbeginn
+     * 2: Aufgabe der Person, Integer für AActivity::Category
+     * 3: Gibt an, ob die Person in einer anderen liste bereits vorhanden ist.
+     *    0: kein andere
+     *    1: in Tf vorhanden
+     *    2: in Zf vorhanden
+     *    3: in zub  --''--
+     *    4: in Service --''--
+     * */
+
+    QMap<QString, QString> *listTf;
+    QMap<QString, QString> *listZf;
+    QMap<QString, QString> *listZub;
+    QMap<QString, QString> *listService;
+
     Fahrtag::Art art;
     QTime *zeitTf;
     bool wichtig;
