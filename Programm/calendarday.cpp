@@ -14,11 +14,12 @@ CalendarDay::~CalendarDay()
 {
     delete ui;
 }
-
+/*
 void CalendarDay::show(QDate datum, QList<AActivity> *objekte)
 {
     show(datum);
 }
+*/
 void CalendarDay::show(QDate datum)
 {
     ui->label->setText(datum.toString("dd."));

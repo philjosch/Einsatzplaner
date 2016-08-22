@@ -231,7 +231,7 @@ void Calendar::activityChanged(AActivity *a)
 
 void Calendar::clickedItem(QListWidgetItem *i)
 {
-    AActivity *a = listitem->key(i);
+    AActivity *a = listitem->key(i, new Fahrtag(new QDate(), nullptr));
     if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
         emit showFahrtag(f);
     } else {
