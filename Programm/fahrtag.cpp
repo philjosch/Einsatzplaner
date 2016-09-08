@@ -26,6 +26,7 @@ QString Fahrtag::getStringFromArt(Fahrtag::Art art)
     switch (art) {
     case Museumszug: return "Museumszug";
     case Sonderzug: return "Sonderzug";
+    case Gesellschaftssonderzug: return "Gesellschaftssonderzug";
     case Nikolauszug: return "Nikolauszug";
     case Schnupperkurs: return "Ehrenlokführer Schnupperkurs";
     case Bahnhofsfest: return "BAhnhofsfest";

@@ -719,6 +719,11 @@
         </item>
         <item>
          <property name="text">
+          <string>Gesellschaftssonderzug</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string notr="true">Nikolausfahrt</string>
          </property>
         </item>

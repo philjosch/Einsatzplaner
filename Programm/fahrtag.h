@@ -11,7 +11,7 @@ class Fahrtag : public ManagerReservierungen, public AActivity
 public:
     Fahrtag(QDate *date, ManagerPersonal *p);
 
-    enum Art { Museumszug, Sonderzug, Nikolauszug, Schnupperkurs, ELFundMuseumszug, Bahnhofsfest, Sonstiges=100 };
+    enum Art { Museumszug, Sonderzug, Gesellschaftssonderzug, Nikolauszug, Schnupperkurs, ELFundMuseumszug, Bahnhofsfest, Sonstiges=100 };
     static QString getStringFromArt(Fahrtag::Art art);
 
     QString getListString();

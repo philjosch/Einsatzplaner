@@ -27,22 +27,33 @@ MainWindow::~MainWindow()
 
 QString MainWindow::getFarbeZug(Fahrtag::Art cat)
 {
-    switch (cat) {
+/*
     case Fahrtag::Museumszug:           return "#ffffff"; // Museumszug
-    case Fahrtag::Sonderzug:            return "#ffc789"; // Sonderzug
+    case Fahrtag::Sonderzug:            return "#FFEBD4"; // Sonderzug
+    case Fahrtag::Gesellschaftssonderzug: return "ffc789";
     case Fahrtag::Nikolauszug:          return "#b7a0e3"; // Nikolausfahrt
-    case Fahrtag::ELFundMuseumszug:     return "#afcad6"; // Museumszug mit ELF
+    case Fahrtag::ELFundMuseumszug:     return "#C8E6F3"; // Museumszug mit ELF
     case Fahrtag::Schnupperkurs:        return "#99c9de"; // ELF-Schnupperkurs
     case Fahrtag::Bahnhofsfest:         return "#d3f7a7"; // Bahnhofsfest
-//    case ???:     return "#fff5ac"; // Ausbildung
     case Fahrtag::Sonstiges:            return "#f2a4c3"; // Sonstiges
+    }*/
+
+    switch (cat) {
+    case Fahrtag::Museumszug:           return "#ffffff"; // Museumszug
+    case Fahrtag::Sonderzug:            return "#FFE8D9"; // Sonderzug -
+    case Fahrtag::Gesellschaftssonderzug: return "#ffbc90"; // Gesellschaft -
+    case Fahrtag::Nikolauszug:          return "#e481d1"; // Nikolausfahrt -
+    case Fahrtag::ELFundMuseumszug:     return "#918fe3"; // Museumszug mit ELF -
+    case Fahrtag::Schnupperkurs:        return "#E7E7FD"; // ELF-Schnupperkurs -
+    case Fahrtag::Bahnhofsfest:         return "#80e3b1"; // Bahnhofsfest
+    case Fahrtag::Sonstiges:            return "#ffeb90"; // Sonstiges
     default:                            return "#dddddd";
     }
 }
 
 QString MainWindow::getFarbeArbeit()
 {
-    return "#cccccc";
+    return "#CCBEBE";
 }
 
 void MainWindow::openFahrtag(Fahrtag *f)
