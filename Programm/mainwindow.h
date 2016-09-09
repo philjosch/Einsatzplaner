@@ -25,6 +25,7 @@ public:
 
     static QString getFarbeZug(Fahrtag::Art cat);
     static QString getFarbeArbeit();
+    static QString getFarbe(AActivity *a);
 
 private:
     Ui::MainWindow *ui;
@@ -37,6 +38,7 @@ public slots:
     void openActivity(Activity *a);
 private slots:
     void on_buttonPersonal_clicked();
+    void on_buttonExport_clicked();
 };
 
 #endif // MAINWINDOW_H

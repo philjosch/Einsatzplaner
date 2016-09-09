@@ -18,6 +18,8 @@ public:
     void setPersonal(ManagerPersonal *value);
     ManagerPersonal *getPersonal() const;
 
+    QListIterator<AActivity *> getActivities() const;
+
 public slots:
     Fahrtag *newFahrtag(QDate *datum);
     Activity *newActivity(QDate *datum);
@@ -28,7 +30,7 @@ public slots:
     void activityChanged(AActivity *a);
 
 protected:
-    QList<AActivity*> *activities;
+    QList<AActivity *> *activities;
     void update(int pos);
     ManagerPersonal *personal;
 

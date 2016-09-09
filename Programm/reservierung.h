@@ -38,6 +38,8 @@ public:
     QString getSonstiges() const;
     void setSonstiges(const QString &value);
 
+    QString getTableRow();
+
 private:
     QString name;
     QString mail;

@@ -74,20 +74,55 @@ private slots:
 
     void on_buttonRemove_clicked();
 
+    void on_actionTest_triggered();
+
+
+    // Reservierungen
+    void on_buttonAdd_clicked();
+    void on_buttonDelete_clicked();
+    void on_listRes_itemDoubleClicked(QListWidgetItem *item);
+    void on_buttonShow_clicked();
+    void on_buttonVerteile_clicked();
+    void on_checkBoxAuto_clicked(bool checked);
+    void on_lineName_textChanged(const QString &arg1);
+    void on_lineMail_textChanged(const QString &arg1);
+    void on_lineTelefon_textChanged(const QString &arg1);
+    void on_spinAnzahl_valueChanged(int arg1);
+    void on_comboKlasse_currentIndexChanged(int index);
+    void on_comboStart1Zug_currentTextChanged(const QString &arg1);
+    void on_comboStart1Hp_currentTextChanged(const QString &arg1);
+    void on_comboEnde1Zug_currentTextChanged(const QString &arg1);
+    void on_comboEnde1Hp_currentTextChanged(const QString &arg1);
+    void on_lineSitze_textChanged(const QString &arg1);
+    void on_lineSitze_returnPressed();
+    void on_checkFahrrad_clicked(bool checked);
+    void on_plainSonstiges_textChanged();
+    void on_listRes_itemClicked(QListWidgetItem *item);
+
+
 private:
     Ui::FahrtagWindow *ui;
     Fahrtag *fahrtag;
 
     bool nehme;
-    QMap<QListWidgetItem *, QString> *listeMitNamen;
+    QMap<QListWidgetItem *, QString> *listeMitNamen; // Liste mit den Namen, die in der Tabelle verwaltet werden
 
-    QMap<QListWidgetItem*, QTableWidgetItem*> *listToTable;
+    QMap<QListWidgetItem*, QTableWidgetItem*> *listToTable; // Mapt von den Listen auf den Tabelleneintrag der Person
 
     void loadData();
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);
 
     QSet<QString> *namen;
+
+    QMap<Reservierung*, QListWidgetItem*> *resToItem;
+    QMap<QListWidgetItem*, Reservierung*> *itemToRes;
+
+    void loadReservierung(Reservierung *r);
+    void saveResFahrt();
+    Reservierung *aktuelleRes;
+    bool nehmeRes;
+
 };
 
 #endif // FAHRTAGWINDOW_H

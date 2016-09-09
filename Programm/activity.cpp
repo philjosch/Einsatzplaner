@@ -22,23 +22,25 @@ QString Activity::getListString()
     return datum->toString("dddd dd.MM.yyyy")+" – Aktivität";
 }
 
-QList<int> *Activity::getIndividual(Person *person)
+AActivity::Infos *Activity::getIndividual(Person *person)
 {
-    QList<int> *l = new QList<int>();
-    QList<int> *orig = personen->value(person);
-    if (orig->at(0) == 0) {
-        l->append(zeitAnfang->msecsSinceStartOfDay());
-    } else {
-        l->append(orig->at(0));
-    }
-    if (orig->at(1) == 0) {
-        l->append(zeitEnde->msecsSinceStartOfDay());
-    } else {
-        l->append(orig->at(1));
-    }
-    l->append(orig->at(2));
+    Infos *neu = new Infos();
+    Infos *alt = personen->value(person);
+    neu->aufgabe = alt->aufgabe;
+    neu->bemerkung = alt->bemerkung;
+    neu->kategorie = alt->kategorie;
+    neu->beginn = alt->beginn;
+    neu->ende = alt->ende;
 
-    return l;
+    if (alt->beginn == QTime(0,0)) {
+        neu->beginn = QTime(zeitAnfang->hour(), zeitAnfang->minute());
+    }
+    if (alt->ende == QTime(0,0)) {
+        neu->ende = QTime(zeitEnde->hour(), zeitEnde->minute());
+    }
+    return neu;
+}
+
 }
 
 void Activity::handleActivity(AActivity *a)

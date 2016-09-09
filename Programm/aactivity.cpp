@@ -10,7 +10,8 @@ AActivity::Category AActivity::getCategoryFromString(QString s)
     if (s=="TB") return Tb;
     if (s=="ZF") return Zf;
     if (s=="SERVICE") return Service;
-    if (s=="BEGLEITER" || s=="ZUB") return Begleiter;
+    if (s=="ZUG BEGLEITER" || s=="ZUB") return Zub;
+    if (s=="BEGLEITER" || s=="BEGL.O.B.A.") return Begleiter;
     if (s=="BÜRO" || s=="BUERO") return Buero;
     if (s=="WERKSTATT") return Werkstatt;
     if (s=="VORBEREITEN" || s=="ZUG VORBEREITEN" || s=="ZUGVORBEREITEN") return ZugVorbereiten;
@@ -24,7 +25,8 @@ QString AActivity::getStringFromCategory(AActivity::Category c)
     case Tb: return "Tb";
     case Zf: return "Zf";
     case Service: return "Service";
-    case Begleiter: return "Begleiter";
+    case Zub: return "Zub";
+    case Begleiter: return "Begl.o.b.A.";
     case Buero: return "Büro";
     case Werkstatt: return "Werkstatt";
     case ZugVorbereiten: return "Zug Vorbereiten";
@@ -40,7 +42,7 @@ AActivity::AActivity(QDate *date, ManagerPersonal *p)
     zeitEnde = new QTime(16, 0);
     anlass = "";
     bemerkungen = "";
-    personen = new QMap<Person *, QList<int> *>();
+    personen = new QMap<Person *, Infos*>();
     personalBenoetigt = true;
     personal = p;
 }
@@ -134,14 +136,14 @@ void AActivity::setPersonalBenoetigt(bool value)
     handleEmit();
 }
 
-QMap<Person *, QList<int> *> *AActivity::getPersonen() const
+QMap<Person *, AActivity::Infos *> *AActivity::getPersonen() const
 {
     return personen;
 }
 
 bool AActivity::removePerson(Person *p)
 {
-
+    personen->remove(p);
     return p->removeActivity(this);
 }
 
@@ -154,14 +156,14 @@ bool AActivity::removePerson(QString p)
     return false;
 }
 
-ManagerPersonal::Misstake AActivity::addPerson(Person *p, QString s, QTime *start, QTime *ende)
+ManagerPersonal::Misstake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, QString aufgabe)
 {
    /*
     * angabe über aufgabe prüfen
     * p. ob person geeignet
     * person hinzufügen
     */
-    AActivity::Category kat = AActivity::getCategoryFromString(s);
+    AActivity::Category kat = AActivity::getCategoryFromString(aufgabe);
     switch (kat) {
     case Tf:
         if (! p->getAusbildungTf()) {
@@ -179,6 +181,11 @@ ManagerPersonal::Misstake AActivity::addPerson(Person *p, QString s, QTime *star
             return ManagerPersonal::FalscheQualifikation;
         }
         break;
+    case Zub:
+        if (! p->getAusbildungRangierer()) {
+            kat = Begleiter;
+        }
+        break;
     default:
         break;
     }
@@ -186,25 +193,28 @@ ManagerPersonal::Misstake AActivity::addPerson(Person *p, QString s, QTime *star
     // jetzt ist alles richtig und die person kann registiert werden.
     p->addActivity(this, kat);
 
-    QList<int> *liste = new QList<int>();
-    liste->append(start->msecsSinceStartOfDay());
-    liste->append(ende->msecsSinceStartOfDay());
-    liste->append((int)kat);
-    personen->insert(p, liste);
+    Infos *info = new Infos();
+    info->beginn = start;
+    info->ende = ende;
+    info->kategorie = kat;
+    info->aufgabe = aufgabe;
+    info->bemerkung = bemerkung;
+
+    personen->insert(p, info);
 
     return ManagerPersonal::OK;
 }
 
-ManagerPersonal::Misstake AActivity::addPerson(QString p, QString s, QTime *start, QTime *ende)
+ManagerPersonal::Misstake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, QString aufgabe)
 {
     Person *pers = personal->getPerson(p);
     if (pers != nullptr) {
-        return addPerson(pers, s, start, ende);
+        return addPerson(pers, bemerkung, start, ende, aufgabe);
     }
     return ManagerPersonal::PersonNichtGefunden;
 }
 
-void AActivity::setPersonen(QMap<Person *, QList<int> *> *value)
+void AActivity::setPersonen(QMap<Person *, Infos *> *value)
 {
     personen = value;
     handleEmit();

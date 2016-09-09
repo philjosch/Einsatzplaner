@@ -14,13 +14,22 @@ class AActivity
 {
 
 public:
+    enum Category { Tf, Tb, Zf, Service, Zub, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
+
+    struct Infos {
+        QTime beginn;
+        QTime ende;
+        Category kategorie;
+        QString aufgabe;
+        QString bemerkung;
+    };
+
     AActivity(QDate *date, ManagerPersonal *p);
     ~AActivity();
 
     void fromJson(QJsonObject *o);
     QJsonObject *toJson();
 
-    enum Category { Tf, Tb, Zf, Service, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
     static Category getCategoryFromString(QString s);
     static QString getStringFromCategory(Category c);
 
@@ -45,13 +54,13 @@ public:
     bool getPersonalBenoetigt() const;
     void setPersonalBenoetigt(bool value);
 
-    QMap<Person *, QList<int> *> *getPersonen() const;
-    virtual QList<int> *getIndividual(Person *person) = 0;
-    ManagerPersonal::Misstake addPerson(Person *p, QString s, QTime *start, QTime *ende);
-    ManagerPersonal::Misstake addPerson(QString p, QString s, QTime *start, QTime *ende);
+    QMap<Person *,  Infos*> *getPersonen() const;
+    virtual Infos *getIndividual(Person *person) = 0;
+    ManagerPersonal::Misstake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, QString aufgabe);
+    ManagerPersonal::Misstake addPerson(QString p, QString bemerkung, QTime start, QTime ende, QString aufgabe);
     bool removePerson(Person *p);
     bool removePerson(QString p);
-    void setPersonen(QMap<Person *, QList<int>*> *value);
+    void setPersonen(QMap<Person *, Infos *> *value);
 
     virtual QString getListString() = 0;
     virtual QString getListStringShort() = 0;
@@ -65,7 +74,7 @@ protected:
     QTime *zeitEnde;
     QString anlass;
     QString bemerkungen;
-    QMap<Person *, QList<int> *> *personen; // QList enthält: Beginn, Ende, Aufgabe; Die Zeit in msec kodiert seit anfang des Tages
+    QMap<Person *, Infos*> *personen; // Für Infos siehe oben
     bool personalBenoetigt;
 
     ManagerPersonal *personal;

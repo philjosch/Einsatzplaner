@@ -43,6 +43,8 @@ private:
     Ui::ActivityWindow *ui;
     Activity *activity;
 
+    bool nehme;
+
     void loadData();
 
 

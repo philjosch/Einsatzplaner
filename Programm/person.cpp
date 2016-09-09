@@ -1,6 +1,7 @@
 #include "person.h"
 #include <QMap>
 #include <QListIterator>
+#include <QDebug>
 
 Person::Person(QString name) : QObject()
 {
@@ -75,16 +76,17 @@ void Person::berechne()
 
     for(AActivity *a: activities->keys()) {
         AActivity::Category cat = activities->value(a);
-        QList<int> *l = a->getIndividual(this);
+        AActivity::Infos *info = a->getIndividual(this);
 
         // Einsatzstunden
-        QTime start = QTime::fromMSecsSinceStartOfDay(l->at(0));
-        QTime ende = QTime::fromMSecsSinceStartOfDay(l->at(1));
+        QTime start = info->beginn;
+        QTime ende = info->ende;
         int duration = start.msecsTo(ende);
         switch (cat) {
         case AActivity::Tf: timeTf += duration;  break;
         case AActivity::Zf: timeZf += duration;  break;
         case AActivity::Begleiter: timeZub += duration;  break;
+        case AActivity::Zub: timeZub += duration; break;
         case AActivity::Service: timeService += duration;  break;
         case AActivity::Buero: timeBuero += duration;  break;
         case AActivity::Werkstatt: timeWerkstatt += duration;  break;

@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include"calendar.h"
+#include "calendar.h"
 #include <QMessageBox>
+#include "exportgesamt.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -56,6 +57,14 @@ QString MainWindow::getFarbeArbeit()
     return "#CCBEBE";
 }
 
+QString MainWindow::getFarbe(AActivity *a)
+{
+    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a))
+        return getFarbeZug(f->getArt());
+    else
+        return getFarbeArbeit();
+}
+
 void MainWindow::openFahrtag(Fahrtag *f)
 {
     if (fenster->contains(f)) {
@@ -90,4 +99,9 @@ void MainWindow::on_buttonPersonal_clicked()
     personalfenster->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
     personalfenster->raise();
     personalfenster->activateWindow();
+}
+
+void MainWindow::on_buttonExport_clicked()
+{
+    ExportGesamt(ui->calendar, this).exec();
 }

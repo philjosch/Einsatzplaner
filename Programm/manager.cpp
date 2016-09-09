@@ -1,4 +1,5 @@
 #include "manager.h"
+#include <QListIterator>
 
 Manager::Manager()
 {
@@ -44,9 +45,15 @@ void Manager::addActivity(AActivity *a)
 
 void Manager::activityChanged(AActivity *a)
 {
-/*    int pos = activities->indexOf(a);
+    int pos = activities->indexOf(a);
     if (pos >= 0)
-        update(pos);*/
+        update(pos);
+}
+
+QListIterator<AActivity *> Manager::getActivities() const
+{
+    QListIterator<AActivity*> i(*activities);
+    return i;
 }
 
 void Manager::update(int pos)

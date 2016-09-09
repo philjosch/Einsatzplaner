@@ -2,8 +2,13 @@
 #include <QDebug>
 #include <QTime>
 
-Fahrtag::Fahrtag(QDate *date, ManagerPersonal *p): ManagerReservierungen(), AActivity(date, p)
+#include "managerreservierungen.h"
+
+Fahrtag::Fahrtag(QDate *date, ManagerPersonal *p): AActivity(date, p), ManagerReservierungen()
 {
+
+//    manager = new ManagerReservierungen();
+
     art = Fahrtag::Museumszug;
     wichtig = false;
     zeitTf = new QTime(8, 15);
@@ -15,10 +20,11 @@ Fahrtag::Fahrtag(QDate *date, ManagerPersonal *p): ManagerReservierungen(), AAct
     benoetigeService = true;
 
     // Listen für Tf, Zf, Zub und Servie müssen noch initalisiert werden
-    listTf = new QMap<QString, QString>();
-    listZf = new QMap<QString, QString>();
-    listZub = new QMap<QString, QString>();
-    listService = new QMap<QString, QString>();
+}
+
+Fahrtag::~Fahrtag()
+{
+    AActivity::~AActivity();
 }
 
 QString Fahrtag::getStringFromArt(Fahrtag::Art art)
@@ -56,122 +62,112 @@ void Fahrtag::handleEmit()
     handleActivity(this);
 }
 
-QMap<QString, QString> *Fahrtag::getListService() const
+AActivity::Infos *Fahrtag::getIndividual(Person *person)
 {
-    return listService;
-}
+    Infos *neu = new Infos();
+    Infos *alt = personen->value(person);
+    neu->aufgabe = alt->aufgabe;
+    neu->bemerkung = alt->bemerkung;
+    neu->kategorie = alt->kategorie;
+    neu->beginn = alt->beginn;
+    neu->ende = alt->ende;
 
-bool Fahrtag::removeService(QString p)
-{
-    return listService->remove(p) == 1;
-}
-
-bool Fahrtag::addService(QString p, QString bemerkungen)
-{
-    listService->insert(p, bemerkungen);
-    QList<int> *l = new QList<int>();
-    l->append(0);
-    l->append(0);
-    l->append((int)Service);
-    l->append(4);
-    personen->insert(personal->getPerson(p), l);
-    return true;
-}
-
-QList<int> *Fahrtag::getIndividual(Person *person)
-{
-    QList<int> *l = new QList<int>();
-    QList<int> *orig = personen->value(person);
-    if (orig->at(0) == 0) {
-        if (orig->at(2) == (int)Tf || orig->at(2) == (int)Tb) {
-            l->append(zeitTf->msecsSinceStartOfDay());
+    if (alt->beginn == QTime(0,0)) {
+        if (alt->kategorie == Tf || alt->kategorie == Tb) {
+            neu->beginn = QTime(zeitTf->hour(), zeitTf->minute());
         } else {
-            l->append(zeitAnfang->msecsSinceStartOfDay());
+            neu->beginn = QTime(zeitAnfang->hour(), zeitAnfang->minute());
         }
-    } else {
-        l->append(orig->at(0));
     }
-    if (orig->at(1) == 0) {
-        l->append(zeitEnde->msecsSinceStartOfDay());
-    } else {
-        l->append(orig->at(1));
+    if (alt->ende == QTime(0,0)) {
+        neu->ende = QTime(zeitEnde->hour(), zeitEnde->minute());
     }
-    l->append(orig->at(2));
-
-    return l;
-
-    return personen->value(person);
+    return neu;
 }
 
-QMap<QString, QString> *Fahrtag::getListZub() const
+QString Fahrtag::getHtmlForSingleView()
 {
-    return listZub;
-}
-
-bool Fahrtag::removeZub(QString p)
-{
-    return listZub->remove(p) == 1;
-}
-
-bool Fahrtag::addZub(QString p, QString bemerkungen)
-{
-    listZub->insert(p, bemerkungen);
-    QList<int> *l = new QList<int>();
-    l->append(0);
-    l->append(0);
-    l->append((int)Begleiter);
-    l->append(3);
-    personen->insert(personal->getPerson(p), l);
-    return true;
-}
-
-QMap<QString, QString> *Fahrtag::getListZf() const
-{
-    return listZf;
-}
-
-bool Fahrtag::removeZf(QString p)
-{
-    return listZf->remove(p) == 1;
-}
-
-bool Fahrtag::addZf(QString p, QString bemerkungen)
-{
-    listZf->insert(p, bemerkungen);
-    QList<int> *l = new QList<int>();
-    l->append(0);
-    l->append(0);
-    l->append((int)Zf);
-    l->append(2);
-    personen->insert(personal->getPerson(p), l);
-    return true;
-}
-
-QMap<QString, QString> *Fahrtag::getListTf() const
-{
-    return listTf;
-}
-
-bool Fahrtag::removeTf(QString p)
-{
-    return listTf->remove(p) == 1;
-}
-
-bool Fahrtag::addTf(QString p, QString bemerkungen)
-{
-    listTf->insert(p, bemerkungen);
-    QList<int> *l = new QList<int>();
-    l->append(0);
-    l->append(0);
-    if (bemerkungen.contains("Tb") || bemerkungen.contains("TB")) {
-        l->append((int)Tb);
-    } else {
-        l->append((int)Tf);
+    QString html = "";
+    // Überschrift
+    html += "<h1 class='pb'>" +Fahrtag::getStringFromArt(art) + " am " + datum->toString("dddd dd.MM.yyyy")+(wichtig?" WICHTIG!":"")+"</h1>";
+    // Anlass
+    if (anlass != "") {
+        html += "<p><b>Anlass:</b><br/>"+anlass+"</p>";
     }
-    l->append(1);
-    personen->insert(personal->getPerson(p), l);
-    return true;
+    // Wagenreihung
+    html += "<p><b>Wagenreihung:</b> "+getWagenreihung()+"</p>";
+    // Deisntzeiten
+    html += "<p><b>Dienstzeiten</b>:<br/>Beginn Tf, Tb: "+zeitTf->toString("hh:mm")+"<br/>Beginn Sonstige: "+zeitAnfang->toString("hh:mm")+"<br/>";
+    html += "Ungefähres Dienstende: "+zeitEnde->toString("hh:mm")+"</p>";
+    // Personal
+    // *Tf, Tb
 
+    QMap<Person*, AActivity::Infos*> tf;
+    QMap<Person*, AActivity::Infos*> zf;
+    QMap<Person*, AActivity::Infos*> zub;
+    QMap<Person*, AActivity::Infos*> begl;
+    QMap<Person*, AActivity::Infos*> service;
+    QMap<Person*, AActivity::Infos*> sonstige;
+
+    // Aufsplitten der Personen auf die Einzelnen Listen
+    for(Person *p: personen->keys()) {
+        switch (personen->value(p)->kategorie) {
+        case AActivity::Tf:
+        case AActivity::Tb: tf.insert(p, personen->value(p)); break;
+        case AActivity::Zf: zf.insert(p, personen->value(p)); break;
+        case AActivity::Zub: zub.insert(p, personen->value(p)); break;
+        case AActivity::Begleiter: begl.insert(p, personen->value(p)); break;
+        case AActivity::Service: service.insert(p, personen->value(p)); break;
+        default: sonstige.insert(p, personen->value(p)); break;
+        }
+    }
+
+    html += "<p><b>Triebfahrzeugführer (Tf), Triebfahrzeugbegleiter(Tb)";
+    html += (benoetigeTf ?" werden benötigt": "");
+    html += ":</b><br/>"+listToString(&tf, " | ")+"</p>";
+    if (art != Fahrtag::Schnupperkurs) {
+        // *Zf
+        html += "<p><b>Zugführer";
+        html += (benoetigeZf ?" wird benötigt":"");
+        html += ":</b><br/>"+listToString(&zf, " | ")+"</p>";
+
+        // *Zub, Begl.o.b.A
+        html += "<p><b>Zugbegleiter und <i>Begleiter ohne betriebliche Ausbildung</i>";
+        html += (benoetigeZub ? " werden benötigt":"");
+        html += ":</br><br/>";
+        html += listToString(&zub, " | ");
+        // Begl. o.b.A
+        if (! zub.isEmpty() && ! begl.isEmpty())
+            html += " | ";
+        html += listToString(&begl, " | ") + "</p>";
+
+        // *Service
+        html += "<p><b>Service-Personal";
+        html += (benoetigeService ?" wird benötigt":"");
+        html += ":</b><br/>"+listToString(&service, " | ") +"</p>";
+    }
+    // *Sonstiges personal
+    html += "<p><b>Sonstiges Personal";
+    html += (personalBenoetigt ?" wird benötigt":"");
+    html += ":</b><br/>"+listToString(&sonstige, " | ") +"</p>";
+
+    // Reservierungen
+    if (bemerkungen!= "") {
+        html += "<p>Bemerkungen:<br/>"+bemerkungen+"</p>";
+    }
+
+    html += "<p><b>Reservierungen:</b><br/>Bereits "+QString::number(getAnzahlBelegt());
+    html += (getAnzahlBelegt() == 1 ? " Platz " :  " Plätze ");
+    html += "belegt. Noch "+QString::number(getFrei())+" frei.</p>";
+
+    if (getAnzahl() > 0) {
+        html += "<table><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
+        for(Reservierung *r: *reservierungen) {
+            html += r->getTableRow();
+        }
+        html += "</tbody></table>";
+    }
+    return html;
 }
 
 bool Fahrtag::getBenoetigeService() const

@@ -302,7 +302,7 @@ void Calendar::setListItemC(QListWidgetItem *i, AActivity *a)
     i->setText(a->getListStringShort());
     if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
         i->setBackgroundColor(MainWindow::getFarbeZug(f->getArt()));
-    } else if (Activity *c = dynamic_cast<Activity*>(a)) {
+    } else {
         i->setBackgroundColor(MainWindow::getFarbeArbeit());
     }
 }
@@ -312,7 +312,7 @@ void Calendar::setListItem(QListWidgetItem *i, AActivity *a)
     i->setText(a->getListString());
     if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
         i->setBackgroundColor(MainWindow::getFarbeZug(f->getArt()));
-    } else if (Activity *c = dynamic_cast<Activity*>(a)) {
+    } else {
         i->setBackgroundColor(MainWindow::getFarbeArbeit());
     }
 }
