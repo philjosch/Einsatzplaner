@@ -1,22 +1,54 @@
 #ifndef EXPORT_H
 #define EXPORT_H
 
-#include <QDialog>
+#include "aactivity.h"
+#include "fahrtag.h"
+#include "activity.h"
+#include "person.h"
+#include "managerpersonal.h"
+#include "mainwindow.h"
 
-namespace Ui {
-class Export;
-}
+//#include <QObject>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QFileDialog>
+#include <QTextDocument>
+#include <QMap>
 
-class Export : public QDialog
+/*
+ * Die Datei mit der Logik für den Export von Daten
+ * Die Daten werden über Fenster an die  methoden übergeben
+ * Es werden statische Methoden benutzt, sodass die Klasse nicht instanziiert werden muss
+ * */
+
+class Export
 {
-    Q_OBJECT
-
 public:
-    explicit Export(QWidget *parent = 0);
-    ~Export();
+
+//    Export();
+    // Drucken von Fahrtagen und Aktivitäten
+    static bool printFahrtag(Fahrtag *f, QPrinter *pdf=0, QPrinter *paper=0);
+    static bool printActivity(Activity *a, QPrinter *pdf=0, QPrinter *paper=0);
+
+    static bool printSingle(QList<AActivity*> *liste, QPrinter *pdf=0, QPrinter *paper=0);
+    static bool printList(QList<AActivity*> *liste, QPrinter *pdf=0, QPrinter *paper=0);
+
+    // Drucken von Personen
+    static bool printPerson(Person *p, QPrinter *pdf=0, QPrinter *paper=0);
+    static bool printPersonen(ManagerPersonal *m, QPrinter *pdf=0, QPrinter *paper=0);
+
+    static QPrinter *getPrinterPaper(QWidget *parent);
+    static QPrinter *getPrinterPDF(QWidget *parent, QString path);
+
 
 private:
-    Ui::Export *ui;
+    static bool print(QPrinter *pdf, QPrinter *print, QTextDocument *d);
+    static QString listToString(QMap<Person *, QString> *map, QString seperator);
+
+    static void preparePrinterSingle(QPrinter *p);
+    static void preparePrinterList(QPrinter *p);
+
+
 };
 
 #endif // EXPORT_H

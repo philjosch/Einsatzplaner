@@ -20,6 +20,8 @@ public:
 
     AActivity::Infos *getIndividual(Person *person);
 
+    QString getHtmlForSingleView();
+
 signals:
     void activityModified(AActivity *a);
 private slots:

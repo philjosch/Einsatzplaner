@@ -22,14 +22,15 @@ SOURCES += main.cpp\
     reservierung.cpp \
     manager.cpp \
     managerreservierungen.cpp \
-    export.cpp \
     fahrtagwindow.cpp \
     activitywindow.cpp \
     personalwindow.cpp \
     fahrtag.cpp \
     calendar.cpp \
     calendarday.cpp \
-    aactivity.cpp
+    aactivity.cpp \
+    export.cpp \
+    exportgesamt.cpp
 
 HEADERS  += mainwindow.h \
     person.h \
@@ -38,23 +39,24 @@ HEADERS  += mainwindow.h \
     reservierung.h \
     manager.h \
     managerreservierungen.h \
-    export.h \
     fahrtagwindow.h \
     activitywindow.h \
     personalwindow.h \
     fahrtag.h \
     calendar.h \
     calendarday.h \
-    aactivity.h
+    aactivity.h \
+    export.h \
+    exportgesamt.h
 
 FORMS    += mainwindow.ui \
     managerreservierungen.ui \
-    export.ui \
     fahrtagwindow.ui \
     activitywindow.ui \
     personalwindow.ui \
     calendar.ui \
-    calendarday.ui
+    calendarday.ui \
+    exportgesamt.ui
 
 CONFIG -= console
 

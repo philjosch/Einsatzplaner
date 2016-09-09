@@ -224,3 +224,17 @@ ManagerPersonal *AActivity::getPersonal() const
 {
     return personal;
 }
+
+QString AActivity::listToString(QMap<Person *, AActivity::Infos *> *liste, QString seperator)
+{
+    QString a = "";
+    for(Person *p: liste->keys()) {
+        a+= p->getName();
+        if (liste->value(p)->bemerkung!= "")
+            a += "; "+liste->value(p)->bemerkung;
+        if (p != liste->keys().last()) {
+            a += seperator;
+        }
+    }
+    return a;
+}

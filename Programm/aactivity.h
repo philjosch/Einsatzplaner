@@ -67,6 +67,8 @@ public:
 
     ManagerPersonal *getPersonal() const;
 
+    virtual QString getHtmlForSingleView() = 0;
+
 protected:
     QDate *datum;
     QString ort;
@@ -78,6 +80,8 @@ protected:
     bool personalBenoetigt;
 
     ManagerPersonal *personal;
+
+    QString listToString(QMap<Person*, Infos*> *liste, QString seperator);
 
 private slots:
     virtual void handleActivity(AActivity* a) = 0;
