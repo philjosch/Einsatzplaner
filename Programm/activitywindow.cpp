@@ -66,7 +66,10 @@ void ActivityWindow::on_buttonRemove_clicked()
 {
     int i = ui->tablePersonen->currentRow();
     if (i == -1) return;
-    QString n = ui->tablePersonen->item(i, 0)->text();
+    QString n = "";
+    if (ui->tablePersonen->item(i, 0) != nullptr) {
+        n = ui->tablePersonen->item(i, 0)->text();
+    }
     if (activity->removePerson(n)) {
         namen->remove(n);
         ui->tablePersonen->removeRow(ui->tablePersonen->currentRow());

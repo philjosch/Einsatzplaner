@@ -5,7 +5,7 @@
 #include <QSetIterator>
 
 double ManagerPersonal::mindestStunden = 10.f;
-double ManagerPersonal::mindestStundenTf = 0.f;
+double ManagerPersonal::mindestStundenTf = 100.f;
 double ManagerPersonal::mindestStundenZf = 0.f;
 
 ManagerPersonal::ManagerPersonal()
@@ -68,7 +68,7 @@ bool ManagerPersonal::removePerson(Person *p)
 
 bool ManagerPersonal::pruefeStunden(Person *p)
 {
-    if ((p->getTimeSum() < mindestStunden) || (p->getTimeTf() < mindestStundenTf) || (p->getTimeZf() < mindestStundenZf) ) {
+    if ((p->getTimeSum() < mindestStunden) || (p->getTimeTf() < mindestStundenTf && p->getAusbildungTf()) || (p->getTimeZf() < mindestStundenZf && p->getAusbildungZf()) ) {
         return false;
     }
     return true;

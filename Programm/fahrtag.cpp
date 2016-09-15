@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QTime>
 
+#include "mainwindow.h"
 #include "managerreservierungen.h"
 
 Fahrtag::Fahrtag(QDate *date, ManagerPersonal *p): AActivity(date, p), ManagerReservierungen()
@@ -18,6 +19,7 @@ Fahrtag::Fahrtag(QDate *date, ManagerPersonal *p): AActivity(date, p), ManagerRe
     benoetigeZf = true;
     benoetigeZub = true;
     benoetigeService = true;
+    personalBenoetigt = false;
 
     // Listen für Tf, Zf, Zub und Servie müssen noch initalisiert werden
 }
@@ -134,12 +136,12 @@ QString Fahrtag::getHtmlForSingleView()
         // *Zub, Begl.o.b.A
         html += "<p><b>Zugbegleiter und <i>Begleiter ohne betriebliche Ausbildung</i>";
         html += (benoetigeZub ? " werden benötigt":"");
-        html += ":</br><br/>";
+        html += ":</b><br/>";
         html += listToString(&zub, " | ");
         // Begl. o.b.A
         if (! zub.isEmpty() && ! begl.isEmpty())
             html += " | ";
-        html += listToString(&begl, " | ") + "</p>";
+        html += "<i>"+listToString(&begl, " | ") + "</i></p>";
 
         // *Service
         html += "<p><b>Service-Personal";
@@ -161,12 +163,125 @@ QString Fahrtag::getHtmlForSingleView()
     html += "belegt. Noch "+QString::number(getFrei())+" frei.</p>";
 
     if (getAnzahl() > 0) {
-        html += "<table><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
+        html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
         for(Reservierung *r: *reservierungen) {
             html += r->getTableRow();
         }
         html += "</tbody></table>";
     }
+    return html;
+}
+
+QString Fahrtag::getHtmlForTableView()
+{
+    QString html = "<tr bgcolor='"+MainWindow::getFarbeZug(art)+"'>";
+    // Datum, Anlass
+    if (wichtig)
+        html += "<td bg='red'>";
+    else
+        html += "<td>";
+    html += "<b>"+datum->toString("dddd d.M.yyyy")+"</b><br/>("+Fahrtag::getStringFromArt(art)+")<br/>"+anlass+"</td>";
+
+    QMap<Person*, AActivity::Infos*> tf;
+    QMap<Person*, AActivity::Infos*> zf;
+    QMap<Person*, AActivity::Infos*> zub;
+    QMap<Person*, AActivity::Infos*> begl;
+    QMap<Person*, AActivity::Infos*> service;
+    QMap<Person*, AActivity::Infos*> sonstige;
+
+    // Aufsplitten der Personen auf die Einzelnen Listen
+    for(Person *p: personen->keys()) {
+        switch (personen->value(p)->kategorie) {
+        case AActivity::Tf:
+        case AActivity::Tb: tf.insert(p, personen->value(p)); break;
+        case AActivity::Zf: zf.insert(p, personen->value(p)); break;
+        case AActivity::Zub: zub.insert(p, personen->value(p)); break;
+        case AActivity::Begleiter: begl.insert(p, personen->value(p)); break;
+        case AActivity::Service: service.insert(p, personen->value(p)); break;
+        default: sonstige.insert(p, personen->value(p)); break;
+        }
+    }
+
+    // Tf, Tb
+    html += "<td>";
+    if (benoetigeTf) {
+        html += "<b>Lokführer werden benötigt!</b>";
+    }
+    if (tf.size() > 0) {
+        html += "<ul><li>" + listToString(&tf, "</li><li>") + "</li></ul>";
+    }
+    html += "</td>";
+
+    if (art != Schnupperkurs) {
+        // Zf, Zub, Begl.o.b.A.
+        html += "<td>";
+        if (benoetigeZf) {
+            html += "<b><u>Zugführer wird benötigt!</u></b><br/>";
+        }
+        if (benoetigeZub) {
+            html += "<b><i>Zugbegleiter wird benötigt!</i></b>";
+        }
+        html += "<ul>";
+        if (zf.size() > 0) {
+            html += "<li><u>" + listToString(&zf, "</u></li><li><u>") + "</u></li>";
+        }
+        if (zub.size() > 0) {
+            html += "<li>" + listToString(&zub, "</li><li>") + "</li>";
+        }
+        if (begl.size() > 0) {
+            html += "<li><i>" + listToString(&begl, "</i></li><li><i>") + "</i></li>";
+        }
+        html += "</ul></td>";
+
+        // Service
+        html += "<td>";
+        if (benoetigeService) {
+            html += "<b>Service-Personal wird benötigt!</b><br/>";
+        }
+        if (service.size() > 0) {
+            html += "<ul><li>" + listToString(&service, "</li><li>") + "</li></ul>";
+        }
+        html += "</td>";
+    } else {
+        html += "<td></td><td></td>";
+    }
+
+    // Dienstzeiten
+    html += "<td>Beginn Tf, Tb: "+zeitTf->toString("hh:mm") + "<br/>";
+    if (art != Schnupperkurs) {
+        html += "Sonstige: "+zeitAnfang->toString("hh:mm") + "<br/>";
+    }
+    html += "Ende: ~"+zeitEnde->toString("hh:mm") + "</td>";
+
+    // Sonstiges
+    html += "<td>";
+    if (personalBenoetigt) {
+        html += "<b>Sonstiges Personal wird benötigt!</b><br/>";
+    }
+    if (sonstige.size() > 0) {
+        html += "<ul><li>";
+        html += listToString(&sonstige, "</li><li>");
+        html += "</li></ul>";
+    }
+    // Wagenreihung
+    if (wagenreihung != "") {
+        html += wagenreihung + "<br/>";
+    }
+    // Sneek-Peek Reservierungen
+    if (art != Schnupperkurs && getAnzahlBelegt() > 0) {
+        html += QString::number(getAnzahlBelegt());
+        html += (getAnzahlBelegt() == 1 ? " reservierter Sitzplatz": " reservierte Sitzplätze");
+        html += " bei " + QString::number(getAnzahl()) + (getAnzahl() == 1 ? " Reservierung" : " Reservierungen");
+        html += "<br/>";
+    }
+
+    // Bemerkungen
+    if (bemerkungen != "") {
+        html += bemerkungen;
+    }
+
+    html += "</td>";
+    html += "</tr>";
     return html;
 }
 

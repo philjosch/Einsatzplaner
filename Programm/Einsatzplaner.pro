@@ -50,7 +50,7 @@ HEADERS  += mainwindow.h \
     exportgesamt.h
 
 FORMS    += mainwindow.ui \
-    managerreservierungen.ui \
+#    managerreservierungen.ui \
     fahrtagwindow.ui \
     activitywindow.ui \
     personalwindow.ui \

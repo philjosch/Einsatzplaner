@@ -870,3 +870,23 @@ void FahrtagWindow::on_listRes_itemClicked(QListWidgetItem *item)
 {
     loadReservierung(itemToRes->value(item));
 }
+
+void FahrtagWindow::on_checkTf_clicked(bool checked)
+{
+    fahrtag->setBenoetigeTf(checked);
+}
+
+void FahrtagWindow::on_checkZf_clicked(bool checked)
+{
+    fahrtag->setBenoetigeZf(checked);
+}
+
+void FahrtagWindow::on_checkZub_clicked(bool checked)
+{
+    fahrtag->setBenoetigeZub(checked);
+}
+
+void FahrtagWindow::on_checkService_clicked(bool checked)
+{
+    fahrtag->setBenoetigeService(checked);
+}

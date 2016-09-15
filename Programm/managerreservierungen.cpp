@@ -1,5 +1,5 @@
 #include "managerreservierungen.h"
-#include "ui_managerreservierungen.h"
+//#include "ui_managerreservierungen.h"
 
 #include <QMessageBox>
 #include <QSetIterator>

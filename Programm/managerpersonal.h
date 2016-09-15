@@ -24,7 +24,7 @@ public:
     bool removePerson(QString name);
     bool removePerson(Person *p);
 
-    bool pruefeStunden(Person *p);
+    static bool pruefeStunden(Person *p);
 
     static double mindestStunden;
     static double mindestStundenTf;

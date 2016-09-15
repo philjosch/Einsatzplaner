@@ -4,6 +4,8 @@
 #include <QHash>
 #include <QListWidgetItem>
 #include <QMessageBox>
+#include <QPrinter>
+#include "export.h"
 
 const QString PersonalWindow::nichtGenugStunden = "#ff9999";
 
@@ -14,14 +16,11 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) :
     ui->setupUi(this);
 
     // Initalisieren der Statischen variablen
-
-
     manager = m;
     setWindowTitle("Personalmanagement");
 
     itemToPerson = new QHash<QListWidgetItem*, Person*>();
     personToItem = new QHash<Person*, QListWidgetItem*>();
-
     enabled = false;
 
     refreshGesamt();
@@ -253,3 +252,25 @@ void PersonalWindow::on_listWidget_itemClicked(QListWidgetItem *item)
     showPerson(itemToPerson->value(item));
 }
 
+void PersonalWindow::on_pushPDF_clicked()
+{
+    QPrinter *pdf = 0;
+    pdf = Export::getPrinterPDF(this, "Personal.pdf");
+    print(pdf);
+}
+
+void PersonalWindow::on_pushPrint_clicked()
+{
+    QPrinter *paper = 0;
+    paper = Export::getPrinterPaper(this);
+    print(paper);
+}
+
+void PersonalWindow::print(QPrinter *p)
+{
+    QList<Person*> *liste = new QList<Person*>();
+    for(int i = 0; i < ui->tabelleGesamt->rowCount(); i++) {
+        liste->append(manager->getPerson(ui->tabelleGesamt->item(i, 0)->text()));
+    }
+    Export::printPersonen(liste, p);
+}

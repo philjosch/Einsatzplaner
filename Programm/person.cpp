@@ -1,7 +1,10 @@
+
 #include "person.h"
 #include <QMap>
 #include <QListIterator>
 #include <QDebug>
+#include "personalwindow.h"
+#include "managerpersonal.h"
 
 Person::Person(QString name) : QObject()
 {
@@ -138,6 +141,27 @@ void Person::setName(const QString &value)
     QString old = name;
     name = value;
     emit nameChanged(this, old);
+}
+
+QString Person::getHtmlForTableView()
+{
+    QString html;
+    if (ManagerPersonal::pruefeStunden(this)) {
+        html = "<tr>";
+    } else {
+        html = "<tr style='background-color:"+PersonalWindow::nichtGenugStunden+";'>";
+    }
+    html += "<td>"+name+"</td><td>";
+    html += QString::number(getTimeSum())+"</td><td>";
+    html += QString::number(getSumKilometer())+"</td><td>";
+    html += QString::number(getAnzahl())+"</td><td>";
+    html += QString::number(getTimeTf())+"</td><td>";
+    html += QString::number(getTimeZf())+"</td><td>";
+    html += QString::number(getTimeService())+"</td><td>";
+    html += QString::number(getTimeWerkstatt())+"</td><td>";
+    html += QString::number(getTimeBuero())+"</td>";
+    html += "</tr>";
+    return html;
 }
 
 double Person::getTimeTf()

@@ -100,6 +100,14 @@ private slots:
     void on_listRes_itemClicked(QListWidgetItem *item);
 
 
+    void on_checkTf_clicked(bool checked);
+
+    void on_checkZf_clicked(bool checked);
+
+    void on_checkZub_clicked(bool checked);
+
+    void on_checkService_clicked(bool checked);
+
 private:
     Ui::FahrtagWindow *ui;
     Fahrtag *fahrtag;

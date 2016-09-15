@@ -44,6 +44,8 @@ public:
     QString getName() const;
     void setName(const QString &value);
 
+    QString getHtmlForTableView();
+
 protected:
     QString vorname;
     QString nachname;

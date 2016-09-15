@@ -68,6 +68,7 @@ public:
     ManagerPersonal *getPersonal() const;
 
     virtual QString getHtmlForSingleView() = 0;
+    virtual QString getHtmlForTableView() = 0;
 
 protected:
     QDate *datum;

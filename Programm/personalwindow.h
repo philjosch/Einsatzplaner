@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "managerpersonal.h"
 #include <QListWidgetItem>
+#include <QPrinter>
 
 namespace Ui {
 class PersonalWindow;
@@ -16,6 +17,8 @@ class PersonalWindow : public QMainWindow
 public:
     explicit PersonalWindow(QWidget *parent, ManagerPersonal *m);
     ~PersonalWindow();
+
+    static const QString nichtGenugStunden;
 
 public slots:
     void showPerson(Person *p);
@@ -41,8 +44,11 @@ private slots:
 
     void on_listWidget_itemClicked(QListWidgetItem *item);
 
+    void on_pushPDF_clicked();
+
+    void on_pushPrint_clicked();
+
 private:
-    static const QString nichtGenugStunden;
     Ui::PersonalWindow *ui;
     ManagerPersonal *manager;
 
@@ -51,6 +57,7 @@ private:
     QHash<QListWidgetItem*, Person*> *itemToPerson;
     QHash<Person*, QListWidgetItem*> *personToItem;
 
+    void print(QPrinter *p);
 
     bool enabled; // Gibt an, ob das Formualr aktiviert ist oder nicht, und ob Änderungen übernommen werden
 };

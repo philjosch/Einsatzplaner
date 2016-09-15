@@ -1,7 +1,7 @@
 #ifndef MANAGERRESERVIERUNGEN_H
 #define MANAGERRESERVIERUNGEN_H
 
-#include <QFrame>
+//#include <QFrame>
 #include <QListWidgetItem>
 #include "reservierung.h"
 

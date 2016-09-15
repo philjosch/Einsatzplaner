@@ -42,6 +42,7 @@ public:
     AActivity::Infos *getIndividual(Person *person);
 
     QString getHtmlForSingleView();
+    QString getHtmlForTableView();
 
 
 signals:

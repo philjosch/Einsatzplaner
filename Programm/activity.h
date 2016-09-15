@@ -21,6 +21,7 @@ public:
     AActivity::Infos *getIndividual(Person *person);
 
     QString getHtmlForSingleView();
+    QString getHtmlForTableView();
 
 signals:
     void activityModified(AActivity *a);
