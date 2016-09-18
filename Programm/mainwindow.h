@@ -31,14 +31,39 @@ private:
     Ui::MainWindow *ui;
     QMap<AActivity*, QMainWindow*> *fenster;
 
+    QString filePath;
+    bool saved;
+
     PersonalWindow *personalfenster;
 
 public slots:
     void openFahrtag(Fahrtag *f);
     void openActivity(Activity *a);
+
+    void openFile(QString filePath);
+
 private slots:
+    // Einsatzplaner
+    void on_actionPreferences_triggered();
+    void on_actionAboutQt_triggered();
+    void on_actionAboutApp_triggered();
+    void on_actionQuit_triggered();
+
+    // Datei
+    void on_actionNew_triggered();
+    void on_actionOpen_triggered();
+    void on_actionSave_triggered();
+    void on_actionSaveas_triggered();
+    void on_actionClose_triggered();
+
+    // Bearbeiten
+
+    // Ansicht
     void on_buttonPersonal_clicked();
     void on_buttonExport_clicked();
+
+
+
 };
 
 #endif // MAINWINDOW_H

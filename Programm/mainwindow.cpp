@@ -3,6 +3,8 @@
 #include "calendar.h"
 #include <QMessageBox>
 #include "exportgesamt.h"
+#include <QSettings>
+#include "fileio.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,12 +19,22 @@ MainWindow::MainWindow(QWidget *parent) :
     fenster = new QMap<AActivity*, QMainWindow*>();
     ui->calendar->setPersonal(new ManagerPersonal());
 
+    setWindowTitle("Neues Dokument");
+    filePath = "";
+    saved = true;
+    setWindowModified(false);
+
+//    QSettings settings;
     personalfenster = new PersonalWindow(this, ui->calendar->getPersonal());
-    personalfenster->hide();
 }
 
 MainWindow::~MainWindow()
-{
+{/*
+    QSettings settings;
+    settings.setValue("window/main/x", this->x());
+    settings.setValue("window/main/y", this->y());
+    settings.setValue("window/main/width", this->width());
+    settings.setValue("window/main/height", this->height());*/
     delete ui;
 }
 
@@ -93,6 +105,15 @@ void MainWindow::openActivity(Activity *a)
     }
 }
 
+void MainWindow::openFile(QString filePath)
+{
+    // Daten aus Datei laden
+    QJsonObject *object = FileIO::getJsonFromFile(filePath);
+    // Daten in Manager laden
+
+    // Gui anpassen und neuladen
+}
+
 void MainWindow::on_buttonPersonal_clicked()
 {
     personalfenster->show();
@@ -104,4 +125,55 @@ void MainWindow::on_buttonPersonal_clicked()
 void MainWindow::on_buttonExport_clicked()
 {
     ExportGesamt(ui->calendar, this).exec();
+}
+
+void MainWindow::on_actionPreferences_triggered()
+{
+
+}
+
+void MainWindow::on_actionAboutQt_triggered()
+{
+    QMessageBox::aboutQt(this);
+}
+
+void MainWindow::on_actionAboutApp_triggered()
+{
+    QMessageBox::about(this, "Über Einsatzplaner", "Einsatzplaner "+QCoreApplication::applicationVersion()+"\n© 2016 by Philipp Schepper");
+}
+
+void MainWindow::on_actionQuit_triggered()
+{
+    QCoreApplication::quit();
+}
+
+void MainWindow::on_actionNew_triggered()
+{
+    MainWindow *w = new MainWindow();
+    w->show();
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    QString file = FileIO::getFilePathOpen(this);
+    if (file != "") {
+        MainWindow *newOpen = new MainWindow();
+        newOpen->openFile(file);
+        newOpen->show();
+    }
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+
+}
+
+void MainWindow::on_actionSaveas_triggered()
+{
+
+}
+
+void MainWindow::on_actionClose_triggered()
+{
+    this->close();
 }

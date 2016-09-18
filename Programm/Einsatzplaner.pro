@@ -6,7 +6,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui printsupport
+QT       += core gui printsupport network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     calendarday.cpp \
     aactivity.cpp \
     export.cpp \
-    exportgesamt.cpp
+    exportgesamt.cpp \
+    fileio.cpp
 
 HEADERS  += mainwindow.h \
     person.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     calendarday.h \
     aactivity.h \
     export.h \
-    exportgesamt.h
+    exportgesamt.h \
+    fileio.h
 
 FORMS    += mainwindow.ui \
 #    managerreservierungen.ui \

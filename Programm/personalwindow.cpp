@@ -6,6 +6,8 @@
 #include <QMessageBox>
 #include <QPrinter>
 #include "export.h"
+#include <QSettings>
+#include <QDebug>
 
 const QString PersonalWindow::nichtGenugStunden = "#ff9999";
 
@@ -34,10 +36,29 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) :
         ui->pushDelete->setEnabled(true);
     }
     refreshEinzel();
+
+    QSettings settings;
+    if (settings.value("window/personal/x").toInt() != 0) {
+        this->setGeometry(settings.value("window/personal/x").toInt(),
+                          settings.value("window/personal/y").toInt(),
+                          settings.value("window/personal/width").toInt(),
+                          settings.value("window/personal/height").toInt());
+    }
+    if (! settings.value("window/personal/visible").toBool()) {
+        this->hide();
+    } else {
+        this->show();
+    }
 }
 
 PersonalWindow::~PersonalWindow()
 {
+    QSettings settings;
+    settings.setValue("window/personal/x", this->x());
+    settings.setValue("window/personal/y", this->y());
+    settings.setValue("window/personal/width", this->width());
+    settings.setValue("window/personal/height", this->height());
+    settings.setValue("window/personal/visible", this->isVisible());
     delete ui;
 }
 

@@ -120,24 +120,42 @@
     <property name="title">
      <string>Datei</string>
     </property>
-    <addaction name="actionNeu"/>
+    <widget class="QMenu" name="menuRecentlyused">
+     <property name="title">
+      <string>Zuletzt benutzt</string>
+     </property>
+     <addaction name="separator"/>
+     <addaction name="actionClear"/>
+    </widget>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="menuRecentlyused"/>
     <addaction name="separator"/>
-    <addaction name="action_fnnen"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveas"/>
     <addaction name="separator"/>
-    <addaction name="actionSpeichern"/>
-    <addaction name="actionSpecihern_unter"/>
+    <addaction name="actionClose"/>
     <addaction name="separator"/>
-    <addaction name="actionSchlie_en"/>
-    <addaction name="separator"/>
-    <addaction name="actionDrucken"/>
+    <addaction name="actionPrint"/>
    </widget>
    <widget class="QMenu" name="menuAnsicht">
     <property name="title">
      <string>Ansicht</string>
     </property>
     <addaction name="actionPersonal_bersicht"/>
-    <addaction name="actionExport"/>
    </widget>
+   <widget class="QMenu" name="menuApp">
+    <property name="title">
+     <string>Einsatzplaner</string>
+    </property>
+    <addaction name="actionAboutApp"/>
+    <addaction name="actionAboutQt"/>
+    <addaction name="separator"/>
+    <addaction name="actionPreferences"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuApp"/>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
    <addaction name="menuAnsicht"/>
@@ -158,6 +176,9 @@
    <property name="shortcut">
     <string>Ctrl++</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
   </action>
   <action name="actionNeuer_Arbeitseinsatz">
    <property name="text">
@@ -166,53 +187,74 @@
    <property name="shortcut">
     <string>Ctrl+Alt++</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
   </action>
-  <action name="actionNeu">
+  <action name="actionNew">
    <property name="text">
     <string>Neu</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
-  <action name="action_fnnen">
+  <action name="actionOpen">
    <property name="text">
     <string>Öffnen …</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
-  <action name="actionSpeichern">
+  <action name="actionSave">
    <property name="text">
     <string>Speichern</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
   </action>
-  <action name="actionSpecihern_unter">
+  <action name="actionSaveas">
    <property name="text">
     <string>Speichern unter …</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
   </action>
-  <action name="actionSchlie_en">
+  <action name="actionClose">
    <property name="text">
     <string>Schließen</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
   </action>
-  <action name="actionDrucken">
+  <action name="actionPrint">
    <property name="text">
     <string>Drucken …</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
    </property>
   </action>
   <action name="actionPersonal_bersicht">
@@ -225,6 +267,9 @@
    <property name="shortcut">
     <string>Ctrl+Shift+P</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
   </action>
   <action name="actionExport">
    <property name="checkable">
@@ -232,6 +277,12 @@
    </property>
    <property name="text">
     <string>Export</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionHauptfenster">
@@ -243,6 +294,58 @@
    </property>
    <property name="text">
     <string>Hauptfenster</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Einstellungen</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="actionAboutApp">
+   <property name="text">
+    <string>Über Einsatzplaner</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionAboutQt">
+   <property name="text">
+    <string>Über Qt</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutQtRole</enum>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Einsatzplaner beenden</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
+  </action>
+  <action name="actionClear">
+   <property name="text">
+    <string>Liste leeren</string>
    </property>
   </action>
  </widget>
@@ -258,7 +361,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>actionDrucken</sender>
+   <sender>actionPrint</sender>
    <signal>triggered()</signal>
    <receiver>buttonExport</receiver>
    <slot>click()</slot>
@@ -280,8 +383,8 @@
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>565</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>316</x>

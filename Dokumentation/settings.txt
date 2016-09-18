@@ -1,0 +1,19 @@
+general/
+	autosearchupdate 	-> automatisch nach updates beim start suchen
+io/
+	lastpathexport 		-> letzter Pfad, der besucht wurde um eine Datei beim export zu sichern
+	lastpathsave 		-> pfad der besucht wurde, als eine Datei gesichert wurde
+	lastused		-> Array mit den zulestzt benutzten dokumenten
+window/
+	mainwindow/
+		positionx	-> x-position des Fensters beim schließen
+		positiony	-> y-position des Fensters beim schließen
+		width		-> breite des Fensters beim schließen
+		height		-> hoehe des Fensters beim schließen
+	personal/
+		positionx	-> x-position des Fensters beim schließen
+		positiony	-> y-position des Fensters beim schließen
+		width		-> breite des Fensters beim schließen
+		height		-> hoehe des Fensters beim schließen
+		visible		-> gibt an, ob das fenster versteckt ist
+test/				-> Verzeichnis für tests
