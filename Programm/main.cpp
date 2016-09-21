@@ -1,6 +1,9 @@
 #include "mainwindow.h"
-#include <QApplication>
+#include "fileio.h"
 
+#include "coreapplication.h"
+
+#include <QApplication>
 #include <QVariant>
 #include <QSettings>
 #include <QCoreApplication>
@@ -11,80 +14,35 @@
 #include <QNetworkReply>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QFileOpenEvent>
 
-
-void checkVersion();
-QString loadVersion();
+#include <QMenuBar>
+#include <QMenu>
 
 QString AKTUELLE_VERSION = "1.0.0";
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    CoreApplication a(argc, argv, AKTUELLE_VERSION);
 
     // Laden der Einstellungen
-    QCoreApplication::setOrganizationName("Philipp Schepper");
-    QCoreApplication::setOrganizationDomain("philipp-schepper.de");
-    QCoreApplication::setApplicationName("Einsatzplaner");
-    QCoreApplication::setApplicationVersion(AKTUELLE_VERSION);
-
+    FileIO::loadSettings();
     QSettings settings;
-    settings.setValue("test/bla", true);
 
     if (settings.value("general/autosearchupdate").toBool()) {
-        checkVersion();
+        a.checkVersion();
     }
 
-    MainWindow w;
-    w.show();
+    if (a.isFirst == true) {
+        MainWindow *w = new MainWindow();
+        w->show();
+    }
+
+/*    if (QApplication::arguments().size() > 1) {
+        const QString filename = QApplication::arguments().at(1);
+        w.openFile(filename);
+    }*/
 
     return a.exec();
 }
 
-
-void checkVersion()
-{
-    QUrl url("Http://bahn.philipp-schepper.de/#downloads");
-    QString v = loadVersion();
-    QStringList online = v.split(".");
-    QStringList aktuell = AKTUELLE_VERSION.split(".");
-
-    if ((online.at(0) > aktuell.at(0)) || ((online.at(0) == aktuell.at(0)) && online.at(1) > aktuell.at(1)) ||
-            ((online.at(0) == aktuell.at(0)) && (online.at(1) == aktuell.at(1)) && (online.at(2) > aktuell.at(2)))) {
-        if (QMessageBox::information(nullptr, "Neue Version", "Es ist Version "+v+" des Programms verfügbar.\nSie benutzen Version "+AKTUELLE_VERSION+". ", QMessageBox::Open, QMessageBox::Ok) == QMessageBox::Open) {
-            // Öffnen der Webseite
-            QDesktopServices::openUrl(url);
-        }
-
-        qDebug() << "Bitte aktualisiern";
-    }
-
-}
-
-QString loadVersion()
-{
-    QUrl url = QUrl("http://bahn.philipp-schepper.de/version.txt");
-
-    // create custom temporary event loop on stack
-    QEventLoop eventLoop;
-
-    // "quit()" the event-loop, when the network request "finished()"
-    QNetworkAccessManager mgr;
-    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-    // the HTTP request
-    QNetworkRequest req( url );
-    QNetworkReply *reply = mgr.get(req);
-    eventLoop.exec(); // blocks stack until "finished()" has been called
-
-    if (reply->error() == QNetworkReply::NoError) {
-        //success
-        QString s = QString(reply->readAll());
-        delete reply;
-        return s;
-    } else {
-        //failure
-        delete reply;
-        return "";
-    }
-}

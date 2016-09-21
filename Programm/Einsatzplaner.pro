@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     aactivity.cpp \
     export.cpp \
     exportgesamt.cpp \
-    fileio.cpp
+    fileio.cpp \
+    coreapplication.cpp
 
 HEADERS  += mainwindow.h \
     person.h \
@@ -49,7 +50,8 @@ HEADERS  += mainwindow.h \
     aactivity.h \
     export.h \
     exportgesamt.h \
-    fileio.h
+    fileio.h \
+    coreapplication.h
 
 FORMS    += mainwindow.ui \
 #    managerreservierungen.ui \
