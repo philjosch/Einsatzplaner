@@ -12,7 +12,11 @@ class ManagerReservierungen
 
 public:
     explicit ManagerReservierungen();
+    ManagerReservierungen(QJsonObject o);
     ~ManagerReservierungen();
+
+    QJsonObject toJson(QJsonObject o);
+    QJsonObject toJson();
 
     QString getWagenreihung() const;
     void setWagenreihung(const QString &value);

@@ -3,7 +3,7 @@
 
 class Person;
 
-//#include "person.h"
+#include <QJsonObject>
 #include <QObject>
 #include <QSet>
 
@@ -14,6 +14,9 @@ class ManagerPersonal :  public QObject
 public:
     ManagerPersonal();
     ~ManagerPersonal();
+
+    QJsonObject toJson();
+    void fromJson(QJsonObject o);
 
     enum Misstake { OK, PersonNichtGefunden, FalscheQualifikation, SonstigerFehler};
 

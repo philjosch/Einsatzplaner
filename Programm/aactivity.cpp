@@ -2,6 +2,7 @@
 #include <QMap>
 #include "person.h"
 #include <QDebug>
+#include <QJsonArray>
 
 AActivity::Category AActivity::getCategoryFromString(QString s)
 {
@@ -34,12 +35,12 @@ QString AActivity::getStringFromCategory(AActivity::Category c)
     }
 }
 
-AActivity::AActivity(QDate *date, ManagerPersonal *p)
+AActivity::AActivity(QDate date, ManagerPersonal *p)
 {
     datum = date;
     ort = "";
-    zeitAnfang = new QTime(10, 0);
-    zeitEnde = new QTime(16, 0);
+    zeitAnfang = QTime(10, 0);
+    zeitEnde = QTime(16, 0);
     anlass = "";
     bemerkungen = "";
     personen = new QMap<Person *, Infos*>();
@@ -47,30 +48,81 @@ AActivity::AActivity(QDate *date, ManagerPersonal *p)
     personal = p;
 }
 
+AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
+{
+    personal = p;
+    personen = new QMap<Person*, Infos*>();
+
+    datum = QDate::fromString(o.value("datum").toString(), "yyyy-MM-dd");
+    ort = o.value("ort").toString();
+    zeitAnfang = QTime::fromString(o.value("zeitAnfang").toString(), "hh:mm");
+    zeitEnde = QTime::fromString(o.value("zeitEnde").toString(), "hh:mm");
+    anlass = o.value("anlass").toString();
+    bemerkungen = o.value("bemerkungen").toString();
+    QJsonArray array = o.value("personen").toArray();
+    for(int i = 0; i < array.size(); i++) {
+        QJsonObject aO = array.at(i).toObject();
+        QString name = aO.value("name").toString();
+        Category kat = (Category) aO.value("kat").toInt();
+
+        Person *p = personal->getPerson(name);
+        Infos *info = new Infos();
+        info->beginn = QTime::fromString(aO.value("beginn").toString(), "hh:mm");
+        info->ende = QTime::fromString(aO.value("ende").toString(), "hh:mm");
+        info->kategorie = kat;
+        info->aufgabe = aO.value("aufagbe").toString();
+        info->bemerkung = aO.value("bemerkung").toString();
+
+        if (p != nullptr) {
+            p->addActivity(this, kat);
+            personen->insert(p, info);
+        }
+
+    }
+    personalBenoetigt = o.value("personalBenoetigt").toBool();
+}
+
 AActivity::~AActivity()
 {
     // Löscht das Objekt und entfernt alle Verbindungen zu den personen
 }
 
-void AActivity::fromJson(QJsonObject *o)
+QJsonObject AActivity::toJson()
 {
+    QJsonObject data;
+    data.insert("datum", datum.toString("yyyy-MM-dd"));
+    data.insert("ort", ort);
+    data.insert("zeitAnfang", zeitAnfang.toString("hh:mm"));
+    data.insert("zeitEnde", zeitEnde.toString("hh:mm"));
+    data.insert("anlass", anlass);
+    data.insert("bemerkungen", bemerkungen);
+    QJsonArray personenJSON;
+    for(Person *p: personen->keys()) {
+        QJsonObject persJson;
+        persJson.insert("name", p->getName());
+        persJson.insert("beginn", personen->value(p)->beginn.toString("hh:mm"));
+        persJson.insert("ende", personen->value(p)->ende.toString("hh:mm"));
+        persJson.insert("kat", (int) personen->value(p)->kategorie);
+        persJson.insert("aufgabe", personen->value(p)->aufgabe);
+        persJson.insert("bemerkung", personen->value(p)->bemerkung);
+        personenJSON.append(persJson);
+    }
+    data.insert("personen", personenJSON);
+    data.insert("personalBenoetigt", personalBenoetigt);
+    data.insert("isFahrtag", false);
+    return data;
 
 }
 
-QJsonObject *AActivity::toJson()
-{
-
-}
-
-QDate *AActivity::getDatum() const
+QDate AActivity::getDatum()
 {
     return datum;
 }
 
-void AActivity::setDatum(QDate *value)
+void AActivity::setDatum(QDate value)
 {
     datum = value;
-    handleEmit();
+    emitter();
 }
 
 QString AActivity::getOrt() const
@@ -81,26 +133,29 @@ QString AActivity::getOrt() const
 void AActivity::setOrt(const QString &value)
 {
     ort = value;
+    emitter();
 }
 
-QTime *AActivity::getZeitAnfang() const
+QTime AActivity::getZeitAnfang()
 {
     return zeitAnfang;
 }
 
-void AActivity::setZeitAnfang(QTime *value)
+void AActivity::setZeitAnfang(QTime value)
 {
     zeitAnfang = value;
+    emitter();
 }
 
-QTime *AActivity::getZeitEnde() const
+QTime AActivity::getZeitEnde()
 {
     return zeitEnde;
 }
 
-void AActivity::setZeitEnde(QTime *value)
+void AActivity::setZeitEnde(QTime value)
 {
     zeitEnde = value;
+    emitter();
 }
 
 QString AActivity::getAnlass() const
@@ -111,7 +166,7 @@ QString AActivity::getAnlass() const
 void AActivity::setAnlass(const QString &value)
 {
     anlass = value;
-    handleEmit();
+    emitter();
 }
 
 QString AActivity::getBemerkungen() const
@@ -122,7 +177,7 @@ QString AActivity::getBemerkungen() const
 void AActivity::setBemerkungen(const QString &value)
 {
     bemerkungen = value;
-    handleEmit();
+    emitter();
 }
 
 bool AActivity::getPersonalBenoetigt() const
@@ -133,7 +188,7 @@ bool AActivity::getPersonalBenoetigt() const
 void AActivity::setPersonalBenoetigt(bool value)
 {
     personalBenoetigt = value;
-    handleEmit();
+    emitter();
 }
 
 QMap<Person *, AActivity::Infos *> *AActivity::getPersonen() const
@@ -144,6 +199,7 @@ QMap<Person *, AActivity::Infos *> *AActivity::getPersonen() const
 bool AActivity::removePerson(Person *p)
 {
     personen->remove(p);
+    emitter();
     return p->removeActivity(this);
 }
 
@@ -151,6 +207,7 @@ bool AActivity::removePerson(QString p)
 {
     Person *pers = personal->getPerson(p);
     if (pers != nullptr) {
+        emitter();
         return removePerson(pers);
     }
     return false;
@@ -202,6 +259,8 @@ ManagerPersonal::Misstake AActivity::addPerson(Person *p, QString bemerkung, QTi
 
     personen->insert(p, info);
 
+    emitter();
+
     return ManagerPersonal::OK;
 }
 
@@ -217,7 +276,7 @@ ManagerPersonal::Misstake AActivity::addPerson(QString p, QString bemerkung, QTi
 void AActivity::setPersonen(QMap<Person *, Infos *> *value)
 {
     personen = value;
-    handleEmit();
+    emitter();
 }
 
 ManagerPersonal *AActivity::getPersonal() const

@@ -11,6 +11,9 @@ class Person : public QObject
 public:
     Person(QString name);
 
+    QJsonObject toJson();
+    static Person *fromJson(QJsonObject o);
+
     double getTimeTf();
     double getTimeZf();
     double getTimeZub();
@@ -47,8 +50,6 @@ public:
     QString getHtmlForTableView();
 
 protected:
-    QString vorname;
-    QString nachname;
     QString name;
     bool ausbildungTf;
     bool ausbildungZf;

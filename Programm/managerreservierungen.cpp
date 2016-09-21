@@ -4,6 +4,8 @@
 #include <QMessageBox>
 #include <QSetIterator>
 #include <QSet>
+#include <QJsonObject>
+#include <QJsonArray>
 
 QString ManagerReservierungen::getStringFromPlaetze(QMap<int, QList<int> *> *liste)
 {
@@ -48,7 +50,6 @@ QMap<int, QList<int> *> *ManagerReservierungen::getPlaetzeFromString(QString pla
         int wagen = l2a.at(0).toInt();
         if (l2a.length() > 1) {
             QStringList l2 = l2a.at(1).split(QRegExp("\\s*,\\s+"));
-            QMessageBox::warning(nullptr, "", "c");
             QList<int> *l = new QList<int>();
             for (QString s2: l2) {
                 if (s2.contains(QRegExp("\\s*-\\s*"))) {
@@ -75,9 +76,36 @@ ManagerReservierungen::ManagerReservierungen()
     reservierungen = new QSet<Reservierung*>();
 }
 
+ManagerReservierungen::ManagerReservierungen(QJsonObject o)
+{
+    wagenreihung = o.value("wagenreihung").toString();
+    reservierungen = new QSet<Reservierung*>();
+    QJsonArray array = o.value("reservierungen").toArray();
+    for(int i = 0; i < array.size(); i++) {
+        reservierungen->insert(new Reservierung(array.at(i).toObject()));
+    }
+}
+
 ManagerReservierungen::~ManagerReservierungen()
 {
 
+}
+
+QJsonObject ManagerReservierungen::toJson(QJsonObject o)
+{
+    o.insert("wagenreihung", wagenreihung);
+    QJsonArray array;
+    for(Reservierung *r: reservierungen->values()) {
+        array.append(r->toJson());
+    }
+    o.insert("reservierungen", array);
+    return o;
+}
+
+QJsonObject ManagerReservierungen::toJson()
+{
+    QJsonObject o;
+    return toJson(o);
 }
 
 QString ManagerReservierungen::getWagenreihung() const

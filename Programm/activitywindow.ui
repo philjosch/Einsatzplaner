@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>926</width>
-    <height>711</height>
+    <width>710</width>
+    <height>660</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>710</width>
+    <height>660</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -252,13 +258,6 @@
        <number>6</number>
       </property>
       <item row="0" column="0">
-       <widget class="QPushButton" name="buttonExport">
-        <property name="text">
-         <string>Exportieren</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -271,7 +270,7 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="2">
+      <item row="0" column="1">
        <widget class="QPushButton" name="buttonDelete">
         <property name="text">
          <string>Arbeitseinsatz löschen</string>
@@ -294,12 +293,56 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>926</width>
+     <width>710</width>
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuArbeitseinsatz">
+    <property name="title">
+     <string>Arbeitseinsatz</string>
+    </property>
+    <addaction name="actionClose"/>
+    <addaction name="separator"/>
+    <addaction name="actionDelete"/>
+    <addaction name="separator"/>
+    <addaction name="actionPdf"/>
+    <addaction name="actionPrint"/>
+   </widget>
+   <addaction name="menuArbeitseinsatz"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionClose">
+   <property name="text">
+    <string>Schließen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Löschen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Backspace</string>
+   </property>
+  </action>
+  <action name="actionPdf">
+   <property name="text">
+    <string>Als PDF sichern …</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+P</string>
+   </property>
+  </action>
+  <action name="actionPrint">
+   <property name="text">
+    <string>Drucken …</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>dateDatum</tabstop>
@@ -311,9 +354,25 @@
   <tabstop>tablePersonen</tabstop>
   <tabstop>buttonInsert</tabstop>
   <tabstop>buttonRemove</tabstop>
-  <tabstop>buttonExport</tabstop>
   <tabstop>buttonDelete</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionClose</sender>
+   <signal>triggered()</signal>
+   <receiver>ActivityWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>462</x>
+     <y>355</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

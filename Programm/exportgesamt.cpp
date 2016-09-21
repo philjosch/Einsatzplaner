@@ -144,15 +144,15 @@ bool ExportGesamt::testShow(AActivity *a)
     // Prüfen bei den Einträgen, ob das Datum stimmt
     switch (ui->comboVon->currentIndex()) {
     case 0: // Ab datum
-        if (*a->getDatum() < ui->dateVon->date())
+        if (a->getDatum() < ui->dateVon->date())
             return false;
         break;
     case 1: // Ab heute
-        if (*a->getDatum() < QDate::currentDate())
+        if (a->getDatum() < QDate::currentDate())
             return false;
         break;
     case 2: // Ab beginn des Jahres
-        if (a->getDatum()->year() != QDate::currentDate().year())
+        if (a->getDatum().year() != QDate::currentDate().year())
             return false;
         break;
     case 3: // Ab egal
@@ -163,15 +163,15 @@ bool ExportGesamt::testShow(AActivity *a)
 
     switch (ui->comboBis->currentIndex()) {
     case 0: // Bis datum
-        if (*a->getDatum() > ui->dateVon->date())
+        if (a->getDatum() > ui->dateVon->date())
             return false;
         break;
     case 1: // Bis heute
-        if (*a->getDatum() > QDate::currentDate())
+        if (a->getDatum() > QDate::currentDate())
             return false;
         break;
     case 2: // Bis Ende des Jahres
-        if (a->getDatum()->year() != QDate::currentDate().year())
+        if (a->getDatum().year() != QDate::currentDate().year())
             return false;
         break;
     case 3: // Bis egal

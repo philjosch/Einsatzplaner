@@ -20,8 +20,14 @@ public:
 
     static const QString nichtGenugStunden;
 
+signals:
+    void changed();
+
 public slots:
     void showPerson(Person *p);
+    void refresh();
+
+    void loadData();
 
 private slots:
     void on_pushAktualisieren_clicked();

@@ -13,7 +13,7 @@ public:
     Manager();
 //    void fetchPersonal(ManagerPersonal *m);
     QJsonObject toJson();
-    void fromJson(QJsonObject *o);
+    void fromJson(QJsonObject o);
 
     void setPersonal(ManagerPersonal *value);
     ManagerPersonal *getPersonal() const;
@@ -21,8 +21,8 @@ public:
     QListIterator<AActivity *> getActivities() const;
 
 public slots:
-    Fahrtag *newFahrtag(QDate *datum);
-    Activity *newActivity(QDate *datum);
+    Fahrtag *newFahrtag(QDate datum);
+    Activity *newActivity(QDate datum);
 
     bool removeActivity(AActivity *a);
     void addActivity(AActivity *a);

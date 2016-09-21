@@ -13,8 +13,12 @@ class Activity: public QObject, public AActivity
 
 public:
 
-    Activity(QDate *date, ManagerPersonal *p);
+    Activity(QDate date, ManagerPersonal *p);
+    Activity(QJsonObject o, ManagerPersonal *p);
     ~Activity();
+
+    QJsonObject toJson();
+
     QString getListStringShort();
     QString getListString();
 
@@ -23,11 +27,9 @@ public:
     QString getHtmlForSingleView();
     QString getHtmlForTableView();
 
-signals:
-    void activityModified(AActivity *a);
-private slots:
-    void handleActivity(AActivity *a);
-    void handleEmit();
+    void emitter();
 
+signals:
+    void changed(AActivity *);
 };
 #endif // ACTIVITY_H

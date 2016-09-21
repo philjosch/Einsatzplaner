@@ -1,5 +1,6 @@
 #include "managerpersonal.h"
 #include "person.h"
+#include <QJsonArray>
 #include <QList>
 #include <QObject>
 #include <QSetIterator>
@@ -17,6 +18,28 @@ ManagerPersonal::ManagerPersonal()
 ManagerPersonal::~ManagerPersonal()
 {
 
+}
+
+QJsonObject ManagerPersonal::toJson()
+{
+    QJsonArray array;
+    for(Person *p: personen->values()) {
+        array.append(p->toJson());
+    }
+    QJsonObject o;
+    o.insert("personen", array);
+    return o;
+}
+
+void ManagerPersonal::fromJson(QJsonObject o)
+{
+    QJsonArray a = o.value("personen").toArray();
+    for(int i = 0; i < a.size(); i++) {
+        Person *neu = Person::fromJson(a.at(i).toObject());
+        personen->insert(neu);
+        personenSorted->insert(neu->getName(), neu);
+        connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
+    }
 }
 
 Person *ManagerPersonal::getPerson(QString name)

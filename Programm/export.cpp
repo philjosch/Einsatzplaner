@@ -1,5 +1,6 @@
 #include "export.h"
 #include <QDebug>
+#include "fileio.h"
 
 
 bool Export::printFahrtag(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
@@ -126,9 +127,9 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path)
     QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
     p->setOutputFormat(QPrinter::PdfFormat);
 
-    QFileDialog f(parent, Qt::Dialog);
-
-    p->setOutputFileName(f.getSaveFileName(parent, "Datei speichern unter...", QDir::currentPath()+"/"+path, "PDF-Dateien (*.pdf)"));
+    p->setOutputFileName(FileIO::getFilePathSave(parent, path, parent->tr("PDF-Dateien (*.pdf)")));
+/*    QFileDialog f(parent, Qt::Dialog);
+    p->setOutputFileName(f.getSaveFileName(parent, "Datei speichern unter...", QDir::currentPath()+"/"+path, "PDF-Dateien (*.pdf)"));*/
     if (p->outputFileName() == "") return nullptr;
     return p;
 }

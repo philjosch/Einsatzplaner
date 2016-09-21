@@ -40,7 +40,12 @@ public slots:
     void openFahrtag(Fahrtag *f);
     void openActivity(Activity *a);
 
-    void openFile(QString filePath);
+    bool openFile(QString filePath);
+
+    void unsave();
+
+protected:
+    void closeEvent(QCloseEvent *event);
 
 private slots:
     // Einsatzplaner
@@ -54,7 +59,7 @@ private slots:
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
     void on_actionSaveas_triggered();
-    void on_actionClose_triggered();
+    bool on_actionClose_triggered();
 
     // Bearbeiten
 

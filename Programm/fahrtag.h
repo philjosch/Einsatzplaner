@@ -9,8 +9,11 @@ class Fahrtag : public QObject, public AActivity, public ManagerReservierungen
     Q_OBJECT
 
 public:
-    Fahrtag(QDate *date, ManagerPersonal *p);
+    Fahrtag(QDate date, ManagerPersonal *p);
+    Fahrtag(QJsonObject o, ManagerPersonal *p);
     ~Fahrtag();
+
+    QJsonObject toJson();
 
     enum Art { Museumszug, Sonderzug, Gesellschaftssonderzug, Nikolauszug, Schnupperkurs, ELFundMuseumszug, Bahnhofsfest, Sonstiges=100 };
     static QString getStringFromArt(Fahrtag::Art art);
@@ -21,8 +24,8 @@ public:
     void setArt(const Fahrtag::Art &value);
     Fahrtag::Art getArt() const;
 
-    QTime *getZeitTf() const;
-    void setZeitTf(QTime *value);
+    QTime getZeitTf();
+    void setZeitTf(QTime value);
 
     bool getWichtig() const;
     void setWichtig(bool value);
@@ -44,17 +47,14 @@ public:
     QString getHtmlForSingleView();
     QString getHtmlForTableView();
 
+    void emitter();
 
 signals:
-    void fahrtagModified(AActivity *a);
-
-private slots:
-    void handleActivity(AActivity *a);
-    void handleEmit();
+    void changed(AActivity *);
 
 protected:
     Fahrtag::Art art;
-    QTime *zeitTf;
+    QTime zeitTf;
     bool wichtig;
     bool benoetigeTf;
     bool benoetigeZf;

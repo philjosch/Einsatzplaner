@@ -1,6 +1,9 @@
 #include "activitywindow.h"
 #include "ui_activitywindow.h"
+#include "export.h"
+
 #include <QMessageBox>
+#include <QPrinter>
 
 ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) :
     QMainWindow(parent),
@@ -10,7 +13,7 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) :
     activity = a;
     loadData();
     nehme = true;
-    setWindowTitle("Arbeitseinsatz am "+activity->getDatum()->toString("dddd dd. MM. yyyy"));
+    setWindowTitle("Arbeitseinsatz am "+activity->getDatum().toString("dddd dd. MM. yyyy"));
 
     namen = new QSet<QString>();
 }
@@ -22,8 +25,8 @@ ActivityWindow::~ActivityWindow()
 
 void ActivityWindow::on_dateDatum_dateChanged(const QDate &date)
 {
-    activity->setDatum(new QDate(date.year(), date.month(), date.day()));
-    setWindowTitle("Arbeitseinsatz am "+activity->getDatum()->toString("dddd dd. MM. yyyy"));
+    activity->setDatum(date);
+    setWindowTitle("Arbeitseinsatz am "+date.toString("dddd dd. MM. yyyy"));
 }
 
 void ActivityWindow::on_lineOrt_textChanged(const QString &arg1)
@@ -43,12 +46,12 @@ void ActivityWindow::on_plainBeschreibung_textChanged()
 
 void ActivityWindow::on_timeBeginn_timeChanged(const QTime &time)
 {
-    activity->setZeitAnfang(new QTime(time.hour(), time.minute()));
+    activity->setZeitAnfang(time);
 }
 
 void ActivityWindow::on_timeEnde_timeChanged(const QTime &time)
 {
-    activity->setZeitEnde(new QTime(time.hour(), time.minute()));
+    activity->setZeitEnde(time);
 }
 
 void ActivityWindow::on_checkBoxBenoetigt_toggled(bool checked)
@@ -72,9 +75,9 @@ void ActivityWindow::on_buttonRemove_clicked()
     }
     if (activity->removePerson(n)) {
         namen->remove(n);
-        ui->tablePersonen->removeRow(ui->tablePersonen->currentRow());
-        ui->buttonRemove->setEnabled(ui->tablePersonen->rowCount() > 0);
     }
+    ui->tablePersonen->removeRow(i);
+    ui->buttonRemove->setEnabled(ui->tablePersonen->rowCount() > 0);
 }
 
 void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
@@ -132,35 +135,62 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         if (ui->tablePersonen->item(row,3) != nullptr)
             aufgabe = ui->tablePersonen->item(row,3)->text();
 
-        ManagerPersonal::Misstake antw = activity->addPerson(name, "", beginnZ, endeZ, aufgabe);
+        if (name.toUpper().contains("EXTERN")) {
+            Person *p = new Person(name);
+            p->setAusbildungTf(true);
+            p->setAusbildungZf(true);
+            p->setAusbildungRangierer(true);
+            activity->addPerson(p, "", beginnZ, endeZ, aufgabe);
+        } else {
+            ManagerPersonal::Misstake antw = activity->addPerson(name, "", beginnZ, endeZ, aufgabe);
 
-        switch (antw) {
-        case ManagerPersonal::OK:
-            break;
-        case ManagerPersonal::PersonNichtGefunden:
-            QMessageBox::warning(this, "Fehler", "Die eingegebene Person konnte im System nicht gefunden werden.");
-            break;
-        case ManagerPersonal::FalscheQualifikation:
-            QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
-            break;
-        default:
-            QMessageBox::warning(this, "Sonstiger Fehler", "Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!");
-            break;
+            switch (antw) {
+            case ManagerPersonal::OK:
+                break;
+            case ManagerPersonal::PersonNichtGefunden:
+                QMessageBox::warning(this, "Fehler", "Die eingegebene Person konnte im System nicht gefunden werden.");
+                break;
+            case ManagerPersonal::FalscheQualifikation:
+                QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
+                break;
+            default:
+                QMessageBox::warning(this, "Sonstiger Fehler", "Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!");
+                break;
+            }
         }
         nehme = true;
     }
 
 }
 
+void ActivityWindow::on_actionDelete_triggered()
+{
+
+}
+
+
+void ActivityWindow::on_actionPrint_triggered()
+{
+    QPrinter *p = Export::getPrinterPaper(this);
+    Export::printActivity(activity, nullptr, p);
+}
+
+void ActivityWindow::on_actionPdf_triggered()
+{
+    QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf");
+    Export::printActivity(activity, p);
+}
+
+
 void ActivityWindow::loadData()
 {
     // Allgemeine Daten von AActivity
-    ui->dateDatum->setDate(* activity->getDatum());
+    ui->dateDatum->setDate(activity->getDatum());
     ui->lineOrt->setText(activity->getOrt());
     ui->lineAnlass->setText(activity->getAnlass());
     ui->plainBeschreibung->setPlainText(activity->getBemerkungen());
-    ui->timeBeginn->setTime(* activity->getZeitAnfang());
-    ui->timeEnde->setTime(* activity->getZeitEnde());
+    ui->timeBeginn->setTime(activity->getZeitAnfang());
+    ui->timeEnde->setTime(activity->getZeitEnde());
     ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
     // Tabelle laden und alles einfügen
     // Fehlt //

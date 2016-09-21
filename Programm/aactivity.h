@@ -24,26 +24,26 @@ public:
         QString bemerkung;
     };
 
-    AActivity(QDate *date, ManagerPersonal *p);
+    AActivity(QDate date, ManagerPersonal *p);
+    AActivity(QJsonObject o, ManagerPersonal *p);
     ~AActivity();
 
-    void fromJson(QJsonObject *o);
-    QJsonObject *toJson();
+    virtual QJsonObject toJson();
 
     static Category getCategoryFromString(QString s);
     static QString getStringFromCategory(Category c);
 
-    QDate *getDatum() const;
-    void setDatum(QDate *value);
+    QDate getDatum();
+    void setDatum(QDate value);
 
     QString getOrt() const;
     void setOrt(const QString &value);
 
-    QTime *getZeitAnfang() const;
-    void setZeitAnfang(QTime *value);
+    QTime getZeitAnfang();
+    void setZeitAnfang(QTime value);
 
-    QTime *getZeitEnde() const;
-    void setZeitEnde(QTime *value);
+    QTime getZeitEnde();
+    void setZeitEnde(QTime value);
 
     QString getAnlass() const;
     void setAnlass(const QString &value);
@@ -70,11 +70,14 @@ public:
     virtual QString getHtmlForSingleView() = 0;
     virtual QString getHtmlForTableView() = 0;
 
+    virtual void emitter() = 0;
+
+
 protected:
-    QDate *datum;
+    QDate datum;
     QString ort;
-    QTime *zeitAnfang;
-    QTime *zeitEnde;
+    QTime zeitAnfang;
+    QTime zeitEnde;
     QString anlass;
     QString bemerkungen;
     QMap<Person *, Infos*> *personen; // Für Infos siehe oben
@@ -83,11 +86,6 @@ protected:
     ManagerPersonal *personal;
 
     QString listToString(QMap<Person*, Infos*> *liste, QString seperator);
-
-private slots:
-    virtual void handleActivity(AActivity* a) = 0;
-    virtual void handleEmit() = 0;
-
 };
 
 

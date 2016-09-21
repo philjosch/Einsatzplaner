@@ -2,13 +2,24 @@
 #include <QMap>
 #include "mainwindow.h"
 
-Activity::Activity(QDate *date, ManagerPersonal *p): AActivity(date, p)
+Activity::Activity(QDate date, ManagerPersonal *p): AActivity(date, p)
 {
+}
+
+Activity::Activity(QJsonObject o, ManagerPersonal *p) : AActivity(o, p)
+{
+
 }
 
 Activity::~Activity()
 {
     AActivity::~AActivity();
+}
+
+QJsonObject Activity::toJson()
+{
+    QJsonObject o = AActivity::toJson();
+    return o;
 }
 
 QString Activity::getListStringShort() {
@@ -20,7 +31,7 @@ QString Activity::getListStringShort() {
 
 QString Activity::getListString()
 {
-    return datum->toString("dddd dd.MM.yyyy")+" – Aktivität";
+    return datum.toString("dddd dd.MM.yyyy")+" – Aktivität";
 }
 
 AActivity::Infos *Activity::getIndividual(Person *person)
@@ -34,10 +45,10 @@ AActivity::Infos *Activity::getIndividual(Person *person)
     neu->ende = alt->ende;
 
     if (alt->beginn == QTime(0,0)) {
-        neu->beginn = QTime(zeitAnfang->hour(), zeitAnfang->minute());
+        neu->beginn = QTime(zeitAnfang.hour(), zeitAnfang.minute());
     }
     if (alt->ende == QTime(0,0)) {
-        neu->ende = QTime(zeitEnde->hour(), zeitEnde->minute());
+        neu->ende = QTime(zeitEnde.hour(), zeitEnde.minute());
     }
     return neu;
 }
@@ -46,7 +57,7 @@ QString Activity::getHtmlForSingleView()
 {
     QString html = "";
     // Überschrift
-    html += "<h1 class='pb'>Arbeitseinsatz am " + datum->toString("dddd dd.MM.yyyy")+"</h1>";
+    html += "<h1 class='pb'>Arbeitseinsatz am " + datum.toString("dddd dd.MM.yyyy")+"</h1>";
     // Ort
     if (ort != "")
         html += "<p><b>Ort:</b> "+ort+"</p>";
@@ -56,8 +67,8 @@ QString Activity::getHtmlForSingleView()
     if (bemerkungen!= "")
         html += "<p><b>Bemerkungen:</b><br/>"+bemerkungen+"</p>";
     // Zeiten
-    html += "<p><b>Zeiten</b>:<br/>Beginn: "+zeitAnfang->toString("hh:mm")+"<br/>";
-    html += "Geplantes Ende: "+zeitEnde->toString("hh:mm")+"</p>";
+    html += "<p><b>Zeiten</b>:<br/>Beginn: "+zeitAnfang.toString("hh:mm")+"<br/>";
+    html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
     // Personal
     html += "<p><b>Helfer";
     html += (personalBenoetigt ?" werden benötigt":"");
@@ -82,7 +93,7 @@ QString Activity::getHtmlForTableView()
     QString html = "<tr bgcolor='"+MainWindow::getFarbeArbeit()+"'>";
     // Datum, Anlass
     html += "<td>";
-    html += "<b>"+datum->toString("dddd d.M.yyyy")+"</b><br/>(Arbeitseinsatz)<br/>"+anlass+"</td>";
+    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>(Arbeitseinsatz)<br/>"+anlass+"</td>";
 
     QMap<Person*, AActivity::Infos*> tf;
     QMap<Person*, AActivity::Infos*> zf;
@@ -132,8 +143,8 @@ QString Activity::getHtmlForTableView()
     html += "</td>";
 
     // Dienstzeiten
-    html += "<td>Beginn: "+zeitAnfang->toString("hh:mm") + "<br/>";
-    html += "Ende: ~"+zeitEnde->toString("hh:mm") + "</td>";
+    html += "<td>Beginn: "+zeitAnfang.toString("hh:mm") + "<br/>";
+    html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
 
     // Sonstiges
     html += "<td>";
@@ -155,12 +166,7 @@ QString Activity::getHtmlForTableView()
     return html;
 }
 
-void Activity::handleActivity(AActivity *a)
+void Activity::emitter()
 {
-    emit activityModified(a);
-}
-
-void Activity::handleEmit()
-{
-    handleActivity(this);
+    emit changed(this);
 }

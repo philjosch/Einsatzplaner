@@ -7,6 +7,9 @@ class Reservierung
 {
 public:
     Reservierung();
+    Reservierung(QJsonObject o);
+
+    QJsonObject toJson();
 
     QString getName() const;
     void setName(const QString &value);

@@ -48,25 +48,23 @@ private slots:
 
     void on_textBemerkungen_textChanged();
 
-    void on_plainBeschreibung_textChanged();
-
-    void on_timeBeginn_timeChanged(const QTime &time);
-
     void on_timeEnde_timeChanged(const QTime &time);
-
-    void on_checkBoxBenoetigt_stateChanged(int arg1);
 
     void on_buttonTfAdd_clicked();
     void on_buttonTfDelete_clicked();
+    void on_checkTf_clicked(bool checked);
 
     void on_buttonZfAdd_clicked();
     void on_buttonZfDelete_clicked();
+    void on_checkZf_clicked(bool checked);
 
     void on_buttonZubAdd_clicked();
     void on_buttonZubDelete_clicked();
+    void on_checkZub_clicked(bool checked);
 
     void on_buttonServiceAdd_clicked();
     void on_buttonServiceDelete_clicked();
+    void on_checkService_clicked(bool checked);
 
     void on_tablePersonen_cellChanged(int row, int column);
 
@@ -74,7 +72,9 @@ private slots:
 
     void on_buttonRemove_clicked();
 
-    void on_actionTest_triggered();
+    void on_actionDelete_triggered();
+    void on_actionPrint_triggered();
+    void on_actionPdf_triggered();
 
 
     // Reservierungen
@@ -100,36 +100,34 @@ private slots:
     void on_listRes_itemClicked(QListWidgetItem *item);
 
 
-    void on_checkTf_clicked(bool checked);
 
-    void on_checkZf_clicked(bool checked);
-
-    void on_checkZub_clicked(bool checked);
-
-    void on_checkService_clicked(bool checked);
+    void on_checkBoxBenoetigt_clicked(bool checked);
 
 private:
+    // Allgemeines
     Ui::FahrtagWindow *ui;
     Fahrtag *fahrtag;
-
     bool nehme;
-    QMap<QListWidgetItem *, QString> *listeMitNamen; // Liste mit den Namen, die in der Tabelle verwaltet werden
-
-    QMap<QListWidgetItem*, QTableWidgetItem*> *listToTable; // Mapt von den Listen auf den Tabelleneintrag der Person
 
     void loadData();
+
+    // Personal Verwaltung
+    QMap<QListWidgetItem *, QString> *listeMitNamen; // Liste mit den Namen, die in der Tabelle verwaltet werden
+    QMap<QListWidgetItem*, QTableWidgetItem*> *listToTable; // Mapt von den Listen auf den Tabelleneintrag der Person
+    QSet<QString> *namen;
+
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);
 
-    QSet<QString> *namen;
-
+    // Reseriverungen
     QMap<Reservierung*, QListWidgetItem*> *resToItem;
     QMap<QListWidgetItem*, Reservierung*> *itemToRes;
 
-    void loadReservierung(Reservierung *r);
-    void saveResFahrt();
     Reservierung *aktuelleRes;
     bool nehmeRes;
+
+    void loadReservierung(Reservierung *r);
+    void saveResFahrt();
 
 };
 

@@ -5,36 +5,35 @@
 #include "exportgesamt.h"
 #include <QSettings>
 #include "fileio.h"
+#include "coreapplication.h"
+#include <QCloseEvent>
+#include <QWindow>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     connect(ui->calendar, SIGNAL(showFahrtag(Fahrtag*)), this, SLOT(openFahrtag(Fahrtag*)));
     connect(ui->calendar, SIGNAL(showActivity(Activity*)), this, SLOT(openActivity(Activity*)));
+    connect(ui->calendar, SIGNAL(changed()), this, SLOT(unsave()));
     connect(ui->actionNeuer_Arbeitseinsatz, SIGNAL(triggered(bool)), ui->calendar, SLOT(newActivity()));
     connect(ui->actionNeuer_Fahrtag, SIGNAL(triggered(bool)), ui->calendar, SLOT(newFahrtag()));
 
     fenster = new QMap<AActivity*, QMainWindow*>();
     ui->calendar->setPersonal(new ManagerPersonal());
 
-    setWindowTitle("Neues Dokument");
+    setWindowTitle(tr("Neues Dokument – Übersicht"));
     filePath = "";
     saved = true;
     setWindowModified(false);
 
 //    QSettings settings;
     personalfenster = new PersonalWindow(this, ui->calendar->getPersonal());
+    connect(personalfenster, SIGNAL(changed()), this, SLOT(unsave()));
 }
 
 MainWindow::~MainWindow()
-{/*
-    QSettings settings;
-    settings.setValue("window/main/x", this->x());
-    settings.setValue("window/main/y", this->y());
-    settings.setValue("window/main/width", this->width());
-    settings.setValue("window/main/height", this->height());*/
+{
+    this->close();
     delete ui;
 }
 
@@ -53,11 +52,11 @@ QString MainWindow::getFarbeZug(Fahrtag::Art cat)
 
     switch (cat) {
     case Fahrtag::Museumszug:           return "#ffffff"; // Museumszug
-    case Fahrtag::Sonderzug:            return "#FFE8D9"; // Sonderzug -
+    case Fahrtag::Sonderzug:            return "#ffe8d9"; // Sonderzug -
     case Fahrtag::Gesellschaftssonderzug: return "#ffbc90"; // Gesellschaft -
     case Fahrtag::Nikolauszug:          return "#e481d1"; // Nikolausfahrt -
     case Fahrtag::ELFundMuseumszug:     return "#918fe3"; // Museumszug mit ELF -
-    case Fahrtag::Schnupperkurs:        return "#E7E7FD"; // ELF-Schnupperkurs -
+    case Fahrtag::Schnupperkurs:        return "#e7e7fd"; // ELF-Schnupperkurs -
     case Fahrtag::Bahnhofsfest:         return "#80e3b1"; // Bahnhofsfest
     case Fahrtag::Sonstiges:            return "#ffeb90"; // Sonstiges
     default:                            return "#dddddd";
@@ -86,6 +85,7 @@ void MainWindow::openFahrtag(Fahrtag *f)
         fenster->value(f)->activateWindow(); // for Windows
     } else {
         FahrtagWindow *w = new FahrtagWindow(this, f);
+        w->setWindowFilePath(filePath);
         fenster->insert(f, w);
         w->show();
     }
@@ -100,18 +100,53 @@ void MainWindow::openActivity(Activity *a)
         fenster->value(a)->activateWindow(); // for Windows
     } else {
         ActivityWindow *w = new ActivityWindow(this, a);
+        w->setWindowFilePath(filePath);
         fenster->insert(a, w);
         w->show();
     }
 }
 
-void MainWindow::openFile(QString filePath)
+void MainWindow::unsave()
 {
-    // Daten aus Datei laden
-    QJsonObject *object = FileIO::getJsonFromFile(filePath);
-    // Daten in Manager laden
+    this->saved = false;
+    setWindowModified(true);
+}
 
-    // Gui anpassen und neuladen
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    bool toClose = false;
+    if (!saved) {
+        QMessageBox::StandardButton answ = QMessageBox::question(this, tr("Ungesicherte Änderungen"),
+                                                                 tr("Möchten Sie die Datei wirklich schließen?\nIhre ungesicherten Änderungen gehen dann verloren!"),
+                                                                 QMessageBox::Close|QMessageBox::Cancel|QMessageBox::Save, QMessageBox::Save);
+        if (answ == QMessageBox::Save) {
+            on_actionSave_triggered();
+            if (saved) {
+                toClose = close();
+            }
+        } else if (answ == QMessageBox::Cancel) {
+            toClose = false;
+        } else if (answ == QMessageBox::Close) {
+            toClose = close();
+        }
+    } else {
+        toClose = true;
+    }
+
+    if (toClose) {
+        personalfenster->close();
+//        delete personalfenster;
+        for(QMainWindow *m: fenster->values()) {
+            m->close();
+            delete m;
+        }
+    }
+
+    if (toClose) {
+        event->accept();
+    } else {
+        event->ignore();
+    }
 }
 
 void MainWindow::on_buttonPersonal_clicked()
@@ -139,12 +174,12 @@ void MainWindow::on_actionAboutQt_triggered()
 
 void MainWindow::on_actionAboutApp_triggered()
 {
-    QMessageBox::about(this, "Über Einsatzplaner", "Einsatzplaner "+QCoreApplication::applicationVersion()+"\n© 2016 by Philipp Schepper");
+    QMessageBox::about(this, tr("Über Einsatzplaner"), tr("Einsatzplaner ")+QCoreApplication::applicationVersion()+tr("\n© 2016 by Philipp Schepper"));
 }
 
 void MainWindow::on_actionQuit_triggered()
 {
-    QCoreApplication::quit();
+    CoreApplication::closeAllWindows();
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -155,7 +190,7 @@ void MainWindow::on_actionNew_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString file = FileIO::getFilePathOpen(this);
+    QString file = FileIO::getFilePathOpen(this, tr("AkO-Dateien (*.ako)"));
     if (file != "") {
         MainWindow *newOpen = new MainWindow();
         newOpen->openFile(file);
@@ -165,15 +200,105 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
+    if (filePath == "") {
+        on_actionSaveas_triggered();
+        return;
+    }
 
+    QJsonObject calendarJSON = ui->calendar->toJson();
+
+    QJsonObject viewJSON;
+    viewJSON.insert("xMain", this->x());
+    viewJSON.insert("yMain", this->y());
+    viewJSON.insert("widthMain", this->width());
+    viewJSON.insert("heightMain", this->height());
+    viewJSON.insert("xPersonal", personalfenster->x());
+    viewJSON.insert("yPersonal", personalfenster->y());
+    viewJSON.insert("widthPersonal", personalfenster->width());
+    viewJSON.insert("heightPersonal", personalfenster->height());
+/*    viewJSON.insert("showPersonal", false); CURRENTLY NOT USED*/
+
+    QJsonObject generalJSON;
+    generalJSON.insert("version", CoreApplication::getAktuelleVersion());
+
+    QJsonObject object;
+    object.insert("calendar", calendarJSON);
+    object.insert("view", viewJSON);
+    object.insert("general", generalJSON);
+
+    bool erfolg = FileIO::saveJsonToFile(filePath, object);
+    if (erfolg) {
+        saved = true;
+        setWindowModified(false);
+    } else {
+        QMessageBox::warning(this, tr("Fehler"), tr("Das speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+    }
 }
+
+bool MainWindow::openFile(QString filePath)
+{
+    // Daten aus Datei laden
+    QJsonObject object = FileIO::getJsonFromFile(filePath);
+    if (object == QJsonObject()) return false;
+
+    // Prüfen, ob Version kompatibel ist
+    QJsonObject generalJSON = object.value("general").toObject();
+    QString version = generalJSON.value("version").toString();
+    if (CoreApplication::versionGreater(version) || (version == "" )) {
+        QMessageBox::warning(this, tr("Nicht kompatibel"),
+                             tr("Die Datei kann nicht mit dieser Version geöffnet werden.\nDas Dokument benötigt mindestens Version ")+
+                             version+tr(".\nDie aktuellste Version finden Sie auf der Webseite des Programms."));
+        return false;
+    }
+    this->filePath = filePath;
+    setWindowFilePath(filePath);
+    personalfenster->setWindowFilePath(filePath);
+    setWindowTitle(tr("Übersicht"));
+
+    // Daten in Manager laden und darstellen lassen
+    QJsonObject calendarJSON = object.value("calendar").toObject();
+    ui->calendar->fromJson(calendarJSON);
+    personalfenster->loadData();
+
+    //- Hier prüfen, ob Personalfenster angezeigt wurde und wiederherstellen der Fensterpositionen
+    QJsonObject viewJSON = object.value("view").toObject();
+    int x = viewJSON.value("xMain").toInt();
+    int y = viewJSON.value("yMain").toInt();
+    int w = viewJSON.value("widthMain").toInt();
+    int h = viewJSON.value("heightMain").toInt();
+    this->setGeometry(x, y, w, h);
+    // Personalfenster
+    x = viewJSON.value("xPersonal").toInt();
+    y = viewJSON.value("yPersonal").toInt();
+    w = viewJSON.value("widthPersonal").toInt();
+    h = viewJSON.value("heightPersonal").toInt();
+    personalfenster->setGeometry(x, y, w, h);
+    if (viewJSON.value("showPersonal").toBool(false)) {
+        personalfenster->show();
+        personalfenster->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+        personalfenster->raise();
+        personalfenster->activateWindow();
+    } else {
+        personalfenster->hide();
+    }
+    return true;
+}
+
 
 void MainWindow::on_actionSaveas_triggered()
 {
-
+    filePath = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
+    if (filePath != "") {
+        setWindowFilePath(filePath);
+        personalfenster->setWindowFilePath(filePath);
+        for(QMainWindow *mw: fenster->values()) {
+            mw->setWindowFilePath(filePath);
+        }
+        on_actionSave_triggered();
+    }
 }
 
-void MainWindow::on_actionClose_triggered()
+bool MainWindow::on_actionClose_triggered()
 {
-    this->close();
+    close();
 }

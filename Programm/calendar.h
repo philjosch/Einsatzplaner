@@ -21,6 +21,9 @@ public:
     explicit Calendar(QWidget *parent = 0);
     ~Calendar();
 
+    QJsonObject toJson();
+    void fromJson(QJsonObject o);
+
 public slots:
     void nextMonth();
     void prevMonth();
@@ -41,9 +44,11 @@ signals:
     void showFahrtag(Fahrtag*);
     void showActivity(Activity*);
 
+    void changed();
+
 protected:
-    int getItemFromDate(QDate *date);
-    int getPosInCalendar(QDate *date);
+    int getItemFromDate(QDate date);
+    int getPosInCalendar(QDate date);
     void insert(AActivity *a);
     void setListItemC(QListWidgetItem *i, AActivity *a);
     void setListItem(QListWidgetItem *i, AActivity *a);

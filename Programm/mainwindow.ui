@@ -109,6 +109,9 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
+   </property>
    <widget class="QMenu" name="menuBearbeiten">
     <property name="title">
      <string>Bearbeiten</string>
@@ -265,7 +268,7 @@
     <string>Personalübersicht</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+P</string>
+    <string>Ctrl+E</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::WindowShortcut</enum>

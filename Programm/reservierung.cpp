@@ -3,6 +3,8 @@
 #include "managerreservierungen.h"
 #include <QMap>
 #include <QList>
+#include <QJsonObject>
+#include <QJsonArray>
 
 Reservierung::Reservierung()
 {
@@ -20,6 +22,52 @@ Reservierung::Reservierung()
     sitzplatz = new QMap<int, QList<int>*>();
     fahrrad = false;
     sonstiges = "";
+}
+
+Reservierung::Reservierung(QJsonObject o)
+{
+    name = o.value("name").toString();
+    mail = o.value("mail").toString();
+    telefon = o.value("telefon").toString();
+    anzahl = o.value("anzahl").toInt();
+    klasse = o.value("klasse").toInt();
+    zuege = new QList<QString>();
+    QJsonArray zuegeA = o.value("zuege").toArray();
+    for(QJsonValue val: zuegeA) {
+        zuege->append(val.toString());
+    }
+    hps = new QList<QString>();
+    QJsonArray hpsA = o.value("hps").toArray();
+    for(QJsonValue val: hpsA) {
+        hps->append(val.toString());
+    }
+    sitzplatz = ManagerReservierungen::getPlaetzeFromString(o.value("sitzplaetze").toString());
+    fahrrad = o.value("fahrrad").toBool();
+    sonstiges = o.value("sonstiges").toString();
+}
+
+QJsonObject Reservierung::toJson()
+{
+    QJsonObject o;
+    o.insert("name", name);
+    o.insert("mail", mail);
+    o.insert("telefon", telefon);
+    o.insert("anzahl", anzahl);
+    o.insert("klasse", klasse);
+    QJsonArray zuegeA;
+    for(QString s: *zuege) {
+        zuegeA.append(s);
+    }
+    o.insert("zuege", zuegeA);
+    QJsonArray hpsA;
+    for(QString s: *hps) {
+        hpsA.append(s);
+    }
+    o.insert("hps", hpsA);
+    o.insert("sitzplaetze", ManagerReservierungen::getStringFromPlaetze(sitzplatz));
+    o.insert("fahrrad", fahrrad);
+    o.insert("sonstiges", sonstiges);
+    return o;
 }
 
 QString Reservierung::getName() const

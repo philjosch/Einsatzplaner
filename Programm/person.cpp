@@ -26,6 +26,27 @@ Person::Person(QString name) : QObject()
     activities = new QMap<AActivity *, AActivity::Category>();
 }
 
+QJsonObject Person::toJson()
+{
+    QJsonObject o;
+    o.insert("name", name);
+    o.insert("ausTf", ausbildungTf);
+    o.insert("ausZf", ausbildungZf);
+    o.insert("ausRang", ausbildungRangierer);
+    o.insert("strecke", strecke);
+    return o;
+}
+
+Person *Person::fromJson(QJsonObject o)
+{
+    Person *p = new Person(o.value("name").toString());
+    p->ausbildungRangierer = o.value("ausRang").toBool();
+    p->ausbildungZf = o.value("ausZf").toBool();
+    p->ausbildungTf = o.value("ausTf").toBool();
+    p->strecke = o.value("strecke").toInt();
+    return p;
+}
+
 bool Person::getAusbildungTf() const
 {
     return ausbildungTf;
@@ -66,7 +87,6 @@ void Person::setStrecke(int value)
     strecke = value;
 }
 
-
 void Person::berechne()
 {
     timeTf = 0;
@@ -76,6 +96,7 @@ void Person::berechne()
     timeBuero = 0;
     timeWerkstatt = 0;
     timeSum = 0;
+    sumKilometer = 0;
 
     for(AActivity *a: activities->keys()) {
         AActivity::Category cat = activities->value(a);
@@ -96,6 +117,7 @@ void Person::berechne()
         default: break;
         }
         timeSum += duration;
+        if (cat != AActivity::Buero) sumKilometer += 2*strecke;
     }
     timeTf = timeTf/(3600000);
     timeZf = timeZf/(3600000);
@@ -105,7 +127,6 @@ void Person::berechne()
     timeWerkstatt = timeWerkstatt/(3600000);
     timeSum = timeSum/(3600000);
 
-    sumKilometer = getAnzahl()*strecke;
     valuesInvalid = false;
 }
 

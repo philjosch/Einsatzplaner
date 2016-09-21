@@ -19,7 +19,7 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) :
 
     // Initalisieren der Statischen variablen
     manager = m;
-    setWindowTitle("Personalmanagement");
+    setWindowTitle(tr("Personalmanagement"));
 
     itemToPerson = new QHash<QListWidgetItem*, Person*>();
     personToItem = new QHash<Person*, QListWidgetItem*>();
@@ -37,28 +37,11 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) :
     }
     refreshEinzel();
 
-    QSettings settings;
-    if (settings.value("window/personal/x").toInt() != 0) {
-        this->setGeometry(settings.value("window/personal/x").toInt(),
-                          settings.value("window/personal/y").toInt(),
-                          settings.value("window/personal/width").toInt(),
-                          settings.value("window/personal/height").toInt());
-    }
-    if (! settings.value("window/personal/visible").toBool()) {
-        this->hide();
-    } else {
-        this->show();
-    }
+/*    QSettings settings; */
 }
 
 PersonalWindow::~PersonalWindow()
 {
-    QSettings settings;
-    settings.setValue("window/personal/x", this->x());
-    settings.setValue("window/personal/y", this->y());
-    settings.setValue("window/personal/width", this->width());
-    settings.setValue("window/personal/height", this->height());
-    settings.setValue("window/personal/visible", this->isVisible());
     delete ui;
 }
 
@@ -85,7 +68,7 @@ void PersonalWindow::showPerson(Person *p)
         AActivity *a = i->next();
         // Datum
         ui->tabelle->insertRow(0);
-        QTableWidgetItem *i0 = new QTableWidgetItem(a->getDatum()->toString("dd.MM.yyyy"));
+        QTableWidgetItem *i0 = new QTableWidgetItem(a->getDatum().toString("dd.MM.yyyy"));
         ui->tabelle->setItem(0, 0, i0);
 
         AActivity::Infos *infos = a->getIndividual(p);
@@ -120,11 +103,29 @@ void PersonalWindow::showPerson(Person *p)
     enabled = true;
 }
 
-void PersonalWindow::on_pushAktualisieren_clicked()
+void PersonalWindow::refresh()
 {
     // Aktualisiere die Ansichten
     refreshGesamt();
     refreshEinzel();
+}
+
+void PersonalWindow::loadData()
+{
+    QSetIterator<Person*> i = manager->getPersonen();
+    while(i.hasNext()) {
+        Person *p = i.next();
+        QListWidgetItem *item = new QListWidgetItem(p->getName());
+        ui->listWidget->insertItem(ui->listWidget->count(), item);
+        itemToPerson->insert(item, p);
+        personToItem->insert(p, item);
+    }
+    refresh();
+}
+
+void PersonalWindow::on_pushAktualisieren_clicked()
+{
+    refresh();
 }
 
 void PersonalWindow::refreshGesamt()
@@ -197,7 +198,7 @@ void PersonalWindow::on_lineName_textChanged(const QString &arg1)
 {
     if (enabled) {
         if (manager->personExists(arg1)) {
-            QMessageBox::information(this, "Name doppelt vergeben", "Der eingegebene Namen ist bereits im System registriert.\nSomit kann keine zweite Personen den gleichen Namen haben!");
+            QMessageBox::information(this, tr("Name doppelt vergeben"), tr("Der eingegebene Namen ist bereits im System registriert.\nSomit kann keine zweite Personen den gleichen Namen haben!"));
         } else {
             aktuellePerson->setName(arg1);
             personToItem->value(aktuellePerson)->setText(arg1);
@@ -209,7 +210,7 @@ void PersonalWindow::on_lineName_textChanged(const QString &arg1)
 void PersonalWindow::on_spinKm_valueChanged(int arg1)
 {
     if (enabled)
-    aktuellePerson->setStrecke(arg1);
+        aktuellePerson->setStrecke(arg1);
 }
 
 void PersonalWindow::on_checkTf_clicked(bool checked)
@@ -233,12 +234,12 @@ void PersonalWindow::on_checkRangierer_clicked(bool checked)
 void PersonalWindow::on_pushDelete_clicked()
 {
     // Lösche die Person
-    if (ui->listWidget->selectedItems().length() > 0) {
+    if (ui->listWidget->selectedItems().length() > 0 && enabled) {
         enabled = false;
         QListWidgetItem *i = ui->listWidget->selectedItems().at(0);
         Person *p = itemToPerson->value(i);
         if (p->getAnzahl() > 0) {
-            QMessageBox::information(this, "Warnung", "Die ausgewählte Person kann nciht gelöscht werden, da Sie noch bei Aktivitäten eingetragen ist.\nBitte lösen Sie diese Verbindung bevor Sie die Person löschen!");
+            QMessageBox::information(this, tr("Warnung"), tr("Die ausgewählte Person kann nicht gelöscht werden, da Sie noch bei Aktivitäten eingetragen ist.\nBitte lösen Sie diese Verbindung bevor Sie die Person löschen!"));
             enabled = true;
             return;
         }

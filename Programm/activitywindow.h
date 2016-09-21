@@ -39,6 +39,10 @@ private slots:
 
     void on_tablePersonen_cellChanged(int row, int column);
 
+    void on_actionDelete_triggered();
+    void on_actionPrint_triggered();
+    void on_actionPdf_triggered();
+
 private:
     Ui::ActivityWindow *ui;
     Activity *activity;
