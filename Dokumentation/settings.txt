@@ -1,8 +1,9 @@
 general/
 	autosearchupdate 	-> automatisch nach updates beim start suchen
 io/
-	lastpathexport 		-> letzter Pfad, der besucht wurde um eine Datei beim export zu sichern
-	lastpathsave 		-> pfad der besucht wurde, als eine Datei gesichert wurde
+	lastpath		-> letzter erfolgreich benutzter pfad von FileIO
+#	lastpathexport 		-> letzter Pfad, der besucht wurde um eine Datei beim export zu sichern
+#	lastpathsave 		-> pfad der besucht wurde, als eine Datei gesichert wurde
 	lastused		-> Array mit den zulestzt benutzten dokumenten
 window/
 	mainwindow/
