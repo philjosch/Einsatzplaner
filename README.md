@@ -10,4 +10,3 @@ Weitere Informationen findet man unter [bahn.philipp-schepper.de](http://bahn.ph
 - in Mockup/* werden verschiedene Design-Studien gespeichert
 - in Programm findet man den eigentlichen Quelltext für das Programm
 - README.md ist diese Datei
-- in Webseite finden Sie die Daten der Webseite
