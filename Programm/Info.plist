@@ -7,12 +7,12 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>.ako</string>
+				<string>ako</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>AkO-Dateien</string>
 			<key>CFBundleTypeIconFile</key>
-			<string>Einsatzplaner.icns</string>
+                        <string>keks.icns</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -20,21 +20,21 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>CFBundleIconFile</key>
-        <string>@ICON@</string>
+	<string>@ICON@</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Ein Programm, für den Arbeitskreis OstertalBahn e.V. (AkO) | Created by Qt/QMake</string>
 	<key>CFBundleName</key>
 	<string>Einsatzplaner</string>
-        <key>CFBundleShortVersionString</key>
-        <string>@SHORT_VERSION@</string>
-        <key>CFBundleVersion</key>
-        <string>1.0.0</string>
+	<key>CFBundleShortVersionString</key>
+	<string>@SHORT_VERSION@</string>
+	<key>CFBundleVersion</key>
+	<string>@VERSION@</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleExecutable</key>
-        <string>@EXECUTABLE@</string>
+	<string>@EXECUTABLE@</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>de_DE</string>
 	<key>CFBundleLocalizations</key>
