@@ -2,22 +2,49 @@
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QDir>
+#include <QSettings>
 
-QString FileIO::currentPath = "";
+QString FileIO::currentPath = QDir::homePath();
 
-QString FileIO::getFilePathOpen(QWidget *parent)
+void FileIO::saveSettings()
 {
-    QUrl path = QFileDialog::getOpenFileUrl(parent, parent->tr("Datei öffnen ..."), currentPath, parent->tr("AkO-Dateien (*.ako)"));
-    currentPath = path.path();
-    currentPath = currentPath.remove(path.fileName());
+    QSettings settings;
+    settings.setValue("io/lastpath", currentPath);
+}
+
+void FileIO::loadSettings()
+{
+    QSettings settings;
+    if (settings.contains("io/lastpath")) {
+        currentPath = settings.value("io/lastpath").toString();
+    } else {
+        currentPath = QDir::homePath();
+    }
+}
+
+QString FileIO::getFilePathOpen(QWidget *parent, QString filter)
+{
+    QUrl path = QFileDialog::getOpenFileUrl(parent, parent->tr("Datei öffnen ..."), currentPath, filter);
+    if (path.path() != "") {
+        currentPath = path.path();
+        currentPath = currentPath.remove(path.fileName());
+    }
+    qDebug() << path.path();
+    qDebug() << currentPath;
+    saveSettings();
     return path.path();
 }
 
-QString FileIO::getFilePathSave(QWidget *parent)
+QString FileIO::getFilePathSave(QWidget *parent, QString filename, QString filter)
 {
-    QUrl path = QFileDialog::getSaveFileUrl(parent, parent->tr("Datei speichern ..."), currentPath, parent->tr("AkO-Dateien (*.ako)"));
-    currentPath = path.path();
-    currentPath = currentPath.remove(path.fileName());
+    qDebug() << currentPath+"/"+filename;
+    QUrl path = QFileDialog::getSaveFileUrl(parent, parent->tr("Datei speichern ..."), currentPath+"/"+filename, filter);
+    if (path.path() != "") {
+        currentPath = path.path();
+        currentPath = currentPath.remove(path.fileName());
+    }
+    saveSettings();
     return path.path();
 }
 
