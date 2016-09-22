@@ -27,12 +27,13 @@ public:
 
     QListWidgetItem *insert(AActivity *a);
 signals:
-    void clickedItem(QListWidgetItem *);
+    void clickedItem(AActivity *);
 private slots:
-    void handler(QListWidgetItem *a);
+    void handler(QListWidgetItem *item);
 private:
     Ui::CalendarDay *ui;
-    QMap<AActivity*, QListWidgetItem*> *liste;
+    QMap<AActivity*, QListWidgetItem*> *actToItem;
+    QMap<QListWidgetItem*, AActivity*> *itemToAct;
 };
 
 #endif // CALENDARDAY_H

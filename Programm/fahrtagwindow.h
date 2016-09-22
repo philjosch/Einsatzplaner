@@ -20,66 +20,42 @@ public:
     ~FahrtagWindow();
 
 private slots:
+    // Allgemeine Daten
+
     void on_dateDate_dateChanged(const QDate &date);
-
     void on_comboArt_currentIndexChanged(int index);
-
     void on_textAnlass_textChanged();
-
     void on_checkWichtig_stateChanged(int arg1);
-
     void on_comboWagenreihung_currentTextChanged(const QString &arg1);
-
     void on_comboTimeTfH_currentTextChanged(const QString &arg1);
-
     void on_comboTimeTfM_currentTextChanged(const QString &arg1);
-
     void on_comboTimeZH_currentTextChanged(const QString &arg1);
-
     void on_comboTimeZM_currentTextChanged(const QString &arg1);
 
+    // Personaltab
     void on_listTf_itemChanged(QListWidgetItem *item);
-
-    void on_listZub_itemChanged(QListWidgetItem *item);
-
-    void on_listZf_itemChanged(QListWidgetItem *item);
-
-    void on_listService_itemChanged(QListWidgetItem *item);
-
-    void on_textBemerkungen_textChanged();
-
-    void on_timeEnde_timeChanged(const QTime &time);
-
     void on_buttonTfAdd_clicked();
     void on_buttonTfDelete_clicked();
     void on_checkTf_clicked(bool checked);
 
+    void on_listZub_itemChanged(QListWidgetItem *item);
     void on_buttonZfAdd_clicked();
     void on_buttonZfDelete_clicked();
     void on_checkZf_clicked(bool checked);
 
+    void on_listZf_itemChanged(QListWidgetItem *item);
     void on_buttonZubAdd_clicked();
     void on_buttonZubDelete_clicked();
     void on_checkZub_clicked(bool checked);
 
+    void on_listService_itemChanged(QListWidgetItem *item);
     void on_buttonServiceAdd_clicked();
     void on_buttonServiceDelete_clicked();
     void on_checkService_clicked(bool checked);
 
-    void on_tablePersonen_cellChanged(int row, int column);
-
-    void on_buttonInsert_clicked();
-
-    void on_buttonRemove_clicked();
-
-    void on_actionDelete_triggered();
-    void on_actionPrint_triggered();
-    void on_actionPdf_triggered();
-
+    void on_textBemerkungen_textChanged();
 
     // Reservierungen
-    void on_buttonAdd_clicked();
-    void on_buttonDelete_clicked();
     void on_listRes_itemDoubleClicked(QListWidgetItem *item);
     void on_buttonShow_clicked();
     void on_buttonVerteile_clicked();
@@ -99,9 +75,23 @@ private slots:
     void on_plainSonstiges_textChanged();
     void on_listRes_itemClicked(QListWidgetItem *item);
 
-
-
+    // Einsatzzeiten
+    void on_timeEnde_timeChanged(const QTime &time);
     void on_checkBoxBenoetigt_clicked(bool checked);
+    void on_tablePersonen_cellChanged(int row, int column);
+
+    void on_buttonInsert_clicked();
+    void on_buttonRemove_clicked();
+
+    // Menue
+    void on_actionDelete_triggered();
+    void on_actionPrint_triggered();
+    void on_actionPdf_triggered();
+
+    // Hilfe
+    void on_buttonAdd_clicked();
+    void on_buttonDelete_clicked();
+
 
 private:
     // Allgemeines
@@ -119,7 +109,7 @@ private:
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);
 
-    // Reseriverungen
+    // Reservierungen
     QMap<Reservierung*, QListWidgetItem*> *resToItem;
     QMap<QListWidgetItem*, Reservierung*> *itemToRes;
 

@@ -13,6 +13,7 @@ public:
     Manager();
 //    void fetchPersonal(ManagerPersonal *m);
     QJsonObject toJson();
+    QJsonObject personalToJson();
     void fromJson(QJsonObject o);
 
     void setPersonal(ManagerPersonal *value);

@@ -178,11 +178,15 @@ QString Fahrtag::getHtmlForSingleView()
         html += "<p>Bemerkungen:<br/>"+bemerkungen+"</p>";
     }
 
-    html += "<p><b>Reservierungen:</b><br/>Bereits "+QString::number(getAnzahlBelegt());
-    html += (getAnzahlBelegt() == 1 ? " Platz " :  " Plätze ");
-    html += "belegt. Noch "+QString::number(getFrei())+" frei.</p>";
-
     if (getAnzahl() > 0) {
+        html += "<p><b>Reservierungen:</b>";
+        if (art != Fahrtag::Schnupperkurs && art != Fahrtag::Gesellschaftssonderzug) {
+            html += "<br/>Bereits "+QString::number(getAnzahlBelegt());
+            html += (getAnzahlBelegt() == 1 ? " Platz " :  " Plätze ");
+            html += "belegt. Noch "+QString::number(getFrei())+" frei.</p>";
+        } else {
+            html += "</p>";
+        }
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
         for(Reservierung *r: *reservierungen) {
             html += r->getTableRow();
@@ -288,7 +292,7 @@ QString Fahrtag::getHtmlForTableView()
         html += wagenreihung + "<br/>";
     }
     // Sneek-Peek Reservierungen
-    if (art != Schnupperkurs && getAnzahlBelegt() > 0) {
+    if (art != Schnupperkurs && art != Gesellschaftssonderzug && getAnzahlBelegt() > 0) {
         html += QString::number(getAnzahlBelegt());
         html += (getAnzahlBelegt() == 1 ? " reservierter Sitzplatz": " reservierte Sitzplätze");
         html += " bei " + QString::number(getAnzahl()) + (getAnzahl() == 1 ? " Reservierung" : " Reservierungen");

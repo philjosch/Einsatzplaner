@@ -136,6 +136,7 @@
     <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveas"/>
+    <addaction name="actionSavePersonal"/>
     <addaction name="separator"/>
     <addaction name="actionClose"/>
     <addaction name="separator"/>
@@ -349,6 +350,11 @@
   <action name="actionClear">
    <property name="text">
     <string>Liste leeren</string>
+   </property>
+  </action>
+  <action name="actionSavePersonal">
+   <property name="text">
+    <string>Personaldaten sichern unter</string>
    </property>
   </action>
  </widget>

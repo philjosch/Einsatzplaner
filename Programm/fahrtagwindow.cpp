@@ -44,8 +44,11 @@ void FahrtagWindow::on_dateDate_dateChanged(const QDate &date)
 
 void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
 {
-    if (nehme)
-        fahrtag->setArt((Fahrtag::Art)index);
+    Fahrtag::Art art = (Fahrtag::Art) index;
+    if (nehme) {
+        fahrtag->setArt(art);
+    }
+    ui->tabReservierungen->setEnabled(art != Fahrtag::Schnupperkurs);
     setWindowTitle(Fahrtag::getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum().toString("dddd dd. MM. yyyy"));
 }
 
@@ -885,7 +888,10 @@ void FahrtagWindow::on_buttonVerteile_clicked()
 
 void FahrtagWindow::on_checkBoxAuto_clicked(bool checked)
 {
-    QMessageBox::information(this, "Ohne Funktion", "Die Funktion ist noch nicht implementiert");
+    if (nehme) {
+        fahrtag->setAutoPlatz(checked);
+        fahrtag->emitter();
+    }
 }
 
 void FahrtagWindow::on_lineName_textChanged(const QString &arg1)
@@ -893,6 +899,7 @@ void FahrtagWindow::on_lineName_textChanged(const QString &arg1)
     if (nehmeRes) {
         aktuelleRes->setName(arg1);
         resToItem->value(aktuelleRes)->setText(aktuelleRes->getName());
+        fahrtag->emitter();
     }
 }
 
@@ -985,7 +992,7 @@ void FahrtagWindow::on_lineSitze_returnPressed()
             ui->lineSitze->setStyleSheet("background-color: #b9ceac");
             update();
         } else {
-            QMessageBox::information(this, "Sitzplätze fehlerhaft", "Die eingegebenen Sitzplätze konnten nciht zugewiesen werden.\nGeben Sie gültige und freie Sitzplätze ein!");
+            QMessageBox::information(this, "Sitzplätze fehlerhaft", "Die eingegebenen Sitzplätze konnten nicht zugewiesen werden.\nGeben Sie gültige und freie Sitzplätze ein!");
             ui->lineSitze->setStyleSheet("background-color: #cb555d");
         }
     }

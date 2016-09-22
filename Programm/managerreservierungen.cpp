@@ -72,6 +72,7 @@ QMap<int, QList<int> *> *ManagerReservierungen::getPlaetzeFromString(QString pla
 
 ManagerReservierungen::ManagerReservierungen()
 {
+    autoPlatz = false;
     wagenreihung = "309, 221, 204, 208";
     reservierungen = new QSet<Reservierung*>();
 }
@@ -79,6 +80,7 @@ ManagerReservierungen::ManagerReservierungen()
 ManagerReservierungen::ManagerReservierungen(QJsonObject o)
 {
     wagenreihung = o.value("wagenreihung").toString();
+    autoPlatz = o.value("autoPlatz").toBool();
     reservierungen = new QSet<Reservierung*>();
     QJsonArray array = o.value("reservierungen").toArray();
     for(int i = 0; i < array.size(); i++) {
@@ -94,6 +96,7 @@ ManagerReservierungen::~ManagerReservierungen()
 QJsonObject ManagerReservierungen::toJson(QJsonObject o)
 {
     o.insert("wagenreihung", wagenreihung);
+    o.insert("autoPlatz", autoPlatz);
     QJsonArray array;
     for(Reservierung *r: reservierungen->values()) {
         array.append(r->toJson());
@@ -167,4 +170,14 @@ Reservierung *ManagerReservierungen::createReservierung()
 bool ManagerReservierungen::removeReservierung(Reservierung *res)
 {
     return reservierungen->remove(res);
+}
+
+bool ManagerReservierungen::getAutoPlatz() const
+{
+    return autoPlatz;
+}
+
+void ManagerReservierungen::setAutoPlatz(bool value)
+{
+    autoPlatz = value;
 }

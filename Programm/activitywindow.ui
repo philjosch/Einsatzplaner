@@ -272,6 +272,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QPushButton" name="buttonDelete">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Arbeitseinsatz löschen</string>
         </property>
@@ -320,6 +323,9 @@
    </property>
   </action>
   <action name="actionDelete">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Löschen</string>
    </property>

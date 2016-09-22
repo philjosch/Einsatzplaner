@@ -15,7 +15,7 @@ public:
 
     QJsonObject toJson();
 
-    enum Art { Museumszug, Sonderzug, Gesellschaftssonderzug, Nikolauszug, Schnupperkurs, ELFundMuseumszug, Bahnhofsfest, Sonstiges=100 };
+    enum Art { Museumszug, Sonderzug, Gesellschaftssonderzug, Nikolauszug, ELFundMuseumszug, Schnupperkurs, Bahnhofsfest, Sonstiges=100 };
     static QString getStringFromArt(Fahrtag::Art art);
 
     QString getListString();

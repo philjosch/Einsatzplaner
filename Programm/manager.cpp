@@ -24,6 +24,18 @@ QJsonObject Manager::toJson()
     return data;
 }
 
+QJsonObject Manager::personalToJson()
+{
+    QJsonObject data;
+    QJsonArray array;
+    data.insert("activites", array);
+
+    // Personen speichern
+    QJsonObject personalJSON = personal->toJson();
+    data.insert("personal", personalJSON);
+    return data;
+}
+
 void Manager::fromJson(QJsonObject o)
 {
     QJsonObject personalJSON = o.value("personal").toObject();

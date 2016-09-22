@@ -22,6 +22,7 @@ public:
     ~Calendar();
 
     QJsonObject toJson();
+    QJsonObject personalToJson();
     void fromJson(QJsonObject o);
 
 public slots:
@@ -38,7 +39,7 @@ public slots:
     void activityChanged(AActivity *a);
 
     void clickedItem(QListWidgetItem *i);
-    void clickedItemCalendar(QListWidgetItem *i);
+    void clickedItemCalendar(AActivity *a);
 
 signals:
     void showFahrtag(Fahrtag*);
@@ -56,8 +57,9 @@ protected:
     QList<CalendarDay*> *tage;
 
     QMap<AActivity*, CalendarDay*> *calendaritem; // Gibt an, in welchem Tag die Elemente momentan angezeigt werden
-    QMap<QListWidgetItem*, AActivity*> *calendarEntries; // Gibt an, welche Aktivität zu den einzelnen Kalendereinträgen gehört
+
     QMap<AActivity*, QListWidgetItem*> *listitem; // Gibt an, welcher Aktivität welches Listenelement in der gesamtListe zugeordnet ist
+    QMap<QListWidgetItem*, AActivity*> *itemToList;
 };
 
 #endif // CALENDAR_H

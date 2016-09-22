@@ -52,9 +52,9 @@ QString MainWindow::getFarbeZug(Fahrtag::Art cat)
 
     switch (cat) {
     case Fahrtag::Museumszug:           return "#ffffff"; // Museumszug
-    case Fahrtag::Sonderzug:            return "#ffe8d9"; // Sonderzug -
-    case Fahrtag::Gesellschaftssonderzug: return "#ffbc90"; // Gesellschaft -
-    case Fahrtag::Nikolauszug:          return "#e481d1"; // Nikolausfahrt -
+    case Fahrtag::Sonderzug:            return "#ffcccc"; // Sonderzug -
+    case Fahrtag::Gesellschaftssonderzug: return "#ffcc66"; // Gesellschaft -
+    case Fahrtag::Nikolauszug:          return "#ffccff"; // Nikolausfahrt -
     case Fahrtag::ELFundMuseumszug:     return "#918fe3"; // Museumszug mit ELF -
     case Fahrtag::Schnupperkurs:        return "#e7e7fd"; // ELF-Schnupperkurs -
     case Fahrtag::Bahnhofsfest:         return "#80e3b1"; // Bahnhofsfest
@@ -298,7 +298,40 @@ void MainWindow::on_actionSaveas_triggered()
     }
 }
 
+void MainWindow::on_actionSavePersonal_triggered()
+{
+    QString filePath = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
+    if (filePath == "") {
+        return;
+    }
+
+    QJsonObject calendarJSON = ui->calendar->personalToJson();
+
+    QJsonObject viewJSON;
+    viewJSON.insert("xMain", this->x());
+    viewJSON.insert("yMain", this->y());
+    viewJSON.insert("widthMain", this->width());
+    viewJSON.insert("heightMain", this->height());
+    viewJSON.insert("xPersonal", personalfenster->x());
+    viewJSON.insert("yPersonal", personalfenster->y());
+    viewJSON.insert("widthPersonal", personalfenster->width());
+    viewJSON.insert("heightPersonal", personalfenster->height());
+/*    viewJSON.insert("showPersonal", false); CURRENTLY NOT USED*/
+
+    QJsonObject generalJSON;
+    generalJSON.insert("version", CoreApplication::getAktuelleVersion());
+
+    QJsonObject object;
+    object.insert("calendar", calendarJSON);
+    object.insert("view", viewJSON);
+    object.insert("general", generalJSON);
+
+    if (! FileIO::saveJsonToFile(filePath, object)) {
+        QMessageBox::warning(this, tr("Fehler"), tr("Das speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+    }
+}
+
 bool MainWindow::on_actionClose_triggered()
 {
-    close();
+    return close();
 }

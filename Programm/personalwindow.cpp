@@ -192,6 +192,7 @@ void PersonalWindow::on_pushAdd_clicked()
     showPerson(aktuellePerson);
     ui->pushDelete->setEnabled(true);
     refreshEinzel();
+    emit changed();
 }
 
 void PersonalWindow::on_lineName_textChanged(const QString &arg1)
@@ -204,31 +205,40 @@ void PersonalWindow::on_lineName_textChanged(const QString &arg1)
             personToItem->value(aktuellePerson)->setText(arg1);
             ui->listWidget->sortItems();
         }
+        emit changed();
     }
 }
 
 void PersonalWindow::on_spinKm_valueChanged(int arg1)
 {
-    if (enabled)
+    if (enabled) {
         aktuellePerson->setStrecke(arg1);
+        emit changed();
+    }
 }
 
 void PersonalWindow::on_checkTf_clicked(bool checked)
 {
-    if (enabled)
+    if (enabled) {
         aktuellePerson->setAusbildungTf(checked);
+        emit changed();
+    }
 }
 
 void PersonalWindow::on_checkZf_clicked(bool checked)
 {
-    if (enabled)
+    if (enabled) {
         aktuellePerson->setAusbildungZf(checked);
+        emit changed();
+    }
 }
 
 void PersonalWindow::on_checkRangierer_clicked(bool checked)
 {
-    if (enabled)
+    if (enabled) {
         aktuellePerson->setAusbildungRangierer(checked);
+        emit changed();
+    }
 }
 
 void PersonalWindow::on_pushDelete_clicked()
@@ -266,6 +276,7 @@ void PersonalWindow::on_pushDelete_clicked()
             showPerson(aktuellePerson);
             enabled = true;
         }
+        emit changed();
     }
 }
 

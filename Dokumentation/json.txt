@@ -36,6 +36,7 @@ calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die P
 
 		~Daten aus Reservierungsmanager~
 		wagenreihung (string)		-> Die wagenreihung, wagen getrennt durch ', '
+		autoPlatz (bool)		-> Plätze werden automatisch verteilt
 		reservierungen (array)		-> Die liste mit den reservierungen jeweils als (object)
 			name (string)
 			telefon (string)

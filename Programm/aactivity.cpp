@@ -84,7 +84,9 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
 
 AActivity::~AActivity()
 {
-    // Löscht das Objekt und entfernt alle Verbindungen zu den personen
+    for(Person *p: personen->keys()) {
+        p->removeActivity(this);
+    }
 }
 
 QJsonObject AActivity::toJson()

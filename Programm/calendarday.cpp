@@ -1,12 +1,15 @@
 #include "calendarday.h"
 #include "ui_calendarday.h"
 
+#include <QDebug>
+
 CalendarDay::CalendarDay(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::CalendarDay)
 {
     ui->setupUi(this);
-    liste = new QMap<AActivity*, QListWidgetItem*>();
+    actToItem = new QMap<AActivity*, QListWidgetItem*>();
+    itemToAct = new QMap<QListWidgetItem*, AActivity*>();
     connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(handler(QListWidgetItem*)));
 }
 
@@ -35,28 +38,30 @@ void CalendarDay::setGray(bool gray)
 
 QListWidgetItem *CalendarDay::get(AActivity *a)
 {
-    return liste->value(a);
+    return actToItem->value(a);
 }
 
 bool CalendarDay::remove(AActivity *a)
 {
-
-    ui->listWidget->takeItem(ui->listWidget->row(liste->value(a)));
-    liste->remove(a);
-
+    QListWidgetItem *item = actToItem->value(a);
+    actToItem->remove(a);
+    itemToAct->remove(item);
+    int row = ui->listWidget->row(item);
+    ui->listWidget->takeItem(row);
+    delete item;
     return true;
-
 }
 
 QListWidgetItem *CalendarDay::insert(AActivity *a)
 {
-    ui->listWidget->insertItem(0, a->getListStringShort());
-    QListWidgetItem* item = ui->listWidget->item(0);
-    liste->insert(a, item);
+    QListWidgetItem* item = new QListWidgetItem(a->getListStringShort());
+    ui->listWidget->insertItem(ui->listWidget->count(), item);
+    actToItem->insert(a, item);
+    itemToAct->insert(item, a);
     return item;
 }
 
-void CalendarDay::handler(QListWidgetItem *a)
+void CalendarDay::handler(QListWidgetItem *item)
 {
-    emit clickedItem(a);
+    emit clickedItem(itemToAct->value(item));
 }

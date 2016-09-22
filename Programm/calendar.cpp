@@ -9,8 +9,8 @@ Calendar::Calendar(QWidget *parent) : QFrame(parent), Manager(), ui(new Ui::Cale
     ui->setupUi(this);
 
     listitem = new QMap<AActivity*, QListWidgetItem*>();
+    itemToList = new QMap<QListWidgetItem*, AActivity*>();
     calendaritem = new QMap<AActivity*, CalendarDay*>();
-    calendarEntries = new QMap<QListWidgetItem*, AActivity*>();
 
     connect(ui->buttonAddActivity, SIGNAL(clicked(bool)), this, SLOT(newActivity()));
     connect(ui->buttonAddFahrtag, SIGNAL(clicked(bool)), this, SLOT(newFahrtag()));
@@ -37,7 +37,7 @@ Calendar::Calendar(QWidget *parent) : QFrame(parent), Manager(), ui(new Ui::Cale
     tage->append(ui->day1_6);    tage->append(ui->day2_6);    tage->append(ui->day3_6);    tage->append(ui->day4_6);
     tage->append(ui->day5_6);    tage->append(ui->day6_6);    tage->append(ui->day7_6);
     for(CalendarDay *c: *tage) {
-        connect(c, SIGNAL(clickedItem(QListWidgetItem*)), this, SLOT(clickedItemCalendar(QListWidgetItem*)));
+        connect(c, SIGNAL(clickedItem(AActivity*)), this, SLOT(clickedItemCalendar(AActivity*)));
     }
     goToday();
 
@@ -51,6 +51,13 @@ Calendar::~Calendar()
 QJsonObject Calendar::toJson()
 {
     QJsonObject o = Manager::toJson();
+    o.insert("currentDate", ui->dateSelector->date().toString("yyyy-MM-dd"));
+    return o;
+}
+
+QJsonObject Calendar::personalToJson()
+{
+    QJsonObject o = Manager::personalToJson();
     o.insert("currentDate", ui->dateSelector->date().toString("yyyy-MM-dd"));
     return o;
 }
@@ -74,6 +81,7 @@ void Calendar::fromJson(QJsonObject o)
         setListItem(i, a);
         ui->listWidget->insertItem(ui->listWidget->count(), i);
         listitem->insert(a, i);
+        itemToList->insert(i, a);
     }
     // an das gespeicherte Datum gehen
     goTo(QDate::fromString(o.value("currentDate").toString(), "yyyy-MM-dd"));
@@ -135,12 +143,10 @@ void Calendar::goTo(QDate date)
     for(int i = 0; i < calendaritem->keys().length(); i++) {
         calendaritem->value(calendaritem->keys().at(i))->remove(calendaritem->keys().at(i));
     }
-    calendarEntries->clear();
     for(int i = 0; i < activities->length(); i++) {
         AActivity *a = activities->at(i);
         int pos = getPosInCalendar(a->getDatum());
         if (pos != -1) {
-            calendarEntries->insert(tage->at(pos)->insert(a), a);
             calendaritem->insert(a, tage->at(pos));
             setListItemC(calendaritem->value(a)->get(a), a);
 //            activityChanged(a);
@@ -157,8 +163,10 @@ void Calendar::goToday()
 
 bool Calendar::removeSelected()
 {
-    QMessageBox::information(this, "Fehler", "Noch nicht implementiert");
-    emit changed();
+    QList<QListWidgetItem*> selected = ui->listWidget->selectedItems();
+    for(QListWidgetItem *item: selected) {
+        removeActivity(itemToList->value(item));
+    }
     return false;
 }
 
@@ -196,9 +204,13 @@ Activity *Calendar::newActivity()
 
 bool Calendar::removeActivity(AActivity *a)
 {
-    QMessageBox::information(this, "Fehler", "Diese Funktion kann im MOment nicht genutzt werden!\nWir bitten um Entschuldigung!");
+    ui->listWidget->takeItem(ui->listWidget->row(listitem->value(a)));
+    itemToList->remove(listitem->value(a));
+    listitem->remove(a);
+    calendaritem->value(a)->remove(a);
+    calendaritem->remove(a);
     emit changed();
-    return false;
+    return true;
 }
 
 void Calendar::activityChanged(AActivity *a)
@@ -218,13 +230,11 @@ void Calendar::activityChanged(AActivity *a)
             if ( ! (pos_neu == pos_alt)) {
                 calendaritem->value(a)->remove(a);
                 calendaritem->insert(a, pos_neu);
-                calendarEntries->insert(pos_neu->insert(a), a);
             }
         } else {
             // Element ist nciht im Kalender und muss eingefügt werden
             CalendarDay *pos_neu = tage->at(pos);
             calendaritem->insert(a, pos_neu);
-            calendarEntries->insert(pos_neu->insert(a), a);
         }
         setListItemC(calendaritem->value(a)->get(a), a);
     } else {
@@ -267,7 +277,7 @@ void Calendar::activityChanged(AActivity *a)
 
 void Calendar::clickedItem(QListWidgetItem *i)
 {
-    AActivity *a = listitem->key(i, new Fahrtag(QDate(), nullptr));
+    AActivity *a = itemToList->value(i);
     if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
         emit showFahrtag(f);
     } else {
@@ -276,9 +286,8 @@ void Calendar::clickedItem(QListWidgetItem *i)
     }
 }
 
-void Calendar::clickedItemCalendar(QListWidgetItem *i)
+void Calendar::clickedItemCalendar(AActivity *a)
 {
-    AActivity *a = calendarEntries->value(i);
     if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
         emit showFahrtag(f);
     } else {
@@ -323,12 +332,12 @@ void Calendar::insert(AActivity *a)
     ui->listWidget->insertItem(ui->listWidget->count(), a->getListString());
     QListWidgetItem *i = ui->listWidget->item(ui->listWidget->count()-1);
     listitem->insert(a, i);
+    itemToList->insert(i, a);
 
     // Einfügen in den Kalender mit allem drum und dran
     int pos = getPosInCalendar(a->getDatum());
     if (pos != -1) {
-        QListWidgetItem *i = tage->at(pos)->insert(a);
-        calendarEntries->insert(i, a);
+        tage->at(pos)->insert(a);
         calendaritem->insert(a, tage->at(pos));
     }
 }
