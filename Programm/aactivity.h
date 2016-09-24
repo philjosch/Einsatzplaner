@@ -28,6 +28,8 @@ public:
     AActivity(QJsonObject o, ManagerPersonal *p);
     ~AActivity();
 
+    bool remove();
+
     virtual QJsonObject toJson();
 
     static Category getCategoryFromString(QString s);

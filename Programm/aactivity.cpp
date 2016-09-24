@@ -84,9 +84,15 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
 
 AActivity::~AActivity()
 {
+    remove();
+}
+
+bool AActivity::remove()
+{
     for(Person *p: personen->keys()) {
         p->removeActivity(this);
     }
+    return true;
 }
 
 QJsonObject AActivity::toJson()

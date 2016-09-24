@@ -209,6 +209,7 @@ bool Calendar::removeActivity(AActivity *a)
     listitem->remove(a);
     calendaritem->value(a)->remove(a);
     calendaritem->remove(a);
+    Manager::removeActivity(a);
     emit changed();
     return true;
 }

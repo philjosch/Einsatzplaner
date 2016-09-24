@@ -74,6 +74,7 @@ Activity *Manager::newActivity(QDate datum)
 
 bool Manager::removeActivity(AActivity *a)
 {
+    a->remove();
     return activities->removeOne(a);
 }
 
