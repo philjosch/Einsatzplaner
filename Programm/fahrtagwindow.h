@@ -93,6 +93,8 @@ private slots:
     void on_buttonDelete_clicked();
 
 
+    void on_checkBoxAll_clicked(bool checked);
+
 private:
     // Allgemeines
     Ui::FahrtagWindow *ui;

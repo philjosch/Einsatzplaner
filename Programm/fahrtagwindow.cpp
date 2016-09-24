@@ -127,6 +127,11 @@ void FahrtagWindow::loadData()
             itemToRes->insert(item, r);
             ui->listRes->insertItem(0, item);
         }
+        ui->checkBoxAuto->setChecked(fahrtag->getAutoPlatz());
+        ui->checkBoxAll->setChecked(fahrtag->getCheckAll());
+        ui->checkBoxAll->setEnabled(fahrtag->getAutoPlatz());
+        ui->buttonVerteile->setEnabled(fahrtag->getAutoPlatz());
+
 
         // Daten von Fahrtag
         ui->comboArt->setCurrentIndex((int)fahrtag->getArt());
@@ -807,8 +812,6 @@ void FahrtagWindow::loadReservierung(Reservierung *r)
     ui->comboKlasse->setCurrentIndex(r->getKlasse());
     QList<QString> *z = r->getZuege();
     QList<QString> *h = r->getHps();
-    qDebug() << z->length();
-    qDebug() << h->length();
     ui->comboStart1Zug->setCurrentText(z->at(0));
     ui->comboEnde1Zug->setCurrentText(z->at(1));
     ui->comboStart1Hp->setCurrentText(h->at(0));
@@ -883,7 +886,11 @@ void FahrtagWindow::on_buttonShow_clicked()
 
 void FahrtagWindow::on_buttonVerteile_clicked()
 {
-    QMessageBox::information(this, "Ohne Funktion", "Die Funktion ist noch nicht implementiert");
+    // Informationen, wie lange es gedauert hat
+    QTime start = QTime::currentTime();
+    fahrtag->verteileSitzplaetze();
+    QTime ende = QTime::currentTime();
+    QMessageBox::information(this, tr("Fertig"), tr("Die Sitzplätze wurden in ")+QString::number(start.msecsTo(ende)/1000)+tr(" Sekunden verteilt."));
 }
 
 void FahrtagWindow::on_checkBoxAuto_clicked(bool checked)
@@ -892,6 +899,8 @@ void FahrtagWindow::on_checkBoxAuto_clicked(bool checked)
         fahrtag->setAutoPlatz(checked);
         fahrtag->emitter();
     }
+    ui->checkBoxAll->setEnabled(checked);
+    ui->buttonVerteile->setEnabled(checked);
 }
 
 void FahrtagWindow::on_lineName_textChanged(const QString &arg1)
@@ -1021,6 +1030,17 @@ void FahrtagWindow::on_listRes_itemClicked(QListWidgetItem *item)
 
 void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)
 {
-    if (nehme)
+    if (nehme) {
         fahrtag->setPersonalBenoetigt(checked);
+        fahrtag->emitter();
+    }
+}
+
+void FahrtagWindow::on_checkBoxAll_clicked(bool checked)
+{
+    if (nehme){
+        if (checked) QMessageBox::information(this, tr("Hinweis"), tr("Es kann sehr unter Umständen sehr lange dauern, bis die 'perfekte' Verteilung berechnet wird.\nIhr Computer reagiert in dieser Zeit vielleicht nicht!"));
+        fahrtag->setCheckAll(checked);
+        fahrtag->emitter();
+    }
 }

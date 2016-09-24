@@ -34,6 +34,9 @@ public:
     bool getAutoPlatz() const;
     void setAutoPlatz(bool value);
 
+    bool getCheckAll() const;
+    void setCheckAll(bool value);
+
 public slots:
     void verteileSitzplaetze();
     bool checkPlaetze(QMap<int, QList<int> *> *p);
@@ -45,6 +48,7 @@ protected:
     QString wagenreihung;
     QSet<Reservierung*> *reservierungen;
     bool autoPlatz;
+    bool checkAll;
 
 };
 

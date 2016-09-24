@@ -33,7 +33,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <property name="documentMode">
        <bool>false</bool>
@@ -625,14 +625,20 @@
          <number>6</number>
         </property>
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridNavigator" rowstretch="0,1,0,0,0,0" columnstretch="1,1">
+         <layout class="QGridLayout" name="gridNavigator" rowstretch="0,1,0,0,0,0,0" columnstretch="1,1">
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QPushButton" name="buttonAdd">
+          <item row="1" column="0" colspan="2">
+           <widget class="QListWidget" name="listRes"/>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QPushButton" name="buttonShow">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="text">
-             <string>Neue Reservierung</string>
+             <string>Sitzplatzverteilung anzeigen</string>
             </property>
            </widget>
           </item>
@@ -643,13 +649,10 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="QListWidget" name="listRes"/>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QPushButton" name="buttonShow">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="buttonAdd">
             <property name="text">
-             <string>Sitzplatzverteilung anzeigen</string>
+             <string>Neue Reservierung</string>
             </property>
            </widget>
           </item>
@@ -663,20 +666,30 @@
           <item row="4" column="0" colspan="2">
            <widget class="QCheckBox" name="checkBoxAuto">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Automatische Sitzplatzverteilung</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="0" colspan="2">
+          <item row="6" column="0" colspan="2">
            <widget class="QPushButton" name="buttonVerteile">
             <property name="enabled">
              <bool>false</bool>
             </property>
             <property name="text">
              <string>Sitzplätze verteilen</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <widget class="QCheckBox" name="checkBoxAll">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Alle Kombinationen berechnen</string>
             </property>
            </widget>
           </item>

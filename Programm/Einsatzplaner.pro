@@ -32,7 +32,9 @@ SOURCES += main.cpp\
     export.cpp \
     exportgesamt.cpp \
     fileio.cpp \
-    coreapplication.cpp
+    coreapplication.cpp \
+    wagen.cpp \
+    verteiler.cpp
 
 HEADERS  += mainwindow.h \
     person.h \
@@ -51,7 +53,9 @@ HEADERS  += mainwindow.h \
     export.h \
     exportgesamt.h \
     fileio.h \
-    coreapplication.h
+    coreapplication.h \
+    wagen.h \
+    verteiler.h
 
 FORMS    += mainwindow.ui \
 #    managerreservierungen.ui \

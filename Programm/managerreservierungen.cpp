@@ -6,6 +6,11 @@
 #include <QSet>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "wagen.h"
+#include "verteiler.h"
+
+#include <QDebug>
+#include <QTime>
 
 QString ManagerReservierungen::getStringFromPlaetze(QMap<int, QList<int> *> *liste)
 {
@@ -16,11 +21,14 @@ QString ManagerReservierungen::getStringFromPlaetze(QMap<int, QList<int> *> *lis
         bool strich = false;
         for (int j : * liste->value(i)) {
             if (old+1 == j) {
-                if (strich && (j == liste->value(i)->last())) {
+                if ((strich && (j == liste->value(i)->last()))) {
                     s += QString::number(j);
                 } else if (! strich) {
                     s += "-";
                     strich = true;
+                    if (j == liste->value(i)->last()) {
+                        s += QString::number(j);
+                    }
                 }
             } else {
                 if (strich)
@@ -73,6 +81,7 @@ QMap<int, QList<int> *> *ManagerReservierungen::getPlaetzeFromString(QString pla
 ManagerReservierungen::ManagerReservierungen()
 {
     autoPlatz = false;
+    checkAll = false;
     wagenreihung = "309, 221, 204, 208";
     reservierungen = new QSet<Reservierung*>();
 }
@@ -80,6 +89,7 @@ ManagerReservierungen::ManagerReservierungen()
 ManagerReservierungen::ManagerReservierungen(QJsonObject o)
 {
     wagenreihung = o.value("wagenreihung").toString();
+    checkAll = o.value("checkAll").toBool();
     autoPlatz = o.value("autoPlatz").toBool();
     reservierungen = new QSet<Reservierung*>();
     QJsonArray array = o.value("reservierungen").toArray();
@@ -97,6 +107,7 @@ QJsonObject ManagerReservierungen::toJson(QJsonObject o)
 {
     o.insert("wagenreihung", wagenreihung);
     o.insert("autoPlatz", autoPlatz);
+    o.insert("checkAll", checkAll);
     QJsonArray array;
     for(Reservierung *r: reservierungen->values()) {
         array.append(r->toJson());
@@ -149,7 +160,33 @@ QSetIterator<Reservierung *> ManagerReservierungen::getReservierungen()
 
 void ManagerReservierungen::verteileSitzplaetze()
 {
+    QList<Wagen*> *ersteKlasse = new QList<Wagen*>();
+    QList<Wagen*> *andereKlasse = new QList<Wagen*>();
+    QSet<Reservierung*> *resErste = new QSet<Reservierung*>();
+    QSet<Reservierung*> *resAndere = new QSet<Reservierung*>();
+    QStringList wagenSplit = wagenreihung.split(", ");
 
+    for(QString s: wagenSplit) {
+        int nummer = s.toInt();
+        if (Wagen::klasse(nummer) == 1) {
+            ersteKlasse->append(new Wagen(nummer));
+        } else {
+            andereKlasse->append(new Wagen(nummer));
+        }
+    }
+
+    for(Reservierung *r: *reservierungen) {
+        if (r->getKlasse() == 0)
+            resAndere->insert(r);
+        else
+            resErste->insert(r);
+    }
+    Verteiler *erste = new Verteiler(ersteKlasse, resErste);
+    erste->setCheckAll(checkAll);
+    erste->verteile();
+    Verteiler *andere = new Verteiler(andereKlasse, resAndere);
+    andere->setCheckAll(checkAll);
+    andere->verteile();
 }
 
 bool ManagerReservierungen::checkPlaetze(QMap<int, QList<int>*> *p)
@@ -170,6 +207,16 @@ Reservierung *ManagerReservierungen::createReservierung()
 bool ManagerReservierungen::removeReservierung(Reservierung *res)
 {
     return reservierungen->remove(res);
+}
+
+bool ManagerReservierungen::getCheckAll() const
+{
+    return checkAll;
+}
+
+void ManagerReservierungen::setCheckAll(bool value)
+{
+    checkAll = value;
 }
 
 bool ManagerReservierungen::getAutoPlatz() const
