@@ -43,6 +43,7 @@ QListWidgetItem *CalendarDay::get(AActivity *a)
 
 bool CalendarDay::remove(AActivity *a)
 {
+    if (! actToItem->contains(a)) return false;
     QListWidgetItem *item = actToItem->value(a);
     actToItem->remove(a);
     itemToAct->remove(item);

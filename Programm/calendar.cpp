@@ -228,13 +228,15 @@ void Calendar::activityChanged(AActivity *a)
             CalendarDay *pos_neu = tage->at(pos);
             CalendarDay *pos_alt = calendaritem->value(a);
             if ( ! (pos_neu == pos_alt)) {
-                calendaritem->value(a)->remove(a);
+                pos_alt->remove(a);
+                pos_neu->insert(a);
                 calendaritem->insert(a, pos_neu);
             }
         } else {
             // Element ist nciht im Kalender und muss eingefügt werden
             CalendarDay *pos_neu = tage->at(pos);
             calendaritem->insert(a, pos_neu);
+            pos_neu->insert(a);
         }
         setListItemC(calendaritem->value(a)->get(a), a);
     } else {
@@ -244,10 +246,10 @@ void Calendar::activityChanged(AActivity *a)
             calendaritem->remove(a);
         }
     }
-
     // Richtiges positionieren des elementes in der Übersichts liste
     setListItem(listitem->value(a), a);
-/*    int i = activities->indexOf(a);
+
+    /*    int i = activities->indexOf(a);
     while (i > 0) {
         QMessageBox::information(this, "", activities->at(i-1)->getDatum()->toString("dd.MM.yyyy"));
         QMessageBox::information(this, "", activities->at(i)->getDatum()->toString("dd.MM.yyyy"));
@@ -272,6 +274,7 @@ void Calendar::activityChanged(AActivity *a)
         i++;
     }
     */
+
     emit changed();
 }
 
