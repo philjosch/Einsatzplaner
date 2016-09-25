@@ -1,4 +1,5 @@
 #include "wagen.h"
+#include "managerreservierungen.h"
 
 #include <math.h>
 #include <cmath>
@@ -7,7 +8,7 @@
 
 double Wagen::FAKTOR_FUER_FREIE_PLAETZE = 0.9;
 double Wagen::GEWICHT_STRAFE_TEIL_1 = 10.0;
-double Wagen::GEWICHT_STRAFE_TEIL_2 = 3.0;
+double Wagen::GEWICHT_STRAFE_TEIL_2 = 11.0;
 
 Wagen::Wagen(int nummer)
 {
@@ -131,7 +132,7 @@ int Wagen::klasse(int nummer)
 
 int Wagen::getAnzahlFreiePlaetzeInSitzgruppe()
 {
-    if (aktuellePosition == sitzGruppen->length()) return 0;
+    if (aktuellePosition == sitzGruppen->length()) return 0; // Out of range
     int ende = sitzGruppen->lastIndexOf(sitzGruppen->at(aktuellePosition));
     return ende - aktuellePosition + 1;
 }
@@ -205,6 +206,11 @@ double Wagen::getStrafpunkteFuerPlaetze(int anzahl, int start)
         sp2 += ueV*ueV;
     }
 
+    // Zweite Neue Variante zur Berechnung des Fehlers:
+    sp1 = ((double) (benoetigt - maxB)) / ((double) maxB);
+    sp2 = (ueV*ueV)/(double)(sgV*sgV) + (ueH*ueH)/ (double)(sgH*sgH);
+    sp2 = ((double) sp2)/((double)2.0);
+
     // Gewichtung der einzelnen Strafpunkte //
     return GEWICHT_STRAFE_TEIL_1 * sp1 + GEWICHT_STRAFE_TEIL_2 * sp2;
 }
@@ -239,10 +245,16 @@ void Wagen::weisePlaetzeZu()
         liste.value(r)->append(i+1);
     }
 
-    for(Reservierung *r: liste.keys()) {
+    for(Reservierung *r: liste.keys()) {        
         QMap<int, QList<int>*> *plaetze = new QMap<int, QList<int>*>();
         plaetze->insert(nummer, liste.value(r));
         r->setSitzplatz(plaetze);
+        qDebug() << r->getName() << ManagerReservierungen::getStringFromPlaetze(plaetze);
     }
 
+}
+
+int Wagen::getAktuellePosition() const
+{
+    return aktuellePosition;
 }

@@ -32,6 +32,8 @@ public:
 
     void weisePlaetzeZu();
 
+    int getAktuellePosition() const;
+
 protected:
     static double FAKTOR_FUER_FREIE_PLAETZE;
     static double GEWICHT_STRAFE_TEIL_1;

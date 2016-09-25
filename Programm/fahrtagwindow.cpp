@@ -890,7 +890,7 @@ void FahrtagWindow::on_buttonVerteile_clicked()
     QTime start = QTime::currentTime();
     fahrtag->verteileSitzplaetze();
     QTime ende = QTime::currentTime();
-    QMessageBox::information(this, tr("Fertig"), tr("Die Sitzplätze wurden in ")+QString::number(start.msecsTo(ende)/1000)+tr(" Sekunden verteilt."));
+    QMessageBox::information(this, tr("Fertig"), tr("Die Sitzplätze wurden in ")+QString::number(start.msecsTo(ende))+tr(" mSekunden verteilt."));
 }
 
 void FahrtagWindow::on_checkBoxAuto_clicked(bool checked)

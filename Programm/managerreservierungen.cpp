@@ -184,9 +184,11 @@ void ManagerReservierungen::verteileSitzplaetze()
     Verteiler *erste = new Verteiler(ersteKlasse, resErste);
     erste->setCheckAll(checkAll);
     erste->verteile();
+    /*
     Verteiler *andere = new Verteiler(andereKlasse, resAndere);
     andere->setCheckAll(checkAll);
     andere->verteile();
+    */
 }
 
 bool ManagerReservierungen::checkPlaetze(QMap<int, QList<int>*> *p)

@@ -37,6 +37,8 @@ public:
     void setCheckAll(bool value);
 
     double mindestbewertung;
+
+    double getMinBewertung(QSet<Reservierung *> *liste);
 };
 
 #endif // VERTEILER_H
