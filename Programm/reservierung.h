@@ -1,13 +1,15 @@
 #ifndef RESERVIERUNG_H
 #define RESERVIERUNG_H
 
+class Wagen;
+
 #include <QObject>
 
 class Reservierung
 {
 public:
-    Reservierung();
-    Reservierung(QJsonObject o);
+    Reservierung(QMap<int, Wagen *> *wagen);
+    Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen);
 
     QJsonObject toJson();
 
@@ -42,6 +44,7 @@ public:
     void setSonstiges(const QString &value);
 
     QString getTableRow();
+    void removePlaetze();
 
 private:
     QString name;
@@ -54,6 +57,7 @@ private:
     QMap<int, QList<int> *> *sitzplatz;
     bool fahrrad;
     QString sonstiges;
+    QMap<int, Wagen *> *wagen;
 
 };
 

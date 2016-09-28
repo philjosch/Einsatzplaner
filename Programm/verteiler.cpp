@@ -18,21 +18,22 @@ bool Verteiler::verteile()
     // berechne untere Schranke für die Güte dees ergebnisses
     mindestbewertung = getMinBewertung(reservierungen);
 
-    qDebug() << "Mindestbewertung: " << mindestbewertung;
 
     int puffer = 0;
-    for(Wagen *w: *wagen) {
-        puffer += w->getFreiePlaetze();
+    for (Wagen *w: *wagen) {
+        puffer += w->getAnzahl();
     }
-    for(Reservierung *r: *reservierungen) {
+    for (Reservierung *r: *reservierungen) {
         puffer -= r->getAnzahl();
     }
     if (puffer < 0) return false;
+    for (Wagen *w: *wagen) {
+        w->clear();
+    }
     verteile(0, *reservierungen, puffer);
     qDebug() << count << "Lösungen";
     return found;
 }
-
 
 void Verteiler::verteile(double bewertung, QSet<Reservierung *> rest, int puffer)
 {
@@ -41,7 +42,7 @@ void Verteiler::verteile(double bewertung, QSet<Reservierung *> rest, int puffer
     }
     // Berechne den kleinsten Fehler und prüfe, ob Ziel noch erreicht werden kann
     if (bewertung + getMinBewertung(&rest) > besteBewertung) {
-        qDebug() << "schlechtes ergebnis" << besteBewertung << getMinBewertung(&rest) << bewertung;
+//        qDebug() << "schlechtes ergebnis" << besteBewertung << getMinBewertung(&rest) << bewertung;
         return;
     }
 
@@ -80,7 +81,7 @@ void Verteiler::verteile(double bewertung, QSet<Reservierung *> rest, int puffer
     }
 
     int freiePlaetze = aktuellerWagen->getAnzahlFreiePlaetzeInSitzgruppe();
-    Reservierung *extra = new Reservierung();
+    Reservierung *extra = new Reservierung(nullptr);
     extra->setAnzahl(freiePlaetze);
     if ((! anzahlToReservierung.contains(freiePlaetze)) && freiePlaetze <= puffer && freiePlaetze > 0) {
         anzahlToReservierung.insert(freiePlaetze, extra);
@@ -168,7 +169,6 @@ void Verteiler::verteile(double bewertung, QSet<Reservierung *> rest, int puffer
     delete extra;
 }
 
-
 void Verteiler::weisePlaetzeZu()
 {
     for(Wagen *w: *wagen) {
@@ -189,9 +189,8 @@ double Verteiler::getMinBewertung(QSet<Reservierung *> *liste)
         if (aktuellerWagen != nullptr) {
             for(int i = wagen->indexOf(aktuellerWagen); i < wagen->length(); ++i) {
                 Wagen *w = wagen->at(i);
-                int akt = w->getAktuellePosition();
                 for(int start = 0; start < w->getFreiePlaetze(); ++start) {
-                    double bew = w->getStrafpunkteFuerPlaetze(r->getAnzahl(), start+akt);
+                    double bew = w->getStrafpunkteFuerPlaetze(r->getAnzahl(), start);
                     if ((bew < min) && (bew != -1))
                         min = bew;
                 }

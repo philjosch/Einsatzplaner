@@ -1,12 +1,14 @@
 #include "reservierung.h"
-
 #include "managerreservierungen.h"
+#include "wagen.h"
+
 #include <QMap>
 #include <QList>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QDebug>
 
-Reservierung::Reservierung()
+Reservierung::Reservierung(QMap<int, Wagen *> *wagen)
 {
     name = "(Name eingeben)";
     mail = "";
@@ -19,12 +21,13 @@ Reservierung::Reservierung()
     hps = new QList<QString>();
     hps->append("Ottweiler");
     hps->append("Ottweiler");
+    this->wagen = wagen;
     sitzplatz = new QMap<int, QList<int>*>();
     fahrrad = false;
     sonstiges = "";
 }
 
-Reservierung::Reservierung(QJsonObject o)
+Reservierung::Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen)
 {
     name = o.value("name").toString();
     mail = o.value("mail").toString();
@@ -41,7 +44,9 @@ Reservierung::Reservierung(QJsonObject o)
     for(QJsonValue val: hpsA) {
         hps->append(val.toString());
     }
-    sitzplatz = ManagerReservierungen::getPlaetzeFromString(o.value("sitzplaetze").toString());
+    this->wagen = wagen;
+    sitzplatz = new QMap<int, QList<int>*>();
+    setSitzplatz(ManagerReservierungen::getPlaetzeFromString(o.value("sitzplaetze").toString()));
     fahrrad = o.value("fahrrad").toBool();
     sonstiges = o.value("sonstiges").toString();
 }
@@ -133,7 +138,6 @@ void Reservierung::setZuege(QList<QString> *value)
     zuege = value;
 }
 
-
 bool Reservierung::getFahrrad() const
 {
     return fahrrad;
@@ -166,6 +170,16 @@ QString Reservierung::getTableRow()
     return html;
 }
 
+void Reservierung::removePlaetze()
+{
+    // Die alten Sitzplätze freigeben
+    qDebug() << "twt4t43";
+    qDebug() << name;
+    for(int w: sitzplatz->keys()) {
+        wagen->value(w)->verlassePlaetze(sitzplatz->value(w));
+    }
+}
+
 QMap<int, QList<int> *> *Reservierung::getSitzplatz() const
 {
     return sitzplatz;
@@ -173,5 +187,10 @@ QMap<int, QList<int> *> *Reservierung::getSitzplatz() const
 
 void Reservierung::setSitzplatz(QMap<int, QList<int> *> *value)
 {
+    removePlaetze();
+    // die neuen belegen, wenn möglich
+    for(int w: value->keys()) {
+        wagen->value(w)->besetzePlaetze(this, value->value(w));
+    }
     sitzplatz = value;
 }

@@ -1,14 +1,13 @@
 #ifndef MANAGERRESERVIERUNGEN_H
 #define MANAGERRESERVIERUNGEN_H
 
-//#include <QFrame>
 #include <QListWidgetItem>
 #include "reservierung.h"
+#include "wagen.h"
 
 
 class ManagerReservierungen
 {
-//    Q_OBJECT
 
 public:
     explicit ManagerReservierungen();
@@ -19,7 +18,7 @@ public:
     QJsonObject toJson();
 
     QString getWagenreihung() const;
-    void setWagenreihung(const QString &value);
+    bool setWagenreihung(const QString &value);
 
     int getAnzahlBelegt();
     int getFrei();
@@ -38,7 +37,7 @@ public:
     void setCheckAll(bool value);
 
 public slots:
-    void verteileSitzplaetze();
+    bool verteileSitzplaetze();
     bool checkPlaetze(QMap<int, QList<int> *> *p);
 
     Reservierung *createReservierung();
@@ -49,6 +48,11 @@ protected:
     QSet<Reservierung*> *reservierungen;
     bool autoPlatz;
     bool checkAll;
+
+    QList<Wagen *> *wagen;
+    QMap<int,Wagen*> *nummerToWagen;
+
+    bool createWagen();
 
 };
 

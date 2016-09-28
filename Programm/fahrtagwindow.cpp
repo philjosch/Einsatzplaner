@@ -799,8 +799,6 @@ void FahrtagWindow::on_actionPdf_triggered()
     Export::printFahrtag(fahrtag, p);
 }
 
-
-
 void FahrtagWindow::loadReservierung(Reservierung *r)
 {
     nehmeRes = false;
@@ -837,10 +835,6 @@ void FahrtagWindow::saveResFahrt()
 }
 
 
-
-
-
-
 void FahrtagWindow::on_buttonAdd_clicked()
 {
     Reservierung *r = fahrtag->createReservierung();
@@ -850,15 +844,12 @@ void FahrtagWindow::on_buttonAdd_clicked()
     itemToRes->insert(i, r);
     ui->buttonDelete->setEnabled(true);
     loadReservierung(r);
-
 }
 
 void FahrtagWindow::on_buttonDelete_clicked()
 {
     // Nachfrage ob wirklcih löschen
-    if (QMessageBox::question(this, "Wirklich löschen?",
-                              "Möchten Sie die ausgwählte Reservierung unwiderruflich löschen?"
-                              ) == QMessageBox::Yes) {
+    if (QMessageBox::question(this, "Wirklich löschen?", "Möchten Sie die ausgwählte Reservierung unwiderruflich löschen?") == QMessageBox::Yes) {
         QListWidgetItem *i = ui->listRes->takeItem(ui->listRes->currentRow());
         Reservierung *r = itemToRes->value(i);
         fahrtag->removeReservierung(r);
@@ -888,9 +879,18 @@ void FahrtagWindow::on_buttonVerteile_clicked()
 {
     // Informationen, wie lange es gedauert hat
     QTime start = QTime::currentTime();
-    fahrtag->verteileSitzplaetze();
+    bool ok = fahrtag->verteileSitzplaetze();
     QTime ende = QTime::currentTime();
-    QMessageBox::information(this, tr("Fertig"), tr("Die Sitzplätze wurden in ")+QString::number(start.msecsTo(ende))+tr(" mSekunden verteilt."));
+    if (nehme) {
+        if (ok) {
+            QMessageBox::information(this, tr("Fertig"), tr("Die Sitzplätze wurden in ")+QString::number(start.msecsTo(ende))+tr(" mSekunden verteilt."));
+        } else {
+            QMessageBox::information(this, tr("Fehler"), tr("Es konnten nicht alle Reservierungen verteilt werden!\nBitte prüfen Sie die Verteilung auf mögliche Fehler!"));
+        }
+        fahrtag->emitter();
+    } else {
+        qDebug() << start.msecsTo(ende);
+    }
 }
 
 void FahrtagWindow::on_checkBoxAuto_clicked(bool checked)
@@ -1039,7 +1039,7 @@ void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)
 void FahrtagWindow::on_checkBoxAll_clicked(bool checked)
 {
     if (nehme){
-        if (checked) QMessageBox::information(this, tr("Hinweis"), tr("Es kann sehr unter Umständen sehr lange dauern, bis die 'perfekte' Verteilung berechnet wird.\nIhr Computer reagiert in dieser Zeit vielleicht nicht!"));
+        if (checked) QMessageBox::information(this, tr("Hinweis"), tr("Es kann unter Umständen sehr lange dauern, bis die 'perfekte' Verteilung berechnet wird.\nIhr Computer reagiert in dieser Zeit vielleicht nicht!\nDiese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutzen."));
         fahrtag->setCheckAll(checked);
         fahrtag->emitter();
     }
