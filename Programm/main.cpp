@@ -27,22 +27,16 @@ int main(int argc, char *argv[])
 
     // Laden der Einstellungen
     FileIO::loadSettings();
+
     QSettings settings;
 
     if (settings.value("general/autosearchupdate").toBool()) {
         a.checkVersion();
     }
-
     if (a.isFirst == true) {
         MainWindow *w = new MainWindow();
         w->show();
     }
-
-/*    if (QApplication::arguments().size() > 1) {
-        const QString filename = QApplication::arguments().at(1);
-        w.openFile(filename);
-    }*/
-
     return a.exec();
 }
 

@@ -8,9 +8,12 @@
 #include "coreapplication.h"
 #include <QCloseEvent>
 #include <QWindow>
+#include <QDebug>
+#include <QPixmap>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
+    setWindowIcon(QApplication::windowIcon());
     ui->setupUi(this);
     connect(ui->calendar, SIGNAL(showFahrtag(Fahrtag*)), this, SLOT(openFahrtag(Fahrtag*)));
     connect(ui->calendar, SIGNAL(showActivity(Activity*)), this, SLOT(openActivity(Activity*)));
@@ -174,7 +177,11 @@ void MainWindow::on_actionAboutQt_triggered()
 
 void MainWindow::on_actionAboutApp_triggered()
 {
-    QMessageBox::about(this, tr("Über Einsatzplaner"), tr("Einsatzplaner ")+QCoreApplication::applicationVersion()+tr("\n© 2016 by Philipp Schepper"));
+    QMessageBox msg;
+    msg.setTextFormat(Qt::RichText);
+    msg.setText("<center><b>Einsatzplaner</b><br/><small><br>"+QCoreApplication::applicationVersion()+"<br/>Copyright © 2016 Philipp Schepper<br/>Alle Rechte vorbehalten.</small></center>");
+    msg.addButton(QMessageBox::Close);
+    msg.exec();
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -232,6 +239,7 @@ void MainWindow::on_actionSave_triggered()
         setWindowModified(false);
     } else {
         QMessageBox::warning(this, tr("Fehler"), tr("Das speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+        filePath = "";
     }
 }
 
@@ -250,10 +258,10 @@ bool MainWindow::openFile(QString filePath)
                              version+tr(".\nDie aktuellste Version finden Sie auf der Webseite des Programms."));
         return false;
     }
+    setWindowTitle(tr("Übersicht"));
     this->filePath = filePath;
     setWindowFilePath(filePath);
     personalfenster->setWindowFilePath(filePath);
-    setWindowTitle(tr("Übersicht"));
 
     // Daten in Manager laden und darstellen lassen
     QJsonObject calendarJSON = object.value("calendar").toObject();
@@ -289,6 +297,14 @@ void MainWindow::on_actionSaveas_triggered()
 {
     filePath = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
     if (filePath != "") {
+        QJsonObject o;
+        bool erfolg = FileIO::saveJsonToFile(filePath, o);
+        if (! erfolg) {
+            QMessageBox::information(this, tr("Fehler"), tr("Das speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+            filePath = "";
+            return;
+        }
+        setWindowTitle(tr("Übersicht"));
         setWindowFilePath(filePath);
         personalfenster->setWindowFilePath(filePath);
         for(QMainWindow *mw: fenster->values()) {

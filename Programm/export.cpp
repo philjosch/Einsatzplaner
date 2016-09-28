@@ -124,13 +124,11 @@ QPrinter *Export::getPrinterPaper(QWidget *parent)
 
 QPrinter *Export::getPrinterPDF(QWidget *parent, QString path)
 {
+    QString filePath = FileIO::getFilePathSave(parent, path, parent->tr("PDF-Dateien (*.pdf)"));
+    if (filePath == "") return nullptr;
     QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
     p->setOutputFormat(QPrinter::PdfFormat);
-
-    p->setOutputFileName(FileIO::getFilePathSave(parent, path, parent->tr("PDF-Dateien (*.pdf)")));
-/*    QFileDialog f(parent, Qt::Dialog);
-    p->setOutputFileName(f.getSaveFileName(parent, "Datei speichern unter...", QDir::currentPath()+"/"+path, "PDF-Dateien (*.pdf)"));*/
-    if (p->outputFileName() == "") return nullptr;
+    p->setOutputFileName(filePath);
     return p;
 }
 

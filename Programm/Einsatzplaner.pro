@@ -6,13 +6,10 @@
 #
 #-------------------------------------------------
 
-QT       += core gui printsupport network
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui printsupport network widgets
 
 TARGET = Einsatzplaner
 TEMPLATE = app
-
 
 SOURCES += main.cpp\
         mainwindow.cpp \

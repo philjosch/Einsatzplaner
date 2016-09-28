@@ -25,27 +25,24 @@ void FileIO::loadSettings()
 
 QString FileIO::getFilePathOpen(QWidget *parent, QString filter)
 {
-    QUrl path = QFileDialog::getOpenFileUrl(parent, parent->tr("Datei öffnen ..."), currentPath, filter);
-    if (path.path() != "") {
-        currentPath = path.path();
-        currentPath = currentPath.remove(path.fileName());
+    QString path = QFileDialog::getOpenFileName(parent, parent->tr("Datei öffnen ..."), currentPath, filter);
+    if (path != "") {
+        QFileInfo info(path);
+        currentPath = info.absolutePath();
+        saveSettings();
     }
-    qDebug() << path.path();
-    qDebug() << currentPath;
-    saveSettings();
-    return path.path();
+    return path;
 }
 
 QString FileIO::getFilePathSave(QWidget *parent, QString filename, QString filter)
 {
-    qDebug() << currentPath+"/"+filename;
-    QUrl path = QFileDialog::getSaveFileUrl(parent, parent->tr("Datei speichern ..."), currentPath+"/"+filename, filter);
-    if (path.path() != "") {
-        currentPath = path.path();
-        currentPath = currentPath.remove(path.fileName());
+    QString path = QFileDialog::getSaveFileName(parent, parent->tr("Datei speichern ..."), currentPath+"/"+filename, filter);
+    if (path != "") {
+        QFileInfo info(path);
+        currentPath = info.absolutePath();
+        saveSettings();
     }
-    saveSettings();
-    return path.path();
+    return path;
 }
 
 QJsonObject FileIO::getJsonFromFile(QString filepath)

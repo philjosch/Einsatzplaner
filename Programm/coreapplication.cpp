@@ -20,7 +20,7 @@ CoreApplication::CoreApplication(int &argc, char **argv, QString version) : QApp
     QCoreApplication::setOrganizationDomain("philipp-schepper.de");
     QCoreApplication::setApplicationName("Einsatzplaner");
     QCoreApplication::setApplicationVersion(aktuelleVersion);
-
+    QApplication::setWindowIcon(QIcon("keks.icns"));
     isFirst = true;
 }
 
