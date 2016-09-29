@@ -6,18 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>710</width>
-    <height>660</height>
+    <width>750</width>
+    <height>640</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>710</width>
-    <height>660</height>
+    <width>720</width>
+    <height>575</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Fahrtag</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_6" rowstretch="0,1">
@@ -33,7 +39,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="documentMode">
        <bool>false</bool>
@@ -626,11 +632,30 @@
         </property>
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridNavigator" rowstretch="0,1,0,0,0,0,0" columnstretch="1,1">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <property name="spacing">
            <number>6</number>
           </property>
           <item row="1" column="0" colspan="2">
-           <widget class="QListWidget" name="listRes"/>
+           <widget class="QListWidget" name="listRes">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
           </item>
           <item row="2" column="0" colspan="2">
            <widget class="QPushButton" name="buttonShow">
@@ -717,6 +742,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="placeholderText">
+             <string>Vorname Nachname</string>
             </property>
            </widget>
           </item>
@@ -861,7 +889,7 @@
              <bool>true</bool>
             </property>
             <property name="currentIndex">
-             <number>10</number>
+             <number>9</number>
             </property>
             <item>
              <property name="text">
@@ -1122,6 +1150,15 @@
         </item>
         <item row="2" column="1" colspan="3">
          <widget class="QTableWidget" name="tablePersonen">
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="cornerButtonEnabled">
+           <bool>false</bool>
+          </property>
+          <attribute name="verticalHeaderHighlightSections">
+           <bool>true</bool>
+          </attribute>
           <column>
            <property name="text">
             <string>Name</string>
@@ -1210,8 +1247,11 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <property name="spacing">
+      <property name="horizontalSpacing">
        <number>6</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>2</number>
       </property>
       <item row="1" column="3">
        <widget class="QComboBox" name="comboWagenreihung">
@@ -1222,7 +1262,7 @@
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>3</number>
         </property>
         <property name="insertPolicy">
          <enum>QComboBox::InsertAlphabetically</enum>
@@ -1265,7 +1305,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Anlass:</string>
+         <string>Anlass</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
@@ -1300,7 +1340,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Art:</string>
+         <string>Art</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1507,6 +1547,12 @@
            <size>
             <width>20</width>
             <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
            </size>
           </property>
           <property name="text">
@@ -1786,6 +1832,12 @@
             <height>0</height>
            </size>
           </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="text">
            <string>:</string>
           </property>
@@ -1863,7 +1915,7 @@
       <item row="1" column="2">
        <widget class="QLabel" name="LabelWagenreihung">
         <property name="text">
-         <string>Wagenreihung:</string>
+         <string>Wagenreihung</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1873,7 +1925,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Datum:</string>
+         <string>Datum</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1939,7 +1991,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>710</width>
+     <width>750</width>
      <height>22</height>
     </rect>
    </property>

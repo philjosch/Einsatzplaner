@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>710</width>
-    <height>660</height>
+    <width>600</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>710</width>
-    <height>660</height>
+    <width>600</width>
+    <height>550</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -92,17 +92,20 @@
       <item row="5" column="0" rowspan="2">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Personal:</string>
+         <string>Personal</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Datum:</string>
+         <string>Datum</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -119,7 +122,10 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Ort:</string>
+         <string>Ort</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -129,7 +135,10 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Anlass:</string>
+         <string>Anlass</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -147,24 +156,30 @@
       <item row="4" column="2">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Ende:</string>
+         <string>Ende</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Beschreibung:</string>
+         <string>Beschreibung</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
         </property>
        </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Beginn:</string>
+         <string>Beginn</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -264,7 +279,7 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>338</width>
+          <width>232</width>
           <height>20</height>
          </size>
         </property>
@@ -296,7 +311,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>710</width>
+     <width>600</width>
      <height>22</height>
     </rect>
    </property>

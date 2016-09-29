@@ -1,19 +1,18 @@
 #include "personalwindow.h"
 #include "ui_personalwindow.h"
 #include "person.h"
+#include "export.h"
+
 #include <QHash>
 #include <QListWidgetItem>
 #include <QMessageBox>
 #include <QPrinter>
-#include "export.h"
 #include <QSettings>
 #include <QDebug>
 
 const QString PersonalWindow::nichtGenugStunden = "#ff9999";
 
-PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) :
-    QMainWindow(parent),
-    ui(new Ui::PersonalWindow)
+PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
 {
     ui->setupUi(this);
 
@@ -36,8 +35,6 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) :
         ui->pushDelete->setEnabled(true);
     }
     refreshEinzel();
-
-/*    QSettings settings; */
 }
 
 PersonalWindow::~PersonalWindow()
@@ -306,4 +303,9 @@ void PersonalWindow::print(QPrinter *p)
         liste->append(manager->getPerson(ui->tabelleGesamt->item(i, 0)->text()));
     }
     Export::printPersonen(liste, p);
+}
+
+void PersonalWindow::on_tabWidget_tabBarClicked(int index)
+{
+    refresh();
 }

@@ -54,6 +54,8 @@ private slots:
 
     void on_pushPrint_clicked();
 
+    void on_tabWidget_tabBarClicked(int index);
+
 private:
     Ui::PersonalWindow *ui;
     ManagerPersonal *manager;

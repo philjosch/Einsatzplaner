@@ -98,26 +98,29 @@ void Person::berechne()
     timeSum = 0;
     sumKilometer = 0;
 
+    QDate today = QDate::currentDate();
     for(AActivity *a: activities->keys()) {
-        AActivity::Category cat = activities->value(a);
-        AActivity::Infos *info = a->getIndividual(this);
+        if (a->getDatum() <= today) {
+            AActivity::Category cat = activities->value(a);
+            AActivity::Infos *info = a->getIndividual(this);
 
-        // Einsatzstunden
-        QTime start = info->beginn;
-        QTime ende = info->ende;
-        int duration = start.msecsTo(ende);
-        switch (cat) {
-        case AActivity::Tf: timeTf += duration;  break;
-        case AActivity::Zf: timeZf += duration;  break;
-        case AActivity::Begleiter: timeZub += duration;  break;
-        case AActivity::Zub: timeZub += duration; break;
-        case AActivity::Service: timeService += duration;  break;
-        case AActivity::Buero: timeBuero += duration;  break;
-        case AActivity::Werkstatt: timeWerkstatt += duration;  break;
-        default: break;
+            // Einsatzstunden
+            QTime start = info->beginn;
+            QTime ende = info->ende;
+            int duration = start.msecsTo(ende);
+            switch (cat) {
+            case AActivity::Tf: timeTf += duration;  break;
+            case AActivity::Zf: timeZf += duration;  break;
+            case AActivity::Begleiter: timeZub += duration;  break;
+            case AActivity::Zub: timeZub += duration; break;
+            case AActivity::Service: timeService += duration;  break;
+            case AActivity::Buero: timeBuero += duration;  break;
+            case AActivity::Werkstatt: timeWerkstatt += duration;  break;
+            default: break;
+            }
+            timeSum += duration;
+            if (cat != AActivity::Buero) sumKilometer += 2*strecke;
         }
-        timeSum += duration;
-        if (cat != AActivity::Buero) sumKilometer += 2*strecke;
     }
     timeTf = timeTf/(3600000);
     timeZf = timeZf/(3600000);
