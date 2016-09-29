@@ -79,6 +79,84 @@ bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper
     return print(pdf, paper, d);
 }
 
+bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
+{
+    if (f->getAnzahl() == 0) return false;
+    // Vorbereiten des Druckers für den Ausdruck
+    preparePrinterLandscape(pdf);
+    preparePrinterLandscape(paper);
+    QTextDocument *d = new QTextDocument();
+    d->setDocumentMargin(0);
+
+    QString a = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Fahrtag - Reservierungen</title></head><body>";
+    a += "<style type='text/css'>";
+    a += "body, tr, td, p { font-size: 12px; }";
+    a += "table { border-width: 1px; border-style: solid; border-color: black; }";
+    a += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }";
+    a += "table tr, table td { page-break-inside: avoid; }";
+    a += "ul { -qt-list-indent: 0; }";
+    a += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
+    a += "</style>";
+    a += "<h3>";
+    a += Fahrtag::getStringFromArt(f->getArt())+" am "+f->getDatum().toString("dddd dd. MM. yyyy");
+    a += " - Die Reservierungen</h3>";
+    a += "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th> <th>Anzahl</th> <th>Sitzplätze</th> <th>Sonstiges</th></tr></thead><tbody>";
+    // Sortieren der Daten nach Wagenreihung
+    QStringList wagen = f->getWagenreihung().split(QRegExp("\\s*,\\s*"));
+    QList<int> wagenNummern;
+    for(QString s: wagen) wagenNummern.append(s.toInt());
+
+    // Sortieren der Reservierungen
+    QHash<int, QList<Reservierung*>*> wagenZuRes;
+    QSetIterator<Reservierung*> it = f->getReservierungen();
+    while(it.hasNext()) {
+        Reservierung *r = it.next();
+        for(int i: r->getSitzplatz()->keys()) {
+            if (!wagenZuRes.contains(i))
+                wagenZuRes.insert(i, new QList<Reservierung*>());
+            int pos = 0;
+            QList<Reservierung*> *list= wagenZuRes.value(i);
+            list->insert(0, r);
+            while (pos+1 < list->length() && list->at(pos)->getName() > list->at(pos+1)->getName()) {
+                list->swap(pos, pos+1);
+                pos++;
+            }
+        }
+        if (r->getSitzplatz()->isEmpty()) {
+            if (! wagenZuRes.contains(999))
+                wagenZuRes.insert(999, new QList<Reservierung*>());
+            int pos = 0;
+            QList<Reservierung*> *list= wagenZuRes.value(999);
+            list->insert(0, r);
+            while (pos+1 < list->length() && list->at(pos)->getName() > list->at(pos+1)->getName()) {
+                list->swap(pos, pos+1);
+                pos++;
+            }
+        }
+    }
+
+    for(int wagenNr: wagenNummern) {
+        if (wagenZuRes.contains(wagenNr)) {
+            a += "<tr><td columnspan='4'><b>Wagen "+QString::number(wagenNr)+":</b></td></tr>";
+            for(Reservierung *r: *wagenZuRes.value(wagenNr)) {
+                a += r->getHtmlForDetailTable();
+            }
+        }
+    }
+    if (wagenZuRes.contains(999)) {
+        a += "<tr><td columnspan='4'><b>Reservierungen ohne Sitzplätze:</b></td></tr>";
+        for(Reservierung *r: *wagenZuRes.value(999)) {
+            a += r->getHtmlForDetailTable();
+        }
+    }
+
+    a += "</tbody></table>";
+    a += "<p><small>Erstellt am: "+QDate::currentDate().toString("d.M.yyyy")+"</small></p>";
+    a += "</body></html>";
+    d->setHtml(a);
+    return print(pdf, paper, d);
+}
+
 bool Export::printPerson(Person *p, QPrinter *pdf, QPrinter *paper)
 {
     QTextDocument *d = new QTextDocument();

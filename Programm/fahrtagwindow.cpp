@@ -28,6 +28,7 @@ FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent),
 
     nehmeRes = false;
 
+    update();
 }
 
 FahrtagWindow::~FahrtagWindow()
@@ -50,6 +51,9 @@ void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
     }
     ui->tabReservierungen->setEnabled(art != Fahrtag::Schnupperkurs);
     setWindowTitle(Fahrtag::getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum().toString("dddd dd. MM. yyyy"));
+    ui->checkBoxAuto->setEnabled(Fahrtag::Nikolauszug == art);
+    ui->checkBoxAll->setEnabled(Fahrtag::Nikolauszug == art);
+    ui->buttonVerteile->setEnabled(Fahrtag::Nikolauszug == art);
 }
 
 void FahrtagWindow::on_textAnlass_textChanged()
@@ -61,13 +65,15 @@ void FahrtagWindow::on_textAnlass_textChanged()
 void FahrtagWindow::on_checkWichtig_stateChanged(int arg1)
 {
     if (nehme)
-        fahrtag->setWichtig(arg1 == 1);
+        fahrtag->setWichtig(arg1 == 2);
 }
 
 void FahrtagWindow::on_comboWagenreihung_currentTextChanged(const QString &arg1)
 {
-    if (nehme)
+    if (nehme) {
         fahrtag->setWagenreihung(arg1);
+        update();
+    }
 }
 
 void FahrtagWindow::on_comboTimeTfH_currentTextChanged(const QString &arg1)
@@ -127,6 +133,11 @@ void FahrtagWindow::loadData()
             itemToRes->insert(item, r);
             ui->listRes->insertItem(0, item);
         }
+        ui->listRes->sortItems();
+        ui->checkBoxAuto->setEnabled(Fahrtag::Nikolauszug == fahrtag->getArt());
+        ui->checkBoxAll->setEnabled(false);
+        ui->buttonVerteile->setEnabled(Fahrtag::Nikolauszug == fahrtag->getArt());
+
         ui->checkBoxAuto->setChecked(fahrtag->getAutoPlatz());
         ui->checkBoxAll->setChecked(fahrtag->getCheckAll());
         ui->checkBoxAll->setEnabled(fahrtag->getAutoPlatz());
@@ -799,6 +810,18 @@ void FahrtagWindow::on_actionPdf_triggered()
     Export::printFahrtag(fahrtag, p);
 }
 
+void FahrtagWindow::on_actionResPdf_triggered()
+{
+    QPrinter *p = Export::getPrinterPDF(this, windowTitle()+"-Reservierungen.pdf");
+    Export::printReservierung(fahrtag, p);
+}
+
+void FahrtagWindow::on_actionResPrint_triggered()
+{
+    QPrinter *p = Export::getPrinterPaper(this);
+    Export::printReservierung(fahrtag, nullptr, p);
+}
+
 void FahrtagWindow::loadReservierung(Reservierung *r)
 {
     nehmeRes = false;
@@ -888,6 +911,7 @@ void FahrtagWindow::on_buttonVerteile_clicked()
             QMessageBox::information(this, tr("Fehler"), tr("Es konnten nicht alle Reservierungen verteilt werden!\nBitte prüfen Sie die Verteilung auf mögliche Fehler!"));
         }
         fahrtag->emitter();
+        update();
     } else {
         qDebug() << start.msecsTo(ende);
     }
@@ -909,6 +933,7 @@ void FahrtagWindow::on_lineName_textChanged(const QString &arg1)
         aktuelleRes->setName(arg1);
         resToItem->value(aktuelleRes)->setText(aktuelleRes->getName());
         fahrtag->emitter();
+        ui->listRes->sortItems();
     }
 }
 
@@ -972,7 +997,7 @@ void FahrtagWindow::on_lineSitze_textChanged(const QString &arg1)
 {
     if (nehmeRes) {
         QMap<int, QList<int>*> *plaetze = ManagerReservierungen::getPlaetzeFromString(arg1);
-        bool ok = fahrtag->checkPlaetze(plaetze);
+        bool ok = fahrtag->checkPlaetze(plaetze, aktuelleRes);
 
         // Prüfe, ob die Sitzplätze valide sind und zeige dies visuell an
         // Speichere die Sitzplätze, wenn die valide sind
@@ -992,18 +1017,19 @@ void FahrtagWindow::on_lineSitze_returnPressed()
     // prüfe, ob die sitzplätze valide sidn und speichere sie
     if (nehmeRes) {
         QMap<int, QList<int>*> *plaetze = ManagerReservierungen::getPlaetzeFromString(ui->lineSitze->text());
-        bool ok = fahrtag->checkPlaetze(plaetze);
+        bool ok = fahrtag->checkPlaetze(plaetze, aktuelleRes);
 
         // Prüfe, ob die Sitzplätze valide sind und zeige dies visuell an
         // Speichere die Sitzplätze, wenn die valide sind
         if (ok) {
             aktuelleRes->setSitzplatz(plaetze);
-            ui->lineSitze->setStyleSheet("background-color: #b9ceac");
+            ui->lineSitze->setStyleSheet("background-color: #b9ceac");            
             update();
         } else {
             QMessageBox::information(this, "Sitzplätze fehlerhaft", "Die eingegebenen Sitzplätze konnten nicht zugewiesen werden.\nGeben Sie gültige und freie Sitzplätze ein!");
             ui->lineSitze->setStyleSheet("background-color: #cb555d");
         }
+        fahrtag->emitter();
     }
 }
 
@@ -1026,6 +1052,32 @@ void FahrtagWindow::on_plainSonstiges_textChanged()
 void FahrtagWindow::on_listRes_itemClicked(QListWidgetItem *item)
 {
     loadReservierung(itemToRes->value(item));
+}
+
+void FahrtagWindow::update()
+{
+    int belegtErste  = fahrtag->getBelegtErste();
+    int belegtZweite = fahrtag->getBelegtZweite();
+    int belegtDritte = fahrtag->getBelegtDritte();
+    int belegtGesamt = fahrtag->getBelegtGesamt();
+
+    int kapErste  = fahrtag->getCapacityErste();
+    int kapZweite = fahrtag->getCapacityZweite();
+    int kapDritte = fahrtag->getCapacityDritte();
+    int kapGesamt = fahrtag->getCapacityGesamt();
+
+    QString darstellung = "%1/%2 (%3 %)";
+    QString erste  = darstellung.arg(belegtErste ).arg(kapErste ).arg(belegtErste *100.0/(kapErste ), 0, 'g', 3);
+    QString zweite = darstellung.arg(belegtZweite).arg(kapZweite).arg(belegtZweite*100.0/(kapZweite), 0, 'g', 3);
+    QString dritte = darstellung.arg(belegtDritte).arg(kapDritte).arg(belegtDritte*100.0/(kapDritte), 0, 'g', 3);
+    QString gesamt = darstellung.arg(belegtGesamt).arg(kapGesamt).arg(belegtGesamt*100.0/(kapGesamt), 0, 'g', 3);
+    if (kapErste == 0) erste = "-";
+    if (kapZweite == 0) zweite = "-";
+    if (kapDritte == 0) dritte = "-";
+    ui->labelBelegtErste->setText( erste );
+    ui->labelBelegtZweite->setText(zweite);
+    ui->labelBelegtDritte->setText(dritte);
+    ui->labelBelegtGesamt->setText(gesamt);
 }
 
 void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)

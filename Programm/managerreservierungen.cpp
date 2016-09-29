@@ -145,22 +145,83 @@ bool ManagerReservierungen::setWagenreihung(const QString &value)
     return false;
 }
 
-int ManagerReservierungen::getAnzahlBelegt()
+int ManagerReservierungen::getBelegtGesamt()
 {
-    int sum = 0;
+    int summe = 0;
     for(Reservierung *r: *reservierungen) {
-        sum += r->getAnzahl();
+        summe += r->getAnzahl();
     }
-    return sum;
+    return summe;
 }
-
-int ManagerReservierungen::getFrei()
+int ManagerReservierungen::getCapacityGesamt()
 {
     int summe = 0;
     for(Wagen *w: *wagen) {
-        summe += w->getFreiePlaetze();
+        summe += w->getKapazitaet();
     }
     return summe;
+}
+
+
+int ManagerReservierungen::getBelegtErste()
+{
+    int summe = 0;
+    for(Wagen *w: *wagen) {
+        if (w->klasse() == 1) {
+            summe += w->getAnzahlBelegt();
+        }
+    }
+    return summe;
+}
+int ManagerReservierungen::getCapacityErste()
+{
+    int summe = 0;
+    for(Wagen *w: *wagen) {
+        if (w->klasse() == 1)
+            summe += w->getKapazitaet();
+    }
+    return summe;
+}
+
+int ManagerReservierungen::getBelegtZweite()
+{
+    int summe = 0;
+    for(Wagen *w: *wagen) {
+        if (w->klasse() == 2) {
+            summe += w->getAnzahlBelegt();
+        }
+    }
+    return summe;
+}
+int ManagerReservierungen::getCapacityZweite()
+{
+    int summe = 0;
+    for(Wagen *w: *wagen) {
+        if (w->klasse() == 2)
+            summe += w->getKapazitaet();
+    }
+    return summe;
+}
+
+int ManagerReservierungen::getBelegtDritte()
+{
+    int summe = 0;
+    for(Wagen *w: *wagen) {
+        if (w->klasse() == 3) {
+            summe += w->getAnzahlBelegt();
+        }
+    }
+    return summe;
+}
+int ManagerReservierungen::getCapacityDritte()
+{
+    int summe = 0;
+    for(Wagen *w: *wagen) {
+        if (w->klasse() == 3)
+            summe += w->getKapazitaet();
+    }
+    return summe;
+
 }
 
 int ManagerReservierungen::getAnzahl()
@@ -176,17 +237,20 @@ QSetIterator<Reservierung *> ManagerReservierungen::getReservierungen()
 
 bool ManagerReservierungen::verteileSitzplaetze()
 {
+    // aufteilen der Wagen auf die beiden Gruppen
     QList<Wagen*> *ersteKlasse = new QList<Wagen*>();
     QList<Wagen*> *andereKlasse = new QList<Wagen*>();
-    for (Wagen *w: *wagen) {
-        switch (w->klasse()) {
-        case 1: ersteKlasse->append(w); break;
+    QStringList wagenR = wagenreihung.split(QRegExp("\\s*,\\s*"));
+    for(QString s: wagenR) {
+        int nummer = s.toInt();
+        switch (Wagen::klasse(nummer)) {
+        case 1: ersteKlasse->append(new Wagen(nummer)); break;
         case 2:
-        case 3: andereKlasse->append(w); break;
+        case 3: andereKlasse->append(new Wagen(nummer)); break;
         default: break;
         }
     }
-
+    // Aufteilen der Resevierungen auf die beiden gruppen
     QSet<Reservierung*> *resErste = new QSet<Reservierung*>();
     QSet<Reservierung*> *resAndere = new QSet<Reservierung*>();
     for(Reservierung *r: *reservierungen) {
@@ -195,8 +259,9 @@ bool ManagerReservierungen::verteileSitzplaetze()
         else
             resErste->insert(r);
     }
-
+    // Verteilen der Sitzplätze
     bool ok = true;
+    // Erste klasse verteilen
     if (resErste->size() > 0 && ersteKlasse->length() > 0) {
         Verteiler *erste = new Verteiler(ersteKlasse, resErste);
         erste->setCheckAll(checkAll);
@@ -204,6 +269,7 @@ bool ManagerReservierungen::verteileSitzplaetze()
     } else if (resErste->size() > 0 && ersteKlasse->length() == 0) {
         ok = false;
     }
+    // 2./3. Klasse verteilen
     if (resAndere->size() > 0 && andereKlasse->length() > 0) {
         Verteiler *andere = new Verteiler(andereKlasse, resAndere);
         andere->setCheckAll(checkAll);
@@ -211,15 +277,27 @@ bool ManagerReservierungen::verteileSitzplaetze()
     } else if (resAndere->size() > 0 && andereKlasse->length() == 0) {
         ok = false;
     }
+    // Die Sitzplätze zuweisen, sodass sie in den Wagen erscheinen.
+    for(Reservierung *r: reservierungen->values()) {
+        r->setSitzplatz(r->getSitzplatz());
+    }
     return ok;
 }
 
-bool ManagerReservierungen::checkPlaetze(QMap<int, QList<int>*> *p)
+bool ManagerReservierungen::checkPlaetze(QMap<int, QList<int>*> *p, Reservierung *r)
 {
     // Überprüft, ob die eingegebenen Sitzplätze frei sind, oder ob sie schon belegt wurden
+    int summe = 0;
     for(int w: p->keys()) {
-        if (nummerToWagen->value(w)->testPlaetze(p->value(w))) return false;
+        if (! nummerToWagen->contains(w)) return false;
+        if (r->getKlasse() == 1 && nummerToWagen->value(w)->klasse() != 1) return false;
+        if (r->getKlasse() == 0 && (nummerToWagen->value(w)->klasse() != 2 &&
+                                    nummerToWagen->value(w)->klasse() != 3)) return false;
+        summe += p->value(w)->length();
+        // für jeden Wagen prüfen, ob die Plätze belegt sind
+        if (! nummerToWagen->value(w)->testPlaetze(p->value(w), r)) return false;
     }
+    if (summe != r->getAnzahl()) return false;
     return true;
 }
 

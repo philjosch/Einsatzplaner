@@ -75,6 +75,8 @@ private slots:
     void on_plainSonstiges_textChanged();
     void on_listRes_itemClicked(QListWidgetItem *item);
 
+    void update(); // Aktualisiert die Anzeige, wieviele Sitzplätze belegt sind
+
     // Einsatzzeiten
     void on_timeEnde_timeChanged(const QTime &time);
     void on_checkBoxBenoetigt_clicked(bool checked);
@@ -87,6 +89,8 @@ private slots:
     void on_actionDelete_triggered();
     void on_actionPrint_triggered();
     void on_actionPdf_triggered();
+    void on_actionResPdf_triggered();
+    void on_actionResPrint_triggered();
 
     // Hilfe
     void on_buttonAdd_clicked();

@@ -26,10 +26,11 @@ public:
 
     double getStrafpunkteFuerPlaetze(int anzahl, int start = 0);
 
-    bool testPlaetze(QList<int> *liste); // Testet ob die Plätze frei sind, externe Darstellung
+    bool testPlaetze(QList<int> *liste, Reservierung *r); // Testet ob die Plätze frei sind, externe Darstellung
 
-    int getFreiePlaetze();
-    int getAnzahl();
+    int getAnzahlFrei();
+    int getAnzahlBelegt();
+    int getKapazitaet();
 
     bool isEmpty();
 
@@ -47,7 +48,7 @@ protected:
 private slots:
     QList<int> extToInt(QList<int> *liste);
     QList<int> *intToExt(QList<int> liste);
-    bool test(QList<int> liste); // Testet mit der Internen Darstellung
+    bool test(QList<int> liste, Reservierung *r); // Testet mit der Internen Darstellung
 
 private:
 

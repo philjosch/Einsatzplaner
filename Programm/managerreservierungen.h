@@ -20,8 +20,17 @@ public:
     QString getWagenreihung() const;
     bool setWagenreihung(const QString &value);
 
-    int getAnzahlBelegt();
-    int getFrei();
+    int getBelegtGesamt();
+    int getCapacityGesamt();
+
+    int getBelegtErste();
+    int getCapacityErste();
+
+    int getBelegtZweite();
+    int getCapacityZweite();
+
+    int getBelegtDritte();
+    int getCapacityDritte();
 
     int getAnzahl();
 
@@ -38,7 +47,7 @@ public:
 
 public slots:
     bool verteileSitzplaetze();
-    bool checkPlaetze(QMap<int, QList<int> *> *p);
+    bool checkPlaetze(QMap<int, QList<int> *> *p, Reservierung *r);
 
     Reservierung *createReservierung();
     bool removeReservierung(Reservierung *res);

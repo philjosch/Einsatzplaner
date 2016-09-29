@@ -16,20 +16,15 @@ Verteiler::Verteiler(QList<Wagen*> *wagen, QSet<Reservierung*> *reservierungen)
 bool Verteiler::verteile()
 {
     // berechne untere Schranke für die Güte dees ergebnisses
-    mindestbewertung = getMinBewertung(reservierungen);
-
-
     int puffer = 0;
     for (Wagen *w: *wagen) {
-        puffer += w->getAnzahl();
+        puffer += w->getKapazitaet();
     }
     for (Reservierung *r: *reservierungen) {
         puffer -= r->getAnzahl();
     }
     if (puffer < 0) return false;
-    for (Wagen *w: *wagen) {
-        w->clear();
-    }
+    mindestbewertung = getMinBewertung(reservierungen);
     verteile(0, *reservierungen, puffer);
     qDebug() << count << "Lösungen";
     return found;
@@ -65,7 +60,7 @@ void Verteiler::verteile(double bewertung, QSet<Reservierung *> rest, int puffer
     for(Reservierung *r: rest.values()) {
 
         if (anzahlToReservierung.contains(r->getAnzahl())) continue;
-        if (aktuellerWagen->getFreiePlaetze() < r->getAnzahl()) continue;
+        if (aktuellerWagen->getAnzahlFrei() < r->getAnzahl()) continue;
 
         double bewertungReservierung = aktuellerWagen->getStrafpunkteFuerPlaetze(r->getAnzahl());
 
@@ -138,7 +133,7 @@ void Verteiler::verteile(double bewertung, QSet<Reservierung *> rest, int puffer
         Reservierung *r = anzahlToReservierung.value(sortiert.at(j));
         QList<int> *liste = aktuellerWagen->besetzePlaetze(r);
         Wagen *alt = aktuellerWagen;
-        if (aktuellerWagen->getFreiePlaetze() == 0) {
+        if (aktuellerWagen->getAnzahlFrei() == 0) {
             if (wagen->indexOf(aktuellerWagen) == wagen->length()-1) {
                 aktuellerWagen = nullptr;
             } else {
@@ -155,9 +150,7 @@ void Verteiler::verteile(double bewertung, QSet<Reservierung *> rest, int puffer
         QSet<Reservierung*> restNeu = rest;
         restNeu.remove(r);
 
-        if (bewertungNeu + getMinBewertung(&restNeu) > besteBewertung) {
-//            qDebug() << "schlechtes ergebnis" << besteBewertung << getMinBewertung(&rest) << bewertung;
-        } else {
+        if (bewertungNeu + getMinBewertung(&restNeu) <= besteBewertung) {
             verteile(bewertungNeu, restNeu, pufferNeu);
         }
         aktuellerWagen = alt;
@@ -189,7 +182,7 @@ double Verteiler::getMinBewertung(QSet<Reservierung *> *liste)
         if (aktuellerWagen != nullptr) {
             for(int i = wagen->indexOf(aktuellerWagen); i < wagen->length(); ++i) {
                 Wagen *w = wagen->at(i);
-                for(int start = 0; start < w->getFreiePlaetze(); ++start) {
+                for(int start = 0; start < w->getAnzahlFrei(); ++start) {
                     double bew = w->getStrafpunkteFuerPlaetze(r->getAnzahl(), start);
                     if ((bew < min) && (bew != -1))
                         min = bew;

@@ -46,6 +46,8 @@ public:
     QString getTableRow();
     void removePlaetze();
 
+    QString getHtmlForDetailTable();
+
 private:
     QString name;
     QString mail;

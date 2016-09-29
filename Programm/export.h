@@ -33,6 +33,9 @@ public:
     static bool printSingle(QList<AActivity*> *liste, QPrinter *pdf=0, QPrinter *paper=0);
     static bool printList(QList<AActivity*> *liste, QPrinter *pdf=0, QPrinter *paper=0);
 
+    // Reservierungen
+    static bool printReservierung(Fahrtag *f, QPrinter *pdf=0, QPrinter *paper=0); // Gibt nur die Reservierungen aus sortiert nach Wagen und dann nach Name
+
     // Drucken von Personen
     static bool printPerson(Person *p, QPrinter *pdf=0, QPrinter *paper=0);
     static bool printPersonen(QList<Person *> *personen, QPrinter *pdf=0, QPrinter *paper=0);

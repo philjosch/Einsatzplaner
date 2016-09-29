@@ -173,11 +173,25 @@ QString Reservierung::getTableRow()
 void Reservierung::removePlaetze()
 {
     // Die alten Sitzplätze freigeben
-    qDebug() << "twt4t43";
-    qDebug() << name;
+    if (wagen == nullptr) return;
     for(int w: sitzplatz->keys()) {
-        wagen->value(w)->verlassePlaetze(sitzplatz->value(w));
+        if (wagen->contains(w))
+            wagen->value(w)->verlassePlaetze(sitzplatz->value(w));
     }
+}
+
+QString Reservierung::getHtmlForDetailTable()
+{
+    QString html = "<tr><td>"+name;
+    if (telefon != "")
+        html += "<br/>"+telefon;
+    if (mail != "")
+        html += "<br/>"+mail;
+    html += "</td>";
+    html += "<td>"+QString::number(anzahl)+" Plätze</td>";
+    html += "<td>"+ManagerReservierungen::getStringFromPlaetze(sitzplatz)+"</td>";
+    html += (fahrrad ? "<td>Fahrrad!<br/>" : "<td>")+sonstiges+"</td></tr>";
+    return html;
 }
 
 QMap<int, QList<int> *> *Reservierung::getSitzplatz() const
@@ -189,8 +203,10 @@ void Reservierung::setSitzplatz(QMap<int, QList<int> *> *value)
 {
     removePlaetze();
     // die neuen belegen, wenn möglich
+    if (wagen == nullptr) return;
     for(int w: value->keys()) {
-        wagen->value(w)->besetzePlaetze(this, value->value(w));
+        if (wagen->contains(w))
+            wagen->value(w)->besetzePlaetze(this, value->value(w));
     }
     sitzplatz = value;
 }

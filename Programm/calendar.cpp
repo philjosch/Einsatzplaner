@@ -147,6 +147,7 @@ void Calendar::goTo(QDate date)
         AActivity *a = activities->at(i);
         int pos = getPosInCalendar(a->getDatum());
         if (pos != -1) {
+            tage->at(pos)->insert(a);
             calendaritem->insert(a, tage->at(pos));
             setListItemC(calendaritem->value(a)->get(a), a);
 //            activityChanged(a);
@@ -316,6 +317,9 @@ int Calendar::getPosInCalendar(QDate date)
     QDate ref = QDate(ui->dateSelector->date().year(), ui->dateSelector->date().month(), 1);
     // Eintrag auch anzeigen, wenn er im vorherigen Monat liegt
     if (date < ref) {
+        if (date.addDays(7) > ref && date.dayOfWeek() < ref.dayOfWeek()) {
+            return date.dayOfWeek() - 1;
+        }
         return -1;
     } else if (date.month() == ref.month()+1) {
         if (date.day()+ref.dayOfWeek()+ref.daysInMonth()-2 < 42) {

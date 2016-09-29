@@ -169,21 +169,22 @@ QString Fahrtag::getHtmlForSingleView()
         html += ":</b><br/>"+listToString(&service, " | ") +"</p>";
     }
     // *Sonstiges personal
-    html += "<p><b>Sonstiges Personal";
-    html += (personalBenoetigt ?" wird benötigt":"");
-    html += ":</b><br/>"+listToString(&sonstige, " | ") +"</p>";
-
-    // Reservierungen
-    if (bemerkungen!= "") {
+    if (sonstige.size() > 0) {
+        html += "<p><b>Sonstiges Personal";
+        html += (personalBenoetigt ?" wird benötigt":"");
+        html += ":</b><br/>"+listToString(&sonstige, " | ") +"</p>";
+    }
+    if (bemerkungen != "") {
         html += "<p>Bemerkungen:<br/>"+bemerkungen+"</p>";
     }
 
+    // Reservierungen
     if (getAnzahl() > 0) {
         html += "<p><b>Reservierungen:</b>";
         if (art != Fahrtag::Schnupperkurs && art != Fahrtag::Gesellschaftssonderzug) {
-            html += "<br/>Bereits "+QString::number(getAnzahlBelegt());
-            html += (getAnzahlBelegt() == 1 ? " Platz " :  " Plätze ");
-            html += "belegt. Noch "+QString::number(getFrei())+" frei.</p>";
+            html += "<br/>Bereits "+QString::number(getBelegtGesamt());
+            html += (getBelegtGesamt() == 1 ? " Platz " :  " Plätze ");
+            html += "belegt. Noch "+QString::number(getCapacityGesamt() - getBelegtGesamt())+" frei.</p>";
         } else {
             html += "</p>";
         }
@@ -200,11 +201,20 @@ QString Fahrtag::getHtmlForTableView()
 {
     QString html = "<tr bgcolor='"+MainWindow::getFarbeZug(art)+"'>";
     // Datum, Anlass
-    if (wichtig)
-        html += "<td bg='red'>";
-    else
+    if (wichtig) {
+        html += "<td bgcolor='#ff8888'>";
+    } else {
         html += "<td>";
-    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>("+Fahrtag::getStringFromArt(art)+")<br/>"+anlass+"</td>";
+    }
+    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>("+Fahrtag::getStringFromArt(art)+")";
+    if (anlass != "") {
+        html += "<br/>"+anlass;
+    }
+    // Wagenreihung
+    if (wagenreihung != "") {
+        html += "<br/>"+ wagenreihung;
+    }
+    html += "</td>";
 
     QMap<Person*, AActivity::Infos*> tf;
     QMap<Person*, AActivity::Infos*> zf;
@@ -287,14 +297,10 @@ QString Fahrtag::getHtmlForTableView()
         html += listToString(&sonstige, "</li><li>");
         html += "</li></ul>";
     }
-    // Wagenreihung
-    if (wagenreihung != "") {
-        html += wagenreihung + "<br/>";
-    }
     // Sneek-Peek Reservierungen
-    if (art != Schnupperkurs && art != Gesellschaftssonderzug && getAnzahlBelegt() > 0) {
-        html += QString::number(getAnzahlBelegt());
-        html += (getAnzahlBelegt() == 1 ? " reservierter Sitzplatz": " reservierte Sitzplätze");
+    if (art != Schnupperkurs && art != Gesellschaftssonderzug && getBelegtGesamt() > 0) {
+        html += QString::number(getBelegtGesamt());
+        html += (getBelegtGesamt() == 1 ? " reservierter Sitzplatz": " reservierte Sitzplätze");
         html += " bei " + QString::number(getAnzahl()) + (getAnzahl() == 1 ? " Reservierung" : " Reservierungen");
         html += "<br/>";
     }

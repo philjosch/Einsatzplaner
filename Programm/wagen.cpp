@@ -194,17 +194,20 @@ int Wagen::getAnzahlFreiePlaetzeInSitzgruppe()
 void Wagen::verlassePlaetze(QList<int> *liste)
 {
     // Umrechnen in Interne Darstellung
+    if (liste == nullptr) return;
     QList<int> intern = extToInt(liste);
     for(int i = intern.length()-1; i >= 0; i--) {
         verteilung->remove(intern.at(i));
     }
-    if (aktuellePosition > intern.first())
-        aktuellePosition = intern.first();
+    if (intern.length() > 0)
+        if (aktuellePosition > intern.first())
+            aktuellePosition = intern.first();
 }
 
 QList<int> *Wagen::besetzePlaetze(Reservierung *r)
 {
     QList<int> liste;
+    if (r->getAnzahl() > getAnzahlFrei()) return nullptr;
     int i = 0;
     while (i < r->getAnzahl()) {
         if (verteilung->contains(aktuellePosition)) {
@@ -223,8 +226,7 @@ bool Wagen::besetzePlaetze(Reservierung *r, QList<int> *plaetze)
 {
     // Umrechnen in interne Darstellung
     QList<int> intern = extToInt(plaetze);
-
-    if (! test(intern)) return false;
+    if (! test(intern, r)) return false;
     for (int pos: intern) {
         if (pos < 0 || pos > size)
             return false;
@@ -294,18 +296,23 @@ double Wagen::getStrafpunkteFuerPlaetze(int anzahl, int start)
     return GEWICHT_STRAFE_TEIL_1 * sp1 + GEWICHT_STRAFE_TEIL_2 * sp2;
 }
 
-bool Wagen::testPlaetze(QList<int> *liste)
+bool Wagen::testPlaetze(QList<int> *liste, Reservierung *r)
 {
     // Prüft, ob die Plätze frei sind.
-    return test(extToInt(liste));
+    return test(extToInt(liste), r);
 }
 
-int Wagen::getFreiePlaetze()
+int Wagen::getAnzahlFrei()
 {
     return size-(verteilung->size());
 }
 
-int Wagen::getAnzahl()
+int Wagen::getAnzahlBelegt()
+{
+    return verteilung->size();
+}
+
+int Wagen::getKapazitaet()
 {
     return size;
 }
@@ -344,11 +351,15 @@ void Wagen::clear()
     verteilung->clear();
 }
 
-bool Wagen::test(QList<int> liste)
+bool Wagen::test(QList<int> liste, Reservierung *r)
 {
     for(int pos: liste) {
-        if (pos < verteilung->size() && pos >= 0) {
-            if (verteilung->contains(pos)) return false;
+        if (pos < size && pos >= 0) {
+            if (verteilung->contains(pos)) {
+                if (verteilung->value(pos) != r) {
+                    return false;
+                }
+            }
         } else {
             return false;
         }
