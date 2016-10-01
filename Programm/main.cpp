@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 
     QSettings settings;
 
-    if (settings.value("general/autosearchupdate").toBool()) {
+    if (settings.value("general/autosearchupdate", true).toBool()) {
         a.checkVersion();
     }
     if (a.isFirst == true) {

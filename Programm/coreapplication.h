@@ -20,15 +20,19 @@ public:
 
     void checkVersion();
 
-
     static QString getAktuelleVersion();
+    static QString loadVersion();
+
+    static QUrl getUrlDownload();
 
 public slots:
     static void closeAllWindows();
 
 protected:
     static QString aktuelleVersion;
-    QString loadVersion();
+
+    static QUrl urlVersion;
+    static QUrl urlDownload;
 };
 
 #endif // COREAPPLICATION_H

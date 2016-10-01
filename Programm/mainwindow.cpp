@@ -1,15 +1,18 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "calendar.h"
-#include <QMessageBox>
 #include "exportgesamt.h"
-#include <QSettings>
 #include "fileio.h"
 #include "coreapplication.h"
+#include "preferencesdialog.h"
+
+#include <QMessageBox>
+#include <QSettings>
 #include <QCloseEvent>
 #include <QWindow>
-#include <QDebug>
 #include <QPixmap>
+
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -167,7 +170,8 @@ void MainWindow::on_buttonExport_clicked()
 
 void MainWindow::on_actionPreferences_triggered()
 {
-
+    PreferencesDialog *dialog = new PreferencesDialog();
+    dialog->show();
 }
 
 void MainWindow::on_actionAboutQt_triggered()

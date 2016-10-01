@@ -10,7 +10,10 @@
 #include <QMessageBox>
 #include <QWindow>
 
+
 QString CoreApplication::aktuelleVersion = "0.0.0";
+QUrl CoreApplication::urlDownload = QUrl("http://bahn.philipp-schepper.de/#downloads");
+QUrl CoreApplication::urlVersion = QUrl("http://bahn.philipp-schepper.de/version_developer.txt");
 
 CoreApplication::CoreApplication(int &argc, char **argv, QString version) : QApplication(argc, argv)
 {
@@ -69,13 +72,12 @@ bool CoreApplication::versionGreater(QString version)
 
 void CoreApplication::checkVersion()
 {
-    QUrl url("http://bahn.philipp-schepper.de/#downloads");
     QString v = loadVersion();
 
     if (versionGreater(v)) {
         if (QMessageBox::information(nullptr, tr("Neue Version"), tr("Es ist Version ")+v+tr(" des Programms verfügbar.\nSie benutzen Version ")+aktuelleVersion+". ", QMessageBox::Ignore|QMessageBox::Open, QMessageBox::Open) == QMessageBox::Open) {
             // Öffnen der Webseite
-            QDesktopServices::openUrl(url);
+            QDesktopServices::openUrl(urlDownload);
         }
     }
 }
@@ -97,10 +99,13 @@ void CoreApplication::closeAllWindows()
 
 }
 
+QUrl CoreApplication::getUrlDownload()
+{
+    return urlDownload;
+}
+
 QString CoreApplication::loadVersion()
 {
-    QUrl url = QUrl("http://bahn.philipp-schepper.de/version.txt");
-
     // create custom temporary event loop on stack
     QEventLoop eventLoop;
 
@@ -109,7 +114,7 @@ QString CoreApplication::loadVersion()
     QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
     // the HTTP request
-    QNetworkRequest req( url );
+    QNetworkRequest req( urlVersion );
     QNetworkReply *reply = mgr.get(req);
     eventLoop.exec(); // blocks stack until "finished()" has been called
 
