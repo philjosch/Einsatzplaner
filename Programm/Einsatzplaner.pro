@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     fileio.cpp \
     coreapplication.cpp \
     wagen.cpp \
-    verteiler.cpp
+    verteiler.cpp \
+    preferencesdialog.cpp
 
 HEADERS  += mainwindow.h \
     person.h \
@@ -52,7 +53,8 @@ HEADERS  += mainwindow.h \
     fileio.h \
     coreapplication.h \
     wagen.h \
-    verteiler.h
+    verteiler.h \
+    preferencesdialog.h
 
 FORMS    += mainwindow.ui \
 #    managerreservierungen.ui \
@@ -61,9 +63,14 @@ FORMS    += mainwindow.ui \
     personalwindow.ui \
     calendar.ui \
     calendarday.ui \
-    exportgesamt.ui
+    exportgesamt.ui \
+    preferencesdialog.ui
+
+TRANSLATIONS += einsatzplaner_de.ts
 
 CONFIG -= console
+
+OTHER_FILES += qt_de.qm einsatzplaner_de.qm
 
 win32 {
     RC_ICONS = ../Icon/keks.ico
@@ -82,5 +89,7 @@ macx {
     # Bundle identifier for your application
     BUNDLEID = de.philipp-schepper.einsatzplaner
     ICON = ../Icon/keks.icns
-    codesign.commands += macdeployqt $${TARGET}.app;
 }
+
+RESOURCES += \
+    resources.qrc
