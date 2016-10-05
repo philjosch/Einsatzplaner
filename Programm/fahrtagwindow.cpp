@@ -998,13 +998,11 @@ void FahrtagWindow::on_lineSitze_textChanged(const QString &arg1)
     if (nehmeRes) {
         QMap<int, QList<int>*> *plaetze = ManagerReservierungen::getPlaetzeFromString(arg1);
         bool ok = fahrtag->checkPlaetze(plaetze, aktuelleRes);
-
+        aktuelleRes->setSitzplatz(plaetze);
+        update();
         // Prüfe, ob die Sitzplätze valide sind und zeige dies visuell an
-        // Speichere die Sitzplätze, wenn die valide sind
         if (ok) {
-            aktuelleRes->setSitzplatz(plaetze);
             ui->lineSitze->setStyleSheet("background-color: #b9ceac");
-            update();
         } else {
             ui->lineSitze->setStyleSheet("background-color: #cb555d");
         }
@@ -1018,16 +1016,14 @@ void FahrtagWindow::on_lineSitze_returnPressed()
     if (nehmeRes) {
         QMap<int, QList<int>*> *plaetze = ManagerReservierungen::getPlaetzeFromString(ui->lineSitze->text());
         bool ok = fahrtag->checkPlaetze(plaetze, aktuelleRes);
-
+        aktuelleRes->setSitzplatz(plaetze);
+        update();
         // Prüfe, ob die Sitzplätze valide sind und zeige dies visuell an
-        // Speichere die Sitzplätze, wenn die valide sind
         if (ok) {
-            aktuelleRes->setSitzplatz(plaetze);
             ui->lineSitze->setStyleSheet("background-color: #b9ceac");            
-            update();
         } else {
-            QMessageBox::information(this, "Sitzplätze fehlerhaft", "Die eingegebenen Sitzplätze konnten nicht zugewiesen werden.\nGeben Sie gültige und freie Sitzplätze ein!");
             ui->lineSitze->setStyleSheet("background-color: #cb555d");
+            QMessageBox::information(this, "Sitzplätze fehlerhaft", "Die eingegebenen Sitzplätze sind möglicherweise belegt! Bitte überprüfen Sie ihre Eingabe.");
         }
         fahrtag->emitter();
     }

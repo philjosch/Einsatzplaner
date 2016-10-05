@@ -392,6 +392,21 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>comboVon</tabstop>
+  <tabstop>dateVon</tabstop>
+  <tabstop>comboBis</tabstop>
+  <tabstop>dateBis</tabstop>
+  <tabstop>comboFahrtag</tabstop>
+  <tabstop>checkActivity</tabstop>
+  <tabstop>listAnzeige</tabstop>
+  <tabstop>checkEinzel</tabstop>
+  <tabstop>checkListe</tabstop>
+  <tabstop>checkPDF</tabstop>
+  <tabstop>checkAusdruck</tabstop>
+  <tabstop>pushAbbruch</tabstop>
+  <tabstop>pushDrucken</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

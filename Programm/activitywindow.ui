@@ -368,12 +368,13 @@
  <tabstops>
   <tabstop>dateDatum</tabstop>
   <tabstop>lineOrt</tabstop>
+  <tabstop>lineAnlass</tabstop>
   <tabstop>plainBeschreibung</tabstop>
   <tabstop>timeBeginn</tabstop>
   <tabstop>timeEnde</tabstop>
   <tabstop>checkBoxBenoetigt</tabstop>
-  <tabstop>tablePersonen</tabstop>
   <tabstop>buttonInsert</tabstop>
+  <tabstop>tablePersonen</tabstop>
   <tabstop>buttonRemove</tabstop>
   <tabstop>buttonDelete</tabstop>
  </tabstops>

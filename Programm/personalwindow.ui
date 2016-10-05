@@ -39,7 +39,7 @@
     <item row="0" column="0" colspan="3">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="gesamt">
        <attribute name="title">
@@ -710,7 +710,6 @@
   <tabstop>tabWidget</tabstop>
   <tabstop>tabelleGesamt</tabstop>
   <tabstop>pushAdd</tabstop>
-  <tabstop>listWidget</tabstop>
   <tabstop>lineName</tabstop>
   <tabstop>spinKm</tabstop>
   <tabstop>checkTf</tabstop>
@@ -724,7 +723,10 @@
   <tabstop>lineBuero</tabstop>
   <tabstop>lineGesamt</tabstop>
   <tabstop>lineStrecke</tabstop>
+  <tabstop>listWidget</tabstop>
   <tabstop>pushDelete</tabstop>
+  <tabstop>pushPDF</tabstop>
+  <tabstop>pushPrint</tabstop>
   <tabstop>pushAktualisieren</tabstop>
  </tabstops>
  <resources/>

@@ -183,8 +183,8 @@ void MainWindow::on_actionAboutApp_triggered()
 {
     QMessageBox msg;
     msg.setTextFormat(Qt::RichText);
-    msg.setText("<center><b>Einsatzplaner</b><br/><small><br>"+QCoreApplication::applicationVersion()+"<br/>Copyright © 2016 Philipp Schepper<br/>Alle Rechte vorbehalten.</small></center>");
-    msg.addButton(QMessageBox::Close);
+    msg.setText("<center><img src=':/icons/keks.png' width='150' /><br/><b>Einsatzplaner</b><br/><small><br/>"+QCoreApplication::applicationVersion()+"<br/>Copyright © 2016 Philipp Schepper<br/>Alle Rechte vorbehalten.</small></center>");
+    msg.addButton(QMessageBox::NoButton);
     msg.exec();
 }
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>645</width>
+    <width>660</width>
     <height>185</height>
    </rect>
   </property>
@@ -811,6 +811,16 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>buttonPrev</tabstop>
+  <tabstop>dateSelector</tabstop>
+  <tabstop>buttonToday</tabstop>
+  <tabstop>buttonNext</tabstop>
+  <tabstop>listWidget</tabstop>
+  <tabstop>buttonAddFahrtag</tabstop>
+  <tabstop>buttonAddActivity</tabstop>
+  <tabstop>buttonDelete</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

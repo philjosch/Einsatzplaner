@@ -215,6 +215,11 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>checkSearchAtStart</tabstop>
+  <tabstop>pushSearch</tabstop>
+  <tabstop>pushDownload</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

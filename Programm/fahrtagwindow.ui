@@ -39,7 +39,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="documentMode">
        <bool>false</bool>
@@ -2147,6 +2147,59 @@
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>dateDate</tabstop>
+  <tabstop>comboArt</tabstop>
+  <tabstop>textAnlass</tabstop>
+  <tabstop>checkWichtig</tabstop>
+  <tabstop>comboWagenreihung</tabstop>
+  <tabstop>comboTimeTfH</tabstop>
+  <tabstop>comboTimeTfM</tabstop>
+  <tabstop>comboTimeZH</tabstop>
+  <tabstop>comboTimeZM</tabstop>
+  <tabstop>tabEingabeWizard</tabstop>
+  <tabstop>checkTf</tabstop>
+  <tabstop>buttonTfAdd</tabstop>
+  <tabstop>listTf</tabstop>
+  <tabstop>buttonTfDelete</tabstop>
+  <tabstop>checkZub</tabstop>
+  <tabstop>buttonZubAdd</tabstop>
+  <tabstop>listZub</tabstop>
+  <tabstop>buttonZubDelete</tabstop>
+  <tabstop>checkZf</tabstop>
+  <tabstop>buttonZfAdd</tabstop>
+  <tabstop>listZf</tabstop>
+  <tabstop>buttonZfDelete</tabstop>
+  <tabstop>checkService</tabstop>
+  <tabstop>buttonServiceAdd</tabstop>
+  <tabstop>listService</tabstop>
+  <tabstop>buttonServiceDelete</tabstop>
+  <tabstop>textBemerkungen</tabstop>
+  <tabstop>buttonAdd</tabstop>
+  <tabstop>listRes</tabstop>
+  <tabstop>lineName</tabstop>
+  <tabstop>lineMail</tabstop>
+  <tabstop>lineTelefon</tabstop>
+  <tabstop>spinAnzahl</tabstop>
+  <tabstop>comboKlasse</tabstop>
+  <tabstop>comboStart1Zug</tabstop>
+  <tabstop>comboStart1Hp</tabstop>
+  <tabstop>comboEnde1Zug</tabstop>
+  <tabstop>comboEnde1Hp</tabstop>
+  <tabstop>lineSitze</tabstop>
+  <tabstop>checkFahrrad</tabstop>
+  <tabstop>plainSonstiges</tabstop>
+  <tabstop>buttonDelete</tabstop>
+  <tabstop>buttonShow</tabstop>
+  <tabstop>checkBoxAuto</tabstop>
+  <tabstop>checkBoxAll</tabstop>
+  <tabstop>buttonVerteile</tabstop>
+  <tabstop>timeEnde</tabstop>
+  <tabstop>checkBoxBenoetigt</tabstop>
+  <tabstop>tablePersonen</tabstop>
+  <tabstop>buttonInsert</tabstop>
+  <tabstop>buttonRemove</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

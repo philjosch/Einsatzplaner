@@ -175,7 +175,7 @@
     <message>
         <location filename="calendar.ui" line="174"/>
         <source>Neuer Fahrtag</source>
-        <translation>Ä neier Fhaadach</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="calendar.ui" line="187"/>
@@ -1152,7 +1152,7 @@ Diese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutze
     <message>
         <location filename="mainwindow.ui" line="14"/>
         <source>MainWindow</source>
-        <translation>Hauptfenster</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="71"/>

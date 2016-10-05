@@ -3,4 +3,7 @@
         <file>einsatzplaner_de.qm</file>
         <file>qt_de.qm</file>
     </qresource>
+    <qresource prefix="/icons">
+        <file>keks.png</file>
+    </qresource>
 </RCC>
