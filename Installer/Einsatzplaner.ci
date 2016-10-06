@@ -150,6 +150,13 @@
                                  <exclude ></>
                               </>
                               <_ >
+                                 <filename >C:\Users\Virtual\Desktop\Einsatzplaner\Icon\keks.ico</>
+                                 <recurse >1</>
+                                 <justfile >0</>
+                                 <emptydir >0</>
+                                 <exclude ></>
+                              </>
+                              <_ >
                                  <filename >C:\Users\Virtual\Desktop\DLLS\*</>
                                  <recurse >1</>
                                  <justfile >0</>
@@ -168,10 +175,10 @@
                         <shfile >#lunname#</>
                         <path >inst</>
                         <file >uninstall.exe</>
-                        <icon ></>
+                        <icon >keks.ico</>
                         <cmdline ></>
                         <comment ></>
-                        <work >inst</>
+                        <work >sys</>
                         <defwork ></>
                         <runas >norm</>
                         <runasadmin >0</>
@@ -187,7 +194,7 @@
                                  <path >inst</>
                                  <file >Einsatzplaner.exe</>
                                  <cmdline ></>
-                                 <icon >C:\Users\Virtual\Desktop\Einsatzplaner\Icon\keks.ico</>
+                                 <icon >keks.ico</>
                                  <work >inst</>
                                  <defwork ></>
                                  <if ></>
@@ -198,7 +205,7 @@
                                  <path >inst</>
                                  <file >Einsatzplaner.exe</>
                                  <cmdline ></>
-                                 <icon >C:\Users\Virtual\Desktop\Einsatzplaner\Icon\keks.ico</>
+                                 <icon >keks.ico</>
                                  <work >inst</>
                                  <defwork ></>
                                  <if ></>
@@ -209,7 +216,7 @@
                                  <path >inst</>
                                  <file >Einsatzplaner.exe</>
                                  <cmdline ></>
-                                 <icon >C:\Users\Virtual\Desktop\Einsatzplaner\Icon\keks.ico</>
+                                 <icon >keks.ico</>
                                  <work >inst</>
                                  <defwork ></>
                                  <if ></>
