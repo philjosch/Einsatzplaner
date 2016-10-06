@@ -149,6 +149,13 @@
                                  <emptydir >0</>
                                  <exclude ></>
                               </>
+                              <_ >
+                                 <filename >C:\Users\Virtual\Desktop\DLLS\*</>
+                                 <recurse >1</>
+                                 <justfile >0</>
+                                 <emptydir >0</>
+                                 <exclude ></>
+                              </>
                            </>
                         </>
                         <varlist >
