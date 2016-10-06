@@ -14,6 +14,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(closeDialogOk()));
     QSettings settings;
     ui->checkSearchAtStart->setChecked(settings.value("general/autosearchupdate", true).toBool());
+    setWindowFilePath("");
 }
 
 PreferencesDialog::~PreferencesDialog()

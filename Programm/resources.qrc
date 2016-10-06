@@ -5,5 +5,7 @@
     </qresource>
     <qresource prefix="/icons">
         <file>keks.png</file>
+        <file>keks.icns</file>
+        <file>square.png</file>
     </qresource>
 </RCC>

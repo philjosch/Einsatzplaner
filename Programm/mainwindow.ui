@@ -124,6 +124,9 @@
      <string>Datei</string>
     </property>
     <widget class="QMenu" name="menuRecentlyused">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="title">
       <string>Zuletzt benutzt</string>
      </property>
@@ -348,6 +351,9 @@
    </property>
   </action>
   <action name="actionClear">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Liste leeren</string>
    </property>

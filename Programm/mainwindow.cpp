@@ -171,6 +171,7 @@ void MainWindow::on_buttonExport_clicked()
 void MainWindow::on_actionPreferences_triggered()
 {
     PreferencesDialog *dialog = new PreferencesDialog();
+    dialog->setWindowFilePath("");
     dialog->show();
 }
 
@@ -181,11 +182,7 @@ void MainWindow::on_actionAboutQt_triggered()
 
 void MainWindow::on_actionAboutApp_triggered()
 {
-    QMessageBox msg;
-    msg.setTextFormat(Qt::RichText);
-    msg.setText("<center><img src=':/icons/keks.png' width='150' /><br/><b>Einsatzplaner</b><br/><small><br/>"+QCoreApplication::applicationVersion()+"<br/>Copyright © 2016 Philipp Schepper<br/>Alle Rechte vorbehalten.</small></center>");
-    msg.addButton(QMessageBox::NoButton);
-    msg.exec();
+    QMessageBox::about(this, tr("Über Einsatzplaner"), "<center><b>Einsatzplaner</b><br/><small><br/>"+QCoreApplication::applicationVersion()+"<br/>Copyright © 2016 Philipp Schepper<br/>Alle Rechte vorbehalten.</small></center>");
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -204,8 +201,11 @@ void MainWindow::on_actionOpen_triggered()
     QString file = FileIO::getFilePathOpen(this, tr("AkO-Dateien (*.ako)"));
     if (file != "") {
         MainWindow *newOpen = new MainWindow();
-        newOpen->openFile(file);
-        newOpen->show();
+        if (newOpen->openFile(file)) {
+            newOpen->show();
+        } else {
+            newOpen->close();
+        }
     }
 }
 
