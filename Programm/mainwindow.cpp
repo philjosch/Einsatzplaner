@@ -61,8 +61,8 @@ QString MainWindow::getFarbeZug(Fahrtag::Art cat)
     case Fahrtag::Sonderzug:            return "#ffcccc"; // Sonderzug -
     case Fahrtag::Gesellschaftssonderzug: return "#ffcc66"; // Gesellschaft -
     case Fahrtag::Nikolauszug:          return "#ffccff"; // Nikolausfahrt -
-    case Fahrtag::ELFundMuseumszug:     return "#918fe3"; // Museumszug mit ELF -
-    case Fahrtag::Schnupperkurs:        return "#e7e7fd"; // ELF-Schnupperkurs -
+    case Fahrtag::ELFundMuseumszug:     return "#e7e7fd"; // Museumszug mit ELF -
+    case Fahrtag::Schnupperkurs:        return "#918fe3"; // ELF-Schnupperkurs -
     case Fahrtag::Bahnhofsfest:         return "#80e3b1"; // Bahnhofsfest
     case Fahrtag::Sonstiges:            return "#ffeb90"; // Sonstiges
     default:                            return "#dddddd";

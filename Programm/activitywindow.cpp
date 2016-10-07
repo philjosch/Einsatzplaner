@@ -12,7 +12,6 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) :
     ui->setupUi(this);
     activity = a;
     loadData();
-    nehme = true;
     setWindowTitle("Arbeitseinsatz am "+activity->getDatum().toString("dddd dd. MM. yyyy"));
 
     namen = new QSet<QString>();
@@ -91,6 +90,7 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
      * und die Liste muss up-todate gehalten werden
      * */
 
+
         // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
         if (column == 0) {
             QStringList *neu = new QStringList();
@@ -98,6 +98,10 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
                 QString n = "";
                 if (ui->tablePersonen->item(i, 0) != nullptr)
                     n = ui->tablePersonen->item(i, 0)->text();
+                if (n.contains(";")) {
+                    QStringList splitted = n.split(QRegExp("\\s*;\\s*"));
+                    n = splitted.at(0);
+                }
                 neu->append(n);
                 if (namen->contains(n)) {
                     namen->remove(n);
@@ -107,9 +111,16 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
                 activity->removePerson(namen->values().at(0));
             }
         }
+
         QString name = "";
         if (ui->tablePersonen->item(row,0) != nullptr)
             name = ui->tablePersonen->item(row,0)->text();
+
+        QString bemerkung = "";
+        QStringList list = name.split(QRegExp("\\s*;\\s*"));
+        name = list.at(0);
+        if (list.length() > 1)
+            bemerkung = list.at(1);
 
         QString beginn = "";
         QTime beginnZ = QTime(0,0);
@@ -135,14 +146,14 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         if (ui->tablePersonen->item(row,3) != nullptr)
             aufgabe = ui->tablePersonen->item(row,3)->text();
 
-        if (name.toUpper().contains("EXTERN")) {
+        if (bemerkung.toUpper().contains("EXTERN")) {
             Person *p = new Person(name);
             p->setAusbildungTf(true);
             p->setAusbildungZf(true);
             p->setAusbildungRangierer(true);
-            activity->addPerson(p, "", beginnZ, endeZ, aufgabe);
+            activity->addPerson(p, bemerkung, beginnZ, endeZ, aufgabe);
         } else {
-            ManagerPersonal::Misstake antw = activity->addPerson(name, "", beginnZ, endeZ, aufgabe);
+            ManagerPersonal::Misstake antw = activity->addPerson(name, bemerkung, beginnZ, endeZ, aufgabe);
 
             switch (antw) {
             case ManagerPersonal::OK:
@@ -184,6 +195,7 @@ void ActivityWindow::on_actionPdf_triggered()
 
 void ActivityWindow::loadData()
 {
+    nehme = false;
     // Allgemeine Daten von AActivity
     ui->dateDatum->setDate(activity->getDatum());
     ui->lineOrt->setText(activity->getOrt());
@@ -192,6 +204,45 @@ void ActivityWindow::loadData()
     ui->timeBeginn->setTime(activity->getZeitAnfang());
     ui->timeEnde->setTime(activity->getZeitEnde());
     ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
+
     // Tabelle laden und alles einfügen
-    // Fehlt //
+    namen = new QSet<QString>();
+
+    for(Person *p: activity->getPersonen()->keys()) {
+        AActivity::Infos *info = activity->getPersonen()->value(p);
+
+        QListWidgetItem *item;
+        if (info->bemerkung == "") {
+            item = new QListWidgetItem(p->getName());
+        } else {
+            item = new QListWidgetItem(p->getName()+"; "+info->bemerkung);
+        }
+        namen->insert(p->getName());
+        ui->buttonRemove->setEnabled(true);
+
+        // Zeile für die Person in die Tabelle einfügen
+        QString bem = info->bemerkung.toUpper();
+
+        ui->tablePersonen->insertRow(0);
+
+        QTableWidgetItem *zelleName = new QTableWidgetItem(p->getName());
+        ui->tablePersonen->setItem(0,0,zelleName);
+
+        if (info->beginn != QTime(0, 0)) {
+            QTableWidgetItem *zelleBeginn = new QTableWidgetItem(info->beginn.toString("hh:mm"));
+            ui->tablePersonen->setItem(0, 1, zelleBeginn);
+        }
+        if (info->ende != QTime(0,0)) {
+            QTableWidgetItem *zelleEnde = new QTableWidgetItem(info->ende.toString("hh:mm"));
+            ui->tablePersonen->setItem(0, 2, zelleEnde);
+        }
+        QTableWidgetItem *zelleAufgabe;
+        if (info->aufgabe == "") {
+            zelleAufgabe = new QTableWidgetItem(AActivity::getStringFromCategory(info->kategorie));
+        } else {
+            zelleAufgabe = new QTableWidgetItem(info->aufgabe);
+        }
+        ui->tablePersonen->setItem(0, 3, zelleAufgabe);
+    }
+    nehme = true;
 }

@@ -65,7 +65,15 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
         QString name = aO.value("name").toString();
         Category kat = (Category) aO.value("kat").toInt();
 
-        Person *p = personal->getPerson(name);
+        Person *p;
+        if (personal->personExists(name)) {
+            p = personal->getPerson(name);
+        } else {
+            p = new Person(name);
+            p->setAusbildungTf(true);
+            p->setAusbildungZf(true);
+            p->setAusbildungRangierer(true);
+        }
         Infos *info = new Infos();
         info->beginn = QTime::fromString(aO.value("beginn").toString(), "hh:mm");
         info->ende = QTime::fromString(aO.value("ende").toString(), "hh:mm");
@@ -217,6 +225,17 @@ bool AActivity::removePerson(QString p)
     if (pers != nullptr) {
         emitter();
         return removePerson(pers);
+    }
+    Person *gefunden;
+    for(Person *pers: personen->keys()) {
+        if (pers->getName() == p) {
+            gefunden = pers;
+        }
+    }
+    if (gefunden != nullptr) {
+        personen->remove(gefunden);
+        emitter();
+        return true;
     }
     return false;
 }

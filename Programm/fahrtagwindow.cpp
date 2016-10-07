@@ -178,6 +178,7 @@ void FahrtagWindow::loadData()
             } else {
                 item = new QListWidgetItem(p->getName()+"; "+info->bemerkung);
             }
+            item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
             listeMitNamen->insert(item, p->getName());
             namen->insert(p->getName());
 
@@ -343,6 +344,7 @@ void FahrtagWindow::on_buttonTfAdd_clicked()
 }
 void FahrtagWindow::on_buttonTfDelete_clicked()
 {
+    if (ui->listTf->currentItem() == nullptr) return;
     QString text = ui->listTf->currentItem()->text();
     QStringList liste = text.split("; ");
     QString name = liste.at(0);
@@ -351,14 +353,14 @@ void FahrtagWindow::on_buttonTfDelete_clicked()
         bem = liste.at(1);
     }
 
-    if (bem.contains("Azubi") || bem.contains("FS") || bem.contains("Extern")) {
+    if (bem.toUpper().contains("AZUBI") || bem.toUpper().contains("FS") || bem.toUpper().contains("EXTERN")) {
         fahrtag->removePerson(name);
     } else if (!fahrtag->getPersonal()->personExists(name)) {
     } else {
-
         Person *person = fahrtag->getPersonal()->getPerson(name);
         name = person->getName();
         person->removeActivity(fahrtag);
+        fahrtag->removePerson(person);
     }
     QListWidgetItem *item = ui->listTf->currentItem();
     if (listeMitNamen->contains(item)) {
@@ -391,7 +393,7 @@ void FahrtagWindow::on_listZf_itemChanged(QListWidgetItem *item)
         AActivity::Category kat = AActivity::Zf;
         Person *person;
 
-        if (bem.contains("Extern")) {
+        if (bem.toUpper().contains("EXTERN")) {
             person = new Person(name);
             person->setAusbildungZf(true);
             person->addActivity(fahrtag, kat);
@@ -451,6 +453,7 @@ void FahrtagWindow::on_buttonZfAdd_clicked()
 }
 void FahrtagWindow::on_buttonZfDelete_clicked()
 {
+    if (ui->listZf->currentItem() == nullptr) return;
     QString text = ui->listZf->currentItem()->text();
     QStringList liste = text.split("; ");
     QString name = liste.at(0);
@@ -459,13 +462,15 @@ void FahrtagWindow::on_buttonZfDelete_clicked()
         bem = liste.at(1);
     }
 
-    if (bem.contains("Extern")) {
+    if (bem.toUpper().contains("EXTERN")) {
+        fahrtag->removePerson(name);
     } else if (!fahrtag->getPersonal()->personExists(name)) {
     } else {
 
         Person *person = fahrtag->getPersonal()->getPerson(name);
         name = person->getName();
         person->removeActivity(fahrtag);
+        fahrtag->removePerson(person);
     }
     QListWidgetItem *item = ui->listZf->currentItem();
     if (listeMitNamen->contains(item)) {
@@ -554,6 +559,7 @@ void FahrtagWindow::on_buttonZubAdd_clicked()
 }
 void FahrtagWindow::on_buttonZubDelete_clicked()
 {
+    if (ui->listZub->currentItem() == nullptr) return;
     QString text = ui->listZub->currentItem()->text();
     QStringList liste = text.split("; ");
     QString name = liste.at(0);
@@ -562,13 +568,15 @@ void FahrtagWindow::on_buttonZubDelete_clicked()
         bem = liste.at(1);
     }
 
-    if (bem.contains("Extern")) {
+    if (bem.toUpper().contains("EXTERN")) {
+        fahrtag->removePerson(name);
     } else if (!fahrtag->getPersonal()->personExists(name)) {
     } else {
 
         Person *person = fahrtag->getPersonal()->getPerson(name);
         name = person->getName();
         person->removeActivity(fahrtag);
+        fahrtag->removePerson(person);
     }
     QListWidgetItem *item = ui->listZub->currentItem();
     if (listeMitNamen->contains(item)) {
@@ -653,21 +661,30 @@ void FahrtagWindow::on_buttonServiceAdd_clicked()
 }
 void FahrtagWindow::on_buttonServiceDelete_clicked()
 {
+    if (ui->listService->currentItem() == nullptr) return;
     QString text = ui->listService->currentItem()->text();
-    QStringList liste = text.split("; ");
-    QString name = liste.at(0);
+    QString name = "";
     QString bem = "";
-    if (liste.length() > 1) {
-        bem = liste.at(1);
+    if (text.contains("; ")) {
+        QStringList liste = text.split("; ");
+        QString name = liste.at(0);
+        QString bem = "";
+        if (liste.length() > 1) {
+            bem = liste.at(1);
+        }
+    } else {
+        name = text;
     }
 
     if (bem.contains("Extern")) {
+        fahrtag->removePerson(name);
     } else if (!fahrtag->getPersonal()->personExists(name)) {
     } else {
 
         Person *person = fahrtag->getPersonal()->getPerson(name);
         name = person->getName();
         person->removeActivity(fahrtag);
+        fahrtag->removePerson(person);
     }
     QListWidgetItem *item = ui->listService->currentItem();
     if (listeMitNamen->contains(item)) {

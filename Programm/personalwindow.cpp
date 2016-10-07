@@ -61,6 +61,8 @@ void PersonalWindow::showPerson(Person *p)
     // Tabellendaten laden und einfügen
     while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
     QListIterator<AActivity*> *i = p->getActivities();
+    bool sortingSaved = ui->tabelle->isSortingEnabled();
+    ui->tabelle->setSortingEnabled(false);
     while(i->hasNext()) {
         AActivity *a = i->next();
         // Datum
@@ -87,6 +89,7 @@ void PersonalWindow::showPerson(Person *p)
         QTableWidgetItem *i3 = new QTableWidgetItem(a->getAnlass());
         ui->tabelle->setItem(0, 3, i3);
     }
+    ui->tabelle->setSortingEnabled(sortingSaved);
 
     ui->lineTf->setText(QString::number(p->getTimeTf()));
     ui->lineZf->setText(QString::number(p->getTimeZf()));
