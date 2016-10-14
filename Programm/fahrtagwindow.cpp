@@ -71,8 +71,15 @@ void FahrtagWindow::on_checkWichtig_stateChanged(int arg1)
 void FahrtagWindow::on_comboWagenreihung_currentTextChanged(const QString &arg1)
 {
     if (nehme) {
-        fahrtag->setWagenreihung(arg1);
-        update();
+        QString alt = fahrtag->getWagenreihung();
+        if (fahrtag->setWagenreihung(arg1)) {
+            update();
+        } else {
+            QMessageBox::information(this, tr("Fehler"), tr("Die Wagenreihung konnte nicht geändert werden. Da es Reservierungen in den weggefallenen Waggons gibt!"));
+            nehme = false;
+            ui->comboWagenreihung->setCurrentText(alt);
+            nehme = true;
+        }
     }
 }
 
@@ -493,7 +500,7 @@ void FahrtagWindow::on_listZub_itemChanged(QListWidgetItem *item)
         nehme = false;
         // Laden der Informationen zur geänderten Person
         QString text = item->text();
-        QStringList liste = text.split("; ");
+        QStringList liste = text.split(QRegExp("\\s*;\\s*"));
         QString name = liste.at(0);
         QString bem = "";
         if (liste.length() > 1) {
@@ -502,7 +509,7 @@ void FahrtagWindow::on_listZub_itemChanged(QListWidgetItem *item)
         AActivity::Category kat = AActivity::Zub;
         Person *person;
 
-        if (bem.contains("Extern")) {
+        if (bem.toUpper().contains("EXTERN")) {
             person = new Person(name);
             person->addActivity(fahrtag, kat);
             fahrtag->addPerson(person, bem, QTime(0,0), QTime(0,0), "Zub");

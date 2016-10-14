@@ -119,9 +119,9 @@ QSetIterator<Person *> ManagerPersonal::getPersonen() const
 
 QString ManagerPersonal::getGoodName(QString name)
 {
-    if (name.contains(", ")) {
-        QStringList liste = name.split(", ");
-        name = liste.at(1)+liste.at(0);
+    if (name.contains(QRegExp("\\s*,\\s*"))) {
+        QStringList liste = name.split(QRegExp("\\s*,\\s*"));
+        name = liste.at(1) + " " + liste.at(0);
     }
     return name;
 }
