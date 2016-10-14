@@ -144,7 +144,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 //        delete personalfenster;
         for(QMainWindow *m: fenster->values()) {
             m->close();
-            delete m;
+//            delete m;
         }
     }
 
