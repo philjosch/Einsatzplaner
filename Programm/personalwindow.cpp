@@ -24,7 +24,6 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     personToItem = new QHash<Person*, QListWidgetItem*>();
     enabled = false;
 
-    refreshGesamt();
     QSetIterator<Person*> i = manager->getPersonen();
     while(i.hasNext()) {
         Person *p = i.next();
@@ -35,6 +34,14 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
         ui->pushDelete->setEnabled(true);
     }
     refreshEinzel();
+
+    anzeige = new QList<bool>();
+    while(anzeige->length() < 11) {
+        anzeige->append(false);
+    }
+    ui->checkShowGesamt->setChecked(true);
+    ui->checkShowAnzahl->setChecked(true);
+    ui->checkShowKilometer->setChecked(true);
 }
 
 PersonalWindow::~PersonalWindow()
@@ -67,7 +74,8 @@ void PersonalWindow::showPerson(Person *p)
         AActivity *a = i->next();
         // Datum
         ui->tabelle->insertRow(0);
-        QTableWidgetItem *i0 = new QTableWidgetItem(a->getDatum().toString("dd.MM.yyyy"));
+        QTableWidgetItem *i0 = new QTableWidgetItem();
+        i0->setData(Qt::EditRole, a->getDatum());
         ui->tabelle->setItem(0, 0, i0);
 
         AActivity::Infos *infos = a->getIndividual(p);
@@ -125,40 +133,170 @@ void PersonalWindow::loadData()
 
 void PersonalWindow::on_pushAktualisieren_clicked()
 {
-    refresh();
+    refreshGesamt();
 }
 
 void PersonalWindow::refreshGesamt()
 {
-//    ui->tabelleGesamt->clear();
     while(ui->tabelleGesamt->rowCount() > 0) {
         ui->tabelleGesamt->removeRow(0);
     }
-    QSetIterator<Person*> i = manager->getPersonen();
+    QSetIterator<Person*> iterator = manager->getPersonen();
     ui->tabelleGesamt->setSortingEnabled(false);
-    while(i.hasNext()) {
-        Person *p = i.next();
+    //  0: summe gesamt
+    //  1: anzahl
+    //  2: tf/tb
+    //  3: zf
+    //  4: zub/begl.o.b.a.
+    //  5: service
+    //  6: zug vorbereiten
+    //  7: werkstatt
+    //  8: büro
+    //  9: sonstiges
+    // 10: kilometer
+    while (ui->tabelleGesamt->columnCount() > 2) {
+        ui->tabelleGesamt->removeColumn(2);
+    }
+
+    if (anzeige->at(10)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Kilometer")));
+    }
+    if (anzeige->at(9)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Sonstiges")));
+    }
+    if (anzeige->at(8)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Büro")));
+    }
+    if (anzeige->at(7)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Werkstatt")));
+    }
+    if (anzeige->at(6)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Zug\nVorbereiten")));
+    }
+    if (anzeige->at(5)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Service")));
+    }
+    if (anzeige->at(4)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Zub")));
+    }
+    if (anzeige->at(3)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Zf")));
+    }
+    if (anzeige->at(2)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Tf/Tb")));
+    }
+    if (anzeige->at(1)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Anzahl")));
+    }
+    if (anzeige->at(0)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Gesamt")));
+    }
+    ui->tabelleGesamt->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    while(iterator.hasNext()) {
+        Person *p = iterator.next();
         p->berechne();
         QString farbe = "#ffffff";
         if (! manager->pruefeStunden(p)) {
             farbe = nichtGenugStunden;
         }
         ui->tabelleGesamt->insertRow(0);
-        QTableWidgetItem *i = new QTableWidgetItem(p->getName());
+        QTableWidgetItem *i = new QTableWidgetItem(p->getVorname());
         i->setBackgroundColor(farbe);
         ui->tabelleGesamt->setItem(0, 0, i);
 
-        i = new QTableWidgetItem(QString::number(p->getTimeSum()));
+        i = new QTableWidgetItem(p->getNachname());
         i->setBackgroundColor(farbe);
         ui->tabelleGesamt->setItem(0, 1, i);
 
-        i = new QTableWidgetItem(QString::number(p->getSumKilometer()));
-        i->setBackgroundColor(farbe);
-        ui->tabelleGesamt->setItem(0, 2, i);
-
-        i = new QTableWidgetItem(QString::number(p->getAnzahl()));
-        i->setBackgroundColor(farbe);
-        ui->tabelleGesamt->setItem(0, 3, i);
+        int pos = 2;
+        if (anzeige->at(0)) {
+            i = new QTableWidgetItem();
+            i->setData(Qt::EditRole, p->getTimeSum());
+            i->setBackgroundColor(farbe);
+            ui->tabelleGesamt->setItem(0, pos, i);
+            pos++;
+        }
+        if (anzeige->at(1)) {
+            i = new QTableWidgetItem();
+            i->setData(Qt::EditRole, p->getAnzahl());
+            i->setBackgroundColor(farbe);
+            ui->tabelleGesamt->setItem(0, pos, i);
+            pos++;
+        }
+        if (anzeige->at(2)) {
+            i = new QTableWidgetItem();
+            i->setData(Qt::EditRole, p->getTimeTf());
+            i->setBackgroundColor(farbe);
+            ui->tabelleGesamt->setItem(0, pos, i);
+            pos++;
+        }
+        if (anzeige->at(3)) {
+            i = new QTableWidgetItem();
+            i->setData(Qt::EditRole, p->getTimeZf());
+            i->setBackgroundColor(farbe);
+            ui->tabelleGesamt->setItem(0, pos, i);
+            pos++;
+        }
+        if (anzeige->at(4)) {
+            i = new QTableWidgetItem();
+            i->setData(Qt::EditRole, p->getTimeZub());
+            i->setBackgroundColor(farbe);
+            ui->tabelleGesamt->setItem(0, pos, i);
+            pos++;
+        }
+        if (anzeige->at(5)) {
+            i = new QTableWidgetItem();
+            i->setData(Qt::EditRole, p->getTimeService());
+            i->setBackgroundColor(farbe);
+            ui->tabelleGesamt->setItem(0, pos, i);
+            pos++;
+        }
+        if (anzeige->at(6)) {
+            i = new QTableWidgetItem();
+            i->setData(Qt::EditRole, p->getTimeVorbereiten());
+            i->setBackgroundColor(farbe);
+            ui->tabelleGesamt->setItem(0, pos, i);
+            pos++;
+        }
+        if (anzeige->at(7)) {
+            i = new QTableWidgetItem();
+            i->setData(Qt::EditRole, p->getTimeWerkstatt());
+            i->setBackgroundColor(farbe);
+            ui->tabelleGesamt->setItem(0, pos, i);
+            pos++;
+        }
+        if (anzeige->at(8)) {
+            i = new QTableWidgetItem();
+            i->setData(Qt::EditRole, p->getTimeBuero());
+            i->setBackgroundColor(farbe);
+            ui->tabelleGesamt->setItem(0, pos, i);
+            pos++;
+        }
+        if (anzeige->at(9)) {
+            i = new QTableWidgetItem();
+            i->setData(Qt::EditRole, p->getTimeSonstiges());
+            i->setBackgroundColor(farbe);
+            ui->tabelleGesamt->setItem(0, pos, i);
+            pos++;
+        }
+        if (anzeige->at(10)) {
+            i = new QTableWidgetItem();
+            i->setData(Qt::EditRole, p->getSumKilometer());
+            i->setBackgroundColor(farbe);
+            ui->tabelleGesamt->setItem(0, pos, i);
+        }
     }
     ui->tabelleGesamt->setSortingEnabled(true);
 }
@@ -302,13 +440,81 @@ void PersonalWindow::on_pushPrint_clicked()
 void PersonalWindow::print(QPrinter *p)
 {
     QList<Person*> *liste = new QList<Person*>();
+
     for(int i = 0; i < ui->tabelleGesamt->rowCount(); i++) {
-        liste->append(manager->getPerson(ui->tabelleGesamt->item(i, 0)->text()));
+        liste->append(manager->getPerson(ui->tabelleGesamt->item(i, 0)->text()+" "+ui->tabelleGesamt->item(i, 1)->text()));
     }
-    Export::printPersonen(liste, p);
+    Export::printPersonen(liste, anzeige, p);
 }
 
 void PersonalWindow::on_tabWidget_tabBarClicked(int index)
 {
-    refresh();
+    if (index == 1)
+        refreshEinzel();
+}
+
+void PersonalWindow::on_checkShowGesamt_clicked(bool checked)
+{
+    anzeige->replace(0, checked);
+    refreshGesamt();
+}
+
+void PersonalWindow::on_checkShowAnzahl_clicked(bool checked)
+{
+    anzeige->replace(1, checked);
+    refreshGesamt();
+}
+
+void PersonalWindow::on_checkShowTf_clicked(bool checked)
+{
+    anzeige->replace(2, checked);
+    refreshGesamt();
+}
+
+void PersonalWindow::on_checkShowZf_clicked(bool checked)
+{
+    anzeige->replace(3, checked);
+    refreshGesamt();
+}
+
+void PersonalWindow::on_checkShowZub_clicked(bool checked)
+{
+    anzeige->replace(4, checked);
+    refreshGesamt();
+}
+
+void PersonalWindow::on_checkShowService_clicked(bool checked)
+{
+    anzeige->replace(5, checked);
+    refreshGesamt();
+}
+
+void PersonalWindow::on_checkShowVorbereiten_clicked(bool checked)
+{
+    anzeige->replace(6, checked);
+    refreshGesamt();
+}
+
+void PersonalWindow::on_checkShowWerkstatt_clicked(bool checked)
+{
+    anzeige->replace(7, checked);
+    refreshGesamt();
+}
+
+void PersonalWindow::on_checkShowBuero_clicked(bool checked)
+{
+    anzeige->replace(8, checked);
+    refreshGesamt();
+}
+
+void PersonalWindow::on_checkShowSonstiges_clicked(bool checked)
+{
+    anzeige->replace(9, checked);
+    refreshGesamt();
+}
+
+void PersonalWindow::on_checkShowKilometer_clicked(bool checked)
+{
+    anzeige->replace(10, checked);
+    refreshGesamt();
 }

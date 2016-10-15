@@ -13,7 +13,7 @@
 
 QString CoreApplication::aktuelleVersion = "0.0.0";
 QUrl CoreApplication::urlDownload = QUrl("http://bahn.philipp-schepper.de/#downloads");
-QUrl CoreApplication::urlVersion = QUrl("http://bahn.philipp-schepper.de/version.txt");
+QUrl CoreApplication::urlVersion = QUrl("http://bahn.philipp-schepper.de/version_developer.txt");
 
 CoreApplication::CoreApplication(int &argc, char **argv, QString version) : QApplication(argc, argv)
 {

@@ -22,7 +22,7 @@
 
 #include <QLibraryInfo>
 
-QString AKTUELLE_VERSION = "1.0.1";
+QString AKTUELLE_VERSION = "1.0.2";
 
 int main(int argc, char *argv[])
 {

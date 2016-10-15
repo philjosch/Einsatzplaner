@@ -35,26 +35,32 @@ private slots:
     void refreshEinzel();
 
     void on_pushAdd_clicked();
-
-    void on_lineName_textChanged(const QString &arg1);
-
-    void on_spinKm_valueChanged(int arg1);
-
-    void on_checkTf_clicked(bool checked);
-
-    void on_checkZf_clicked(bool checked);
-
-    void on_checkRangierer_clicked(bool checked);
-
     void on_pushDelete_clicked();
 
     void on_listWidget_itemClicked(QListWidgetItem *item);
 
-    void on_pushPDF_clicked();
+    void on_lineName_textChanged(const QString &arg1);
+    void on_spinKm_valueChanged(int arg1);
+    void on_checkTf_clicked(bool checked);
+    void on_checkZf_clicked(bool checked);
+    void on_checkRangierer_clicked(bool checked);
 
+    void on_pushPDF_clicked();
     void on_pushPrint_clicked();
 
     void on_tabWidget_tabBarClicked(int index);
+
+    void on_checkShowGesamt_clicked(bool checked);
+    void on_checkShowAnzahl_clicked(bool checked);
+    void on_checkShowTf_clicked(bool checked);
+    void on_checkShowZf_clicked(bool checked);
+    void on_checkShowZub_clicked(bool checked);
+    void on_checkShowService_clicked(bool checked);
+    void on_checkShowVorbereiten_clicked(bool checked);
+    void on_checkShowWerkstatt_clicked(bool checked);
+    void on_checkShowBuero_clicked(bool checked);
+    void on_checkShowSonstiges_clicked(bool checked);
+    void on_checkShowKilometer_clicked(bool checked);
 
 private:
     Ui::PersonalWindow *ui;
@@ -64,6 +70,19 @@ private:
 
     QHash<QListWidgetItem*, Person*> *itemToPerson;
     QHash<Person*, QListWidgetItem*> *personToItem;
+
+    QList<bool> *anzeige; //Gibt an, welche Werte in der Tabelle angezeigt werden
+    //  0: gesamtstunden
+    //  1: anzahl
+    //  2: tf/tb
+    //  3: zf
+    //  4: zub/begl.o.b.a.
+    //  5: service
+    //  6: zug vorbereiten
+    //  7: werkstatt
+    //  8: büro
+    //  9: sonstiges
+    // 10: kilometer
 
     void print(QPrinter *p);
 

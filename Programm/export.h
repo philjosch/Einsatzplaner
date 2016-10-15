@@ -38,7 +38,7 @@ public:
 
     // Drucken von Personen
     static bool printPerson(Person *p, QPrinter *pdf=0, QPrinter *paper=0);
-    static bool printPersonen(QList<Person *> *personen, QPrinter *pdf=0, QPrinter *paper=0);
+    static bool printPersonen(QList<Person *> *personen, QList<bool> *data, QPrinter *pdf=0, QPrinter *paper=0);
 
     static QPrinter *getPrinterPaper(QWidget *parent);
     static QPrinter *getPrinterPDF(QWidget *parent, QString path);

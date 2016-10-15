@@ -163,7 +163,7 @@ bool Export::printPerson(Person *p, QPrinter *pdf, QPrinter *paper)
     return print(pdf, paper, d);
 }
 
-bool Export::printPersonen(QList<Person *> *personen, QPrinter *pdf, QPrinter *paper)
+bool Export::printPersonen(QList<Person *> *personen, QList<bool> *data, QPrinter *pdf, QPrinter *paper)
 {
     preparePrinterLandscape(pdf);
     preparePrinterLandscape(paper);
@@ -180,15 +180,53 @@ bool Export::printPersonen(QList<Person *> *personen, QPrinter *pdf, QPrinter *p
     a += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
     a += "</style>";
     a += "<h3>Personalübersicht</h3>";
-    a += "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th> <th>Summe Stunden</th> <th>Kilometer</th> <th>Anzahl</th> <th>Tf/Tb</th> <th>Zf</th> <th>Service</th> <th>Werkstatt</th> <th>Büro</th> </tr></thead><tbody>";
-    for(Person *person: *personen) {
-        a += person->getHtmlForTableView();
+
+    //  0: gesamtstunden
+    //  1: anzahl
+    //  2: tf/tb
+    //  3: zf
+    //  4: zub/begl.o.b.a.
+    //  5: service
+    //  6: zug vorbereiten
+    //  7: werkstatt
+    //  8: büro
+    //  9: sonstiges
+    // 10: kilometer
+    a += "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
+    while (data->length() < 11) {
+        data->append(false);
+    }
+    if (data->at(0))
+        a += "<th>Stunden</th>";
+    if (data->at(1))
+        a += "<th>Anzahl</th>";
+    if (data->at(2))
+        a += "<th>Tf/Tb</th>";
+    if (data->at(3))
+        a += "<th>Zf</th>";
+    if (data->at(4))
+        a += "<th>Zub/Begl.o.b.A.</th>";
+    if (data->at(5))
+        a += "<th>Service</th>";
+    if (data->at(6))
+        a += "<th>Zug Vorbereiten</th>";
+    if (data->at(7))
+        a += "<th>Werkstatt</th>";
+    if (data->at(8))
+        a += "<th>Büro</th>";
+    if (data->at(9))
+        a += "<th>Sonstiges</th>";
+    if (data->at(10))
+        a += "<th>Kilometer</th>";
+    a += "</thead><tbody>";
+    for(Person *p: *personen) {
+        a += p->getHtmlForTableView(data);
     }
     a += "</tbody></table>";
     a += "<p><small>Erstellt am: "+QDate::currentDate().toString("d.M.yyyy")+"</small></p>";
     a += "</body></html>";
     d->setHtml(a);
-    qDebug() << a;
+//    qDebug() << a;
     return print(pdf, paper, d);
 }
 
