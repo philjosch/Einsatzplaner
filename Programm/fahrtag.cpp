@@ -1,15 +1,13 @@
 #include "fahrtag.h"
-#include <QDebug>
-#include <QTime>
-
 #include "mainwindow.h"
 #include "managerreservierungen.h"
 
+#include <QDebug>
+#include <QTime>
+#include <QObject>
+
 Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p), ManagerReservierungen()
 {
-
-//    manager = new ManagerReservierungen();
-
     art = Fahrtag::Museumszug;
     wichtig = false;
     zeitTf = QTime(8, 15);
@@ -20,8 +18,6 @@ Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p), ManagerRes
     benoetigeZub = true;
     benoetigeService = true;
     personalBenoetigt = false;
-
-    // Listen für Tf, Zf, Zub und Servie müssen noch initalisiert werden
 }
 
 Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p), ManagerReservierungen(o)
@@ -74,12 +70,16 @@ QString Fahrtag::getStringFromArt(Fahrtag::Art art)
 
 QString Fahrtag::getListString()
 {
-    return datum.toString("dddd dd.MM.yyyy")+" – Fahrtag";
+    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – "+QObject::tr("Fahrtag");
+    if (wichtig) {
+        s += " WICHTIG!";
+    }
+    return s;
 }
 
 QString Fahrtag::getListStringShort() {
     if (anlass.length() == 0) {
-        return "Fahrtag";
+        return QObject::tr("Fahrtag");
     }
     return anlass;
 }
@@ -118,12 +118,11 @@ QString Fahrtag::getHtmlForSingleView()
     }
     // Wagenreihung
     html += "<p><b>Wagenreihung:</b> "+getWagenreihung()+"</p>";
-    // Deisntzeiten
+    // Dienstzeiten
     html += "<p><b>Dienstzeiten</b>:<br/>Beginn Tf, Tb: "+zeitTf.toString("hh:mm")+"<br/>Beginn Sonstige: "+zeitAnfang.toString("hh:mm")+"<br/>";
     html += "Ungefähres Dienstende: "+zeitEnde.toString("hh:mm")+"</p>";
-    // Personal
-    // *Tf, Tb
 
+    // Personal
     QMap<Person*, AActivity::Infos*> tf;
     QMap<Person*, AActivity::Infos*> zf;
     QMap<Person*, AActivity::Infos*> zub;
@@ -143,7 +142,7 @@ QString Fahrtag::getHtmlForSingleView()
         default: sonstige.insert(p, personen->value(p)); break;
         }
     }
-
+    // *Tf/Tb
     html += "<p><b>Triebfahrzeugführer (Tf), Triebfahrzeugbegleiter(Tb)";
     html += (benoetigeTf ?" werden benötigt": "");
     html += ":</b><br/>"+listToString(&tf, " | ")+"</p>";
@@ -152,7 +151,6 @@ QString Fahrtag::getHtmlForSingleView()
         html += "<p><b>Zugführer";
         html += (benoetigeZf ?" wird benötigt":"");
         html += ":</b><br/>"+listToString(&zf, " | ")+"</p>";
-
         // *Zub, Begl.o.b.A
         html += "<p><b>Zugbegleiter und <i>Begleiter ohne betriebliche Ausbildung</i>";
         html += (benoetigeZub ? " werden benötigt":"");
@@ -162,7 +160,6 @@ QString Fahrtag::getHtmlForSingleView()
         if (! zub.isEmpty() && ! begl.isEmpty())
             html += " | ";
         html += "<i>"+listToString(&begl, " | ") + "</i></p>";
-
         // *Service
         html += "<p><b>Service-Personal";
         html += (benoetigeService ?" wird benötigt":"");
@@ -299,8 +296,10 @@ QString Fahrtag::getHtmlForTableView()
     }
     // Sneek-Peek Reservierungen
     if (art != Schnupperkurs && art != Gesellschaftssonderzug && getBelegtGesamt() > 0) {
+//        html += QObject::tr("%1 reservierte(r) Sitzplätz(e)").arg(getBelegtGesamt());
         html += QString::number(getBelegtGesamt());
         html += (getBelegtGesamt() == 1 ? " reservierter Sitzplatz": " reservierte Sitzplätze");
+//        html += QObject::tr(" bei %1 Reservierung(en)").arg(getAnzahl());
         html += " bei " + QString::number(getAnzahl()) + (getAnzahl() == 1 ? " Reservierung" : " Reservierungen");
         html += "<br/>";
     }

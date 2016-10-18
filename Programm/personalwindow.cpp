@@ -42,6 +42,10 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     ui->checkShowGesamt->setChecked(true);
     ui->checkShowAnzahl->setChecked(true);
     ui->checkShowKilometer->setChecked(true);
+    on_checkShowGesamt_clicked(true);
+    on_checkShowAnzahl_clicked(true);
+    on_checkShowKilometer_clicked(true);
+    ui->tabelleGesamt->sortItems(1);
 }
 
 PersonalWindow::~PersonalWindow()
@@ -98,6 +102,7 @@ void PersonalWindow::showPerson(Person *p)
         ui->tabelle->setItem(0, 3, i3);
     }
     ui->tabelle->setSortingEnabled(sortingSaved);
+    ui->tabelle->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     ui->lineTf->setText(QString::number(p->getTimeTf()));
     ui->lineZf->setText(QString::number(p->getTimeZf()));
