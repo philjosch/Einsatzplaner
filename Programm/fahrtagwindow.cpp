@@ -995,26 +995,82 @@ void FahrtagWindow::on_comboKlasse_currentIndexChanged(int index)
 
 void FahrtagWindow::on_comboStart1Zug_currentTextChanged(const QString &arg1)
 {
-    if (nehmeRes)
+    if (nehmeRes) {
+        nehmeRes = false;
+        if (ui->comboEnde1Zug->currentText() != "-" && ui->comboEnde1Zug->currentText() < arg1) {
+            ui->comboEnde1Zug->setCurrentText("-");
+        }
+        if (arg1.contains("SSWN-SOTW")) {
+            if (ui->comboStart1Hp->currentText() == "Ottweiler") {
+                ui->comboStart1Hp->setCurrentText("-");
+            }
+        } else if (arg1.contains("SOTW-SSWN")) {
+            if (ui->comboStart1Hp->currentText() == "Schwarzerden") {
+                ui->comboStart1Hp->setCurrentText("-");
+            }
+        }
+        nehmeRes = true;
         saveResFahrt();
+    }
 }
 
 void FahrtagWindow::on_comboStart1Hp_currentTextChanged(const QString &arg1)
 {
-    if (nehmeRes)
+    if (nehmeRes) {
+        nehmeRes = false;
+        if (ui->comboStart1Zug->currentText().contains("SSWN-SOTW")) {
+            if (arg1 == "Ottweiler") {
+                ui->comboStart1Hp->setCurrentText("-");
+            }
+        } else if (ui->comboStart1Zug->currentText().contains("SOTW-SSWN")) {
+            if (arg1 == "Schwarzerden") {
+                ui->comboStart1Hp->setCurrentText("-");
+            }
+        }
+        nehmeRes = true;
         saveResFahrt();
+    }
 }
 
 void FahrtagWindow::on_comboEnde1Zug_currentTextChanged(const QString &arg1)
 {
-    if (nehmeRes)
+    if (nehmeRes) {
+        nehmeRes = false;
+        if (arg1.contains("SSWN-SOTW")) {
+            if (ui->comboEnde1Hp->currentText() == "Schwarzerden") {
+                ui->comboEnde1Hp->setCurrentText("-");
+            }
+        } else if (arg1.contains("SOTW-SSWN")) {
+            if (ui->comboEnde1Hp->currentText() == "Ottweiler") {
+                ui->comboEnde1Hp->setCurrentText("-");
+            }
+        }
+        if (ui->comboStart1Zug->currentText() != "-" && ui->comboStart1Zug->currentText() > arg1) {
+            ui->comboStart1Zug->setCurrentText("-");
+        }
+        nehmeRes = true;
         saveResFahrt();
+    }
+
 }
 
 void FahrtagWindow::on_comboEnde1Hp_currentTextChanged(const QString &arg1)
 {
-    if (nehmeRes)
+    if (nehmeRes) {
+        nehmeRes = false;
+        if (ui->comboEnde1Zug->currentText().contains("SSWN-SOTW")) {
+            if (arg1 == "Schwarzerden") {
+                ui->comboEnde1Hp->setCurrentText("-");
+            }
+        } else if (ui->comboEnde1Zug->currentText().contains("SOTW-SSWN")) {
+            if (arg1 == "Ottweiler") {
+                ui->comboEnde1Hp->setCurrentText("-");
+            }
+        }
+        nehmeRes = true;
         saveResFahrt();
+
+    }
 }
 
 void FahrtagWindow::on_lineSitze_textChanged(const QString &arg1)

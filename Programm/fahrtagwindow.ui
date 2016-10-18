@@ -933,7 +933,7 @@
              <bool>true</bool>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>6</number>
             </property>
             <item>
              <property name="text">
@@ -965,6 +965,11 @@
               <string>2206 SOTW-SSWN</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="3" column="2">
@@ -973,7 +978,7 @@
              <bool>true</bool>
             </property>
             <property name="currentIndex">
-             <number>9</number>
+             <number>11</number>
             </property>
             <item>
              <property name="text">
@@ -1028,6 +1033,11 @@
             <item>
              <property name="text">
               <string>Ottweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
              </property>
             </item>
            </widget>
@@ -1048,7 +1058,7 @@
              <bool>true</bool>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>6</number>
             </property>
             <item>
              <property name="text">
@@ -1080,6 +1090,11 @@
               <string>2206 SOTW-SSWN</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="4" column="2">
@@ -1088,7 +1103,7 @@
              <bool>true</bool>
             </property>
             <property name="currentIndex">
-             <number>10</number>
+             <number>11</number>
             </property>
             <item>
              <property name="text">
@@ -1143,6 +1158,11 @@
             <item>
              <property name="text">
               <string>Ottweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
              </property>
             </item>
            </widget>

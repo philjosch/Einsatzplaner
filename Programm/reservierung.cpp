@@ -16,11 +16,11 @@ Reservierung::Reservierung(QMap<int, Wagen *> *wagen)
     anzahl = 1;
     klasse = 0;
     zuege = new QList<QString>();
-    zuege->append("2202 SOTW-SSWN");
-    zuege->append("2203 SSWN-SOTW");
+    zuege->append("-");
+    zuege->append("-");
     hps = new QList<QString>();
-    hps->append("Ottweiler");
-    hps->append("Ottweiler");
+    hps->append("-");
+    hps->append("-");
     this->wagen = wagen;
     sitzplatz = new QMap<int, QList<int>*>();
     fahrrad = false;

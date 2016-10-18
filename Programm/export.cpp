@@ -60,9 +60,9 @@ bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper
 
     QString a = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Einsatzplan - Listenansicht</title></head><body>";
     a += "<style type='text/css'>";
-    a += "body, tr, td, p { font-size: 12px; }";
+    a += "body, td, p { font-size: 11px; font-weight: normal !important;}";
     a += "table { border-width: 1px; border-style: solid; border-color: black; }";
-    a += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }";
+    a += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black;}";
     a += "table tr, table td { page-break-inside: avoid; }";
     a += "ul { -qt-list-indent: 0; }";
     a += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
