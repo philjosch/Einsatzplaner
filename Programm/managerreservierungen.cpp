@@ -221,7 +221,6 @@ int ManagerReservierungen::getCapacityDritte()
             summe += w->getKapazitaet();
     }
     return summe;
-
 }
 
 int ManagerReservierungen::getAnzahl()

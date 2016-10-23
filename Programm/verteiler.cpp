@@ -1,4 +1,5 @@
 #include "verteiler.h"
+
 #include <QDebug>
 #include <QTime>
 
@@ -26,7 +27,6 @@ bool Verteiler::verteile()
     if (puffer < 0) return false;
     mindestbewertung = getMinBewertung(reservierungen);
     verteile(0, *reservierungen, puffer);
-    qDebug() << count << "Lösungen";
     return found;
 }
 
@@ -37,13 +37,12 @@ void Verteiler::verteile(double bewertung, QSet<Reservierung *> rest, int puffer
     }
     // Berechne den kleinsten Fehler und prüfe, ob Ziel noch erreicht werden kann
     if (bewertung + getMinBewertung(&rest) > besteBewertung) {
-//        qDebug() << "schlechtes ergebnis" << besteBewertung << getMinBewertung(&rest) << bewertung;
         return;
     }
 
     // Alles wurde Verteilt
     if (rest.isEmpty()) {
-        qDebug() << "Lösung von " << besteBewertung << " auf " << bewertung << " verbessert!";
+//        qDebug() << "Lösung von " << besteBewertung << " auf " << bewertung << " verbessert!";
         count ++;
         weisePlaetzeZu();
         besteBewertung = bewertung;

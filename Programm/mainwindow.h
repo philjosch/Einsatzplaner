@@ -2,14 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMap>
+
 #include "aactivity.h"
 #include "fahrtag.h"
 #include "fahrtagwindow.h"
 #include "activity.h"
 #include "activitywindow.h"
 #include "personalwindow.h"
-#include <QMap>
-
 
 namespace Ui {
 class MainWindow;
@@ -67,9 +67,6 @@ private slots:
     // Ansicht
     void on_buttonPersonal_clicked();
     void on_buttonExport_clicked();
-
-
-
 };
 
 #endif // MAINWINDOW_H

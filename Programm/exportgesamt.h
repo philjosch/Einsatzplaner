@@ -2,6 +2,7 @@
 #define EXPORTGESAMT_H
 
 #include <QDialog>
+
 #include "manager.h"
 
 namespace Ui {

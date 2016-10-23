@@ -5,9 +5,7 @@
 #include <QMessageBox>
 #include <QPrinter>
 
-ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) :
-    QMainWindow(parent),
-    ui(new Ui::ActivityWindow)
+ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(parent), ui(new Ui::ActivityWindow)
 {
     ui->setupUi(this);
     activity = a;
@@ -84,13 +82,6 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
     if (nehme) {
         nehme = false;
         // column 1: Name, 2: Beginn, 3: Ende, 4: Aufgabe
-        /*
-     * Hier muss etwas aufwendiger gearbeitet werden,
-     * denn die veränderte Spalte muss eingefügt werden
-     * und die Liste muss up-todate gehalten werden
-     * */
-
-
         // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
         if (column == 0) {
             QStringList *neu = new QStringList();
@@ -171,14 +162,12 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         }
         nehme = true;
     }
-
 }
 
 void ActivityWindow::on_actionDelete_triggered()
 {
 
 }
-
 
 void ActivityWindow::on_actionPrint_triggered()
 {
@@ -191,7 +180,6 @@ void ActivityWindow::on_actionPdf_triggered()
     QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf");
     Export::printActivity(activity, p);
 }
-
 
 void ActivityWindow::loadData()
 {

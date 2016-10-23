@@ -3,9 +3,10 @@
 
 #include <QObject>
 #include <QVariant>
+
 #include "aactivity.h"
 
-class Person : public QObject, public QVariant
+class Person : public QObject
 {
     Q_OBJECT
 

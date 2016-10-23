@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QVariant>
 
-Person::Person(QString name) : QObject(), QVariant()
+Person::Person(QString name) : QObject()
 {
     this->name = name;
     strecke = 0;
@@ -171,14 +171,21 @@ QString Person::getVorname() const
 {
     if (! name.contains(" ")) return name;
     QStringList liste = name.split(" ");
-    return liste.at(0);
+    QString vorname = "";
+    for(int i = 0; i < liste.length()-1; i++) {
+        vorname += liste.at(i);
+        if (i < liste.length() - 2) {
+            vorname += " ";
+        }
+    }
+    return vorname;
 }
 
 QString Person::getNachname() const
 {
     if (! name.contains(" ")) return name;
     QStringList liste = name.split(" ");
-    return liste.at(1);
+    return liste.last();
 }
 
 void Person::setName(const QString &value)

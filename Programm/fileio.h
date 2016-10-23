@@ -16,7 +16,6 @@ public:
     static QJsonObject getJsonFromFile(QString filepath);
     static bool saveJsonToFile(QString filepath, QJsonObject object);
 
-
 private:
     static QString currentPath;
 };

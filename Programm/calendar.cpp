@@ -1,7 +1,8 @@
 #include "calendar.h"
 #include "ui_calendar.h"
-#include <QMessageBox>
 #include "mainwindow.h"
+
+#include <QMessageBox>
 #include <QDebug>
 
 Calendar::Calendar(QWidget *parent) : QFrame(parent), Manager(), ui(new Ui::Calendar)

@@ -1,6 +1,7 @@
 #include "activity.h"
-#include <QMap>
 #include "mainwindow.h"
+
+#include <QMap>
 
 Activity::Activity(QDate date, ManagerPersonal *p): AActivity(date, p)
 {
@@ -71,7 +72,7 @@ QString Activity::getHtmlForSingleView()
     html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
     // Personal
     html += "<p><b>Helfer";
-    html += (personalBenoetigt ?" werden benötigt":"");
+    html += (personalBenoetigt ? " werden benötigt":"");
     html += ":</b></p>";
     if (personen->count() > 0) {
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Name</th><th>Beginn*</th><th>Ende*</th><th>Aufgabe</th></tr></thead><tbody>";

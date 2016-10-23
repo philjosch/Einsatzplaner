@@ -6,9 +6,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 
-ExportGesamt::ExportGesamt(Manager *m, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ExportGesamt)
+ExportGesamt::ExportGesamt(Manager *m, QWidget *parent) : QDialog(parent), ui(new Ui::ExportGesamt)
 {
     ui->setupUi(this);
     p = parent;
@@ -33,7 +31,6 @@ ExportGesamt::ExportGesamt(Manager *m, QWidget *parent) :
         actToList.insert(a, item);
         listToAct.insert(item, a);
     }
-
     //Anzeigen der Daten
     show();
 }
@@ -180,9 +177,6 @@ bool ExportGesamt::testShow(AActivity *a)
         break;
     }
 
-    bool ok = true;
-
-
     // Prüfen, ob die Art stimmt (Fahrtag, Arbeitseinsatz)
     if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
         int i = ui->comboFahrtag->currentIndex();
@@ -198,7 +192,4 @@ bool ExportGesamt::testShow(AActivity *a)
         return ui->checkActivity->isChecked();
         // es ist kein fahrtag
     }
-
-
-    return ok;
 }

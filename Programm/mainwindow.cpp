@@ -32,7 +32,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     saved = true;
     setWindowModified(false);
 
-//    QSettings settings;
     personalfenster = new PersonalWindow(this, ui->calendar->getPersonal());
     connect(personalfenster, SIGNAL(changed()), this, SLOT(unsave()));
 }
@@ -45,17 +44,6 @@ MainWindow::~MainWindow()
 
 QString MainWindow::getFarbeZug(Fahrtag::Art cat)
 {
-/*
-    case Fahrtag::Museumszug:           return "#ffffff"; // Museumszug
-    case Fahrtag::Sonderzug:            return "#FFEBD4"; // Sonderzug
-    case Fahrtag::Gesellschaftssonderzug: return "ffc789";
-    case Fahrtag::Nikolauszug:          return "#b7a0e3"; // Nikolausfahrt
-    case Fahrtag::ELFundMuseumszug:     return "#C8E6F3"; // Museumszug mit ELF
-    case Fahrtag::Schnupperkurs:        return "#99c9de"; // ELF-Schnupperkurs
-    case Fahrtag::Bahnhofsfest:         return "#d3f7a7"; // Bahnhofsfest
-    case Fahrtag::Sonstiges:            return "#f2a4c3"; // Sonstiges
-    }*/
-
     switch (cat) {
     case Fahrtag::Museumszug:           return "#ffffff"; // Museumszug
     case Fahrtag::Sonderzug:            return "#ffcccc"; // Sonderzug -

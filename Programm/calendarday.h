@@ -4,6 +4,7 @@
 #include <QFrame>
 #include <QDate>
 #include <QListWidgetItem>
+
 #include "aactivity.h"
 #include "fahrtag.h"
 
@@ -18,7 +19,6 @@ class CalendarDay : public QFrame
 public:
     explicit CalendarDay(QWidget *parent = 0);
     ~CalendarDay();
-//    void show(QDate datum, QList<AActivity> *objekte);
     void show(QDate datum);
     void setGray(bool gray);
 

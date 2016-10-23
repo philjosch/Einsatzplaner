@@ -1,5 +1,6 @@
 #include "managerpersonal.h"
 #include "person.h"
+
 #include <QJsonArray>
 #include <QList>
 #include <QObject>

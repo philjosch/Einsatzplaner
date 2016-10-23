@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "fileio.h"
-
 #include "coreapplication.h"
 
 #include <QApplication>
@@ -19,7 +18,6 @@
 #include <QMenu>
 #include <QTranslator>
 #include <QLocale>
-
 #include <QLibraryInfo>
 
 QString AKTUELLE_VERSION = "1.0.2";
@@ -35,7 +33,6 @@ int main(int argc, char *argv[])
     QTranslator myappTranslator;
     myappTranslator.load(":translations/einsatzplaner_" + QLocale::system().name());
     a.installTranslator(&myappTranslator);
-
 
     // Laden der Einstellungen
     FileIO::loadSettings();

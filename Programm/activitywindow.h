@@ -2,9 +2,10 @@
 #define ACTIVITYWINDOW_H
 
 #include <QMainWindow>
+#include <QSet>
+
 #include "activity.h"
 #include "person.h"
-#include <QSet>
 
 namespace Ui {
 class ActivityWindow;
@@ -50,7 +51,6 @@ private:
     bool nehme;
 
     void loadData();
-
 
     QSet<QString> *namen;
 };

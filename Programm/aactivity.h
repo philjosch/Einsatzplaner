@@ -1,12 +1,11 @@
 #ifndef AACTIVITY_H
 #define AACTIVITY_H
 
-
 #include <QDate>
 #include <QTime>
 #include <QObject>
+
 #include "managerpersonal.h"
-//#include "person.h"
 
 class Person;
 
@@ -74,7 +73,6 @@ public:
 
     virtual void emitter() = 0;
 
-
 protected:
     QDate datum;
     QString ort;
@@ -89,6 +87,5 @@ protected:
 
     QString listToString(QMap<Person*, Infos*> *liste, QString seperator);
 };
-
 
 #endif // AACTIVITY_H

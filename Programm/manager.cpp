@@ -1,4 +1,5 @@
 #include "manager.h"
+
 #include <QJsonArray>
 #include <QListIterator>
 

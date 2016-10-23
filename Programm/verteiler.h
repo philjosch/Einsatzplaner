@@ -2,8 +2,9 @@
 #define VERTEILER_H
 
 #include <QList>
-#include "reservierung.h"
 #include <QSet>
+
+#include "reservierung.h"
 #include "wagen.h"
 
 class Verteiler

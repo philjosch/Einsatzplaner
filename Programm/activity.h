@@ -3,8 +3,9 @@
 
 #include <QDate>
 #include <QTime>
-#include "person.h"
 #include <QObject>
+
+#include "person.h"
 #include "aactivity.h"
 
 class Activity: public QObject, public AActivity
@@ -12,7 +13,6 @@ class Activity: public QObject, public AActivity
     Q_OBJECT
 
 public:
-
     Activity(QDate date, ManagerPersonal *p);
     Activity(QJsonObject o, ManagerPersonal *p);
     ~Activity();

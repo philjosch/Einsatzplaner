@@ -63,7 +63,6 @@ bool CoreApplication::versionGreater(QString firstV, QString secondV)
         return true;
     }
     return false;
-
 }
 
 bool CoreApplication::versionGreater(QString version)
@@ -77,7 +76,6 @@ void CoreApplication::checkVersion()
 
     if (versionGreater(v)) {
         if (QMessageBox::information(nullptr, tr("Neue Version"), tr("Es ist Version ")+v+tr(" des Programms verfügbar.\nSie benutzen Version ")+aktuelleVersion+". ", QMessageBox::Ignore|QMessageBox::Open, QMessageBox::Open) == QMessageBox::Open) {
-            // Öffnen der Webseite
             QDesktopServices::openUrl(urlDownload);
         }
     }
@@ -95,9 +93,7 @@ void CoreApplication::closeAllWindows()
     for (int i = 0; i < liste.length(); i++) {
         ok = ok && liste.at(i)->close();
     }
-    if (ok)
-        quit();
-
+    if (ok) quit();
 }
 
 QUrl CoreApplication::getUrlDownload()

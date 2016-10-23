@@ -1,11 +1,9 @@
 #ifndef WAGEN_H
 #define WAGEN_H
 
-#include "reservierung.h"
-
 #include <QList>
 
-
+#include "reservierung.h"
 
 class Wagen
 {
@@ -51,7 +49,6 @@ private slots:
     bool test(QList<int> liste, Reservierung *r); // Testet mit der Internen Darstellung
 
 private:
-
     int nummer;
 
     int aktuellePosition;

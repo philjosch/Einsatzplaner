@@ -49,8 +49,6 @@ QJsonObject Fahrtag::toJson()
     o.insert("benoetigeZf", benoetigeZf);
     o.insert("benoetigeZub", benoetigeZub);
     o.insert("benoetigeService", benoetigeService);
-
-
     return o;
 }
 
