@@ -2,9 +2,9 @@
 #define MANAGERRESERVIERUNGEN_H
 
 #include <QListWidgetItem>
+
 #include "reservierung.h"
 #include "wagen.h"
-
 
 class ManagerReservierungen
 {
@@ -62,7 +62,6 @@ protected:
     QMap<int,Wagen*> *nummerToWagen;
 
     bool createWagen();
-
 };
 
 #endif // MANAGERRESERVIERUNGEN_H

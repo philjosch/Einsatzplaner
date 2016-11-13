@@ -3,9 +3,7 @@
 
 #include <QDebug>
 
-CalendarDay::CalendarDay(QWidget *parent) :
-    QFrame(parent),
-    ui(new Ui::CalendarDay)
+CalendarDay::CalendarDay(QWidget *parent) : QFrame(parent), ui(new Ui::CalendarDay)
 {
     ui->setupUi(this);
     actToItem = new QMap<AActivity*, QListWidgetItem*>();
@@ -17,12 +15,7 @@ CalendarDay::~CalendarDay()
 {
     delete ui;
 }
-/*
-void CalendarDay::show(QDate datum, QList<AActivity> *objekte)
-{
-    show(datum);
-}
-*/
+
 void CalendarDay::show(QDate datum)
 {
     ui->label->setText(datum.toString("dd."));

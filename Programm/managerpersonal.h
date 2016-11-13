@@ -1,11 +1,11 @@
 #ifndef MANAGERPERSONAL_H
 #define MANAGERPERSONAL_H
 
-class Person;
-
 #include <QJsonObject>
 #include <QObject>
 #include <QSet>
+
+class Person;
 
 class ManagerPersonal :  public QObject
 {
@@ -44,8 +44,6 @@ private:
     QHash<QString, Person*> *personenSorted;
 
     QString getGoodName(QString name); // Wandlet einen Namen in das Format Vorname Nachname um
-
-
 };
 
 #endif // MANAGERPERSONAL_H

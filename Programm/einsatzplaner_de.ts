@@ -269,17 +269,17 @@
 <context>
     <name>CoreApplication</name>
     <message>
-        <location filename="coreapplication.cpp" line="78"/>
+        <location filename="coreapplication.cpp" line="79"/>
         <source>Neue Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="coreapplication.cpp" line="78"/>
+        <location filename="coreapplication.cpp" line="79"/>
         <source>Es ist Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="coreapplication.cpp" line="78"/>
+        <location filename="coreapplication.cpp" line="79"/>
         <source> des Programms verfügbar.
 Sie benutzen Version </source>
         <translation type="unfinished"></translation>
@@ -288,7 +288,7 @@ Sie benutzen Version </source>
 <context>
     <name>Export</name>
     <message>
-        <location filename="export.cpp" line="205"/>
+        <location filename="export.cpp" line="243"/>
         <source>PDF-Dateien (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1096,38 +1096,44 @@ Sie benutzen Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.cpp" line="909"/>
-        <source>Fertig</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="fahrtagwindow.cpp" line="909"/>
-        <source>Die Sitzplätze wurden in </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="fahrtagwindow.cpp" line="909"/>
-        <source> mSekunden verteilt.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="fahrtagwindow.cpp" line="911"/>
+        <location filename="fahrtagwindow.cpp" line="78"/>
+        <location filename="fahrtagwindow.cpp" line="935"/>
         <source>Fehler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.cpp" line="911"/>
+        <location filename="fahrtagwindow.cpp" line="78"/>
+        <source>Die Wagenreihung konnte nicht geändert werden. Da es Reservierungen in den weggefallenen Waggons gibt!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="fahrtagwindow.cpp" line="933"/>
+        <source>Fertig</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="fahrtagwindow.cpp" line="933"/>
+        <source>Die Sitzplätze wurden in </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="fahrtagwindow.cpp" line="933"/>
+        <source> mSekunden verteilt.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="fahrtagwindow.cpp" line="935"/>
         <source>Es konnten nicht alle Reservierungen verteilt werden!
 Bitte prüfen Sie die Verteilung auf mögliche Fehler!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.cpp" line="1094"/>
+        <location filename="fahrtagwindow.cpp" line="1114"/>
         <source>Hinweis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.cpp" line="1094"/>
+        <location filename="fahrtagwindow.cpp" line="1114"/>
         <source>Es kann unter Umständen sehr lange dauern, bis die &apos;perfekte&apos; Verteilung berechnet wird.
 Ihr Computer reagiert in dieser Zeit vielleicht nicht!
 Diese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutzen.</source>
@@ -1156,7 +1162,7 @@ Diese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutze
     </message>
     <message>
         <location filename="mainwindow.ui" line="71"/>
-        <location filename="mainwindow.ui" line="269"/>
+        <location filename="mainwindow.ui" line="272"/>
         <source>Personalübersicht</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1176,143 +1182,144 @@ Diese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutze
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="128"/>
+        <location filename="mainwindow.ui" line="131"/>
         <source>Zuletzt benutzt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="147"/>
+        <location filename="mainwindow.ui" line="150"/>
         <source>Ansicht</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="153"/>
+        <location filename="mainwindow.ui" line="156"/>
         <source>Einsatzplaner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="178"/>
+        <location filename="mainwindow.ui" line="181"/>
         <source>Neuer Fahrtag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="181"/>
+        <location filename="mainwindow.ui" line="184"/>
         <source>Ctrl++</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="189"/>
+        <location filename="mainwindow.ui" line="192"/>
         <source>Neuer Arbeitseinsatz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="192"/>
+        <location filename="mainwindow.ui" line="195"/>
         <source>Ctrl+Alt++</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="200"/>
+        <location filename="mainwindow.ui" line="203"/>
         <source>Neu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="203"/>
+        <location filename="mainwindow.ui" line="206"/>
         <source>Ctrl+N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="211"/>
+        <location filename="mainwindow.ui" line="214"/>
         <source>Öffnen …</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="214"/>
+        <location filename="mainwindow.ui" line="217"/>
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="222"/>
+        <location filename="mainwindow.ui" line="225"/>
         <source>Speichern</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="225"/>
+        <location filename="mainwindow.ui" line="228"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="233"/>
+        <location filename="mainwindow.ui" line="236"/>
         <source>Speichern unter …</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="236"/>
+        <location filename="mainwindow.ui" line="239"/>
         <source>Ctrl+Shift+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="244"/>
+        <location filename="mainwindow.ui" line="247"/>
         <source>Schließen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="247"/>
+        <location filename="mainwindow.ui" line="250"/>
         <source>Ctrl+W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="255"/>
+        <location filename="mainwindow.ui" line="258"/>
         <source>Drucken …</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="258"/>
-        <location filename="mainwindow.ui" line="286"/>
+        <location filename="mainwindow.ui" line="261"/>
+        <location filename="mainwindow.ui" line="289"/>
         <source>Ctrl+P</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="272"/>
+        <location filename="mainwindow.ui" line="275"/>
         <source>Ctrl+E</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="283"/>
+        <location filename="mainwindow.ui" line="286"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="300"/>
+        <location filename="mainwindow.ui" line="303"/>
         <source>Hauptfenster</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="308"/>
+        <location filename="mainwindow.ui" line="311"/>
         <source>Einstellungen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="319"/>
+        <location filename="mainwindow.ui" line="322"/>
+        <location filename="mainwindow.cpp" line="185"/>
         <source>Über Einsatzplaner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="330"/>
+        <location filename="mainwindow.ui" line="333"/>
         <source>Über Qt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="341"/>
+        <location filename="mainwindow.ui" line="344"/>
         <source>Einsatzplaner beenden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="352"/>
+        <location filename="mainwindow.ui" line="358"/>
         <source>Liste leeren</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="357"/>
+        <location filename="mainwindow.ui" line="363"/>
         <source>Personaldaten sichern unter</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1333,7 +1340,7 @@ Ihre ungesicherten Änderungen gehen dann verloren!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="204"/>
+        <location filename="mainwindow.cpp" line="201"/>
         <location filename="mainwindow.cpp" line="302"/>
         <location filename="mainwindow.cpp" line="323"/>
         <source>AkO-Dateien (*.ako)</source>
@@ -1396,232 +1403,289 @@ Die aktuellste Version finden Sie auf der Webseite des Programms.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="67"/>
-        <source>Drucken …</source>
+        <location filename="personalwindow.ui" line="65"/>
+        <source>Vorname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="74"/>
-        <source>Als PDF speichern …</source>
+        <location filename="personalwindow.ui" line="70"/>
+        <source>Nachname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="97"/>
-        <location filename="personalwindow.ui" line="203"/>
-        <source>Name</source>
+        <location filename="personalwindow.ui" line="80"/>
+        <source>Zug Vorbereiten</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="102"/>
-        <source>Geleistete Stunden</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="107"/>
-        <source>Gefahrene Kilometer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="112"/>
-        <source>Anzahl Aktivitäten</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="121"/>
-        <source>Einzelansicht</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="179"/>
-        <source>Rangierer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="186"/>
-        <source>Ausbildung</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="196"/>
-        <source>Zugführer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="225"/>
-        <source>Vorname Nachname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="251"/>
-        <source>Die Entfernung zum Heimatbahnhof. Wird benötigt, um die Strecke auszurechnen.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="254"/>
-        <source>Km bis Bahnhof</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="264"/>
-        <source>Lokführer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="322"/>
-        <source>Fahrstrecke</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="349"/>
-        <location filename="personalwindow.ui" line="356"/>
-        <location filename="personalwindow.ui" line="380"/>
-        <location filename="personalwindow.ui" line="434"/>
-        <location filename="personalwindow.ui" line="472"/>
-        <location filename="personalwindow.ui" line="499"/>
-        <source>h</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="373"/>
-        <source>Gesamt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="394"/>
-        <source>Tf/Tb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="401"/>
-        <source>Zf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="441"/>
+        <location filename="personalwindow.ui" line="90"/>
+        <location filename="personalwindow.ui" line="540"/>
+        <location filename="personalwindow.cpp" line="180"/>
         <source>Werkstatt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="458"/>
-        <source>km</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="465"/>
-        <source>Service</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="506"/>
+        <location filename="personalwindow.ui" line="100"/>
+        <location filename="personalwindow.ui" line="605"/>
+        <location filename="personalwindow.cpp" line="176"/>
         <source>Büro</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="543"/>
-        <source>Datum</source>
+        <location filename="personalwindow.ui" line="110"/>
+        <location filename="personalwindow.cpp" line="172"/>
+        <source>Sonstiges</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="548"/>
-        <source>Aufgabe</source>
+        <location filename="personalwindow.ui" line="120"/>
+        <source>Gefahrene Kilometer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="553"/>
-        <source>Einsatzstunden</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="558"/>
-        <source>Beschreibung</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="598"/>
-        <source>Neue Person anlegen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="612"/>
-        <source>Eine Person in der Liste auswählen und dann auf den Button drücken, um die Person aus dem System zu löschen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="615"/>
-        <source>Ausgewählte Person löschen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="personalwindow.ui" line="628"/>
-        <location filename="personalwindow.ui" line="631"/>
+        <location filename="personalwindow.ui" line="130"/>
+        <location filename="personalwindow.ui" line="133"/>
         <source>Die Werte neuberechnen und die Anzeige aktualisieren</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="634"/>
-        <location filename="personalwindow.ui" line="702"/>
+        <location filename="personalwindow.ui" line="136"/>
+        <location filename="personalwindow.ui" line="775"/>
         <source>Aktualisieren</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="664"/>
+        <location filename="personalwindow.ui" line="143"/>
+        <location filename="personalwindow.ui" line="564"/>
+        <location filename="personalwindow.cpp" line="188"/>
+        <source>Service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="153"/>
+        <source>Zub/Begl.o.b.A.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="163"/>
+        <location filename="personalwindow.ui" line="500"/>
+        <location filename="personalwindow.cpp" line="196"/>
+        <source>Zf</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="173"/>
+        <location filename="personalwindow.ui" line="493"/>
+        <location filename="personalwindow.cpp" line="200"/>
+        <source>Tf/Tb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="183"/>
+        <source>Anzahl Einsätze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="193"/>
+        <source>Gesamtstunden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="205"/>
+        <source>Als PDF speichern …</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="212"/>
+        <source>Drucken …</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="220"/>
+        <source>Einzelansicht</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="278"/>
+        <source>Rangierer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="285"/>
+        <source>Ausbildung</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="295"/>
+        <source>Zugführer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="302"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="324"/>
+        <source>Vorname Nachname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="350"/>
+        <source>Die Entfernung zum Heimatbahnhof. Wird benötigt, um die Strecke auszurechnen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="353"/>
+        <source>Km bis Bahnhof</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="363"/>
+        <source>Lokführer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="421"/>
+        <source>Fahrstrecke</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="448"/>
+        <location filename="personalwindow.ui" line="455"/>
+        <location filename="personalwindow.ui" line="479"/>
+        <location filename="personalwindow.ui" line="533"/>
+        <location filename="personalwindow.ui" line="571"/>
+        <location filename="personalwindow.ui" line="598"/>
+        <source>h</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="472"/>
+        <location filename="personalwindow.cpp" line="208"/>
+        <source>Gesamt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="557"/>
+        <source>km</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="642"/>
+        <source>Datum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="647"/>
+        <source>Aufgabe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="652"/>
+        <source>Einsatzstunden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="657"/>
+        <source>Beschreibung</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="697"/>
+        <source>Neue Person anlegen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="711"/>
+        <source>Eine Person in der Liste auswählen und dann auf den Button drücken, um die Person aus dem System zu löschen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="714"/>
+        <source>Ausgewählte Person löschen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.ui" line="737"/>
         <location filename="personalwindow.cpp" line="21"/>
         <source>Personalmanagement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="678"/>
+        <location filename="personalwindow.ui" line="751"/>
         <source>Schließen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="681"/>
+        <location filename="personalwindow.ui" line="754"/>
         <source>Ctrl+W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="686"/>
+        <location filename="personalwindow.ui" line="759"/>
         <source>Person hinzufügen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="689"/>
+        <location filename="personalwindow.ui" line="762"/>
         <source>Ctrl++</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="694"/>
+        <location filename="personalwindow.ui" line="767"/>
         <source>Person löschen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="697"/>
+        <location filename="personalwindow.ui" line="770"/>
         <source>Ctrl+Backspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.ui" line="705"/>
+        <location filename="personalwindow.ui" line="778"/>
         <source>Ctrl+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.cpp" line="199"/>
+        <location filename="personalwindow.cpp" line="168"/>
+        <source>Kilometer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.cpp" line="184"/>
+        <source>Zug
+Vorbereiten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.cpp" line="192"/>
+        <source>Zub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.cpp" line="204"/>
+        <source>Anzahl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="personalwindow.cpp" line="345"/>
         <source>Name doppelt vergeben</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.cpp" line="199"/>
+        <location filename="personalwindow.cpp" line="345"/>
         <source>Der eingegebene Namen ist bereits im System registriert.
 Somit kann keine zweite Personen den gleichen Namen haben!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.cpp" line="249"/>
+        <location filename="personalwindow.cpp" line="395"/>
         <source>Warnung</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="personalwindow.cpp" line="249"/>
+        <location filename="personalwindow.cpp" line="395"/>
         <source>Die ausgewählte Person kann nicht gelöscht werden, da Sie noch bei Aktivitäten eingetragen ist.
 Bitte lösen Sie diese Verbindung bevor Sie die Person löschen!</source>
         <translation type="unfinished"></translation>
@@ -1660,18 +1724,32 @@ Bitte lösen Sie diese Verbindung bevor Sie die Person löschen!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="preferencesdialog.cpp" line="29"/>
+        <location filename="preferencesdialog.cpp" line="30"/>
         <source>Fehler bei der Anfrage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="preferencesdialog.cpp" line="31"/>
+        <location filename="preferencesdialog.cpp" line="32"/>
         <source>Sie verwenden Version %1. Es ist Version %2 verfügbar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="preferencesdialog.cpp" line="33"/>
+        <location filename="preferencesdialog.cpp" line="34"/>
         <source>Sie verwenden bereits die neuste Version %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="fahrtag.cpp" line="78"/>
+        <source>dddd dd.MM.yyyy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="fahrtag.cpp" line="78"/>
+        <location filename="fahrtag.cpp" line="87"/>
+        <source>Fahrtag</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -221,7 +221,6 @@ int ManagerReservierungen::getCapacityDritte()
             summe += w->getKapazitaet();
     }
     return summe;
-
 }
 
 int ManagerReservierungen::getAnzahl()
@@ -322,7 +321,7 @@ bool ManagerReservierungen::createWagen()
     }
 
     QList<Wagen*> *wagenNeu = new QList<Wagen*>();
-    QStringList wagenSplit = wagenreihung.split(", ");
+    QStringList wagenSplit = wagenreihung.split(QRegExp("\\s*,\\s*"));
     for(QString s: wagenSplit) {
         int nummer = s.toInt();
         Wagen *w;

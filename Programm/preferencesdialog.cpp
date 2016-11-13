@@ -6,9 +6,7 @@
 #include <QSettings>
 #include <QUrl>
 
-PreferencesDialog::PreferencesDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PreferencesDialog)
+PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new Ui::PreferencesDialog)
 {
     ui->setupUi(this);
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(closeDialogOk()));
@@ -32,7 +30,6 @@ void PreferencesDialog::on_pushSearch_clicked()
         s = tr("Sie verwenden Version %1. Es ist Version %2 verfügbar.").arg(aktuell, online);
     } else {
         s =  tr("Sie verwenden bereits die neuste Version %1.").arg(aktuell);
-        // Version auf dem aktuellsten Stand
     }
     ui->labelVersion->setText(s);
     ui->pushDownload->setEnabled(old);

@@ -1,17 +1,17 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
+#include <QJsonObject>
+#include <QList>
+
 #include "fahrtag.h"
 #include "activity.h"
 #include "managerpersonal.h"
-#include <QJsonObject>
-#include <QList>
 
 class Manager
 {
 public:
     Manager();
-//    void fetchPersonal(ManagerPersonal *m);
     QJsonObject toJson();
     QJsonObject personalToJson();
     void fromJson(QJsonObject o);

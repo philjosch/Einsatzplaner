@@ -1,6 +1,7 @@
 #include "aactivity.h"
-#include <QMap>
 #include "person.h"
+
+#include <QMap>
 #include <QDebug>
 #include <QJsonArray>
 
@@ -127,7 +128,6 @@ QJsonObject AActivity::toJson()
     data.insert("personalBenoetigt", personalBenoetigt);
     data.insert("isFahrtag", false);
     return data;
-
 }
 
 QDate AActivity::getDatum()
@@ -287,7 +287,6 @@ ManagerPersonal::Misstake AActivity::addPerson(Person *p, QString bemerkung, QTi
     personen->insert(p, info);
 
     emitter();
-
     return ManagerPersonal::OK;
 }
 

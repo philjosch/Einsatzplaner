@@ -1,4 +1,5 @@
 #include "manager.h"
+
 #include <QJsonArray>
 #include <QListIterator>
 
@@ -53,6 +54,7 @@ void Manager::fromJson(QJsonObject o)
             akt = new Activity(aO, personal);
         }
         activities->append(akt);
+        update(activities->length()-1);
     }
 }
 
@@ -60,7 +62,7 @@ Fahrtag *Manager::newFahrtag(QDate datum)
 {
     Fahrtag *f = new Fahrtag(datum, personal);
     activities->append(f);
-//    update(activities->length()-1);
+    update(activities->length()-1);
     return f;
 }
 
@@ -68,7 +70,7 @@ Activity *Manager::newActivity(QDate datum)
 {
     Activity *a = new Activity(datum, personal);
     activities->append(a);
-//    update(activities->length()-1);
+    update(activities->length()-1);
     return a;
 }
 
@@ -81,7 +83,7 @@ bool Manager::removeActivity(AActivity *a)
 void Manager::addActivity(AActivity *a)
 {
     activities->append(a);
-//    update(activities->length()-1);
+    update(activities->length()-1);
 }
 
 void Manager::activityChanged(AActivity *a)
@@ -117,7 +119,6 @@ void Manager::update(int pos)
             break;
         }
     }
-
 }
 
 ManagerPersonal *Manager::getPersonal() const

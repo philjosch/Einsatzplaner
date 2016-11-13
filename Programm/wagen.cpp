@@ -271,16 +271,6 @@ double Wagen::getStrafpunkteFuerPlaetze(int anzahl, int start)
     int ueH = endeLetzte - ende; // Anzahl der durch fremde Reservierungen belegten Sitzplaetze in der letzten Sitzgruppe
     int sgH = endeLetzte - beginnLetzte + 1; // Anzahl der Plaetze in letzter Sitzgruppe
 
-    if (ueV != 0){
-        //         Fehler, weil Sitzgruppe nciht zu Hälte belegt ist
-        //                                                  Fehler weil Sitzgruppe nicht komplett belegt ist
-//        sp2 += /* 1 + */ ceil(std::abs(sgV * 0.5 - ueV)) * 0.5 + (sgV - ueV) * 0.5;
-    }
-    if ((sitzGruppen->at(start) != sitzGruppen->at(ende)) && (ueH != 0)){
-        // Die gleichen Fehlerpunkte, wenn dies auch bei der letzten Sitzgruppe zutrifft und sie verschieden von der ersten ist
-//        sp2 += /* 1 + */ ceil(std::abs(sgH * 0.5 - ueH)) * 0.5 + (sgH - ueH) * 0.5;
-    }
-
     if (sitzGruppen->at(start) != sitzGruppen->at(ende)) {
         sp2 += ueV*ueV + ueH *ueH;
     } else {
@@ -336,7 +326,6 @@ void Wagen::weisePlaetzeZu()
         QMap<int, QList<int>*> *plaetze = new QMap<int, QList<int>*>();
         plaetze->insert(nummer, intToExt(*intern.value(r)));
         r->setSitzplatz(plaetze);
-//        qDebug() << r->getName() << ManagerReservierungen::getStringFromPlaetze(plaetze);
     }
 }
 

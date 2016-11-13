@@ -4,6 +4,7 @@
 #include <QFrame>
 #include <QDate>
 #include <QListWidgetItem>
+
 #include "manager.h"
 #include "activity.h"
 #include "fahrtag.h"

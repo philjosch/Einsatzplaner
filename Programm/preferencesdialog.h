@@ -17,7 +17,6 @@ public:
 
 private slots:
     void on_pushSearch_clicked();
-
     void on_pushDownload_clicked();
 
     void closeDialogOk();

@@ -2,10 +2,11 @@
 #define FAHRTAGWINDOW_H
 
 #include <QMainWindow>
-#include "fahrtag.h"
 #include <QListWidgetItem>
 #include <QTableWidgetItem>
 #include <QPushButton>
+
+#include "fahrtag.h"
 
 namespace Ui {
 class FahrtagWindow;
@@ -21,7 +22,6 @@ public:
 
 private slots:
     // Allgemeine Daten
-
     void on_dateDate_dateChanged(const QDate &date);
     void on_comboArt_currentIndexChanged(int index);
     void on_textAnlass_textChanged();
@@ -96,7 +96,6 @@ private slots:
     void on_buttonAdd_clicked();
     void on_buttonDelete_clicked();
 
-
     void on_checkBoxAll_clicked(bool checked);
 
 private:
@@ -124,7 +123,6 @@ private:
 
     void loadReservierung(Reservierung *r);
     void saveResFahrt();
-
 };
 
 #endif // FAHRTAGWINDOW_H

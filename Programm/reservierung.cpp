@@ -16,11 +16,11 @@ Reservierung::Reservierung(QMap<int, Wagen *> *wagen)
     anzahl = 1;
     klasse = 0;
     zuege = new QList<QString>();
-    zuege->append("2202 SOTW-SSWN");
-    zuege->append("2203 SSWN-SOTW");
+    zuege->append("-");
+    zuege->append("-");
     hps = new QList<QString>();
-    hps->append("Ottweiler");
-    hps->append("Ottweiler");
+    hps->append("-");
+    hps->append("-");
     this->wagen = wagen;
     sitzplatz = new QMap<int, QList<int>*>();
     fahrrad = false;
@@ -159,13 +159,10 @@ void Reservierung::setSonstiges(const QString &value)
 QString Reservierung::getTableRow()
 {
     QString html = "<tr><td>"+name+"<br/>"+telefon+"<br/>"+mail+"</td>";
-
     html += "<td>"+QString::number(anzahl)+" Plätze in ";
     html += (klasse==1 ? "1. Klasse" :  "2./3.Klasse");
     html += "<br/>"+ManagerReservierungen::getStringFromPlaetze(sitzplatz)+"</td>";
-
     html += "<td>"+zuege->at(0)+" "+hps->at(0)+"<br/>->"+zuege->at(1)+" "+hps->at(1)+"</td>";
-
     html += (fahrrad ? "<td>Fahrrad!<br/>" : "<td>")+sonstiges+"</td></tr>";
     return html;
 }

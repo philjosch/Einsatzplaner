@@ -2,6 +2,8 @@
 #define PERSON_H
 
 #include <QObject>
+#include <QVariant>
+
 #include "aactivity.h"
 
 class Person : public QObject
@@ -20,6 +22,8 @@ public:
     double getTimeService();
     double getTimeBuero();
     double getTimeWerkstatt();
+    double getTimeVorbereiten();
+    double getTimeSonstiges();
     double getTimeSum();
     double getSumKilometer();
     double getAnzahl();
@@ -45,9 +49,11 @@ public:
 
 
     QString getName() const;
+    QString getVorname() const;
+    QString getNachname() const;
     void setName(const QString &value);
 
-    QString getHtmlForTableView();
+    QString getHtmlForTableView(QList<bool> *liste);
 
 protected:
     QString name;
@@ -64,6 +70,8 @@ private:
     double timeService;
     double timeBuero;
     double timeWerkstatt;
+    double timeVorbereiten;
+    double timeSonstiges;
     double timeSum;
     double sumKilometer;
     bool valuesInvalid;

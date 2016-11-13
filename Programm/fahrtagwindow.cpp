@@ -24,10 +24,9 @@ FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent),
     resToItem = new QMap<Reservierung*, QListWidgetItem*>();
     itemToRes = new QMap<QListWidgetItem*, Reservierung*>();
 
-    loadData();
-
     nehmeRes = false;
 
+    loadData();
     update();
 }
 
@@ -71,8 +70,15 @@ void FahrtagWindow::on_checkWichtig_stateChanged(int arg1)
 void FahrtagWindow::on_comboWagenreihung_currentTextChanged(const QString &arg1)
 {
     if (nehme) {
-        fahrtag->setWagenreihung(arg1);
-        update();
+        QString alt = fahrtag->getWagenreihung();
+        if (fahrtag->setWagenreihung(arg1)) {
+            update();
+        } else {
+            QMessageBox::information(this, tr("Fehler"), tr("Die Wagenreihung konnte nicht geändert werden. Da es Reservierungen in den weggefallenen Waggons gibt!"));
+            nehme = false;
+            ui->comboWagenreihung->setCurrentText(alt);
+            nehme = true;
+        }
     }
 }
 
@@ -143,7 +149,6 @@ void FahrtagWindow::loadData()
         ui->checkBoxAll->setEnabled(fahrtag->getAutoPlatz());
         ui->buttonVerteile->setEnabled(fahrtag->getAutoPlatz());
 
-
         // Daten von Fahrtag
         ui->comboArt->setCurrentIndex((int)fahrtag->getArt());
         ui->comboTimeTfH->setCurrentText(fahrtag->getZeitTf().toString("HH"));
@@ -166,7 +171,6 @@ void FahrtagWindow::loadData()
         listeMitNamen = new QMap<QListWidgetItem*, QString>();
         listToTable = new QMap<QListWidgetItem*, QTableWidgetItem*>();
         namen = new QSet<QString>();
-
 
         // Aufsplitten der Personen auf die Einzelnen Listen
         for(Person *p: fahrtag->getPersonen()->keys()) {
@@ -371,7 +375,6 @@ void FahrtagWindow::on_buttonTfDelete_clicked()
         listToTable->remove(item);
     }
     deleteItemFromList(ui->listTf, ui->buttonTfDelete);
-
 }
 void FahrtagWindow::on_checkTf_clicked(bool checked)
 {
@@ -493,7 +496,7 @@ void FahrtagWindow::on_listZub_itemChanged(QListWidgetItem *item)
         nehme = false;
         // Laden der Informationen zur geänderten Person
         QString text = item->text();
-        QStringList liste = text.split("; ");
+        QStringList liste = text.split(QRegExp("\\s*;\\s*"));
         QString name = liste.at(0);
         QString bem = "";
         if (liste.length() > 1) {
@@ -502,7 +505,7 @@ void FahrtagWindow::on_listZub_itemChanged(QListWidgetItem *item)
         AActivity::Category kat = AActivity::Zub;
         Person *person;
 
-        if (bem.contains("Extern")) {
+        if (bem.toUpper().contains("EXTERN")) {
             person = new Person(name);
             person->addActivity(fahrtag, kat);
             fahrtag->addPerson(person, bem, QTime(0,0), QTime(0,0), "Zub");
@@ -706,12 +709,6 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
     if (nehme) {
         nehme = false;
         // column 1: Name, 2: Beginn, 3: Ende, 4: Aufgabe
-        /*
-     * Hier muss etwas aufwendiger gearbeitet werden,
-     * denn die veränderte Spalte muss eingefügt werden
-     * und die Liste muss up-todate gehalten werden
-     * */
-
         // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
         if (column == 0) {
             QStringList *neu = new QStringList();
@@ -874,7 +871,6 @@ void FahrtagWindow::saveResFahrt()
     aktuelleRes->setHps(h);
 }
 
-
 void FahrtagWindow::on_buttonAdd_clicked()
 {
     Reservierung *r = fahrtag->createReservierung();
@@ -929,8 +925,8 @@ void FahrtagWindow::on_buttonVerteile_clicked()
         }
         fahrtag->emitter();
         update();
-    } else {
-        qDebug() << start.msecsTo(ende);
+//    } else {
+//        qDebug() << start.msecsTo(ende);
     }
 }
 
@@ -988,26 +984,80 @@ void FahrtagWindow::on_comboKlasse_currentIndexChanged(int index)
 
 void FahrtagWindow::on_comboStart1Zug_currentTextChanged(const QString &arg1)
 {
-    if (nehmeRes)
+    if (nehmeRes) {
+        nehmeRes = false;
+        if (ui->comboEnde1Zug->currentText() != "-" && ui->comboEnde1Zug->currentText() < arg1) {
+            ui->comboEnde1Zug->setCurrentText("-");
+        }
+        if (arg1.contains("SSWN-SOTW")) {
+            if (ui->comboStart1Hp->currentText() == "Ottweiler") {
+                ui->comboStart1Hp->setCurrentText("-");
+            }
+        } else if (arg1.contains("SOTW-SSWN")) {
+            if (ui->comboStart1Hp->currentText() == "Schwarzerden") {
+                ui->comboStart1Hp->setCurrentText("-");
+            }
+        }
+        nehmeRes = true;
         saveResFahrt();
+    }
 }
 
 void FahrtagWindow::on_comboStart1Hp_currentTextChanged(const QString &arg1)
 {
-    if (nehmeRes)
+    if (nehmeRes) {
+        nehmeRes = false;
+        if (ui->comboStart1Zug->currentText().contains("SSWN-SOTW")) {
+            if (arg1 == "Ottweiler") {
+                ui->comboStart1Hp->setCurrentText("-");
+            }
+        } else if (ui->comboStart1Zug->currentText().contains("SOTW-SSWN")) {
+            if (arg1 == "Schwarzerden") {
+                ui->comboStart1Hp->setCurrentText("-");
+            }
+        }
+        nehmeRes = true;
         saveResFahrt();
+    }
 }
 
 void FahrtagWindow::on_comboEnde1Zug_currentTextChanged(const QString &arg1)
 {
-    if (nehmeRes)
+    if (nehmeRes) {
+        nehmeRes = false;
+        if (arg1.contains("SSWN-SOTW")) {
+            if (ui->comboEnde1Hp->currentText() == "Schwarzerden") {
+                ui->comboEnde1Hp->setCurrentText("-");
+            }
+        } else if (arg1.contains("SOTW-SSWN")) {
+            if (ui->comboEnde1Hp->currentText() == "Ottweiler") {
+                ui->comboEnde1Hp->setCurrentText("-");
+            }
+        }
+        if (ui->comboStart1Zug->currentText() != "-" && ui->comboStart1Zug->currentText() > arg1) {
+            ui->comboStart1Zug->setCurrentText("-");
+        }
+        nehmeRes = true;
         saveResFahrt();
+    }
 }
 
 void FahrtagWindow::on_comboEnde1Hp_currentTextChanged(const QString &arg1)
 {
-    if (nehmeRes)
+    if (nehmeRes) {
+        nehmeRes = false;
+        if (ui->comboEnde1Zug->currentText().contains("SSWN-SOTW")) {
+            if (arg1 == "Schwarzerden") {
+                ui->comboEnde1Hp->setCurrentText("-");
+            }
+        } else if (ui->comboEnde1Zug->currentText().contains("SOTW-SSWN")) {
+            if (arg1 == "Ottweiler") {
+                ui->comboEnde1Hp->setCurrentText("-");
+            }
+        }
+        nehmeRes = true;
         saveResFahrt();
+    }
 }
 
 void FahrtagWindow::on_lineSitze_textChanged(const QString &arg1)

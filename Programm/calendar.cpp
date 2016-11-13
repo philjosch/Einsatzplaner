@@ -1,7 +1,8 @@
 #include "calendar.h"
 #include "ui_calendar.h"
-#include <QMessageBox>
 #include "mainwindow.h"
+
+#include <QMessageBox>
 #include <QDebug>
 
 Calendar::Calendar(QWidget *parent) : QFrame(parent), Manager(), ui(new Ui::Calendar)
@@ -40,7 +41,6 @@ Calendar::Calendar(QWidget *parent) : QFrame(parent), Manager(), ui(new Ui::Cale
         connect(c, SIGNAL(clickedItem(AActivity*)), this, SLOT(clickedItemCalendar(AActivity*)));
     }
     goToday();
-
 }
 
 Calendar::~Calendar()
@@ -66,10 +66,7 @@ void Calendar::fromJson(QJsonObject o)
 {
     // Daten in den Manager laden und die ogik herstellen
     Manager::fromJson(o);
-    // Darstellung aktualisieren und Daten darstellen
-
     // Alle aktivitäten in die seitenleiste eintragen
-    /* TODO */
     for(AActivity *a: *activities) {
         QListWidgetItem *i = new QListWidgetItem("");
         if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
@@ -180,6 +177,7 @@ Fahrtag *Calendar::newFahrtag()
 
     // Einfügen in Seitenliste und Kalender
     insert(f);
+    activityChanged(f);
 
     // Anzeigen eines neuen Fensters
     emit showFahrtag(f);
@@ -196,6 +194,7 @@ Activity *Calendar::newActivity()
 
     // Einfügen in die Seitenleiste
     insert(a);
+    activityChanged(a);
 
     // Anzeigen einen neuen Fensters
     emit showActivity(a);
@@ -217,11 +216,14 @@ bool Calendar::removeActivity(AActivity *a)
 
 void Calendar::activityChanged(AActivity *a)
 {
+    Manager::activityChanged(a);
+
+    // Richtiges Anzeigen im Kalender
     int pos = getPosInCalendar(a->getDatum());
     if (pos < 42 && pos >= 0) {
         /* Element befindet sich nach Aktualiserung im Kalender
          * -> Befindet sich schon jetzt im Kalender
-         * ---> Position veröndert
+         * ---> Position verändert
          * ---> Position nciht verändert
          * -> Befindet sich im Moment nicht im Kalender
          * */
@@ -248,35 +250,33 @@ void Calendar::activityChanged(AActivity *a)
             calendaritem->remove(a);
         }
     }
-    // Richtiges positionieren des elementes in der Übersichts liste
+
+    // Richtiges Anzeigen in der Übersichts liste
     setListItem(listitem->value(a), a);
 
-    /*    int i = activities->indexOf(a);
+    // Prüfen, ob das element weitgenug vorne (oben) ist
+    int i = ui->listWidget->row(listitem->value(a));
+    AActivity *ref;
     while (i > 0) {
-        QMessageBox::information(this, "", activities->at(i-1)->getDatum()->toString("dd.MM.yyyy"));
-        QMessageBox::information(this, "", activities->at(i)->getDatum()->toString("dd.MM.yyyy"));
-        if (activities->at(i-1)->getDatum() > activities->at(i)->getDatum()) {
-            QMessageBox::information(this, "", "bla bla bla");
+        ref = itemToList->value(ui->listWidget->item(i-1));
+        if (ref->getDatum() > a->getDatum()) {
+            ui->listWidget->insertItem(i-1, ui->listWidget->takeItem(i));
+            i--;
+        } else {
+            break;
         }
-        break;
     }
 
-    while ((i > 0) && (activities->at(i-1)->getDatum() > activities->at(i)->getDatum())) {
-        activities->swap(i-1, i);
-        ui->listWidget->insertItem(i, ui->listWidget->takeItem(i-1));
-        ui->listWidget->insertItem(i-1, ui->listWidget->takeItem(i));
-        i--;
+    // Prüfen, ob das element weit genug hinten (unten) ist
+    while (i < ui->listWidget->count()-1) {
+        ref = itemToList->value(ui->listWidget->item(i+1));
+        if (ref->getDatum() < a->getDatum()) {
+            ui->listWidget->insertItem(i, ui->listWidget->takeItem(i+1));
+            i++;
+        } else {
+            break;
+        }
     }
-
-
-    while ((i < activities->length()-1) && (activities->at(i)->getDatum() > activities->at(i+1)->getDatum())) {
-        activities->swap(i, i+1);
-        ui->listWidget->insertItem(i+1, ui->listWidget->takeItem(i));
-        ui->listWidget->insertItem(i, ui->listWidget->takeItem(i+1));
-        i++;
-    }
-    */
-
     emit changed();
 }
 
@@ -299,8 +299,6 @@ void Calendar::clickedItemCalendar(AActivity *a)
         Activity *c = dynamic_cast<Activity*>(a);
         emit showActivity(c);
     }
-    // Element liegt im Kalender
-
 }
 
 int Calendar::getItemFromDate(QDate date)
@@ -309,7 +307,7 @@ int Calendar::getItemFromDate(QDate date)
     int month = ui->dateSelector->date().month();
     int wochentag = QDate(year, month, 1).dayOfWeek();
 
-    return wochentag -1 + date.day();
+    return wochentag - 1 + date.day();
 }
 
 int Calendar::getPosInCalendar(QDate date)
@@ -354,20 +352,14 @@ void Calendar::setListItemC(QListWidgetItem *i, AActivity *a)
 {
     if (i == nullptr) return;
     i->setText(a->getListStringShort());
-    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
-        i->setBackgroundColor(MainWindow::getFarbeZug(f->getArt()));
-    } else {
-        i->setBackgroundColor(MainWindow::getFarbeArbeit());
-    }
+    i->setBackgroundColor(MainWindow::getFarbe(a));
 }
 
 void Calendar::setListItem(QListWidgetItem *i, AActivity *a)
 {
     if (i == nullptr) return;
     i->setText(a->getListString());
-    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
-        i->setBackgroundColor(MainWindow::getFarbeZug(f->getArt()));
-    } else {
-        i->setBackgroundColor(MainWindow::getFarbeArbeit());
-    }
+    i->setToolTip(a->getAnlass());
+    i->setWhatsThis(a->getAnlass());
+    i->setBackgroundColor(MainWindow::getFarbe(a));
 }

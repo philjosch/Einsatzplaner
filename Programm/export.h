@@ -1,19 +1,18 @@
 #ifndef EXPORT_H
 #define EXPORT_H
 
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QFileDialog>
+#include <QTextDocument>
+#include <QMap>
+
 #include "aactivity.h"
 #include "fahrtag.h"
 #include "activity.h"
 #include "person.h"
 #include "managerpersonal.h"
 #include "mainwindow.h"
-
-//#include <QObject>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QFileDialog>
-#include <QTextDocument>
-#include <QMap>
 
 /*
  * Die Datei mit der Logik für den Export von Daten
@@ -24,8 +23,6 @@
 class Export
 {
 public:
-
-//    Export();
     // Drucken von Fahrtagen und Aktivitäten
     static bool printFahrtag(Fahrtag *f, QPrinter *pdf=0, QPrinter *paper=0);
     static bool printActivity(Activity *a, QPrinter *pdf=0, QPrinter *paper=0);
@@ -38,11 +35,10 @@ public:
 
     // Drucken von Personen
     static bool printPerson(Person *p, QPrinter *pdf=0, QPrinter *paper=0);
-    static bool printPersonen(QList<Person *> *personen, QPrinter *pdf=0, QPrinter *paper=0);
+    static bool printPersonen(QList<Person *> *personen, QList<bool> *data, QPrinter *pdf=0, QPrinter *paper=0);
 
     static QPrinter *getPrinterPaper(QWidget *parent);
     static QPrinter *getPrinterPDF(QWidget *parent, QString path);
-
 
 private:
     static bool print(QPrinter *pdf, QPrinter *print, QTextDocument *d);
@@ -50,8 +46,6 @@ private:
 
     static void preparePrinterPortrait(QPrinter *p);
     static void preparePrinterLandscape(QPrinter *p);
-
-
 };
 
 #endif // EXPORT_H

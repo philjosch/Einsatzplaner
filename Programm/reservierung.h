@@ -1,9 +1,9 @@
 #ifndef RESERVIERUNG_H
 #define RESERVIERUNG_H
 
-class Wagen;
-
 #include <QObject>
+
+class Wagen;
 
 class Reservierung
 {
@@ -60,7 +60,6 @@ private:
     bool fahrrad;
     QString sonstiges;
     QMap<int, Wagen *> *wagen;
-
 };
 
 #endif // RESERVIERUNG_H
