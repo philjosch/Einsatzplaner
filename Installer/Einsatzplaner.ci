@@ -1,16 +1,16 @@
-﻿<project version = 9 civer = 7.4.1 winver = "2.9/6.1.7601" >
+<project version = 9 civer = 7.4.1 winver = "2.9/6.1.7601" >
    <autorun >1</>
    <autoclose >0</>
    <compname >Philipp Schepper</>
    <produrl >http://bahn.philipp-schepper.de</>
-   <ver >Version 1.0.2</>
+   <ver >Version 1.0.3</>
    <supurl ></>
    <updurl ></>
    <dlgfont >verdana</>
    <headlogo >default - 1</>
    <dlgfontsize >s8</>
    <output >C:\Users\Virtual\Desktop</>
-   <exename >einsatzplaner-setup-v1-0-2.exe</>
+   <exename >einsatzplaner-setup-v1-0-3.exe</>
    <beffile ></>
    <aftfile ></>
    <uninclude >1</>

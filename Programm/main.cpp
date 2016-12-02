@@ -20,7 +20,7 @@
 #include <QLocale>
 #include <QLibraryInfo>
 
-QString AKTUELLE_VERSION = "1.0.2";
+QString AKTUELLE_VERSION = "1.0.3";
 
 int main(int argc, char *argv[])
 {

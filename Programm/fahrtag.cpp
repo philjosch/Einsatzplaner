@@ -157,7 +157,7 @@ QString Fahrtag::getHtmlForSingleView()
         // Begl. o.b.A
         if (! zub.isEmpty() && ! begl.isEmpty())
             html += " | ";
-        html += "<i>"+listToString(&begl, " | ") + "</i></p>";
+        html += "<i>"+listToString(&begl, "</i> | <i>") + "</i></p>";
         // *Service
         html += "<p><b>Service-Personal";
         html += (benoetigeService ?" wird benötigt":"");
@@ -167,14 +167,14 @@ QString Fahrtag::getHtmlForSingleView()
     if (sonstige.size() > 0) {
         html += "<p><b>Sonstiges Personal";
         html += (personalBenoetigt ?" wird benötigt":"");
-        html += ":</b><br/>"+listToString(&sonstige, " | ") +"</p>";
+        html += ":</b><br/>"+listToString(&sonstige, " | ", true) +"</p>";
     }
     if (bemerkungen != "") {
         html += "<p>Bemerkungen:<br/>"+bemerkungen+"</p>";
     }
 
     // Reservierungen
-    if (getAnzahl() > 0) {
+    if (getAnzahl() > 0 && art != Fahrtag::Nikolauszug) {
         html += "<p><b>Reservierungen:</b>";
         if (art != Fahrtag::Schnupperkurs && art != Fahrtag::Gesellschaftssonderzug) {
             html += "<br/>Bereits "+QString::number(getBelegtGesamt());
@@ -289,7 +289,7 @@ QString Fahrtag::getHtmlForTableView()
     }
     if (sonstige.size() > 0) {
         html += "<ul><li>";
-        html += listToString(&sonstige, "</li><li>");
+        html += listToString(&sonstige, "</li><li>", true);
         html += "</li></ul>";
     }
     // Sneek-Peek Reservierungen

@@ -230,6 +230,7 @@ bool AActivity::removePerson(QString p)
     for(Person *pers: personen->keys()) {
         if (pers->getName() == p) {
             gefunden = pers;
+            break;
         }
     }
     if (gefunden != nullptr) {
@@ -299,6 +300,11 @@ ManagerPersonal::Misstake AActivity::addPerson(QString p, QString bemerkung, QTi
     return ManagerPersonal::PersonNichtGefunden;
 }
 
+void AActivity::updatePersonBemerkung(Person *p, QString bemerkung)
+{
+    personen->value(p)->bemerkung = bemerkung;
+}
+
 void AActivity::setPersonen(QMap<Person *, Infos *> *value)
 {
     personen = value;
@@ -310,13 +316,35 @@ ManagerPersonal *AActivity::getPersonal() const
     return personal;
 }
 
-QString AActivity::listToString(QMap<Person *, AActivity::Infos *> *liste, QString seperator)
+QString AActivity::listToString(QMap<Person *, AActivity::Infos *> *liste, QString seperator, bool aufgabe)
 {
     QString a = "";
     for(Person *p: liste->keys()) {
         a+= p->getName();
-        if (liste->value(p)->bemerkung!= "")
+        bool strichPunkt = false;
+        if (liste->value(p)->bemerkung!= "") {
             a += "; "+liste->value(p)->bemerkung;
+            strichPunkt = true;
+        }
+        if (aufgabe) {
+            if (liste->value(p)->aufgabe != "" && liste->value(p)->aufgabe != "Sonstiges") {
+                if (! strichPunkt) {
+                    a += "; ";
+                    strichPunkt = true;
+                } else {
+                    a += " ";
+                }
+                a += liste->value(p)->aufgabe;
+            } else if(liste->value(p)->kategorie != AActivity::Sonstiges) {
+                if (! strichPunkt) {
+                    a += "; ";
+                    strichPunkt = true;
+                } else {
+                    a += " ";
+                }
+                a += AActivity::getStringFromCategory(liste->value(p)->kategorie);
+            }
+        }
         if (p != liste->keys().last()) {
             a += seperator;
         }

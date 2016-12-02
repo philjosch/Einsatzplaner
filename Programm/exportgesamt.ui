@@ -266,12 +266,15 @@
        <property name="text">
         <string>Arbeitseinsätze</string>
        </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
     </layout>
    </item>
    <item row="2" column="0">
-    <layout class="QGridLayout" name="gridLayout_3">
+    <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,1,1">
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -303,19 +306,6 @@
         <bool>true</bool>
        </property>
       </widget>
-     </item>
-     <item row="0" column="2">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item row="1" column="0" colspan="3">
       <widget class="Line" name="line">
@@ -385,6 +375,13 @@
       <widget class="QPushButton" name="pushDrucken">
        <property name="text">
         <string>Drucken</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Aktualisieren</string>
        </property>
       </widget>
      </item>

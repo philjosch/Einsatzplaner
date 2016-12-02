@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setWindowModified(false);
 
     personalfenster = new PersonalWindow(this, ui->calendar->getPersonal());
+    exportDialog = new ExportGesamt(ui->calendar, this);
     connect(personalfenster, SIGNAL(changed()), this, SLOT(unsave()));
 }
 
@@ -153,7 +154,8 @@ void MainWindow::on_buttonPersonal_clicked()
 
 void MainWindow::on_buttonExport_clicked()
 {
-    ExportGesamt(ui->calendar, this).exec();
+    exportDialog->hardReload();
+    exportDialog->exec();
 }
 
 void MainWindow::on_actionPreferences_triggered()
@@ -170,7 +172,7 @@ void MainWindow::on_actionAboutQt_triggered()
 
 void MainWindow::on_actionAboutApp_triggered()
 {
-    QMessageBox::about(this, tr("Über Einsatzplaner"), "<center><b>Einsatzplaner</b><br/><small><br/>"+QCoreApplication::applicationVersion()+"<br/>Copyright © 2016 Philipp Schepper<br/>Alle Rechte vorbehalten.</small></center>");
+    QMessageBox::about(this, tr("Über Einsatzplaner"), "<h1>Einsatzplaner</h1>"+QCoreApplication::applicationVersion()+"<br/>Copyright © 2016 Philipp Schepper<br/>Alle Rechte vorbehalten.");
 }
 
 void MainWindow::on_actionQuit_triggered()

@@ -10,6 +10,7 @@
 #include "activity.h"
 #include "activitywindow.h"
 #include "personalwindow.h"
+#include "exportgesamt.h"
 
 namespace Ui {
 class MainWindow;
@@ -35,6 +36,8 @@ private:
     bool saved;
 
     PersonalWindow *personalfenster;
+
+    ExportGesamt *exportDialog;
 
 public slots:
     void openFahrtag(Fahrtag *f);

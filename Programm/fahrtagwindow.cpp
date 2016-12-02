@@ -264,81 +264,134 @@ void FahrtagWindow::addItemTolist(QListWidget *l, QPushButton *b)
 }
 void FahrtagWindow::deleteItemFromList(QListWidget *l, QPushButton *b)
 {
+    if (l->currentItem() == nullptr) return;
+    QListWidgetItem *item = l->currentItem();
+    QString text = item->text();
+    QStringList liste = text.split(QRegExp("\\s*;\\s*"));
+    QString name = liste.at(0);
+
+    fahrtag->removePerson(name);
+    if (fahrtag->getPersonal()->personExists(name)) {
+        Person *person = fahrtag->getPersonal()->getPerson(name);
+        person->removeActivity(fahrtag);
+    }
+
+    if (listeMitNamen->contains(item)) {
+        listeMitNamen->remove(item);
+    }
+    if (listToTable->contains(item)) {
+        ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
+        listToTable->remove(item);
+    }
+
     l->takeItem(l->currentRow());
     b->setEnabled(l->count()>0);
 }
 
+void FahrtagWindow::itemChanged(QListWidgetItem *item , AActivity::Category kat, bool isExtern)
+{
+    /* item: Das Item das Verändert wurde */
+    /* kat: Die Kategorie, auf die gebucht wird */
+    /* is Extern: Gibt an ob die Person extern ist */
+    // Laden der Informationen zur geänderten Person
+    QString text = item->text();
+    QStringList liste = text.split(QRegExp("\\s*;\\s*"));
+    QString name = liste.at(0);
+    QString bem = "";
+    QTime start = QTime(0,0);
+    QTime ende = QTime(0,0);
+    QString aufgabe = AActivity::getStringFromCategory(kat);
+    if (liste.length() > 1) {
+        bem = liste.at(1);
+    }
+    if (bem.toUpper().contains("EXTERN")) isExtern = true;
+
+    Person *person;
+
+    if (isExtern) {
+        person = new Person(name);
+        person->setAusbildungTf(true);
+        person->setAusbildungZf(true);
+        person->setAusbildungRangierer(true);
+        person->addActivity(fahrtag, kat);
+        fahrtag->addPerson(person, bem, start, ende, aufgabe);
+
+        if (listeMitNamen->contains(item)) {
+            fahrtag->removePerson(listeMitNamen->value(item));
+            listeMitNamen->remove(item);
+            ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
+            namen->remove(name);
+        }
+        return;
+    } else if (!fahrtag->getPersonal()->personExists(name)) {
+        QMessageBox::information(this, "Person nicht gefunden", "Die eingegebene Person konnte nicht gefunden werden!");
+        return;
+    }
+
+    person = fahrtag->getPersonal()->getPerson(name);
+
+    // Die Person ist in Ordnung und kann jetzt übernommen werden
+    name = person->getName();
+
+    if (listeMitNamen->contains(item)) {
+        if (listeMitNamen->value(item) == name) {
+            // Der Name hat sich nicht verändert, lediglich die Bemerkungen updaten
+            fahrtag->updatePersonBemerkung(person, bem);
+            return;
+        } else {
+            // Der Name wurde verändert -> alte Person löschen und dann verfahren, als ob person nicht vorhanden wäre
+            QString nameAlt = listeMitNamen->value(item);
+            AActivity::Infos *info = fahrtag->getIndividual(person);
+            start = info->beginn;
+            ende = info->ende;
+            aufgabe = info->aufgabe;
+            fahrtag->removePerson(nameAlt); // Alte Person von Fahrtag lösen
+
+            listeMitNamen->remove(item);
+            ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
+            listToTable->remove(item);
+        }
+    }
+
+    if (fahrtag->addPerson(person, bem, start, ende, aufgabe) == ManagerPersonal::FalscheQualifikation) {
+        QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
+        return;
+    }
+    person->addActivity(fahrtag, kat);
+
+    listeMitNamen->insert(item, name);
+    // Zeile für die Person in die Tabelle einfügen
+    ui->tablePersonen->insertRow(0);
+    QTableWidgetItem *zelleName = new QTableWidgetItem(name);
+    zelleName->setFlags(Qt::NoItemFlags);
+    ui->tablePersonen->setItem(0,0,zelleName);
+
+    if (start != QTime(0, 0)) {
+        ui->tablePersonen->setItem(0, 1, new QTableWidgetItem(start.toString("hh:mm")));
+    }
+    if (ende != QTime(0,0)) {
+        ui->tablePersonen->setItem(0, 2, new QTableWidgetItem(ende.toString("hh:mm")));
+    }
+
+    QTableWidgetItem *zelleAufgabe = new QTableWidgetItem(AActivity::getStringFromCategory(kat));
+    zelleAufgabe->setFlags(Qt::NoItemFlags);
+    ui->tablePersonen->setItem(0,3,zelleAufgabe);
+    listToTable->insert(item, zelleName);
+    namen->insert(name);
+}
 
 void FahrtagWindow::on_listTf_itemChanged(QListWidgetItem *item)
 {
     if (nehme) {
         nehme = false;
-        // Laden der Informationen zur geänderten Person
-        QString text = item->text();
-        QStringList liste = text.split("; ");
-        QString name = liste.at(0);
+        QStringList liste = item->text().split(QRegExp("\\s*;\\s*"));
         QString bem = "";
-        if (liste.length() > 1) {
-            bem = liste.at(1);
-        }
+        if (liste.length() > 1) bem = liste.at(1).toUpper();
+        bool isExtern = false;
         AActivity::Category kat = AActivity::Tf;
-        if (bem.contains("Tb") || bem.contains("TB")) {
-            kat = AActivity::Tb;
-        }
-        Person *person;
-
-        if (bem.contains("Azubi") || bem.contains("FS") || bem.contains("Extern")) {
-            person = new Person(name);
-            person->setAusbildungTf(true);
-            kat = AActivity::Tf;
-            person->addActivity(fahrtag, kat);
-            fahrtag->addPerson(person, bem, QTime(0,0), QTime(0,0), "Tf");
-
-            if (listeMitNamen->contains(item)) {
-                fahrtag->removePerson(listeMitNamen->value(item));
-                listeMitNamen->remove(item);
-                ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
-                namen->remove(name);
-            }
-            nehme = true;
-            return;
-        } else if (!fahrtag->getPersonal()->personExists(name)) {
-            QMessageBox::information(this, "Person nicht gefunden", "Die eingegebene Person konnte nicht gefunden werden!");
-            nehme = true;
-            return;
-        } else {
-            person = fahrtag->getPersonal()->getPerson(name);
-            // Prüfen, ob die Person die Qualifikationen hat
-            if (! person->getAusbildungTf()) {
-                QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
-                nehme = true;
-                return;
-            }
-        }
-        // Die Person ist in Ordnung und kann jetzt übernommen werden
-        name = person->getName();
-        person->addActivity(fahrtag, kat);
-
-        if (listeMitNamen->contains(item)) {
-            // Zeile war schon vorhanden und kann jetzt angepasst werden
-            QString nameAlt = listeMitNamen->value(item);
-            fahrtag->removePerson(nameAlt); // Alte Person von Fahrtag lösen
-            listeMitNamen->insert(item, name); // den neuen Namen der Person speichern, der alte wird jetzt nicht mehr benötigt
-            listToTable->value(item)->setText(name); // der Name der person in der Tabelle wird angepasst
-        } else {
-            listeMitNamen->insert(item, name);
-            fahrtag->addPerson(person, bem, QTime(0,0), QTime(0,0), AActivity::getStringFromCategory(kat));
-            // Zeile für die Person in die Tabelle einfügen
-            ui->tablePersonen->insertRow(0);
-            QTableWidgetItem *zelleName = new QTableWidgetItem(name);
-            zelleName->setFlags(Qt::NoItemFlags);
-            ui->tablePersonen->setItem(0,0,zelleName);
-            QTableWidgetItem *zelleAufgabe = new QTableWidgetItem(AActivity::getStringFromCategory(kat));
-            zelleAufgabe->setFlags(Qt::NoItemFlags);
-            ui->tablePersonen->setItem(0,3,zelleAufgabe);
-            listToTable->insert(item, zelleName);
-            namen->insert(name);
-        }
+        if (bem.contains("TB")) kat = AActivity::Tb;
+        if (bem.contains("AZUBI") || bem.contains("FS")) isExtern = true;
+        itemChanged(item, kat, isExtern);
         nehme = true;
     }
 }
@@ -348,32 +401,6 @@ void FahrtagWindow::on_buttonTfAdd_clicked()
 }
 void FahrtagWindow::on_buttonTfDelete_clicked()
 {
-    if (ui->listTf->currentItem() == nullptr) return;
-    QString text = ui->listTf->currentItem()->text();
-    QStringList liste = text.split("; ");
-    QString name = liste.at(0);
-    QString bem = "";
-    if (liste.length() > 1) {
-        bem = liste.at(1);
-    }
-
-    if (bem.toUpper().contains("AZUBI") || bem.toUpper().contains("FS") || bem.toUpper().contains("EXTERN")) {
-        fahrtag->removePerson(name);
-    } else if (!fahrtag->getPersonal()->personExists(name)) {
-    } else {
-        Person *person = fahrtag->getPersonal()->getPerson(name);
-        name = person->getName();
-        person->removeActivity(fahrtag);
-        fahrtag->removePerson(person);
-    }
-    QListWidgetItem *item = ui->listTf->currentItem();
-    if (listeMitNamen->contains(item)) {
-        listeMitNamen->remove(item);
-    }
-    if (listToTable->contains(item)) {
-        ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
-        listToTable->remove(item);
-    }
     deleteItemFromList(ui->listTf, ui->buttonTfDelete);
 }
 void FahrtagWindow::on_checkTf_clicked(bool checked)
@@ -385,68 +412,7 @@ void FahrtagWindow::on_listZf_itemChanged(QListWidgetItem *item)
 {
     if (nehme) {
         nehme = false;
-        // Laden der Informationen zur geänderten Person
-        QString text = item->text();
-        QStringList liste = text.split("; ");
-        QString name = liste.at(0);
-        QString bem = "";
-        if (liste.length() > 1) {
-            bem = liste.at(1);
-        }
-        AActivity::Category kat = AActivity::Zf;
-        Person *person;
-
-        if (bem.toUpper().contains("EXTERN")) {
-            person = new Person(name);
-            person->setAusbildungZf(true);
-            person->addActivity(fahrtag, kat);
-            fahrtag->addPerson(person, bem, QTime(0,0), QTime(0,0), "Zf");
-
-            if (listeMitNamen->contains(item)) {
-                fahrtag->removePerson(listeMitNamen->value(item));
-                listeMitNamen->remove(item);
-                ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
-                namen->remove(name);
-            }
-            nehme = true;
-            return;
-        } else if (!fahrtag->getPersonal()->personExists(name)) {
-            QMessageBox::information(this, "Person nicht gefunden", "Die eingegebene Person konnte nicht gefunden werden!");
-            nehme = true;
-            return;
-        } else {
-            person = fahrtag->getPersonal()->getPerson(name);
-            // Prüfen, ob die Person die Qualifikationen hat
-            if (! person->getAusbildungZf()) {
-                QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
-                nehme = true;
-                return;
-            }
-        }
-        // Die Person ist in Ordnung und kann jetzt übernommen werden
-        name = person->getName();
-        person->addActivity(fahrtag, kat);
-
-        if (listeMitNamen->contains(item)) {
-            // Zeile war schon vorhanden und kann jetzt angepasst werden
-            QString nameAlt = listeMitNamen->value(item);
-            fahrtag->removePerson(nameAlt); // Alte Person von Fahrtag lösen
-            listeMitNamen->insert(item, name); // den neuen Namen der Person speichern, der alte wird jetzt nicht mehr benötigt
-            listToTable->value(item)->setText(name); // der Name der person in der Tabelle wird angepasst
-        } else {
-            listeMitNamen->insert(item, name);
-            fahrtag->addPerson(person, bem, QTime(0,0), QTime(0,0), AActivity::getStringFromCategory(kat));
-            // Zeile für die Person in die Tabelle einfügen
-            ui->tablePersonen->insertRow(0);
-            QTableWidgetItem *zelleName = new QTableWidgetItem(name);
-            zelleName->setFlags(Qt::NoItemFlags);
-            ui->tablePersonen->setItem(0,0,zelleName);
-            QTableWidgetItem *zelleAufgabe = new QTableWidgetItem(AActivity::getStringFromCategory(kat));
-            zelleAufgabe->setFlags(Qt::NoItemFlags);
-            ui->tablePersonen->setItem(0,3,zelleAufgabe);
-            listToTable->insert(item, zelleName);
-            namen->insert(name);
-        }
+        itemChanged(item, AActivity::Zf);
         nehme = true;
     }
 }
@@ -456,33 +422,6 @@ void FahrtagWindow::on_buttonZfAdd_clicked()
 }
 void FahrtagWindow::on_buttonZfDelete_clicked()
 {
-    if (ui->listZf->currentItem() == nullptr) return;
-    QString text = ui->listZf->currentItem()->text();
-    QStringList liste = text.split("; ");
-    QString name = liste.at(0);
-    QString bem = "";
-    if (liste.length() > 1) {
-        bem = liste.at(1);
-    }
-
-    if (bem.toUpper().contains("EXTERN")) {
-        fahrtag->removePerson(name);
-    } else if (!fahrtag->getPersonal()->personExists(name)) {
-    } else {
-
-        Person *person = fahrtag->getPersonal()->getPerson(name);
-        name = person->getName();
-        person->removeActivity(fahrtag);
-        fahrtag->removePerson(person);
-    }
-    QListWidgetItem *item = ui->listZf->currentItem();
-    if (listeMitNamen->contains(item)) {
-        listeMitNamen->remove(item);
-    }
-    if (listToTable->contains(item)) {
-        ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
-        listToTable->remove(item);
-    }
     deleteItemFromList(ui->listZf, ui->buttonZfDelete);
 }
 void FahrtagWindow::on_checkZf_clicked(bool checked)
@@ -494,65 +433,7 @@ void FahrtagWindow::on_listZub_itemChanged(QListWidgetItem *item)
 {
     if (nehme) {
         nehme = false;
-        // Laden der Informationen zur geänderten Person
-        QString text = item->text();
-        QStringList liste = text.split(QRegExp("\\s*;\\s*"));
-        QString name = liste.at(0);
-        QString bem = "";
-        if (liste.length() > 1) {
-            bem = liste.at(1);
-        }
-        AActivity::Category kat = AActivity::Zub;
-        Person *person;
-
-        if (bem.toUpper().contains("EXTERN")) {
-            person = new Person(name);
-            person->addActivity(fahrtag, kat);
-            fahrtag->addPerson(person, bem, QTime(0,0), QTime(0,0), "Zub");
-
-            if (listeMitNamen->contains(item)) {
-                fahrtag->removePerson(listeMitNamen->value(item));
-                listeMitNamen->remove(item);
-                ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
-                namen->remove(name);
-            }
-            nehme = true;
-            return;
-        } else if (!fahrtag->getPersonal()->personExists(name)) {
-            QMessageBox::information(this, "Person nicht gefunden", "Die eingegebene Person konnte nicht gefunden werden!");
-            nehme = true;
-            return;
-        } else {
-            person = fahrtag->getPersonal()->getPerson(name);
-            // Prüfen, ob die Person die Qualifikationen hat
-            if (! person->getAusbildungRangierer()) {
-                kat = AActivity::Begleiter;
-            }
-        }
-        // Die Person ist in Ordnung und kann jetzt übernommen werden
-        name = person->getName();
-        person->addActivity(fahrtag, kat);
-
-        if (listeMitNamen->contains(item)) {
-            // Zeile war schon vorhanden und kann jetzt angepasst werden
-            QString nameAlt = listeMitNamen->value(item);
-            fahrtag->removePerson(nameAlt); // Alte Person von Fahrtag lösen
-            listeMitNamen->insert(item, name); // den neuen Namen der Person speichern, der alte wird jetzt nicht mehr benötigt
-            listToTable->value(item)->setText(name); // der Name der person in der Tabelle wird angepasst
-        } else {
-            listeMitNamen->insert(item, name);
-            fahrtag->addPerson(person, bem, QTime(0,0), QTime(0,0), AActivity::getStringFromCategory(kat));
-            // Zeile für die Person in die Tabelle einfügen
-            ui->tablePersonen->insertRow(0);
-            QTableWidgetItem *zelleName = new QTableWidgetItem(name);
-            zelleName->setFlags(Qt::NoItemFlags);
-            ui->tablePersonen->setItem(0,0,zelleName);
-            QTableWidgetItem *zelleAufgabe = new QTableWidgetItem(AActivity::getStringFromCategory(kat));
-            zelleAufgabe->setFlags(Qt::NoItemFlags);
-            ui->tablePersonen->setItem(0,3,zelleAufgabe);
-            listToTable->insert(item, zelleName);
-            namen->insert(name);
-        }
+        itemChanged(item, AActivity::Zub);
         nehme = true;
     }
 }
@@ -562,33 +443,6 @@ void FahrtagWindow::on_buttonZubAdd_clicked()
 }
 void FahrtagWindow::on_buttonZubDelete_clicked()
 {
-    if (ui->listZub->currentItem() == nullptr) return;
-    QString text = ui->listZub->currentItem()->text();
-    QStringList liste = text.split("; ");
-    QString name = liste.at(0);
-    QString bem = "";
-    if (liste.length() > 1) {
-        bem = liste.at(1);
-    }
-
-    if (bem.toUpper().contains("EXTERN")) {
-        fahrtag->removePerson(name);
-    } else if (!fahrtag->getPersonal()->personExists(name)) {
-    } else {
-
-        Person *person = fahrtag->getPersonal()->getPerson(name);
-        name = person->getName();
-        person->removeActivity(fahrtag);
-        fahrtag->removePerson(person);
-    }
-    QListWidgetItem *item = ui->listZub->currentItem();
-    if (listeMitNamen->contains(item)) {
-        listeMitNamen->remove(item);
-    }
-    if (listToTable->contains(item)) {
-        ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
-        listToTable->remove(item);
-    }
     deleteItemFromList(ui->listZub, ui->buttonZubDelete);
 }
 void FahrtagWindow::on_checkZub_clicked(bool checked)
@@ -600,61 +454,7 @@ void FahrtagWindow::on_listService_itemChanged(QListWidgetItem *item)
 {
     if (nehme) {
         nehme = false;
-        // Laden der Informationen zur geänderten Person
-        QString text = item->text();
-        QStringList liste = text.split("; ");
-        QString name = liste.at(0);
-        QString bem = "";
-        if (liste.length() > 1) {
-            bem = liste.at(1);
-        }
-        AActivity::Category kat = AActivity::Service;
-        Person *person;
-
-        if (bem.contains("Extern")) {
-            person = new Person(name);
-            person->addActivity(fahrtag, kat);
-            fahrtag->addPerson(person, bem, QTime(0,0), QTime(0,0), "Service");
-
-            if (listeMitNamen->contains(item)) {
-                fahrtag->removePerson(listeMitNamen->value(item));
-                listeMitNamen->remove(item);
-                ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
-                namen->remove(name);
-            }
-            nehme = true;
-            return;
-        } else if (!fahrtag->getPersonal()->personExists(name)) {
-            QMessageBox::information(this, "Person nicht gefunden", "Die eingegebene Person konnte nicht gefunden werden!");
-            nehme = true;
-            return;
-        } else {
-            person = fahrtag->getPersonal()->getPerson(name);
-        }
-        // Die Person ist in Ordnung und kann jetzt übernommen werden
-        name = person->getName();
-        person->addActivity(fahrtag, kat);
-
-        if (listeMitNamen->contains(item)) {
-            // Zeile war schon vorhanden und kann jetzt angepasst werden
-            QString nameAlt = listeMitNamen->value(item);
-            fahrtag->removePerson(nameAlt); // Alte Person von Fahrtag lösen
-            listeMitNamen->insert(item, name); // den neuen Namen der Person speichern, der alte wird jetzt nicht mehr benötigt
-            listToTable->value(item)->setText(name); // der Name der person in der Tabelle wird angepasst
-        } else {
-            listeMitNamen->insert(item, name);
-            fahrtag->addPerson(person, bem, QTime(0,0), QTime(0,0), AActivity::getStringFromCategory(kat));
-            // Zeile für die Person in die Tabelle einfügen
-            ui->tablePersonen->insertRow(0);
-            QTableWidgetItem *zelleName = new QTableWidgetItem(name);
-            zelleName->setFlags(Qt::NoItemFlags);
-            ui->tablePersonen->setItem(0,0,zelleName);
-            QTableWidgetItem *zelleAufgabe = new QTableWidgetItem(AActivity::getStringFromCategory(kat));
-            zelleAufgabe->setFlags(Qt::NoItemFlags);
-            ui->tablePersonen->setItem(0,3,zelleAufgabe);
-            listToTable->insert(item, zelleName);
-            namen->insert(name);
-        }
+        itemChanged(item, AActivity::Service);
         nehme = true;
     }
 }
@@ -664,39 +464,6 @@ void FahrtagWindow::on_buttonServiceAdd_clicked()
 }
 void FahrtagWindow::on_buttonServiceDelete_clicked()
 {
-    if (ui->listService->currentItem() == nullptr) return;
-    QString text = ui->listService->currentItem()->text();
-    QString name = "";
-    QString bem = "";
-    if (text.contains("; ")) {
-        QStringList liste = text.split("; ");
-        QString name = liste.at(0);
-        QString bem = "";
-        if (liste.length() > 1) {
-            bem = liste.at(1);
-        }
-    } else {
-        name = text;
-    }
-
-    if (bem.contains("Extern")) {
-        fahrtag->removePerson(name);
-    } else if (!fahrtag->getPersonal()->personExists(name)) {
-    } else {
-
-        Person *person = fahrtag->getPersonal()->getPerson(name);
-        name = person->getName();
-        person->removeActivity(fahrtag);
-        fahrtag->removePerson(person);
-    }
-    QListWidgetItem *item = ui->listService->currentItem();
-    if (listeMitNamen->contains(item)) {
-        listeMitNamen->remove(item);
-    }
-    if (listToTable->contains(item)) {
-        ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
-        listToTable->remove(item);
-    }
     deleteItemFromList(ui->listService, ui->buttonServiceDelete);
 }
 void FahrtagWindow::on_checkService_clicked(bool checked)
