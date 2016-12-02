@@ -269,17 +269,17 @@
 <context>
     <name>CoreApplication</name>
     <message>
-        <location filename="coreapplication.cpp" line="79"/>
+        <location filename="coreapplication.cpp" line="78"/>
         <source>Neue Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="coreapplication.cpp" line="79"/>
+        <location filename="coreapplication.cpp" line="78"/>
         <source>Es ist Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="coreapplication.cpp" line="79"/>
+        <location filename="coreapplication.cpp" line="78"/>
         <source> des Programms verfügbar.
 Sie benutzen Version </source>
         <translation type="unfinished"></translation>
@@ -409,32 +409,32 @@ Sie benutzen Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="exportgesamt.ui" line="293"/>
+        <location filename="exportgesamt.ui" line="296"/>
         <source>Einzelansichten</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="exportgesamt.ui" line="300"/>
+        <location filename="exportgesamt.ui" line="303"/>
         <source>Listenansicht</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="exportgesamt.ui" line="343"/>
+        <location filename="exportgesamt.ui" line="346"/>
         <source>PDF-Datei</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="exportgesamt.ui" line="353"/>
+        <location filename="exportgesamt.ui" line="356"/>
         <source>Ausdruck</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="exportgesamt.ui" line="367"/>
+        <location filename="exportgesamt.ui" line="370"/>
         <source>Abbruch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="exportgesamt.ui" line="387"/>
+        <location filename="exportgesamt.ui" line="390"/>
         <source>Drucken</source>
         <translation type="unfinished"></translation>
     </message>
@@ -443,13 +443,13 @@ Sie benutzen Version </source>
     <name>FahrtagWindow</name>
     <message>
         <location filename="fahrtagwindow.ui" line="26"/>
-        <location filename="fahrtagwindow.ui" line="2084"/>
+        <location filename="fahrtagwindow.ui" line="2104"/>
         <source>Fahrtag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="61"/>
-        <location filename="fahrtagwindow.ui" line="1221"/>
+        <location filename="fahrtagwindow.ui" line="1241"/>
         <source>Personal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -488,7 +488,7 @@ Sie benutzen Version </source>
         <location filename="fahrtagwindow.ui" line="533"/>
         <location filename="fahrtagwindow.ui" line="536"/>
         <location filename="fahrtagwindow.ui" line="539"/>
-        <location filename="fahrtagwindow.ui" line="1231"/>
+        <location filename="fahrtagwindow.ui" line="1251"/>
         <source>Name hinzufügen</source>
         <translation type="unfinished"></translation>
     </message>
@@ -525,6 +525,10 @@ Sie benutzen Version </source>
         <location filename="fahrtagwindow.ui" line="269"/>
         <location filename="fahrtagwindow.ui" line="384"/>
         <location filename="fahrtagwindow.ui" line="570"/>
+        <location filename="fahrtagwindow.ui" line="970"/>
+        <location filename="fahrtagwindow.ui" line="1040"/>
+        <location filename="fahrtagwindow.ui" line="1095"/>
+        <location filename="fahrtagwindow.ui" line="1165"/>
         <source>-</source>
         <translation type="unfinished"></translation>
     </message>
@@ -668,472 +672,472 @@ Sie benutzen Version </source>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="940"/>
-        <location filename="fahrtagwindow.ui" line="1055"/>
+        <location filename="fahrtagwindow.ui" line="1065"/>
         <source>2201 SSWN-SOTW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="945"/>
-        <location filename="fahrtagwindow.ui" line="1060"/>
+        <location filename="fahrtagwindow.ui" line="1070"/>
         <source>2202 SOTW-SSWN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="950"/>
-        <location filename="fahrtagwindow.ui" line="1065"/>
+        <location filename="fahrtagwindow.ui" line="1075"/>
         <source>2203 SSWN-SOTW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="955"/>
-        <location filename="fahrtagwindow.ui" line="1070"/>
+        <location filename="fahrtagwindow.ui" line="1080"/>
         <source>2204 SOTW-SSWN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="960"/>
-        <location filename="fahrtagwindow.ui" line="1075"/>
+        <location filename="fahrtagwindow.ui" line="1085"/>
         <source>2205 SSWN-SOTW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="965"/>
-        <location filename="fahrtagwindow.ui" line="1080"/>
+        <location filename="fahrtagwindow.ui" line="1090"/>
         <source>2206 SOTW-SSWN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="980"/>
-        <location filename="fahrtagwindow.ui" line="1095"/>
+        <location filename="fahrtagwindow.ui" line="985"/>
+        <location filename="fahrtagwindow.ui" line="1110"/>
         <source>Schwarzerden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="985"/>
-        <location filename="fahrtagwindow.ui" line="1100"/>
+        <location filename="fahrtagwindow.ui" line="990"/>
+        <location filename="fahrtagwindow.ui" line="1115"/>
         <source>Oberkirchen (Süd)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="990"/>
-        <location filename="fahrtagwindow.ui" line="1105"/>
+        <location filename="fahrtagwindow.ui" line="995"/>
+        <location filename="fahrtagwindow.ui" line="1120"/>
         <source>Haupersweiler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="995"/>
-        <location filename="fahrtagwindow.ui" line="1110"/>
+        <location filename="fahrtagwindow.ui" line="1000"/>
+        <location filename="fahrtagwindow.ui" line="1125"/>
         <source>Osterbrücken</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1000"/>
-        <location filename="fahrtagwindow.ui" line="1115"/>
+        <location filename="fahrtagwindow.ui" line="1005"/>
+        <location filename="fahrtagwindow.ui" line="1130"/>
         <source>Marth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1005"/>
-        <location filename="fahrtagwindow.ui" line="1120"/>
+        <location filename="fahrtagwindow.ui" line="1010"/>
+        <location filename="fahrtagwindow.ui" line="1135"/>
         <source>Niederkirchen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1010"/>
-        <location filename="fahrtagwindow.ui" line="1125"/>
+        <location filename="fahrtagwindow.ui" line="1015"/>
+        <location filename="fahrtagwindow.ui" line="1140"/>
         <source>Werschweiler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1015"/>
-        <location filename="fahrtagwindow.ui" line="1130"/>
+        <location filename="fahrtagwindow.ui" line="1020"/>
+        <location filename="fahrtagwindow.ui" line="1145"/>
         <source>Dörrenbach</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1020"/>
-        <location filename="fahrtagwindow.ui" line="1135"/>
+        <location filename="fahrtagwindow.ui" line="1025"/>
+        <location filename="fahrtagwindow.ui" line="1150"/>
         <source>Fürth (Ostertal)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1025"/>
-        <location filename="fahrtagwindow.ui" line="1140"/>
+        <location filename="fahrtagwindow.ui" line="1030"/>
+        <location filename="fahrtagwindow.ui" line="1155"/>
         <source>Ottweiler-Wingertsweiher</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1030"/>
-        <location filename="fahrtagwindow.ui" line="1145"/>
+        <location filename="fahrtagwindow.ui" line="1035"/>
+        <location filename="fahrtagwindow.ui" line="1160"/>
         <source>Ottweiler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1038"/>
+        <location filename="fahrtagwindow.ui" line="1048"/>
         <source>Ausstieg:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1153"/>
+        <location filename="fahrtagwindow.ui" line="1173"/>
         <source>Sitzplätze</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1163"/>
+        <location filename="fahrtagwindow.ui" line="1183"/>
         <source>Sitzplätze in einem gültigen Format eingeben, z.B. 204: 1-4, 6; 208: 7-9</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1170"/>
+        <location filename="fahrtagwindow.ui" line="1190"/>
         <source>Sonstiges:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1190"/>
+        <location filename="fahrtagwindow.ui" line="1210"/>
         <source>Fahrräder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1200"/>
+        <location filename="fahrtagwindow.ui" line="1220"/>
         <source>Einsatzzeiten</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1248"/>
+        <location filename="fahrtagwindow.ui" line="1268"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1253"/>
+        <location filename="fahrtagwindow.ui" line="1273"/>
         <source>Beginn*</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1258"/>
+        <location filename="fahrtagwindow.ui" line="1278"/>
         <source>Ende*</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1263"/>
+        <location filename="fahrtagwindow.ui" line="1283"/>
         <source>Aufgabe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1271"/>
+        <location filename="fahrtagwindow.ui" line="1291"/>
         <source>wird benötigt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1278"/>
+        <location filename="fahrtagwindow.ui" line="1298"/>
         <source>Ende</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1299"/>
+        <location filename="fahrtagwindow.ui" line="1319"/>
         <source>* abweichend zur Oben angegebenen Zeit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1312"/>
+        <location filename="fahrtagwindow.ui" line="1332"/>
         <source>Name entfernen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1359"/>
+        <location filename="fahrtagwindow.ui" line="1379"/>
         <source>309, 221, 204, 208</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1364"/>
+        <location filename="fahrtagwindow.ui" line="1384"/>
         <source>309, 221, 204, 208, 202</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1369"/>
+        <location filename="fahrtagwindow.ui" line="1389"/>
         <source>309, 221, 204, 208, 202, 201</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1374"/>
+        <location filename="fahrtagwindow.ui" line="1394"/>
         <source>309, 221, 204, 217, 208, 202, 201</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1379"/>
+        <location filename="fahrtagwindow.ui" line="1399"/>
         <source>309, 221, 204, 217</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1384"/>
+        <location filename="fahrtagwindow.ui" line="1404"/>
         <source>309, 221, 217</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1392"/>
+        <location filename="fahrtagwindow.ui" line="1412"/>
         <source>Anlass</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1417"/>
+        <location filename="fahrtagwindow.ui" line="1437"/>
         <source>Dienstbeginn sonst</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1427"/>
+        <location filename="fahrtagwindow.ui" line="1447"/>
         <source>Art</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1480"/>
+        <location filename="fahrtagwindow.ui" line="1500"/>
         <source>Dienstbeginn Tf, Tb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1496"/>
+        <location filename="fahrtagwindow.ui" line="1516"/>
         <source>Wichtig</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="fahrtagwindow.ui" line="1542"/>
-        <location filename="fahrtagwindow.ui" line="1825"/>
-        <source>05</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="fahrtagwindow.ui" line="1547"/>
-        <location filename="fahrtagwindow.ui" line="1830"/>
-        <source>06</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="fahrtagwindow.ui" line="1552"/>
-        <location filename="fahrtagwindow.ui" line="1835"/>
-        <source>07</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="fahrtagwindow.ui" line="1557"/>
-        <location filename="fahrtagwindow.ui" line="1840"/>
-        <source>08</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="1562"/>
         <location filename="fahrtagwindow.ui" line="1845"/>
-        <source>09</source>
+        <source>05</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="1567"/>
         <location filename="fahrtagwindow.ui" line="1850"/>
-        <source>10</source>
+        <source>06</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="1572"/>
         <location filename="fahrtagwindow.ui" line="1855"/>
-        <source>11</source>
+        <source>07</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="1577"/>
         <location filename="fahrtagwindow.ui" line="1860"/>
-        <source>12</source>
+        <source>08</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="1582"/>
         <location filename="fahrtagwindow.ui" line="1865"/>
-        <source>13</source>
+        <source>09</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="1587"/>
         <location filename="fahrtagwindow.ui" line="1870"/>
-        <source>14</source>
+        <source>10</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="1592"/>
-        <location filename="fahrtagwindow.ui" line="1686"/>
         <location filename="fahrtagwindow.ui" line="1875"/>
-        <location filename="fahrtagwindow.ui" line="1969"/>
-        <source>15</source>
+        <source>11</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="1597"/>
         <location filename="fahrtagwindow.ui" line="1880"/>
-        <source>16</source>
+        <source>12</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="1602"/>
         <location filename="fahrtagwindow.ui" line="1885"/>
-        <source>17</source>
+        <source>13</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="1607"/>
         <location filename="fahrtagwindow.ui" line="1890"/>
-        <source>18</source>
+        <source>14</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="1612"/>
+        <location filename="fahrtagwindow.ui" line="1706"/>
         <location filename="fahrtagwindow.ui" line="1895"/>
-        <source>19</source>
+        <location filename="fahrtagwindow.ui" line="1989"/>
+        <source>15</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="fahrtagwindow.ui" line="1617"/>
         <location filename="fahrtagwindow.ui" line="1900"/>
+        <source>16</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="fahrtagwindow.ui" line="1622"/>
+        <location filename="fahrtagwindow.ui" line="1905"/>
+        <source>17</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="fahrtagwindow.ui" line="1627"/>
+        <location filename="fahrtagwindow.ui" line="1910"/>
+        <source>18</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="fahrtagwindow.ui" line="1632"/>
+        <location filename="fahrtagwindow.ui" line="1915"/>
+        <source>19</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="fahrtagwindow.ui" line="1637"/>
+        <location filename="fahrtagwindow.ui" line="1920"/>
         <source>20</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1643"/>
-        <location filename="fahrtagwindow.ui" line="1926"/>
+        <location filename="fahrtagwindow.ui" line="1663"/>
+        <location filename="fahrtagwindow.ui" line="1946"/>
         <source>:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1681"/>
-        <location filename="fahrtagwindow.ui" line="1964"/>
+        <location filename="fahrtagwindow.ui" line="1701"/>
+        <location filename="fahrtagwindow.ui" line="1984"/>
         <source>00</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1691"/>
-        <location filename="fahrtagwindow.ui" line="1974"/>
+        <location filename="fahrtagwindow.ui" line="1711"/>
+        <location filename="fahrtagwindow.ui" line="1994"/>
         <source>30</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="1696"/>
-        <location filename="fahrtagwindow.ui" line="1979"/>
+        <location filename="fahrtagwindow.ui" line="1716"/>
+        <location filename="fahrtagwindow.ui" line="1999"/>
         <source>45</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2002"/>
+        <location filename="fahrtagwindow.ui" line="2022"/>
         <source>Wagenreihung</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2012"/>
+        <location filename="fahrtagwindow.ui" line="2032"/>
         <source>Datum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2039"/>
+        <location filename="fahrtagwindow.ui" line="2059"/>
         <source>Gesellschaftssonderzug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2049"/>
+        <location filename="fahrtagwindow.ui" line="2069"/>
         <source>Museumszug mit ELF Schnupperkurs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2059"/>
+        <location filename="fahrtagwindow.ui" line="2079"/>
         <source>Bahnhofsfest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2101"/>
+        <location filename="fahrtagwindow.ui" line="2121"/>
         <source>Schließen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2104"/>
+        <location filename="fahrtagwindow.ui" line="2124"/>
         <source>Ctrl+W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2112"/>
+        <location filename="fahrtagwindow.ui" line="2132"/>
         <source>Löschen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2115"/>
+        <location filename="fahrtagwindow.ui" line="2135"/>
         <source>Ctrl+Backspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2120"/>
+        <location filename="fahrtagwindow.ui" line="2140"/>
         <source>Drucken ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2123"/>
+        <location filename="fahrtagwindow.ui" line="2143"/>
         <source>Ctrl+P</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2128"/>
+        <location filename="fahrtagwindow.ui" line="2148"/>
         <source>Test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2133"/>
+        <location filename="fahrtagwindow.ui" line="2153"/>
         <source>Als PDF sichern ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2136"/>
+        <location filename="fahrtagwindow.ui" line="2156"/>
         <source>Ctrl+Shift+P</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2141"/>
+        <location filename="fahrtagwindow.ui" line="2161"/>
         <source>Reservierungen drucken …</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.ui" line="2146"/>
+        <location filename="fahrtagwindow.ui" line="2166"/>
         <source>Reservierungen als PDF sichern …</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.cpp" line="78"/>
-        <location filename="fahrtagwindow.cpp" line="935"/>
+        <location filename="fahrtagwindow.cpp" line="77"/>
+        <location filename="fahrtagwindow.cpp" line="691"/>
         <source>Fehler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.cpp" line="78"/>
+        <location filename="fahrtagwindow.cpp" line="77"/>
         <source>Die Wagenreihung konnte nicht geändert werden. Da es Reservierungen in den weggefallenen Waggons gibt!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.cpp" line="933"/>
+        <location filename="fahrtagwindow.cpp" line="689"/>
         <source>Fertig</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.cpp" line="933"/>
+        <location filename="fahrtagwindow.cpp" line="689"/>
         <source>Die Sitzplätze wurden in </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.cpp" line="933"/>
+        <location filename="fahrtagwindow.cpp" line="689"/>
         <source> mSekunden verteilt.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.cpp" line="935"/>
+        <location filename="fahrtagwindow.cpp" line="691"/>
         <source>Es konnten nicht alle Reservierungen verteilt werden!
 Bitte prüfen Sie die Verteilung auf mögliche Fehler!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.cpp" line="1114"/>
+        <location filename="fahrtagwindow.cpp" line="924"/>
         <source>Hinweis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtagwindow.cpp" line="1114"/>
+        <location filename="fahrtagwindow.cpp" line="924"/>
         <source>Es kann unter Umständen sehr lange dauern, bis die &apos;perfekte&apos; Verteilung berechnet wird.
 Ihr Computer reagiert in dieser Zeit vielleicht nicht!
 Diese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutzen.</source>
@@ -1143,12 +1147,12 @@ Diese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutze
 <context>
     <name>FileIO</name>
     <message>
-        <location filename="fileio.cpp" line="28"/>
+        <location filename="fileio.cpp" line="29"/>
         <source>Datei öffnen ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fileio.cpp" line="39"/>
+        <location filename="fileio.cpp" line="40"/>
         <source>Datei speichern ...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1299,7 +1303,7 @@ Diese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutze
     </message>
     <message>
         <location filename="mainwindow.ui" line="322"/>
-        <location filename="mainwindow.cpp" line="185"/>
+        <location filename="mainwindow.cpp" line="173"/>
         <source>Über Einsatzplaner</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1329,63 +1333,63 @@ Diese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutze
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="125"/>
+        <location filename="mainwindow.cpp" line="113"/>
         <source>Ungesicherte Änderungen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="126"/>
+        <location filename="mainwindow.cpp" line="114"/>
         <source>Möchten Sie die Datei wirklich schließen?
 Ihre ungesicherten Änderungen gehen dann verloren!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="201"/>
-        <location filename="mainwindow.cpp" line="302"/>
-        <location filename="mainwindow.cpp" line="323"/>
+        <location filename="mainwindow.cpp" line="189"/>
+        <location filename="mainwindow.cpp" line="290"/>
+        <location filename="mainwindow.cpp" line="311"/>
         <source>AkO-Dateien (*.ako)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="245"/>
-        <location filename="mainwindow.cpp" line="307"/>
-        <location filename="mainwindow.cpp" line="350"/>
+        <location filename="mainwindow.cpp" line="233"/>
+        <location filename="mainwindow.cpp" line="295"/>
+        <location filename="mainwindow.cpp" line="338"/>
         <source>Fehler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="245"/>
-        <location filename="mainwindow.cpp" line="307"/>
-        <location filename="mainwindow.cpp" line="350"/>
+        <location filename="mainwindow.cpp" line="233"/>
+        <location filename="mainwindow.cpp" line="295"/>
+        <location filename="mainwindow.cpp" line="338"/>
         <source>Das speichern unter der angegebenen Adresse ist fehlgeschlagen!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="260"/>
+        <location filename="mainwindow.cpp" line="248"/>
         <source>Nicht kompatibel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="261"/>
+        <location filename="mainwindow.cpp" line="249"/>
         <source>Die Datei kann nicht mit dieser Version geöffnet werden.
 Das Dokument benötigt mindestens Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="262"/>
+        <location filename="mainwindow.cpp" line="250"/>
         <source>.
 Die aktuellste Version finden Sie auf der Webseite des Programms.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="265"/>
-        <location filename="mainwindow.cpp" line="311"/>
+        <location filename="mainwindow.cpp" line="253"/>
+        <location filename="mainwindow.cpp" line="299"/>
         <source>Übersicht</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="302"/>
-        <location filename="mainwindow.cpp" line="323"/>
+        <location filename="mainwindow.cpp" line="290"/>
+        <location filename="mainwindow.cpp" line="311"/>
         <source>Einsatzplan.ako</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1724,17 +1728,17 @@ Bitte lösen Sie diese Verbindung bevor Sie die Person löschen!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="preferencesdialog.cpp" line="30"/>
+        <location filename="preferencesdialog.cpp" line="28"/>
         <source>Fehler bei der Anfrage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="preferencesdialog.cpp" line="32"/>
+        <location filename="preferencesdialog.cpp" line="30"/>
         <source>Sie verwenden Version %1. Es ist Version %2 verfügbar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="preferencesdialog.cpp" line="34"/>
+        <location filename="preferencesdialog.cpp" line="32"/>
         <source>Sie verwenden bereits die neuste Version %1.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1742,13 +1746,13 @@ Bitte lösen Sie diese Verbindung bevor Sie die Person löschen!</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="fahrtag.cpp" line="78"/>
+        <location filename="fahrtag.cpp" line="71"/>
         <source>dddd dd.MM.yyyy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="fahrtag.cpp" line="78"/>
-        <location filename="fahrtag.cpp" line="87"/>
+        <location filename="fahrtag.cpp" line="71"/>
+        <location filename="fahrtag.cpp" line="80"/>
         <source>Fahrtag</source>
         <translation type="unfinished"></translation>
     </message>

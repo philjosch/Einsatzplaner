@@ -59,6 +59,7 @@ public:
     virtual Infos *getIndividual(Person *person) = 0;
     ManagerPersonal::Misstake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, QString aufgabe);
     ManagerPersonal::Misstake addPerson(QString p, QString bemerkung, QTime start, QTime ende, QString aufgabe);
+    void updatePersonBemerkung(Person *p, QString bemerkung);
     bool removePerson(Person *p);
     bool removePerson(QString p);
     void setPersonen(QMap<Person *, Infos *> *value);
@@ -85,7 +86,7 @@ protected:
 
     ManagerPersonal *personal;
 
-    QString listToString(QMap<Person*, Infos*> *liste, QString seperator);
+    QString listToString(QMap<Person*, Infos*> *liste, QString seperator, bool aufgabe=false);
 };
 
 #endif // AACTIVITY_H

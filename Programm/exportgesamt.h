@@ -17,6 +17,9 @@ public:
     explicit ExportGesamt(Manager *m, QWidget *parent = 0);
     ~ExportGesamt();
 
+    void reload();
+    void hardReload();
+
 private slots:
     void on_pushDrucken_clicked();
 
@@ -31,6 +34,8 @@ private slots:
     void on_comboFahrtag_currentIndexChanged(int index);
 
     void on_checkActivity_clicked(bool checked);
+
+    void on_pushButton_clicked();
 
 private:
     Ui::ExportGesamt *ui;

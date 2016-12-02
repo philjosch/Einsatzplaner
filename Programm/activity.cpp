@@ -82,7 +82,10 @@ QString Activity::getHtmlForSingleView()
             html += (info->beginn != QTime(0,0) ? info->beginn.toString("hh:mm") : " ");
             html += "</td><td>";
             html += (info->ende != QTime(0,0) ? info->ende.toString("hh:mm") : " ");
-            html += "</td><td>"+info->aufgabe+"</td></tr>";
+            if (info->aufgabe == "")
+                html += "</td><td>"+AActivity::getStringFromCategory(info->kategorie)+"</td></tr>";
+            else
+                html += "</td><td>"+info->aufgabe+"</td></tr>";
         }
         html += "</tbody></table><p>* Abweichend von obigen Zeiten!</p>";
     }
@@ -154,7 +157,7 @@ QString Activity::getHtmlForTableView()
     }
     if (sonstige.size() > 0) {
         html += "<ul><li>";
-        html += listToString(&sonstige, "</li><li>");
+        html += listToString(&sonstige, "</li><li>", true);
         html += "</li></ul>";
     } else {
         html += "<br/>";

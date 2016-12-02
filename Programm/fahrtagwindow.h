@@ -107,12 +107,13 @@ private:
     void loadData();
 
     // Personal Verwaltung
-    QMap<QListWidgetItem *, QString> *listeMitNamen; // Liste mit den Namen, die in der Tabelle verwaltet werden
+    QMap<QListWidgetItem *, QString> *listeMitNamen; // Liste mit den Namen, die in den Listen verwaltet werden
     QMap<QListWidgetItem*, QTableWidgetItem*> *listToTable; // Mapt von den Listen auf den Tabelleneintrag der Person
     QSet<QString> *namen;
 
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);
+    void itemChanged(QListWidgetItem *item, AActivity::Category kat, bool isExtern=false);
 
     // Reservierungen
     QMap<Reservierung*, QListWidgetItem*> *resToItem;
