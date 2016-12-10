@@ -7,6 +7,8 @@ calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die P
 			ausZf		-> Ausbildung Zugführer
 			ausRang		-> Ausbildung Rangierer
 			strecke		-> strecke von zuhause zum Bahnhof
+			additional (map) -> hier werden zusaetzliche Stunden fuer die einzelnen kategorien angegeben
+				AActvity::Category |--> int	-> die anzahl in Minuten, die extra angegeben werden
 	activities (array)	-> die einzelnen aktivitäten, gespeichert in Objekten
 		~Für Arbeitseinsatz~
 		datum (string)

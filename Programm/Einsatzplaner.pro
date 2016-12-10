@@ -12,7 +12,7 @@ TARGET = Einsatzplaner
 TEMPLATE = app
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
+    mainwindow.cpp \
     person.cpp \
     managerpersonal.cpp \
     activity.cpp \
@@ -57,7 +57,6 @@ HEADERS  += mainwindow.h \
     preferencesdialog.h
 
 FORMS    += mainwindow.ui \
-#    managerreservierungen.ui \
     fahrtagwindow.ui \
     activitywindow.ui \
     personalwindow.ui \
@@ -78,11 +77,11 @@ win32 {
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
     QMAKE_TARGET_COPYRIGHT = Rechte bei Philipp Schepper 2016
     QMAKE_TARGET_PRODUCT = Einsatzplaner
-    VERSION = 1.0.3.1
+    VERSION = 1.1.0.1
 }
 
 macx {
-    VERSION = 1.0.3
+    VERSION = 1.1.0
     OTHER_FILES += Info.plist ../Icon/keks.icns
     QMAKE_INFO_PLIST = Info.plist
     DISTFILES += Info.plist
