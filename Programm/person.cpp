@@ -7,9 +7,10 @@
 #include <QDebug>
 #include <QVariant>
 
-Person::Person(QString name) : QObject()
+Person::Person(QString vorname, QString nachname)
 {
-    this->name = name;
+    this->vorname = vorname;
+    this->nachname = nachname;
     strecke = 0;
     this->ausbildungTf = false;
     this->ausbildungZf = false;
@@ -22,6 +23,57 @@ Person::Person(QString name) : QObject()
     timeWerkstatt = 0.f;
     timeSum = 0.f;
     sumKilometer = 0.f;
+    additionalTimeBuero = 0.f;
+    additionalTimeService = 0.f;
+    additionalTimeSonstiges = 0.f;
+    additionalTimeTf = 0.f;
+    additionalTimeVorbereiten = 0.f;
+    additionalTimeWerkstatt = 0.f;
+    additionalTimeZf = 0.f;
+    additionalTimeZub = 0.f;
+    valuesInvalid = true;
+
+    activities = new QMap<AActivity *, AActivity::Category>();
+}
+
+Person::Person(QString name) : QObject()
+{
+    QString vorname = "";
+    QString nachname = "";
+    if (! name.contains(" ")) {
+        nachname = name;
+    } else {
+        QStringList liste = name.split(" ");
+        for(int i = 0; i < liste.length()-1; i++) {
+            vorname += liste.at(i);
+            if (i < liste.length() - 2) {
+                vorname += " ";
+            }
+        }
+        nachname = liste.last();
+    }
+    this->vorname = vorname;
+    this->nachname = nachname;
+    strecke = 0;
+    this->ausbildungTf = false;
+    this->ausbildungZf = false;
+    this->ausbildungRangierer = false;
+    timeTf = 0.f;
+    timeZf = 0.f;
+    timeZub = 0.f;
+    timeService = 0.f;
+    timeBuero = 0.f;
+    timeWerkstatt = 0.f;
+    timeSum = 0.f;
+    sumKilometer = 0.f;
+    additionalTimeBuero = 0.f;
+    additionalTimeService = 0.f;
+    additionalTimeSonstiges = 0.f;
+    additionalTimeTf = 0.f;
+    additionalTimeVorbereiten = 0.f;
+    additionalTimeWerkstatt = 0.f;
+    additionalTimeZf = 0.f;
+    additionalTimeZub = 0.f;
     valuesInvalid = true;
 
     activities = new QMap<AActivity *, AActivity::Category>();
@@ -30,7 +82,28 @@ Person::Person(QString name) : QObject()
 QJsonObject Person::toJson()
 {
     QJsonObject o;
-    o.insert("name", name);
+    o.insert("vorname", vorname);
+    o.insert("nachname", nachname);
+    o.insert("ausTf", ausbildungTf);
+    o.insert("ausZf", ausbildungZf);
+    o.insert("ausRang", ausbildungRangierer);
+    o.insert("strecke", strecke);
+    o.insert("additionalTf", additionalTimeTf);
+    o.insert("additionalZf", additionalTimeZf);
+    o.insert("additionalZub", additionalTimeZub);
+    o.insert("additionalService", additionalTimeService);
+    o.insert("additionalBuero", additionalTimeBuero);
+    o.insert("additionalWerkstatt", additionalTimeWerkstatt);
+    o.insert("additionalVorbereiten", additionalTimeVorbereiten);
+    o.insert("additionalSonstiges", additionalTimeSonstiges);
+    return o;
+}
+
+QJsonObject Person::personalToJson()
+{
+    QJsonObject o;
+    o.insert("vorname", vorname);
+    o.insert("nachname", nachname);
     o.insert("ausTf", ausbildungTf);
     o.insert("ausZf", ausbildungZf);
     o.insert("ausRang", ausbildungRangierer);
@@ -40,11 +113,24 @@ QJsonObject Person::toJson()
 
 Person *Person::fromJson(QJsonObject o)
 {
-    Person *p = new Person(o.value("name").toString());
+    Person *p;
+    if (o.contains("name")) {
+        p = new Person(o.value("name").toString());
+    } else {
+        p = new Person(o.value("vorname").toString(), o.value("nachname").toString());
+    }
     p->ausbildungRangierer = o.value("ausRang").toBool();
     p->ausbildungZf = o.value("ausZf").toBool();
     p->ausbildungTf = o.value("ausTf").toBool();
     p->strecke = o.value("strecke").toInt();
+    p->additionalTimeTf = o.value("additionalTf").toDouble(0);
+    p->additionalTimeZf = o.value("additionalZf").toDouble(0);
+    p->additionalTimeZub = o.value("additionalZub").toDouble(0);
+    p->additionalTimeBuero = o.value("additionalBuero").toDouble(0);
+    p->additionalTimeService = o.value("additionalService").toDouble(0);
+    p->additionalTimeWerkstatt = o.value("additionalWerkstatt").toDouble(0);
+    p->additionalTimeVorbereiten = o.value("additionalVorbereiten").toDouble(0);
+    p->additionalTimeSonstiges = o.value("additionalSonstiges").toDouble(0);
     return p;
 }
 
@@ -127,15 +213,15 @@ void Person::berechne()
             if (cat != AActivity::Buero) sumKilometer += 2*strecke;
         }
     }
-    timeTf = timeTf/(3600000);
-    timeZf = timeZf/(3600000);
-    timeZub = timeZub/(3600000);
-    timeService = timeService/(3600000);
-    timeBuero = timeBuero/(3600000);
-    timeWerkstatt = timeWerkstatt/(3600000);
-    timeVorbereiten = timeVorbereiten/3600000;
-    timeSonstiges = timeSonstiges/3600000;
-    timeSum = timeSum/(3600000);
+    timeTf = timeTf/(3600000) + additionalTimeTf;
+    timeZf = timeZf/(3600000) + additionalTimeZf;
+    timeZub = timeZub/(3600000) + additionalTimeZub;
+    timeService = timeService/(3600000) + additionalTimeService;
+    timeBuero = timeBuero/(3600000) + additionalTimeBuero;
+    timeWerkstatt = timeWerkstatt/(3600000) + additionalTimeWerkstatt;
+    timeVorbereiten = timeVorbereiten/3600000 + additionalTimeVorbereiten;
+    timeSonstiges = timeSonstiges/3600000 + additionalTimeSonstiges;
+    timeSum = timeSum/(3600000) + additionalTimeTf + additionalTimeZf + additionalTimeZub + additionalTimeService + additionalTimeBuero + additionalTimeWerkstatt + additionalTimeVorbereiten + additionalTimeSonstiges;
 
     valuesInvalid = false;
 }
@@ -164,37 +250,42 @@ QListIterator<AActivity *> *Person::getActivities()
 
 QString Person::getName() const
 {
-    return name;
+    QString nameKomplett;
+    if (vorname != "") nameKomplett = vorname + " " + nachname;
+    else nameKomplett = nachname;
+    return nameKomplett;
 }
 
 QString Person::getVorname() const
 {
-    if (! name.contains(" ")) return name;
-    QStringList liste = name.split(" ");
-    QString vorname = "";
-    for(int i = 0; i < liste.length()-1; i++) {
-        vorname += liste.at(i);
-        if (i < liste.length() - 2) {
-            vorname += " ";
-        }
-    }
     return vorname;
+}
+void Person::setVorname(const QString &value)
+{
+    QString old = getName();
+    vorname = value;
+    emit nameChanged(this, old);
 }
 
 QString Person::getNachname() const
 {
-    if (! name.contains(" ")) return name;
-    QStringList liste = name.split(" ");
-    return liste.last();
+    return nachname;
+}
+void Person::setNachname(const QString &value)
+{
+    QString old = getName();
+    nachname = value;
+    emit nameChanged(this, old);
 }
 
+/*
 void Person::setName(const QString &value)
 {
     QString old = name;
     name = value;
     emit nameChanged(this, old);
 }
-
+*/
 QString Person::getHtmlForTableView(QList<bool> *liste)
 {
     //  0: summe gesamt
@@ -217,7 +308,7 @@ QString Person::getHtmlForTableView(QList<bool> *liste)
     } else {
         html = "<tr style='background-color:"+PersonalWindow::nichtGenugStunden+";'>";
     }
-    html += "<td>"+name+"</td>";
+    html += "<td>"+getName()+"</td>";
     if (liste->at(0))
         html += "<td>"+QString::number(getTimeSum())+"</td>";
     if (liste->at(1))
@@ -242,6 +333,86 @@ QString Person::getHtmlForTableView(QList<bool> *liste)
         html += "<td>"+QString::number(getSumKilometer())+"</td>";
     html += "</tr>";
     return html;
+}
+
+double Person::getAdditionalTimeTf() const
+{
+    return additionalTimeTf;
+}
+void Person::setAdditionalTimeTf(double value)
+{
+    additionalTimeTf = value;
+    valuesInvalid = true;
+}
+
+double Person::getAdditionalTimeZf() const
+{
+    return additionalTimeZf;
+}
+void Person::setAdditionalTimeZf(double value)
+{
+    additionalTimeZf = value;
+    valuesInvalid = true;
+}
+
+double Person::getAdditionalTimeZub() const
+{
+    return additionalTimeZub;
+}
+void Person::setAdditionalTimeZub(double value)
+{
+    additionalTimeZub = value;
+    valuesInvalid = true;
+}
+
+double Person::getAdditionalTimeService() const
+{
+    return additionalTimeService;
+}
+void Person::setAdditionalTimeService(double value)
+{
+    additionalTimeService = value;
+    valuesInvalid = true;
+}
+
+double Person::getAdditionalTimeBuero() const
+{
+    return additionalTimeBuero;
+}
+void Person::setAdditionalTimeBuero(double value)
+{
+    additionalTimeBuero = value;
+    valuesInvalid = true;
+}
+
+double Person::getAdditionalTimeWerkstatt() const
+{
+    return additionalTimeWerkstatt;
+}
+void Person::setAdditionalTimeWerkstatt(double value)
+{
+    additionalTimeWerkstatt = value;
+    valuesInvalid = true;
+}
+
+double Person::getAdditionalTimeVorbereiten() const
+{
+    return additionalTimeVorbereiten;
+}
+void Person::setAdditionalTimeVorbereiten(double value)
+{
+    additionalTimeVorbereiten = value;
+    valuesInvalid = true;
+}
+
+double Person::getAdditionalTimeSonstiges() const
+{
+    return additionalTimeSonstiges;
+}
+void Person::setAdditionalTimeSonstiges(double value)
+{
+    additionalTimeSonstiges = value;
+    valuesInvalid = true;
 }
 
 double Person::getTimeTf()
