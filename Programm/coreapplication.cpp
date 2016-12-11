@@ -12,12 +12,15 @@
 
 
 QString CoreApplication::aktuelleVersion = "0.0.0";
+QString CoreApplication::aktuelleVersionKurz = "0.0";
 QUrl CoreApplication::urlDownload = QUrl("http://bahn.philipp-schepper.de/#downloads");
 QUrl CoreApplication::urlVersion = QUrl("http://bahn.philipp-schepper.de/version.txt");
 
 CoreApplication::CoreApplication(int &argc, char **argv, QString version) : QApplication(argc, argv)
 {
     aktuelleVersion = version;
+    QStringList l = version.split(".");
+    aktuelleVersionKurz = l.at(0)+"."+l.at(1);
 
     QCoreApplication::setOrganizationName("Philipp Schepper");
     QCoreApplication::setOrganizationDomain("philipp-schepper.de");
@@ -70,6 +73,27 @@ bool CoreApplication::versionGreater(QString version)
     return versionGreater(version, aktuelleVersion);
 }
 
+bool CoreApplication::versionGreaterMajor(QString firstV, QString secondV)
+{
+    if ((! firstV.contains(".")) || (! secondV.contains("."))) return false;
+    QStringList first = firstV.split(".");
+    QStringList second = secondV.split(".");
+
+    if (first.at(0) > second.at(0)) {
+        return true;
+    }
+    if ((first.at(0) == second.at(0)) && (first.at(1).toInt() > second.at(1).toInt())) {
+        return true;
+    }
+    return false;
+}
+
+bool CoreApplication::versionGreaterMajor(QString version)
+{
+    return versionGreaterMajor(version, aktuelleVersion);
+}
+
+
 void CoreApplication::checkVersion()
 {
     QString v = loadVersion();
@@ -84,6 +108,11 @@ void CoreApplication::checkVersion()
 QString CoreApplication::getAktuelleVersion()
 {
     return aktuelleVersion;
+}
+
+QString CoreApplication::getAktuelleVersionKurz()
+{
+    return aktuelleVersionKurz;
 }
 
 void CoreApplication::closeAllWindows()
