@@ -447,7 +447,12 @@ void PersonalWindow::print(QPrinter *p)
     QList<Person*> *liste = new QList<Person*>();
 
     for(int i = 0; i < ui->tabelleGesamt->rowCount(); i++) {
-        liste->append(manager->getPerson(ui->tabelleGesamt->item(i, 0)->text()+" "+ui->tabelleGesamt->item(i, 1)->text()));
+        QString name = ui->tabelleGesamt->item(i, 0)->text();
+        if (name != "") name += " ";
+        name += ui->tabelleGesamt->item(i, 1)->text();
+        Person *pers = manager->getPerson(name);
+        if (pers != nullptr)
+            liste->append(pers);
     }
     Export::printPersonen(liste, anzeige, p);
 }
