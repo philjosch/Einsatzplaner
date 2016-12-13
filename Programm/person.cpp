@@ -172,6 +172,7 @@ int Person::getStrecke() const
 void Person::setStrecke(int value)
 {
     strecke = value;
+    valuesInvalid = true;
 }
 
 void Person::berechne()
