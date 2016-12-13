@@ -16,13 +16,16 @@ public:
     ~ManagerPersonal();
 
     QJsonObject toJson();
+    QJsonObject personalToJson();
     void fromJson(QJsonObject o);
 
     enum Misstake { OK, PersonNichtGefunden, FalscheQualifikation, SonstigerFehler};
 
     Person *getPerson(QString name);
     bool personExists(QString name); // Prüft, ob die Person im System registriert ist
+    bool personExists(QString vorname, QString nachname); // Prüft, ob die Person im System registriert ist
 
+    Person *registerPerson(QString vorname, QString nachname); // Fügt die Person in das System ein
     Person *registerPerson(QString name); // Fügt die Person in das System ein
     bool removePerson(QString name);
     bool removePerson(Person *p);
