@@ -342,6 +342,21 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="suffix">
+               <string> km</string>
+              </property>
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
              </widget>
             </item>
             <item row="1" column="0">
@@ -350,7 +365,7 @@
                <string>Die Entfernung zum Heimatbahnhof. Wird benötigt, um die Strecke auszurechnen.</string>
               </property>
               <property name="text">
-               <string>Km bis Bahnhof</string>
+               <string>Entfernung</string>
               </property>
              </widget>
             </item>

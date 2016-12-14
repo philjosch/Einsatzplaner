@@ -86,6 +86,7 @@ int Person::getStrecke() const
 void Person::setStrecke(int value)
 {
     strecke = value;
+    valuesInvalid = true;
 }
 
 void Person::berechne()
@@ -169,7 +170,7 @@ QString Person::getName() const
 
 QString Person::getVorname() const
 {
-    if (! name.contains(" ")) return name;
+    if (! name.contains(" ")) return "";
     QStringList liste = name.split(" ");
     QString vorname = "";
     for(int i = 0; i < liste.length()-1; i++) {
