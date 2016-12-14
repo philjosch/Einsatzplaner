@@ -55,31 +55,19 @@ PersonalWindow::~PersonalWindow()
 
 void PersonalWindow::showPerson(Person *p)
 {
-    aktuellePerson = p;
-
     enabled = false;
-    ui->lineVorname->setEnabled(true);
-    ui->lineNachname->setEnabled(true);
+    ui->lineName->setEnabled(true);
     ui->spinKm->setEnabled(true);
     ui->checkRangierer->setEnabled(true);
     ui->checkTf->setEnabled(true);
     ui->checkZf->setEnabled(true);
     ui->tabelle->setEnabled(true);
-    ui->lineVorname->setText(p->getVorname());
-    ui->lineNachname->setText(p->getNachname());
+    aktuellePerson = p;
+    ui->lineName->setText(p->getName());
     ui->spinKm->setValue(p->getStrecke());
     ui->checkTf->setChecked(p->getAusbildungTf());
     ui->checkZf->setChecked(p->getAusbildungZf());
     ui->checkRangierer->setChecked(p->getAusbildungRangierer());
-    // Zusätzliche Zeiten aktivieren
-    ui->doubleBuero->setEnabled(true);
-    ui->doubleService->setEnabled(true);
-    ui->doubleWerkstatt->setEnabled(true);
-    ui->doubleTf->setEnabled(true);
-    ui->doubleZf->setEnabled(true);
-    ui->doubleZub->setEnabled(true);
-    ui->doubleZugVorbereiten->setEnabled(true);
-    ui->doubleSonstiges->setEnabled(true);
 
     // Tabellendaten laden und einfügen
     while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
@@ -118,22 +106,10 @@ void PersonalWindow::showPerson(Person *p)
 
     ui->lineTf->setText(QString::number(p->getTimeTf()));
     ui->lineZf->setText(QString::number(p->getTimeZf()));
-    ui->lineZub->setText(QString::number(p->getTimeZub()));
     ui->lineService->setText(QString::number(p->getTimeService()));
-    ui->lineZugVorbereiten->setText(QString::number(p->getTimeVorbereiten()));
     ui->lineWerkstatt->setText(QString::number(p->getTimeWerkstatt()));
     ui->lineBuero->setText(QString::number(p->getTimeBuero()));
-    ui->lineSonstiges->setText(QString::number(p->getTimeSonstiges()));
     ui->lineGesamt->setText(QString::number(p->getTimeSum()));
-
-    ui->doubleTf->setValue(p->getAdditionalTimeTf());
-    ui->doubleZf->setValue(p->getAdditionalTimeZf());
-    ui->doubleZub->setValue(p->getAdditionalTimeZub());
-    ui->doubleService->setValue(p->getAdditionalTimeService());
-    ui->doubleZugVorbereiten->setValue(p->getAdditionalTimeVorbereiten());
-    ui->doubleWerkstatt->setValue(p->getAdditionalTimeWerkstatt());
-    ui->doubleBuero->setValue(p->getAdditionalTimeBuero());
-    ui->doubleSonstiges->setValue(p->getAdditionalTimeSonstiges());
 
     ui->lineStrecke->setText(QString::number(p->getSumKilometer()));
 
@@ -347,7 +323,7 @@ void PersonalWindow::refreshEinzel()
 
 void PersonalWindow::on_pushAdd_clicked()
 {
-    Person *p = manager->registerPerson("Unbenannt", "Unbekannt");
+    Person *p = manager->registerPerson("Unbenannt Unbekannt");
     if (p == nullptr) {
         return;
     }
@@ -362,30 +338,14 @@ void PersonalWindow::on_pushAdd_clicked()
     emit changed();
 }
 
-void PersonalWindow::on_lineVorname_textChanged(const QString &arg1)
+void PersonalWindow::on_lineName_textChanged(const QString &arg1)
 {
     if (enabled) {
-        // test, ob Person vorhanden ist
-        if (manager->personExists(arg1, aktuellePerson->getNachname())) {
+        if (manager->personExists(arg1)) {
             QMessageBox::information(this, tr("Name doppelt vergeben"), tr("Der eingegebene Namen ist bereits im System registriert.\nSomit kann keine zweite Personen den gleichen Namen haben!"));
         } else {
-            aktuellePerson->setVorname(arg1);
-            personToItem->value(aktuellePerson)->setText(aktuellePerson->getName());
-            ui->listWidget->sortItems();
-        }
-        emit changed();
-    }
-}
-
-void PersonalWindow::on_lineNachname_textChanged(const QString &arg1)
-{
-    if (enabled) {
-        // test, ob Person vorhanden ist
-        if (manager->personExists(aktuellePerson->getVorname(), arg1)) {
-            QMessageBox::information(this, tr("Name doppelt vergeben"), tr("Der eingegebene Namen ist bereits im System registriert.\nSomit kann keine zweite Personen den gleichen Namen haben!"));
-        } else {
-            aktuellePerson->setNachname(arg1);
-            personToItem->value(aktuellePerson)->setText(aktuellePerson->getName());
+            aktuellePerson->setName(arg1);
+            personToItem->value(aktuellePerson)->setText(arg1);
             ui->listWidget->sortItems();
         }
         emit changed();
@@ -446,8 +406,7 @@ void PersonalWindow::on_pushDelete_clicked()
         ui->listWidget->takeItem(ui->listWidget->row(i));
 
         if (ui->listWidget->count() == 0) {
-            ui->lineVorname->setEnabled(false);
-            ui->lineNachname->setEnabled(false);
+            ui->lineName->setEnabled(false);
             ui->spinKm->setEnabled(false);
             ui->checkRangierer->setEnabled(false);
             ui->checkTf->setEnabled(false);
@@ -568,84 +527,4 @@ void PersonalWindow::on_checkShowKilometer_clicked(bool checked)
 {
     anzeige->replace(10, checked);
     refreshGesamt();
-}
-
-void PersonalWindow::on_doubleTf_valueChanged(double arg1)
-{
-    if (enabled) {
-        aktuellePerson->setAdditionalTimeTf(arg1);
-        ui->lineTf->setText(QString::number(aktuellePerson->getTimeTf()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
-        emit changed();
-    }
-}
-
-void PersonalWindow::on_doubleZf_valueChanged(double arg1)
-{
-    if (enabled) {
-        aktuellePerson->setAdditionalTimeZf(arg1);
-        ui->lineZf->setText(QString::number(aktuellePerson->getTimeZf()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
-        emit changed();
-    }
-}
-
-void PersonalWindow::on_doubleZub_valueChanged(double arg1)
-{
-    if (enabled) {
-        aktuellePerson->setAdditionalTimeZub(arg1);
-        ui->lineZub->setText(QString::number(aktuellePerson->getTimeZub()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
-        emit changed();
-    }
-}
-
-void PersonalWindow::on_doubleService_valueChanged(double arg1)
-{
-    if (enabled) {
-        aktuellePerson->setAdditionalTimeService(arg1);
-        ui->lineService->setText(QString::number(aktuellePerson->getTimeService()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
-        emit changed();
-    }
-}
-
-void PersonalWindow::on_doubleZugVorbereiten_valueChanged(double arg1)
-{
-    if (enabled) {
-        aktuellePerson->setAdditionalTimeVorbereiten(arg1);
-        ui->lineZugVorbereiten->setText(QString::number(aktuellePerson->getTimeVorbereiten()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
-        emit changed();
-    }
-}
-
-void PersonalWindow::on_doubleWerkstatt_valueChanged(double arg1)
-{
-    if (enabled) {
-        aktuellePerson->setAdditionalTimeWerkstatt(arg1);
-        ui->lineWerkstatt->setText(QString::number(aktuellePerson->getTimeWerkstatt()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
-        emit changed();
-    }
-}
-
-void PersonalWindow::on_doubleBuero_valueChanged(double arg1)
-{
-    if (enabled) {
-        aktuellePerson->setAdditionalTimeBuero(arg1);
-        ui->lineBuero->setText(QString::number(aktuellePerson->getTimeBuero()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
-        emit changed();
-    }
-}
-
-void PersonalWindow::on_doubleSonstiges_valueChanged(double arg1)
-{
-    if (enabled) {
-        aktuellePerson->setAdditionalTimeSonstiges(arg1);
-        ui->lineSonstiges->setText(QString::number(aktuellePerson->getTimeSonstiges()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
-        emit changed();
-    }
 }

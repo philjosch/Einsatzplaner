@@ -18,13 +18,9 @@ public:
     static bool versionGreater(QString firstV, QString secondV);
     static bool versionGreater(QString version);
 
-    static bool versionGreaterMajor(QString firstV, QString secondV);
-    static bool versionGreaterMajor(QString version);
-
     void checkVersion();
 
     static QString getAktuelleVersion();
-    static QString getAktuelleVersionKurz();
     static QString loadVersion();
 
     static QUrl getUrlDownload();
@@ -34,7 +30,6 @@ public slots:
 
 protected:
     static QString aktuelleVersion;
-    static QString aktuelleVersionKurz;
 
     static QUrl urlVersion;
     static QUrl urlDownload;
