@@ -32,7 +32,7 @@ QJsonObject Manager::personalToJson()
     data.insert("activites", array);
 
     // Personen speichern
-    QJsonObject personalJSON = personal->toJson();
+    QJsonObject personalJSON = personal->personalToJson();
     data.insert("personal", personalJSON);
     return data;
 }
