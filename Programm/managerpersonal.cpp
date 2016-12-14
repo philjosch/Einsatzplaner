@@ -32,17 +32,6 @@ QJsonObject ManagerPersonal::toJson()
     return o;
 }
 
-QJsonObject ManagerPersonal::personalToJson()
-{
-    QJsonArray array;
-    for(Person *p: personen->values()) {
-        array.append(p->personalToJson());
-    }
-    QJsonObject o;
-    o.insert("personen", array);
-    return o;
-}
-
 void ManagerPersonal::fromJson(QJsonObject o)
 {
     QJsonArray a = o.value("personen").toArray();
@@ -69,31 +58,9 @@ bool ManagerPersonal::personExists(QString name)
     return personenSorted->contains(name);
 }
 
-bool ManagerPersonal::personExists(QString vorname, QString nachname)
-{
-    QString nameKomplett;
-    if (vorname != "") nameKomplett = vorname + " " + nachname;
-    else nameKomplett = nachname;
-    return personenSorted->contains(nameKomplett);
-}
-
-Person *ManagerPersonal::registerPerson(QString vorname, QString  nachname)
-{
-    QString nameKomplett;
-    if (vorname != "") nameKomplett = vorname + " " + nachname;
-    else nameKomplett = nachname;
-    if (! personExists(nameKomplett)) {
-        Person *neu = new Person(vorname, nachname);
-        personen->insert(neu);
-        personenSorted->insert(nameKomplett, neu);
-        connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
-        return neu;
-    }
-    return nullptr;
-}
-
 Person *ManagerPersonal::registerPerson(QString name)
 {
+    name = getGoodName(name);
     if (! personExists(name)) {
         Person *neu = new Person(name);
         personen->insert(neu);

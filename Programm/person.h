@@ -11,11 +11,9 @@ class Person : public QObject
     Q_OBJECT
 
 public:
-    Person(QString vorname, QString nachname);
     Person(QString name);
 
     QJsonObject toJson();
-    QJsonObject personalToJson();
     static Person *fromJson(QJsonObject o);
 
     double getTimeTf();
@@ -51,35 +49,14 @@ public:
 
 
     QString getName() const;
-//    void setName(const QString &value);
     QString getVorname() const;
-    void setVorname(const QString &value);
     QString getNachname() const;
-    void setNachname(const QString &value);
+    void setName(const QString &value);
 
     QString getHtmlForTableView(QList<bool> *liste);
 
-    double getAdditionalTimeTf() const;
-    void setAdditionalTimeTf(double value);
-    double getAdditionalTimeZf() const;
-    void setAdditionalTimeZf(double value);
-    double getAdditionalTimeZub() const;
-    void setAdditionalTimeZub(double value);
-    double getAdditionalTimeService() const;
-    void setAdditionalTimeService(double value);
-    double getAdditionalTimeBuero() const;
-    void setAdditionalTimeBuero(double value);
-    double getAdditionalTimeWerkstatt() const;
-    void setAdditionalTimeWerkstatt(double value);
-    double getAdditionalTimeVorbereiten() const;
-    void setAdditionalTimeVorbereiten(double value);
-    double getAdditionalTimeSonstiges() const;
-    void setAdditionalTimeSonstiges(double value);
-
-
 protected:
-    QString vorname;
-    QString nachname;
+    QString name;
     bool ausbildungTf;
     bool ausbildungZf;
     bool ausbildungRangierer;
@@ -103,17 +80,8 @@ private:
      * in dem eine Veranstlltung verändert wurde,
      * dann muss manuell neuberechnet werden */
 
-    double additionalTimeTf;
-    double additionalTimeZf;
-    double additionalTimeZub;
-    double additionalTimeService;
-    double additionalTimeBuero;
-    double additionalTimeWerkstatt;
-    double additionalTimeVorbereiten;
-    double additionalTimeSonstiges;
-
 signals:
-    void nameChanged(Person*, QString);// Person ist die Person und QString gibt den !ALTEN! Namen an
+    void nameChanged(Person*, QString);// Person ist die Person und QString gibt den !ALTEN! NAmen an
 };
 
 #endif // PERSON_H

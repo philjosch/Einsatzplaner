@@ -220,7 +220,7 @@ void MainWindow::on_actionSave_triggered()
 /*    viewJSON.insert("showPersonal", false); CURRENTLY NOT USED*/
 
     QJsonObject generalJSON;
-    generalJSON.insert("version", CoreApplication::getAktuelleVersionKurz());
+    generalJSON.insert("version", CoreApplication::getAktuelleVersion());
 
     QJsonObject object;
     object.insert("calendar", calendarJSON);
@@ -246,10 +246,10 @@ bool MainWindow::openFile(QString filePath)
     // Prüfen, ob Version kompatibel ist
     QJsonObject generalJSON = object.value("general").toObject();
     QString version = generalJSON.value("version").toString();
-    if (CoreApplication::versionGreaterMajor(version) || (version == "" )) {
+    if (CoreApplication::versionGreater(version) || (version == "" )) {
         QMessageBox::warning(this, tr("Nicht kompatibel"),
                              tr("Die Datei kann nicht mit dieser Version geöffnet werden.\nDas Dokument benötigt mindestens Version ")+
-                             version+tr(".\nDie aktuellste Version finden Sie auf der Webseite des Programms.\Bei weiteren Fragen wenden Sie sich bitte an den Support."));
+                             version+tr(".\nDie aktuellste Version finden Sie auf der Webseite des Programms."));
         return false;
     }
     setWindowTitle(tr("Übersicht"));
@@ -329,7 +329,7 @@ void MainWindow::on_actionSavePersonal_triggered()
 /*    viewJSON.insert("showPersonal", false); CURRENTLY NOT USED*/
 
     QJsonObject generalJSON;
-    generalJSON.insert("version", CoreApplication::getAktuelleVersionKurz());
+    generalJSON.insert("version", CoreApplication::getAktuelleVersion());
 
     QJsonObject object;
     object.insert("calendar", calendarJSON);
