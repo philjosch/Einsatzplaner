@@ -5,6 +5,7 @@
 #include <QDesktopServices>
 #include <QSettings>
 #include <QUrl>
+#include <QMessageBox>
 
 PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new Ui::PreferencesDialog)
 {
@@ -23,7 +24,7 @@ PreferencesDialog::~PreferencesDialog()
 void PreferencesDialog::on_pushSearch_clicked()
 {
     QString aktuell = QCoreApplication::applicationVersion();
-    QString online = CoreApplication::loadVersion();
+    online = CoreApplication::loadVersion();
     bool old = CoreApplication::versionGreater(online, aktuell);
     QString s = tr("Fehler bei der Anfrage");
     if (old) {
@@ -33,6 +34,7 @@ void PreferencesDialog::on_pushSearch_clicked()
     }
     ui->labelVersion->setText(s);
     ui->pushDownload->setEnabled(old);
+    ui->pushNotes->setEnabled(old);
 }
 
 void PreferencesDialog::on_pushDownload_clicked()
@@ -50,4 +52,11 @@ void PreferencesDialog::saveSettings()
 {
     QSettings settings;
     settings.setValue("general/autosearchupdate", ui->checkSearchAtStart->isChecked());
+}
+
+void PreferencesDialog::on_pushNotes_clicked()
+{
+    if (QMessageBox::information(nullptr, tr("Über die neue Version"), CoreApplication::loadNotes(CoreApplication::versionParser(online)), QMessageBox::Close|QMessageBox::Open, QMessageBox::Open) == QMessageBox::Open) {
+        QDesktopServices::openUrl(CoreApplication::getUrlDownload());
+    }
 }

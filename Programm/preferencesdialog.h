@@ -21,10 +21,14 @@ private slots:
 
     void closeDialogOk();
 
+    void on_pushNotes_clicked();
+
 private:
     Ui::PreferencesDialog *ui;
 
     void saveSettings();
+
+    QString online;
 };
 
 #endif // PREFERENCESDIALOG_H

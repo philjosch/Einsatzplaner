@@ -11,6 +11,12 @@ public:
     CoreApplication(int &argc, char **argv, QString version);
     ~CoreApplication();
 
+    struct Version {
+        int major;
+        int minor;
+        int patch;
+    };
+
     bool isFirst;
 
     bool event(QEvent *event);
@@ -26,8 +32,11 @@ public:
     static QString getAktuelleVersion();
     static QString getAktuelleVersionKurz();
     static QString loadVersion();
+    static QString loadNotes(Version v);
 
     static QUrl getUrlDownload();
+
+    static Version versionParser(QString version);
 
 public slots:
     static void closeAllWindows();
@@ -38,6 +47,7 @@ protected:
 
     static QUrl urlVersion;
     static QUrl urlDownload;
+    static QString urlNotes;
 };
 
 #endif // COREAPPLICATION_H

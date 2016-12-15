@@ -15,6 +15,7 @@ QString CoreApplication::aktuelleVersion = "0.0.0";
 QString CoreApplication::aktuelleVersionKurz = "0.0";
 QUrl CoreApplication::urlDownload = QUrl("http://bahn.philipp-schepper.de/#downloads");
 QUrl CoreApplication::urlVersion = QUrl("http://bahn.philipp-schepper.de/version.txt");
+QString CoreApplication::urlNotes = "http://bahn.philipp-schepper.de/version/";
 
 CoreApplication::CoreApplication(int &argc, char **argv, QString version) : QApplication(argc, argv)
 {
@@ -99,9 +100,17 @@ void CoreApplication::checkVersion()
     QString v = loadVersion();
 
     if (versionGreater(v)) {
-        if (QMessageBox::information(nullptr, tr("Neue Version"), tr("Es ist Version ")+v+tr(" des Programms verfügbar.\nSie benutzen Version ")+aktuelleVersion+". ", QMessageBox::Ignore|QMessageBox::Open, QMessageBox::Open) == QMessageBox::Open) {
+        QString message = tr("Es ist Version ")+v+tr(" des Programms verfügbar.\nSie benutzen Version ")+aktuelleVersion+".\n\n";
+        QMessageBox::StandardButton answ = QMessageBox::information(nullptr, tr("Neue Version"), message, QMessageBox::Ignore|QMessageBox::Help|QMessageBox::Open, QMessageBox::Open);
+        if (answ == QMessageBox::Open) {
             QDesktopServices::openUrl(urlDownload);
+        } else if (answ == QMessageBox::Help) {
+            if (QMessageBox::information(nullptr, tr("Über die neue Version"), loadNotes(versionParser(v)), QMessageBox::Close|QMessageBox::Open, QMessageBox::Open) == QMessageBox::Open) {
+                QDesktopServices::openUrl(urlDownload);
+            }
         }
+    } else {
+        return;
     }
 }
 
@@ -128,6 +137,46 @@ void CoreApplication::closeAllWindows()
 QUrl CoreApplication::getUrlDownload()
 {
     return urlDownload;
+}
+
+CoreApplication::Version CoreApplication::versionParser(QString version)
+{
+    QStringList vers = version.split(".");
+    Version v;
+    v.major = vers.at(0).toInt();
+    v.minor = vers.at(1).toInt();
+    v.patch = vers.at(2).toInt();
+    return v;
+}
+
+QString CoreApplication::loadNotes(Version v)
+{
+
+    QUrl url = QUrl(urlNotes + QString("v%1-%2/notes-v%1-%2-%3.txt").arg(v.major).arg(v.minor).arg(v.patch));
+    qDebug() << url;
+
+    // create custom temporary event loop on stack
+    QEventLoop eventLoop;
+
+    // "quit()" the event-loop, when the network request "finished()"
+    QNetworkAccessManager mgr;
+    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+    // the HTTP request
+    QNetworkRequest req( url );
+    QNetworkReply *reply = mgr.get(req);
+    eventLoop.exec(); // blocks stack until "finished()" has been called
+
+    if (reply->error() == QNetworkReply::NoError) {
+        //success
+        QString s = QString(reply->readAll());
+        delete reply;
+        return s;
+    } else {
+        //failure
+        delete reply;
+        return "";
+    }
 }
 
 QString CoreApplication::loadVersion()
