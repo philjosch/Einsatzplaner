@@ -302,7 +302,7 @@
              <string>Die Entfernung zum Heimatbahnhof. Wird benötigt, um die Strecke auszurechnen.</string>
             </property>
             <property name="text">
-             <string>Km bis Bahnhof</string>
+             <string>Entfernung</string>
             </property>
            </widget>
           </item>
@@ -364,12 +364,102 @@
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
+            <property name="suffix">
+             <string> km</string>
+            </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>40000</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="1">
+         <layout class="QGridLayout" name="gridEinzelSumme">
+          <property name="horizontalSpacing">
+           <number>6</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>3</number>
+          </property>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>h</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>km</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="4">
+           <widget class="Line" name="horizontalLine">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QLineEdit" name="lineStrecke">
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLineEdit" name="lineGesamt">
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Gesamt</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Fahrstrecke</string>
+            </property>
            </widget>
           </item>
          </layout>
         </item>
         <item row="1" column="1">
-         <widget class="QToolBox" name="toolBox">
+         <widget class="QTabWidget" name="tabWidget">
           <property name="minimumSize">
            <size>
             <width>435</width>
@@ -377,21 +467,16 @@
            </size>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
-          <property name="tabSpacing">
-           <number>6</number>
+          <property name="tabsClosable">
+           <bool>false</bool>
           </property>
-          <widget class="QWidget" name="pageTable">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>435</width>
-             <height>310</height>
-            </rect>
-           </property>
-           <attribute name="label">
+          <property name="movable">
+           <bool>false</bool>
+          </property>
+          <widget class="QWidget" name="tabWidgetEinzelAktivities" native="true">
+           <attribute name="title">
             <string>Aktivitäten</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_6">
@@ -420,6 +505,12 @@
                 <width>402</width>
                 <height>120</height>
                </size>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Plain</enum>
+              </property>
+              <property name="lineWidth">
+               <number>0</number>
               </property>
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
@@ -463,17 +554,9 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="pageEinzelZeiten">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>435</width>
-             <height>310</height>
-            </rect>
-           </property>
-           <attribute name="label">
-            <string>Einsatzzeiten</string>
+          <widget class="QWidget" name="tabWidgetEinzelZeiten" native="true">
+           <attribute name="title">
+            <string>Zeiten</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,0,0,0,0,0">
             <property name="leftMargin">
@@ -542,21 +625,6 @@
               <property name="maximum">
                <double>8784.000000000000000</double>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="suffix">
-               <string> km</string>
-              </property>
-              <property name="minimum">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <number>10000</number>
-              </property>
-              <property name="value">
-               <number>0</number>
-              </property>
              </widget>
             </item>
             <item row="3" column="3">
@@ -573,6 +641,9 @@
              <widget class="QLabel" name="label_21">
               <property name="text">
                <string>Summe</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -876,84 +947,6 @@
           </widget>
          </widget>
         </item>
-        <item row="2" column="1">
-         <layout class="QGridLayout" name="gridEinzelSumme">
-          <property name="horizontalSpacing">
-           <number>6</number>
-          </property>
-          <property name="verticalSpacing">
-           <number>3</number>
-          </property>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_16">
-            <property name="text">
-             <string>h</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="3">
-           <widget class="QLabel" name="label_17">
-            <property name="text">
-             <string>km</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="4">
-           <widget class="Line" name="horizontalLine">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QLineEdit" name="lineStrecke">
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLineEdit" name="lineGesamt">
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Gesamt</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <spacer name="horizontalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Fahrstrecke</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
        </layout>
       </widget>
      </widget>
@@ -1030,19 +1023,49 @@
  <tabstops>
   <tabstop>tabWidget</tabstop>
   <tabstop>tabelleGesamt</tabstop>
+  <tabstop>checkShowGesamt</tabstop>
+  <tabstop>checkShowAnzahl</tabstop>
+  <tabstop>checkShowTf</tabstop>
+  <tabstop>checkShowZf</tabstop>
+  <tabstop>checkShowZub</tabstop>
+  <tabstop>checkShowService</tabstop>
+  <tabstop>checkShowVorbereiten</tabstop>
+  <tabstop>checkShowWerkstatt</tabstop>
+  <tabstop>checkShowBuero</tabstop>
+  <tabstop>checkShowSonstiges</tabstop>
+  <tabstop>checkShowKilometer</tabstop>
+  <tabstop>pushAktualisieren</tabstop>
+  <tabstop>pushPDF</tabstop>
+  <tabstop>pushPrint</tabstop>
   <tabstop>pushAdd</tabstop>
+  <tabstop>listWidget</tabstop>
+  <tabstop>pushDelete</tabstop>
+  <tabstop>lineVorname</tabstop>
+  <tabstop>lineNachname</tabstop>
+  <tabstop>spinKm</tabstop>
   <tabstop>checkTf</tabstop>
   <tabstop>checkZf</tabstop>
   <tabstop>checkRangierer</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>tabelle</tabstop>
+  <tabstop>doubleTf</tabstop>
+  <tabstop>doubleZf</tabstop>
+  <tabstop>doubleZub</tabstop>
+  <tabstop>doubleService</tabstop>
+  <tabstop>doubleZugVorbereiten</tabstop>
+  <tabstop>doubleWerkstatt</tabstop>
+  <tabstop>doubleBuero</tabstop>
+  <tabstop>doubleSonstiges</tabstop>
   <tabstop>lineTf</tabstop>
   <tabstop>lineZf</tabstop>
+  <tabstop>lineZub</tabstop>
   <tabstop>lineService</tabstop>
   <tabstop>lineWerkstatt</tabstop>
+  <tabstop>lineZugVorbereiten</tabstop>
   <tabstop>lineBuero</tabstop>
-  <tabstop>listWidget</tabstop>
-  <tabstop>pushDelete</tabstop>
-  <tabstop>pushPDF</tabstop>
-  <tabstop>pushPrint</tabstop>
+  <tabstop>lineSonstiges</tabstop>
+  <tabstop>lineGesamt</tabstop>
+  <tabstop>lineStrecke</tabstop>
  </tabstops>
  <resources/>
  <connections>

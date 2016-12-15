@@ -396,6 +396,7 @@ void PersonalWindow::on_spinKm_valueChanged(int arg1)
 {
     if (enabled) {
         aktuellePerson->setStrecke(arg1);
+        ui->lineStrecke->setText(QString::number(aktuellePerson->getSumKilometer()));
         emit changed();
     }
 }
