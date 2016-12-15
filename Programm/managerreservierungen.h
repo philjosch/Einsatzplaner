@@ -39,9 +39,6 @@ public:
     static QString getStringFromPlaetze(QMap<int, QList<int> *> *liste);
     static QMap<int, QList<int>*> *getPlaetzeFromString(QString plaetze);
 
-    bool getAutoPlatz() const;
-    void setAutoPlatz(bool value);
-
     bool getCheckAll() const;
     void setCheckAll(bool value);
 
@@ -55,7 +52,6 @@ public slots:
 protected:
     QString wagenreihung;
     QSet<Reservierung*> *reservierungen;
-    bool autoPlatz;
     bool checkAll;
 
     QList<Wagen *> *wagen;

@@ -46,7 +46,6 @@ calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die P
 
 		~Daten aus Reservierungsmanager~
 		wagenreihung (string)		-> Die wagenreihung, wagen getrennt durch ', '
-		autoPlatz (bool)		-> Plätze werden automatisch verteilt
 		checkAll (bool)			-> bei einer Verteilung der Sitzplätze werden alle möglichkeiten berechnet und nicht nur das erst beste
 		reservierungen (array)		-> Die liste mit den reservierungen jeweils als (object)
 			name (string)
