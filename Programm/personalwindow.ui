@@ -21,7 +21,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="gesamt">
        <attribute name="title">
@@ -475,7 +475,7 @@
           <property name="movable">
            <bool>false</bool>
           </property>
-          <widget class="QWidget" name="tabWidgetEinzelAktivities" native="true">
+          <widget class="QWidget" name="tabWidgetEinzelAktivities">
            <attribute name="title">
             <string>Aktivitäten</string>
            </attribute>
@@ -554,7 +554,7 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tabWidgetEinzelZeiten" native="true">
+          <widget class="QWidget" name="tabWidgetEinzelZeiten">
            <attribute name="title">
             <string>Zeiten</string>
            </attribute>
@@ -976,17 +976,6 @@
    <addaction name="menuPersonalmanagement"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
   <action name="actionSchlie_en">
    <property name="text">
     <string>Schließen</string>
@@ -1060,12 +1049,13 @@
   <tabstop>lineZf</tabstop>
   <tabstop>lineZub</tabstop>
   <tabstop>lineService</tabstop>
-  <tabstop>lineWerkstatt</tabstop>
   <tabstop>lineZugVorbereiten</tabstop>
+  <tabstop>lineWerkstatt</tabstop>
   <tabstop>lineBuero</tabstop>
   <tabstop>lineSonstiges</tabstop>
   <tabstop>lineGesamt</tabstop>
   <tabstop>lineStrecke</tabstop>
+  <tabstop>tabWidget</tabstop>
  </tabstops>
  <resources/>
  <connections>
