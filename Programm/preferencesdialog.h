@@ -1,6 +1,8 @@
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
 
+#include "coreapplication.h"
+
 #include <QDialog>
 
 namespace Ui {
@@ -28,7 +30,7 @@ private:
 
     void saveSettings();
 
-    QString online;
+    CoreApplication::Version online;
 };
 
 #endif // PREFERENCESDIALOG_H
