@@ -187,7 +187,12 @@ QString Reservierung::getHtmlForDetailTable()
     html += "</td>";
     html += "<td>"+QString::number(anzahl)+" Plätze</td>";
     html += "<td>"+ManagerReservierungen::getStringFromPlaetze(sitzplatz)+"</td>";
-    html += (fahrrad ? "<td>Fahrrad!<br/>" : "<td>")+sonstiges+"</td></tr>";
+    html += (fahrrad ? "<td>Fahrrad!<br/>" : "<td>");
+    if (hps->at(0) != "-")
+        html += QObject::tr("Einstieg in ")+hps->at(0)+"<br/>";
+    if (hps->at(1) != hps->at(0) && hps->at(1) != "-")
+        html += QObject::tr("Ausstieg in ")+hps->at(1)+"<br/>";
+    html+=sonstiges.replace("\n", "<br/>")+"</td></tr>";
     return html;
 }
 

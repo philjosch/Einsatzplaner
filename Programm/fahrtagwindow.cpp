@@ -50,7 +50,6 @@ void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
     }
     ui->tabReservierungen->setEnabled(art != Fahrtag::Schnupperkurs);
     setWindowTitle(Fahrtag::getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum().toString("dddd dd. MM. yyyy"));
-    ui->checkBoxAuto->setEnabled(Fahrtag::Nikolauszug == art);
     ui->checkBoxAll->setEnabled(Fahrtag::Nikolauszug == art);
     ui->buttonVerteile->setEnabled(Fahrtag::Nikolauszug == art);
 }
@@ -140,14 +139,12 @@ void FahrtagWindow::loadData()
             ui->listRes->insertItem(0, item);
         }
         ui->listRes->sortItems();
-        ui->checkBoxAuto->setEnabled(Fahrtag::Nikolauszug == fahrtag->getArt());
         ui->checkBoxAll->setEnabled(false);
         ui->buttonVerteile->setEnabled(Fahrtag::Nikolauszug == fahrtag->getArt());
 
-        ui->checkBoxAuto->setChecked(fahrtag->getAutoPlatz());
         ui->checkBoxAll->setChecked(fahrtag->getCheckAll());
-        ui->checkBoxAll->setEnabled(fahrtag->getAutoPlatz());
-        ui->buttonVerteile->setEnabled(fahrtag->getAutoPlatz());
+        ui->checkBoxAll->setEnabled(fahrtag->getArt() == Fahrtag::Nikolauszug);
+        ui->buttonVerteile->setEnabled(fahrtag->getArt() == Fahrtag::Nikolauszug);
 
         // Daten von Fahrtag
         ui->comboArt->setCurrentIndex((int)fahrtag->getArt());
@@ -695,16 +692,6 @@ void FahrtagWindow::on_buttonVerteile_clicked()
 //    } else {
 //        qDebug() << start.msecsTo(ende);
     }
-}
-
-void FahrtagWindow::on_checkBoxAuto_clicked(bool checked)
-{
-    if (nehme) {
-        fahrtag->setAutoPlatz(checked);
-        fahrtag->emitter();
-    }
-    ui->checkBoxAll->setEnabled(checked);
-    ui->buttonVerteile->setEnabled(checked);
 }
 
 void FahrtagWindow::on_lineName_textChanged(const QString &arg1)

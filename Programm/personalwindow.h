@@ -40,7 +40,8 @@ private slots:
 
     void on_listWidget_itemClicked(QListWidgetItem *item);
 
-    void on_lineName_textChanged(const QString &arg1);
+    void on_lineVorname_textChanged(const QString &arg1);
+    void on_lineNachname_textChanged(const QString &arg1);
     void on_spinKm_valueChanged(int arg1);
     void on_checkTf_clicked(bool checked);
     void on_checkZf_clicked(bool checked);
@@ -62,6 +63,15 @@ private slots:
     void on_checkShowBuero_clicked(bool checked);
     void on_checkShowSonstiges_clicked(bool checked);
     void on_checkShowKilometer_clicked(bool checked);
+
+    void on_doubleTf_valueChanged(double arg1);
+    void on_doubleZf_valueChanged(double arg1);
+    void on_doubleZub_valueChanged(double arg1);
+    void on_doubleService_valueChanged(double arg1);
+    void on_doubleZugVorbereiten_valueChanged(double arg1);
+    void on_doubleWerkstatt_valueChanged(double arg1);
+    void on_doubleBuero_valueChanged(double arg1);
+    void on_doubleSonstiges_valueChanged(double arg1);
 
 private:
     Ui::PersonalWindow *ui;
