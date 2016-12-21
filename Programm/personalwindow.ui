@@ -19,7 +19,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_4">
     <item row="0" column="0">
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="tabWidgetMain">
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -459,7 +459,7 @@
          </layout>
         </item>
         <item row="1" column="1">
-         <widget class="QTabWidget" name="tabWidget">
+         <widget class="QTabWidget" name="tabWidgetEinzel">
           <property name="minimumSize">
            <size>
             <width>435</width>
@@ -1010,7 +1010,7 @@
   </action>
  </widget>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
+  <tabstop>tabWidgetMain</tabstop>
   <tabstop>tabelleGesamt</tabstop>
   <tabstop>checkShowGesamt</tabstop>
   <tabstop>checkShowAnzahl</tabstop>
@@ -1035,7 +1035,7 @@
   <tabstop>checkTf</tabstop>
   <tabstop>checkZf</tabstop>
   <tabstop>checkRangierer</tabstop>
-  <tabstop>tabWidget</tabstop>
+  <tabstop>tabWidgetMain</tabstop>
   <tabstop>tabelle</tabstop>
   <tabstop>doubleTf</tabstop>
   <tabstop>doubleZf</tabstop>
@@ -1055,7 +1055,7 @@
   <tabstop>lineSonstiges</tabstop>
   <tabstop>lineGesamt</tabstop>
   <tabstop>lineStrecke</tabstop>
-  <tabstop>tabWidget</tabstop>
+  <tabstop>tabWidgetMain</tabstop>
  </tabstops>
  <resources/>
  <connections>
