@@ -59,7 +59,6 @@ private slots:
     void on_listRes_itemDoubleClicked(QListWidgetItem *item);
     void on_buttonShow_clicked();
     void on_buttonVerteile_clicked();
-    void on_checkBoxAuto_clicked(bool checked);
     void on_lineName_textChanged(const QString &arg1);
     void on_lineMail_textChanged(const QString &arg1);
     void on_lineTelefon_textChanged(const QString &arg1);

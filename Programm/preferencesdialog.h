@@ -1,6 +1,8 @@
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
 
+#include "coreapplication.h"
+
 #include <QDialog>
 
 namespace Ui {
@@ -21,10 +23,14 @@ private slots:
 
     void closeDialogOk();
 
+    void on_pushNotes_clicked();
+
 private:
     Ui::PreferencesDialog *ui;
 
     void saveSettings();
+
+    CoreApplication::Version online;
 };
 
 #endif // PREFERENCESDIALOG_H

@@ -79,7 +79,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
         info->beginn = QTime::fromString(aO.value("beginn").toString(), "hh:mm");
         info->ende = QTime::fromString(aO.value("ende").toString(), "hh:mm");
         info->kategorie = kat;
-        info->aufgabe = aO.value("aufagbe").toString();
+        info->aufgabe = aO.value("aufgabe").toString();
         info->bemerkung = aO.value("bemerkung").toString();
 
         if (p != nullptr) {

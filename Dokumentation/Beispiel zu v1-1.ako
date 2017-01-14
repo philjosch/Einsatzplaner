@@ -2,9 +2,36 @@
     "calendar": {
         "activites": [
             {
+                "anlass": "Vorbereiten Museumszug",
+                "bemerkungen": "Vorbereiten des Zuges für die Fahrt nach Lummerland",
+                "datum": "2016-10-04",
+                "isFahrtag": false,
+                "ort": "",
+                "personalBenoetigt": true,
+                "personen": [
+                    {
+                        "aufgabe": "",
+                        "beginn": "00:00",
+                        "bemerkung": "",
+                        "ende": "00:00",
+                        "kat": 5,
+                        "name": "Lukas Lokomotivführer"
+                    },
+                    {
+                        "aufgabe": "",
+                        "beginn": "00:00",
+                        "bemerkung": "",
+                        "ende": "15:00",
+                        "kat": 8,
+                        "name": "Nepomuk"
+                    }
+                ],
+                "zeitAnfang": "10:00",
+                "zeitEnde": "16:00"
+            },
+            {
                 "anlass": "Fahrt nach Lummerland",
                 "art": 0,
-                "autoPlatz": false,
                 "bemerkungen": "Hier könnte ihre Bemerkung stehen!",
                 "benoetigeService": true,
                 "benoetigeTf": true,
@@ -16,14 +43,6 @@
                 "ort": "",
                 "personalBenoetigt": false,
                 "personen": [
-                    {
-                        "aufgabe": "",
-                        "beginn": "00:00",
-                        "bemerkung": "",
-                        "ende": "00:00",
-                        "kat": 0,
-                        "name": "Lukas Lokomotivführer"
-                    },
                     {
                         "aufgabe": "",
                         "beginn": "00:00",
@@ -52,9 +71,9 @@
                         "aufgabe": "",
                         "beginn": "00:00",
                         "bemerkung": "",
-                        "ende": "13:00",
-                        "kat": 5,
-                        "name": "Nepomuk"
+                        "ende": "00:00",
+                        "kat": 0,
+                        "name": "Lukas Lokomotivführer"
                     },
                     {
                         "aufgabe": "",
@@ -63,6 +82,14 @@
                         "ende": "18:00",
                         "kat": 3,
                         "name": "Schu Fu Lu Pi Plu"
+                    },
+                    {
+                        "aufgabe": "",
+                        "beginn": "00:00",
+                        "bemerkung": "",
+                        "ende": "13:00",
+                        "kat": 5,
+                        "name": "Nepomuk"
                     }
                 ],
                 "reservierungen": [
@@ -92,37 +119,8 @@
                 "zeitTf": "08:15"
             },
             {
-                "anlass": "Vorbereiten Museumszug",
-                "bemerkungen": "Vorbereiten des Zuges für die Fahrt nach Lummerland",
-                "datum": "2016-10-04",
-                "isFahrtag": false,
-                "ort": "",
-                "personalBenoetigt": true,
-                "personen": [
-                    {
-                        "aufgabe": "",
-                        "beginn": "00:00",
-                        "bemerkung": "",
-                        "ende": "00:00",
-                        "kat": 5,
-                        "name": "Lukas Lokomotivführer"
-                    },
-                    {
-                        "aufgabe": "",
-                        "beginn": "00:00",
-                        "bemerkung": "",
-                        "ende": "15:00",
-                        "kat": 8,
-                        "name": "Nepomuk"
-                    }
-                ],
-                "zeitAnfang": "10:00",
-                "zeitEnde": "16:00"
-            },
-            {
                 "anlass": "Sonderzug",
                 "art": 1,
-                "autoPlatz": false,
                 "bemerkungen": "",
                 "benoetigeService": true,
                 "benoetigeTf": true,
@@ -146,7 +144,6 @@
             {
                 "anlass": "Gesellschaft.",
                 "art": 2,
-                "autoPlatz": false,
                 "bemerkungen": "",
                 "benoetigeService": true,
                 "benoetigeTf": true,
@@ -170,7 +167,6 @@
             {
                 "anlass": "Fahrtag",
                 "art": 3,
-                "autoPlatz": true,
                 "bemerkungen": "",
                 "benoetigeService": true,
                 "benoetigeTf": true,
@@ -184,24 +180,6 @@
                 "personen": [
                 ],
                 "reservierungen": [
-                    {
-                        "anzahl": 13,
-                        "fahrrad": false,
-                        "hps": [
-                            "Ottweiler",
-                            "Ottweiler"
-                        ],
-                        "klasse": 1,
-                        "mail": "",
-                        "name": "Die Wilde 13",
-                        "sitzplaetze": "204: 17-21, 23-26, 29-32",
-                        "sonstiges": "",
-                        "telefon": "",
-                        "zuege": [
-                            "2202 SOTW-SSWN",
-                            "2203 SSWN-SOTW"
-                        ]
-                    },
                     {
                         "anzahl": 10,
                         "fahrrad": false,
@@ -219,6 +197,24 @@
                             "2202 SOTW-SSWN",
                             "2203 SSWN-SOTW"
                         ]
+                    },
+                    {
+                        "anzahl": 13,
+                        "fahrrad": false,
+                        "hps": [
+                            "Ottweiler",
+                            "Ottweiler"
+                        ],
+                        "klasse": 1,
+                        "mail": "",
+                        "name": "Die Wilde 13",
+                        "sitzplaetze": "204: 17-21, 23-26, 29-32",
+                        "sonstiges": "",
+                        "telefon": "",
+                        "zuege": [
+                            "2202 SOTW-SSWN",
+                            "2203 SSWN-SOTW"
+                        ]
                     }
                 ],
                 "wagenreihung": "309, 221, 204, 208",
@@ -230,7 +226,6 @@
             {
                 "anlass": "Museumszug mit ELF",
                 "art": 4,
-                "autoPlatz": false,
                 "bemerkungen": "",
                 "benoetigeService": true,
                 "benoetigeTf": true,
@@ -278,7 +273,6 @@
             {
                 "anlass": "Schnupperkurs",
                 "art": 5,
-                "autoPlatz": false,
                 "bemerkungen": "",
                 "benoetigeService": true,
                 "benoetigeTf": true,
@@ -302,7 +296,6 @@
             {
                 "anlass": "Bahnhofsfest",
                 "art": 6,
-                "autoPlatz": false,
                 "bemerkungen": "",
                 "benoetigeService": true,
                 "benoetigeTf": true,
@@ -326,7 +319,6 @@
             {
                 "anlass": "Sonstiges",
                 "art": 7,
-                "autoPlatz": false,
                 "bemerkungen": "",
                 "benoetigeService": true,
                 "benoetigeTf": true,
@@ -348,65 +340,119 @@
                 "zeitTf": "08:15"
             }
         ],
-        "currentDate": "2016-10-07",
+        "currentDate": "2016-10-21",
         "personal": {
             "personen": [
                 {
-                    "ausRang": false,
-                    "ausTf": false,
-                    "ausZf": true,
-                    "name": "Jim Knopf",
-                    "strecke": 2
-                },
-                {
-                    "ausRang": true,
-                    "ausTf": false,
-                    "ausZf": false,
-                    "name": "König Alfons der Viertel-Vor-Zwölfte",
-                    "strecke": 5
-                },
-                {
+                    "additionalBuero": 0,
+                    "additionalService": 0,
+                    "additionalSonstiges": 0,
+                    "additionalTf": 0,
+                    "additionalVorbereiten": 0,
+                    "additionalWerkstatt": 5,
+                    "additionalZf": 0,
+                    "additionalZub": 0,
                     "ausRang": false,
                     "ausTf": false,
                     "ausZf": false,
-                    "name": "Emma",
-                    "strecke": 12
+                    "nachname": "Emma",
+                    "strecke": 12,
+                    "vorname": ""
                 },
                 {
+                    "additionalBuero": 0,
+                    "additionalService": 0,
+                    "additionalSonstiges": 0,
+                    "additionalTf": 0,
+                    "additionalVorbereiten": 0,
+                    "additionalWerkstatt": 0,
+                    "additionalZf": 0,
+                    "additionalZub": 0,
+                    "ausRang": false,
+                    "ausTf": false,
+                    "ausZf": false,
+                    "nachname": "Nepomuk",
+                    "strecke": 1,
+                    "vorname": ""
+                },
+                {
+                    "additionalBuero": 2,
+                    "additionalService": 0,
+                    "additionalSonstiges": 0,
+                    "additionalTf": 0,
+                    "additionalVorbereiten": 0,
+                    "additionalWerkstatt": 0,
+                    "additionalZf": 0,
+                    "additionalZub": 0,
                     "ausRang": false,
                     "ausTf": true,
                     "ausZf": false,
-                    "name": "Lukas Lokomotivführer",
-                    "strecke": 4
+                    "nachname": "Lokomotivführer",
+                    "strecke": 4,
+                    "vorname": "Lukas"
                 },
                 {
+                    "additionalBuero": 0,
+                    "additionalService": 0,
+                    "additionalSonstiges": 0,
+                    "additionalTf": 0,
+                    "additionalVorbereiten": 0,
+                    "additionalWerkstatt": 0,
+                    "additionalZf": 0,
+                    "additionalZub": 0,
+                    "ausRang": true,
+                    "ausTf": false,
+                    "ausZf": false,
+                    "nachname": "Viertel-Vor-Zwölfte",
+                    "strecke": 5,
+                    "vorname": "König Alfons der"
+                },
+                {
+                    "additionalBuero": 0,
+                    "additionalService": 0,
+                    "additionalSonstiges": 0,
+                    "additionalTf": 0,
+                    "additionalVorbereiten": 0,
+                    "additionalWerkstatt": 0,
+                    "additionalZf": 0,
+                    "additionalZub": 0,
+                    "ausRang": false,
+                    "ausTf": false,
+                    "ausZf": true,
+                    "nachname": "Knopf",
+                    "strecke": 2,
+                    "vorname": "Jim"
+                },
+                {
+                    "additionalBuero": 0,
+                    "additionalService": 0,
+                    "additionalSonstiges": 2,
+                    "additionalTf": 0,
+                    "additionalVorbereiten": 0,
+                    "additionalWerkstatt": 0,
+                    "additionalZf": 0,
+                    "additionalZub": 0,
                     "ausRang": false,
                     "ausTf": false,
                     "ausZf": false,
-                    "name": "Schu Fu Lu Pi Plu",
-                    "strecke": 20
-                },
-                {
-                    "ausRang": false,
-                    "ausTf": false,
-                    "ausZf": false,
-                    "name": "Nepomuk",
-                    "strecke": 1
+                    "nachname": "Plu",
+                    "strecke": 20,
+                    "vorname": "Schu Fu Lu Pi"
                 }
             ]
         }
     },
     "general": {
-        "version": "1.0.1"
+        "version": "1.1"
     },
     "view": {
         "heightMain": 620,
         "heightPersonal": 600,
         "widthMain": 803,
-        "widthPersonal": 721,
+        "widthPersonal": 742,
         "xMain": 1064,
         "xPersonal": 1286,
-        "yMain": 262,
-        "yPersonal": 319
+        "yMain": 290,
+        "yPersonal": 297
     }
 }

@@ -2,11 +2,21 @@ calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die P
 	currentDate (string)	-> Das Datum, das der DateSelektor gerade anzeigt, somit auch der Moant (Kodiert als 'yyyy-mm-dd')
 	personal/ (object)	-> hier werden die Personen gesichert
 		personen (array)	-> hier werden die Personen gelistet über ein (object)
-			name		-> Name der Person
-			ausTf		-> Ausbildung Lokführer
-			ausZf		-> Ausbildung Zugführer
-			ausRang		-> Ausbildung Rangierer
-			strecke		-> strecke von zuhause zum Bahnhof
+			vorname (string)-> Vorname der Person
+			nachname(string)-> Nachname der Person
+			ausTf (bool)	-> Ausbildung Lokführer
+			ausZf (bool)	-> Ausbildung Zugführer
+			ausRang	(bool)	-> Ausbildung Rangierer
+			strecke	(int)	-> strecke von zuhause zum Bahnhof
+			~Die zusätzlichen Zeiten für eine Person, die geleistet wurden, gespeichert in Stunden~
+			additionalTf (double)
+			additionalZf (double)
+			additionalZub (double)
+			additionalService (double)
+			additionalBuero (double)
+			additionalWerkstatt (double)
+			additionalVorbereiten (double)
+			additionalSonstiges (double)
 	activities (array)	-> die einzelnen aktivitäten, gespeichert in Objekten
 		~Für Arbeitseinsatz~
 		datum (string)
@@ -36,7 +46,6 @@ calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die P
 
 		~Daten aus Reservierungsmanager~
 		wagenreihung (string)		-> Die wagenreihung, wagen getrennt durch ', '
-		autoPlatz (bool)		-> Plätze werden automatisch verteilt
 		checkAll (bool)			-> bei einer Verteilung der Sitzplätze werden alle möglichkeiten berechnet und nicht nur das erst beste
 		reservierungen (array)		-> Die liste mit den reservierungen jeweils als (object)
 			name (string)

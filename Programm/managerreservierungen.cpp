@@ -85,7 +85,6 @@ ManagerReservierungen::ManagerReservierungen()
     nummerToWagen = new QMap<int, Wagen*>();
     wagenreihung = "309, 221, 204, 208";
     createWagen();
-    autoPlatz = false;
     checkAll = false;
     reservierungen = new QSet<Reservierung*>();
 }
@@ -97,7 +96,6 @@ ManagerReservierungen::ManagerReservierungen(QJsonObject o)
     wagenreihung = o.value("wagenreihung").toString();
     createWagen();
     checkAll = o.value("checkAll").toBool();
-    autoPlatz = o.value("autoPlatz").toBool();
     reservierungen = new QSet<Reservierung*>();
     QJsonArray array = o.value("reservierungen").toArray();
     for(int i = 0; i < array.size(); i++) {
@@ -113,7 +111,6 @@ ManagerReservierungen::~ManagerReservierungen()
 QJsonObject ManagerReservierungen::toJson(QJsonObject o)
 {
     o.insert("wagenreihung", wagenreihung);
-    o.insert("autoPlatz", autoPlatz);
     o.insert("checkAll", checkAll);
     QJsonArray array;
     for(Reservierung *r: reservierungen->values()) {
@@ -358,14 +355,4 @@ bool ManagerReservierungen::getCheckAll() const
 void ManagerReservierungen::setCheckAll(bool value)
 {
     checkAll = value;
-}
-
-bool ManagerReservierungen::getAutoPlatz() const
-{
-    return autoPlatz;
-}
-
-void ManagerReservierungen::setAutoPlatz(bool value)
-{
-    autoPlatz = value;
 }

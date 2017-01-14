@@ -170,11 +170,11 @@ QString Fahrtag::getHtmlForSingleView()
         html += ":</b><br/>"+listToString(&sonstige, " | ", true) +"</p>";
     }
     if (bemerkungen != "") {
-        html += "<p>Bemerkungen:<br/>"+bemerkungen+"</p>";
+        html += "<p>Bemerkungen:<br/>"+bemerkungen.replace("\n", "<br/>")+"</p>";
     }
 
     // Reservierungen
-    if (getAnzahl() > 0 && art != Fahrtag::Nikolauszug) {
+    if (getAnzahl() > 0) {
         html += "<p><b>Reservierungen:</b>";
         if (art != Fahrtag::Schnupperkurs && art != Fahrtag::Gesellschaftssonderzug) {
             html += "<br/>Bereits "+QString::number(getBelegtGesamt());
@@ -183,11 +183,13 @@ QString Fahrtag::getHtmlForSingleView()
         } else {
             html += "</p>";
         }
-        html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
-        for(Reservierung *r: *reservierungen) {
-            html += r->getTableRow();
+        if (art != Fahrtag::Nikolauszug) {
+            html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
+            for(Reservierung *r: *reservierungen) {
+                html += r->getTableRow();
+            }
+            html += "</tbody></table>";
         }
-        html += "</tbody></table>";
     }
     return html;
 }
@@ -304,7 +306,7 @@ QString Fahrtag::getHtmlForTableView()
 
     // Bemerkungen
     if (bemerkungen != "") {
-        html += bemerkungen;
+        html += bemerkungen.replace("\n", "<br/>");
     }
 
     html += "</td>";
