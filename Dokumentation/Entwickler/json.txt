@@ -5,7 +5,7 @@ personal/ (object)	-> hier werden die Personen gesichert
 	minimumhours (map)
 		key (AActivity::Category) 	-> Die Kategorie, fur welche die Mindestunden angegeben ist
 		value (int) 			-> Die Anzahl an Mindeststunden, fuer die korrespondierende Kategorie
-	minimumTotal (int)			→ Die Anzahl der Mindeststunden in der Summe
+	minimumTotal (int)			-> Die Anzahl der Mindeststunden in der Summe
 
 	personen (array)	-> hier werden die Personen gelistet über ein (object)
 		vorname (string)-> Vorname der Person
@@ -83,5 +83,4 @@ view/ (object)			-> Die Daten der Ansicht, war Personalansicht sichtbar, wo ware
 
 general/ (object)
 	version (string)	-> Version die mindestens benötigt wird, um die Datei korrekt zu öffnen
-
 
