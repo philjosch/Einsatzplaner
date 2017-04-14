@@ -18,3 +18,10 @@ window/
 		height		-> hoehe des Fensters beim schließen
 		visible		-> gibt an, ob das fenster versteckt ist
 test/				-> Verzeichnis für tests
+
+online/ (object) 		-> Hier werden alle Daten gespeichert, die mit dem OnlineSpeichern von Daten zu tun haben
+	username (string)	-> Benutzername des Nutzers
+	servers (map)
+		key (string)	-> Name des Servers
+		value (string)	-> Idenifikationsschlüsel des Servers
+
