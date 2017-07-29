@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QJsonArray>
 
-AActivity::Category AActivity::getCategoryFromString(QString s)
+Category AActivity::getCategoryFromString(QString s)
 {
     s = s.toUpper();
     if (s=="TF") return Tf;
@@ -20,7 +20,7 @@ AActivity::Category AActivity::getCategoryFromString(QString s)
     return Sonstiges;
 }
 
-QString AActivity::getStringFromCategory(AActivity::Category c)
+QString AActivity::getStringFromCategory(Category c)
 {
     switch (c) {
     case Tf: return "Tf";
@@ -241,29 +241,29 @@ bool AActivity::removePerson(QString p)
     return false;
 }
 
-ManagerPersonal::Misstake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, QString aufgabe)
+Misstake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, QString aufgabe)
 {
    /*
     * angabe über aufgabe prüfen
     * p. ob person geeignet
     * person hinzufügen
     */
-    AActivity::Category kat = AActivity::getCategoryFromString(aufgabe);
+    Category kat = AActivity::getCategoryFromString(aufgabe);
     switch (kat) {
     case Tf:
         if (! p->getAusbildungTf()) {
-            return ManagerPersonal::FalscheQualifikation;
+            return Misstake::FalscheQualifikation;
         }
         break;
     case Tb:
         // Ein Tb muss auch Lokführer sein, diese muss noch abgeklärt werden: Issue #9
         if (! p->getAusbildungTf()) {
-            return ManagerPersonal::FalscheQualifikation;
+            return Misstake::FalscheQualifikation;
         }
         break;
     case Zf:
         if (! p->getAusbildungZf()) {
-            return ManagerPersonal::FalscheQualifikation;
+            return Misstake::FalscheQualifikation;
         }
         break;
     case Zub:
@@ -288,16 +288,16 @@ ManagerPersonal::Misstake AActivity::addPerson(Person *p, QString bemerkung, QTi
     personen->insert(p, info);
 
     emitter();
-    return ManagerPersonal::OK;
+    return Misstake::OK;
 }
 
-ManagerPersonal::Misstake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, QString aufgabe)
+Misstake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, QString aufgabe)
 {
     Person *pers = personal->getPerson(p);
     if (pers != nullptr) {
         return addPerson(pers, bemerkung, start, ende, aufgabe);
     }
-    return ManagerPersonal::PersonNichtGefunden;
+    return Misstake::PersonNichtGefunden;
 }
 
 void AActivity::updatePersonBemerkung(Person *p, QString bemerkung)
@@ -335,7 +335,7 @@ QString AActivity::listToString(QMap<Person *, AActivity::Infos *> *liste, QStri
                     a += " ";
                 }
                 a += liste->value(p)->aufgabe;
-            } else if(liste->value(p)->kategorie != AActivity::Sonstiges) {
+            } else if(liste->value(p)->kategorie != Category::Sonstiges) {
                 if (! strichPunkt) {
                     a += "; ";
                     strichPunkt = true;

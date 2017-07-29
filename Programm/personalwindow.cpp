@@ -2,6 +2,7 @@
 #include "ui_personalwindow.h"
 #include "person.h"
 #include "export.h"
+#include "minimumhourseditordialog.h"
 
 #include <QHash>
 #include <QListWidgetItem>
@@ -15,6 +16,7 @@ const QString PersonalWindow::nichtGenugStunden = "#ff9999";
 PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
 {
     ui->setupUi(this);
+    connect(ui->actionMindeststunden, &QAction::triggered, this, &PersonalWindow::editMinimumHours);
 
     // Initalisieren der Statischen variablen
     manager = m;
@@ -649,4 +651,9 @@ void PersonalWindow::on_doubleSonstiges_valueChanged(double arg1)
         ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
         emit changed();
     }
+}
+
+void PersonalWindow::editMinimumHours()
+{
+   MinimumHoursEditorDialog(manager, this).exec();
 }

@@ -971,6 +971,8 @@
     <addaction name="separator"/>
     <addaction name="actionAktualisieren"/>
     <addaction name="separator"/>
+    <addaction name="actionMindeststunden"/>
+    <addaction name="separator"/>
     <addaction name="actionSchlie_en"/>
    </widget>
    <addaction name="menuPersonalmanagement"/>
@@ -1006,6 +1008,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionMindeststunden">
+   <property name="text">
+    <string>Mindeststunden ...</string>
    </property>
   </action>
  </widget>

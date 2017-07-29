@@ -44,7 +44,7 @@ public:
 
     void berechne();
 
-    bool addActivity(AActivity *a, AActivity::Category category);
+    bool addActivity(AActivity *a, Category category);
     bool removeActivity(AActivity *a);
 
     QListIterator<AActivity *> *getActivities();
@@ -84,7 +84,7 @@ protected:
     bool ausbildungZf;
     bool ausbildungRangierer;
     int strecke; // Entfernung vom Wohnort nach Schwarzerden, wird benötigt, um die Kilometer zu berechnen.
-    QMap<AActivity*, AActivity::Category> *activities;
+    QMap<AActivity*, Category> *activities;
 
 private:
     double timeTf;

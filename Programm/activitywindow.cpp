@@ -144,15 +144,15 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
             p->setAusbildungRangierer(true);
             activity->addPerson(p, bemerkung, beginnZ, endeZ, aufgabe);
         } else {
-            ManagerPersonal::Misstake antw = activity->addPerson(name, bemerkung, beginnZ, endeZ, aufgabe);
+            Misstake antw = activity->addPerson(name, bemerkung, beginnZ, endeZ, aufgabe);
 
             switch (antw) {
-            case ManagerPersonal::OK:
+            case Misstake::OK:
                 break;
-            case ManagerPersonal::PersonNichtGefunden:
+            case Misstake::PersonNichtGefunden:
                 QMessageBox::warning(this, "Fehler", "Die eingegebene Person konnte im System nicht gefunden werden.");
                 break;
-            case ManagerPersonal::FalscheQualifikation:
+            case Misstake::FalscheQualifikation:
                 QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
                 break;
             default:

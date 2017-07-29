@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     coreapplication.cpp \
     wagen.cpp \
     verteiler.cpp \
-    preferencesdialog.cpp
+    preferencesdialog.cpp \
+    minimumhourseditordialog.cpp
 
 HEADERS  += mainwindow.h \
     person.h \
@@ -54,7 +55,9 @@ HEADERS  += mainwindow.h \
     coreapplication.h \
     wagen.h \
     verteiler.h \
-    preferencesdialog.h
+    preferencesdialog.h \
+    minimumhourseditordialog.h \
+    enums.h
 
 FORMS    += mainwindow.ui \
     fahrtagwindow.ui \
@@ -63,7 +66,8 @@ FORMS    += mainwindow.ui \
     calendar.ui \
     calendarday.ui \
     exportgesamt.ui \
-    preferencesdialog.ui
+    preferencesdialog.ui \
+    minimumhourseditordialog.ui
 
 TRANSLATIONS += einsatzplaner_de.ts
 

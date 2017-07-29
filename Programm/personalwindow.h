@@ -73,6 +73,8 @@ private slots:
     void on_doubleBuero_valueChanged(double arg1);
     void on_doubleSonstiges_valueChanged(double arg1);
 
+    void editMinimumHours();
+
 private:
     Ui::PersonalWindow *ui;
     ManagerPersonal *manager;

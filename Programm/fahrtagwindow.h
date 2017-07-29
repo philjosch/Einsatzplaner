@@ -112,7 +112,7 @@ private:
 
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);
-    void itemChanged(QListWidgetItem *item, AActivity::Category kat, bool isExtern=false);
+    void itemChanged(QListWidgetItem *item, Category kat, bool isExtern=false);
 
     // Reservierungen
     QMap<Reservierung*, QListWidgetItem*> *resToItem;

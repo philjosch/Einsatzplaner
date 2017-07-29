@@ -33,7 +33,7 @@ Person::Person(QString vorname, QString nachname)
     additionalTimeZub = 0.f;
     valuesInvalid = true;
 
-    activities = new QMap<AActivity *, AActivity::Category>();
+    activities = new QMap<AActivity *, Category>();
 }
 
 Person::Person(QString name) : QObject()
@@ -76,7 +76,7 @@ Person::Person(QString name) : QObject()
     additionalTimeZub = 0.f;
     valuesInvalid = true;
 
-    activities = new QMap<AActivity *, AActivity::Category>();
+    activities = new QMap<AActivity *, Category>();
 }
 
 QJsonObject Person::toJson()
@@ -191,7 +191,7 @@ void Person::berechne()
     QDate today = QDate::currentDate();
     for(AActivity *a: activities->keys()) {
         if (a->getDatum() <= today) {
-            AActivity::Category cat = activities->value(a);
+            Category cat = activities->value(a);
             AActivity::Infos *info = a->getIndividual(this);
 
             // Einsatzstunden
@@ -199,19 +199,19 @@ void Person::berechne()
             QTime ende = info->ende;
             int duration = start.msecsTo(ende);
             switch (cat) {
-            case AActivity::Tb:
-            case AActivity::Tf: timeTf += duration;  break;
-            case AActivity::Zf: timeZf += duration;  break;
-            case AActivity::Begleiter:
-            case AActivity::Zub: timeZub += duration; break;
-            case AActivity::Service: timeService += duration;  break;
-            case AActivity::Buero: timeBuero += duration;  break;
-            case AActivity::Werkstatt: timeWerkstatt += duration;  break;
-            case AActivity::ZugVorbereiten: timeVorbereiten += duration; break;
+            case Category::Tb:
+            case Category::Tf: timeTf += duration;  break;
+            case Category::Zf: timeZf += duration;  break;
+            case Category::Begleiter:
+            case Category::Zub: timeZub += duration; break;
+            case Category::Service: timeService += duration;  break;
+            case Category::Buero: timeBuero += duration;  break;
+            case Category::Werkstatt: timeWerkstatt += duration;  break;
+            case Category::ZugVorbereiten: timeVorbereiten += duration; break;
             default: timeSonstiges += duration;
             }
             timeSum += duration;
-            if (cat != AActivity::Buero) sumKilometer += 2*strecke;
+            if (cat != Category::Buero) sumKilometer += 2*strecke;
         }
     }
     timeTf = timeTf/(3600000) + additionalTimeTf;
@@ -227,7 +227,7 @@ void Person::berechne()
     valuesInvalid = false;
 }
 
-bool Person::addActivity(AActivity *a, AActivity::Category category)
+bool Person::addActivity(AActivity *a, Category category)
 {
     activities->insert(a, category);
     valuesInvalid = true;

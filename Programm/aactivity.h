@@ -5,6 +5,9 @@
 #include <QTime>
 #include <QObject>
 
+//class AActivity;
+//enum Category { Tf, Tb, Zf, Service, Zub, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
+
 #include "managerpersonal.h"
 
 class Person;
@@ -13,8 +16,6 @@ class AActivity
 {
 
 public:
-    enum Category { Tf, Tb, Zf, Service, Zub, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
-
     struct Infos {
         QTime beginn;
         QTime ende;
@@ -57,8 +58,8 @@ public:
 
     QMap<Person *,  Infos*> *getPersonen() const;
     virtual Infos *getIndividual(Person *person) = 0;
-    ManagerPersonal::Misstake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, QString aufgabe);
-    ManagerPersonal::Misstake addPerson(QString p, QString bemerkung, QTime start, QTime ende, QString aufgabe);
+    Misstake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, QString aufgabe);
+    Misstake addPerson(QString p, QString bemerkung, QTime start, QTime ende, QString aufgabe);
     void updatePersonBemerkung(Person *p, QString bemerkung);
     bool removePerson(Person *p);
     bool removePerson(QString p);

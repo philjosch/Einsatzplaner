@@ -186,24 +186,24 @@ void FahrtagWindow::loadData()
             bool block = true;
 
             switch (fahrtag->getPersonen()->value(p)->kategorie) {
-            case AActivity::Tf:
-            case AActivity::Tb:
+            case Category::Tf:
+            case Category::Tb:
                 tf.insert(p, info);
                 ui->listTf->insertItem(0, item);
                 ui->buttonTfDelete->setEnabled(true);
                 break;
-            case AActivity::Zf:
+            case Category::Zf:
                 zf.insert(p, info);
                 ui->listZf->insertItem(0, item);
                 ui->buttonZfDelete->setEnabled(true);
                 break;
-            case AActivity::Zub:
-            case AActivity::Begleiter:
+            case Category::Zub:
+            case Category::Begleiter:
                 zub.insert(p, info);
                 ui->listZub->insertItem(0, item);
                 ui->buttonZubDelete->setEnabled(true);
                 break;
-            case AActivity::Service:
+            case Category::Service:
                 service.insert(p, info);
                 ui->listService->insertItem(0, item);
                 ui->buttonServiceDelete->setEnabled(true);
@@ -217,7 +217,7 @@ void FahrtagWindow::loadData()
 
             // Zeile für die Person in die Tabelle einfügen
             QString bem = info->bemerkung.toUpper();
-            if ( ! (bem.contains("EXTERN") || ((bem.contains("AZUBI") || bem.contains("FS")) && (info->kategorie == AActivity::Tf  || info->kategorie == AActivity::Tb)))) {
+            if ( ! (bem.contains("EXTERN") || ((bem.contains("AZUBI") || bem.contains("FS")) && (info->kategorie == Category::Tf  || info->kategorie == Category::Tb)))) {
 
                 ui->tablePersonen->insertRow(0);
 
@@ -285,7 +285,7 @@ void FahrtagWindow::deleteItemFromList(QListWidget *l, QPushButton *b)
     b->setEnabled(l->count()>0);
 }
 
-void FahrtagWindow::itemChanged(QListWidgetItem *item , AActivity::Category kat, bool isExtern)
+void FahrtagWindow::itemChanged(QListWidgetItem *item , Category kat, bool isExtern)
 {
     /* item: Das Item das Verändert wurde */
     /* kat: Die Kategorie, auf die gebucht wird */
@@ -350,7 +350,7 @@ void FahrtagWindow::itemChanged(QListWidgetItem *item , AActivity::Category kat,
         }
     }
 
-    if (fahrtag->addPerson(person, bem, start, ende, aufgabe) == ManagerPersonal::FalscheQualifikation) {
+    if (fahrtag->addPerson(person, bem, start, ende, aufgabe) == Misstake::FalscheQualifikation) {
         QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
         return;
     }
@@ -385,8 +385,8 @@ void FahrtagWindow::on_listTf_itemChanged(QListWidgetItem *item)
         QString bem = "";
         if (liste.length() > 1) bem = liste.at(1).toUpper();
         bool isExtern = false;
-        AActivity::Category kat = AActivity::Tf;
-        if (bem.contains("TB")) kat = AActivity::Tb;
+        Category kat = Category::Tf;
+        if (bem.contains("TB")) kat = Category::Tb;
         if (bem.contains("AZUBI") || bem.contains("FS")) isExtern = true;
         itemChanged(item, kat, isExtern);
         nehme = true;
@@ -409,7 +409,7 @@ void FahrtagWindow::on_listZf_itemChanged(QListWidgetItem *item)
 {
     if (nehme) {
         nehme = false;
-        itemChanged(item, AActivity::Zf);
+        itemChanged(item, Category::Zf);
         nehme = true;
     }
 }
@@ -430,7 +430,7 @@ void FahrtagWindow::on_listZub_itemChanged(QListWidgetItem *item)
 {
     if (nehme) {
         nehme = false;
-        itemChanged(item, AActivity::Zub);
+        itemChanged(item, Category::Zub);
         nehme = true;
     }
 }
@@ -451,7 +451,7 @@ void FahrtagWindow::on_listService_itemChanged(QListWidgetItem *item)
 {
     if (nehme) {
         nehme = false;
-        itemChanged(item, AActivity::Service);
+        itemChanged(item, Category::Service);
         nehme = true;
     }
 }
@@ -524,15 +524,15 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
             p->setAusbildungRangierer(true);
             fahrtag->addPerson(p, "", beginnZ, endeZ, aufgabe);
         } else {
-            ManagerPersonal::Misstake antw = fahrtag->addPerson(name, "", beginnZ, endeZ, aufgabe);
+            Misstake antw = fahrtag->addPerson(name, "", beginnZ, endeZ, aufgabe);
 
             switch (antw) {
-            case ManagerPersonal::OK:
+            case Misstake::OK:
                 break;
-            case ManagerPersonal::PersonNichtGefunden:
+            case Misstake::PersonNichtGefunden:
                 QMessageBox::warning(this, "Fehler", "Die eingegebene Person konnte im System nicht gefunden werden.");
                 break;
-            case ManagerPersonal::FalscheQualifikation:
+            case Misstake::FalscheQualifikation:
                 QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
                 break;
             default:

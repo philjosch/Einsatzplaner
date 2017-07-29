@@ -109,12 +109,12 @@ QString Activity::getHtmlForTableView()
     // Aufsplitten der Personen auf die Einzelnen Listen
     for(Person *p: personen->keys()) {
         switch (personen->value(p)->kategorie) {
-        case AActivity::Tf:
-        case AActivity::Tb: tf.insert(p, personen->value(p)); break;
-        case AActivity::Zf: zf.insert(p, personen->value(p)); break;
-        case AActivity::Zub: zub.insert(p, personen->value(p)); break;
-        case AActivity::Begleiter: begl.insert(p, personen->value(p)); break;
-        case AActivity::Service: service.insert(p, personen->value(p)); break;
+        case Category::Tf:
+        case Category::Tb: tf.insert(p, personen->value(p)); break;
+        case Category::Zf: zf.insert(p, personen->value(p)); break;
+        case Category::Zub: zub.insert(p, personen->value(p)); break;
+        case Category::Begleiter: begl.insert(p, personen->value(p)); break;
+        case Category::Service: service.insert(p, personen->value(p)); break;
         default: sonstige.insert(p, personen->value(p)); break;
         }
     }

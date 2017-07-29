@@ -10,10 +10,19 @@ double ManagerPersonal::mindestStunden = 10.f;
 double ManagerPersonal::mindestStundenTf = 100.f;
 double ManagerPersonal::mindestStundenZf = 0.f;
 
+QHash<Category, double> ManagerPersonal::minimumHoursDefault {{Category::Tf, 100}};
+double ManagerPersonal::minimumTotalDefault = 10.0;
+
+
 ManagerPersonal::ManagerPersonal()
 {
     personen = new QSet<Person*>();
     personenSorted = new QHash<QString, Person*>();
+    minimumHours = new QHash<Category, double>();
+    foreach (Category cat, minimumHoursDefault.keys()) {
+       minimumHours->insert(cat, minimumHoursDefault.value(cat));
+    }
+    minimumTotal = minimumTotalDefault;
 }
 
 ManagerPersonal::~ManagerPersonal()
@@ -23,34 +32,62 @@ ManagerPersonal::~ManagerPersonal()
 
 QJsonObject ManagerPersonal::toJson()
 {
+    // TODO inlcude minimum Hours
     QJsonArray array;
     for(Person *p: personen->values()) {
         array.append(p->toJson());
     }
+    QJsonObject o2;
+    foreach (Category cat, minimumHours->keys()) {
+       o2.insert(AActivity::getStringFromCategory(cat), minimumHours->value(cat));
+    }
+
     QJsonObject o;
     o.insert("personen", array);
+    o.insert("minimumHours", o2);
+    o.insert("minimumTotal", minimumTotal);
     return o;
 }
 
 QJsonObject ManagerPersonal::personalToJson()
 {
+    // TODO: include MinimumHours
     QJsonArray array;
     for(Person *p: personen->values()) {
         array.append(p->personalToJson());
     }
+    QJsonObject o2;
+    foreach (Category cat, minimumHours->keys()) {
+       o2.insert(AActivity::getStringFromCategory(cat), minimumHours->value(cat));
+    }
+
     QJsonObject o;
     o.insert("personen", array);
+    o.insert("minimumHours", o2);
+    o.insert("minimumTotal", minimumTotal);
     return o;
 }
 
 void ManagerPersonal::fromJson(QJsonObject o)
 {
+    // TODO: minimumHours
     QJsonArray a = o.value("personen").toArray();
     for(int i = 0; i < a.size(); i++) {
         Person *neu = Person::fromJson(a.at(i).toObject());
         personen->insert(neu);
         personenSorted->insert(neu->getName(), neu);
         connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
+    }
+    if (o.contains("minimumTotal")) {
+        minimumTotal = o.value("minimumTotal").toDouble(minimumTotalDefault);
+    }
+    if (o.contains("minimumHours")) {
+        minimumHours = new QHash<Category, double>();
+        QJsonObject o2 = o.value("minimumHours").toObject();
+        foreach (QString cat, o2.keys()) {
+            Category catt = AActivity::getCategoryFromString(cat);
+            minimumHours->insert(catt, o2.value(cat).toDouble(0));
+        }
     }
 }
 
@@ -129,6 +166,36 @@ bool ManagerPersonal::pruefeStunden(Person *p)
         return false;
     }
     return true;
+}
+
+void ManagerPersonal::setMinimumHours(Category cat, double amount)
+{
+    minimumHours->insert(cat, amount);
+}
+
+void ManagerPersonal::setMinimumHours(double amount)
+{
+    minimumTotal = amount;
+}
+
+double ManagerPersonal::getMinimumHours(Category cat)
+{
+    return minimumHours->value(cat, 0);
+}
+
+double ManagerPersonal::getMinimumHours()
+{
+    return minimumTotal;
+}
+
+double ManagerPersonal::getMinimumHoursDefault(Category cat)
+{
+    return minimumHoursDefault.value(cat, 0);
+}
+
+double ManagerPersonal::getMinimumHoursDefault()
+{
+    return ManagerPersonal::minimumTotalDefault;
 }
 
 void ManagerPersonal::personChangedName(Person *p, QString alt)
