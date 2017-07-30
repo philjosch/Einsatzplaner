@@ -138,7 +138,7 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
             aufgabe = ui->tablePersonen->item(row,3)->text();
 
         if (bemerkung.toUpper().contains("EXTERN")) {
-            Person *p = new Person(name);
+            Person *p = new Person(name, nullptr);
             p->setAusbildungTf(true);
             p->setAusbildungZf(true);
             p->setAusbildungRangierer(true);

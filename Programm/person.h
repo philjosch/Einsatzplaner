@@ -11,12 +11,12 @@ class Person : public QObject
     Q_OBJECT
 
 public:
-    Person(QString vorname, QString nachname);
-    Person(QString name);
+    Person(QString vorname, QString nachname, ManagerPersonal *manager);
+    Person(QString name, ManagerPersonal *manager);
 
     QJsonObject toJson();
     QJsonObject personalToJson();
-    static Person *fromJson(QJsonObject o);
+    static Person *fromJson(QJsonObject o, ManagerPersonal *manager);
 
     double getTimeTf();
     double getTimeZf();
@@ -111,6 +111,8 @@ private:
     double additionalTimeWerkstatt;
     double additionalTimeVorbereiten;
     double additionalTimeSonstiges;
+
+    ManagerPersonal *manager;
 
 signals:
     void nameChanged(Person*, QString);// Person ist die Person und QString gibt den !ALTEN! Namen an

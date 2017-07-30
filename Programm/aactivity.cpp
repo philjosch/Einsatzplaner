@@ -70,7 +70,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
         if (personal->personExists(name)) {
             p = personal->getPerson(name);
         } else {
-            p = new Person(name);
+            p = new Person(name, nullptr);
             p->setAusbildungTf(true);
             p->setAusbildungZf(true);
             p->setAusbildungRangierer(true);

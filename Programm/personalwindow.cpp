@@ -16,7 +16,7 @@ const QString PersonalWindow::nichtGenugStunden = "#ff9999";
 PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
 {
     ui->setupUi(this);
-    connect(ui->actionMindeststunden, &QAction::triggered, this, &PersonalWindow::editMinimumHours);
+    connect(ui->pushMindeststunden, &QAbstractButton::clicked, this, &PersonalWindow::editMinimumHours);
 
     // Initalisieren der Statischen variablen
     manager = m;
@@ -655,5 +655,8 @@ void PersonalWindow::on_doubleSonstiges_valueChanged(double arg1)
 
 void PersonalWindow::editMinimumHours()
 {
-   MinimumHoursEditorDialog(manager, this).exec();
+   if (MinimumHoursEditorDialog(manager, this).exec() == QDialog::Accepted) {
+       on_pushAktualisieren_clicked();
+       changed();
+   }
 }

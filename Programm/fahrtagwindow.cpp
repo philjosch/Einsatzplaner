@@ -306,7 +306,7 @@ void FahrtagWindow::itemChanged(QListWidgetItem *item , Category kat, bool isExt
     Person *person;
 
     if (isExtern) {
-        person = new Person(name);
+        person = new Person(name, nullptr);
         person->setAusbildungTf(true);
         person->setAusbildungZf(true);
         person->setAusbildungRangierer(true);
@@ -518,7 +518,7 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
             aufgabe = ui->tablePersonen->item(row,3)->text();
 
         if (name.toUpper().contains("EXTERN")) {
-            Person *p = new Person(name);
+            Person *p = new Person(name, nullptr);
             p->setAusbildungTf(true);
             p->setAusbildungZf(true);
             p->setAusbildungRangierer(true);

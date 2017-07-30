@@ -6,10 +6,6 @@
 #include <QObject>
 #include <QSetIterator>
 
-double ManagerPersonal::mindestStunden = 10.f;
-double ManagerPersonal::mindestStundenTf = 100.f;
-double ManagerPersonal::mindestStundenZf = 0.f;
-
 QHash<Category, double> ManagerPersonal::minimumHoursDefault {{Category::Tf, 100}};
 double ManagerPersonal::minimumTotalDefault = 10.0;
 
@@ -73,7 +69,7 @@ void ManagerPersonal::fromJson(QJsonObject o)
     // TODO: minimumHours
     QJsonArray a = o.value("personen").toArray();
     for(int i = 0; i < a.size(); i++) {
-        Person *neu = Person::fromJson(a.at(i).toObject());
+        Person *neu = Person::fromJson(a.at(i).toObject(), this);
         personen->insert(neu);
         personenSorted->insert(neu->getName(), neu);
         connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
@@ -120,7 +116,7 @@ Person *ManagerPersonal::registerPerson(QString vorname, QString  nachname)
     if (vorname != "") nameKomplett = vorname + " " + nachname;
     else nameKomplett = nachname;
     if (! personExists(nameKomplett)) {
-        Person *neu = new Person(vorname, nachname);
+        Person *neu = new Person(vorname, nachname, this);
         personen->insert(neu);
         personenSorted->insert(nameKomplett, neu);
         connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
@@ -132,7 +128,7 @@ Person *ManagerPersonal::registerPerson(QString vorname, QString  nachname)
 Person *ManagerPersonal::registerPerson(QString name)
 {
     if (! personExists(name)) {
-        Person *neu = new Person(name);
+        Person *neu = new Person(name, this);
         personen->insert(neu);
         personenSorted->insert(name, neu);
         connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
@@ -162,9 +158,26 @@ bool ManagerPersonal::removePerson(Person *p)
 
 bool ManagerPersonal::pruefeStunden(Person *p)
 {
-    if ((p->getTimeSum() < mindestStunden) || (p->getTimeTf() < mindestStundenTf && p->getAusbildungTf()) || (p->getTimeZf() < mindestStundenZf && p->getAusbildungZf()) ) {
+    if (p->getAusbildungTf())
+        if (p->getTimeTf() < getMinimumHours(Category::Tf))
+            return false;
+    if (p->getAusbildungZf())
+        if (p->getTimeZf() < getMinimumHours(Category::Zf))
+            return false;
+    if (p->getTimeService() < getMinimumHours(Category::Service))
         return false;
-    }
+    if (p->getTimeZub() < getMinimumHours(Category::Zub))
+        return false;
+    if (p->getTimeBuero() < getMinimumHours(Category::Buero))
+        return false;
+    if (p->getTimeWerkstatt() < getMinimumHours(Category::Werkstatt))
+        return false;
+    if (p->getTimeVorbereiten() < getMinimumHours(Category::ZugVorbereiten))
+        return false;
+    if (p->getTimeSonstiges() < getMinimumHours(Category::Sonstiges))
+        return false;
+    if (p->getTimeSum() < getMinimumHours())
+        return false;
     return true;
 }
 

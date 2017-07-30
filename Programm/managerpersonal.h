@@ -35,7 +35,7 @@ public:
     bool removePerson(QString name);
     bool removePerson(Person *p);
 
-    static bool pruefeStunden(Person *p);
+    bool pruefeStunden(Person *p);
 
     void setMinimumHours(Category cat, double amount);
     void setMinimumHours(double amount);
@@ -45,10 +45,6 @@ public:
 
     static double getMinimumHoursDefault(Category kat);
     static double getMinimumHoursDefault();
-
-    static double mindestStunden;
-    static double mindestStundenTf;
-    static double mindestStundenZf;
 
     QSetIterator<Person *> getPersonen() const;
 

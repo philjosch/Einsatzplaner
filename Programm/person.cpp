@@ -7,8 +7,9 @@
 #include <QDebug>
 #include <QVariant>
 
-Person::Person(QString vorname, QString nachname)
+Person::Person(QString vorname, QString nachname, ManagerPersonal *manager)
 {
+    this->manager = manager;
     this->vorname = vorname;
     this->nachname = nachname;
     strecke = 0;
@@ -36,7 +37,7 @@ Person::Person(QString vorname, QString nachname)
     activities = new QMap<AActivity *, Category>();
 }
 
-Person::Person(QString name) : QObject()
+Person::Person(QString name, ManagerPersonal *manager) : QObject()
 {
     QString vorname = "";
     QString nachname = "";
@@ -52,6 +53,8 @@ Person::Person(QString name) : QObject()
         }
         nachname = liste.last();
     }
+    Person(vorname, nachname, manager);
+/*
     this->vorname = vorname;
     this->nachname = nachname;
     strecke = 0;
@@ -77,6 +80,7 @@ Person::Person(QString name) : QObject()
     valuesInvalid = true;
 
     activities = new QMap<AActivity *, Category>();
+    */
 }
 
 QJsonObject Person::toJson()
@@ -111,13 +115,13 @@ QJsonObject Person::personalToJson()
     return o;
 }
 
-Person *Person::fromJson(QJsonObject o)
+Person *Person::fromJson(QJsonObject o, ManagerPersonal *manager)
 {
     Person *p;
     if (o.contains("name")) {
-        p = new Person(o.value("name").toString());
+        p = new Person(o.value("name").toString(), manager);
     } else {
-        p = new Person(o.value("vorname").toString(), o.value("nachname").toString());
+        p = new Person(o.value("vorname").toString(), o.value("nachname").toString(), manager);
     }
     p->ausbildungRangierer = o.value("ausRang").toBool();
     p->ausbildungZf = o.value("ausZf").toBool();
@@ -304,7 +308,7 @@ QString Person::getHtmlForTableView(QList<bool> *liste)
         liste->append(0);
     }
     QString html;
-    if (ManagerPersonal::pruefeStunden(this)) {
+    if (manager->pruefeStunden(this)) {
         html = "<tr>";
     } else {
         html = "<tr style='background-color:"+PersonalWindow::nichtGenugStunden+";'>";

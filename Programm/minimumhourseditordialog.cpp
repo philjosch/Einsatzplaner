@@ -8,13 +8,12 @@ MinimumHoursEditorDialog::MinimumHoursEditorDialog(ManagerPersonal *manager, QWi
     ui(new Ui::MinimumHoursEditorDialog)
 {
     ui->setupUi(this);
-    QDialog::setModal(true);
+    QDialog::setWindowModality(Qt::WindowModal);
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(save()));
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(abstractButtonClickedSlot(QAbstractButton*)));
     this->manager = manager;
 
     ui->doubleTf->setValue(manager->getMinimumHours(Category::Tf));
-    ui->doubleTb->setValue(manager->getMinimumHours(Category::Tb));
     ui->doubleZf->setValue(manager->getMinimumHours(Category::Zf));
     ui->doubleService->setValue(manager->getMinimumHours(Category::Service));
     ui->doubleZub->setValue(manager->getMinimumHours(Category::Zub));
@@ -23,7 +22,6 @@ MinimumHoursEditorDialog::MinimumHoursEditorDialog(ManagerPersonal *manager, QWi
     ui->doubleZugVorbereiten->setValue(manager->getMinimumHours(Category::ZugVorbereiten));
     ui->doubleSonstiges->setValue(manager->getMinimumHours(Category::Sonstiges));
     ui->doubleGesamt->setValue(manager->getMinimumHours());
-
 }
 
 MinimumHoursEditorDialog::~MinimumHoursEditorDialog()
@@ -34,7 +32,6 @@ MinimumHoursEditorDialog::~MinimumHoursEditorDialog()
 void MinimumHoursEditorDialog::setDefault()
 {
     ui->doubleTf->setValue(manager->getMinimumHoursDefault(Category::Tf));
-    ui->doubleTb->setValue(manager->getMinimumHoursDefault(Category::Tb));
     ui->doubleZf->setValue(manager->getMinimumHoursDefault(Category::Zf));
     ui->doubleService->setValue(manager->getMinimumHoursDefault(Category::Service));
     ui->doubleZub->setValue(manager->getMinimumHoursDefault(Category::Zub));
@@ -53,15 +50,12 @@ void MinimumHoursEditorDialog::abstractButtonClickedSlot(QAbstractButton *button
         save();
     } else if (button == (QAbstractButton*)ui->buttonBox->button(QDialogButtonBox::Cancel)) {
         QDialog::close();
-//        ui->buttonBox->rejected();
-//        delete ui;
     }
 }
 
 void MinimumHoursEditorDialog::save()
 {
     manager->setMinimumHours(Category::Tf, ui->doubleTf->value());
-    manager->setMinimumHours(Category::Tb, ui->doubleTb->value());
     manager->setMinimumHours(Category::Zf, ui->doubleZf->value());
     manager->setMinimumHours(Category::Service, ui->doubleService->value());
     manager->setMinimumHours(Category::Zub, ui->doubleZub->value());
@@ -70,5 +64,5 @@ void MinimumHoursEditorDialog::save()
     manager->setMinimumHours(Category::ZugVorbereiten, ui->doubleZugVorbereiten->value());
     manager->setMinimumHours(Category::Sonstiges, ui->doubleSonstiges->value());
     manager->setMinimumHours(ui->doubleGesamt->value());
-    QDialog::close();
+    QDialog::accept();
 }

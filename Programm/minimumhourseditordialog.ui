@@ -13,6 +13,12 @@
     <height>361</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="minimumSize">
    <size>
     <width>300</width>
@@ -27,9 +33,6 @@
   </property>
   <property name="windowTitle">
    <string>Mindeststunden bearbeiten</string>
-  </property>
-  <property name="modal">
-   <bool>true</bool>
   </property>
   <layout class="QFormLayout" name="formLayout">
    <property name="rowWrapPolicy">
