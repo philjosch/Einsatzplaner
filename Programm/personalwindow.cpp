@@ -235,6 +235,84 @@ void PersonalWindow::refreshGesamt()
     }
     ui->tabelleGesamt->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    // Insert the sum of each column
+
+    ui->tabelleGesamt->insertRow(0);
+    QTableWidgetItem *ii = new QTableWidgetItem();
+    ui->tabelleGesamt->setItem(0, 0, ii);
+
+    ii = new QTableWidgetItem("Gesamt");
+    ui->tabelleGesamt->setItem(0, 1, ii);
+
+    int pos = 2;
+    if (anzeige->at(0)) {
+        ii = new QTableWidgetItem();
+        ii->setData(Qt::EditRole, manager->getTimeSum());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+        pos++;
+    }
+    if (anzeige->at(1)) {
+        ii = new QTableWidgetItem();
+//        ii->setData(Qt::EditRole, manager->getAnzahl());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+        pos++;
+    }
+    if (anzeige->at(2)) {
+        ii = new QTableWidgetItem();
+        ii->setData(Qt::EditRole, manager->getTimeTf());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+        pos++;
+    }
+    if (anzeige->at(3)) {
+        ii = new QTableWidgetItem();
+        ii->setData(Qt::EditRole, manager->getTimeZf());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+        pos++;
+    }
+    if (anzeige->at(4)) {
+        ii = new QTableWidgetItem();
+        ii->setData(Qt::EditRole, manager->getTimeZub());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+        pos++;
+    }
+    if (anzeige->at(5)) {
+        ii = new QTableWidgetItem();
+        ii->setData(Qt::EditRole, manager->getTimeService());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+        pos++;
+    }
+    if (anzeige->at(6)) {
+        ii = new QTableWidgetItem();
+        ii->setData(Qt::EditRole, manager->getTimeVorbereiten());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+        pos++;
+    }
+    if (anzeige->at(7)) {
+        ii = new QTableWidgetItem();
+        ii->setData(Qt::EditRole, manager->getTimeWerkstatt());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+        pos++;
+    }
+    if (anzeige->at(8)) {
+        ii = new QTableWidgetItem();
+        ii->setData(Qt::EditRole, manager->getTimeBuero());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+        pos++;
+    }
+    if (anzeige->at(9)) {
+        ii = new QTableWidgetItem();
+        ii->setData(Qt::EditRole, manager->getTimeSonstiges());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+        pos++;
+    }
+    if (anzeige->at(10)) {
+        ii = new QTableWidgetItem();
+        ii->setData(Qt::EditRole, manager->getSumKilometer());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+    }
+    // End of insert the sum of each column
+
+
     while(iterator.hasNext()) {
         Person *p = iterator.next();
         p->berechne();
@@ -488,6 +566,7 @@ void PersonalWindow::on_pushPrint_clicked()
 
 void PersonalWindow::print(QPrinter *p)
 {
+    refreshGesamt();
     QList<Person*> *liste = new QList<Person*>();
 
     for(int i = 0; i < ui->tabelleGesamt->rowCount(); i++) {
@@ -498,7 +577,19 @@ void PersonalWindow::print(QPrinter *p)
         if (pers != nullptr)
             liste->append(pers);
     }
-    Export::printPersonen(liste, anzeige, p);
+    QList<double> *gesamt = new QList<double>();
+    gesamt->append(manager->getTimeSum());
+    gesamt->append(0);
+    gesamt->append(manager->getTimeTf());
+    gesamt->append(manager->getTimeZf());
+    gesamt->append(manager->getTimeZub());
+    gesamt->append(manager->getTimeService());
+    gesamt->append(manager->getTimeVorbereiten());
+    gesamt->append(manager->getTimeWerkstatt());
+    gesamt->append(manager->getTimeBuero());
+    gesamt->append(manager->getTimeSonstiges());
+    gesamt->append(manager->getSumKilometer());
+    Export::printPersonen(liste, gesamt, anzeige, p);
 }
 
 void PersonalWindow::on_tabWidget_tabBarClicked(int index)

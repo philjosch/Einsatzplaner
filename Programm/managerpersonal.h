@@ -48,6 +48,17 @@ public:
 
     QSetIterator<Person *> getPersonen() const;
 
+    double getTimeTf();
+    double getTimeZf();
+    double getTimeZub();
+    double getTimeService();
+    double getTimeBuero();
+    double getTimeWerkstatt();
+    double getTimeVorbereiten();
+    double getTimeSonstiges();
+    double getTimeSum();
+    double getSumKilometer();
+
 public slots:
     void personChangedName(Person *p, QString alt);
     void reloadSettings();

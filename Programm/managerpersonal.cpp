@@ -231,6 +231,76 @@ QSetIterator<Person *> ManagerPersonal::getPersonen() const
     return i;
 }
 
+double ManagerPersonal::getTimeTf()
+{
+    double sum = 0;
+    foreach (Person *p, personenSorted->values()) sum += p->getTimeTf();
+    return sum;
+}
+
+double ManagerPersonal::getTimeZf()
+{
+    double sum = 0;
+    foreach (Person *p, personenSorted->values()) sum += p->getTimeZf();
+    return sum;
+}
+
+double ManagerPersonal::getTimeZub()
+{
+    double sum = 0;
+    foreach (Person *p, personenSorted->values()) sum += p->getTimeZub();
+    return sum;
+}
+
+double ManagerPersonal::getTimeService()
+{
+    double sum = 0;
+    foreach (Person *p, personenSorted->values()) sum += p->getTimeService();
+    return sum;
+}
+
+double ManagerPersonal::getTimeBuero()
+{
+    double sum = 0;
+    foreach (Person *p, personenSorted->values()) sum += p->getTimeBuero();
+    return sum;
+}
+
+double ManagerPersonal::getTimeWerkstatt()
+{
+    double sum = 0;
+    foreach (Person *p, personenSorted->values()) sum += p->getTimeWerkstatt();
+    return sum;
+}
+
+double ManagerPersonal::getTimeVorbereiten()
+{
+    double sum = 0;
+    foreach (Person *p, personenSorted->values()) sum += p->getTimeVorbereiten();
+    return sum;
+}
+
+double ManagerPersonal::getTimeSonstiges()
+{
+    double sum = 0;
+    foreach (Person *p, personenSorted->values()) sum += p->getTimeSonstiges();
+    return sum;
+}
+
+double ManagerPersonal::getTimeSum()
+{
+    double sum = 0;
+    foreach (Person *p, personenSorted->values()) sum += p->getTimeSum();
+    return sum;
+}
+
+double ManagerPersonal::getSumKilometer()
+{
+    double sum = 0;
+    foreach (Person *p, personenSorted->values()) sum += p->getSumKilometer();
+    return sum;
+}
+
 QString ManagerPersonal::getGoodName(QString name)
 {
     if (name.contains(QRegExp("\\s*,\\s*"))) {
