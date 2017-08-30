@@ -71,6 +71,11 @@
         </column>
         <column>
          <property name="text">
+          <string>Aufgabe</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>Beginn*</string>
          </property>
         </column>
@@ -81,10 +86,10 @@
         </column>
         <column>
          <property name="text">
-          <string>Aufgabe</string>
+          <string>Bemerkung</string>
          </property>
          <property name="toolTip">
-          <string>Tf, Tb, Zf, Service, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges</string>
+          <string>Angeben, ob es sich bei der Person um eine Externe handelt, ob sie auf den Führerstand mitfährt, oder Azubi ist oder aber ein Teilnehmer eines Schnupperkurses.</string>
          </property>
         </column>
        </widget>

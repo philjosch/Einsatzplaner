@@ -4,6 +4,7 @@
 #include <QDate>
 #include <QTime>
 #include <QObject>
+#include <QComboBox>
 
 //class AActivity;
 //enum Category { Tf, Tb, Zf, Service, Zub, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
@@ -75,6 +76,8 @@ public:
 
     virtual void emitter() = 0;
 
+    QComboBox* generateNewComboBox();
+
 protected:
     QDate datum;
     QString ort;
@@ -88,6 +91,7 @@ protected:
     ManagerPersonal *personal;
 
     QString listToString(QMap<Person*, Infos*> *liste, QString seperator, bool aufgabe=false);
+
 };
 
 #endif // AACTIVITY_H

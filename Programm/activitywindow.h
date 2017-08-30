@@ -44,6 +44,8 @@ private slots:
     void on_actionPrint_triggered();
     void on_actionPdf_triggered();
 
+    void comboInTableChanged();
+
 private:
     Ui::ActivityWindow *ui;
     Activity *activity;

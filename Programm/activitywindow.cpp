@@ -2,6 +2,7 @@
 #include "ui_activitywindow.h"
 #include "export.h"
 
+#include <QComboBox>
 #include <QMessageBox>
 #include <QPrinter>
 
@@ -59,6 +60,9 @@ void ActivityWindow::on_checkBoxBenoetigt_toggled(bool checked)
 void ActivityWindow::on_buttonInsert_clicked()
 {
     ui->tablePersonen->insertRow(0);
+    QComboBox *box = activity->generateNewComboBox();
+    connect(box, SIGNAL(currentTextChanged(QString)), this, SLOT(comboInTableChanged()));
+    ui->tablePersonen->setCellWidget(0, 1, box);
     ui->buttonRemove->setEnabled(true);
 }
 
@@ -81,7 +85,7 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
 {
     if (nehme) {
         nehme = false;
-        // column 1: Name, 2: Beginn, 3: Ende, 4: Aufgabe
+        // column 0: Name, 1: Aufgabe, 2: Beginn, 3: Ende, 4: Bemerkung
         // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
         if (column == 0) {
             QStringList *neu = new QStringList();
@@ -107,59 +111,49 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         if (ui->tablePersonen->item(row,0) != nullptr)
             name = ui->tablePersonen->item(row,0)->text();
 
-        QString bemerkung = "";
-        QStringList list = name.split(QRegExp("\\s*;\\s*"));
-        name = list.at(0);
-        if (list.length() > 1)
-            bemerkung = list.at(1);
+        QString aufgabe = "";
+        aufgabe = ((QComboBox*)ui->tablePersonen->cellWidget(row, 1))->currentText();
 
         QString beginn = "";
         QTime beginnZ = QTime(0,0);
-        if (ui->tablePersonen->item(row,1) != nullptr) {
-            beginn = ui->tablePersonen->item(row,1)->text();
+        if (ui->tablePersonen->item(row,2) != nullptr) {
+            beginn = ui->tablePersonen->item(row,2)->text();
             if (beginn != "") {
                 beginnZ = QTime::fromString(beginn, "h:mm");
-                ui->tablePersonen->item(row,1)->setText(beginnZ.toString("hh:mm"));
+                ui->tablePersonen->item(row,2)->setText(beginnZ.toString("hh:mm"));
             }
         }
 
         QString ende = "";
         QTime endeZ = QTime(0,0);
-        if (ui->tablePersonen->item(row,2) != nullptr) {
-            ende = ui->tablePersonen->item(row,2)->text();
+        if (ui->tablePersonen->item(row,3) != nullptr) {
+            ende = ui->tablePersonen->item(row,3)->text();
             if (ende != "") {
                 endeZ = QTime::fromString(ende, "h:mm");
-                ui->tablePersonen->item(row,2)->setText(endeZ.toString("hh:mm"));
+                ui->tablePersonen->item(row,3)->setText(endeZ.toString("hh:mm"));
             }
         }
 
-        QString aufgabe = "";
-        if (ui->tablePersonen->item(row,3) != nullptr)
-            aufgabe = ui->tablePersonen->item(row,3)->text();
+        QString bemerkung = "";
+        if (ui->tablePersonen->item(row,4) != nullptr)
+            bemerkung = ui->tablePersonen->item(row,4)->text();
 
-        if (bemerkung.toUpper().contains("EXTERN")) {
-            Person *p = new Person(name, nullptr);
-            p->setAusbildungTf(true);
-            p->setAusbildungZf(true);
-            p->setAusbildungRangierer(true);
-            activity->addPerson(p, bemerkung, beginnZ, endeZ, aufgabe);
-        } else {
-            Misstake antw = activity->addPerson(name, bemerkung, beginnZ, endeZ, aufgabe);
+        Misstake antw = activity->addPerson(name, bemerkung, beginnZ, endeZ, aufgabe);
 
-            switch (antw) {
-            case Misstake::OK:
-                break;
-            case Misstake::PersonNichtGefunden:
-                QMessageBox::warning(this, "Fehler", "Die eingegebene Person konnte im System nicht gefunden werden.");
-                break;
-            case Misstake::FalscheQualifikation:
-                QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
-                break;
-            default:
-                QMessageBox::warning(this, "Sonstiger Fehler", "Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!");
-                break;
-            }
+        switch (antw) {
+        case Misstake::OK:
+            break;
+        case Misstake::PersonNichtGefunden:
+            QMessageBox::warning(this, "Fehler", "Die eingegebene Person konnte im System nicht gefunden werden.");
+            break;
+        case Misstake::FalscheQualifikation:
+            QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
+            break;
+        default:
+            QMessageBox::warning(this, "Sonstiger Fehler", "Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!");
+            break;
         }
+
         nehme = true;
     }
 }
@@ -179,6 +173,15 @@ void ActivityWindow::on_actionPdf_triggered()
 {
     QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf");
     Export::printActivity(activity, p);
+}
+
+void ActivityWindow::comboInTableChanged()
+{
+    QComboBox* combo = qobject_cast<QComboBox*>(sender());
+     if (combo)
+     {
+         on_tablePersonen_cellChanged(combo->property("row").toInt(), combo->property("column").toInt());
+     }
 }
 
 void ActivityWindow::loadData()

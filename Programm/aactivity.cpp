@@ -249,6 +249,13 @@ Misstake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime e
     * person hinzufügen
     */
     Category kat = AActivity::getCategoryFromString(aufgabe);
+    /**
+      * TODO: Hier muss noch ordentlich Zeit reininvestiert werden.
+      * Denn die bisherige Vorgehensweise ist überhlolt.
+      * Die ganze verabreitung muss zentral hier in der MEthode bzw. Klasse stattfidnen
+      * denn dann wird es im COde übersichtliche run ddas MVC-Prinzip wird besser umgesetzt
+      *
+      */
     switch (kat) {
     case Tf:
         if (! p->getAusbildungTf()) {
@@ -350,4 +357,12 @@ QString AActivity::listToString(QMap<Person *, AActivity::Infos *> *liste, QStri
         }
     }
     return a;
+}
+
+QComboBox *AActivity::generateNewComboBox()
+{
+    QComboBox *box = new QComboBox();
+    box->insertItems(0, QStringList({"Tf","Tb","Zf","Service","Zug Begleiter","Büro","Werkstatt","Vorbereiten","Sonstiges"}));
+    box->setCurrentIndex(8);
+    return box;
 }
