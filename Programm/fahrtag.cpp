@@ -60,7 +60,7 @@ QString Fahrtag::getStringFromArt(Fahrtag::Art art)
     case Gesellschaftssonderzug: return "Gesellschaftssonderzug";
     case Nikolauszug: return "Nikolauszug";
     case Schnupperkurs: return "Ehrenlokführer Schnupperkurs";
-    case Bahnhofsfest: return "BAhnhofsfest";
+    case Bahnhofsfest: return "Bahnhofsfest";
     case ELFundMuseumszug: return "Museumszug mit Schnupperkurs";
     default: return "Sonstiges";
     }

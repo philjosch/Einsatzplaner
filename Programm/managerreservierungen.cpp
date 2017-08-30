@@ -58,7 +58,7 @@ QMap<int, QList<int> *> *ManagerReservierungen::getPlaetzeFromString(QString pla
         QStringList l2a = s1.split(QRegExp("\\s*:\\s*"));
         int wagen = l2a.at(0).toInt();
         if (l2a.length() > 1) {
-            QStringList l2 = l2a.at(1).split(QRegExp("\\s*,\\s+"));
+            QStringList l2 = l2a.at(1).split(QRegExp("\\s*,\\s*"));
             QList<int> *l = new QList<int>();
             for (QString s2: l2) {
                 if (s2.contains(QRegExp("\\s*-\\s*"))) {
