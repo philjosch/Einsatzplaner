@@ -59,6 +59,8 @@ void PersonalWindow::showPerson(Person *p)
 {
     aktuellePerson = p;
 
+    p->berechne();
+
     enabled = false;
     ui->lineVorname->setEnabled(true);
     ui->lineNachname->setEnabled(true);
