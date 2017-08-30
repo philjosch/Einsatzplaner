@@ -111,11 +111,24 @@ void FahrtagWindow::on_textBemerkungen_textChanged()
         fahrtag->setBemerkungen(ui->textBemerkungen->toPlainText());
 }
 
-void FahrtagWindow::on_timeEnde_timeChanged(const QTime &time)
+
+void FahrtagWindow::on_comboTimeEndeH_currentTextChanged(const QString &arg1)
 {
     if (nehme)
-        fahrtag->setZeitEnde(QTime(time.hour(), time.minute()));
+        fahrtag->setZeitEnde(QTime(arg1.toInt(), fahrtag->getZeitEnde().minute()));
 }
+
+void FahrtagWindow::on_comboTimeEndeM_currentTextChanged(const QString &arg1)
+{
+    if (nehme)
+        fahrtag->setZeitEnde(QTime(fahrtag->getZeitEnde().hour(), arg1.toInt()));
+}
+
+//void FahrtagWindow::on_timeEnde_timeChanged(const QTime &time)
+//{
+//    if (nehme)
+//        fahrtag->setZeitEnde(QTime(time.hour(), time.minute()));
+//}
 
 void FahrtagWindow::loadData()
 {
@@ -125,7 +138,9 @@ void FahrtagWindow::loadData()
         ui->dateDate->setDate(fahrtag->getDatum());
         ui->textAnlass->clear();
         ui->textAnlass->insertPlainText(fahrtag->getAnlass());
-        ui->timeEnde->setTime(fahrtag->getZeitEnde());
+        ui->comboTimeEndeH->setCurrentText(fahrtag->getZeitEnde().toString("HH"));
+        ui->comboTimeEndeM->setCurrentText(fahrtag->getZeitEnde().toString("mm"));
+//        ui->timeEnde->setTime(fahrtag->getZeitEnde());
         ui->checkBoxBenoetigt->setChecked(fahrtag->getPersonalBenoetigt());
 
         // Daten von Manager_Reservierungen

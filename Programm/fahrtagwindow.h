@@ -31,6 +31,8 @@ private slots:
     void on_comboTimeTfM_currentTextChanged(const QString &arg1);
     void on_comboTimeZH_currentTextChanged(const QString &arg1);
     void on_comboTimeZM_currentTextChanged(const QString &arg1);
+    void on_comboTimeEndeH_currentTextChanged(const QString &arg1);
+    void on_comboTimeEndeM_currentTextChanged(const QString &arg1);
 
     // Personaltab
     void on_listTf_itemChanged(QListWidgetItem *item);
@@ -77,7 +79,7 @@ private slots:
     void update(); // Aktualisiert die Anzeige, wieviele Sitzplätze belegt sind
 
     // Einsatzzeiten
-    void on_timeEnde_timeChanged(const QTime &time);
+//    void on_timeEnde_timeChanged(const QTime &time);
     void on_checkBoxBenoetigt_clicked(bool checked);
     void on_tablePersonen_cellChanged(int row, int column);
 
