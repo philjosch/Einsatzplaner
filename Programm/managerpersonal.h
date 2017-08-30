@@ -48,16 +48,18 @@ public:
 
     QSetIterator<Person *> getPersonen() const;
 
-    double getTimeTf();
-    double getTimeZf();
-    double getTimeZub();
-    double getTimeService();
-    double getTimeBuero();
-    double getTimeWerkstatt();
-    double getTimeVorbereiten();
-    double getTimeSonstiges();
-    double getTimeSum();
-    double getSumKilometer();
+    void berechne();
+
+    double getTimeTf() const;
+    double getTimeZf() const;
+    double getTimeZub() const;
+    double getTimeService() const;
+    double getTimeBuero() const;
+    double getTimeWerkstatt() const;
+    double getTimeVorbereiten() const;
+    double getTimeSonstiges() const;
+    double getTimeSum() const;
+    double getSumKilometer() const;
 
 public slots:
     void personChangedName(Person *p, QString alt);
@@ -74,6 +76,17 @@ private:
 
     static QHash<Category, double> minimumHoursDefault;
     static double minimumTotalDefault;
+
+    double timeTf;
+    double timeZf;
+    double timeZub;
+    double timeService;
+    double timeBuero;
+    double timeWerkstatt;
+    double timeVorbereiten;
+    double timeSonstiges;
+    double timeSum;
+    double sumKilometer;
 
 };
 

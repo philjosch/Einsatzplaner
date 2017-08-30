@@ -236,6 +236,7 @@ void PersonalWindow::refreshGesamt()
     ui->tabelleGesamt->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     // Insert the sum of each column
+    manager->berechne();
 
     ui->tabelleGesamt->insertRow(0);
     QTableWidgetItem *ii = new QTableWidgetItem();
@@ -315,7 +316,6 @@ void PersonalWindow::refreshGesamt()
 
     while(iterator.hasNext()) {
         Person *p = iterator.next();
-        p->berechne();
         QString farbe = "#ffffff";
         if (! manager->pruefeStunden(p)) {
             farbe = nichtGenugStunden;

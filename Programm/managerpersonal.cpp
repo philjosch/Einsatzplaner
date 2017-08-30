@@ -231,74 +231,31 @@ QSetIterator<Person *> ManagerPersonal::getPersonen() const
     return i;
 }
 
-double ManagerPersonal::getTimeTf()
+void ManagerPersonal::berechne()
 {
-    double sum = 0;
-    foreach (Person *p, personenSorted->values()) sum += p->getTimeTf();
-    return sum;
-}
-
-double ManagerPersonal::getTimeZf()
-{
-    double sum = 0;
-    foreach (Person *p, personenSorted->values()) sum += p->getTimeZf();
-    return sum;
-}
-
-double ManagerPersonal::getTimeZub()
-{
-    double sum = 0;
-    foreach (Person *p, personenSorted->values()) sum += p->getTimeZub();
-    return sum;
-}
-
-double ManagerPersonal::getTimeService()
-{
-    double sum = 0;
-    foreach (Person *p, personenSorted->values()) sum += p->getTimeService();
-    return sum;
-}
-
-double ManagerPersonal::getTimeBuero()
-{
-    double sum = 0;
-    foreach (Person *p, personenSorted->values()) sum += p->getTimeBuero();
-    return sum;
-}
-
-double ManagerPersonal::getTimeWerkstatt()
-{
-    double sum = 0;
-    foreach (Person *p, personenSorted->values()) sum += p->getTimeWerkstatt();
-    return sum;
-}
-
-double ManagerPersonal::getTimeVorbereiten()
-{
-    double sum = 0;
-    foreach (Person *p, personenSorted->values()) sum += p->getTimeVorbereiten();
-    return sum;
-}
-
-double ManagerPersonal::getTimeSonstiges()
-{
-    double sum = 0;
-    foreach (Person *p, personenSorted->values()) sum += p->getTimeSonstiges();
-    return sum;
-}
-
-double ManagerPersonal::getTimeSum()
-{
-    double sum = 0;
-    foreach (Person *p, personenSorted->values()) sum += p->getTimeSum();
-    return sum;
-}
-
-double ManagerPersonal::getSumKilometer()
-{
-    double sum = 0;
-    foreach (Person *p, personenSorted->values()) sum += p->getSumKilometer();
-    return sum;
+    timeTf = 0;
+    timeZf = 0;
+    timeZub = 0;
+    timeService = 0;
+    timeBuero = 0;
+    timeWerkstatt = 0;
+    timeVorbereiten = 0;
+    timeSonstiges = 0;
+    timeSum = 0;
+    sumKilometer = 0;
+    foreach (Person *p, personenSorted->values()) {
+        p->berechne();
+        timeTf += p->getTimeTf();
+        timeZf += p->getTimeZf();
+        timeZub += p->getTimeZub();
+        timeService += p->getTimeService();
+        timeBuero += p->getTimeBuero();
+        timeWerkstatt += p->getTimeWerkstatt();
+        timeVorbereiten += p->getTimeVorbereiten();
+        timeSonstiges += p->getTimeSonstiges();
+        timeSum += p->getTimeSum();
+        sumKilometer += p->getSumKilometer();
+    }
 }
 
 QString ManagerPersonal::getGoodName(QString name)
@@ -308,4 +265,54 @@ QString ManagerPersonal::getGoodName(QString name)
         name = liste.at(1) + " " + liste.at(0);
     }
     return name;
+}
+
+double ManagerPersonal::getSumKilometer() const
+{
+    return sumKilometer;
+}
+
+double ManagerPersonal::getTimeSum() const
+{
+    return timeSum;
+}
+
+double ManagerPersonal::getTimeSonstiges() const
+{
+    return timeSonstiges;
+}
+
+double ManagerPersonal::getTimeVorbereiten() const
+{
+    return timeVorbereiten;
+}
+
+double ManagerPersonal::getTimeWerkstatt() const
+{
+    return timeWerkstatt;
+}
+
+double ManagerPersonal::getTimeBuero() const
+{
+    return timeBuero;
+}
+
+double ManagerPersonal::getTimeService() const
+{
+    return timeService;
+}
+
+double ManagerPersonal::getTimeZub() const
+{
+    return timeZub;
+}
+
+double ManagerPersonal::getTimeZf() const
+{
+    return timeZf;
+}
+
+double ManagerPersonal::getTimeTf() const
+{
+    return timeTf;
 }
