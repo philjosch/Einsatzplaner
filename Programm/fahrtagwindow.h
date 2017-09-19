@@ -99,6 +99,9 @@ private slots:
 
     void on_checkBoxAll_clicked(bool checked);
 
+    void comboInTableChanged();
+    void timeEditInTableChanged();
+
 private:
     // Allgemeines
     Ui::FahrtagWindow *ui;

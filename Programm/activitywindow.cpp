@@ -154,15 +154,13 @@ void ActivityWindow::on_actionPdf_triggered()
 void ActivityWindow::comboInTableChanged()
 {
     QComboBox* combo = qobject_cast<QComboBox*>(sender());
-     if (combo)
-         on_tablePersonen_cellChanged(combo->property("row").toInt(), combo->property("column").toInt());
+     if (combo) on_tablePersonen_cellChanged(combo->property("row").toInt(), combo->property("column").toInt());
 }
 
 void ActivityWindow::timeEditInTableChanged()
 {
     QTimeEdit *time = qobject_cast<QTimeEdit*>(sender());
-     if (time)
-         on_tablePersonen_cellChanged(time->property("row").toInt(), time->property("column").toInt());
+     if (time) on_tablePersonen_cellChanged(time->property("row").toInt(), time->property("column").toInt());
 }
 
 void ActivityWindow::loadData()

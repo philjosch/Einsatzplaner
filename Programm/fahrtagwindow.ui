@@ -1250,6 +1250,11 @@
           </column>
           <column>
            <property name="text">
+            <string>Aufgabe</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
             <string>Beginn*</string>
            </property>
           </column>
@@ -1260,7 +1265,7 @@
           </column>
           <column>
            <property name="text">
-            <string>Aufgabe</string>
+            <string>Bemerkung</string>
            </property>
           </column>
          </widget>
