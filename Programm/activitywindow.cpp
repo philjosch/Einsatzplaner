@@ -9,6 +9,7 @@
 ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(parent), ui(new Ui::ActivityWindow)
 {
     ui->setupUi(this);
+    ui->tablePersonen->resizeColumnsToContents();
     activity = a;
     loadData();
     setWindowTitle("Arbeitseinsatz am "+activity->getDatum().toString("dddd dd. MM. yyyy"));
@@ -60,20 +61,27 @@ void ActivityWindow::on_checkBoxBenoetigt_toggled(bool checked)
 void ActivityWindow::on_buttonInsert_clicked()
 {
     ui->tablePersonen->insertRow(0);
-    QComboBox *box = activity->generateNewComboBox();
+
+    QComboBox *box = activity->generateNewCategoryComboBox();
     connect(box, SIGNAL(currentTextChanged(QString)), this, SLOT(comboInTableChanged()));
     ui->tablePersonen->setCellWidget(0, 1, box);
+
+    QTimeEdit *beginn = activity->generateNewTimeEdit();
+    connect(beginn, SIGNAL(timeChanged(QTime)), this, SLOT(timeEditInTableChanged()));
+    ui->tablePersonen->setCellWidget(0, 2, beginn);
+
+    QTimeEdit *ende = activity->generateNewTimeEdit();
+    connect(ende, SIGNAL(timeChanged(QTime)), this, SLOT(timeEditInTableChanged()));
+    ui->tablePersonen->setCellWidget(0, 3, ende);
+
     ui->buttonRemove->setEnabled(true);
 }
 
 void ActivityWindow::on_buttonRemove_clicked()
 {
-    int i = ui->tablePersonen->currentRow();
-    if (i == -1) return;
-    QString n = "";
-    if (ui->tablePersonen->item(i, 0) != nullptr) {
-        n = ui->tablePersonen->item(i, 0)->text();
-    }
+    int i = ;
+    if (ui->tablePersonen->currentRow() == -1) return;
+    QString n = (ui->tablePersonen->item(i, 0) == nullptr) ? "" : ui->tablePersonen->item(i, 0)->text();
     if (activity->removePerson(n)) {
         namen->remove(n);
     }
@@ -83,74 +91,42 @@ void ActivityWindow::on_buttonRemove_clicked()
 
 void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
 {
+    ui->tablePersonen->resizeColumnsToContents();
     if (nehme) {
         nehme = false;
         // column 0: Name, 1: Aufgabe, 2: Beginn, 3: Ende, 4: Bemerkung
         // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
         if (column == 0) {
             QStringList *neu = new QStringList();
-            for(int i = 1; i <= ui->tablePersonen->rowCount(); i++) {
-                QString n = "";
-                if (ui->tablePersonen->item(i, 0) != nullptr)
-                    n = ui->tablePersonen->item(i, 0)->text();
-                if (n.contains(";")) {
-                    QStringList splitted = n.split(QRegExp("\\s*;\\s*"));
-                    n = splitted.at(0);
-                }
+            for( int i = 1; i <= ui->tablePersonen->rowCount(); i++) {
+                QString n = (ui->tablePersonen->item(i, 0) == nullptr) ? "" : ui->tablePersonen->item(i, 0)->text();
                 neu->append(n);
                 if (namen->contains(n)) {
                     namen->remove(n);
                 }
             }
-            if (namen->size() == 1) {
-                activity->removePerson(namen->values().at(0));
-            }
+
+            if (namen->size() == 1) activity->removePerson(namen->values().at(0));
+            namen = neu;
         }
 
-        QString name = "";
-        if (ui->tablePersonen->item(row,0) != nullptr)
-            name = ui->tablePersonen->item(row,0)->text();
+        QString name = (ui->tablePersonen->item(row,0) == nullptr) ? "" : ui->tablePersonen->item(row,0)->text();
+        QString aufgabe = ((QComboBox*)ui->tablePersonen->cellWidget(row, 1))->currentText();
+        QTime beginnZ = ((QTimeEdit*)ui->tablePersonen->cellWidget(row, 2))->time();
+        QTime endeZ = ((QTimeEdit*)ui->tablePersonen->cellWidget(row, 3))->time();
+        QString bemerkung = (ui->tablePersonen->item(row,4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
 
-        QString aufgabe = "";
-        aufgabe = ((QComboBox*)ui->tablePersonen->cellWidget(row, 1))->currentText();
-
-        QString beginn = "";
-        QTime beginnZ = QTime(0,0);
-        if (ui->tablePersonen->item(row,2) != nullptr) {
-            beginn = ui->tablePersonen->item(row,2)->text();
-            if (beginn != "") {
-                beginnZ = QTime::fromString(beginn, "h:mm");
-                ui->tablePersonen->item(row,2)->setText(beginnZ.toString("hh:mm"));
-            }
-        }
-
-        QString ende = "";
-        QTime endeZ = QTime(0,0);
-        if (ui->tablePersonen->item(row,3) != nullptr) {
-            ende = ui->tablePersonen->item(row,3)->text();
-            if (ende != "") {
-                endeZ = QTime::fromString(ende, "h:mm");
-                ui->tablePersonen->item(row,3)->setText(endeZ.toString("hh:mm"));
-            }
-        }
-
-        QString bemerkung = "";
-        if (ui->tablePersonen->item(row,4) != nullptr)
-            bemerkung = ui->tablePersonen->item(row,4)->text();
-
-        Misstake antw = activity->addPerson(name, bemerkung, beginnZ, endeZ, aufgabe);
-
-        switch (antw) {
+        switch (activity->addPerson(name, bemerkung, beginnZ, endeZ, aufgabe)) {
         case Misstake::OK:
             break;
         case Misstake::PersonNichtGefunden:
-            QMessageBox::warning(this, "Fehler", "Die eingegebene Person konnte im System nicht gefunden werden.");
+            QMessageBox::warning(this, tr("Fehler"), tr("Die eingegebene Person konnte im System nicht gefunden werden."));
             break;
         case Misstake::FalscheQualifikation:
-            QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
+            QMessageBox::warning(this, tr("Fehlene Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt."));
             break;
         default:
-            QMessageBox::warning(this, "Sonstiger Fehler", "Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!");
+            QMessageBox::warning(this, tr("Sonstiger Fehler"), tr("Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!"));
             break;
         }
 
@@ -179,9 +155,14 @@ void ActivityWindow::comboInTableChanged()
 {
     QComboBox* combo = qobject_cast<QComboBox*>(sender());
      if (combo)
-     {
          on_tablePersonen_cellChanged(combo->property("row").toInt(), combo->property("column").toInt());
-     }
+}
+
+void ActivityWindow::timeEditInTableChanged()
+{
+    QTimeEdit *time = qobject_cast<QTimeEdit*>(sender());
+     if (time)
+         on_tablePersonen_cellChanged(time->property("row").toInt(), time->property("column").toInt());
 }
 
 void ActivityWindow::loadData()

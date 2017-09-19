@@ -359,10 +359,17 @@ QString AActivity::listToString(QMap<Person *, AActivity::Infos *> *liste, QStri
     return a;
 }
 
-QComboBox *AActivity::generateNewComboBox()
+QComboBox *AActivity::generateNewCategoryComboBox()
 {
     QComboBox *box = new QComboBox();
     box->insertItems(0, QStringList({"Tf","Tb","Zf","Service","Zug Begleiter","Büro","Werkstatt","Vorbereiten","Sonstiges"}));
     box->setCurrentIndex(8);
     return box;
+}
+
+QTimeEdit *AActivity::generateNewTimeEdit()
+{
+    QTimeEdit *edit = new QTimeEdit();
+    edit->setDisplayFormat("hh:mm");
+    return edit;
 }

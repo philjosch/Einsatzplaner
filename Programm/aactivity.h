@@ -5,6 +5,7 @@
 #include <QTime>
 #include <QObject>
 #include <QComboBox>
+#include <QTimeEdit>
 
 //class AActivity;
 //enum Category { Tf, Tb, Zf, Service, Zub, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
@@ -76,7 +77,8 @@ public:
 
     virtual void emitter() = 0;
 
-    QComboBox* generateNewComboBox();
+    static QComboBox *generateNewCategoryComboBox();
+    static QTimeEdit *generateNewTimeEdit();
 
 protected:
     QDate datum;
