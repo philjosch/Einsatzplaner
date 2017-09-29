@@ -9,32 +9,7 @@
 
 Person::Person(QString vorname, QString nachname, ManagerPersonal *manager)
 {
-    this->manager = manager;
-    this->vorname = vorname;
-    this->nachname = nachname;
-    strecke = 0;
-    this->ausbildungTf = false;
-    this->ausbildungZf = false;
-    this->ausbildungRangierer = false;
-    timeTf = 0.f;
-    timeZf = 0.f;
-    timeZub = 0.f;
-    timeService = 0.f;
-    timeBuero = 0.f;
-    timeWerkstatt = 0.f;
-    timeSum = 0.f;
-    sumKilometer = 0.f;
-    additionalTimeBuero = 0.f;
-    additionalTimeService = 0.f;
-    additionalTimeSonstiges = 0.f;
-    additionalTimeTf = 0.f;
-    additionalTimeVorbereiten = 0.f;
-    additionalTimeWerkstatt = 0.f;
-    additionalTimeZf = 0.f;
-    additionalTimeZub = 0.f;
-    valuesInvalid = true;
-
-    activities = new QMap<AActivity *, Category>();
+    personConstructor(vorname, nachname, manager);
 }
 
 Person::Person(QString name, ManagerPersonal *manager) : QObject()
@@ -53,34 +28,7 @@ Person::Person(QString name, ManagerPersonal *manager) : QObject()
         }
         nachname = liste.last();
     }
-    Person(vorname, nachname, manager);
-/*
-    this->vorname = vorname;
-    this->nachname = nachname;
-    strecke = 0;
-    this->ausbildungTf = false;
-    this->ausbildungZf = false;
-    this->ausbildungRangierer = false;
-    timeTf = 0.f;
-    timeZf = 0.f;
-    timeZub = 0.f;
-    timeService = 0.f;
-    timeBuero = 0.f;
-    timeWerkstatt = 0.f;
-    timeSum = 0.f;
-    sumKilometer = 0.f;
-    additionalTimeBuero = 0.f;
-    additionalTimeService = 0.f;
-    additionalTimeSonstiges = 0.f;
-    additionalTimeTf = 0.f;
-    additionalTimeVorbereiten = 0.f;
-    additionalTimeWerkstatt = 0.f;
-    additionalTimeZf = 0.f;
-    additionalTimeZub = 0.f;
-    valuesInvalid = true;
-
-    activities = new QMap<AActivity *, Category>();
-    */
+    personConstructor(vorname, nachname, manager);
 }
 
 QJsonObject Person::toJson()
@@ -418,6 +366,38 @@ void Person::setAdditionalTimeSonstiges(double value)
 {
     additionalTimeSonstiges = value;
     valuesInvalid = true;
+}
+
+void Person::personConstructor(QString vorname, QString nachname, ManagerPersonal *manager)
+{
+    this->manager = manager;
+    this->vorname = vorname;
+    this->nachname = nachname;
+    strecke = 0;
+    ausbildungTf = false;
+    ausbildungZf = false;
+    ausbildungRangierer = false;
+    timeTf = 0.f;
+    timeZf = 0.f;
+    timeZub = 0.f;
+    timeService = 0.f;
+    timeBuero = 0.f;
+    timeWerkstatt = 0.f;
+    timeVorbereiten = 0.f;
+    timeSonstiges = 0.f;
+    timeSum = 0.f;
+    sumKilometer = 0.f;
+    additionalTimeTf = 0.f;
+    additionalTimeZf = 0.f;
+    additionalTimeZub = 0.f;
+    additionalTimeService = 0.f;
+    additionalTimeBuero = 0.f;
+    additionalTimeWerkstatt = 0.f;
+    additionalTimeVorbereiten = 0.f;
+    additionalTimeSonstiges = 0.f;
+    valuesInvalid = true;
+
+    activities = new QMap<AActivity *, Category>();
 }
 
 double Person::getTimeTf()
