@@ -111,18 +111,18 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         }
 
         QString name = (ui->tablePersonen->item(row,0) == nullptr) ? "" : ui->tablePersonen->item(row,0)->text();
-        QString aufgabe = ((QComboBox*)ui->tablePersonen->cellWidget(row, 1))->currentText();
+        Category kat = AActivity::getCategoryFromString(((QComboBox*)ui->tablePersonen->cellWidget(row, 1))->currentText());
         QTime beginnZ = ((QTimeEdit*)ui->tablePersonen->cellWidget(row, 2))->time();
         QTime endeZ = ((QTimeEdit*)ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
 
-        switch (activity->addPerson(name, bemerkung, beginnZ, endeZ, aufgabe)) {
-        case Misstake::OK:
+        switch (activity->addPerson(name, bemerkung, beginnZ, endeZ, kat)) {
+        case Mistake::OK:
             break;
-        case Misstake::PersonNichtGefunden:
+        case Mistake::PersonNichtGefunden:
             QMessageBox::warning(this, tr("Fehler"), tr("Die eingegebene Person konnte im System nicht gefunden werden."));
             break;
-        case Misstake::FalscheQualifikation:
+        case Mistake::FalscheQualifikation:
             QMessageBox::warning(this, tr("Fehlene Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt."));
             break;
         default:
