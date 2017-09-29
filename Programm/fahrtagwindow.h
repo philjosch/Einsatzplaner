@@ -98,8 +98,7 @@ private slots:
 
     void on_checkBoxAll_clicked(bool checked);
 
-    void comboInTableChanged();
-    void timeEditInTableChanged();
+    void complexWidgetInTableChanged();
 
 private:
     // Allgemeines
@@ -116,7 +115,7 @@ private:
 
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);
-    void itemChanged(QListWidgetItem *item, Category kat, bool isExtern=false);
+    void itemChanged(QListWidgetItem *item, Category kat);
 
     // Reservierungen
     QMap<Reservierung*, QListWidgetItem*> *resToItem;
@@ -127,6 +126,8 @@ private:
 
     void loadReservierung(Reservierung *r);
     void saveResFahrt();
+
+    QMap<QWidget*, QTableWidgetItem*> *widgetInTableToTableWidget;
 };
 
 #endif // FAHRTAGWINDOW_H
