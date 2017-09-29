@@ -79,7 +79,6 @@ private slots:
     void update(); // Aktualisiert die Anzeige, wieviele Sitzplätze belegt sind
 
     // Einsatzzeiten
-//    void on_timeEnde_timeChanged(const QTime &time);
     void on_checkBoxBenoetigt_clicked(bool checked);
     void on_tablePersonen_cellChanged(int row, int column);
 

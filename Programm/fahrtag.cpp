@@ -86,7 +86,6 @@ AActivity::Infos *Fahrtag::getIndividual(Person *person)
 {
     Infos *neu = new Infos();
     Infos *alt = personen->value(person);
-    neu->aufgabe = alt->aufgabe;
     neu->bemerkung = alt->bemerkung;
     neu->kategorie = alt->kategorie;
     neu->beginn = alt->beginn;

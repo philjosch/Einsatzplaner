@@ -5,6 +5,9 @@
 #include <QDebug>
 #include <QJsonArray>
 
+QStringList AActivity::EXTERNAL_LIST = QStringList() << "Extern" << "Führerstand" << "FS" << "Schnupperkurs" << "ELF" << "Ehrenlokführer" << "ELF-Kurs";
+QStringList AActivity::QUALIFICATION_LIST = QStringList() << "Azubi" << "Ausbildung" << "Tf-Ausbildung" << "Zf-Ausbildung" << "Tf-Unterricht" << "Zf-Unterricht" << "Weiterbildung";
+
 Category AActivity::getCategoryFromString(QString s)
 {
     s = s.toUpper();
@@ -79,7 +82,6 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
         info->beginn = QTime::fromString(aO.value("beginn").toString(), "hh:mm");
         info->ende = QTime::fromString(aO.value("ende").toString(), "hh:mm");
         info->kategorie = kat;
-        info->aufgabe = aO.value("aufgabe").toString();
         info->bemerkung = aO.value("bemerkung").toString();
 
         if (p != nullptr) {
@@ -120,7 +122,6 @@ QJsonObject AActivity::toJson()
         persJson.insert("beginn", personen->value(p)->beginn.toString("hh:mm"));
         persJson.insert("ende", personen->value(p)->ende.toString("hh:mm"));
         persJson.insert("kat", (int) personen->value(p)->kategorie);
-        persJson.insert("aufgabe", personen->value(p)->aufgabe);
         persJson.insert("bemerkung", personen->value(p)->bemerkung);
         personenJSON.append(persJson);
     }
@@ -241,14 +242,13 @@ bool AActivity::removePerson(QString p)
     return false;
 }
 
-Misstake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, QString aufgabe)
+Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat)
 {
    /*
     * angabe über aufgabe prüfen
     * p. ob person geeignet
     * person hinzufügen
     */
-    Category kat = AActivity::getCategoryFromString(aufgabe);
     /**
       * TODO: Hier muss noch ordentlich Zeit reininvestiert werden.
       * Denn die bisherige Vorgehensweise ist überhlolt.
@@ -256,31 +256,10 @@ Misstake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime e
       * denn dann wird es im COde übersichtliche run ddas MVC-Prinzip wird besser umgesetzt
       *
       */
-    switch (kat) {
-    case Tf:
-        if (! p->getAusbildungTf()) {
-            return Misstake::FalscheQualifikation;
-        }
-        break;
-    case Tb:
-        // Ein Tb muss auch Lokführer sein, diese muss noch abgeklärt werden: Issue #9
-        if (! p->getAusbildungTf()) {
-            return Misstake::FalscheQualifikation;
-        }
-        break;
-    case Zf:
-        if (! p->getAusbildungZf()) {
-            return Misstake::FalscheQualifikation;
-        }
-        break;
-    case Zub:
-        if (! p->getAusbildungRangierer()) {
-            kat = Begleiter;
-        }
-        break;
-    default:
-        break;
-    }
+
+    if (kat == Zub && !hasQualification(p, kat, bemerkung)) kat = Begleiter;
+
+    if (! hasQualification(p, kat, bemerkung)) return Mistake::FalscheQualifikation;
 
     // jetzt ist alles richtig und die person kann registiert werden.
     p->addActivity(this, kat);
@@ -289,22 +268,30 @@ Misstake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime e
     info->beginn = start;
     info->ende = ende;
     info->kategorie = kat;
-    info->aufgabe = aufgabe;
     info->bemerkung = bemerkung;
 
     personen->insert(p, info);
 
     emitter();
-    return Misstake::OK;
+    return Mistake::OK;
 }
 
-Misstake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, QString aufgabe)
+Mistake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat)
 {
     Person *pers = personal->getPerson(p);
     if (pers != nullptr) {
-        return addPerson(pers, bemerkung, start, ende, aufgabe);
+        return addPerson(pers, bemerkung, start, ende, kat);
     }
-    return Misstake::PersonNichtGefunden;
+    if (isExtern(bemerkung)) {
+        Person *neuePerson = new Person(p, nullptr);
+        neuePerson->setAusbildungTf(true);
+        neuePerson->setAusbildungZf(true);
+        neuePerson->setAusbildungRangierer(true);
+        Mistake atw = addPerson(neuePerson, bemerkung, start, ende, kat);
+        if (atw == Mistake::OK) return ExternOk;
+        return atw;
+    }
+    return Mistake::PersonNichtGefunden;
 }
 
 void AActivity::updatePersonBemerkung(Person *p, QString bemerkung)
@@ -334,15 +321,7 @@ QString AActivity::listToString(QMap<Person *, AActivity::Infos *> *liste, QStri
             strichPunkt = true;
         }
         if (aufgabe) {
-            if (liste->value(p)->aufgabe != "" && liste->value(p)->aufgabe != "Sonstiges") {
-                if (! strichPunkt) {
-                    a += "; ";
-                    strichPunkt = true;
-                } else {
-                    a += " ";
-                }
-                a += liste->value(p)->aufgabe;
-            } else if(liste->value(p)->kategorie != Category::Sonstiges) {
+            if(liste->value(p)->kategorie != Category::Sonstiges) {
                 if (! strichPunkt) {
                     a += "; ";
                     strichPunkt = true;
@@ -357,6 +336,42 @@ QString AActivity::listToString(QMap<Person *, AActivity::Infos *> *liste, QStri
         }
     }
     return a;
+}
+
+bool AActivity::hasQualification(Person *p, Category kat, QString bemerkung)
+{
+    switch (kat) {
+    case Tf:
+        if (p->getAusbildungTf()) return true;
+        break;
+    case Tb:
+        if (p->getAusbildungZf()) return true;
+        break;
+    case Zf:
+        if (p->getAusbildungZf()) return true;
+        break;
+    case Zub:
+        if (p->getAusbildungRangierer()) return true;
+    default:
+        return true;
+    }
+
+    for(QString s: QUALIFICATION_LIST) {
+        if (bemerkung.contains(s, Qt::CaseInsensitive)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool AActivity::isExtern(QString bemerkung)
+{
+    for(QString s: EXTERNAL_LIST) {
+        if (bemerkung.contains(s, Qt::CaseInsensitive)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 QComboBox *AActivity::generateNewCategoryComboBox()

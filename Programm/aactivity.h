@@ -22,7 +22,6 @@ public:
         QTime beginn;
         QTime ende;
         Category kategorie;
-        QString aufgabe;
         QString bemerkung;
     };
 
@@ -60,8 +59,8 @@ public:
 
     QMap<Person *,  Infos*> *getPersonen() const;
     virtual Infos *getIndividual(Person *person) = 0;
-    Misstake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, QString aufgabe);
-    Misstake addPerson(QString p, QString bemerkung, QTime start, QTime ende, QString aufgabe);
+    Mistake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
+    Mistake addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
     void updatePersonBemerkung(Person *p, QString bemerkung);
     bool removePerson(Person *p);
     bool removePerson(QString p);
@@ -80,6 +79,11 @@ public:
     static QComboBox *generateNewCategoryComboBox();
     static QTimeEdit *generateNewTimeEdit();
 
+    static QStringList EXTERNAL_LIST;
+    static QStringList QUALIFICATION_LIST;
+
+    static bool hasQualification(Person *p, Category kat, QString bemerkung);
+    static bool isExtern(QString bemerkung);
 protected:
     QDate datum;
     QString ort;

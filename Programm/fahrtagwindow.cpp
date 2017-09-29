@@ -124,12 +124,6 @@ void FahrtagWindow::on_comboTimeEndeM_currentTextChanged(const QString &arg1)
         fahrtag->setZeitEnde(QTime(fahrtag->getZeitEnde().hour(), arg1.toInt()));
 }
 
-//void FahrtagWindow::on_timeEnde_timeChanged(const QTime &time)
-//{
-//    if (nehme)
-//        fahrtag->setZeitEnde(QTime(time.hour(), time.minute()));
-//}
-
 void FahrtagWindow::loadData()
 {
     if (nehme) {
@@ -386,11 +380,7 @@ void FahrtagWindow::on_listTf_itemChanged(QListWidgetItem *item)
         QStringList liste = item->text().split(QRegExp("\\s*;\\s*"));
         QString bem = "";
         if (liste.length() > 1) bem = liste.at(1).toUpper();
-        bool isExtern = false;
-        Category kat = Category::Tf;
-        if (bem.contains("TB")) kat = Category::Tb;
-        if (bem.contains("AZUBI") || bem.contains("FS")) isExtern = true;
-        itemChanged(item, kat, isExtern);
+        itemChanged(item, Category::Tf);
         nehme = true;
     }
 }
@@ -497,13 +487,13 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
         QTime ende = ((QTimeEdit*)ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
 
-        switch (fahrtag->addPerson(name, bemerkung, beginn, ende, aufgabe)) {
-        case Misstake::OK:
+        switch (fahrtag->addPerson(name, bemerkung, beginn, ende, kat)) {
+        case Mistake::OK:
             break;
-        case Misstake::PersonNichtGefunden:
+        case Mistake::PersonNichtGefunden:
             QMessageBox::warning(this, "Fehler", "Die eingegebene Person konnte im System nicht gefunden werden.");
             break;
-        case Misstake::FalscheQualifikation:
+        case Mistake::FalscheQualifikation:
             QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
             break;
         default:
@@ -870,10 +860,10 @@ void FahrtagWindow::update()
     QString zweite = darstellung.arg(belegtZweite).arg(kapZweite).arg(belegtZweite*100.0/(kapZweite), 0, 'g', 3);
     QString dritte = darstellung.arg(belegtDritte).arg(kapDritte).arg(belegtDritte*100.0/(kapDritte), 0, 'g', 3);
     QString gesamt = darstellung.arg(belegtGesamt).arg(kapGesamt).arg(belegtGesamt*100.0/(kapGesamt), 0, 'g', 3);
-    if (kapErste == 0) erste = "-";
+    if (kapErste  == 0) erste  = "-";
     if (kapZweite == 0) zweite = "-";
     if (kapDritte == 0) dritte = "-";
-    ui->labelBelegtErste->setText( erste );
+    ui->labelBelegtErste ->setText(erste );
     ui->labelBelegtZweite->setText(zweite);
     ui->labelBelegtDritte->setText(dritte);
     ui->labelBelegtGesamt->setText(gesamt);
