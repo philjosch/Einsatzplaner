@@ -87,6 +87,8 @@ protected:
     QMap<AActivity*, Category> *activities;
 
 private:
+    void personConstructor(QString vorname, QString nachname, ManagerPersonal *manager);
+
     double timeTf;
     double timeZf;
     double timeZub;
