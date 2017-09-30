@@ -249,13 +249,6 @@ Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime en
     * p. ob person geeignet
     * person hinzufügen
     */
-    /**
-      * TODO: Hier muss noch ordentlich Zeit reininvestiert werden.
-      * Denn die bisherige Vorgehensweise ist überhlolt.
-      * Die ganze verabreitung muss zentral hier in der MEthode bzw. Klasse stattfidnen
-      * denn dann wird es im COde übersichtliche run ddas MVC-Prinzip wird besser umgesetzt
-      *
-      */
 
     if (kat == Zub && !hasQualification(p, kat, bemerkung)) kat = Begleiter;
 

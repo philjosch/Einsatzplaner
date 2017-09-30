@@ -310,7 +310,6 @@ void FahrtagWindow::itemChanged(QListWidgetItem *item , Category kat)
         break;
     case Mistake::ExternOk:
         del = true;
-        // TODO: Was passiert, wenn man einen Externen entfernen möchte? Dafür müssen Grundlagen gelegt werden!!
         break;
         // Verfahren, wie bei einer normalen person, außer dass der
     case Mistake::OK:

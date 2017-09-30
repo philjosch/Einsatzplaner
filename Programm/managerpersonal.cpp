@@ -28,7 +28,6 @@ ManagerPersonal::~ManagerPersonal()
 
 QJsonObject ManagerPersonal::toJson()
 {
-    // TODO inlcude minimum Hours
     QJsonArray array;
     for(Person *p: personen->values()) {
         array.append(p->toJson());
@@ -47,7 +46,6 @@ QJsonObject ManagerPersonal::toJson()
 
 QJsonObject ManagerPersonal::personalToJson()
 {
-    // TODO: include MinimumHours
     QJsonArray array;
     for(Person *p: personen->values()) {
         array.append(p->personalToJson());
@@ -66,7 +64,6 @@ QJsonObject ManagerPersonal::personalToJson()
 
 void ManagerPersonal::fromJson(QJsonObject o)
 {
-    // TODO: minimumHours
     QJsonArray a = o.value("personen").toArray();
     for(int i = 0; i < a.size(); i++) {
         Person *neu = Person::fromJson(a.at(i).toObject(), this);
@@ -158,12 +155,10 @@ bool ManagerPersonal::removePerson(Person *p)
 
 bool ManagerPersonal::pruefeStunden(Person *p)
 {
-    if (p->getAusbildungTf())
-        if (p->getTimeTf() < getMinimumHours(Category::Tf))
-            return false;
-    if (p->getAusbildungZf())
-        if (p->getTimeZf() < getMinimumHours(Category::Zf))
-            return false;
+    if (p->getAusbildungTf() && p->getTimeTf() < getMinimumHours(Category::Tf))
+        return false;
+    if (p->getAusbildungZf() && p->getTimeZf() < getMinimumHours(Category::Zf))
+        return false;
     if (p->getTimeService() < getMinimumHours(Category::Service))
         return false;
     if (p->getTimeZub() < getMinimumHours(Category::Zub))

@@ -42,7 +42,6 @@ void Verteiler::verteile(double bewertung, QSet<Reservierung *> rest, int puffer
 
     // Alles wurde Verteilt
     if (rest.isEmpty()) {
-//        qDebug() << "Lösung von " << besteBewertung << " auf " << bewertung << " verbessert!";
         count ++;
         weisePlaetzeZu();
         besteBewertung = bewertung;
