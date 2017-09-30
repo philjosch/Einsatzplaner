@@ -1,8 +1,6 @@
 #include "export.h"
 #include "fileio.h"
 
-#include <QDebug>
-
 bool Export::printFahrtag(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
 {
     QList<AActivity*> *liste = new QList<AActivity*>();
@@ -39,9 +37,9 @@ bool Export::printSingle(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *pap
     for(AActivity *aa: *liste) {
         html += aa->getHtmlForSingleView();
         if(liste->last() != aa)
-            html += "<p class='last'><small>Erstellt am: "+QDate::currentDate().toString("d.M.yyyy")+"</small></p>";
+            html += "<p class='last'><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
         else
-            html += "<p><small>Erstellt am: "+QDate::currentDate().toString("d.M.yyyy")+"</small></p>";
+            html += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     }
 
     // Footer hinzufügen
@@ -73,7 +71,7 @@ bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper
         a += akt->getHtmlForTableView();
     }
     a += "</tbody></table>";
-    a += "<p><small>Erstellt am: "+QDate::currentDate().toString("d.M.yyyy")+"</small></p>";
+    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     a += "</body></html>";
     d->setHtml(a);
     return print(pdf, paper, d);
@@ -151,7 +149,7 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
     }
 
     a += "</tbody></table>";
-    a += "<p><small>Erstellt am: "+QDate::currentDate().toString("d.M.yyyy")+"</small></p>";
+    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     a += "</body></html>";
     d->setHtml(a);
     return print(pdf, paper, d);
@@ -233,7 +231,6 @@ bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QLi
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
     a += "</body></html>";
     d->setHtml(a);
-//    qDebug() << a;
     return print(pdf, paper, d);
 }
 
