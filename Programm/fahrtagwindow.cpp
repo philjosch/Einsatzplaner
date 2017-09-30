@@ -469,7 +469,7 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
         // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
         if (column == 0) {
             QSet<QString> *neu = new QSet<QString>();
-            for( int i = 1; i <= ui->tablePersonen->rowCount(); i++) {
+            for( int i = 0; i <= ui->tablePersonen->rowCount(); i++) {
                 QString n = (ui->tablePersonen->item(i, 0) == nullptr) ? "" : ui->tablePersonen->item(i, 0)->text();
                 neu->insert(n);
                 if (namen->contains(n)) {
@@ -539,7 +539,7 @@ void FahrtagWindow::on_buttonRemove_clicked()
 {
     // Prüfen, ob die Zeile wirklich gelöscht werden darf, ansonsten einfach nicht löschen, bzw HInweis in entsprechender Liste löschen
     int i = ui->tablePersonen->currentRow();
-    if (i == -1) return;
+    if (i < 0) return;
     QString n = "";
     if (ui->tablePersonen->item(i, 0) != nullptr) {
         if (ui->tablePersonen->item(i, 0)->flags() == Qt::NoItemFlags) {
@@ -904,6 +904,6 @@ void FahrtagWindow::complexWidgetInTableChanged()
         QWidget *obj = qobject_cast<QWidget*>(sender());
         if (! widgetInTableToTableWidget->contains(obj)) return;
         QTableWidgetItem *tableItem = widgetInTableToTableWidget->value(obj);
-        on_tablePersonen_cellChanged(ui->tablePersonen->row(tableItem), ui->tablePersonen->column(tableItem));
+        on_tablePersonen_cellChanged(ui->tablePersonen->row(tableItem), 1);
     }
 }
