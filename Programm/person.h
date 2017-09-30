@@ -51,7 +51,6 @@ public:
 
 
     QString getName() const;
-//    void setName(const QString &value);
     QString getVorname() const;
     void setVorname(const QString &value);
     QString getNachname() const;

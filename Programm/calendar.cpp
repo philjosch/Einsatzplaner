@@ -147,9 +147,6 @@ void Calendar::goTo(QDate date)
             tage->at(pos)->insert(a);
             calendaritem->insert(a, tage->at(pos));
             setListItemC(calendaritem->value(a)->get(a), a);
-//            activityChanged(a);
-//        } else if (calendaritem->contains(a)) {
-  //          calendaritem->remove(a);
         }
     }
 }

@@ -295,10 +295,8 @@ QString Fahrtag::getHtmlForTableView()
     }
     // Sneek-Peek Reservierungen
     if (art != Schnupperkurs && art != Gesellschaftssonderzug && getBelegtGesamt() > 0) {
-//        html += QObject::tr("%1 reservierte(r) Sitzplätz(e)").arg(getBelegtGesamt());
         html += QString::number(getBelegtGesamt());
         html += (getBelegtGesamt() == 1 ? " reservierter Sitzplatz": " reservierte Sitzplätze");
-//        html += QObject::tr(" bei %1 Reservierung(en)").arg(getAnzahl());
         html += " bei " + QString::number(getAnzahl()) + (getAnzahl() == 1 ? " Reservierung" : " Reservierungen");
         html += "<br/>";
     }

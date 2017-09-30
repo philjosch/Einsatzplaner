@@ -672,8 +672,6 @@ void FahrtagWindow::on_buttonVerteile_clicked()
         }
         fahrtag->emitter();
         update();
-//    } else {
-//        qDebug() << start.msecsTo(ende);
     }
 }
 

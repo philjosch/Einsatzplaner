@@ -256,7 +256,6 @@ void PersonalWindow::refreshGesamt()
     }
     if (anzeige->at(1)) {
         ii = new QTableWidgetItem();
-//        ii->setData(Qt::EditRole, manager->getAnzahl());
         ui->tabelleGesamt->setItem(0, pos, ii);
         pos++;
     }

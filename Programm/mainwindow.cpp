@@ -130,10 +130,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     if (toClose) {
         personalfenster->close();
-//        delete personalfenster;
         for(QMainWindow *m: fenster->values()) {
             m->close();
-//            delete m;
         }
     }
 
