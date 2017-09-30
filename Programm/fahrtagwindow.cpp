@@ -225,11 +225,11 @@ void FahrtagWindow::loadData()
                 ui->tablePersonen->item(0, 0)->setText(p->getName());
                 if (block) ui->tablePersonen->item(0, 0)->setFlags(Qt::NoItemFlags);
                 ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(info->kategorie));
-                ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setEditable(!block);
+                ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setEnabled(!block);
                 ((QTimeEdit*)ui->tablePersonen->cellWidget(0, 2))->setTime(info->beginn);
                 ((QTimeEdit*)ui->tablePersonen->cellWidget(0, 3))->setTime(info->ende);
                 QTableWidgetItem *zelleBemerkung = new QTableWidgetItem(info->bemerkung);
-                zelleBemerkung->setFlags(Qt::NoItemFlags);
+                if(block) zelleBemerkung->setFlags(Qt::NoItemFlags);
                 ui->tablePersonen->setItem(0, 4, zelleBemerkung);
 
                 listToTable->insert(item, ui->tablePersonen->item(0,0));
@@ -518,11 +518,11 @@ void FahrtagWindow::on_buttonInsert_clicked()
     ui->tablePersonen->setCellWidget(0, 1, box);
 
     QTimeEdit *beginn = fahrtag->generateNewTimeEdit();
-    connect(beginn, SIGNAL(currentTextChanged(QString)), this, SLOT(complexWidgetInTableChanged()));
+    connect(beginn, SIGNAL(timeChanged(QTime)), this, SLOT(complexWidgetInTableChanged()));
     ui->tablePersonen->setCellWidget(0, 2, beginn);
 
     QTimeEdit *ende = fahrtag->generateNewTimeEdit();
-    connect(ende, SIGNAL(currentTextChanged(QString)), this, SLOT(complexWidgetInTableChanged()));
+    connect(ende, SIGNAL(timeChanged(QTime)), this, SLOT(complexWidgetInTableChanged()));
     ui->tablePersonen->setCellWidget(0, 3, ende);
 
     ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(""));

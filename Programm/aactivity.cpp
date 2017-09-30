@@ -15,7 +15,7 @@ Category AActivity::getCategoryFromString(QString s)
     if (s=="TB") return Tb;
     if (s=="ZF") return Zf;
     if (s=="SERVICE") return Service;
-    if (s=="ZUG BEGLEITER" || s=="ZUB") return Zub;
+    if (s=="ZUGBEGLEITER" || s=="ZUB") return Zub;
     if (s=="BEGLEITER" || s=="BEGL.O.B.A.") return Begleiter;
     if (s=="BÜRO" || s=="BUERO") return Buero;
     if (s=="WERKSTATT") return Werkstatt;
@@ -30,7 +30,7 @@ QString AActivity::getStringFromCategory(Category c)
     case Tb: return "Tb";
     case Zf: return "Zf";
     case Service: return "Service";
-    case Zub: return "Zub";
+    case Zub: return "Zugbegleiter";
     case Begleiter: return "Begl.o.b.A.";
     case Buero: return "Büro";
     case Werkstatt: return "Werkstatt";
@@ -377,7 +377,7 @@ bool AActivity::isExtern(QString bemerkung)
 QComboBox *AActivity::generateNewCategoryComboBox()
 {
     QComboBox *box = new QComboBox();
-    box->insertItems(0, QStringList({"Tf","Tb","Zf","Service","Zug Begleiter","Büro","Werkstatt","Vorbereiten","Sonstiges"}));
+    box->insertItems(0, QStringList({"Tf","Tb","Zf","Service","Zugbegleiter","Büro","Werkstatt","Vorbereiten","Sonstiges"}));
     box->setCurrentIndex(8);
     return box;
 }
