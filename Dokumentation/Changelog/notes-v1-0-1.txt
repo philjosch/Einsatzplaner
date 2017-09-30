@@ -1,0 +1,6 @@
+Version 1.0.1
+
+Fehlerbehebungen:
+
+- Problem beim Öffnen von Dateien (Externe Personen wurden nicht geladen, Personen wurden nicht im Arbeitseinsatzfenster angezeigt)
+- Problem bei Anzeige von Personen (Die Informationen zu den Aktivitäten wurden unter Umständen falsch dargestellt)

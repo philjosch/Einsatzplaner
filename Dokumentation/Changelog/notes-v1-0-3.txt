@@ -1,0 +1,14 @@
+Version 1.0.3
+
+Version 1.0.3 ist fertig gestellt und kann ab sofort heruntergeladen werden.
+
+Folgende Verbesserungen wurden vorgenommen:
+- Beim Export werden jetzt die Aufgaben der Personen angegeben, wenn sie unter sonstigem Personal gelistet wurden
+- Arbeitseinsätze werden jetzt standardmäßig in der Listenansicht exportiert
+- Bei Nikolausfahrten werden die Reservierungen nicht mehr auf dem Übersichtsblatt ausgegeben, sie müssen ab sofort über die Funktionen Reservierungen exportieren ausgegeben werden
+
+Fehlerbehebungen:
+- Personen können jetzt wieder in die Personallisten korrekt eingetragen und gelöscht werden, auch wenn eine Bemerkung angegeben ist
+- Die Auswahl eines Datum bei der Export-Funktion für das "Bis Datum" funktioniert jetzt wieder wie erwartet
+
+Weitere kleinere Verbesserungen und Fehlerbehebungen

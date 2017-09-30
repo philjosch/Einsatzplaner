@@ -1,0 +1,6 @@
+2016-10-06: Release von Version 1.0
+2016-10-07: Release von Version 1.0.1
+2016-11-13: Release von Version 1.0.2
+2016-12-02: Release von Version 1.0.3
+2016-12-14: Release von Version 1.0.4
+2016-12-21: Release von Version 1.1

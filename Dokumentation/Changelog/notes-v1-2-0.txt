@@ -1,0 +1,11 @@
+Version 1.2.0
+
+Neue Funktionen:
+- Die Mindeststunden können eingestellt werden, dies ist im Personalfenster möglich. Dort findet sich ein neuer Knopf mit der Bezeichnung Mindeststuden.
+- Anzeige der Summe der Einsatzzeiten in der Personalübersicht und in der exportierten Tabelle. Diese Funktion ist immer aktiv und zeigt die Summe der Zeiten der jeweiligen Spalte an.
+- Kennzeichnung von externen Personen auf Triebfahrzeugen oder ähnlichem wurde vereinfacht und verbessert. Externe Personen können jetzt mit folgenden Begriffen gekennzeichnet werden, sodass sie als extern angesehen werden und nicht im Personalverzeichnis gesucht werden: „Extern“, „Führerstand“, „FS“, „Schnupperkurs“, „ELF“, „Ehrenlokführer“, „ELF-Kurs“. Hierbei ist es ausreichend, wenn einer dieser Begriffe in der Bemerkung vorkommt.
+- Für registriertes personal wurde eine ähnliche Funktion eingeführt, die verhindert, dass überprüft wird, ob eine Person die Qualifikation hat. Dies kann dann insbesondere für Ausbildungszwecke verwendet werden. Hier lauten die Schlüsselbegriffe: „Azubi“, „Ausbildung“, „Tf-Ausbildung“, „Zf-Ausbildung“, „Tf-Unterricht“, „Zf-Unterricht“ und „Weiterbildung“
+- In der Personalübersicht eines Arbeitseinsatzes und Fahrtages können jetzt die Aufgaben aus der voreingestellten Liste ausgewählt werden. Ebenso wurde ein extra Feld für die Bemerkung eingeführt. Die Zeiten können jetzt besser eingestellt werden.
+- Beim Export von Daten wird jetzt auch die Uhrzeit mit ausgegeben.
+- Die Sitzplätze bei Reservierungen können jetzt besser eingegeben werden. Hier wurde ein Fehler behoben.
+- Weitere kleine Fehlerbehebungen und Verbesserungen
