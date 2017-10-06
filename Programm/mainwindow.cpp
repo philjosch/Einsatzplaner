@@ -16,8 +16,8 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-    setWindowIcon(QApplication::windowIcon());
     ui->setupUi(this);
+    setWindowIcon(QApplication::windowIcon());
     connect(ui->calendar, SIGNAL(showFahrtag(Fahrtag*)), this, SLOT(openFahrtag(Fahrtag*)));
     connect(ui->calendar, SIGNAL(showActivity(Activity*)), this, SLOT(openActivity(Activity*)));
     connect(ui->calendar, SIGNAL(changed()), this, SLOT(unsave()));
