@@ -50,7 +50,7 @@ private slots:
     void on_pushPDF_clicked();
     void on_pushPrint_clicked();
 
-    void on_tabWidget_tabBarClicked(int index);
+    void on_tabWidgetMain_tabBarClicked(int index);
 
     void on_checkShowGesamt_clicked(bool checked);
     void on_checkShowAnzahl_clicked(bool checked);

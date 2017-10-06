@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>666</width>
-    <height>574</height>
+    <width>703</width>
+    <height>517</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,7 @@
        <attribute name="title">
         <string>Gesamtübersicht</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0,0,0,0">
+       <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0,0,0,0" columnstretch="1,1,1">
         <item row="0" column="0" colspan="3">
          <widget class="QTableWidget" name="tabelleGesamt">
           <property name="editTriggers">
@@ -80,28 +80,6 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QCheckBox" name="checkShowVorbereiten">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>24</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>24</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Zug Vorbereiten</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
          <widget class="QCheckBox" name="checkShowAnzahl">
           <property name="minimumSize">
            <size>
@@ -117,6 +95,28 @@
           </property>
           <property name="text">
            <string>Anzahl Einsätze</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QCheckBox" name="checkShowKilometer">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Gefahrene Kilometer</string>
           </property>
           <property name="checked">
            <bool>false</bool>
@@ -190,28 +190,6 @@
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QCheckBox" name="checkShowWerkstatt">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>24</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>24</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Werkstatt</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
          <widget class="QCheckBox" name="checkShowService">
           <property name="minimumSize">
            <size>
@@ -233,7 +211,51 @@
           </property>
          </widget>
         </item>
+        <item row="3" column="1">
+         <widget class="QCheckBox" name="checkShowVorbereiten">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Zug Vorbereiten</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
         <item row="3" column="2">
+         <widget class="QCheckBox" name="checkShowWerkstatt">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Werkstatt</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
          <widget class="QCheckBox" name="checkShowBuero">
           <property name="minimumSize">
            <size>
@@ -255,7 +277,7 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
+        <item row="4" column="1">
          <widget class="QCheckBox" name="checkShowSonstiges">
           <property name="minimumSize">
            <size>
@@ -271,28 +293,6 @@
           </property>
           <property name="text">
            <string>Sonstiges</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QCheckBox" name="checkShowKilometer">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>24</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>24</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Gefahrene Kilometer</string>
           </property>
           <property name="checked">
            <bool>false</bool>
@@ -455,40 +455,10 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1" colspan="2">
-           <widget class="QCheckBox" name="checkTf">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Lokführer</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1">
            <widget class="QLineEdit" name="lineVorname">
             <property name="placeholderText">
              <string>Vorname</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1" colspan="2">
-           <widget class="QCheckBox" name="checkRangierer">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Rangierer</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1" colspan="2">
-           <widget class="QCheckBox" name="checkZf">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Zugführer</string>
             </property>
            </widget>
           </item>
@@ -535,6 +505,36 @@
             </property>
             <property name="text">
              <string>Entfernung</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QCheckBox" name="checkTf">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Lokführer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QCheckBox" name="checkZf">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Zugführer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="checkRangierer">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Rangierer</string>
             </property>
            </widget>
           </item>
@@ -622,12 +622,12 @@
          <widget class="QTabWidget" name="tabWidgetEinzel">
           <property name="minimumSize">
            <size>
-            <width>435</width>
-            <height>250</height>
+            <width>400</width>
+            <height>200</height>
            </size>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <property name="tabsClosable">
            <bool>false</bool>
@@ -662,7 +662,7 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>402</width>
+                <width>400</width>
                 <height>120</height>
                </size>
               </property>
@@ -1115,7 +1115,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>666</width>
+     <width>703</width>
      <height>22</height>
     </rect>
    </property>

@@ -593,10 +593,12 @@ void PersonalWindow::print(QPrinter *p)
     Export::printPersonen(liste, gesamt, anzeige, p);
 }
 
-void PersonalWindow::on_tabWidget_tabBarClicked(int index)
+void PersonalWindow::on_tabWidgetMain_tabBarClicked(int index)
 {
     if (index == 1)
         refreshEinzel();
+    if (index == 0)
+        refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowGesamt_clicked(bool checked)
