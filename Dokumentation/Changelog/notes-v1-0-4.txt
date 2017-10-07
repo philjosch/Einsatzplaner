@@ -1,5 +1,0 @@
-Version 1.0.4
-
-Folgende Veränderungen wurden vorgenommen:
-Der Fehler, das das Programm beim Export der Personalübersicht bei manchen Benutzern abstürzt, wurde behoben.
-Weitere kleine Fehlerkorrekturen und Verbesserungen.

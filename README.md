@@ -10,4 +10,5 @@ Weitere Informationen findet man unter [bahn.philipp-schepper.de](http://bahn.ph
 - in `Installer` finden Sie Dateien eine Installer-Datei für Windows zu erstellen
 - in `Mockup` werden verschiedene Design-Studien gespeichert
 - in `Programm` findet man den eigentlichen Quelltext für das Programm
+- `CHANGELOG.md` Die Veränderungshistorie des Programms
 - `README.md` ist diese Datei
