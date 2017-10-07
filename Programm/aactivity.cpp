@@ -313,16 +313,14 @@ QString AActivity::listToString(QMap<Person *, AActivity::Infos *> *liste, QStri
             a += "; "+liste->value(p)->bemerkung;
             strichPunkt = true;
         }
-        if (aufgabe) {
-            if(liste->value(p)->kategorie != Category::Sonstiges) {
-                if (! strichPunkt) {
-                    a += "; ";
-                    strichPunkt = true;
-                } else {
-                    a += " ";
-                }
-                a += AActivity::getStringFromCategory(liste->value(p)->kategorie);
+        if (aufgabe && (liste->value(p)->kategorie != Category::Sonstiges)) {
+            if (strichPunkt) {
+                a += " ";
+            } else {
+                a += "; ";
+                strichPunkt = true;
             }
+            a += AActivity::getStringFromCategory(liste->value(p)->kategorie);
         }
         if (p != liste->keys().last()) {
             a += seperator;
@@ -370,7 +368,7 @@ bool AActivity::isExtern(QString bemerkung)
 QComboBox *AActivity::generateNewCategoryComboBox()
 {
     QComboBox *box = new QComboBox();
-    box->insertItems(0, QStringList({"Tf","Tb","Zf","Service","Zugbegleiter","Büro","Werkstatt","Vorbereiten","Sonstiges"}));
+    box->insertItems(0, QStringList({"Tf","Tb","Zf","Service","Zugbegleiter","Büro","Werkstatt","Zug Vorbereiten","Sonstiges"}));
     box->setCurrentIndex(8);
     return box;
 }

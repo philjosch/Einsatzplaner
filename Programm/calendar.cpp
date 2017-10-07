@@ -81,7 +81,7 @@ void Calendar::fromJson(QJsonObject o)
         itemToList->insert(i, a);
     }
     // an das gespeicherte Datum gehen
-    goTo(QDate::fromString(o.value("currentDate").toString(), "yyyy-MM-dd"));
+    ui->dateSelector->setDate(QDate::fromString(o.value("currentDate").toString(), "yyyy-MM-dd"));
 }
 
 void Calendar::nextMonth()
