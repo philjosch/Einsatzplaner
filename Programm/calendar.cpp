@@ -84,6 +84,11 @@ void Calendar::fromJson(QJsonObject o)
     ui->dateSelector->setDate(QDate::fromString(o.value("currentDate").toString(), "yyyy-MM-dd"));
 }
 
+void Calendar::wheelEvent(QWheelEvent *event)
+{
+//    ui->dateSelector->setDate(ui->dateSelector->date().addDays(- event->angleDelta().y() / 30));
+}
+
 void Calendar::nextMonth()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addMonths(1));

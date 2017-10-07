@@ -26,6 +26,8 @@ public:
     QJsonObject personalToJson();
     void fromJson(QJsonObject o);
 
+    void wheelEvent(QWheelEvent *event);
+
 public slots:
     void nextMonth();
     void prevMonth();
