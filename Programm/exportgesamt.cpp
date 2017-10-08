@@ -179,7 +179,7 @@ bool ExportGesamt::testShow(AActivity *a)
             return false;
         break;
     case 2: // Ab beginn des Jahres
-        if (a->getDatum().year() != QDate::currentDate().year())
+        if (a->getDatum().year() < QDate::currentDate().year())
             return false;
         break;
     case 3: // Ab egal
@@ -198,7 +198,7 @@ bool ExportGesamt::testShow(AActivity *a)
             return false;
         break;
     case 2: // Bis Ende des Jahres
-        if (a->getDatum().year() != QDate::currentDate().year())
+        if (a->getDatum().year() > QDate::currentDate().year())
             return false;
         break;
     case 3: // Bis egal
