@@ -136,6 +136,8 @@ void FahrtagWindow::loadData()
         ui->comboTimeEndeH->setCurrentText(fahrtag->getZeitEnde().toString("HH"));
         ui->comboTimeEndeM->setCurrentText(fahrtag->getZeitEnde().toString("mm"));
         ui->checkBoxBenoetigt->setChecked(fahrtag->getPersonalBenoetigt());
+        ui->textBemerkungen->clear();
+        ui->textBemerkungen->insertPlainText(fahrtag->getBemerkungen());
 
         // Daten von Manager_Reservierungen
         ui->comboWagenreihung->setCurrentText(fahrtag->getWagenreihung());

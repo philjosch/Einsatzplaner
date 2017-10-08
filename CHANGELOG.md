@@ -31,6 +31,7 @@ Stand: 7. Oktober 2017
 
 ### Fehlerbehebungen
 - Beim öffnen einer Datei, wird jetzt wieder zu dem Monat gesprungen, an dem die Datei gespeichert wurde.
+- Beim Öffnen eines Fahrtags wird die Bemerkung wieder geladen.
 - Rechtschreibfehler korrigiert
 - Weitere kleine Fehlerbehebungen und Verbesserungen
 
