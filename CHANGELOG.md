@@ -1,7 +1,7 @@
 # Einsatzplaner - Veränderungshistorie
 Stand: 7. Oktober 2017
 
-## Version 1.2 - Unveröffentlicht
+## Version 1.2 - 2017-10-10
 ### Neu
 - Die Mindeststunden können eingestellt werden, dies ist im Personalfenster möglich. Dort findet sich ein neuer Knopf mit der Bezeichnung Mindeststuden.
 - Anzeige der Summe der Einsatzzeiten in der Personalübersicht und in der exportierten Tabelle. Diese Funktion ist immer aktiv und zeigt die Summe der Zeiten der jeweiligen Spalte an.
