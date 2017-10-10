@@ -2,7 +2,7 @@
 #
 # Project created by QtCreator 2016-06-05T18:01:55
 #
-# All Rights by Philipp Schepper 2016
+# All Rights by Philipp Schepper 2016-2017
 #
 #-------------------------------------------------
 
@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     coreapplication.cpp \
     wagen.cpp \
     verteiler.cpp \
-    preferencesdialog.cpp
+    preferencesdialog.cpp \
+    minimumhourseditordialog.cpp
 
 HEADERS  += mainwindow.h \
     person.h \
@@ -54,7 +55,9 @@ HEADERS  += mainwindow.h \
     coreapplication.h \
     wagen.h \
     verteiler.h \
-    preferencesdialog.h
+    preferencesdialog.h \
+    minimumhourseditordialog.h \
+    enums.h
 
 FORMS    += mainwindow.ui \
     fahrtagwindow.ui \
@@ -63,7 +66,8 @@ FORMS    += mainwindow.ui \
     calendar.ui \
     calendarday.ui \
     exportgesamt.ui \
-    preferencesdialog.ui
+    preferencesdialog.ui \
+    minimumhourseditordialog.ui
 
 TRANSLATIONS += einsatzplaner_de.ts
 
@@ -75,13 +79,13 @@ win32 {
     RC_ICONS = ../Icon/keks.ico
     QMAKE_TARGET_COMPANY = Philipp Schepper
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
-    QMAKE_TARGET_COPYRIGHT = Rechte bei Philipp Schepper 2016
+    QMAKE_TARGET_COPYRIGHT = Rechte bei Philipp Schepper 2016-2017
     QMAKE_TARGET_PRODUCT = Einsatzplaner
-    VERSION = 1.1.0.1
+    VERSION = 1.2.0.1
 }
 
 macx {
-    VERSION = 1.1.0
+    VERSION = 1.2.0
     OTHER_FILES += Info.plist ../Icon/keks.icns
     QMAKE_INFO_PLIST = Info.plist
     DISTFILES += Info.plist

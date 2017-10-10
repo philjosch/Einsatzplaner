@@ -16,8 +16,8 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-    setWindowIcon(QApplication::windowIcon());
     ui->setupUi(this);
+    setWindowIcon(QApplication::windowIcon());
     connect(ui->calendar, SIGNAL(showFahrtag(Fahrtag*)), this, SLOT(openFahrtag(Fahrtag*)));
     connect(ui->calendar, SIGNAL(showActivity(Activity*)), this, SLOT(openActivity(Activity*)));
     connect(ui->calendar, SIGNAL(changed()), this, SLOT(unsave()));
@@ -130,10 +130,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     if (toClose) {
         personalfenster->close();
-//        delete personalfenster;
         for(QMainWindow *m: fenster->values()) {
             m->close();
-//            delete m;
         }
     }
 
@@ -172,7 +170,7 @@ void MainWindow::on_actionAboutQt_triggered()
 
 void MainWindow::on_actionAboutApp_triggered()
 {
-    QMessageBox::about(this, tr("Über Einsatzplaner"), "<h1>Einsatzplaner</h1>"+QCoreApplication::applicationVersion()+"<br/>Copyright © 2016 Philipp Schepper<br/>Alle Rechte vorbehalten.");
+    QMessageBox::about(this, tr("Über Einsatzplaner"), "<h1>Einsatzplaner</h1>"+QCoreApplication::applicationVersion()+"<br/>Copyright © 2016-2017 Philipp Schepper<br/>Alle Rechte vorbehalten.");
 }
 
 void MainWindow::on_actionQuit_triggered()

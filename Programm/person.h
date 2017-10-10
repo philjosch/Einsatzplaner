@@ -11,12 +11,12 @@ class Person : public QObject
     Q_OBJECT
 
 public:
-    Person(QString vorname, QString nachname);
-    Person(QString name);
+    Person(QString vorname, QString nachname, ManagerPersonal *manager);
+    Person(QString name, ManagerPersonal *manager);
 
     QJsonObject toJson();
     QJsonObject personalToJson();
-    static Person *fromJson(QJsonObject o);
+    static Person *fromJson(QJsonObject o, ManagerPersonal *manager);
 
     double getTimeTf();
     double getTimeZf();
@@ -44,14 +44,13 @@ public:
 
     void berechne();
 
-    bool addActivity(AActivity *a, AActivity::Category category);
+    bool addActivity(AActivity *a, Category category);
     bool removeActivity(AActivity *a);
 
     QListIterator<AActivity *> *getActivities();
 
 
     QString getName() const;
-//    void setName(const QString &value);
     QString getVorname() const;
     void setVorname(const QString &value);
     QString getNachname() const;
@@ -84,9 +83,11 @@ protected:
     bool ausbildungZf;
     bool ausbildungRangierer;
     int strecke; // Entfernung vom Wohnort nach Schwarzerden, wird benötigt, um die Kilometer zu berechnen.
-    QMap<AActivity*, AActivity::Category> *activities;
+    QMap<AActivity*, Category> *activities;
 
 private:
+    void personConstructor(QString vorname, QString nachname, ManagerPersonal *manager);
+
     double timeTf;
     double timeZf;
     double timeZub;
@@ -111,6 +112,8 @@ private:
     double additionalTimeWerkstatt;
     double additionalTimeVorbereiten;
     double additionalTimeSonstiges;
+
+    ManagerPersonal *manager;
 
 signals:
     void nameChanged(Person*, QString);// Person ist die Person und QString gibt den !ALTEN! Namen an

@@ -1,8 +1,6 @@
 #include "export.h"
 #include "fileio.h"
 
-#include <QDebug>
-
 bool Export::printFahrtag(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
 {
     QList<AActivity*> *liste = new QList<AActivity*>();
@@ -39,9 +37,9 @@ bool Export::printSingle(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *pap
     for(AActivity *aa: *liste) {
         html += aa->getHtmlForSingleView();
         if(liste->last() != aa)
-            html += "<p class='last'><small>Erstellt am: "+QDate::currentDate().toString("d.M.yyyy")+"</small></p>";
+            html += "<p class='last'><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
         else
-            html += "<p><small>Erstellt am: "+QDate::currentDate().toString("d.M.yyyy")+"</small></p>";
+            html += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     }
 
     // Footer hinzufügen
@@ -73,7 +71,7 @@ bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper
         a += akt->getHtmlForTableView();
     }
     a += "</tbody></table>";
-    a += "<p><small>Erstellt am: "+QDate::currentDate().toString("d.M.yyyy")+"</small></p>";
+    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     a += "</body></html>";
     d->setHtml(a);
     return print(pdf, paper, d);
@@ -151,7 +149,7 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
     }
 
     a += "</tbody></table>";
-    a += "<p><small>Erstellt am: "+QDate::currentDate().toString("d.M.yyyy")+"</small></p>";
+    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     a += "</body></html>";
     d->setHtml(a);
     return print(pdf, paper, d);
@@ -163,7 +161,7 @@ bool Export::printPerson(Person *p, QPrinter *pdf, QPrinter *paper)
     return print(pdf, paper, d);
 }
 
-bool Export::printPersonen(QList<Person *> *personen, QList<bool> *data, QPrinter *pdf, QPrinter *paper)
+bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QList<bool> *data, QPrinter *pdf, QPrinter *paper)
 {
     preparePrinterLandscape(pdf);
     preparePrinterLandscape(paper);
@@ -176,6 +174,7 @@ bool Export::printPersonen(QList<Person *> *personen, QList<bool> *data, QPrinte
     a += "table { border-width: 1px; border-style: solid; border-color: black; }";
     a += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }";
     a += "table tr, table td { page-break-inside: avoid; }";
+    a += "table tfoot tr, table tfoot td { border-width: 2px; }";
     a += "ul { -qt-list-indent: 0; }";
     a += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
     a += "</style>";
@@ -222,11 +221,16 @@ bool Export::printPersonen(QList<Person *> *personen, QList<bool> *data, QPrinte
     for(Person *p: *personen) {
         a += p->getHtmlForTableView(data);
     }
-    a += "</tbody></table>";
-    a += "<p><small>Erstellt am: "+QDate::currentDate().toString("d.M.yyyy")+"</small></p>";
+    a += "</tbody><tfoot><tr>";
+    a += "<td></td>";
+    for(int i = 0; i <= 10; i++) {
+        if (data->at(i))
+            a += "<td>"+QString::number(gesamt->at(i))+"</td>";
+    }
+    a += "</tr></tfoot></table>";
+    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
     a += "</body></html>";
     d->setHtml(a);
-//    qDebug() << a;
     return print(pdf, paper, d);
 }
 

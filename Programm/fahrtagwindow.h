@@ -31,6 +31,8 @@ private slots:
     void on_comboTimeTfM_currentTextChanged(const QString &arg1);
     void on_comboTimeZH_currentTextChanged(const QString &arg1);
     void on_comboTimeZM_currentTextChanged(const QString &arg1);
+    void on_comboTimeEndeH_currentTextChanged(const QString &arg1);
+    void on_comboTimeEndeM_currentTextChanged(const QString &arg1);
 
     // Personaltab
     void on_listTf_itemChanged(QListWidgetItem *item);
@@ -77,7 +79,6 @@ private slots:
     void update(); // Aktualisiert die Anzeige, wieviele Sitzplätze belegt sind
 
     // Einsatzzeiten
-    void on_timeEnde_timeChanged(const QTime &time);
     void on_checkBoxBenoetigt_clicked(bool checked);
     void on_tablePersonen_cellChanged(int row, int column);
 
@@ -97,6 +98,8 @@ private slots:
 
     void on_checkBoxAll_clicked(bool checked);
 
+    void complexWidgetInTableChanged();
+
 private:
     // Allgemeines
     Ui::FahrtagWindow *ui;
@@ -112,7 +115,7 @@ private:
 
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);
-    void itemChanged(QListWidgetItem *item, AActivity::Category kat, bool isExtern=false);
+    void itemChanged(QListWidgetItem *item, Category kat);
 
     // Reservierungen
     QMap<Reservierung*, QListWidgetItem*> *resToItem;
@@ -123,6 +126,8 @@ private:
 
     void loadReservierung(Reservierung *r);
     void saveResFahrt();
+
+    QMap<QWidget*, QTableWidgetItem*> *widgetInTableToTableWidget;
 };
 
 #endif // FAHRTAGWINDOW_H

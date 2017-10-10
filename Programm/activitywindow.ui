@@ -55,9 +55,6 @@
       </property>
       <item row="6" column="1" colspan="3">
        <widget class="QTableWidget" name="tablePersonen">
-        <property name="statusTip">
-         <string>Tf, Tb, Zf, Service, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges</string>
-        </property>
         <property name="sortingEnabled">
          <bool>true</bool>
         </property>
@@ -67,6 +64,11 @@
         <column>
          <property name="text">
           <string>Name</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Aufgabe</string>
          </property>
         </column>
         <column>
@@ -81,10 +83,10 @@
         </column>
         <column>
          <property name="text">
-          <string>Aufgabe</string>
+          <string>Bemerkung</string>
          </property>
          <property name="toolTip">
-          <string>Tf, Tb, Zf, Service, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges</string>
+          <string>Angeben, ob es sich bei der Person um eine Externe handelt, ob sie auf den Führerstand mitfährt, oder Azubi ist oder aber ein Teilnehmer eines Schnupperkurses.</string>
          </property>
         </column>
        </widget>

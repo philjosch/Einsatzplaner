@@ -7,5 +7,6 @@
         <file>keks.png</file>
         <file>keks.icns</file>
         <file>square.png</file>
+        <file>square@2x.png</file>
     </qresource>
 </RCC>

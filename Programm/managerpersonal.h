@@ -5,6 +5,12 @@
 #include <QObject>
 #include <QSet>
 
+#include "enums.h"
+
+class ManagerPersonal;
+
+#include "aactivity.h"
+
 class Person;
 
 class ManagerPersonal :  public QObject
@@ -19,7 +25,6 @@ public:
     QJsonObject personalToJson();
     void fromJson(QJsonObject o);
 
-    enum Misstake { OK, PersonNichtGefunden, FalscheQualifikation, SonstigerFehler};
 
     Person *getPerson(QString name);
     bool personExists(QString name); // Prüft, ob die Person im System registriert ist
@@ -30,13 +35,31 @@ public:
     bool removePerson(QString name);
     bool removePerson(Person *p);
 
-    static bool pruefeStunden(Person *p);
+    bool pruefeStunden(Person *p);
 
-    static double mindestStunden;
-    static double mindestStundenTf;
-    static double mindestStundenZf;
+    void setMinimumHours(Category cat, double amount);
+    void setMinimumHours(double amount);
+
+    double getMinimumHours(Category cat);
+    double getMinimumHours();
+
+    static double getMinimumHoursDefault(Category kat);
+    static double getMinimumHoursDefault();
 
     QSetIterator<Person *> getPersonen() const;
+
+    void berechne();
+
+    double getTimeTf() const;
+    double getTimeZf() const;
+    double getTimeZub() const;
+    double getTimeService() const;
+    double getTimeBuero() const;
+    double getTimeWerkstatt() const;
+    double getTimeVorbereiten() const;
+    double getTimeSonstiges() const;
+    double getTimeSum() const;
+    double getSumKilometer() const;
 
 public slots:
     void personChangedName(Person *p, QString alt);
@@ -47,6 +70,24 @@ private:
     QHash<QString, Person*> *personenSorted;
 
     QString getGoodName(QString name); // Wandlet einen Namen in das Format Vorname Nachname um
+
+    QHash<Category, double> *minimumHours;
+    double minimumTotal;
+
+    static QHash<Category, double> minimumHoursDefault;
+    static double minimumTotalDefault;
+
+    double timeTf;
+    double timeZf;
+    double timeZub;
+    double timeService;
+    double timeBuero;
+    double timeWerkstatt;
+    double timeVorbereiten;
+    double timeSonstiges;
+    double timeSum;
+    double sumKilometer;
+
 };
 
 #endif // MANAGERPERSONAL_H

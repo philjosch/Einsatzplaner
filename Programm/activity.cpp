@@ -39,7 +39,6 @@ AActivity::Infos *Activity::getIndividual(Person *person)
 {
     Infos *neu = new Infos();
     Infos *alt = personen->value(person);
-    neu->aufgabe = alt->aufgabe;
     neu->bemerkung = alt->bemerkung;
     neu->kategorie = alt->kategorie;
     neu->beginn = alt->beginn;
@@ -79,13 +78,12 @@ QString Activity::getHtmlForSingleView()
         for(Person *p: personen->keys()) {
             Infos *info = personen->value(p);
             html += "<tr><td>"+p->getName()+"</td><td>";
-            html += (info->beginn != QTime(0,0) ? info->beginn.toString("hh:mm") : " ");
+            html += (info->beginn == QTime(0,0) ? "" : info->beginn.toString("hh:mm"));
             html += "</td><td>";
-            html += (info->ende != QTime(0,0) ? info->ende.toString("hh:mm") : " ");
-            if (info->aufgabe == "")
-                html += "</td><td>"+AActivity::getStringFromCategory(info->kategorie)+"</td></tr>";
-            else
-                html += "</td><td>"+info->aufgabe+"</td></tr>";
+            html += (info->ende == QTime(0,0) ? "" : info->ende.toString("hh:mm"));
+            html += "</td><td>"+AActivity::getStringFromCategory(info->kategorie);
+            if (info->bemerkung != "") html += "<br/>"+info->bemerkung;
+            html +="</td></tr>";
         }
         html += "</tbody></table><p>* Abweichend von obigen Zeiten!</p>";
     }
@@ -109,12 +107,12 @@ QString Activity::getHtmlForTableView()
     // Aufsplitten der Personen auf die Einzelnen Listen
     for(Person *p: personen->keys()) {
         switch (personen->value(p)->kategorie) {
-        case AActivity::Tf:
-        case AActivity::Tb: tf.insert(p, personen->value(p)); break;
-        case AActivity::Zf: zf.insert(p, personen->value(p)); break;
-        case AActivity::Zub: zub.insert(p, personen->value(p)); break;
-        case AActivity::Begleiter: begl.insert(p, personen->value(p)); break;
-        case AActivity::Service: service.insert(p, personen->value(p)); break;
+        case Category::Tf:
+        case Category::Tb: tf.insert(p, personen->value(p)); break;
+        case Category::Zf: zf.insert(p, personen->value(p)); break;
+        case Category::Zub: zub.insert(p, personen->value(p)); break;
+        case Category::Begleiter: begl.insert(p, personen->value(p)); break;
+        case Category::Service: service.insert(p, personen->value(p)); break;
         default: sonstige.insert(p, personen->value(p)); break;
         }
     }

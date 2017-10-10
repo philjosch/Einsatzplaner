@@ -1,6 +1,10 @@
 calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die Personalangelegenheiten (calendar)
 	currentDate (string)	-> Das Datum, das der DateSelektor gerade anzeigt, somit auch der Moant (Kodiert als 'yyyy-mm-dd')
 	personal/ (object)	-> hier werden die Personen gesichert
+		minimumHours (object)
+			key (AActivity::Category) 	-> Die Kategorie, fuer welche die Mindeststunden angegeben ist
+			value (int) 			-> Die Anzahl an Mindeststunden, fuer die korrespondierende Kategorie
+		minimumTotal (int)			-> Die Anzahl der Mindeststunden in der Summe
 		personen (array)	-> hier werden die Personen gelistet über ein (object)
 			vorname (string)-> Vorname der Person
 			nachname(string)-> Nachname der Person

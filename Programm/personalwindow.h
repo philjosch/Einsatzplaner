@@ -50,7 +50,7 @@ private slots:
     void on_pushPDF_clicked();
     void on_pushPrint_clicked();
 
-    void on_tabWidget_tabBarClicked(int index);
+    void on_tabWidgetMain_tabBarClicked(int index);
 
     void on_checkShowGesamt_clicked(bool checked);
     void on_checkShowAnzahl_clicked(bool checked);
@@ -72,6 +72,8 @@ private slots:
     void on_doubleWerkstatt_valueChanged(double arg1);
     void on_doubleBuero_valueChanged(double arg1);
     void on_doubleSonstiges_valueChanged(double arg1);
+
+    void editMinimumHours();
 
 private:
     Ui::PersonalWindow *ui;

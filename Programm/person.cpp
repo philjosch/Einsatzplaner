@@ -7,36 +7,12 @@
 #include <QDebug>
 #include <QVariant>
 
-Person::Person(QString vorname, QString nachname)
+Person::Person(QString vorname, QString nachname, ManagerPersonal *manager)
 {
-    this->vorname = vorname;
-    this->nachname = nachname;
-    strecke = 0;
-    this->ausbildungTf = false;
-    this->ausbildungZf = false;
-    this->ausbildungRangierer = false;
-    timeTf = 0.f;
-    timeZf = 0.f;
-    timeZub = 0.f;
-    timeService = 0.f;
-    timeBuero = 0.f;
-    timeWerkstatt = 0.f;
-    timeSum = 0.f;
-    sumKilometer = 0.f;
-    additionalTimeBuero = 0.f;
-    additionalTimeService = 0.f;
-    additionalTimeSonstiges = 0.f;
-    additionalTimeTf = 0.f;
-    additionalTimeVorbereiten = 0.f;
-    additionalTimeWerkstatt = 0.f;
-    additionalTimeZf = 0.f;
-    additionalTimeZub = 0.f;
-    valuesInvalid = true;
-
-    activities = new QMap<AActivity *, AActivity::Category>();
+    personConstructor(vorname, nachname, manager);
 }
 
-Person::Person(QString name) : QObject()
+Person::Person(QString name, ManagerPersonal *manager) : QObject()
 {
     QString vorname = "";
     QString nachname = "";
@@ -52,31 +28,7 @@ Person::Person(QString name) : QObject()
         }
         nachname = liste.last();
     }
-    this->vorname = vorname;
-    this->nachname = nachname;
-    strecke = 0;
-    this->ausbildungTf = false;
-    this->ausbildungZf = false;
-    this->ausbildungRangierer = false;
-    timeTf = 0.f;
-    timeZf = 0.f;
-    timeZub = 0.f;
-    timeService = 0.f;
-    timeBuero = 0.f;
-    timeWerkstatt = 0.f;
-    timeSum = 0.f;
-    sumKilometer = 0.f;
-    additionalTimeBuero = 0.f;
-    additionalTimeService = 0.f;
-    additionalTimeSonstiges = 0.f;
-    additionalTimeTf = 0.f;
-    additionalTimeVorbereiten = 0.f;
-    additionalTimeWerkstatt = 0.f;
-    additionalTimeZf = 0.f;
-    additionalTimeZub = 0.f;
-    valuesInvalid = true;
-
-    activities = new QMap<AActivity *, AActivity::Category>();
+    personConstructor(vorname, nachname, manager);
 }
 
 QJsonObject Person::toJson()
@@ -111,13 +63,13 @@ QJsonObject Person::personalToJson()
     return o;
 }
 
-Person *Person::fromJson(QJsonObject o)
+Person *Person::fromJson(QJsonObject o, ManagerPersonal *manager)
 {
     Person *p;
     if (o.contains("name")) {
-        p = new Person(o.value("name").toString());
+        p = new Person(o.value("name").toString(), manager);
     } else {
-        p = new Person(o.value("vorname").toString(), o.value("nachname").toString());
+        p = new Person(o.value("vorname").toString(), o.value("nachname").toString(), manager);
     }
     p->ausbildungRangierer = o.value("ausRang").toBool();
     p->ausbildungZf = o.value("ausZf").toBool();
@@ -191,7 +143,7 @@ void Person::berechne()
     QDate today = QDate::currentDate();
     for(AActivity *a: activities->keys()) {
         if (a->getDatum() <= today) {
-            AActivity::Category cat = activities->value(a);
+            Category cat = activities->value(a);
             AActivity::Infos *info = a->getIndividual(this);
 
             // Einsatzstunden
@@ -199,19 +151,19 @@ void Person::berechne()
             QTime ende = info->ende;
             int duration = start.msecsTo(ende);
             switch (cat) {
-            case AActivity::Tb:
-            case AActivity::Tf: timeTf += duration;  break;
-            case AActivity::Zf: timeZf += duration;  break;
-            case AActivity::Begleiter:
-            case AActivity::Zub: timeZub += duration; break;
-            case AActivity::Service: timeService += duration;  break;
-            case AActivity::Buero: timeBuero += duration;  break;
-            case AActivity::Werkstatt: timeWerkstatt += duration;  break;
-            case AActivity::ZugVorbereiten: timeVorbereiten += duration; break;
+            case Category::Tb:
+            case Category::Tf: timeTf += duration;  break;
+            case Category::Zf: timeZf += duration;  break;
+            case Category::Begleiter:
+            case Category::Zub: timeZub += duration; break;
+            case Category::Service: timeService += duration;  break;
+            case Category::Buero: timeBuero += duration;  break;
+            case Category::Werkstatt: timeWerkstatt += duration;  break;
+            case Category::ZugVorbereiten: timeVorbereiten += duration; break;
             default: timeSonstiges += duration;
             }
             timeSum += duration;
-            if (cat != AActivity::Buero) sumKilometer += 2*strecke;
+            if (cat != Category::Buero) sumKilometer += 2*strecke;
         }
     }
     timeTf = timeTf/(3600000) + additionalTimeTf;
@@ -227,7 +179,7 @@ void Person::berechne()
     valuesInvalid = false;
 }
 
-bool Person::addActivity(AActivity *a, AActivity::Category category)
+bool Person::addActivity(AActivity *a, Category category)
 {
     activities->insert(a, category);
     valuesInvalid = true;
@@ -304,7 +256,7 @@ QString Person::getHtmlForTableView(QList<bool> *liste)
         liste->append(0);
     }
     QString html;
-    if (ManagerPersonal::pruefeStunden(this)) {
+    if (manager->pruefeStunden(this)) {
         html = "<tr>";
     } else {
         html = "<tr style='background-color:"+PersonalWindow::nichtGenugStunden+";'>";
@@ -414,6 +366,38 @@ void Person::setAdditionalTimeSonstiges(double value)
 {
     additionalTimeSonstiges = value;
     valuesInvalid = true;
+}
+
+void Person::personConstructor(QString vorname, QString nachname, ManagerPersonal *manager)
+{
+    this->manager = manager;
+    this->vorname = vorname;
+    this->nachname = nachname;
+    strecke = 0;
+    ausbildungTf = false;
+    ausbildungZf = false;
+    ausbildungRangierer = false;
+    timeTf = 0.f;
+    timeZf = 0.f;
+    timeZub = 0.f;
+    timeService = 0.f;
+    timeBuero = 0.f;
+    timeWerkstatt = 0.f;
+    timeVorbereiten = 0.f;
+    timeSonstiges = 0.f;
+    timeSum = 0.f;
+    sumKilometer = 0.f;
+    additionalTimeTf = 0.f;
+    additionalTimeZf = 0.f;
+    additionalTimeZub = 0.f;
+    additionalTimeService = 0.f;
+    additionalTimeBuero = 0.f;
+    additionalTimeWerkstatt = 0.f;
+    additionalTimeVorbereiten = 0.f;
+    additionalTimeSonstiges = 0.f;
+    valuesInvalid = true;
+
+    activities = new QMap<AActivity *, Category>();
 }
 
 double Person::getTimeTf()

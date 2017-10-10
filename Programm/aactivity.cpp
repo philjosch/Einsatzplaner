@@ -5,14 +5,17 @@
 #include <QDebug>
 #include <QJsonArray>
 
-AActivity::Category AActivity::getCategoryFromString(QString s)
+QStringList AActivity::EXTERNAL_LIST = QStringList() << "Extern" << "Führerstand" << "FS" << "Schnupperkurs" << "ELF" << "Ehrenlokführer" << "ELF-Kurs";
+QStringList AActivity::QUALIFICATION_LIST = QStringList() << "Azubi" << "Ausbildung" << "Tf-Ausbildung" << "Zf-Ausbildung" << "Tf-Unterricht" << "Zf-Unterricht" << "Weiterbildung";
+
+Category AActivity::getCategoryFromString(QString s)
 {
     s = s.toUpper();
     if (s=="TF") return Tf;
     if (s=="TB") return Tb;
     if (s=="ZF") return Zf;
     if (s=="SERVICE") return Service;
-    if (s=="ZUG BEGLEITER" || s=="ZUB") return Zub;
+    if (s=="ZUGBEGLEITER" || s=="ZUB") return Zub;
     if (s=="BEGLEITER" || s=="BEGL.O.B.A.") return Begleiter;
     if (s=="BÜRO" || s=="BUERO") return Buero;
     if (s=="WERKSTATT") return Werkstatt;
@@ -20,14 +23,14 @@ AActivity::Category AActivity::getCategoryFromString(QString s)
     return Sonstiges;
 }
 
-QString AActivity::getStringFromCategory(AActivity::Category c)
+QString AActivity::getStringFromCategory(Category c)
 {
     switch (c) {
     case Tf: return "Tf";
     case Tb: return "Tb";
     case Zf: return "Zf";
     case Service: return "Service";
-    case Zub: return "Zub";
+    case Zub: return "Zugbegleiter";
     case Begleiter: return "Begl.o.b.A.";
     case Buero: return "Büro";
     case Werkstatt: return "Werkstatt";
@@ -70,7 +73,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
         if (personal->personExists(name)) {
             p = personal->getPerson(name);
         } else {
-            p = new Person(name);
+            p = new Person(name, nullptr);
             p->setAusbildungTf(true);
             p->setAusbildungZf(true);
             p->setAusbildungRangierer(true);
@@ -79,7 +82,6 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
         info->beginn = QTime::fromString(aO.value("beginn").toString(), "hh:mm");
         info->ende = QTime::fromString(aO.value("ende").toString(), "hh:mm");
         info->kategorie = kat;
-        info->aufgabe = aO.value("aufgabe").toString();
         info->bemerkung = aO.value("bemerkung").toString();
 
         if (p != nullptr) {
@@ -120,7 +122,6 @@ QJsonObject AActivity::toJson()
         persJson.insert("beginn", personen->value(p)->beginn.toString("hh:mm"));
         persJson.insert("ende", personen->value(p)->ende.toString("hh:mm"));
         persJson.insert("kat", (int) personen->value(p)->kategorie);
-        persJson.insert("aufgabe", personen->value(p)->aufgabe);
         persJson.insert("bemerkung", personen->value(p)->bemerkung);
         personenJSON.append(persJson);
     }
@@ -241,39 +242,17 @@ bool AActivity::removePerson(QString p)
     return false;
 }
 
-ManagerPersonal::Misstake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, QString aufgabe)
+Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat)
 {
    /*
     * angabe über aufgabe prüfen
     * p. ob person geeignet
     * person hinzufügen
     */
-    AActivity::Category kat = AActivity::getCategoryFromString(aufgabe);
-    switch (kat) {
-    case Tf:
-        if (! p->getAusbildungTf()) {
-            return ManagerPersonal::FalscheQualifikation;
-        }
-        break;
-    case Tb:
-        // Ein Tb muss auch Lokführer sein, diese muss noch abgeklärt werden: Issue #9
-        if (! p->getAusbildungTf()) {
-            return ManagerPersonal::FalscheQualifikation;
-        }
-        break;
-    case Zf:
-        if (! p->getAusbildungZf()) {
-            return ManagerPersonal::FalscheQualifikation;
-        }
-        break;
-    case Zub:
-        if (! p->getAusbildungRangierer()) {
-            kat = Begleiter;
-        }
-        break;
-    default:
-        break;
-    }
+
+    if (kat == Zub && !hasQualification(p, kat, bemerkung)) kat = Begleiter;
+
+    if (! hasQualification(p, kat, bemerkung)) return Mistake::FalscheQualifikation;
 
     // jetzt ist alles richtig und die person kann registiert werden.
     p->addActivity(this, kat);
@@ -282,22 +261,30 @@ ManagerPersonal::Misstake AActivity::addPerson(Person *p, QString bemerkung, QTi
     info->beginn = start;
     info->ende = ende;
     info->kategorie = kat;
-    info->aufgabe = aufgabe;
     info->bemerkung = bemerkung;
 
     personen->insert(p, info);
 
     emitter();
-    return ManagerPersonal::OK;
+    return Mistake::OK;
 }
 
-ManagerPersonal::Misstake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, QString aufgabe)
+Mistake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat)
 {
     Person *pers = personal->getPerson(p);
     if (pers != nullptr) {
-        return addPerson(pers, bemerkung, start, ende, aufgabe);
+        return addPerson(pers, bemerkung, start, ende, kat);
     }
-    return ManagerPersonal::PersonNichtGefunden;
+    if (isExtern(bemerkung)) {
+        Person *neuePerson = new Person(p, nullptr);
+        neuePerson->setAusbildungTf(true);
+        neuePerson->setAusbildungZf(true);
+        neuePerson->setAusbildungRangierer(true);
+        Mistake atw = addPerson(neuePerson, bemerkung, start, ende, kat);
+        if (atw == Mistake::OK) return ExternOk;
+        return atw;
+    }
+    return Mistake::PersonNichtGefunden;
 }
 
 void AActivity::updatePersonBemerkung(Person *p, QString bemerkung)
@@ -326,28 +313,69 @@ QString AActivity::listToString(QMap<Person *, AActivity::Infos *> *liste, QStri
             a += "; "+liste->value(p)->bemerkung;
             strichPunkt = true;
         }
-        if (aufgabe) {
-            if (liste->value(p)->aufgabe != "" && liste->value(p)->aufgabe != "Sonstiges") {
-                if (! strichPunkt) {
-                    a += "; ";
-                    strichPunkt = true;
-                } else {
-                    a += " ";
-                }
-                a += liste->value(p)->aufgabe;
-            } else if(liste->value(p)->kategorie != AActivity::Sonstiges) {
-                if (! strichPunkt) {
-                    a += "; ";
-                    strichPunkt = true;
-                } else {
-                    a += " ";
-                }
-                a += AActivity::getStringFromCategory(liste->value(p)->kategorie);
+        if (aufgabe && (liste->value(p)->kategorie != Category::Sonstiges)) {
+            if (strichPunkt) {
+                a += " ";
+            } else {
+                a += "; ";
+                strichPunkt = true;
             }
+            a += AActivity::getStringFromCategory(liste->value(p)->kategorie);
         }
         if (p != liste->keys().last()) {
             a += seperator;
         }
     }
     return a;
+}
+
+bool AActivity::hasQualification(Person *p, Category kat, QString bemerkung)
+{
+    switch (kat) {
+    case Tf:
+        if (p->getAusbildungTf()) return true;
+        break;
+    case Tb:
+        if (p->getAusbildungZf()) return true;
+        break;
+    case Zf:
+        if (p->getAusbildungZf()) return true;
+        break;
+    case Zub:
+        if (p->getAusbildungRangierer()) return true;
+    default:
+        return true;
+    }
+
+    for(QString s: QUALIFICATION_LIST) {
+        if (bemerkung.contains(s, Qt::CaseInsensitive)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool AActivity::isExtern(QString bemerkung)
+{
+    for(QString s: EXTERNAL_LIST) {
+        if (bemerkung.contains(s, Qt::CaseInsensitive)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+QComboBox *AActivity::generateNewCategoryComboBox()
+{
+    QComboBox *box = new QComboBox();
+    box->insertItems(0, QStringList({"Tf","Tb","Zf","Service","Zugbegleiter","Büro","Werkstatt","Zug Vorbereiten","Sonstiges"}));
+    box->setCurrentIndex(8);
+    return box;
+}
+
+QTimeEdit *AActivity::generateNewTimeEdit()
+{
+    QTimeEdit *edit = new QTimeEdit();
+    edit->setDisplayFormat("hh:mm");
+    return edit;
 }

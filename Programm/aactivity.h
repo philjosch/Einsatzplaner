@@ -4,6 +4,11 @@
 #include <QDate>
 #include <QTime>
 #include <QObject>
+#include <QComboBox>
+#include <QTimeEdit>
+
+//class AActivity;
+//enum Category { Tf, Tb, Zf, Service, Zub, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
 
 #include "managerpersonal.h"
 
@@ -13,13 +18,10 @@ class AActivity
 {
 
 public:
-    enum Category { Tf, Tb, Zf, Service, Zub, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
-
     struct Infos {
         QTime beginn;
         QTime ende;
         Category kategorie;
-        QString aufgabe;
         QString bemerkung;
     };
 
@@ -57,8 +59,8 @@ public:
 
     QMap<Person *,  Infos*> *getPersonen() const;
     virtual Infos *getIndividual(Person *person) = 0;
-    ManagerPersonal::Misstake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, QString aufgabe);
-    ManagerPersonal::Misstake addPerson(QString p, QString bemerkung, QTime start, QTime ende, QString aufgabe);
+    Mistake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
+    Mistake addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
     void updatePersonBemerkung(Person *p, QString bemerkung);
     bool removePerson(Person *p);
     bool removePerson(QString p);
@@ -74,6 +76,14 @@ public:
 
     virtual void emitter() = 0;
 
+    static QComboBox *generateNewCategoryComboBox();
+    static QTimeEdit *generateNewTimeEdit();
+
+    static QStringList EXTERNAL_LIST;
+    static QStringList QUALIFICATION_LIST;
+
+    static bool hasQualification(Person *p, Category kat, QString bemerkung);
+    static bool isExtern(QString bemerkung);
 protected:
     QDate datum;
     QString ort;
@@ -87,6 +97,7 @@ protected:
     ManagerPersonal *personal;
 
     QString listToString(QMap<Person*, Infos*> *liste, QString seperator, bool aufgabe=false);
+
 };
 
 #endif // AACTIVITY_H
