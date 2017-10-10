@@ -118,6 +118,7 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
 
         switch (activity->addPerson(name, bemerkung, beginnZ, endeZ, kat)) {
         case Mistake::OK:
+        case Mistake::ExternOk:
             break;
         case Mistake::PersonNichtGefunden:
             QMessageBox::warning(this, tr("Fehler"), tr("Die eingegebene Person konnte im System nicht gefunden werden."));

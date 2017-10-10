@@ -490,6 +490,7 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
 
         switch (fahrtag->addPerson(name, bemerkung, beginn, ende, kat)) {
         case Mistake::OK:
+        case Mistake::ExternOk:
             break;
         case Mistake::PersonNichtGefunden:
             QMessageBox::warning(this, "Fehler", "Die eingegebene Person konnte im System nicht gefunden werden.");
