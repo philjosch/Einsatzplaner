@@ -169,6 +169,8 @@ bool ManagerPersonal::pruefeStunden(Person *p)
         return false;
     if (p->getTimeVorbereiten() < getMinimumHours(Category::ZugVorbereiten))
         return false;
+    if ((p->getAusbildungRangierer() || p->getAusbildungTf() || p->getAusbildungZf()) && (p->getTimeAusbildung() < getMinimumHours(Category::Ausbildung)))
+        return false;
     if (p->getTimeSonstiges() < getMinimumHours(Category::Sonstiges))
         return false;
     if (p->getTimeSum() < getMinimumHours())
@@ -235,6 +237,7 @@ void ManagerPersonal::berechne()
     timeBuero = 0;
     timeWerkstatt = 0;
     timeVorbereiten = 0;
+    timeAusbildung = 0;
     timeSonstiges = 0;
     timeSum = 0;
     sumKilometer = 0;
@@ -247,6 +250,7 @@ void ManagerPersonal::berechne()
         timeBuero += p->getTimeBuero();
         timeWerkstatt += p->getTimeWerkstatt();
         timeVorbereiten += p->getTimeVorbereiten();
+        timeAusbildung += p->getTimeAusbildung();
         timeSonstiges += p->getTimeSonstiges();
         timeSum += p->getTimeSum();
         sumKilometer += p->getSumKilometer();
@@ -280,6 +284,11 @@ double ManagerPersonal::getTimeSonstiges() const
 double ManagerPersonal::getTimeVorbereiten() const
 {
     return timeVorbereiten;
+}
+
+double ManagerPersonal::getTimeAusbildung() const
+{
+    return timeAusbildung;
 }
 
 double ManagerPersonal::getTimeWerkstatt() const

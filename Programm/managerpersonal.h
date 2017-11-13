@@ -57,6 +57,7 @@ public:
     double getTimeBuero() const;
     double getTimeWerkstatt() const;
     double getTimeVorbereiten() const;
+    double getTimeAusbildung() const;
     double getTimeSonstiges() const;
     double getTimeSum() const;
     double getSumKilometer() const;
@@ -84,6 +85,7 @@ private:
     double timeBuero;
     double timeWerkstatt;
     double timeVorbereiten;
+    double timeAusbildung;
     double timeSonstiges;
     double timeSum;
     double sumKilometer;

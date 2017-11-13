@@ -38,7 +38,7 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     refreshEinzel();
 
     anzeige = new QList<bool>();
-    while(anzeige->length() < 11) {
+    while(anzeige->length() <= 11) {
         anzeige->append(false);
     }
     ui->checkShowGesamt->setChecked(true);
@@ -187,6 +187,7 @@ void PersonalWindow::refreshGesamt()
     //  8: büro
     //  9: sonstiges
     // 10: kilometer
+    // 11: ausbildung
     while (ui->tabelleGesamt->columnCount() > 2) {
         ui->tabelleGesamt->removeColumn(2);
     }
@@ -198,6 +199,10 @@ void PersonalWindow::refreshGesamt()
     if (anzeige->at(9)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Sonstiges")));
+    }
+    if (anzeige->at(11)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Ausbildung")));
     }
     if (anzeige->at(8)) {
         ui->tabelleGesamt->insertColumn(2);
@@ -298,6 +303,12 @@ void PersonalWindow::refreshGesamt()
     if (anzeige->at(8)) {
         ii = new QTableWidgetItem();
         ii->setData(Qt::EditRole, manager->getTimeBuero());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+        pos++;
+    }
+    if (anzeige->at(11)) {
+        ii = new QTableWidgetItem();
+        ii->setData(Qt::EditRole, manager->getTimeAusbildung());
         ui->tabelleGesamt->setItem(0, pos, ii);
         pos++;
     }

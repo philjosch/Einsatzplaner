@@ -46,6 +46,7 @@ QJsonObject Person::toJson()
     o.insert("additionalService", additionalTimeService);
     o.insert("additionalBuero", additionalTimeBuero);
     o.insert("additionalWerkstatt", additionalTimeWerkstatt);
+    o.insert("additionalAusbildung", additionalTimeAusbildung);
     o.insert("additionalVorbereiten", additionalTimeVorbereiten);
     o.insert("additionalSonstiges", additionalTimeSonstiges);
     return o;
@@ -82,6 +83,7 @@ Person *Person::fromJson(QJsonObject o, ManagerPersonal *manager)
     p->additionalTimeService = o.value("additionalService").toDouble(0);
     p->additionalTimeWerkstatt = o.value("additionalWerkstatt").toDouble(0);
     p->additionalTimeVorbereiten = o.value("additionalVorbereiten").toDouble(0);
+    p->additionalTimeAusbildung = o.value("additionalAusbildung").toDouble(0);
     p->additionalTimeSonstiges = o.value("additionalSonstiges").toDouble(0);
     return p;
 }
@@ -136,6 +138,7 @@ void Person::berechne()
     timeBuero = 0;
     timeWerkstatt = 0;
     timeVorbereiten = 0;
+    timeAusbildung = 0;
     timeSonstiges = 0;
     timeSum = 0;
     sumKilometer = 0;
@@ -160,6 +163,7 @@ void Person::berechne()
             case Category::Buero: timeBuero += duration;  break;
             case Category::Werkstatt: timeWerkstatt += duration;  break;
             case Category::ZugVorbereiten: timeVorbereiten += duration; break;
+            case Category::Ausbildung: timeAusbildung += duration; break;
             default: timeSonstiges += duration;
             }
             timeSum += duration;
@@ -174,7 +178,9 @@ void Person::berechne()
     timeWerkstatt = timeWerkstatt/(3600000) + additionalTimeWerkstatt;
     timeVorbereiten = timeVorbereiten/3600000 + additionalTimeVorbereiten;
     timeSonstiges = timeSonstiges/3600000 + additionalTimeSonstiges;
-    timeSum = timeSum/(3600000) + additionalTimeTf + additionalTimeZf + additionalTimeZub + additionalTimeService + additionalTimeBuero + additionalTimeWerkstatt + additionalTimeVorbereiten + additionalTimeSonstiges;
+    timeSum = timeSum/(3600000) + additionalTimeTf + additionalTimeZf + additionalTimeZub
+            + additionalTimeService + additionalTimeBuero + additionalTimeWerkstatt
+            + additionalTimeVorbereiten + additionalTimeAusbildung + additionalTimeSonstiges;
 
     valuesInvalid = false;
 }
@@ -252,7 +258,8 @@ QString Person::getHtmlForTableView(QList<bool> *liste)
     //  8: büro
     //  9: sonstiges
     // 10: kilometer
-    while (liste->length() < 10) {
+    // 11: Ausbildung
+    while (liste->length() < 11) {
         liste->append(0);
     }
     QString html;
@@ -280,6 +287,8 @@ QString Person::getHtmlForTableView(QList<bool> *liste)
         html += "<td>"+QString::number(getTimeWerkstatt())+"</td>";
     if (liste->at(8))
         html += "<td>"+QString::number(getTimeBuero())+"</td>";
+    if (liste->at(11))
+        html += "<td>"+QString::number(getTimeAusbildung())+"</td>";
     if (liste->at(9))
         html += "<td>"+QString::number(getTimeSonstiges())+"</td>";
     if (liste->at(10))
@@ -358,6 +367,16 @@ void Person::setAdditionalTimeVorbereiten(double value)
     valuesInvalid = true;
 }
 
+double Person::getAdditionalTimeAusbildung() const
+{
+    return additionalTimeAusbildung;
+}
+void Person::setAdditionalTimeAusbildung(double value)
+{
+    additionalTimeAusbildung = value;
+    valuesInvalid = true;
+}
+
 double Person::getAdditionalTimeSonstiges() const
 {
     return additionalTimeSonstiges;
@@ -384,6 +403,7 @@ void Person::personConstructor(QString vorname, QString nachname, ManagerPersona
     timeBuero = 0.f;
     timeWerkstatt = 0.f;
     timeVorbereiten = 0.f;
+    timeAusbildung = 0.f;
     timeSonstiges = 0.f;
     timeSum = 0.f;
     sumKilometer = 0.f;
@@ -394,6 +414,7 @@ void Person::personConstructor(QString vorname, QString nachname, ManagerPersona
     additionalTimeBuero = 0.f;
     additionalTimeWerkstatt = 0.f;
     additionalTimeVorbereiten = 0.f;
+    additionalTimeAusbildung = 0.f;
     additionalTimeSonstiges = 0.f;
     valuesInvalid = true;
 
@@ -440,6 +461,12 @@ double Person::getTimeVorbereiten()
 {
     if (valuesInvalid) berechne();
     return timeVorbereiten;
+}
+
+double Person::getTimeAusbildung()
+{
+    if (valuesInvalid) berechne();
+    return timeAusbildung;
 }
 
 double Person::getTimeSonstiges()

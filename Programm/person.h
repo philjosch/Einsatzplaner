@@ -25,6 +25,7 @@ public:
     double getTimeBuero();
     double getTimeWerkstatt();
     double getTimeVorbereiten();
+    double getTimeAusbildung();
     double getTimeSonstiges();
     double getTimeSum();
     double getSumKilometer();
@@ -72,6 +73,8 @@ public:
     void setAdditionalTimeWerkstatt(double value);
     double getAdditionalTimeVorbereiten() const;
     void setAdditionalTimeVorbereiten(double value);
+    double getAdditionalTimeAusbildung() const;
+    void setAdditionalTimeAusbildung(double value);
     double getAdditionalTimeSonstiges() const;
     void setAdditionalTimeSonstiges(double value);
 
@@ -95,6 +98,7 @@ private:
     double timeBuero;
     double timeWerkstatt;
     double timeVorbereiten;
+    double timeAusbildung;
     double timeSonstiges;
     double timeSum;
     double sumKilometer;
@@ -111,6 +115,7 @@ private:
     double additionalTimeBuero;
     double additionalTimeWerkstatt;
     double additionalTimeVorbereiten;
+    double additionalTimeAusbildung;
     double additionalTimeSonstiges;
 
     ManagerPersonal *manager;

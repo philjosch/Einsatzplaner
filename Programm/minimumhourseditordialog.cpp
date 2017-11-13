@@ -20,6 +20,7 @@ MinimumHoursEditorDialog::MinimumHoursEditorDialog(ManagerPersonal *manager, QWi
     ui->doubleBuero->setValue(manager->getMinimumHours(Category::Buero));
     ui->doubleWerkstatt->setValue(manager->getMinimumHours(Category::Werkstatt));
     ui->doubleZugVorbereiten->setValue(manager->getMinimumHours(Category::ZugVorbereiten));
+    ui->doubleAusbildung->setValue(manager->getMinimumHours(Category::Ausbildung));
     ui->doubleSonstiges->setValue(manager->getMinimumHours(Category::Sonstiges));
     ui->doubleGesamt->setValue(manager->getMinimumHours());
 }
@@ -38,6 +39,7 @@ void MinimumHoursEditorDialog::setDefault()
     ui->doubleBuero->setValue(manager->getMinimumHoursDefault(Category::Buero));
     ui->doubleWerkstatt->setValue(manager->getMinimumHoursDefault(Category::Werkstatt));
     ui->doubleZugVorbereiten->setValue(manager->getMinimumHoursDefault(Category::ZugVorbereiten));
+    ui->doubleAusbildung->setValue(manager->getMinimumHoursDefault(Category::Ausbildung));
     ui->doubleSonstiges->setValue(manager->getMinimumHoursDefault(Category::Sonstiges));
     ui->doubleGesamt->setValue(manager->getMinimumHoursDefault());
 }
@@ -62,6 +64,7 @@ void MinimumHoursEditorDialog::save()
     manager->setMinimumHours(Category::Buero, ui->doubleBuero->value());
     manager->setMinimumHours(Category::Werkstatt, ui->doubleWerkstatt->value());
     manager->setMinimumHours(Category::ZugVorbereiten, ui->doubleZugVorbereiten->value());
+    manager->setMinimumHours(Category::Ausbildung, ui->doubleAusbildung->value());
     manager->setMinimumHours(Category::Sonstiges, ui->doubleSonstiges->value());
     manager->setMinimumHours(ui->doubleGesamt->value());
     QDialog::accept();

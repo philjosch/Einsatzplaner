@@ -81,11 +81,11 @@ win32 {
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
     QMAKE_TARGET_COPYRIGHT = Rechte bei Philipp Schepper 2016-2017
     QMAKE_TARGET_PRODUCT = Einsatzplaner
-    VERSION = 1.2.0.1
+    VERSION = 1.3.0.1
 }
 
 macx {
-    VERSION = 1.2.0
+    VERSION = 1.3.0
     OTHER_FILES += Info.plist ../Icon/keks.icns
     QMAKE_INFO_PLIST = Info.plist
     DISTFILES += Info.plist
