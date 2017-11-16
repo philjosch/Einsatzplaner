@@ -18,6 +18,7 @@ public:
     enum Art { Museumszug, Sonderzug, Gesellschaftssonderzug, Nikolauszug, ELFundMuseumszug, Schnupperkurs, Bahnhofsfest, Sonstiges };
     static QString getStringFromArt(Fahrtag::Art art);
 
+    QString getKurzbeschreibung();
     QString getListString();
     QString getListStringShort();
 

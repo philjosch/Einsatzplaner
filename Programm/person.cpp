@@ -297,6 +297,53 @@ QString Person::getHtmlForTableView(QList<bool> *liste)
     return html;
 }
 
+QString Person::getHtmlForDetailPage()
+{
+    QString html = "<h3>"+vorname+" "+nachname+"</h3>";
+    if (ausbildungRangierer || ausbildungTf || ausbildungZf)
+        html = html + "<p>Ausbildung zum: " + (ausbildungTf? "Triebfahrzeugführer, ":" ") + (ausbildungZf? "Zugführer, ":" ")
+                + (ausbildungRangierer? "Rangierer":" ") + "</p>";
+    html += "Entfernung zum Bahnhof: "+QString::number(strecke) + "km<br/>";
+    html += "Geleistete Stunden:<br/>";
+    if (timeTf > 0 || ausbildungTf) html += "<ul><li>Tf: "+QString::number(timeTf)+" h</li>";
+    if (timeZf > 0 || ausbildungZf) html += "<li>Zf: "+QString::number(timeZf)+" h</li>";
+    html += "<li>Zub/Beegl.o.b.A.: "+QString::number(timeZub)+" h</li>";
+    html += "<li>Service: "+QString::number(timeService)+" h</li>";
+    html += "<li>Vorbereiten: "+QString::number(timeVorbereiten)+" h</li>";
+    html += "<li>Werkstatt: "+QString::number(timeWerkstatt)+" h</li>";
+    html += "<li>Büro: "+QString::number(timeBuero)+" h</li>";
+    html += "<li>Ausbildung: "+QString::number(timeAusbildung)+" h</li>";
+    html += "<li>Sonstiges: "+QString::number(timeSonstiges)+" h</li>";
+    html += "<li>Gesamte Stundenanzahl: "+QString::number(timeSum)+" h</li>";
+    html += "<li>Anzahl Aktivitäten: "+QString::number(getAnzahl())+" h</li>";
+    html += "<li>Gefahrene Strecke: "+QString::number(sumKilometer)+" h</li></ul>";
+
+    html += "<p></p>";
+
+    // Hier kommt die liste mit den Arbeitseinsätzen
+    if (activities->size() > 0) {
+        html += "<table cellspacing='0' width='100%'><thead>";
+        html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
+        for(AActivity *a: activities->keys()) {
+            AActivity::Infos *info = a->getIndividual(this);
+            html += "<tr><td>"+a->getDatum().toString("dd. MM. yyyy")+"<br/>"+a->getKurzbeschreibung()+"<br/>"+a->getAnlass()+"</td><td>"
+                    + info->beginn.toString("HH:mm")+"-"+info->ende.toString("HH:mm")+"</td><td>"
+                    + AActivity::getStringFromCategory(info->kategorie) + "</td><td>"
+                    + info->bemerkung + "</td></tr>";
+        }
+        html += "</tbody></table>";
+    } else {
+        html += "<p>An keinen Aktivitäten teilgenommen!</p>";
+    }
+
+    if (manager->pruefeStunden(this)) {
+        html += "<p><br/>Die Person hat die für Sie notwendigen Stunden erbracht!</p>";
+    } else {
+        html += "<p><br/>Die Person hat die für Sie notwendigen Stunden <b>nicht</b> erbracht!</p>";
+    }
+    return html;
+}
+
 double Person::getAdditionalTimeTf() const
 {
     return additionalTimeTf;

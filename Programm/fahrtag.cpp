@@ -66,6 +66,11 @@ QString Fahrtag::getStringFromArt(Fahrtag::Art art)
     }
 }
 
+QString Fahrtag::getKurzbeschreibung()
+{
+    return getStringFromArt(art);
+}
+
 QString Fahrtag::getListString()
 {
     QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – "+QObject::tr("Fahrtag");

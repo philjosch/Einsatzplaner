@@ -23,6 +23,11 @@ QJsonObject Activity::toJson()
     return o;
 }
 
+QString Activity::getKurzbeschreibung()
+{
+    return "Arbeitseinsatz";
+}
+
 QString Activity::getListStringShort() {
     if (anlass == "") {
         return "Aktivität";

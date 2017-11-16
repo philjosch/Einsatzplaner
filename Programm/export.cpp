@@ -155,10 +155,62 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
     return print(pdf, paper, d);
 }
 
-bool Export::printPerson(Person *p, QPrinter *pdf, QPrinter *paper)
+bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
 {
+    preparePrinterPortrait(printer);
     QTextDocument *d = new QTextDocument();
-    return print(pdf, paper, d);
+    // Append a style sheet
+    QString a = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Einsatzplan - Listenansicht</title></head><body>";
+    a += "<style type='text/css'>";
+    a += "body, tr, td, p { font-size: 12px; }";
+    a += "table { border-width: 1px; border-style: solid; border-color: black; }";
+    a += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }";
+    a += "table tr, table td { page-break-inside: avoid; }";
+    a += "table tfoot tr, table tfoot td { border-width: 2px; }";
+    a += "ul { -qt-list-indent: 0; }";
+    a += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
+    a += "</style>";
+    // Add the title page
+    a += "<h3>Personalübersicht</h3>";
+    a += "<p>Geleistete Stunden gesamt: "+QString::number(m->getMinimumHours())+"<br/>";
+    a += "Tf/Tb: "+QString::number(m->getTimeTf())+" h<br/>";
+    a += "Zf: "+QString::number(m->getTimeZf())+" h<br/>";
+    a += "Zub: "+QString::number(m->getTimeZub())+" h<br/>";
+    a += "Service: "+QString::number(m->getTimeService())+" h<br/>";
+    a += "Vorbereiten: "+QString::number(m->getTimeVorbereiten())+" h<br/>";
+    a += "Werkstatt: "+QString::number(m->getTimeWerkstatt())+" h<br/>";
+    a += "Büro: "+QString::number(m->getTimeBuero())+" h<br/>";
+    a += "Ausbildung: "+QString::number(m->getTimeAusbildung())+" h</p>";
+    a += "<p>Gefahrene Kilometer gesamt: "+QString::number(m->getSumKilometer())+" km</p>";
+
+    a += "<p>Mindeststunden gesamt: "+QString::number(m->getMinimumHours())+" h<br/>";
+    a += "Mindeststunden Tf: "+QString::number(m->getMinimumHours(Category::Tf))+" h<br/>";
+    a += "Mindeststunden Tb: "+QString::number(m->getMinimumHours(Category::Tb))+" h<br/>";
+    a += "Mindeststunden Zf: "+QString::number(m->getMinimumHours(Category::Zf))+" h<br/>";
+    a += "Mindeststunden Zub: "+QString::number(m->getMinimumHours(Category::Zub))+" h<br/>";
+    a += "Mindeststunden Service: "+QString::number(m->getMinimumHours(Category::Service))+" h<br/>";
+    a += "Mindeststunden Vorbereiten: "+QString::number(m->getMinimumHours(Category::ZugVorbereiten))+" h<br/>";
+    a += "Mindeststunden Werkstatt: "+QString::number(m->getMinimumHours(Category::Werkstatt))+" h<br/>";
+    a += "Mindeststunden Büro: "+QString::number(m->getMinimumHours(Category::Buero))+" h<br/>";
+    a += "Mindeststunden Ausbildung: "+QString::number(m->getMinimumHours(Category::Ausbildung))+" h</p>";
+
+    a += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+
+    // Add a papge for each person
+    QSetIterator<Person*> iter = m->getPersonen();
+    while(iter.hasNext()) {
+        Person *akt = iter.next();
+        a += akt->getHtmlForDetailPage();
+        if (iter.hasNext()) {
+            a += "<div style='page-break-after:always'>";
+            a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+        } else {
+            a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+        }
+    }
+    a += "</body></html>";
+    d->setHtml(a);
+    return print(nullptr, printer, d);
 }
 
 bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QList<bool> *data, QPrinter *pdf, QPrinter *paper)

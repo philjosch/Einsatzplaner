@@ -565,7 +565,7 @@ void PersonalWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 void PersonalWindow::on_pushPDF_clicked()
 {
     QPrinter *pdf = 0;
-    pdf = Export::getPrinterPDF(this, "Personal.pdf");
+    pdf = Export::getPrinterPDF(this, "Personal-Gesamt.pdf");
     print(pdf);
 }
 
@@ -574,6 +574,20 @@ void PersonalWindow::on_pushPrint_clicked()
     QPrinter *paper = 0;
     paper = Export::getPrinterPaper(this);
     print(paper);
+}
+
+void PersonalWindow::on_pushPDFEinzel_clicked()
+{
+    QPrinter *pdf = 0;
+    pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf");
+    Export::printPerson(manager, pdf);
+}
+
+void PersonalWindow::on_pushPrintEinzel_clicked()
+{
+    QPrinter *paper = 0;
+    paper = Export::getPrinterPaper(this);
+    Export::printPerson(manager, paper);
 }
 
 void PersonalWindow::print(QPrinter *p)
