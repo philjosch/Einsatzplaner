@@ -78,6 +78,8 @@ public:
     void setAdditionalTimeAusbildung(double value);
     double getAdditionalTimeSonstiges() const;
     void setAdditionalTimeSonstiges(double value);
+    double getAdditionalKilometer() const;
+    void setAdditionalKilometer(double value);
 
 
 protected:
@@ -118,6 +120,7 @@ private:
     double additionalTimeVorbereiten;
     double additionalTimeAusbildung;
     double additionalTimeSonstiges;
+    double additionalKilometer;
 
     ManagerPersonal *manager;
 

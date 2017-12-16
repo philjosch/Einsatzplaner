@@ -49,6 +49,7 @@ QJsonObject Person::toJson()
     o.insert("additionalAusbildung", additionalTimeAusbildung);
     o.insert("additionalVorbereiten", additionalTimeVorbereiten);
     o.insert("additionalSonstiges", additionalTimeSonstiges);
+    o.insert("additionalKilometer", additionalKilometer);
     return o;
 }
 
@@ -85,6 +86,7 @@ Person *Person::fromJson(QJsonObject o, ManagerPersonal *manager)
     p->additionalTimeVorbereiten = o.value("additionalVorbereiten").toDouble(0);
     p->additionalTimeAusbildung = o.value("additionalAusbildung").toDouble(0);
     p->additionalTimeSonstiges = o.value("additionalSonstiges").toDouble(0);
+    p->additionalKilometer = o.value("additionalKilometer").toDouble(0);
     return p;
 }
 
@@ -181,6 +183,7 @@ void Person::berechne()
     timeSum = timeSum/(3600000) + additionalTimeTf + additionalTimeZf + additionalTimeZub
             + additionalTimeService + additionalTimeBuero + additionalTimeWerkstatt
             + additionalTimeVorbereiten + additionalTimeAusbildung + additionalTimeSonstiges;
+    sumKilometer += additionalKilometer;
 
     valuesInvalid = false;
 }
@@ -434,6 +437,16 @@ void Person::setAdditionalTimeSonstiges(double value)
     valuesInvalid = true;
 }
 
+double Person::getAdditionalKilometer() const
+{
+    return additionalKilometer;
+}
+void Person::setAdditionalKilometer(double value)
+{
+    additionalKilometer = value;
+    valuesInvalid = true;
+}
+
 void Person::personConstructor(QString vorname, QString nachname, ManagerPersonal *manager)
 {
     this->manager = manager;
@@ -463,6 +476,7 @@ void Person::personConstructor(QString vorname, QString nachname, ManagerPersona
     additionalTimeVorbereiten = 0.f;
     additionalTimeAusbildung = 0.f;
     additionalTimeSonstiges = 0.f;
+    additionalKilometer = 0.f;
     valuesInvalid = true;
 
     activities = new QMap<AActivity *, Category>();

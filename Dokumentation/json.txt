@@ -12,7 +12,7 @@ calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die P
 			ausZf (bool)	-> Ausbildung Zugführer
 			ausRang	(bool)	-> Ausbildung Rangierer
 			strecke	(int)	-> strecke von zuhause zum Bahnhof
-			~Die zusätzlichen Zeiten für eine Person, die geleistet wurden, gespeichert in Stunden~
+			~Die zusätzlichen Zeiten/Werte für eine Person, die geleistet wurden, gespeichert in Stunden bzw. in Kilometern~
 			additionalTf (double)
 			additionalZf (double)
 			additionalZub (double)
@@ -20,7 +20,9 @@ calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die P
 			additionalBuero (double)
 			additionalWerkstatt (double)
 			additionalVorbereiten (double)
+			additionalAusbildung (double)
 			additionalSonstiges (double)
+			additionalKilometer (double)
 	activities (array)	-> die einzelnen aktivitäten, gespeichert in Objekten
 		~Für Arbeitseinsatz~
 		datum (string)
