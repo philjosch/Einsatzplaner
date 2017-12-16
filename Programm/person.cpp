@@ -179,6 +179,7 @@ void Person::berechne()
     timeBuero = timeBuero/(3600000) + additionalTimeBuero;
     timeWerkstatt = timeWerkstatt/(3600000) + additionalTimeWerkstatt;
     timeVorbereiten = timeVorbereiten/3600000 + additionalTimeVorbereiten;
+    timeAusbildung = timeAusbildung/3600000 + additionalTimeAusbildung;
     timeSonstiges = timeSonstiges/3600000 + additionalTimeSonstiges;
     timeSum = timeSum/(3600000) + additionalTimeTf + additionalTimeZf + additionalTimeZub
             + additionalTimeService + additionalTimeBuero + additionalTimeWerkstatt

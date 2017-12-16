@@ -74,7 +74,9 @@ private slots:
     void on_doubleZugVorbereiten_valueChanged(double arg1);
     void on_doubleWerkstatt_valueChanged(double arg1);
     void on_doubleBuero_valueChanged(double arg1);
+    void on_doubleAusbildung_valueChanged(double arg1);
     void on_doubleSonstiges_valueChanged(double arg1);
+    void on_doubleKilometer_valueChanged(double arg1);
 
     void editMinimumHours();
 
@@ -103,6 +105,7 @@ private:
      * */
 
     void print(QPrinter *p);
+    void disableFields();
 
     bool enabled; // Gibt an, ob das Formualr aktiviert ist oder nicht, und ob Änderungen übernommen werden
 };
