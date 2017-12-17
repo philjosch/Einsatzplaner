@@ -58,7 +58,7 @@ public:
     void setNachname(const QString &value);
 
     QString getHtmlForTableView(QList<bool> *liste);
-    QString getHtmlForDetailPage();
+    QString getHtmlForDetailPage(ManagerPersonal *m);
 
     double getAdditionalTimeTf() const;
     void setAdditionalTimeTf(double value);

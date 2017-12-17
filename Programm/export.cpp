@@ -171,28 +171,38 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     a += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
     a += "</style>";
     // Add the title page
-    a += "<h3>Personalübersicht</h3>";
-    a += "<p>Geleistete Stunden gesamt: "+QString::number(m->getMinimumHours())+"<br/>";
-    a += "Tf/Tb: "+QString::number(m->getTimeTf())+" h<br/>";
-    a += "Zf: "+QString::number(m->getTimeZf())+" h<br/>";
-    a += "Zub: "+QString::number(m->getTimeZub())+" h<br/>";
-    a += "Service: "+QString::number(m->getTimeService())+" h<br/>";
-    a += "Vorbereiten: "+QString::number(m->getTimeVorbereiten())+" h<br/>";
-    a += "Werkstatt: "+QString::number(m->getTimeWerkstatt())+" h<br/>";
-    a += "Büro: "+QString::number(m->getTimeBuero())+" h<br/>";
-    a += "Ausbildung: "+QString::number(m->getTimeAusbildung())+" h</p>";
-    a += "<p>Gefahrene Kilometer gesamt: "+QString::number(m->getSumKilometer())+" km</p>";
+    a += "<h3>Personalübersicht - Gesamt</h3>";
+    m->berechne();
+    QString help = "<li>%1: %2h</li>";
+    a += "<h4>Geleistete Stunden</h4><ul>";
+    if (m->getTime(Tf) > 0) a += help.arg("Tf").arg(m->getTime(Tf), 0, 'f', 0);
+    if (m->getTime(Zf) > 0) a += help.arg("Zf").arg(m->getTime(Zf), 0, 'f', 0);
+    if (m->getTime(Zub) > 0) a += help.arg("Zub").arg(m->getTime(Zub), 0, 'f', 0);
+    if (m->getTime(Service) > 0) a += help.arg("Service").arg(m->getTime(Service), 0, 'f', 0);
+    if (m->getTime(ZugVorbereiten) > 0) a += help.arg("Vorbereiten").arg(m->getTime(ZugVorbereiten), 0, 'f', 0);
+    if (m->getTime(Werkstatt) > 0) a += help.arg("Werkstatt").arg(m->getTime(Werkstatt), 0, 'f', 0);
+    if (m->getTime(Buero) > 0) a += help.arg("Büro").arg(m->getTime(Buero), 0, 'f', 0);
+    if (m->getTime(Ausbildung) > 0) a += help.arg("Ausbildung").arg(m->getTime(Ausbildung), 0, 'f', 0);
+    if (m->getTime(Sonstiges) > 0) a += help.arg("Sonstiges").arg(m->getTime(Sonstiges), 0, 'f', 0);
+    a += "</ul>";
 
-    a += "<p>Mindeststunden gesamt: "+QString::number(m->getMinimumHours())+" h<br/>";
-    a += "Mindeststunden Tf: "+QString::number(m->getMinimumHours(Category::Tf))+" h<br/>";
-    a += "Mindeststunden Tb: "+QString::number(m->getMinimumHours(Category::Tb))+" h<br/>";
-    a += "Mindeststunden Zf: "+QString::number(m->getMinimumHours(Category::Zf))+" h<br/>";
-    a += "Mindeststunden Zub: "+QString::number(m->getMinimumHours(Category::Zub))+" h<br/>";
-    a += "Mindeststunden Service: "+QString::number(m->getMinimumHours(Category::Service))+" h<br/>";
-    a += "Mindeststunden Vorbereiten: "+QString::number(m->getMinimumHours(Category::ZugVorbereiten))+" h<br/>";
-    a += "Mindeststunden Werkstatt: "+QString::number(m->getMinimumHours(Category::Werkstatt))+" h<br/>";
-    a += "Mindeststunden Büro: "+QString::number(m->getMinimumHours(Category::Buero))+" h<br/>";
-    a += "Mindeststunden Ausbildung: "+QString::number(m->getMinimumHours(Category::Ausbildung))+" h</p>";
+    a += "<ul><li>Stunden gesamt: "+QString::number(m->getTimeSum())+"h</li>";
+    a += "<li>Gefahrene Kilometer gesamt: "+QString::number(m->getSumKilometer())+" km</li></ul>";
+
+    help = "<li>%1: %2h</li>";
+    a += "<h4>Mindeststunden</h4><ul>";
+    if (m->getMinimumHours() > 0) a += help.arg("Insgesamt").arg(m->getMinimumHours(), 0, 'f', 1);
+    if (m->getMinimumHours(Tf) > 0) a += help.arg("Tf").arg(m->getMinimumHours(Tf), 0, 'f', 1);
+    if (m->getMinimumHours(Tb) > 0) a += help.arg("Tb").arg(m->getMinimumHours(Tb), 0, 'f', 1);
+    if (m->getMinimumHours(Zf) > 0) a += help.arg("Zf").arg(m->getMinimumHours(Zf), 0, 'f', 1);
+    if (m->getMinimumHours(Zub) > 0) a += help.arg("Zub").arg(m->getMinimumHours(Zub), 0, 'f', 1);
+    if (m->getMinimumHours(Service) > 0) a += help.arg("Service").arg(m->getMinimumHours(Service), 0, 'f', 1);
+    if (m->getMinimumHours(ZugVorbereiten) > 0) a += help.arg("Vorbereiten").arg(m->getMinimumHours(ZugVorbereiten), 0, 'f', 1);
+    if (m->getMinimumHours(Werkstatt) > 0) a += help.arg("Werkstatt").arg(m->getMinimumHours(Werkstatt), 0, 'f', 1);
+    if (m->getMinimumHours(Buero) > 0) a += help.arg("Büro").arg(m->getMinimumHours(Buero), 0, 'f', 1);
+    if (m->getMinimumHours(Ausbildung) > 0) a += help.arg("Ausbildung").arg(m->getMinimumHours(Ausbildung), 0, 'f', 1);
+    if (m->getMinimumHours(Sonstiges) > 0) a += help.arg("Sonstiges").arg(m->getMinimumHours(Sonstiges), 0, 'f', 1);
+    a += "</ul>";
 
     a += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
 
@@ -200,7 +210,7 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     QSetIterator<Person*> iter = m->getPersonen();
     while(iter.hasNext()) {
         Person *akt = iter.next();
-        a += akt->getHtmlForDetailPage();
+        a += akt->getHtmlForDetailPage(m);
         if (iter.hasNext()) {
             a += "<div style='page-break-after:always'>";
             a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";

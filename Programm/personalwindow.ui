@@ -1295,6 +1295,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QLineEdit" name="lineVorname">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="placeholderText">
              <string>Vorname</string>
             </property>
@@ -1326,6 +1329,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QLineEdit" name="lineNachname">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="placeholderText">
              <string>Nachname</string>
             </property>

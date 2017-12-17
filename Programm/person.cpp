@@ -301,31 +301,79 @@ QString Person::getHtmlForTableView(QList<bool> *liste)
     return html;
 }
 
-QString Person::getHtmlForDetailPage()
+QString Person::getHtmlForDetailPage(ManagerPersonal *m)
 {
     QString html = "<h3>"+vorname+" "+nachname+"</h3>";
     if (ausbildungRangierer || ausbildungTf || ausbildungZf)
         html = html + "<p>Ausbildung zum: " + (ausbildungTf? "Triebfahrzeugführer, ":" ") + (ausbildungZf? "Zugführer, ":" ")
-                + (ausbildungRangierer? "Rangierer":" ") + "</p>";
-    html += "Entfernung zum Bahnhof: "+QString::number(strecke) + "km<br/>";
-    html += "Geleistete Stunden:<br/>";
-    if (timeTf > 0 || ausbildungTf) html += "<ul><li>Tf: "+QString::number(timeTf)+" h</li>";
-    if (timeZf > 0 || ausbildungZf) html += "<li>Zf: "+QString::number(timeZf)+" h</li>";
-    html += "<li>Zub/Beegl.o.b.A.: "+QString::number(timeZub)+" h</li>";
-    html += "<li>Service: "+QString::number(timeService)+" h</li>";
-    html += "<li>Vorbereiten: "+QString::number(timeVorbereiten)+" h</li>";
-    html += "<li>Werkstatt: "+QString::number(timeWerkstatt)+" h</li>";
-    html += "<li>Büro: "+QString::number(timeBuero)+" h</li>";
-    html += "<li>Ausbildung: "+QString::number(timeAusbildung)+" h</li>";
-    html += "<li>Sonstiges: "+QString::number(timeSonstiges)+" h</li>";
-    html += "<li>Gesamte Stundenanzahl: "+QString::number(timeSum)+" h</li>";
-    html += "<li>Anzahl Aktivitäten: "+QString::number(getAnzahl())+" h</li>";
-    html += "<li>Gefahrene Strecke: "+QString::number(sumKilometer)+" h</li></ul>";
+                + (ausbildungRangierer? "Rangierer":" ") + "<br/>";
+    html += "Entfernung zum Bahnhof: "+QString::number(strecke) + "km</p>";
+    html += "<h4>Geleistete Stunden</h4>";
+    html += "<ul>";
+    QString help = "<li %1>%3: %4h%2</li>";
+    QString helpcurrent;
+    if (timeTf > 0 || ausbildungTf) {
+        if (m->checkHours(this, Tf)) helpcurrent = help.arg("", "");
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+QString::number(m->getMinimumHours(Tf))+"h)");
+        html += helpcurrent.arg("Tf").arg(timeTf, 0, 'f', 1);
+    }
+    if (timeZf > 0 || ausbildungZf) {
+        if (m->checkHours(this, Zf)) helpcurrent = help.arg("", "");
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+QString::number(m->getMinimumHours(Zf))+"h)");
+        html += helpcurrent.arg("Zf").arg(timeZf, 0, 'f', 1);
+    }
+    if (timeZub > 0) {
+        if (m->checkHours(this, Zub)) helpcurrent = help.arg("", "");
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+QString::number(m->getMinimumHours(Zub))+"h)");
+        html += helpcurrent.arg("Zub/Begl.o.b.A.").arg(timeZub, 0, 'f', 1);
+    }
+    if (timeService > 0) {
+        if (m->checkHours(this, Service)) helpcurrent = help.arg("", "");
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+QString::number(m->getMinimumHours(Service))+"h)");
+        html += helpcurrent.arg("Service").arg(timeService, 0, 'f', 1);
+    }
+    if (timeVorbereiten > 0) {
+        if (m->checkHours(this, ZugVorbereiten)) helpcurrent = help.arg("", "");
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+QString::number(m->getMinimumHours(ZugVorbereiten))+"h)");
+        html += helpcurrent.arg("Zug Vorbereiten").arg(timeVorbereiten, 0, 'f', 1);
+    }
+    if (timeWerkstatt > 0) {
+        if (m->checkHours(this, Werkstatt)) helpcurrent = help.arg("", "");
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+QString::number(m->getMinimumHours(Werkstatt))+"h)");
+        html += helpcurrent.arg("Werkstatt").arg(timeWerkstatt, 0, 'f', 1);
+    }
+    if (timeBuero > 0) {
+        if (m->checkHours(this, Buero)) helpcurrent = help.arg("", "");
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+QString::number(m->getMinimumHours(Buero))+"h)");
+        html += helpcurrent.arg("Büro").arg(timeBuero, 0, 'f', 1);
+    }
+    if (timeAusbildung > 0 || ausbildungTf || ausbildungZf || ausbildungRangierer) {
+        if (m->checkHours(this, Ausbildung)) helpcurrent = help.arg("", "");
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+QString::number(m->getMinimumHours(Ausbildung))+"h)");
+        html += helpcurrent.arg("Ausbildung").arg(timeAusbildung, 0, 'f', 1);
+    }
+    if (timeSonstiges > 0) {
+        if (m->checkHours(this, Sonstiges)) helpcurrent = help.arg("", "");
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+QString::number(m->getMinimumHours(Sonstiges))+"h)");
+        html += helpcurrent.arg("Sonstiges").arg(timeSonstiges, 0, 'f', 1);
+    }
 
-    html += "<p></p>";
+    html += "</ul><ul>";
+    if (m->checkHours(this)) helpcurrent = help.arg("", "");
+    else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+QString::number(m->getMinimumHours())+"h)");
+    html += helpcurrent.arg("Gesamte Stundenzahl").arg(timeSum, 0, 'f', 1);
+    html += "<li>Anzahl Aktivitäten: "+QString::number(getAnzahl())+"</li>";
+    html += "<li>Gefahrene Strecke: "+QString::number(sumKilometer)+" km</li></ul>";
+    html += "</p>";
+    if (manager->pruefeStunden(this)) {
+        html += "<p><br/>Die Person hat die für Sie notwendigen Stunden erbracht!</p>";
+    } else {
+        html += "<p><br/>Die Person hat die für Sie notwendigen Stunden <b style=\"color: red;\">nicht</b> erbracht!</p>";
+    }
 
     // Hier kommt die liste mit den Arbeitseinsätzen
     if (activities->size() > 0) {
+        html += "<h4>Übersicht über die einzelnen Aktivitäten</h4>";
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
         for(AActivity *a: activities->keys()) {
@@ -337,14 +385,22 @@ QString Person::getHtmlForDetailPage()
         }
         html += "</tbody></table>";
     } else {
-        html += "<p>An keinen Aktivitäten teilgenommen!</p>";
+        html += QString("<p>%1 %2 hat an keinen Aktivitäten teilgenommen!</p>").arg(vorname, nachname);
     }
+    html+= "<h5>Zusätzliche nicht in der Tabelle erfassten Stunden</h5><ul>";
+    help = "<li>%1: %2h</li>";
+    if (additionalTimeTf > 0) html+= help.arg("Tf").arg(additionalTimeTf, 0, 'f', 1);
+    if (additionalTimeZf > 0) html+= help.arg("Zf").arg(additionalTimeZf, 0, 'f', 1);
+    if (additionalTimeZub > 0) html+= help.arg("Zub").arg(additionalTimeZub, 0, 'f', 1);
+    if (additionalTimeService > 0) html+= help.arg("Service").arg(additionalTimeService, 0, 'f', 1);
+    if (additionalTimeVorbereiten > 0) html+= help.arg("Vorbereiten").arg(additionalTimeVorbereiten, 0, 'f', 1);
+    if (additionalTimeWerkstatt > 0) html+= help.arg("Werkstatt").arg(additionalTimeWerkstatt, 0, 'f', 1);
+    if (additionalTimeBuero > 0) html+= help.arg("Büro").arg(additionalTimeBuero, 0, 'f', 1);
+    if (additionalTimeAusbildung > 0) html+= help.arg("Ausbildung").arg(additionalTimeAusbildung, 0, 'f', 1);
+    if (additionalTimeSonstiges > 0) html+= help.arg("Sonstiges").arg(additionalTimeSonstiges, 0, 'f', 1);
+    if (additionalKilometer > 0) html+= QString("<li>Kilometer: %1km</li>").arg(additionalKilometer, 0, 'f', 1);
+    html+= "</ul>";
 
-    if (manager->pruefeStunden(this)) {
-        html += "<p><br/>Die Person hat die für Sie notwendigen Stunden erbracht!</p>";
-    } else {
-        html += "<p><br/>Die Person hat die für Sie notwendigen Stunden <b>nicht</b> erbracht!</p>";
-    }
     return html;
 }
 

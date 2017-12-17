@@ -155,27 +155,43 @@ bool ManagerPersonal::removePerson(Person *p)
 
 bool ManagerPersonal::pruefeStunden(Person *p)
 {
-    if (p->getAusbildungTf() && p->getTimeTf() < getMinimumHours(Category::Tf))
-        return false;
-    if (p->getAusbildungZf() && p->getTimeZf() < getMinimumHours(Category::Zf))
-        return false;
-    if (p->getTimeService() < getMinimumHours(Category::Service))
-        return false;
-    if (p->getTimeZub() < getMinimumHours(Category::Zub))
-        return false;
-    if (p->getTimeBuero() < getMinimumHours(Category::Buero))
-        return false;
-    if (p->getTimeWerkstatt() < getMinimumHours(Category::Werkstatt))
-        return false;
-    if (p->getTimeVorbereiten() < getMinimumHours(Category::ZugVorbereiten))
-        return false;
-    if ((p->getAusbildungRangierer() || p->getAusbildungTf() || p->getAusbildungZf()) && (p->getTimeAusbildung() < getMinimumHours(Category::Ausbildung)))
-        return false;
-    if (p->getTimeSonstiges() < getMinimumHours(Category::Sonstiges))
-        return false;
-    if (p->getTimeSum() < getMinimumHours())
-        return false;
-    return true;
+    return checkHours(p, Tf) && checkHours(p, Tb) &&
+            checkHours(p, Zf) && checkHours(p, Zub) &&
+            checkHours(p, Service) && checkHours(p, ZugVorbereiten) &&
+            checkHours(p, Werkstatt) && checkHours(p, Buero) &&
+            checkHours(p, Ausbildung) && checkHours(p, Sonstiges) &&
+            checkHours(p);
+}
+
+bool ManagerPersonal::checkHours(Person *p, Category kat)
+{
+    switch (kat) {
+    case Tf:
+        return !(p->getAusbildungTf() && p->getTimeTf() < getMinimumHours(Category::Tf));
+    case Zf:
+        return !(p->getAusbildungZf() && p->getTimeZf() < getMinimumHours(Category::Zf));
+    case Service:
+        return !(p->getTimeService() < getMinimumHours(Category::Service));
+    case Zub:
+        return !(p->getTimeZub() < getMinimumHours(Category::Zub));
+    case Buero:
+        return !(p->getTimeBuero() < getMinimumHours(Category::Buero));
+    case Werkstatt:
+        return !(p->getTimeWerkstatt() < getMinimumHours(Category::Werkstatt));
+    case ZugVorbereiten:
+        return !(p->getTimeVorbereiten() < getMinimumHours(Category::ZugVorbereiten));
+    case Ausbildung:
+        return !((p->getAusbildungRangierer() || p->getAusbildungTf() || p->getAusbildungZf()) && (p->getTimeAusbildung() < getMinimumHours(Category::Ausbildung)));
+    case Sonstiges:
+        return !(p->getTimeSonstiges() < getMinimumHours(Category::Sonstiges));
+    default:
+        return true;
+    }
+}
+
+bool ManagerPersonal::checkHours(Person *p)
+{
+    return !(p->getTimeSum() < getMinimumHours());
 }
 
 void ManagerPersonal::setMinimumHours(Category cat, double amount)
@@ -254,6 +270,31 @@ void ManagerPersonal::berechne()
         timeSonstiges += p->getTimeSonstiges();
         timeSum += p->getTimeSum();
         sumKilometer += p->getSumKilometer();
+    }
+}
+
+double ManagerPersonal::getTime(Category kat)
+{
+    switch (kat) {
+    case Tf:
+    case Tb:
+        return timeTf;
+    case Zf:
+        return timeZf;
+    case Zub:
+        return timeZub;
+    case Service:
+        return timeService;
+    case ZugVorbereiten:
+        return timeVorbereiten;
+    case Werkstatt:
+        return timeWerkstatt;
+    case Buero:
+        return timeBuero;
+    case Ausbildung:
+        return timeAusbildung;
+    default:
+        return timeSonstiges;
     }
 }
 
