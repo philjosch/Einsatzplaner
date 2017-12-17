@@ -374,6 +374,33 @@ void FahrtagWindow::itemChanged(QListWidgetItem *item , Category kat)
     }
 }
 
+void FahrtagWindow::plausibilityCheck()
+{
+    int z1 = ui->comboStart1Zug->currentIndex();
+    int z2 = ui->comboEnde1Zug->currentIndex();
+    int z3 = ui->comboStart2Zug->currentIndex();
+    int z4 = ui->comboEnde2Zug->currentIndex();
+
+    int h1 = ui->comboStart1Hp->currentIndex();
+    int h2 = ui->comboEnde1Hp->currentIndex();
+    int h3 = ui->comboStart2Hp->currentIndex();
+    int h4 = ui->comboEnde2Hp->currentIndex();
+
+    bool z_ok = ( z1 <= z2 || z1 == 6 || z2 == 6) && (z2 < z3 || z2 == 6 || z3 == 6) && (z3 <= z4 || z3 == 6 || z4 == 6);
+    bool h_ok1 = (h1 != h2 || h1 == 11 || h2 == 11 || z1 < z2)
+            && (z1 != z2 || z1 == 6 || z2 == 6 || h1 == 11 || h2 == 11 || ((z1 %2 != 0 || h1 < h2) && (z1%2 != 1 || h1 > h2)))
+            && (h1 == 11 || z1 == 6 || ((z1%2 != 0 || h1 != 10) && (z1%2 != 1 || h1 !=  0)))
+            && (h2 == 11 || z2 == 6 || ((z2%2 != 0 || h2 !=  0) && (z2%2 != 1 || h2 != 10)));
+    bool h_ok2 = (h3 != h4 || h3 == 11 || h4 == 11 || z3 < z4)
+            && (z3 != z4 || z3 == 6 || z4 == 6 || h3 == 11 || h4 == 11 || ((z3 %2 != 0 || h3 < h4) && (z3%2 != 1 || h3 > h4)))
+            && (h3 == 11 || z3 == 6 || ((z3%2 != 0 || h3 != 10) && (z3%2 != 1 || h3 !=  0)))
+            && (h4 == 11 || z4 == 6 || ((z4%2 != 0 || h4 !=  0) && (z4%2 != 1 || h4 != 10)));
+
+    if (! (z_ok && h_ok1 && h_ok2)) {
+        QMessageBox::warning(this, "Plausibilitätsprüfung", "Bitte überprüfen Sie ihre Eingaben bezüglich der Fahrstrecken, da das System eine mögliche Unstimmigkeit festgestllt hat. Ihre Daten werden dennoch gespeichert!");
+    }
+}
+
 void FahrtagWindow::on_listTf_itemChanged(QListWidgetItem *item)
 {
     if (nehme) {
@@ -613,10 +640,49 @@ void FahrtagWindow::saveResFahrt()
 {
     QList<QString> *z = new QList<QString>();
     QList<QString> *h = new QList<QString>();
-    z->append(ui->comboStart1Zug->currentText());
-    z->append(ui->comboEnde1Zug->currentText());
-    h->append(ui->comboStart1Hp->currentText());
-    h->append(ui->comboEnde1Hp->currentText());
+
+    QString zg1 = ui->comboStart1Zug->currentText();
+    QString hp1 = ui->comboStart1Hp->currentText();
+    QString zg2 = ui->comboEnde1Zug->currentText();
+    QString hp2 = ui->comboEnde1Hp->currentText();
+    QString zg3 = ui->comboStart2Zug->currentText();
+    QString hp3 = ui->comboStart2Hp->currentText();
+    QString zg4 = ui->comboEnde2Zug->currentText();
+    QString hp4 = ui->comboEnde2Hp->currentText();
+
+    bool i1 = zg1 != "-" || hp1 != "-";
+    bool i2 = zg2 != "-" || hp2 != "-";
+    bool i3 = zg3 != "-" || hp3 != "-";
+    bool i4 = zg4 != "-" || hp4 != "-";
+    if (i1 && !i2 && !i3) {
+        // append 1 and 4
+        z->append(zg1);
+        h->append(hp1);
+        z->append(zg4);
+        h->append(hp4);
+    } else if ((i2 && i3) || (i1 && i3) || (i2 && i4)) {
+        // append 1, 2, 3, 4
+        z->append(zg1);
+        h->append(hp1);
+        z->append(zg2);
+        h->append(hp2);
+        z->append(zg3);
+        h->append(hp3);
+        z->append(zg4);
+        h->append(hp4);
+    } else if (i1 || i2) {
+        // append 1 and 2
+        z->append(zg1);
+        h->append(hp1);
+        z->append(zg2);
+        h->append(hp2);
+    } else if (i3 || i4) {
+        // append 3, 4
+        z->append(zg3);
+        h->append(hp3);
+        z->append(zg4);
+        h->append(hp4);
+    }
     aktuelleRes->setZuege(z);
     aktuelleRes->setHps(h);
 }
@@ -720,80 +786,66 @@ void FahrtagWindow::on_comboKlasse_currentIndexChanged(int index)
     }
 }
 
-void FahrtagWindow::on_comboStart1Zug_currentTextChanged(const QString &arg1)
+void FahrtagWindow::on_comboStart1Zug_currentIndexChanged()
 {
     if (nehmeRes) {
-        nehmeRes = false;
-        if (ui->comboEnde1Zug->currentText() != "-" && ui->comboEnde1Zug->currentText() < arg1) {
-            ui->comboEnde1Zug->setCurrentText("-");
-        }
-        if (arg1.contains("SSWN-SOTW")) {
-            if (ui->comboStart1Hp->currentText() == "Ottweiler") {
-                ui->comboStart1Hp->setCurrentText("-");
-            }
-        } else if (arg1.contains("SOTW-SSWN")) {
-            if (ui->comboStart1Hp->currentText() == "Schwarzerden") {
-                ui->comboStart1Hp->setCurrentText("-");
-            }
-        }
-        nehmeRes = true;
+        plausibilityCheck();
         saveResFahrt();
     }
 }
 
-void FahrtagWindow::on_comboStart1Hp_currentTextChanged(const QString &arg1)
+void FahrtagWindow::on_comboStart1Hp_currentIndexChanged()
 {
     if (nehmeRes) {
-        nehmeRes = false;
-        if (ui->comboStart1Zug->currentText().contains("SSWN-SOTW")) {
-            if (arg1 == "Ottweiler") {
-                ui->comboStart1Hp->setCurrentText("-");
-            }
-        } else if (ui->comboStart1Zug->currentText().contains("SOTW-SSWN")) {
-            if (arg1 == "Schwarzerden") {
-                ui->comboStart1Hp->setCurrentText("-");
-            }
-        }
-        nehmeRes = true;
+        plausibilityCheck();
         saveResFahrt();
     }
 }
 
-void FahrtagWindow::on_comboEnde1Zug_currentTextChanged(const QString &arg1)
+void FahrtagWindow::on_comboEnde1Zug_currentIndexChanged()
 {
     if (nehmeRes) {
-        nehmeRes = false;
-        if (arg1.contains("SSWN-SOTW")) {
-            if (ui->comboEnde1Hp->currentText() == "Schwarzerden") {
-                ui->comboEnde1Hp->setCurrentText("-");
-            }
-        } else if (arg1.contains("SOTW-SSWN")) {
-            if (ui->comboEnde1Hp->currentText() == "Ottweiler") {
-                ui->comboEnde1Hp->setCurrentText("-");
-            }
-        }
-        if (ui->comboStart1Zug->currentText() != "-" && ui->comboStart1Zug->currentText() > arg1) {
-            ui->comboStart1Zug->setCurrentText("-");
-        }
-        nehmeRes = true;
+        plausibilityCheck();
         saveResFahrt();
     }
 }
 
-void FahrtagWindow::on_comboEnde1Hp_currentTextChanged(const QString &arg1)
+void FahrtagWindow::on_comboEnde1Hp_currentIndexChanged()
 {
     if (nehmeRes) {
-        nehmeRes = false;
-        if (ui->comboEnde1Zug->currentText().contains("SSWN-SOTW")) {
-            if (arg1 == "Schwarzerden") {
-                ui->comboEnde1Hp->setCurrentText("-");
-            }
-        } else if (ui->comboEnde1Zug->currentText().contains("SOTW-SSWN")) {
-            if (arg1 == "Ottweiler") {
-                ui->comboEnde1Hp->setCurrentText("-");
-            }
-        }
-        nehmeRes = true;
+        plausibilityCheck();
+        saveResFahrt();
+    }
+}
+
+void FahrtagWindow::on_comboStart2Zug_currentIndexChanged()
+{
+    if (nehmeRes) {
+        plausibilityCheck();
+        saveResFahrt();
+    }
+}
+
+void FahrtagWindow::on_comboStart2Hp_currentIndexChanged()
+{
+    if (nehmeRes) {
+        plausibilityCheck();
+        saveResFahrt();
+    }
+}
+
+void FahrtagWindow::on_comboEnde2Zug_currentIndexChanged()
+{
+    if (nehmeRes) {
+        plausibilityCheck();
+        saveResFahrt();
+    }
+}
+
+void FahrtagWindow::on_comboEnde2Hp_currentIndexChanged()
+{
+    if (nehmeRes) {
+        plausibilityCheck();
         saveResFahrt();
     }
 }

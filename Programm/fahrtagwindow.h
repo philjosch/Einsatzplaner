@@ -61,18 +61,26 @@ private slots:
     void on_listRes_itemDoubleClicked(QListWidgetItem *item);
     void on_buttonShow_clicked();
     void on_buttonVerteile_clicked();
+
     void on_lineName_textChanged(const QString &arg1);
     void on_lineMail_textChanged(const QString &arg1);
     void on_lineTelefon_textChanged(const QString &arg1);
+
     void on_spinAnzahl_valueChanged(int arg1);
     void on_comboKlasse_currentIndexChanged(int index);
-    void on_comboStart1Zug_currentTextChanged(const QString &arg1);
-    void on_comboStart1Hp_currentTextChanged(const QString &arg1);
-    void on_comboEnde1Zug_currentTextChanged(const QString &arg1);
-    void on_comboEnde1Hp_currentTextChanged(const QString &arg1);
     void on_lineSitze_textChanged(const QString &arg1);
     void on_lineSitze_returnPressed();
     void on_checkFahrrad_clicked(bool checked);
+
+    void on_comboStart1Zug_currentIndexChanged();
+    void on_comboStart1Hp_currentIndexChanged();
+    void on_comboEnde1Zug_currentIndexChanged();
+    void on_comboEnde1Hp_currentIndexChanged();
+    void on_comboStart2Zug_currentIndexChanged();
+    void on_comboStart2Hp_currentIndexChanged();
+    void on_comboEnde2Zug_currentIndexChanged();
+    void on_comboEnde2Hp_currentIndexChanged();
+
     void on_plainSonstiges_textChanged();
     void on_listRes_itemClicked(QListWidgetItem *item);
 
@@ -118,6 +126,7 @@ private:
     void itemChanged(QListWidgetItem *item, Category kat);
 
     // Reservierungen
+    void plausibilityCheck();
     QMap<Reservierung*, QListWidgetItem*> *resToItem;
     QMap<QListWidgetItem*, Reservierung*> *itemToRes;
 
