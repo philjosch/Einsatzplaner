@@ -162,7 +162,14 @@ QString Reservierung::getTableRow()
     html += "<td>"+QString::number(anzahl)+" Plätze in ";
     html += (klasse==1 ? "1. Klasse" :  "2./3.Klasse");
     html += "<br/>"+ManagerReservierungen::getStringFromPlaetze(sitzplatz)+"</td>";
-    html += "<td>"+zuege->at(0)+" "+hps->at(0)+"<br/>->"+zuege->at(1)+" "+hps->at(1)+"</td>";
+    html += "<td>";
+    for(int i = 0; i < zuege->length(); i=i+2) {
+        html +=  (zuege->at(i  ) == "-" ? "" : zuege->at(i  ))+" "+(hps->at(i  ) == "-" ? "" : hps->at(i  ))
+                +"->"
+                +(zuege->at(i+1) == "-" ? "" : zuege->at(i+1))+" "+(hps->at(i+1) == "-" ? "" : hps->at(i+1));
+        if (i+2 < zuege->length()) html += " und <br/>";
+    }
+    html += "</td>";
     html += (fahrrad ? "<td>Fahrrad!<br/>" : "<td>")+sonstiges+"</td></tr>";
     return html;
 }
