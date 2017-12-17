@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>350</width>
-    <height>361</height>
+    <width>340</width>
+    <height>380</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,31 +21,43 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>300</width>
-    <height>361</height>
+    <width>340</width>
+    <height>380</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>16777215</width>
-    <height>361</height>
+    <width>340</width>
+    <height>380</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Mindeststunden bearbeiten</string>
   </property>
-  <layout class="QFormLayout" name="formLayout">
-   <property name="rowWrapPolicy">
-    <enum>QFormLayout::WrapLongRows</enum>
+  <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,1,0" columnstretch="1,0,0,1">
+   <property name="leftMargin">
+    <number>6</number>
    </property>
-   <item row="0" column="0">
-    <widget class="QLabel" name="labelTf">
+   <property name="topMargin">
+    <number>6</number>
+   </property>
+   <property name="rightMargin">
+    <number>6</number>
+   </property>
+   <property name="bottomMargin">
+    <number>6</number>
+   </property>
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <item row="2" column="1">
+    <widget class="QLabel" name="labelZf">
      <property name="text">
-      <string>Triebfahrzeugführer</string>
+      <string>Zugführer</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item row="0" column="2">
     <widget class="QDoubleSpinBox" name="doubleTf">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -58,14 +70,14 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="1" column="1">
     <widget class="QLabel" name="labelTb">
      <property name="text">
       <string>Triebfahrzeugbegleiter</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item row="1" column="2">
     <widget class="QDoubleSpinBox" name="doubleTb">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -78,14 +90,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="labelZf">
-     <property name="text">
-      <string>Zugführer</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
+   <item row="2" column="2">
     <widget class="QDoubleSpinBox" name="doubleZf">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -98,134 +103,54 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="labelService">
-     <property name="text">
-      <string>Service</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QDoubleSpinBox" name="doubleService">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="suffix">
-      <string> h</string>
-     </property>
-     <property name="maximum">
-      <double>8760.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
+   <item row="4" column="1">
     <widget class="QLabel" name="labelZub">
      <property name="text">
       <string>Zugbegleiter/Begl.o.b.A.</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QDoubleSpinBox" name="doubleZub">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   <item row="13" column="0" colspan="4">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="suffix">
-      <string> h</string>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
      </property>
-     <property name="maximum">
-      <double>8760.000000000000000</double>
+     <property name="centerButtons">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="0" column="1">
+    <widget class="QLabel" name="labelTf">
+     <property name="text">
+      <string>Triebfahrzeugführer</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
     <widget class="QLabel" name="labelBuero">
      <property name="text">
       <string>Büro</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QDoubleSpinBox" name="doubleBuero">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   <item row="5" column="0">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="suffix">
-      <string> h</string>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>31</width>
+       <height>20</height>
+      </size>
      </property>
-     <property name="maximum">
-      <double>8760.000000000000000</double>
-     </property>
-    </widget>
+    </spacer>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="labelWerkstatt">
-     <property name="text">
-      <string>Werkstatt</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QDoubleSpinBox" name="doubleWerkstatt">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="suffix">
-      <string> h</string>
-     </property>
-     <property name="maximum">
-      <double>8760.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="labelZugVorbereiten">
-     <property name="text">
-      <string>Zug Vorbereitung</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1">
-    <widget class="QDoubleSpinBox" name="doubleZugVorbereiten">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="suffix">
-      <string> h</string>
-     </property>
-     <property name="maximum">
-      <double>8760.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="labelSonstiges">
-     <property name="text">
-      <string>Sonstiges</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1">
-    <widget class="QDoubleSpinBox" name="doubleSonstiges">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="suffix">
-      <string> h</string>
-     </property>
-     <property name="maximum">
-      <double>8760.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="0">
-    <widget class="QLabel" name="labelGesamt">
-     <property name="text">
-      <string>Gesamt</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="1">
+   <item row="11" column="2">
     <widget class="QDoubleSpinBox" name="doubleGesamt">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -238,31 +163,41 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="0">
+   <item row="11" column="1">
+    <widget class="QLabel" name="labelGesamt">
+     <property name="text">
+      <string>Gesamt</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1" colspan="2">
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="12" column="0" colspan="2">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="9" column="2">
+    <widget class="QDoubleSpinBox" name="doubleSonstiges">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
+     <property name="suffix">
+      <string> h</string>
+     </property>
+     <property name="maximum">
+      <double>8760.000000000000000</double>
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="labelAusbildung">
+   <item row="9" column="1">
+    <widget class="QLabel" name="labelSonstiges">
      <property name="text">
-      <string>Ausbildung</string>
+      <string>Sonstiges</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
+   <item row="8" column="2">
     <widget class="QDoubleSpinBox" name="doubleAusbildung">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -275,8 +210,140 @@
      </property>
     </widget>
    </item>
+   <item row="3" column="2">
+    <widget class="QDoubleSpinBox" name="doubleService">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="suffix">
+      <string> h</string>
+     </property>
+     <property name="maximum">
+      <double>8760.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <widget class="QDoubleSpinBox" name="doubleZugVorbereiten">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="suffix">
+      <string> h</string>
+     </property>
+     <property name="maximum">
+      <double>8760.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QLabel" name="labelZugVorbereiten">
+     <property name="text">
+      <string>Zug Vorbereitung</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <widget class="QLabel" name="labelAusbildung">
+     <property name="text">
+      <string>Ausbildung</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QLabel" name="labelWerkstatt">
+     <property name="text">
+      <string>Werkstatt</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLabel" name="labelService">
+     <property name="text">
+      <string>Service</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QDoubleSpinBox" name="doubleBuero">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="suffix">
+      <string> h</string>
+     </property>
+     <property name="maximum">
+      <double>8760.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="3">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>30</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="2">
+    <widget class="QDoubleSpinBox" name="doubleWerkstatt">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="suffix">
+      <string> h</string>
+     </property>
+     <property name="maximum">
+      <double>8760.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QDoubleSpinBox" name="doubleZub">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="suffix">
+      <string> h</string>
+     </property>
+     <property name="maximum">
+      <double>8760.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="1" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>doubleTf</tabstop>
+  <tabstop>doubleTb</tabstop>
+  <tabstop>doubleZf</tabstop>
+  <tabstop>doubleService</tabstop>
+  <tabstop>doubleZub</tabstop>
+  <tabstop>doubleBuero</tabstop>
+  <tabstop>doubleWerkstatt</tabstop>
+  <tabstop>doubleZugVorbereiten</tabstop>
+  <tabstop>doubleAusbildung</tabstop>
+  <tabstop>doubleSonstiges</tabstop>
+  <tabstop>doubleGesamt</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -287,7 +354,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>316</x>
-     <y>260</y>
+     <y>376</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

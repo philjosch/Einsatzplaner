@@ -36,7 +36,7 @@
        <attribute name="title">
         <string>Gesamtübersicht</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0,0,0,0,0" columnstretch="1,1,1,1">
+       <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0,0,0,0,0" columnstretch="1,1,1,1" rowminimumheight="0,20,20,20,20,3,20">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -50,7 +50,7 @@
          <number>0</number>
         </property>
         <property name="spacing">
-         <number>9</number>
+         <number>6</number>
         </property>
         <item row="0" column="0" colspan="4">
          <widget class="QTableWidget" name="tabelleGesamt">
@@ -329,12 +329,6 @@
         </item>
         <item row="4" column="0" colspan="2">
          <widget class="QPushButton" name="pushAktualisieren">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>24</height>
-           </size>
-          </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -354,12 +348,6 @@
         </item>
         <item row="4" column="2" colspan="2">
          <widget class="QPushButton" name="pushMindeststunden">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>24</height>
-           </size>
-          </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -399,12 +387,6 @@
         </item>
         <item row="6" column="2" colspan="2">
          <widget class="QPushButton" name="pushPrint">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>24</height>
-           </size>
-          </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -422,7 +404,7 @@
        <attribute name="title">
         <string>Einzelansicht</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_9" rowstretch="0,0,1,0,0,0" columnstretch="1,2">
+       <layout class="QGridLayout" name="gridLayout_9" rowstretch="0,0,0,0,0,0" columnstretch="1,0">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -438,29 +420,44 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <item row="4" column="0" colspan="2">
-         <widget class="Line" name="line_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+        <item row="0" column="0" rowspan="4">
+         <layout class="QGridLayout" name="liste">
+          <property name="leftMargin">
+           <number>0</number>
           </property>
-         </widget>
-        </item>
-        <item row="5" column="0" colspan="2">
-         <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,1">
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <property name="spacing">
            <number>6</number>
           </property>
           <item row="0" column="0">
-           <widget class="QPushButton" name="pushPDFEinzel">
+           <widget class="QPushButton" name="pushAdd">
             <property name="text">
-             <string>Einzelübersichten als PDF speichern …</string>
+             <string>Neue Person anlegen</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="pushPrintEinzel">
+          <item row="1" column="0">
+           <widget class="QListWidget" name="listWidget">
+            <property name="sortingEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QPushButton" name="pushDelete">
+            <property name="statusTip">
+             <string>Eine Person in der Liste auswählen und dann auf den Button drücken, um die Person aus dem System zu löschen</string>
+            </property>
             <property name="text">
-             <string>Einzelübersichten drucken …</string>
+             <string>Ausgewählte Person löschen</string>
             </property>
            </widget>
           </item>
@@ -1269,6 +1266,59 @@
           </widget>
          </widget>
         </item>
+        <item row="3" column="1">
+         <layout class="QGridLayout" name="gridLayout_8" columnstretch="0,0,0,1">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Gesamt</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineGesamt">
+            <property name="maximumSize">
+             <size>
+              <width>75</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>h</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
         <item row="0" column="1">
          <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,0,0,0,0,1">
           <property name="leftMargin">
@@ -1411,98 +1461,33 @@
           </item>
          </layout>
         </item>
-        <item row="0" column="0" rowspan="4">
-         <layout class="QGridLayout" name="liste">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
+        <item row="5" column="0" colspan="2">
+         <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,1">
           <property name="spacing">
            <number>6</number>
           </property>
           <item row="0" column="0">
-           <widget class="QPushButton" name="pushAdd">
+           <widget class="QPushButton" name="pushPDFEinzel">
             <property name="text">
-             <string>Neue Person anlegen</string>
+             <string>Einzelübersichten als PDF speichern …</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QListWidget" name="listWidget">
-            <property name="sortingEnabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QPushButton" name="pushDelete">
-            <property name="statusTip">
-             <string>Eine Person in der Liste auswählen und dann auf den Button drücken, um die Person aus dem System zu löschen</string>
-            </property>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pushPrintEinzel">
             <property name="text">
-             <string>Ausgewählte Person löschen</string>
+             <string>Einzelübersichten drucken …</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
-        <item row="3" column="1">
-         <layout class="QGridLayout" name="gridLayout_8" columnstretch="0,0,0,1">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Gesamt</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineGesamt">
-            <property name="maximumSize">
-             <size>
-              <width>75</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_16">
-            <property name="text">
-             <string>h</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <spacer name="horizontalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
+        <item row="4" column="0" colspan="2">
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
         </item>
         <item row="2" column="1">
          <spacer name="verticalSpacer_2">
@@ -1619,17 +1604,21 @@
  </widget>
  <tabstops>
   <tabstop>tabWidgetMain</tabstop>
+  <tabstop>tabWidgetMain</tabstop>
   <tabstop>tabelleGesamt</tabstop>
   <tabstop>checkShowGesamt</tabstop>
-  <tabstop>checkShowVorbereiten</tabstop>
   <tabstop>checkShowAnzahl</tabstop>
+  <tabstop>checkShowKilometer</tabstop>
   <tabstop>checkShowTf</tabstop>
   <tabstop>checkShowZf</tabstop>
   <tabstop>checkShowZub</tabstop>
-  <tabstop>checkShowWerkstatt</tabstop>
   <tabstop>checkShowService</tabstop>
+  <tabstop>checkShowVorbereiten</tabstop>
+  <tabstop>checkShowWerkstatt</tabstop>
   <tabstop>checkShowBuero</tabstop>
-  <tabstop>checkShowKilometer</tabstop>
+  <tabstop>checkShowAusbildung</tabstop>
+  <tabstop>checkShowSonstiges</tabstop>
+  <tabstop>pushAktualisieren</tabstop>
   <tabstop>pushMindeststunden</tabstop>
   <tabstop>pushPDF</tabstop>
   <tabstop>pushPrint</tabstop>
@@ -1638,6 +1627,11 @@
   <tabstop>listWidget</tabstop>
   <tabstop>pushDelete</tabstop>
   <tabstop>lineVorname</tabstop>
+  <tabstop>lineNachname</tabstop>
+  <tabstop>spinKm</tabstop>
+  <tabstop>checkTf</tabstop>
+  <tabstop>checkZf</tabstop>
+  <tabstop>checkRangierer</tabstop>
   <tabstop>tabWidgetEinzel</tabstop>
   <tabstop>tabelle</tabstop>
   <tabstop>doubleTf</tabstop>
@@ -1660,15 +1654,6 @@
   <tabstop>lineSonstiges</tabstop>
   <tabstop>doubleKilometer</tabstop>
   <tabstop>lineKilometer</tabstop>
-  <tabstop>tabWidgetMain</tabstop>
-  <tabstop>checkShowAusbildung</tabstop>
-  <tabstop>checkShowSonstiges</tabstop>
-  <tabstop>pushAktualisieren</tabstop>
-  <tabstop>checkTf</tabstop>
-  <tabstop>lineNachname</tabstop>
-  <tabstop>checkZf</tabstop>
-  <tabstop>spinKm</tabstop>
-  <tabstop>checkRangierer</tabstop>
   <tabstop>lineGesamt</tabstop>
   <tabstop>pushPDFEinzel</tabstop>
   <tabstop>pushPrintEinzel</tabstop>
