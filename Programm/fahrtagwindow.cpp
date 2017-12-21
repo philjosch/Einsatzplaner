@@ -624,15 +624,40 @@ void FahrtagWindow::loadReservierung(Reservierung *r)
     ui->comboKlasse->setCurrentIndex(r->getKlasse());
     QList<QString> *z = r->getZuege();
     QList<QString> *h = r->getHps();
-    ui->comboStart1Zug->setCurrentText(z->at(0));
-    ui->comboEnde1Zug->setCurrentText(z->at(1));
-    ui->comboStart1Hp->setCurrentText(h->at(0));
-    ui->comboEnde1Hp->setCurrentText(h->at(1));
+    if (z->length() >= 2) {
+        ui->comboStart1Zug->setCurrentText(z->at(0));
+        ui->comboEnde1Zug->setCurrentText(z->at(1));
+        ui->comboStart1Hp->setCurrentText(h->at(0));
+        ui->comboEnde1Hp->setCurrentText(h->at(1));
+        if (z->length() >= 4) {
+            ui->comboStart2Zug->setCurrentText(z->at(2));
+            ui->comboEnde2Zug->setCurrentText(z->at(3));
+            ui->comboStart2Hp->setCurrentText(h->at(2));
+            ui->comboEnde2Hp->setCurrentText(h->at(3));
+        } else {
+            ui->comboStart2Zug->setCurrentText("-");
+            ui->comboEnde2Zug->setCurrentText("-");
+            ui->comboStart2Hp->setCurrentText("-");
+            ui->comboEnde2Hp->setCurrentText("-");
+        }
+    } else {
+        ui->comboStart1Zug->setCurrentText("-");
+        ui->comboEnde1Zug->setCurrentText("-");
+        ui->comboStart1Hp->setCurrentText("-");
+        ui->comboEnde1Hp->setCurrentText("-");
+
+        ui->comboStart2Zug->setCurrentText("-");
+        ui->comboEnde2Zug->setCurrentText("-");
+        ui->comboStart2Hp->setCurrentText("-");
+        ui->comboEnde2Hp->setCurrentText("-");
+    }
     ui->lineSitze->setText(Fahrtag::getStringFromPlaetze(r->getSitzplatz()));
     ui->lineSitze->setStyleSheet("background-color: #b9ceac");
     ui->checkFahrrad->setChecked(r->getFahrrad());
     ui->plainSonstiges->clear();
     ui->plainSonstiges->setPlainText(r->getSonstiges());
+
+    setEnabledFieldsForReservierung(true);
     nehmeRes = true;
 }
 
@@ -685,6 +710,30 @@ void FahrtagWindow::saveResFahrt()
     }
     aktuelleRes->setZuege(z);
     aktuelleRes->setHps(h);
+    fahrtag->emitter();
+}
+
+void FahrtagWindow::setEnabledFieldsForReservierung(bool enabled)
+{
+    ui->lineName->setEnabled(enabled);
+    ui->lineMail->setEnabled(enabled);
+    ui->lineTelefon->setEnabled(enabled);
+
+    ui->spinAnzahl->setEnabled(enabled);
+    ui->comboKlasse->setEnabled(enabled);
+    ui->lineSitze->setEnabled(enabled);
+    ui->checkFahrrad->setEnabled(enabled);
+
+    ui->comboStart1Zug->setEnabled(enabled);
+    ui->comboStart1Hp->setEnabled(enabled);
+    ui->comboEnde1Zug->setEnabled(enabled);
+    ui->comboEnde1Hp->setEnabled(enabled);
+    ui->comboStart2Zug->setEnabled(enabled);
+    ui->comboStart2Hp->setEnabled(enabled);
+    ui->comboEnde2Zug->setEnabled(enabled);
+    ui->comboEnde2Hp->setEnabled(enabled);
+
+    ui->plainSonstiges->setEnabled(enabled);
 }
 
 void FahrtagWindow::on_buttonAdd_clicked()
@@ -696,6 +745,7 @@ void FahrtagWindow::on_buttonAdd_clicked()
     itemToRes->insert(i, r);
     ui->buttonDelete->setEnabled(true);
     loadReservierung(r);
+    fahrtag->emitter();
 }
 
 void FahrtagWindow::on_buttonDelete_clicked()
@@ -712,8 +762,10 @@ void FahrtagWindow::on_buttonDelete_clicked()
         } else {
             nehmeRes = false;
             ui->buttonDelete->setEnabled(false);
+            setEnabledFieldsForReservierung(false);
         }
         update();
+        fahrtag->emitter();
     }
 }
 

@@ -135,6 +135,7 @@ private:
 
     void loadReservierung(Reservierung *r);
     void saveResFahrt();
+    void setEnabledFieldsForReservierung(bool enabled);
 
     QMap<QWidget*, QTableWidgetItem*> *widgetInTableToTableWidget;
 };

@@ -720,6 +720,9 @@
           </item>
           <item row="1" column="0" colspan="2">
            <widget class="QPushButton" name="buttonDelete">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Reservierung löschen</string>
             </property>
@@ -824,7 +827,7 @@
           <item row="0" column="1" colspan="4">
            <widget class="QLineEdit" name="lineName">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -850,7 +853,7 @@
           <item row="1" column="1" colspan="2">
            <widget class="QLineEdit" name="lineMail">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="inputMethodHints">
              <set>Qt::ImhEmailCharactersOnly</set>
@@ -863,7 +866,7 @@
           <item row="1" column="3" colspan="2">
            <widget class="QLineEdit" name="lineTelefon">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="inputMethodHints">
              <set>Qt::ImhDigitsOnly</set>
@@ -879,7 +882,7 @@
           <item row="2" column="1">
            <widget class="QSpinBox" name="spinAnzahl">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -895,7 +898,7 @@
           <item row="2" column="2" colspan="2">
            <widget class="QComboBox" name="comboKlasse">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="currentIndex">
              <number>0</number>
@@ -915,7 +918,7 @@
           <item row="2" column="4">
            <widget class="QCheckBox" name="checkFahrrad">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="text">
              <string>Fahrräder</string>
@@ -924,6 +927,9 @@
           </item>
           <item row="3" column="1" colspan="4">
            <widget class="QLineEdit" name="lineSitze">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="statusTip">
              <string>Sitzplätze in einem gültigen Format eingeben, z.B. 204: 1-4, 6; 208: 7-9</string>
             </property>
@@ -932,7 +938,7 @@
           <item row="4" column="1" colspan="2">
            <widget class="QComboBox" name="comboStart1Zug">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="currentIndex">
              <number>6</number>
@@ -977,7 +983,7 @@
           <item row="4" column="3" colspan="2">
            <widget class="QComboBox" name="comboStart1Hp">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="currentIndex">
              <number>11</number>
@@ -1047,7 +1053,7 @@
           <item row="5" column="1" colspan="2">
            <widget class="QComboBox" name="comboEnde1Zug">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="currentIndex">
              <number>6</number>
@@ -1092,7 +1098,7 @@
           <item row="5" column="3" colspan="2">
            <widget class="QComboBox" name="comboEnde1Hp">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="currentIndex">
              <number>11</number>
@@ -1162,7 +1168,7 @@
           <item row="6" column="1" colspan="2">
            <widget class="QComboBox" name="comboStart2Zug">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="currentIndex">
              <number>6</number>
@@ -1207,7 +1213,7 @@
           <item row="6" column="3" colspan="2">
            <widget class="QComboBox" name="comboStart2Hp">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="currentIndex">
              <number>11</number>
@@ -1277,7 +1283,7 @@
           <item row="7" column="1" colspan="2">
            <widget class="QComboBox" name="comboEnde2Zug">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="currentIndex">
              <number>6</number>
@@ -1322,7 +1328,7 @@
           <item row="7" column="3" colspan="2">
            <widget class="QComboBox" name="comboEnde2Hp">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="currentIndex">
              <number>11</number>
@@ -1402,7 +1408,7 @@
           <item row="8" column="1" colspan="4">
            <widget class="QPlainTextEdit" name="plainSonstiges">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>
