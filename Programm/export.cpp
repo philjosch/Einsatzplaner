@@ -155,10 +155,72 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
     return print(pdf, paper, d);
 }
 
-bool Export::printPerson(Person *p, QPrinter *pdf, QPrinter *paper)
+bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
 {
+    preparePrinterPortrait(printer);
     QTextDocument *d = new QTextDocument();
-    return print(pdf, paper, d);
+    // Append a style sheet
+    QString a = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Einsatzplan - Listenansicht</title></head><body>";
+    a += "<style type='text/css'>";
+    a += "body, tr, td, p { font-size: 12px; }";
+    a += "table { border-width: 1px; border-style: solid; border-color: black; }";
+    a += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }";
+    a += "table tr, table td { page-break-inside: avoid; }";
+    a += "table tfoot tr, table tfoot td { border-width: 2px; }";
+    a += "ul { -qt-list-indent: 0; }";
+    a += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
+    a += "</style>";
+    // Add the title page
+    a += "<h3>Personalübersicht - Gesamt</h3>";
+    m->berechne();
+    QString help = "<li>%1: %2h</li>";
+    a += "<h4>Geleistete Stunden</h4><ul>";
+    if (m->getTime(Tf) > 0) a += help.arg("Tf").arg(m->getTime(Tf), 0, 'f', 0);
+    if (m->getTime(Zf) > 0) a += help.arg("Zf").arg(m->getTime(Zf), 0, 'f', 0);
+    if (m->getTime(Zub) > 0) a += help.arg("Zub").arg(m->getTime(Zub), 0, 'f', 0);
+    if (m->getTime(Service) > 0) a += help.arg("Service").arg(m->getTime(Service), 0, 'f', 0);
+    if (m->getTime(ZugVorbereiten) > 0) a += help.arg("Vorbereiten").arg(m->getTime(ZugVorbereiten), 0, 'f', 0);
+    if (m->getTime(Werkstatt) > 0) a += help.arg("Werkstatt").arg(m->getTime(Werkstatt), 0, 'f', 0);
+    if (m->getTime(Buero) > 0) a += help.arg("Büro").arg(m->getTime(Buero), 0, 'f', 0);
+    if (m->getTime(Ausbildung) > 0) a += help.arg("Ausbildung").arg(m->getTime(Ausbildung), 0, 'f', 0);
+    if (m->getTime(Sonstiges) > 0) a += help.arg("Sonstiges").arg(m->getTime(Sonstiges), 0, 'f', 0);
+    a += "</ul>";
+
+    a += "<ul><li>Stunden gesamt: "+QString::number(m->getTimeSum())+"h</li>";
+    a += "<li>Gefahrene Kilometer gesamt: "+QString::number(m->getSumKilometer())+" km</li></ul>";
+
+    help = "<li>%1: %2h</li>";
+    a += "<h4>Mindeststunden</h4><ul>";
+    if (m->getMinimumHours() > 0) a += help.arg("Insgesamt").arg(m->getMinimumHours(), 0, 'f', 1);
+    if (m->getMinimumHours(Tf) > 0) a += help.arg("Tf").arg(m->getMinimumHours(Tf), 0, 'f', 1);
+    if (m->getMinimumHours(Tb) > 0) a += help.arg("Tb").arg(m->getMinimumHours(Tb), 0, 'f', 1);
+    if (m->getMinimumHours(Zf) > 0) a += help.arg("Zf").arg(m->getMinimumHours(Zf), 0, 'f', 1);
+    if (m->getMinimumHours(Zub) > 0) a += help.arg("Zub").arg(m->getMinimumHours(Zub), 0, 'f', 1);
+    if (m->getMinimumHours(Service) > 0) a += help.arg("Service").arg(m->getMinimumHours(Service), 0, 'f', 1);
+    if (m->getMinimumHours(ZugVorbereiten) > 0) a += help.arg("Vorbereiten").arg(m->getMinimumHours(ZugVorbereiten), 0, 'f', 1);
+    if (m->getMinimumHours(Werkstatt) > 0) a += help.arg("Werkstatt").arg(m->getMinimumHours(Werkstatt), 0, 'f', 1);
+    if (m->getMinimumHours(Buero) > 0) a += help.arg("Büro").arg(m->getMinimumHours(Buero), 0, 'f', 1);
+    if (m->getMinimumHours(Ausbildung) > 0) a += help.arg("Ausbildung").arg(m->getMinimumHours(Ausbildung), 0, 'f', 1);
+    if (m->getMinimumHours(Sonstiges) > 0) a += help.arg("Sonstiges").arg(m->getMinimumHours(Sonstiges), 0, 'f', 1);
+    a += "</ul>";
+
+    a += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+
+    // Add a papge for each person
+    QSetIterator<Person*> iter = m->getPersonen();
+    while(iter.hasNext()) {
+        Person *akt = iter.next();
+        a += akt->getHtmlForDetailPage(m);
+        if (iter.hasNext()) {
+            a += "<div style='page-break-after:always'>";
+            a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+        } else {
+            a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+        }
+    }
+    a += "</body></html>";
+    d->setHtml(a);
+    return print(nullptr, printer, d);
 }
 
 bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QList<bool> *data, QPrinter *pdf, QPrinter *paper)

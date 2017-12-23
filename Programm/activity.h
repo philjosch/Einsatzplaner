@@ -19,6 +19,7 @@ public:
 
     QJsonObject toJson();
 
+    QString getKurzbeschreibung();
     QString getListStringShort();
     QString getListString();
 

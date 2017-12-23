@@ -38,7 +38,7 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     refreshEinzel();
 
     anzeige = new QList<bool>();
-    while(anzeige->length() < 11) {
+    while(anzeige->length() <= 11) {
         anzeige->append(false);
     }
     ui->checkShowGesamt->setChecked(true);
@@ -76,14 +76,16 @@ void PersonalWindow::showPerson(Person *p)
     ui->checkZf->setChecked(p->getAusbildungZf());
     ui->checkRangierer->setChecked(p->getAusbildungRangierer());
     // Zusätzliche Zeiten aktivieren
-    ui->doubleBuero->setEnabled(true);
-    ui->doubleService->setEnabled(true);
-    ui->doubleWerkstatt->setEnabled(true);
     ui->doubleTf->setEnabled(true);
     ui->doubleZf->setEnabled(true);
+    ui->doubleService->setEnabled(true);
     ui->doubleZub->setEnabled(true);
     ui->doubleZugVorbereiten->setEnabled(true);
+    ui->doubleWerkstatt->setEnabled(true);
+    ui->doubleBuero->setEnabled(true);
+    ui->doubleAusbildung->setEnabled(true);
     ui->doubleSonstiges->setEnabled(true);
+    ui->doubleKilometer->setEnabled(true);
 
     // Tabellendaten laden und einfügen
     while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
@@ -127,7 +129,9 @@ void PersonalWindow::showPerson(Person *p)
     ui->lineZugVorbereiten->setText(QString::number(p->getTimeVorbereiten()));
     ui->lineWerkstatt->setText(QString::number(p->getTimeWerkstatt()));
     ui->lineBuero->setText(QString::number(p->getTimeBuero()));
+    ui->lineAusbildung->setText(QString::number(p->getTimeAusbildung()));
     ui->lineSonstiges->setText(QString::number(p->getTimeSonstiges()));
+    ui->lineKilometer->setText(QString::number(p->getSumKilometer()));
     ui->lineGesamt->setText(QString::number(p->getTimeSum()));
 
     ui->doubleTf->setValue(p->getAdditionalTimeTf());
@@ -137,9 +141,9 @@ void PersonalWindow::showPerson(Person *p)
     ui->doubleZugVorbereiten->setValue(p->getAdditionalTimeVorbereiten());
     ui->doubleWerkstatt->setValue(p->getAdditionalTimeWerkstatt());
     ui->doubleBuero->setValue(p->getAdditionalTimeBuero());
+    ui->doubleAusbildung->setValue(p->getAdditionalTimeAusbildung());
     ui->doubleSonstiges->setValue(p->getAdditionalTimeSonstiges());
-
-    ui->lineStrecke->setText(QString::number(p->getSumKilometer()));
+    ui->doubleKilometer->setValue(p->getAdditionalKilometer());
 
     enabled = true;
 }
@@ -187,6 +191,7 @@ void PersonalWindow::refreshGesamt()
     //  8: büro
     //  9: sonstiges
     // 10: kilometer
+    // 11: ausbildung
     while (ui->tabelleGesamt->columnCount() > 2) {
         ui->tabelleGesamt->removeColumn(2);
     }
@@ -198,6 +203,10 @@ void PersonalWindow::refreshGesamt()
     if (anzeige->at(9)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Sonstiges")));
+    }
+    if (anzeige->at(11)) {
+        ui->tabelleGesamt->insertColumn(2);
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Ausbildung")));
     }
     if (anzeige->at(8)) {
         ui->tabelleGesamt->insertColumn(2);
@@ -298,6 +307,12 @@ void PersonalWindow::refreshGesamt()
     if (anzeige->at(8)) {
         ii = new QTableWidgetItem();
         ii->setData(Qt::EditRole, manager->getTimeBuero());
+        ui->tabelleGesamt->setItem(0, pos, ii);
+        pos++;
+    }
+    if (anzeige->at(11)) {
+        ii = new QTableWidgetItem();
+        ii->setData(Qt::EditRole, manager->getTimeAusbildung());
         ui->tabelleGesamt->setItem(0, pos, ii);
         pos++;
     }
@@ -477,7 +492,7 @@ void PersonalWindow::on_spinKm_valueChanged(int arg1)
 {
     if (enabled) {
         aktuellePerson->setStrecke(arg1);
-        ui->lineStrecke->setText(QString::number(aktuellePerson->getSumKilometer()));
+        ui->lineKilometer->setText(QString::number(aktuellePerson->getSumKilometer()));
         emit changed();
     }
 }
@@ -528,14 +543,7 @@ void PersonalWindow::on_pushDelete_clicked()
         ui->listWidget->takeItem(ui->listWidget->row(i));
 
         if (ui->listWidget->count() == 0) {
-            ui->lineVorname->setEnabled(false);
-            ui->lineNachname->setEnabled(false);
-            ui->spinKm->setEnabled(false);
-            ui->checkRangierer->setEnabled(false);
-            ui->checkTf->setEnabled(false);
-            ui->checkZf->setEnabled(false);
-            ui->tabelle->setEnabled(false);
-
+            disableFields();
             ui->pushDelete->setEnabled(false);
         } else {
             aktuellePerson = itemToPerson->value(ui->listWidget->item(0));
@@ -554,7 +562,7 @@ void PersonalWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 void PersonalWindow::on_pushPDF_clicked()
 {
     QPrinter *pdf = 0;
-    pdf = Export::getPrinterPDF(this, "Personal.pdf");
+    pdf = Export::getPrinterPDF(this, "Personal-Gesamt.pdf");
     print(pdf);
 }
 
@@ -563,6 +571,20 @@ void PersonalWindow::on_pushPrint_clicked()
     QPrinter *paper = 0;
     paper = Export::getPrinterPaper(this);
     print(paper);
+}
+
+void PersonalWindow::on_pushPDFEinzel_clicked()
+{
+    QPrinter *pdf = 0;
+    pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf");
+    Export::printPerson(manager, pdf);
+}
+
+void PersonalWindow::on_pushPrintEinzel_clicked()
+{
+    QPrinter *paper = 0;
+    paper = Export::getPrinterPaper(this);
+    Export::printPerson(manager, paper);
 }
 
 void PersonalWindow::print(QPrinter *p)
@@ -591,6 +613,41 @@ void PersonalWindow::print(QPrinter *p)
     gesamt->append(manager->getTimeSonstiges());
     gesamt->append(manager->getSumKilometer());
     Export::printPersonen(liste, gesamt, anzeige, p);
+}
+
+void PersonalWindow::disableFields()
+{
+    ui->lineVorname->setEnabled(false);
+    ui->lineNachname->setEnabled(false);
+    ui->spinKm->setEnabled(false);
+    ui->checkRangierer->setEnabled(false);
+    ui->checkTf->setEnabled(false);
+    ui->checkZf->setEnabled(false);
+    ui->tabelle->setEnabled(false);
+
+    ui->doubleTf->setEnabled(false);
+    ui->doubleZf->setEnabled(false);
+    ui->doubleZub->setEnabled(false);
+    ui->doubleService->setEnabled(false);
+    ui->doubleZugVorbereiten->setEnabled(false);
+    ui->doubleWerkstatt->setEnabled(false);
+    ui->doubleBuero->setEnabled(false);
+    ui->doubleAusbildung->setEnabled(false);
+    ui->doubleSonstiges->setEnabled(false);
+    ui->doubleKilometer->setEnabled(false);
+
+    ui->lineTf->setEnabled(false);
+    ui->lineZf->setEnabled(false);
+    ui->lineZub->setEnabled(false);
+    ui->lineService->setEnabled(false);
+    ui->lineZugVorbereiten->setEnabled(false);
+    ui->lineWerkstatt->setEnabled(false);
+    ui->lineBuero->setEnabled(false);
+    ui->lineAusbildung->setEnabled(false);
+    ui->lineSonstiges->setEnabled(false);
+    ui->lineKilometer->setEnabled(false);
+
+    ui->lineGesamt->setEnabled(false);
 }
 
 void PersonalWindow::on_tabWidgetMain_tabBarClicked(int index)
@@ -737,12 +794,31 @@ void PersonalWindow::on_doubleBuero_valueChanged(double arg1)
     }
 }
 
+void PersonalWindow::on_doubleAusbildung_valueChanged(double arg1)
+{
+    if (enabled) {
+        aktuellePerson->setAdditionalTimeAusbildung(arg1);
+        ui->lineAusbildung->setText(QString::number(aktuellePerson->getTimeAusbildung()));
+        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
+        emit changed();
+    }
+}
+
 void PersonalWindow::on_doubleSonstiges_valueChanged(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditionalTimeSonstiges(arg1);
         ui->lineSonstiges->setText(QString::number(aktuellePerson->getTimeSonstiges()));
         ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
+        emit changed();
+    }
+}
+
+void PersonalWindow::on_doubleKilometer_valueChanged(double arg1)
+{
+    if (enabled) {
+        aktuellePerson->setAdditionalKilometer(arg1);
+        ui->lineKilometer->setText(QString::number(aktuellePerson->getSumKilometer()));
         emit changed();
     }
 }

@@ -41,6 +41,8 @@ Calendar::Calendar(QWidget *parent) : QFrame(parent), Manager(), ui(new Ui::Cale
         connect(c, SIGNAL(clickedItem(AActivity*)), this, SLOT(clickedItemCalendar(AActivity*)));
     }
     goToday();
+
+    scrollOffSet = 0;
 }
 
 Calendar::~Calendar()
@@ -86,7 +88,10 @@ void Calendar::fromJson(QJsonObject o)
 
 void Calendar::wheelEvent(QWheelEvent *event)
 {
-//    ui->dateSelector->setDate(ui->dateSelector->date().addDays(- event->angleDelta().y() / 30));
+//    int scrollAmount = 30;
+//    scrollOffSet += event->angleDelta().y();
+//    ui->dateSelector->setDate(ui->dateSelector->date().addDays(- scrollOffSet / scrollAmount));
+//    scrollOffSet %= scrollAmount;
 }
 
 void Calendar::nextMonth()

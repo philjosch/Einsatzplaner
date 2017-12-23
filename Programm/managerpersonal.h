@@ -35,7 +35,9 @@ public:
     bool removePerson(QString name);
     bool removePerson(Person *p);
 
-    bool pruefeStunden(Person *p);
+    bool pruefeStunden(Person *p); // Gibt true zurueck, genau dann wenn die Person die notwenidgen stunden erbracht hat!
+    bool checkHours(Person *p, Category kat); // Gibt true zurueck, genau dann wenn die Person die notwenidgen stunden erbracht hat!
+    bool checkHours(Person *p); // Gibt true zurueck, genau dann wenn die Person die notwenidgen stunden erbracht hat!
 
     void setMinimumHours(Category cat, double amount);
     void setMinimumHours(double amount);
@@ -50,6 +52,7 @@ public:
 
     void berechne();
 
+    double getTime(Category kat);
     double getTimeTf() const;
     double getTimeZf() const;
     double getTimeZub() const;
@@ -57,6 +60,7 @@ public:
     double getTimeBuero() const;
     double getTimeWerkstatt() const;
     double getTimeVorbereiten() const;
+    double getTimeAusbildung() const;
     double getTimeSonstiges() const;
     double getTimeSum() const;
     double getSumKilometer() const;
@@ -84,6 +88,7 @@ private:
     double timeBuero;
     double timeWerkstatt;
     double timeVorbereiten;
+    double timeAusbildung;
     double timeSonstiges;
     double timeSum;
     double sumKilometer;

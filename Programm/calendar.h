@@ -63,6 +63,8 @@ protected:
 
     QMap<AActivity*, QListWidgetItem*> *listitem; // Gibt an, welcher Aktivität welches Listenelement in der gesamtListe zugeordnet ist
     QMap<QListWidgetItem*, AActivity*> *itemToList;
+
+    int scrollOffSet;
 };
 
 #endif // CALENDAR_H

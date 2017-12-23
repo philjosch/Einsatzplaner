@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>720</width>
-    <height>616</height>
+    <height>575</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -614,12 +614,12 @@
        <attribute name="title">
         <string>Reservierungen</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
+       <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
         <property name="leftMargin">
          <number>0</number>
         </property>
         <property name="topMargin">
-         <number>9</number>
+         <number>6</number>
         </property>
         <property name="rightMargin">
          <number>0</number>
@@ -631,7 +631,7 @@
          <number>6</number>
         </property>
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridNavigator" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="1,0">
+         <layout class="QGridLayout" name="gridNavigator" rowstretch="0,0,1,0,0,0,0,0,0,0,0,0" columnstretch="1,0">
           <property name="leftMargin">
            <number>0</number>
           </property>
@@ -720,6 +720,9 @@
           </item>
           <item row="1" column="0" colspan="2">
            <widget class="QPushButton" name="buttonDelete">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Reservierung löschen</string>
             </property>
@@ -795,21 +798,36 @@
          </layout>
         </item>
         <item row="0" column="1">
-         <layout class="QGridLayout" name="gridDaten">
+         <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0,1" columnstretch="0,2,1,1,2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_21">
             <property name="text">
-             <string>Name:</string>
+             <string>Name</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
             </property>
            </widget>
           </item>
-          <item row="0" column="1" colspan="2">
+          <item row="0" column="1" colspan="4">
            <widget class="QLineEdit" name="lineName">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -825,17 +843,17 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_18">
             <property name="text">
-             <string>Kontakt:</string>
+             <string>Kontakt</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="1" column="1" colspan="2">
            <widget class="QLineEdit" name="lineMail">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="inputMethodHints">
              <set>Qt::ImhEmailCharactersOnly</set>
@@ -845,10 +863,10 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
+          <item row="1" column="3" colspan="2">
            <widget class="QLineEdit" name="lineTelefon">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="inputMethodHints">
              <set>Qt::ImhDigitsOnly</set>
@@ -861,20 +879,10 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Sitzplätze:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1">
            <widget class="QSpinBox" name="spinAnzahl">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -887,10 +895,10 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="2">
+          <item row="2" column="2" colspan="2">
            <widget class="QComboBox" name="comboKlasse">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="currentIndex">
              <number>0</number>
@@ -907,274 +915,487 @@
             </item>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_20">
+          <item row="2" column="4">
+           <widget class="QCheckBox" name="checkFahrrad">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
-             <string>Einstieg:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+             <string>Fahrräder</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QComboBox" name="comboStart1Zug">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="currentIndex">
-             <number>6</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>2201 SSWN-SOTW</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2202 SOTW-SSWN</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2203 SSWN-SOTW</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2204 SOTW-SSWN</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2205 SSWN-SOTW</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2206 SOTW-SSWN</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>-</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QComboBox" name="comboStart1Hp">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="currentIndex">
-             <number>11</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>Schwarzerden</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Oberkirchen (Süd)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Haupersweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Osterbrücken</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Marth</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Niederkirchen</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Werschweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dörrenbach</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Fürth (Ostertal)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler-Wingertsweiher</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>-</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_17">
-            <property name="text">
-             <string>Ausstieg:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QComboBox" name="comboEnde1Zug">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="currentIndex">
-             <number>6</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>2201 SSWN-SOTW</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2202 SOTW-SSWN</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2203 SSWN-SOTW</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2204 SOTW-SSWN</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2205 SSWN-SOTW</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2206 SOTW-SSWN</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>-</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="4" column="2">
-           <widget class="QComboBox" name="comboEnde1Hp">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="currentIndex">
-             <number>11</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>Schwarzerden</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Oberkirchen (Süd)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Haupersweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Osterbrücken</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Marth</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Niederkirchen</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Werschweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dörrenbach</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Fürth (Ostertal)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler-Wingertsweiher</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>-</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_16">
-            <property name="text">
-             <string>Sitzplätze</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1" colspan="2">
+          <item row="3" column="1" colspan="4">
            <widget class="QLineEdit" name="lineSitze">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="statusTip">
              <string>Sitzplätze in einem gültigen Format eingeben, z.B. 204: 1-4, 6; 208: 7-9</string>
             </property>
            </widget>
           </item>
-          <item row="6" column="0" rowspan="2">
+          <item row="4" column="1" colspan="2">
+           <widget class="QComboBox" name="comboStart1Zug">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>6</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>2201 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2202 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2203 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2204 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2205 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2206 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="4" column="3" colspan="2">
+           <widget class="QComboBox" name="comboStart1Hp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>11</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Schwarzerden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Oberkirchen (Süd)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Haupersweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Osterbrücken</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Marth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Niederkirchen</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Werschweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Dörrenbach</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Fürth (Ostertal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler-Wingertsweiher</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="5" column="1" colspan="2">
+           <widget class="QComboBox" name="comboEnde1Zug">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>6</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>2201 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2202 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2203 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2204 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2205 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2206 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="5" column="3" colspan="2">
+           <widget class="QComboBox" name="comboEnde1Hp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>11</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Schwarzerden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Oberkirchen (Süd)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Haupersweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Osterbrücken</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Marth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Niederkirchen</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Werschweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Dörrenbach</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Fürth (Ostertal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler-Wingertsweiher</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="6" column="1" colspan="2">
+           <widget class="QComboBox" name="comboStart2Zug">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>6</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>2201 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2202 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2203 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2204 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2205 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2206 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="6" column="3" colspan="2">
+           <widget class="QComboBox" name="comboStart2Hp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>11</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Schwarzerden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Oberkirchen (Süd)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Haupersweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Osterbrücken</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Marth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Niederkirchen</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Werschweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Dörrenbach</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Fürth (Ostertal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler-Wingertsweiher</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="7" column="1" colspan="2">
+           <widget class="QComboBox" name="comboEnde2Zug">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>6</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>2201 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2202 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2203 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2204 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2205 SSWN-SOTW</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2206 SOTW-SSWN</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="7" column="3" colspan="2">
+           <widget class="QComboBox" name="comboEnde2Hp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>11</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Schwarzerden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Oberkirchen (Süd)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Haupersweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Osterbrücken</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Marth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Niederkirchen</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Werschweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Dörrenbach</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Fürth (Ostertal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler-Wingertsweiher</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="8" column="0">
            <widget class="QLabel" name="label_19">
             <property name="text">
              <string>Sonstiges:</string>
@@ -1184,20 +1405,40 @@
             </property>
            </widget>
           </item>
-          <item row="7" column="1" colspan="2">
+          <item row="8" column="1" colspan="4">
            <widget class="QPlainTextEdit" name="plainSonstiges">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>
-          <item row="6" column="1" colspan="2">
-           <widget class="QCheckBox" name="checkFahrrad">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
+          <item row="4" column="0" rowspan="2">
+           <widget class="QLabel" name="label_20">
             <property name="text">
-             <string>Fahrräder</string>
+             <string>Strecke 1</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0" rowspan="2">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Strecke 2</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" rowspan="2">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Sitzplätze</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1214,7 +1455,7 @@
          <number>0</number>
         </property>
         <property name="topMargin">
-         <number>9</number>
+         <number>6</number>
         </property>
         <property name="rightMargin">
          <number>0</number>
@@ -1460,7 +1701,7 @@
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>3</number>
+         <number>0</number>
         </property>
         <property name="insertPolicy">
          <enum>QComboBox::InsertAlphabetically</enum>
@@ -1480,6 +1721,11 @@
         </item>
         <item>
          <property name="text">
+          <string>309, 221, 204, 217, 208, 202</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>309, 221, 204, 208, 202, 201</string>
          </property>
         </item>
@@ -1491,6 +1737,11 @@
         <item>
          <property name="text">
           <string>309, 221, 204, 217</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>309, 221, 204, 217, 208</string>
          </property>
         </item>
         <item>

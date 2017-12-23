@@ -1,5 +1,20 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 7. Oktober 2017
+Stand: 21. Dezember 2017
+
+## Version 1.3 - 2017-12-23
+### Neu
+- Es kann jetzt eine Übersicht über die einzelnen Aktivitäten einer person ausgegeben werden, die Funktio dazu findet sich in der Einzelansicht des Personalfensters.
+- Als weitere Kategorie für eine Aufgabe, kann jetzt noch "Ausbildung" angegeben werden.
+- Es können nun auch zusätzliche Kilometer eingegeben werden, diese werden auf die automatisch berechneten Kilometer angerechnet.
+
+### Verbessert
+- Bei einer Reservieurng kann jetzt eine zweite Teilstrecke eingegeben werden.
+
+### Fehlerbehebungen
+- Bei einer Änderung an einer Reservierung wird vor dem Schließen wieder nachgefragt, ob die Änderungen übernommen werden sollen.
+- Optimierung beim Personalfenster, sodass es kleiner als bisher gemacht werden kann.
+
+---
 
 ## Version 1.2 - 2017-10-10
 ### Neu

@@ -13,6 +13,7 @@ enum Category { Tf,
                 Buero,
                 Werkstatt,
                 ZugVorbereiten,
+                Ausbildung, // In Version 1.3 eingefuehrt
                 Sonstiges=100
               };
 enum Mistake { OK, // Returned if the person was found in the system and is abled to do the job
