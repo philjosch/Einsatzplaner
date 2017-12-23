@@ -1,7 +1,7 @@
 # Einsatzplaner - Veränderungshistorie
 Stand: 21. Dezember 2017
 
-## Version 1.3 - 2017-12-xx
+## Version 1.3 - 2017-12-23
 ### Neu
 - Es kann jetzt eine Übersicht über die einzelnen Aktivitäten einer person ausgegeben werden, die Funktio dazu findet sich in der Einzelansicht des Personalfensters.
 - Als weitere Kategorie für eine Aufgabe, kann jetzt noch "Ausbildung" angegeben werden.
