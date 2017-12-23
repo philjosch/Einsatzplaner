@@ -42,11 +42,11 @@
                 "personalBenoetigt": false,
                 "personen": [
                     {
-                        "beginn": "00:00",
+                        "beginn": "09:00",
                         "bemerkung": "",
-                        "ende": "00:00",
-                        "kat": 7,
-                        "name": "Emma"
+                        "ende": "18:00",
+                        "kat": 3,
+                        "name": "Schu Fu Lu Pi Plu"
                     },
                     {
                         "beginn": "00:00",
@@ -56,11 +56,11 @@
                         "name": "Lukas Lokomotivführer"
                     },
                     {
-                        "beginn": "09:00",
+                        "beginn": "00:00",
                         "bemerkung": "",
-                        "ende": "18:00",
-                        "kat": 3,
-                        "name": "Schu Fu Lu Pi Plu"
+                        "ende": "13:00",
+                        "kat": 5,
+                        "name": "Nepomuk"
                     },
                     {
                         "beginn": "12:00",
@@ -72,16 +72,16 @@
                     {
                         "beginn": "00:00",
                         "bemerkung": "",
-                        "ende": "13:00",
-                        "kat": 5,
-                        "name": "Nepomuk"
+                        "ende": "00:00",
+                        "kat": 2,
+                        "name": "Jim Knopf"
                     },
                     {
                         "beginn": "00:00",
                         "bemerkung": "",
                         "ende": "00:00",
-                        "kat": 2,
-                        "name": "Jim Knopf"
+                        "kat": 7,
+                        "name": "Emma"
                     }
                 ],
                 "reservierungen": [
@@ -342,24 +342,6 @@
             "personen": [
                 {
                     "additionalAusbildung": 0,
-                    "additionalBuero": 0,
-                    "additionalKilometer": 0,
-                    "additionalService": 0,
-                    "additionalSonstiges": 2,
-                    "additionalTf": 0,
-                    "additionalVorbereiten": 0,
-                    "additionalWerkstatt": 0,
-                    "additionalZf": 0,
-                    "additionalZub": 0,
-                    "ausRang": false,
-                    "ausTf": false,
-                    "ausZf": false,
-                    "nachname": "Plu",
-                    "strecke": 20,
-                    "vorname": "Schu Fu Lu Pi"
-                },
-                {
-                    "additionalAusbildung": 0,
                     "additionalBuero": 2,
                     "additionalKilometer": 0,
                     "additionalService": 0,
@@ -384,15 +366,51 @@
                     "additionalSonstiges": 0,
                     "additionalTf": 0,
                     "additionalVorbereiten": 0,
+                    "additionalWerkstatt": 5,
+                    "additionalZf": 0,
+                    "additionalZub": 0,
+                    "ausRang": false,
+                    "ausTf": false,
+                    "ausZf": false,
+                    "nachname": "Emma",
+                    "strecke": 12,
+                    "vorname": ""
+                },
+                {
+                    "additionalAusbildung": 0,
+                    "additionalBuero": 0,
+                    "additionalKilometer": 0,
+                    "additionalService": 0,
+                    "additionalSonstiges": 2,
+                    "additionalTf": 0,
+                    "additionalVorbereiten": 0,
                     "additionalWerkstatt": 0,
                     "additionalZf": 0,
                     "additionalZub": 0,
                     "ausRang": false,
                     "ausTf": false,
                     "ausZf": false,
-                    "nachname": "Nepomuk",
-                    "strecke": 1,
-                    "vorname": ""
+                    "nachname": "Plu",
+                    "strecke": 20,
+                    "vorname": "Schu Fu Lu Pi"
+                },
+                {
+                    "additionalAusbildung": 0,
+                    "additionalBuero": 0,
+                    "additionalKilometer": 0,
+                    "additionalService": 0,
+                    "additionalSonstiges": 0,
+                    "additionalTf": 0,
+                    "additionalVorbereiten": 0,
+                    "additionalWerkstatt": 0,
+                    "additionalZf": 0,
+                    "additionalZub": 0,
+                    "ausRang": false,
+                    "ausTf": false,
+                    "ausZf": true,
+                    "nachname": "Knopf",
+                    "strecke": 2,
+                    "vorname": "Jim"
                 },
                 {
                     "additionalAusbildung": 0,
@@ -425,27 +443,9 @@
                     "additionalZub": 0,
                     "ausRang": false,
                     "ausTf": false,
-                    "ausZf": true,
-                    "nachname": "Knopf",
-                    "strecke": 2,
-                    "vorname": "Jim"
-                },
-                {
-                    "additionalAusbildung": 0,
-                    "additionalBuero": 0,
-                    "additionalKilometer": 0,
-                    "additionalService": 0,
-                    "additionalSonstiges": 0,
-                    "additionalTf": 0,
-                    "additionalVorbereiten": 0,
-                    "additionalWerkstatt": 5,
-                    "additionalZf": 0,
-                    "additionalZub": 0,
-                    "ausRang": false,
-                    "ausTf": false,
                     "ausZf": false,
-                    "nachname": "Emma",
-                    "strecke": 12,
+                    "nachname": "Nepomuk",
+                    "strecke": 1,
                     "vorname": ""
                 }
             ]
@@ -459,9 +459,9 @@
         "heightPersonal": 600,
         "widthMain": 803,
         "widthPersonal": 685,
-        "xMain": 1422,
-        "xPersonal": 1444,
-        "yMain": 546,
-        "yPersonal": 602
+        "xMain": 393,
+        "xPersonal": 374,
+        "yMain": 250,
+        "yPersonal": 241
     }
 }

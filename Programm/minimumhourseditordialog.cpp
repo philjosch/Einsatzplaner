@@ -14,6 +14,7 @@ MinimumHoursEditorDialog::MinimumHoursEditorDialog(ManagerPersonal *manager, QWi
     this->manager = manager;
 
     ui->doubleTf->setValue(manager->getMinimumHours(Category::Tf));
+    ui->doubleTb->setValue(manager->getMinimumHours(Category::Tb));
     ui->doubleZf->setValue(manager->getMinimumHours(Category::Zf));
     ui->doubleService->setValue(manager->getMinimumHours(Category::Service));
     ui->doubleZub->setValue(manager->getMinimumHours(Category::Zub));
@@ -33,6 +34,7 @@ MinimumHoursEditorDialog::~MinimumHoursEditorDialog()
 void MinimumHoursEditorDialog::setDefault()
 {
     ui->doubleTf->setValue(manager->getMinimumHoursDefault(Category::Tf));
+    ui->doubleTb->setValue(manager->getMinimumHours(Category::Tb));
     ui->doubleZf->setValue(manager->getMinimumHoursDefault(Category::Zf));
     ui->doubleService->setValue(manager->getMinimumHoursDefault(Category::Service));
     ui->doubleZub->setValue(manager->getMinimumHoursDefault(Category::Zub));
@@ -58,6 +60,7 @@ void MinimumHoursEditorDialog::abstractButtonClickedSlot(QAbstractButton *button
 void MinimumHoursEditorDialog::save()
 {
     manager->setMinimumHours(Category::Tf, ui->doubleTf->value());
+    manager->setMinimumHours(Category::Tb, ui->doubleTb->value());
     manager->setMinimumHours(Category::Zf, ui->doubleZf->value());
     manager->setMinimumHours(Category::Service, ui->doubleService->value());
     manager->setMinimumHours(Category::Zub, ui->doubleZub->value());
