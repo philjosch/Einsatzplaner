@@ -1,5 +1,12 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 21. Dezember 2017
+Stand: 12. März 2018
+
+## Version 1.3.1 - 2018-03-??
+### Fehlerbehebungen
+- Probleme beim Drucken der Einzel und Listenansicht unter macOS, wenn im Druckdialog "als PDF speichern" oder ähnliches gewählt wurde
+- Veränderungen in der Tabelle der Personen einer Aktivität wurde nciht korrekt übernommen
+
+---
 
 ## Version 1.3 - 2017-12-23
 ### Neu
