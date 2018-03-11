@@ -155,13 +155,38 @@ void ActivityWindow::on_actionPdf_triggered()
 void ActivityWindow::comboInTableChanged()
 {
     QComboBox* combo = qobject_cast<QComboBox*>(sender());
-     if (combo) on_tablePersonen_cellChanged(combo->property("row").toInt(), combo->property("column").toInt());
+    if (combo) {
+        int row = 0;
+        for(int i = 0; i < ui->tablePersonen->rowCount(); i++) {
+            if (ui->tablePersonen->cellWidget(i, 1) == combo) {
+                row = i;
+                break;
+            }
+        }
+        on_tablePersonen_cellChanged(row, 1);
+    }
 }
 
 void ActivityWindow::timeEditInTableChanged()
 {
     QTimeEdit *time = qobject_cast<QTimeEdit*>(sender());
-     if (time) on_tablePersonen_cellChanged(time->property("row").toInt(), time->property("column").toInt());
+    if (time) {
+        int row = 0;
+        int column = 2;
+        for(int i = 0; i < ui->tablePersonen->rowCount(); i++) {
+            if (ui->tablePersonen->cellWidget(i, 2) == time) {
+                row = i;
+                column = 2;
+                break;
+            }
+            if (ui->tablePersonen->cellWidget(i, 3) == time) {
+                row = i;
+                column = 3;
+                break;
+            }
+        }
+        on_tablePersonen_cellChanged(row, column);
+    }
 }
 
 void ActivityWindow::loadData()

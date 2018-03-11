@@ -86,22 +86,23 @@ void ExportGesamt::on_pushDrucken_clicked()
     }
 
     // Lasse einene Drucker auswählen
-    QPrinter *paper = 0;
+    QPrinter *paperListe = 0;
+    QPrinter *paperEinzel = 0;
     QPrinter *pdfListe = 0;
     QPrinter *pdfEinzel = 0;
-    if ((ui->checkAusdruck->isChecked()) && (ui->checkEinzel->isChecked() || ui->checkListe->isChecked()))
-        paper = Export::getPrinterPaper(p);
-
-    //Drucke die Daten mit dem Export modul
-    if (ui->checkEinzel->isChecked() && listeEinzel->length() > 0) {
-        if (ui->checkEinzel->isChecked() && ui->checkPDF->isChecked())
-            pdfEinzel = Export::getPrinterPDF(p, "Einzelansicht.pdf");
-        Export::printSingle(listeEinzel, pdfEinzel, paper);
-    }
     if (ui->checkListe->isChecked() && listeListe->length() > 0) {
-        if (ui->checkListe->isChecked() && ui->checkPDF->isChecked())
+        if (ui->checkPDF->isChecked())
             pdfListe = Export::getPrinterPDF(p, "Listenansicht.pdf");
-        Export::printList(listeListe, pdfListe, paper);
+        if (ui->checkAusdruck->isChecked())
+            paperListe = Export::getPrinterPaper(p);
+        Export::printList(listeListe, pdfListe, paperListe);
+    }
+    if (ui->checkEinzel->isChecked() && listeEinzel->length() > 0) {
+        if (ui->checkPDF->isChecked())
+            pdfEinzel = Export::getPrinterPDF(p, "Einzelansicht.pdf");
+        if (ui->checkAusdruck->isChecked())
+            paperEinzel = Export::getPrinterPaper(p);
+        Export::printSingle(listeEinzel, pdfEinzel, paperEinzel);
     }
 }
 
