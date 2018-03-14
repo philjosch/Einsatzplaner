@@ -14,6 +14,7 @@ Person::Person(QString vorname, QString nachname, ManagerPersonal *manager)
 
 Person::Person(QString name, ManagerPersonal *manager) : QObject()
 {
+    name = ManagerPersonal::getGoodName(name);
     QString vorname = "";
     QString nachname = "";
     if (! name.contains(" ")) {

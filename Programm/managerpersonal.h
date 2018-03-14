@@ -65,6 +65,8 @@ public:
     double getTimeSum() const;
     double getSumKilometer() const;
 
+    static QString getGoodName(QString name); // Wandlet einen Namen in das Format Vorname Nachname um
+
 public slots:
     void personChangedName(Person *p, QString alt);
     void reloadSettings();
@@ -72,8 +74,6 @@ public slots:
 private:
     QSet<Person *> *personen;
     QHash<QString, Person*> *personenSorted;
-
-    QString getGoodName(QString name); // Wandlet einen Namen in das Format Vorname Nachname um
 
     QHash<Category, double> *minimumHours;
     double minimumTotal;
