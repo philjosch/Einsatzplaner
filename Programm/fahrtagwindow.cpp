@@ -231,7 +231,9 @@ void FahrtagWindow::loadData()
 
                 ui->tablePersonen->item(0, 0)->setText(p->getName());
                 if (block) ui->tablePersonen->item(0, 0)->setFlags(Qt::NoItemFlags);
-                ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(info->kategorie));
+                Category kat = info->kategorie;
+                if (kat == Category::Begleiter) kat = Category::Zub;
+                ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
                 ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setEnabled(!block);
                 ((QTimeEdit*)ui->tablePersonen->cellWidget(0, 2))->setTime(info->beginn);
                 ((QTimeEdit*)ui->tablePersonen->cellWidget(0, 3))->setTime(info->ende);

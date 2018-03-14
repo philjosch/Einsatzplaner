@@ -212,7 +212,10 @@ void ActivityWindow::loadData()
         AActivity::Infos *info = activity->getPersonen()->value(p);
 
         ui->tablePersonen->setItem(0, 0, new QTableWidgetItem(p->getName()));
-        ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(info->kategorie));
+        Category kat = info->kategorie;
+        if (kat == Category::Begleiter)
+            kat = Category::Zub;
+        ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
         ((QTimeEdit*)ui->tablePersonen->cellWidget(0, 2))->setTime(info->beginn);
         ((QTimeEdit*)ui->tablePersonen->cellWidget(0, 3))->setTime(info->ende);
         ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(info->bemerkung));
