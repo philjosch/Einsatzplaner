@@ -166,6 +166,11 @@ QString Fahrtag::getHtmlForSingleView()
         html += "<p><b>Service-Personal";
         html += (benoetigeService ?" wird benötigt":"");
         html += ":</b><br/>"+listToString(&service, " | ") +"</p>";
+    } else {
+        sonstige.unite(zf);
+        sonstige.unite(zub);
+        sonstige.unite(begl);
+        sonstige.unite(service);
     }
     // *Sonstiges personal
     if (sonstige.size() > 0) {
@@ -278,6 +283,10 @@ QString Fahrtag::getHtmlForTableView()
         }
         html += "</td>";
     } else {
+        sonstige.unite(zf);
+        sonstige.unite(zub);
+        sonstige.unite(begl);
+        sonstige.unite(service);
         html += "<td></td><td></td>";
     }
 
