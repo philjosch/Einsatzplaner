@@ -111,9 +111,11 @@ AActivity::Infos *Fahrtag::getIndividual(Person *person)
 
 QString Fahrtag::getHtmlForSingleView()
 {
+    QString required1 = "<font color='"+COLOR_REQUIRED+"'>";
+    QString required2 = "</font>";
     QString html = "";
     // Überschrift
-    html += "<h1 class='pb'>" +Fahrtag::getStringFromArt(art) + " am " + datum.toString("dddd dd.MM.yyyy")+(wichtig?" WICHTIG!":"")+"</h1>";
+    html += "<h1 class='pb'>" +Fahrtag::getStringFromArt(art) + " am " + datum.toString("dddd dd.MM.yyyy")+(wichtig?required1+" WICHTIG!"+required2:"")+"</h1>";
     // Anlass
     if (anlass != "") {
         html += "<p><b>Anlass:</b><br/>"+anlass+"</p>";
@@ -146,7 +148,7 @@ QString Fahrtag::getHtmlForSingleView()
     }
     // *Tf/Tb
     html += "<p><b>Triebfahrzeugführer (Tf), Triebfahrzeugbegleiter(Tb)";
-    html += (benoetigeTf ?" werden benötigt": "");
+    html += (benoetigeTf ? required1+" werden benötigt"+required2: "");
     html += ":</b><br/>"+listToString(&tf, " | ")+"</p>";
     if (art != Fahrtag::Schnupperkurs) {
         // *Zf
@@ -175,7 +177,7 @@ QString Fahrtag::getHtmlForSingleView()
     // *Sonstiges personal
     if (sonstige.size() > 0) {
         html += "<p><b>Sonstiges Personal";
-        html += (personalBenoetigt ?" wird benötigt":"");
+        html += (personalBenoetigt ? required1+" wird benötigt"+required2:"");
         html += ":</b><br/>"+listToString(&sonstige, " | ", true) +"</p>";
     }
     if (bemerkungen != "") {
