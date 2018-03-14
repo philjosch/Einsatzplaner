@@ -50,9 +50,14 @@ void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
         fahrtag->setArt(art);
     }
     ui->tabReservierungen->setEnabled(art != Fahrtag::Schnupperkurs);
-    setWindowTitle(Fahrtag::getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum().toString("dddd dd. MM. yyyy"));
+    ui->checkZf->setEnabled(art != Fahrtag::Schnupperkurs);
+    ui->checkZub->setEnabled(art != Fahrtag::Schnupperkurs);
+    ui->checkService->setEnabled(art != Fahrtag::Schnupperkurs);
+
     ui->checkBoxAll->setEnabled(Fahrtag::Nikolauszug == art);
     ui->buttonVerteile->setEnabled(Fahrtag::Nikolauszug == art);
+
+    setWindowTitle(Fahrtag::getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum().toString("dddd dd. MM. yyyy"));
 }
 
 void FahrtagWindow::on_textAnlass_textChanged()
