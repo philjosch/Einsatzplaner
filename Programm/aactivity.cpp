@@ -345,6 +345,7 @@ bool AActivity::hasQualification(Person *p, Category kat, QString bemerkung)
         break;
     case Zub:
         if (p->getAusbildungRangierer()) return true;
+        break;
     default:
         return true;
     }
