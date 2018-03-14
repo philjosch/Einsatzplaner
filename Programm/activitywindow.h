@@ -56,6 +56,7 @@ private:
     void loadData();
 
     QSet<QString> *namen;
+    Category predefinedValueForTable;
 };
 
 #endif // ACTIVITYWINDOW_H

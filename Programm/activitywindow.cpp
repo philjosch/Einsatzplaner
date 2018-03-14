@@ -15,6 +15,7 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(paren
     setWindowTitle("Arbeitseinsatz am "+activity->getDatum().toString("dddd dd. MM. yyyy"));
 
     namen = new QSet<QString>();
+    predefinedValueForTable = Category::Sonstiges;
 }
 
 ActivityWindow::~ActivityWindow()
@@ -24,38 +25,60 @@ ActivityWindow::~ActivityWindow()
 
 void ActivityWindow::on_dateDatum_dateChanged(const QDate &date)
 {
-    activity->setDatum(date);
+    if (nehme) {
+        activity->setDatum(date);
+    }
     setWindowTitle("Arbeitseinsatz am "+date.toString("dddd dd. MM. yyyy"));
 }
 
 void ActivityWindow::on_lineOrt_textChanged(const QString &arg1)
 {
-    activity->setOrt(arg1);
+    if (nehme)
+        activity->setOrt(arg1);
 }
 
 void ActivityWindow::on_lineAnlass_textChanged()
 {
-    activity->setAnlass(ui->lineAnlass->text());
+    if (nehme) {
+        QString anlass = ui->lineAnlass->text();
+        activity->setAnlass(anlass);
+        anlass = anlass.replace(" ", "").toLower();
+        if (anlass.contains(tr("Vorbereiten").toLower()) || anlass.contains(tr("Vorbereitung").toLower())) {
+            predefinedValueForTable = Category::ZugVorbereiten;
+        } else if (anlass.contains(tr("Werkstatt").toLower())) {
+            predefinedValueForTable = Category::Werkstatt;
+        } else if (anlass.contains(tr("Ausbildung").toLower())) {
+            predefinedValueForTable = Category::Ausbildung;
+        } else if (anlass.contains(tr("Büro").toLower())) {
+            predefinedValueForTable = Category::Buero;
+        } else {
+            predefinedValueForTable = Category::Sonstiges;
+        }
+    }
 }
 
 void ActivityWindow::on_plainBeschreibung_textChanged()
 {
-    activity->setBemerkungen(ui->plainBeschreibung->toPlainText());
+    if (nehme)
+        activity->setBemerkungen(ui->plainBeschreibung->toPlainText());
 }
 
 void ActivityWindow::on_timeBeginn_timeChanged(const QTime &time)
 {
-    activity->setZeitAnfang(time);
+    if (nehme)
+        activity->setZeitAnfang(time);
 }
 
 void ActivityWindow::on_timeEnde_timeChanged(const QTime &time)
 {
-    activity->setZeitEnde(time);
+    if (nehme)
+        activity->setZeitEnde(time);
 }
 
 void ActivityWindow::on_checkBoxBenoetigt_toggled(bool checked)
 {
-    activity->setPersonalBenoetigt(checked);
+    if (nehme)
+        activity->setPersonalBenoetigt(checked);
 }
 
 void ActivityWindow::on_buttonInsert_clicked()
@@ -63,6 +86,7 @@ void ActivityWindow::on_buttonInsert_clicked()
     ui->tablePersonen->insertRow(0);
 
     QComboBox *box = activity->generateNewCategoryComboBox();
+    box->setCurrentText(AActivity::getStringFromCategory(predefinedValueForTable));
     connect(box, SIGNAL(currentTextChanged(QString)), this, SLOT(comboInTableChanged()));
     ui->tablePersonen->setCellWidget(0, 1, box);
 
@@ -212,7 +236,10 @@ void ActivityWindow::loadData()
         AActivity::Infos *info = activity->getPersonen()->value(p);
 
         ui->tablePersonen->setItem(0, 0, new QTableWidgetItem(p->getName()));
-        ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(info->kategorie));
+        Category kat = info->kategorie;
+        if (kat == Category::Begleiter)
+            kat = Category::Zub;
+        ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
         ((QTimeEdit*)ui->tablePersonen->cellWidget(0, 2))->setTime(info->beginn);
         ((QTimeEdit*)ui->tablePersonen->cellWidget(0, 3))->setTime(info->ende);
         ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(info->bemerkung));

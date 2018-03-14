@@ -7,6 +7,7 @@
 
 QStringList AActivity::EXTERNAL_LIST = QStringList() << "Extern" << "Führerstand" << "FS" << "Schnupperkurs" << "ELF" << "Ehrenlokführer" << "ELF-Kurs";
 QStringList AActivity::QUALIFICATION_LIST = QStringList() << "Azubi" << "Ausbildung" << "Tf-Ausbildung" << "Zf-Ausbildung" << "Tf-Unterricht" << "Zf-Unterricht" << "Weiterbildung";
+QString AActivity::COLOR_REQUIRED = "#ff3333";
 
 Category AActivity::getCategoryFromString(QString s)
 {
@@ -345,6 +346,7 @@ bool AActivity::hasQualification(Person *p, Category kat, QString bemerkung)
         break;
     case Zub:
         if (p->getAusbildungRangierer()) return true;
+        break;
     default:
         return true;
     }

@@ -99,6 +99,7 @@ protected:
 
     QString listToString(QMap<Person*, Infos*> *liste, QString seperator, bool aufgabe=false);
 
+    static QString COLOR_REQUIRED;
 };
 
 #endif // AACTIVITY_H

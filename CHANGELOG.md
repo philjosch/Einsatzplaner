@@ -1,10 +1,19 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 12. März 2018
+Stand: 14. März 2018
 
-## Version 1.3.1 - 2018-03-??
+## Version 1.3.1 - 2018-03-14
+### Neu
+- Das Arbeitseinsatzfenster wurde intelligenter. Es wählt eine bestimmte Kategorie für die Personaltabelle aus, wenn es dies aus dem Anlass folgern kann.
+### Verbessert
+- Wird personal für einen Fahrtag oder Arbeitseinsatz benötigt, wird dies farblich in der Einzelansicht kenntlich gemacht.
+- Das Personal, dass bei einem Schnupperkurs eingetragen wurde, wird jetzt in der Listen- und Einzelansicht ausgegeben
+- Externe Personen können nun auch mit "Nachname, Vorname" in Listen eingetragen werden.
+
 ### Fehlerbehebungen
-- Probleme beim Drucken der Einzel und Listenansicht unter macOS, wenn im Druckdialog "als PDF speichern" oder ähnliches gewählt wurde
-- Veränderungen in der Tabelle der Personen einer Aktivität wurde nciht korrekt übernommen
+- Probleme beim Drucken der Einzel- und Listenansicht zumindest unter macOS, wenn im Druckdialog "als PDF speichern" oder ähnliches gewählt wurde, sind behoben.
+- Veränderungen in der Personaltabelle einer Aktivität wurde nicht korrekt übernommen.
+- Fehler behoben, der es ermögliche nicht-Betriebsdienstpersonal als Zub einzutragen.
+- Weitere Fehlerbehebungen, u.A. beim Darstellen der Daten nach dem Öffnen der Datei.
 
 ---
 

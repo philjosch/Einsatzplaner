@@ -111,9 +111,11 @@ AActivity::Infos *Fahrtag::getIndividual(Person *person)
 
 QString Fahrtag::getHtmlForSingleView()
 {
+    QString required1 = "<font color='"+COLOR_REQUIRED+"'>";
+    QString required2 = "</font>";
     QString html = "";
     // Überschrift
-    html += "<h1 class='pb'>" +Fahrtag::getStringFromArt(art) + " am " + datum.toString("dddd dd.MM.yyyy")+(wichtig?" WICHTIG!":"")+"</h1>";
+    html += "<h1 class='pb'>" +Fahrtag::getStringFromArt(art) + " am " + datum.toString("dddd dd.MM.yyyy")+(wichtig?required1+" WICHTIG!"+required2:"")+"</h1>";
     // Anlass
     if (anlass != "") {
         html += "<p><b>Anlass:</b><br/>"+anlass+"</p>";
@@ -145,32 +147,38 @@ QString Fahrtag::getHtmlForSingleView()
         }
     }
     // *Tf/Tb
-    html += "<p><b>Triebfahrzeugführer (Tf), Triebfahrzeugbegleiter(Tb)";
-    html += (benoetigeTf ?" werden benötigt": "");
-    html += ":</b><br/>"+listToString(&tf, " | ")+"</p>";
-    if (art != Fahrtag::Schnupperkurs) {
-        // *Zf
+    if (benoetigeTf || tf.size() > 0) {
+        html += "<p><b>Triebfahrzeugführer (Tf), Triebfahrzeugbegleiter(Tb)";
+        html += (benoetigeTf ? required1+" werden benötigt"+required2: "");
+        html += ":</b><br/>"+listToString(&tf, " | ")+"</p>";
+    }
+    // *Zf
+    if ((benoetigeZf && (art != Fahrtag::Schnupperkurs)) || zf.size() > 0) {
         html += "<p><b>Zugführer";
-        html += (benoetigeZf ?" wird benötigt":"");
+        html += (benoetigeZf && (art != Fahrtag::Schnupperkurs) ? required1+" wird benötigt"+required2:"");
         html += ":</b><br/>"+listToString(&zf, " | ")+"</p>";
-        // *Zub, Begl.o.b.A
+    }
+    // *Zub, Begl.o.b.A
+    if ((benoetigeZub && (art != Fahrtag::Schnupperkurs)) || zub.size() > 0) {
         html += "<p><b>Zugbegleiter und <i>Begleiter ohne betriebliche Ausbildung</i>";
-        html += (benoetigeZub ? " werden benötigt":"");
+        html += (benoetigeZub && (art != Fahrtag::Schnupperkurs) ? required1+" werden benötigt"+required2:"");
         html += ":</b><br/>";
         html += listToString(&zub, " | ");
         // Begl. o.b.A
         if (! zub.isEmpty() && ! begl.isEmpty())
             html += " | ";
         html += "<i>"+listToString(&begl, "</i> | <i>") + "</i></p>";
-        // *Service
+    }
+    // *Service
+    if ((benoetigeService && (art != Fahrtag::Schnupperkurs)) || service.size() > 0) {
         html += "<p><b>Service-Personal";
-        html += (benoetigeService ?" wird benötigt":"");
+        html += (benoetigeService && (art != Fahrtag::Schnupperkurs) ? required1+" wird benötigt"+required2:"");
         html += ":</b><br/>"+listToString(&service, " | ") +"</p>";
     }
     // *Sonstiges personal
     if (sonstige.size() > 0) {
         html += "<p><b>Sonstiges Personal";
-        html += (personalBenoetigt ?" wird benötigt":"");
+        html += (personalBenoetigt ? required1+" wird benötigt"+required2:"");
         html += ":</b><br/>"+listToString(&sonstige, " | ", true) +"</p>";
     }
     if (bemerkungen != "") {
@@ -247,39 +255,35 @@ QString Fahrtag::getHtmlForTableView()
     }
     html += "</td>";
 
-    if (art != Schnupperkurs) {
-        // Zf, Zub, Begl.o.b.A.
-        html += "<td>";
-        if (benoetigeZf) {
-            html += "<b><u>Zugführer wird benötigt!</u></b><br/>";
-        }
-        if (benoetigeZub) {
-            html += "<b><i>Zugbegleiter wird benötigt!</i></b>";
-        }
-        html += "<ul>";
-        if (zf.size() > 0) {
-            html += "<li><u>" + listToString(&zf, "</u></li><li><u>") + "</u></li>";
-        }
-        if (zub.size() > 0) {
-            html += "<li>" + listToString(&zub, "</li><li>") + "</li>";
-        }
-        if (begl.size() > 0) {
-            html += "<li><i>" + listToString(&begl, "</i></li><li><i>") + "</i></li>";
-        }
-        html += "</ul></td>";
-
-        // Service
-        html += "<td>";
-        if (benoetigeService) {
-            html += "<b>Service-Personal wird benötigt!</b><br/>";
-        }
-        if (service.size() > 0) {
-            html += "<ul><li>" + listToString(&service, "</li><li>") + "</li></ul>";
-        }
-        html += "</td>";
-    } else {
-        html += "<td></td><td></td>";
+    // Zf, Zub, Begl.o.b.A.
+    html += "<td>";
+    if (benoetigeZf && (art != Schnupperkurs)) {
+        html += "<b><u>Zugführer wird benötigt!</u></b><br/>";
     }
+    if (benoetigeZub && (art != Schnupperkurs)) {
+        html += "<b><i>Zugbegleiter wird benötigt!</i></b>";
+    }
+    html += "<ul>";
+    if (zf.size() > 0) {
+        html += "<li><u>" + listToString(&zf, "</u></li><li><u>") + "</u></li>";
+    }
+    if (zub.size() > 0) {
+        html += "<li>" + listToString(&zub, "</li><li>") + "</li>";
+    }
+    if (begl.size() > 0) {
+        html += "<li><i>" + listToString(&begl, "</i></li><li><i>") + "</i></li>";
+    }
+    html += "</ul></td>";
+
+    // Service
+    html += "<td>";
+    if (benoetigeService && (art != Schnupperkurs)) {
+        html += "<b>Service-Personal wird benötigt!</b><br/>";
+    }
+    if (service.size() > 0) {
+        html += "<ul><li>" + listToString(&service, "</li><li>") + "</li></ul>";
+    }
+    html += "</td>";
 
     // Dienstzeiten
     html += "<td>Beginn Tf, Tb: "+zeitTf.toString("hh:mm") + "<br/>";

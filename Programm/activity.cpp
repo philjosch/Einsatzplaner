@@ -60,6 +60,8 @@ AActivity::Infos *Activity::getIndividual(Person *person)
 
 QString Activity::getHtmlForSingleView()
 {
+    QString required1 = "<font color='"+COLOR_REQUIRED+"'>";
+    QString required2 = "</font>";
     QString html = "";
     // Überschrift
     html += "<h1 class='pb'>Arbeitseinsatz am " + datum.toString("dddd dd.MM.yyyy")+"</h1>";
@@ -76,7 +78,7 @@ QString Activity::getHtmlForSingleView()
     html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
     // Personal
     html += "<p><b>Helfer";
-    html += (personalBenoetigt ? " werden benötigt":"");
+    html += (personalBenoetigt ? required1+" werden benötigt"+required2:"");
     html += ":</b></p>";
     if (personen->count() > 0) {
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Name</th><th>Beginn*</th><th>Ende*</th><th>Aufgabe</th></tr></thead><tbody>";
