@@ -85,6 +85,7 @@ void PersonalWindow::showPerson(Person *p)
     ui->doubleBuero->setEnabled(true);
     ui->doubleAusbildung->setEnabled(true);
     ui->doubleSonstiges->setEnabled(true);
+    ui->doubleAnzahl->setEnabled(true);
     ui->doubleKilometer->setEnabled(true);
 
     // Tabellendaten laden und einfügen
@@ -131,6 +132,7 @@ void PersonalWindow::showPerson(Person *p)
     ui->lineBuero->setText(QString::number(p->getTimeBuero()));
     ui->lineAusbildung->setText(QString::number(p->getTimeAusbildung()));
     ui->lineSonstiges->setText(QString::number(p->getTimeSonstiges()));
+    ui->lineAnzahl->setText(QString::number(p->getSumAnzahl()));
     ui->lineKilometer->setText(QString::number(p->getSumKilometer()));
     ui->lineGesamt->setText(QString::number(p->getTimeSum()));
 
@@ -143,6 +145,7 @@ void PersonalWindow::showPerson(Person *p)
     ui->doubleBuero->setValue(p->getAdditionalTimeBuero());
     ui->doubleAusbildung->setValue(p->getAdditionalTimeAusbildung());
     ui->doubleSonstiges->setValue(p->getAdditionalTimeSonstiges());
+    ui->doubleAnzahl->setValue(p->getAdditionalAnzahl());
     ui->doubleKilometer->setValue(p->getAdditionalKilometer());
 
     enabled = true;
@@ -355,7 +358,7 @@ void PersonalWindow::refreshGesamt()
         }
         if (anzeige->at(1)) {
             i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getAnzahl());
+            i->setData(Qt::EditRole, p->getSumAnzahl());
             i->setBackgroundColor(farbe);
             ui->tabelleGesamt->setItem(0, pos, i);
             pos++;
@@ -634,6 +637,7 @@ void PersonalWindow::disableFields()
     ui->doubleBuero->setEnabled(false);
     ui->doubleAusbildung->setEnabled(false);
     ui->doubleSonstiges->setEnabled(false);
+    ui->doubleAnzahl->setEnabled(false);
     ui->doubleKilometer->setEnabled(false);
 
     ui->lineTf->setEnabled(false);
@@ -645,6 +649,7 @@ void PersonalWindow::disableFields()
     ui->lineBuero->setEnabled(false);
     ui->lineAusbildung->setEnabled(false);
     ui->lineSonstiges->setEnabled(false);
+    ui->lineAnzahl->setEnabled(false);
     ui->lineKilometer->setEnabled(false);
 
     ui->lineGesamt->setEnabled(false);
@@ -810,6 +815,15 @@ void PersonalWindow::on_doubleSonstiges_valueChanged(double arg1)
         aktuellePerson->setAdditionalTimeSonstiges(arg1);
         ui->lineSonstiges->setText(QString::number(aktuellePerson->getTimeSonstiges()));
         ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
+        emit changed();
+    }
+}
+
+void PersonalWindow::on_doubleAnzahl_valueChanged(double arg1)
+{
+    if (enabled) {
+        aktuellePerson->setAdditionalAnzahl(arg1);
+        ui->lineAnzahl->setText(QString::number(aktuellePerson->getSumAnzahl()));
         emit changed();
     }
 }
