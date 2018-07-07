@@ -182,7 +182,7 @@ QString Fahrtag::getHtmlForSingleView()
         html += ":</b><br/>"+listToString(&sonstige, " | ", true) +"</p>";
     }
     if (bemerkungen != "") {
-        html += "<p>Bemerkungen:<br/>"+bemerkungen.replace("\n", "<br/>")+"</p>";
+        html += "<p><b>Bemerkungen:</b><br/>"+bemerkungen.replace("\n", "<br/>")+"</p>";
     }
 
     // Reservierungen
