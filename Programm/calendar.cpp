@@ -97,11 +97,13 @@ void Calendar::wheelEvent(QWheelEvent *event)
 void Calendar::nextMonth()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addMonths(1));
+    goTo(ui->dateSelector->date());
 }
 
 void Calendar::prevMonth()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addMonths(-1));
+    goTo(ui->dateSelector->date());
 }
 
 void Calendar::goTo(QDate date)
@@ -164,6 +166,7 @@ void Calendar::goTo(QDate date)
 void Calendar::goToday()
 {
     ui->dateSelector->setDate(QDate::currentDate());
+    goTo(ui->dateSelector->date());
 }
 
 bool Calendar::removeSelected()
@@ -321,21 +324,21 @@ int Calendar::getPosInCalendar(QDate date)
 {
     QDate ref = QDate(ui->dateSelector->date().year(), ui->dateSelector->date().month(), 1);
     // Eintrag auch anzeigen, wenn er im vorherigen Monat liegt
-    if (date < ref) {
+    if (date.month() == ref.month() && date.year() == ref.year()) {
+        return getItemFromDate(date)-1;
+    } else if (date.addMonths(1).month() == ref.month() && date.addMonths(1).year() == ref.year()) {
         if (date.addDays(7) > ref && date.dayOfWeek() < ref.dayOfWeek()) {
             return date.dayOfWeek() - 1;
         }
         return -1;
-    } else if (date.month() == ref.month()+1) {
+    } else if (date.month() == ref.addMonths(1).month() && date.year() == ref.addMonths(1).year()) {
         if (date.day()+ref.dayOfWeek()+ref.daysInMonth()-2 < 42) {
             return date.day()+ref.dayOfWeek()+ref.daysInMonth()-2;
         } else {
             return -1;
         }
-    } else if (date > ref.addMonths(1)) {
-        return -1;
     } else {
-        return getItemFromDate(date)-1;
+        return -1;
     }
 }
 
