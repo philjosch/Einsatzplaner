@@ -153,6 +153,7 @@ void FahrtagWindow::loadData()
             resToItem->insert(r, item);
             itemToRes->insert(item, r);
             ui->listRes->insertItem(0, item);
+            ui->buttonDelete->setEnabled(true);
         }
         ui->listRes->sortItems();
         ui->checkBoxAll->setEnabled(false);
