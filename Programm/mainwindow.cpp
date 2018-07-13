@@ -71,6 +71,16 @@ QString MainWindow::getFarbe(AActivity *a)
         return getFarbeArbeit();
 }
 
+void MainWindow::open(QString filepath)
+{
+    MainWindow *newOpen = new MainWindow();
+    if (newOpen->openFile(filepath)) {
+        newOpen->show();
+    } else {
+        newOpen->close();
+    }
+}
+
 void MainWindow::openFahrtag(Fahrtag *f)
 {
     if (fenster->contains(f)) {
@@ -187,14 +197,41 @@ void MainWindow::on_actionNew_triggered()
 void MainWindow::on_actionOpen_triggered()
 {
     QString file = FileIO::getFilePathOpen(this, tr("AkO-Dateien (*.ako)"));
-    if (file != "") {
-        MainWindow *newOpen = new MainWindow();
-        if (newOpen->openFile(file)) {
-            newOpen->show();
-        } else {
-            newOpen->close();
+    if (file != "") open(file);
+}
+
+void MainWindow::on_menuRecentlyused_aboutToShow()
+{
+    QStringList list = FileIO::getLastUsed();
+
+    if (list.length() > 0) {
+        QList<QAction*> actions = ui->menuRecentlyused->actions();
+        for (int i = 2; i < actions.length(); i++) {
+            ui->menuRecentlyused->removeAction(actions[i]);
+        }
+        ui->actionClear->setEnabled(true);
+        foreach (QString entry, list) {
+            QAction *a = new QAction(entry, this);
+            connect(a, SIGNAL(triggered(bool)), this, SLOT(open()));
+            ui->menuRecentlyused->insertAction(0, a);
         }
     }
+}
+
+void MainWindow::open()
+{
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (action) open(action->text());
+}
+
+void MainWindow::on_actionClear_triggered()
+{
+    FileIO::clearLastUsed();
+    QList<QAction*> actions = ui->menuRecentlyused->actions();
+    for (int i = 2; i < actions.length(); i++) {
+        ui->menuRecentlyused->removeAction(actions[i]);
+    }
+    ui->actionClear->setEnabled(false);
 }
 
 void MainWindow::on_actionSave_triggered()

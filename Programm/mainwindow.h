@@ -43,7 +43,8 @@ public slots:
     void openFahrtag(Fahrtag *f);
     void openActivity(Activity *a);
 
-    bool openFile(QString filePath);
+    void open(QString filepath); // Open the file in a new window
+    bool openFile(QString filePath); // Tells the window to open the file
 
     void unsave();
 
@@ -60,6 +61,9 @@ private slots:
     // Datei
     void on_actionNew_triggered();
     void on_actionOpen_triggered();
+    void on_menuRecentlyused_aboutToShow();
+    void open();
+    void on_actionClear_triggered();
     void on_actionSave_triggered();
     void on_actionSaveas_triggered();
     void on_actionSavePersonal_triggered();

@@ -7,11 +7,13 @@
 #include <QSettings>
 
 QString FileIO::currentPath = QDir::homePath();
+QStringList FileIO::lastUsed = QStringList();
 
 void FileIO::saveSettings()
 {
     QSettings settings;
     settings.setValue("io/lastpath", currentPath);
+    settings.setValue("io/lastused", lastUsed);
 }
 
 void FileIO::loadSettings()
@@ -22,6 +24,10 @@ void FileIO::loadSettings()
     } else {
         currentPath = QDir::homePath();
     }
+    if (settings.contains("io/lastused"))
+        lastUsed = settings.value("io/lastused").toStringList();
+    else
+        lastUsed = QStringList();
 }
 
 QString FileIO::getFilePathOpen(QWidget *parent, QString filter)
@@ -55,7 +61,8 @@ QJsonObject FileIO::getJsonFromFile(QString filepath)
     QByteArray data = datei.readAll();
     QJsonDocument tmp = QJsonDocument::fromJson(data);
     QJsonDocument *json = new QJsonDocument(tmp);
-
+    datei.close();
+    insert(filepath);
     return json->object();
 }
 
@@ -68,6 +75,31 @@ bool FileIO::saveJsonToFile(QString filepath, QJsonObject object)
     } else {
         datei.write(saveDoc.toJson());
         datei.close();
+        insert(filepath);
         return true;
+    }
+}
+
+QStringList FileIO::getLastUsed()
+{
+    loadSettings();
+    return lastUsed;
+}
+
+void FileIO::clearLastUsed()
+{
+    lastUsed = QStringList();
+    saveSettings();
+}
+
+void FileIO::insert(QString filepath)
+{
+    if (filepath.endsWith(".ako", Qt::CaseInsensitive)) {
+        if (lastUsed.contains(filepath))
+            lastUsed.removeOne(filepath);
+        else if (lastUsed.length() >= 5)
+            lastUsed.removeLast();
+        lastUsed.insert(0, filepath);
+        saveSettings();
     }
 }

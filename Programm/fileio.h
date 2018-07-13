@@ -16,8 +16,14 @@ public:
     static QJsonObject getJsonFromFile(QString filepath);
     static bool saveJsonToFile(QString filepath, QJsonObject object);
 
+    static QStringList getLastUsed();
+    static void clearLastUsed();
+
 private:
     static QString currentPath;
+    static QStringList lastUsed;
+
+    static void insert(QString filepath);
 };
 
 #endif // FILEIO_H
