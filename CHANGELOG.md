@@ -1,11 +1,24 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 14. März 2018
+Stand: 13. Juli 2018
+
+## Version 1.4 - 2018-??-??
+### Neu
+- Das Programm merkt sich die zuletzt verwendeten Dateien. Sie können unter "Datei>Zuletzt benutzt" direkt geöffnet werden.
+
+### Verbessert
+- Für eine Person kann jetzt auch noch eine zusätzliche Anzahl an Aktivitäten angegeben werden. Bisher war dies nur für Zeiten und Kilometer möglich.
+
+### Fehlerbehebungen
+- Fehlerbehebungen und Verbesserungen. Unter anderem bei der Druck-Ausgabe eines Fahrtags, der Anzeige des Kalenders und der Verwaltung von Reservierungen.
+
+---
 
 ## Version 1.3.1 - 2018-03-14
 ### Neu
 - Das Arbeitseinsatzfenster wurde intelligenter. Es wählt eine bestimmte Kategorie für die Personaltabelle aus, wenn es dies aus dem Anlass folgern kann.
+
 ### Verbessert
-- Wird personal für einen Fahrtag oder Arbeitseinsatz benötigt, wird dies farblich in der Einzelansicht kenntlich gemacht.
+- Wird Personal für einen Fahrtag oder Arbeitseinsatz benötigt, wird dies farblich in der Einzelansicht kenntlich gemacht.
 - Das Personal, dass bei einem Schnupperkurs eingetragen wurde, wird jetzt in der Listen- und Einzelansicht ausgegeben
 - Externe Personen können nun auch mit "Nachname, Vorname" in Listen eingetragen werden.
 
@@ -15,7 +28,6 @@ Stand: 14. März 2018
 - Fehler behoben, der es ermögliche nicht-Betriebsdienstpersonal als Zub einzutragen.
 - Weitere Fehlerbehebungen, u.A. beim Darstellen der Daten nach dem Öffnen der Datei.
 
----
 
 ## Version 1.3 - 2017-12-23
 ### Neu
@@ -88,7 +100,7 @@ Diese Zeiten können in der Einzelansicht einer Person angegeben werden.
 - Der Fehler, das das Programm beim Export der Personalübersicht bei manchen Benutzern abstürzt, wurde behoben.
 - Weitere kleine Fehlerkorrekturen und Verbesserungen.
 
----
+
 
 ## Version 1.0.3 - 2016-12-02
 ### Neu
@@ -101,7 +113,7 @@ Diese Zeiten können in der Einzelansicht einer Person angegeben werden.
 - Die Auswahl eines Datum bei der Export-Funktion für das "Bis Datum" funktioniert jetzt wieder wie erwartet
 - Weitere kleinere Verbesserungen und Fehlerbehebungen
 
----
+
 
 ## Version 1.0.2 - 2016-11-13
 ### Neu
@@ -119,14 +131,14 @@ Diese Zeiten können in der Einzelansicht einer Person angegeben werden.
 ### Fehlerbehebungen
 - Allgemeine Verbesserungen bei der Stabilität und Behebung von Fehlern.
 
----
+
 
 ## Version 1.0.1 - 2016-10-07
 ### Fehlerbehebungen
 - Problem beim Öffnen von Dateien behoben (Externe Personen wurden nicht geladen, Personen wurden nicht im Arbeitseinsatzfenster angezeigt)
 - Problem bei Anzeige von Personen behoben (Die Informationen zu den Aktivitäten wurden unter Umständen falsch dargestellt)
 
----
+
 
 ## Version 1.0.0 - 2016-10-06
 ### Neu
