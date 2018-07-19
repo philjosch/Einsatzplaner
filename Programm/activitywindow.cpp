@@ -122,7 +122,7 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
         if (column == 0) {
             QSet<QString> *neu = new QSet<QString>();
-            for( int i = 1; i <= ui->tablePersonen->rowCount(); i++) {
+            for( int i = 0; i < ui->tablePersonen->rowCount(); i++) {
                 QString n = (ui->tablePersonen->item(i, 0) == nullptr) ? "" : ui->tablePersonen->item(i, 0)->text();
                 neu->insert(n);
                 if (namen->contains(n)) {
