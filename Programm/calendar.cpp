@@ -85,6 +85,8 @@ void Calendar::fromJson(QJsonObject o)
     }
     // an das gespeicherte Datum gehen
     ui->dateSelector->setDate(QDate::fromString(o.value("currentDate").toString(), "yyyy-MM-dd"));
+    ui->dateSelector->repaint();
+    goTo(ui->dateSelector->date());
 }
 
 void Calendar::wheelEvent(QWheelEvent *event)
@@ -98,13 +100,13 @@ void Calendar::wheelEvent(QWheelEvent *event)
 void Calendar::nextMonth()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addMonths(1));
-    goTo(ui->dateSelector->date());
+    ui->dateSelector->repaint();
 }
 
 void Calendar::prevMonth()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addMonths(-1));
-    goTo(ui->dateSelector->date());
+    ui->dateSelector->repaint();
 }
 
 void Calendar::goTo(QDate date)
@@ -167,7 +169,7 @@ void Calendar::goTo(QDate date)
 void Calendar::goToday()
 {
     ui->dateSelector->setDate(QDate::currentDate());
-    goTo(ui->dateSelector->date());
+    ui->dateSelector->repaint();
 }
 
 bool Calendar::removeSelected()
