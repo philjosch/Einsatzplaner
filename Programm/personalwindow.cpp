@@ -717,6 +717,12 @@ void PersonalWindow::on_checkShowBuero_clicked(bool checked)
     refreshGesamt();
 }
 
+void PersonalWindow::on_checkShowAusbildung_clicked(bool checked)
+{
+    anzeige->replace(11, checked);
+    refreshGesamt();
+}
+
 void PersonalWindow::on_checkShowSonstiges_clicked(bool checked)
 {
     anzeige->replace(9, checked);
