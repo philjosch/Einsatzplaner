@@ -18,6 +18,7 @@ CalendarDay::~CalendarDay()
 
 void CalendarDay::show(QDate datum)
 {
+    date = datum;
     ui->label->setText(datum.toString("dd."));
 }
 
@@ -58,4 +59,9 @@ QListWidgetItem *CalendarDay::insert(AActivity *a)
 void CalendarDay::handler(QListWidgetItem *item)
 {
     emit clickedItem(itemToAct->value(item));
+}
+
+void CalendarDay::on_buttonAdd_clicked(bool b)
+{
+    emit addActivity(date);
 }

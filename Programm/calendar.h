@@ -35,8 +35,8 @@ public slots:
     void goToday();
     bool removeSelected();
 
-    Fahrtag *newFahrtag();
-    Activity *newActivity();
+    Fahrtag *newFahrtag(QDate d = QDate::currentDate());
+    Activity *newActivity(QDate d = QDate::currentDate());
     bool removeActivity(AActivity *a);
 
     void activityChanged(AActivity *a);

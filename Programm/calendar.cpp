@@ -39,6 +39,7 @@ Calendar::Calendar(QWidget *parent) : QFrame(parent), Manager(), ui(new Ui::Cale
     tage->append(ui->day5_6);    tage->append(ui->day6_6);    tage->append(ui->day7_6);
     for(CalendarDay *c: *tage) {
         connect(c, SIGNAL(clickedItem(AActivity*)), this, SLOT(clickedItemCalendar(AActivity*)));
+        connect(c, SIGNAL(addActivity(QDate)), this, SLOT(newActivity(QDate)));
     }
     goToday();
 
@@ -178,10 +179,9 @@ bool Calendar::removeSelected()
     return false;
 }
 
-Fahrtag *Calendar::newFahrtag()
+Fahrtag *Calendar::newFahrtag(QDate d)
 {
     // Anlegen des Fahrtags
-    QDate d = QDate::currentDate();
     Fahrtag *f = Manager::newFahrtag(d);
     connect(f, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
 
@@ -195,10 +195,9 @@ Fahrtag *Calendar::newFahrtag()
     return f;
 }
 
-Activity *Calendar::newActivity()
+Activity *Calendar::newActivity(QDate d)
 {
     // Anlegen der Aktivität
-    QDate d = QDate::currentDate();
     Activity *a = Manager::newActivity(d);
     connect(a, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
 
