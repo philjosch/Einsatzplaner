@@ -83,7 +83,7 @@ ManagerReservierungen::ManagerReservierungen()
 {
     wagen = new QList<Wagen *>;
     nummerToWagen = new QMap<int, Wagen*>();
-    wagenreihung = "309, 221, 204, 208";
+    wagenreihung = "221, 217, 208, 309";
     createWagen();
     checkAll = false;
     reservierungen = new QSet<Reservierung*>();
