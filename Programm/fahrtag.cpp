@@ -89,8 +89,10 @@ QString Fahrtag::getListStringShort() {
 
 AActivity::Infos *Fahrtag::getIndividual(Person *person)
 {
-    Infos *neu = new Infos();
+    if (person == nullptr) return nullptr;
     Infos *alt = personen->value(person);
+    if (alt == nullptr) return nullptr;
+    Infos *neu = new Infos();
     neu->bemerkung = alt->bemerkung;
     neu->kategorie = alt->kategorie;
     neu->beginn = alt->beginn;

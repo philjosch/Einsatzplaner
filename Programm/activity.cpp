@@ -42,9 +42,10 @@ QString Activity::getListString()
 
 AActivity::Infos *Activity::getIndividual(Person *person)
 {
-    Infos *neu = new Infos();
+    if (person == nullptr) return nullptr;
     Infos *alt = personen->value(person);
-    neu->bemerkung = alt->bemerkung;
+    if (alt == nullptr) return nullptr;
+    Infos *neu = new Infos();
     neu->kategorie = alt->kategorie;
     neu->beginn = alt->beginn;
     neu->ende = alt->ende;
