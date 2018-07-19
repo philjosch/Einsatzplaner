@@ -86,10 +86,10 @@ void ExportGesamt::on_pushDrucken_clicked()
     }
 
     // Lasse einene Drucker auswählen
-    QPrinter *paperListe = 0;
-    QPrinter *paperEinzel = 0;
-    QPrinter *pdfListe = 0;
-    QPrinter *pdfEinzel = 0;
+    QPrinter *paperListe = nullptr;
+    QPrinter *paperEinzel = nullptr;
+    QPrinter *pdfListe = nullptr;
+    QPrinter *pdfEinzel = nullptr;
     if (ui->checkListe->isChecked() && listeListe->length() > 0) {
         if (ui->checkPDF->isChecked())
             pdfListe = Export::getPrinterPDF(p, "Listenansicht.pdf");
@@ -213,7 +213,7 @@ bool ExportGesamt::testShow(AActivity *a)
         int i = ui->comboFahrtag->currentIndex();
         if (i == 9) return false;
         if (i != 8) {
-            if (i != (int)f->getArt()) {
+            if (i != f->getArt()) {
                 return false;
             }
         }

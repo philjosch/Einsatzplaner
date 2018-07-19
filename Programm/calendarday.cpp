@@ -61,7 +61,7 @@ void CalendarDay::handler(QListWidgetItem *item)
     emit clickedItem(itemToAct->value(item));
 }
 
-void CalendarDay::on_buttonAdd_clicked(bool b)
+void CalendarDay::on_buttonAdd_clicked()
 {
     emit addActivity(date);
 }
