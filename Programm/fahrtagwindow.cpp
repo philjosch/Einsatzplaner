@@ -924,6 +924,7 @@ void FahrtagWindow::on_lineSitze_textChanged(const QString &arg1)
         } else {
             ui->lineSitze->setStyleSheet("background-color: #cb555d");
         }
+        ui->lineSitze->repaint();
         fahrtag->emitter();
     }
 }
@@ -938,11 +939,12 @@ void FahrtagWindow::on_lineSitze_returnPressed()
         update();
         // Prüfe, ob die Sitzplätze valide sind und zeige dies visuell an
         if (ok) {
-            ui->lineSitze->setStyleSheet("background-color: #b9ceac");            
+            ui->lineSitze->setStyleSheet("background-color: #b9ceac");
         } else {
             ui->lineSitze->setStyleSheet("background-color: #cb555d");
             QMessageBox::information(this, "Sitzplätze fehlerhaft", "Die eingegebenen Sitzplätze sind möglicherweise belegt! Bitte überprüfen Sie ihre Eingabe.");
         }
+        ui->lineSitze->repaint();
         fahrtag->emitter();
     }
 }

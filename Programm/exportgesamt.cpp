@@ -70,45 +70,6 @@ void ExportGesamt::hardReload()
     show();
 }
 
-void ExportGesamt::printPreview(QPrinter *printer)
-{
-    // Erstelle eine liste mit den Objekten für die Einzelansicht
-    // Erstelle eine Liste für die Listenansicht
-    QList<AActivity*> *listeListe = new QList<AActivity*>();
-    for (AActivity *a: liste) {
-        if(! actToList.value(a)->isHidden()) {
-            listeListe->append(a);
-        }
-    }
-
-    QTextDocument *d = new QTextDocument();
-    QString b = "";
-    b += "body, td, p { font-weight: normal !important;}";
-    b += "table { border-width: 0.1em; border-style: solid; border-color: black; }";
-    b += "table th, table td { border-width: 0.1em; padding: 0.1em; border-style: solid; border-color: black;}";
-    b += "table tr, table td { page-break-inside: avoid; }";
-    b += "ul { -qt-list-indent: 0; }";
-    b += "li { text-indent: 1em; margin-top: 0px !important; margin-bottom: 0px !important; }";
-//    b += "</style>";
-    d->setDefaultStyleSheet(b);
-    QFont myfont("Console", 11, QFont::Normal);
-    d->setDefaultFont(myfont);
-    d->setDocumentMargin(0);
-
-    QString a = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Einsatzplan - Listenansicht</title></head><body>";
-    a += "<h3>Übersicht über die Aktivitäten</h3>";
-    a += "<table cellspacing='0' width='100%'><thead><tr> <th>Datum, Anlass</th> <th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th> <th>Service</th> <th>Dienstzeiten</th> <th>Sonstiges</th></tr></thead><tbody>";
-    for(AActivity *akt: *listeListe) {
-        a += akt->getHtmlForTableView();
-    }
-    a += "</tbody></table>";
-    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
-    a += "</body></html>";
-    d->setHtml(a);
-    d->print(printer);
-
-}
-
 void ExportGesamt::on_pushDrucken_clicked()
 {
     // Erstelle eine liste mit den Objekten für die Einzelansicht
