@@ -1,15 +1,18 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 13. Juli 2018
+Stand: 22. Juli 2018
 
-## Version 1.4 - 2018-??-??
+## Version 1.4 - 2018-07-??
 ### Neu
 - Das Programm merkt sich die zuletzt verwendeten Dateien. Sie können unter "Datei>Zuletzt benutzt" direkt geöffnet werden.
+- Im Kalender können jetzt direkt Arbeitseinsätze an einem ausgewählten Tag erstellt werden.
 
 ### Verbessert
 - Für eine Person kann jetzt auch noch eine zusätzliche Anzahl an Aktivitäten angegeben werden. Bisher war dies nur für Zeiten und Kilometer möglich.
 
 ### Fehlerbehebungen
-- Fehlerbehebungen und Verbesserungen. Unter anderem bei der Druck-Ausgabe eines Fahrtags, der Anzeige des Kalenders und der Verwaltung von Reservierungen.
+- Die Druckausgabe wurde verbessert. Unter macOS ist nun das korrekte Erstellen einer PDF-Datei möglich.
+- Mehrere Fehler beim Kalender wurden behoben.
+- Weitere verschiedene Fehlerbehebungen und Verbesserungen, unter anderem bei der Verwaltung von Reservierungen.
 
 ---
 
