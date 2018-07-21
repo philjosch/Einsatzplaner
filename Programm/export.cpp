@@ -54,17 +54,20 @@ bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper
     preparePrinterLandscape(pdf);
     preparePrinterLandscape(paper);
     QTextDocument *d = new QTextDocument();
+    QString b = "";
+    b += "body, td, p { font-size: 11px; font-weight: normal !important;}";
+    b += "table { border-width: 1px; border-style: solid; border-color: black; }";
+    b += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black;}";
+    b += "table tr, table td { page-break-inside: avoid; }";
+    b += "ul { -qt-list-indent: 0; }";
+    b += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
+//    b += "</style>";
+    d->setDefaultStyleSheet(b);
+    QFont myfont("Console", 11, QFont::Normal);
+    d->setDefaultFont(myfont);
     d->setDocumentMargin(0);
 
     QString a = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Einsatzplan - Listenansicht</title></head><body>";
-    a += "<style type='text/css'>";
-    a += "body, td, p { font-size: 11px; font-weight: normal !important;}";
-    a += "table { border-width: 1px; border-style: solid; border-color: black; }";
-    a += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black;}";
-    a += "table tr, table td { page-break-inside: avoid; }";
-    a += "ul { -qt-list-indent: 0; }";
-    a += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
-    a += "</style>";
     a += "<h3>Übersicht über die Aktivitäten</h3>";
     a += "<table cellspacing='0' width='100%'><thead><tr> <th>Datum, Anlass</th> <th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th> <th>Service</th> <th>Dienstzeiten</th> <th>Sonstiges</th></tr></thead><tbody>";
     for(AActivity *akt: *liste) {
@@ -228,18 +231,23 @@ bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QLi
     preparePrinterLandscape(pdf);
     preparePrinterLandscape(paper);
     QTextDocument *d = new QTextDocument();
+    QFont myfont("Console", 20, QFont::Normal);
+    d->setDefaultFont(myfont);
+
     d->setDocumentMargin(0);
 
-    QString a = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Einsatzplan - Listenansicht</title></head><body>";
-    a += "<style type='text/css'>";
-    a += "body, tr, td, p { font-size: 12px; }";
-    a += "table { border-width: 1px; border-style: solid; border-color: black; }";
-    a += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }";
-    a += "table tr, table td { page-break-inside: avoid; }";
-    a += "table tfoot tr, table tfoot td { border-width: 2px; }";
-    a += "ul { -qt-list-indent: 0; }";
-    a += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
-    a += "</style>";
+    QString a = "";//<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Einsatzplan - Listenansicht</title></head><body>";
+//    a += "<style type='text/css'>";
+    QString b = "";
+    b += "body, tr, td, p { font-size: 20px; }";
+    b += "table { border-width: 1px; border-style: solid; border-color: black; }";
+    b += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }";
+    b += "table tr, table td { page-break-inside: avoid; }";
+    b += "table tfoot tr, table tfoot td { border-width: 2px; }";
+    b += "ul { -qt-list-indent: 0; }";
+    b += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
+//    d->setDefaultStyleSheet(b);
+    //a += "</style>";
     a += "<h3>Personalübersicht</h3>";
 
     //  0: gesamtstunden
@@ -291,8 +299,9 @@ bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QLi
     }
     a += "</tr></tfoot></table>";
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
-    a += "</body></html>";
+//    a += "</body></html>";
     d->setHtml(a);
+
     return print(pdf, paper, d);
 }
 
