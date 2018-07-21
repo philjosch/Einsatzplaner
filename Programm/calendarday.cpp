@@ -58,6 +58,7 @@ QListWidgetItem *CalendarDay::insert(AActivity *a)
 
 void CalendarDay::handler(QListWidgetItem *item)
 {
+    ui->listWidget->setItemSelected(item, false);
     emit clickedItem(itemToAct->value(item));
 }
 
