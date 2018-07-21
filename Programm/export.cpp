@@ -25,14 +25,15 @@ bool Export::printSingle(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *pap
 
 
     QTextDocument *d = new QTextDocument();
+    d->setDefaultStyleSheet("body{float: none} body,td,th,p { font-size: 80%;}"
+                            "table {border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
+                            "p.last { page-break-after: always; }"
+                            " table th, table td { border-width: 1px; border-collapse: collapse; padding: 1px; border-style: solid; border-color: black; }");
+    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
     d->setDocumentMargin(0);
+
     //header zum Dokument hinzufügen
-    QString html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Einsatzplan - Einzelansicht</title></head><body>";
-    html += "<style type=\"text/css\">";
-    html += "body{float: none} body,td,th,p { font-size: 80%;}";
-    html += "table {border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;} p.last { page-break-after: always; }";
-    html +=" table th, table td { border-width: 1px; border-collapse: collapse; padding: 1px; border-style: solid; border-color: black; }";
-    html +="</style>";
+    QString html = "";
 
     for(AActivity *aa: *liste) {
         html += aa->getHtmlForSingleView();
@@ -42,8 +43,6 @@ bool Export::printSingle(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *pap
             html += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     }
 
-    // Footer hinzufügen
-    html += "</body></html>";
     d->setHtml(html);
     return print(pdf, paper, d);
 }
@@ -54,28 +53,24 @@ bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper
     preparePrinterLandscape(pdf);
     preparePrinterLandscape(paper);
     QTextDocument *d = new QTextDocument();
-    QString b = "";
-    b += "body, td, p { font-size: 11px; font-weight: normal !important;}";
-    b += "table { border-width: 1px; border-style: solid; border-color: black; }";
-    b += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black;}";
-    b += "table tr, table td { page-break-inside: avoid; }";
-    b += "ul { -qt-list-indent: 0; }";
-    b += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
-//    b += "</style>";
-    d->setDefaultStyleSheet(b);
-    QFont myfont("Console", 11, QFont::Normal);
-    d->setDefaultFont(myfont);
+    d->setDefaultStyleSheet("body, td, p { font-size: 11px; font-weight: normal !important;}"
+                            "table { border-width: 1px; border-style: solid; border-color: black; } "
+                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black;}"
+                            "table tr, table td { page-break-inside: avoid; }"
+                            "ul { -qt-list-indent: 0; }"
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
+    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
     d->setDocumentMargin(0);
 
-    QString a = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Einsatzplan - Listenansicht</title></head><body>";
-    a += "<h3>Übersicht über die Aktivitäten</h3>";
-    a += "<table cellspacing='0' width='100%'><thead><tr> <th>Datum, Anlass</th> <th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th> <th>Service</th> <th>Dienstzeiten</th> <th>Sonstiges</th></tr></thead><tbody>";
+    QString a = "<h3>Übersicht über die Aktivitäten</h3>"
+                "<table cellspacing='0' width='100%'><thead><tr>"
+                "<th>Datum, Anlass</th> <th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th>"
+                "<th>Service</th> <th>Dienstzeiten</th> <th>Sonstiges</th></tr></thead><tbody>";
     for(AActivity *akt: *liste) {
         a += akt->getHtmlForTableView();
     }
-    a += "</tbody></table>";
-    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
-    a += "</body></html>";
+    a += "</tbody></table>"
+         "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     d->setHtml(a);
     return print(pdf, paper, d);
 }
@@ -87,18 +82,16 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
     preparePrinterLandscape(pdf);
     preparePrinterLandscape(paper);
     QTextDocument *d = new QTextDocument();
+    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
+                            "table { border-width: 1px; border-style: solid; border-color: black; }"
+                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
+                            "table tr, table td { page-break-inside: avoid; }"
+                            "ul { -qt-list-indent: 0; }"
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
+    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
     d->setDocumentMargin(0);
 
-    QString a = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Fahrtag - Reservierungen</title></head><body>";
-    a += "<style type='text/css'>";
-    a += "body, tr, td, p { font-size: 12px; }";
-    a += "table { border-width: 1px; border-style: solid; border-color: black; }";
-    a += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }";
-    a += "table tr, table td { page-break-inside: avoid; }";
-    a += "ul { -qt-list-indent: 0; }";
-    a += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
-    a += "</style>";
-    a += "<h3>";
+    QString a = "<h3>";
     a += Fahrtag::getStringFromArt(f->getArt())+" am "+f->getDatum().toString("dddd dd. MM. yyyy");
     a += " - Die Reservierungen</h3>";
     a += "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th> <th>Anzahl</th> <th>Sitzplätze</th> <th>Sonstiges</th></tr></thead><tbody>";
@@ -153,7 +146,6 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
 
     a += "</tbody></table>";
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
-    a += "</body></html>";
     d->setHtml(a);
     return print(pdf, paper, d);
 }
@@ -163,21 +155,21 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     preparePrinterPortrait(printer);
     QTextDocument *d = new QTextDocument();
     // Append a style sheet
-    QString a = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Einsatzplan - Listenansicht</title></head><body>";
-    a += "<style type='text/css'>";
-    a += "body, tr, td, p { font-size: 12px; }";
-    a += "table { border-width: 1px; border-style: solid; border-color: black; }";
-    a += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }";
-    a += "table tr, table td { page-break-inside: avoid; }";
-    a += "table tfoot tr, table tfoot td { border-width: 2px; }";
-    a += "ul { -qt-list-indent: 0; }";
-    a += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
-    a += "</style>";
+    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
+                            "table { border-width: 1px; border-style: solid; border-color: black; }"
+                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
+                            "table tr, table td { page-break-inside: avoid; }"
+                            "table tfoot tr, table tfoot td { border-width: 2px; }"
+                            "ul { -qt-list-indent: 0; }"
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
+    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
+    d->setDocumentMargin(0);
+
     // Add the title page
-    a += "<h3>Personalübersicht - Gesamt</h3>";
     m->berechne();
     QString help = "<li>%1: %2h</li>";
-    a += "<h4>Geleistete Stunden</h4><ul>";
+    QString a = "<h3>Personalübersicht - Gesamt</h3>"
+                "<h4>Geleistete Stunden</h4><ul>";
     if (m->getTime(Tf) > 0) a += help.arg("Tf").arg(m->getTime(Tf), 0, 'f', 0);
     if (m->getTime(Zf) > 0) a += help.arg("Zf").arg(m->getTime(Zf), 0, 'f', 0);
     if (m->getTime(Zub) > 0) a += help.arg("Zub").arg(m->getTime(Zub), 0, 'f', 0);
@@ -221,7 +213,6 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
             a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
         }
     }
-    a += "</body></html>";
     d->setHtml(a);
     return print(nullptr, printer, d);
 }
@@ -231,24 +222,16 @@ bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QLi
     preparePrinterLandscape(pdf);
     preparePrinterLandscape(paper);
     QTextDocument *d = new QTextDocument();
-    QFont myfont("Console", 20, QFont::Normal);
-    d->setDefaultFont(myfont);
-
+    d->setDefaultStyleSheet("body, tr, td, p { font-size: 20px; }"
+                            "table { border-width: 1px; border-style: solid; border-color: black; }"
+                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
+                            "table tr, table td { page-break-inside: avoid; }"
+                            "table tfoot tr, table tfoot td { border-width: 2px; }"
+                            "ul { -qt-list-indent: 0; }"
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
+    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
     d->setDocumentMargin(0);
 
-    QString a = "";//<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><title>Einsatzplan - Listenansicht</title></head><body>";
-//    a += "<style type='text/css'>";
-    QString b = "";
-    b += "body, tr, td, p { font-size: 20px; }";
-    b += "table { border-width: 1px; border-style: solid; border-color: black; }";
-    b += "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }";
-    b += "table tr, table td { page-break-inside: avoid; }";
-    b += "table tfoot tr, table tfoot td { border-width: 2px; }";
-    b += "ul { -qt-list-indent: 0; }";
-    b += "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }";
-//    d->setDefaultStyleSheet(b);
-    //a += "</style>";
-    a += "<h3>Personalübersicht</h3>";
 
     //  0: gesamtstunden
     //  1: anzahl
@@ -261,7 +244,8 @@ bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QLi
     //  8: büro
     //  9: sonstiges
     // 10: kilometer
-    a += "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
+    QString a = "<h3>Personalübersicht</h3>"
+                "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
     while (data->length() < 11) {
         data->append(false);
     }
@@ -299,7 +283,6 @@ bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QLi
     }
     a += "</tr></tfoot></table>";
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
-//    a += "</body></html>";
     d->setHtml(a);
 
     return print(pdf, paper, d);

@@ -834,6 +834,7 @@ void FahrtagWindow::on_spinAnzahl_valueChanged(int arg1)
 {
     if (nehmeRes) {
         aktuelleRes->setAnzahl(arg1);
+        update();
         fahrtag->emitter();
     }
 }
@@ -991,6 +992,11 @@ void FahrtagWindow::update()
     ui->labelBelegtZweite->setText(zweite);
     ui->labelBelegtDritte->setText(dritte);
     ui->labelBelegtGesamt->setText(gesamt);
+
+    ui->labelBelegtErste->repaint();
+    ui->labelBelegtZweite->repaint();
+    ui->labelBelegtDritte->repaint();
+    ui->labelBelegtGesamt->repaint();
 }
 
 void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)
