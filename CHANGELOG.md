@@ -1,7 +1,7 @@
 # Einsatzplaner - Veränderungshistorie
 Stand: 22. Juli 2018
 
-## Version 1.4 - 2018-07-??
+## Version 1.4 - 2018-07-23
 ### Neu
 - Das Programm merkt sich die zuletzt verwendeten Dateien. Sie können unter "Datei>Zuletzt benutzt" direkt geöffnet werden.
 - Im Kalender können jetzt direkt Arbeitseinsätze an einem ausgewählten Tag erstellt werden.
