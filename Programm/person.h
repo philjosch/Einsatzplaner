@@ -28,8 +28,10 @@ public:
     double getTimeAusbildung();
     double getTimeSonstiges();
     double getTimeSum();
+
+    int getAnzahl();
+    int getSumAnzahl();
     double getSumKilometer();
-    double getAnzahl();
 
     bool getAusbildungTf() const;
     void setAusbildungTf(bool value);
@@ -78,6 +80,9 @@ public:
     void setAdditionalTimeAusbildung(double value);
     double getAdditionalTimeSonstiges() const;
     void setAdditionalTimeSonstiges(double value);
+
+    int getAdditionalAnzahl() const;
+    void setAdditionalAnzahl(int value);
     double getAdditionalKilometer() const;
     void setAdditionalKilometer(double value);
 
@@ -104,7 +109,10 @@ private:
     double timeAusbildung;
     double timeSonstiges;
     double timeSum;
+
+    int sumAnzahl;
     double sumKilometer;
+
     bool valuesInvalid;
     /* Gibt an, ob die Werte verändert wurden und ob es bemerkt wurde,
      * kann auch sein, dass dies an der Person vorbei passiert ist,
@@ -120,6 +128,8 @@ private:
     double additionalTimeVorbereiten;
     double additionalTimeAusbildung;
     double additionalTimeSonstiges;
+
+    int additionalAnzahl;
     double additionalKilometer;
 
     ManagerPersonal *manager;

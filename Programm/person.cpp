@@ -50,6 +50,7 @@ QJsonObject Person::toJson()
     o.insert("additionalAusbildung", additionalTimeAusbildung);
     o.insert("additionalVorbereiten", additionalTimeVorbereiten);
     o.insert("additionalSonstiges", additionalTimeSonstiges);
+    o.insert("additionalAnzahl", additionalAnzahl);
     o.insert("additionalKilometer", additionalKilometer);
     return o;
 }
@@ -87,6 +88,7 @@ Person *Person::fromJson(QJsonObject o, ManagerPersonal *manager)
     p->additionalTimeVorbereiten = o.value("additionalVorbereiten").toDouble(0);
     p->additionalTimeAusbildung = o.value("additionalAusbildung").toDouble(0);
     p->additionalTimeSonstiges = o.value("additionalSonstiges").toDouble(0);
+    p->additionalAnzahl = o.value("additionalAnzahl").toInt();
     p->additionalKilometer = o.value("additionalKilometer").toDouble(0);
     return p;
 }
@@ -144,6 +146,7 @@ void Person::berechne()
     timeAusbildung = 0;
     timeSonstiges = 0;
     timeSum = 0;
+    sumAnzahl = activities->size();
     sumKilometer = 0;
 
     QDate today = QDate::currentDate();
@@ -185,6 +188,7 @@ void Person::berechne()
     timeSum = timeSum/(3600000) + additionalTimeTf + additionalTimeZf + additionalTimeZub
             + additionalTimeService + additionalTimeBuero + additionalTimeWerkstatt
             + additionalTimeVorbereiten + additionalTimeAusbildung + additionalTimeSonstiges;
+    sumAnzahl += additionalAnzahl;
     sumKilometer += additionalKilometer;
 
     valuesInvalid = false;
@@ -277,7 +281,7 @@ QString Person::getHtmlForTableView(QList<bool> *liste)
     if (liste->at(0))
         html += "<td>"+QString::number(getTimeSum())+"</td>";
     if (liste->at(1))
-        html += "<td>"+QString::number(getAnzahl())+"</td>";
+        html += "<td>"+QString::number(getSumAnzahl())+"</td>";
     if (liste->at(2))
         html += "<td>"+QString::number(getTimeTf())+"</td>";
     if (liste->at(3))
@@ -363,7 +367,7 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     if (m->checkHours(this)) helpcurrent = help.arg("", "");
     else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+QString::number(m->getMinimumHours())+"h)");
     html += helpcurrent.arg("Gesamte Stundenzahl").arg(timeSum, 0, 'f', 1);
-    html += "<li>Anzahl Aktivitäten: "+QString::number(getAnzahl())+"</li>";
+    html += "<li>Anzahl Aktivitäten: "+QString::number(getSumAnzahl())+"</li>";
     html += "<li>Gefahrene Strecke: "+QString::number(sumKilometer)+" km</li></ul>";
     html += "</p>";
     if (manager->pruefeStunden(this)) {
@@ -399,6 +403,7 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     if (additionalTimeBuero > 0) html+= help.arg("Büro").arg(additionalTimeBuero, 0, 'f', 1);
     if (additionalTimeAusbildung > 0) html+= help.arg("Ausbildung").arg(additionalTimeAusbildung, 0, 'f', 1);
     if (additionalTimeSonstiges > 0) html+= help.arg("Sonstiges").arg(additionalTimeSonstiges, 0, 'f', 1);
+    if (additionalAnzahl > 0) html+= help.arg("Zusätzliche Aktivitäten").arg(additionalAnzahl);
     if (additionalKilometer > 0) html+= QString("<li>Kilometer: %1km</li>").arg(additionalKilometer, 0, 'f', 1);
     html+= "</ul>";
 
@@ -495,6 +500,16 @@ void Person::setAdditionalTimeSonstiges(double value)
     valuesInvalid = true;
 }
 
+int Person::getAdditionalAnzahl() const
+{
+    return additionalAnzahl;
+}
+void Person::setAdditionalAnzahl(int value)
+{
+    additionalAnzahl = value;
+    valuesInvalid = true;
+}
+
 double Person::getAdditionalKilometer() const
 {
     return additionalKilometer;
@@ -514,27 +529,29 @@ void Person::personConstructor(QString vorname, QString nachname, ManagerPersona
     ausbildungTf = false;
     ausbildungZf = false;
     ausbildungRangierer = false;
-    timeTf = 0.f;
-    timeZf = 0.f;
-    timeZub = 0.f;
-    timeService = 0.f;
-    timeBuero = 0.f;
-    timeWerkstatt = 0.f;
-    timeVorbereiten = 0.f;
-    timeAusbildung = 0.f;
-    timeSonstiges = 0.f;
-    timeSum = 0.f;
-    sumKilometer = 0.f;
-    additionalTimeTf = 0.f;
-    additionalTimeZf = 0.f;
-    additionalTimeZub = 0.f;
-    additionalTimeService = 0.f;
-    additionalTimeBuero = 0.f;
-    additionalTimeWerkstatt = 0.f;
-    additionalTimeVorbereiten = 0.f;
-    additionalTimeAusbildung = 0.f;
-    additionalTimeSonstiges = 0.f;
-    additionalKilometer = 0.f;
+    timeTf = 0;
+    timeZf = 0;
+    timeZub = 0;
+    timeService = 0;
+    timeBuero = 0;
+    timeWerkstatt = 0;
+    timeVorbereiten = 0;
+    timeAusbildung = 0;
+    timeSonstiges = 0;
+    timeSum = 0;
+    sumAnzahl = 0;
+    sumKilometer = 0;
+    additionalTimeTf = 0;
+    additionalTimeZf = 0;
+    additionalTimeZub = 0;
+    additionalTimeService = 0;
+    additionalTimeBuero = 0;
+    additionalTimeWerkstatt = 0;
+    additionalTimeVorbereiten = 0;
+    additionalTimeAusbildung = 0;
+    additionalTimeSonstiges = 0;
+    additionalAnzahl = 0;
+    additionalKilometer = 0;
     valuesInvalid = true;
 
     activities = new QMap<AActivity *, Category>();
@@ -600,13 +617,19 @@ double Person::getTimeSum()
     return timeSum;
 }
 
+int Person::getAnzahl()
+{
+    return activities->size();
+}
+
+int Person::getSumAnzahl()
+{
+    if (valuesInvalid) berechne();
+    return sumAnzahl;
+}
+
 double Person::getSumKilometer()
 {
     if (valuesInvalid) berechne();
     return sumKilometer;
-}
-
-double Person::getAnzahl()
-{
-    return activities->size();
 }

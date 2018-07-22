@@ -1,7 +1,7 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-#endif // ENUMS_H
+
 
 
 enum Category { Tf,
@@ -22,3 +22,5 @@ enum Mistake { OK, // Returned if the person was found in the system and is able
                 ExternOk, // The person was not found in the system, but there is a reason to interpret it as an external
                 SonstigerFehler // Some other misstake during the process -> check the inputs
               };
+
+#endif // ENUMS_H

@@ -230,7 +230,7 @@ bool AActivity::removePerson(QString p)
         emitter();
         return removePerson(pers);
     }
-    Person *gefunden;
+    Person *gefunden = nullptr;
     for(Person *pers: personen->keys()) {
         if (pers->getName() == p) {
             gefunden = pers;

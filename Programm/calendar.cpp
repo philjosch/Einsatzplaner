@@ -39,6 +39,7 @@ Calendar::Calendar(QWidget *parent) : QFrame(parent), Manager(), ui(new Ui::Cale
     tage->append(ui->day5_6);    tage->append(ui->day6_6);    tage->append(ui->day7_6);
     for(CalendarDay *c: *tage) {
         connect(c, SIGNAL(clickedItem(AActivity*)), this, SLOT(clickedItemCalendar(AActivity*)));
+        connect(c, SIGNAL(addActivity(QDate)), this, SLOT(newActivity(QDate)));
     }
     goToday();
 
@@ -84,6 +85,8 @@ void Calendar::fromJson(QJsonObject o)
     }
     // an das gespeicherte Datum gehen
     ui->dateSelector->setDate(QDate::fromString(o.value("currentDate").toString(), "yyyy-MM-dd"));
+    ui->dateSelector->repaint();
+    goTo(ui->dateSelector->date());
 }
 
 void Calendar::wheelEvent(QWheelEvent *event)
@@ -97,11 +100,13 @@ void Calendar::wheelEvent(QWheelEvent *event)
 void Calendar::nextMonth()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addMonths(1));
+    ui->dateSelector->repaint();
 }
 
 void Calendar::prevMonth()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addMonths(-1));
+    ui->dateSelector->repaint();
 }
 
 void Calendar::goTo(QDate date)
@@ -164,6 +169,7 @@ void Calendar::goTo(QDate date)
 void Calendar::goToday()
 {
     ui->dateSelector->setDate(QDate::currentDate());
+    ui->dateSelector->repaint();
 }
 
 bool Calendar::removeSelected()
@@ -175,10 +181,9 @@ bool Calendar::removeSelected()
     return false;
 }
 
-Fahrtag *Calendar::newFahrtag()
+Fahrtag *Calendar::newFahrtag(QDate d)
 {
     // Anlegen des Fahrtags
-    QDate d = QDate::currentDate();
     Fahrtag *f = Manager::newFahrtag(d);
     connect(f, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
 
@@ -192,10 +197,9 @@ Fahrtag *Calendar::newFahrtag()
     return f;
 }
 
-Activity *Calendar::newActivity()
+Activity *Calendar::newActivity(QDate d)
 {
     // Anlegen der Aktivität
-    QDate d = QDate::currentDate();
     Activity *a = Manager::newActivity(d);
     connect(a, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
 
@@ -321,21 +325,21 @@ int Calendar::getPosInCalendar(QDate date)
 {
     QDate ref = QDate(ui->dateSelector->date().year(), ui->dateSelector->date().month(), 1);
     // Eintrag auch anzeigen, wenn er im vorherigen Monat liegt
-    if (date < ref) {
+    if (date.month() == ref.month() && date.year() == ref.year()) {
+        return getItemFromDate(date)-1;
+    } else if (date.addMonths(1).month() == ref.month() && date.addMonths(1).year() == ref.year()) {
         if (date.addDays(7) > ref && date.dayOfWeek() < ref.dayOfWeek()) {
             return date.dayOfWeek() - 1;
         }
         return -1;
-    } else if (date.month() == ref.month()+1) {
+    } else if (date.month() == ref.addMonths(1).month() && date.year() == ref.addMonths(1).year()) {
         if (date.day()+ref.dayOfWeek()+ref.daysInMonth()-2 < 42) {
             return date.day()+ref.dayOfWeek()+ref.daysInMonth()-2;
         } else {
             return -1;
         }
-    } else if (date > ref.addMonths(1)) {
-        return -1;
     } else {
-        return getItemFromDate(date)-1;
+        return -1;
     }
 }
 

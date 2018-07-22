@@ -23,7 +23,7 @@ Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p), ManagerRes
 Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p), ManagerReservierungen(o)
 {
     // Daten für Fahrtag extrahieren
-    art = (Art) o.value("art").toInt();
+    art = static_cast<Fahrtag::Art>(o.value("art").toInt());
     zeitTf = QTime::fromString(o.value("zeitTf").toString(), "hh:mm");
     wichtig = o.value("wichtig").toBool();
     benoetigeTf = o.value("benoetigeTf").toBool(true);
@@ -42,7 +42,7 @@ QJsonObject Fahrtag::toJson()
     QJsonObject o = AActivity::toJson();
     o = ManagerReservierungen::toJson(o);
     o.insert("isFahrtag", true);
-    o.insert("art", (int) art);
+    o.insert("art", art);
     o.insert("zeitTf", zeitTf.toString("hh:mm"));
     o.insert("wichtig", wichtig);
     o.insert("benoetigeTf", benoetigeTf);
@@ -89,8 +89,10 @@ QString Fahrtag::getListStringShort() {
 
 AActivity::Infos *Fahrtag::getIndividual(Person *person)
 {
-    Infos *neu = new Infos();
+    if (person == nullptr) return nullptr;
     Infos *alt = personen->value(person);
+    if (alt == nullptr) return nullptr;
+    Infos *neu = new Infos();
     neu->bemerkung = alt->bemerkung;
     neu->kategorie = alt->kategorie;
     neu->beginn = alt->beginn;
@@ -182,7 +184,7 @@ QString Fahrtag::getHtmlForSingleView()
         html += ":</b><br/>"+listToString(&sonstige, " | ", true) +"</p>";
     }
     if (bemerkungen != "") {
-        html += "<p>Bemerkungen:<br/>"+bemerkungen.replace("\n", "<br/>")+"</p>";
+        html += "<p><b>Bemerkungen:</b><br/>"+bemerkungen.replace("\n", "<br/>")+"</p>";
     }
 
     // Reservierungen

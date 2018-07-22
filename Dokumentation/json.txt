@@ -22,6 +22,7 @@ calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die P
 			additionalVorbereiten (double)
 			additionalAusbildung (double)
 			additionalSonstiges (double)
+			additionalAnzahl (int)
 			additionalKilometer (double)
 	activities (array)	-> die einzelnen aktivitäten, gespeichert in Objekten
 		~Für Arbeitseinsatz~

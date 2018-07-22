@@ -1711,42 +1711,37 @@
         </property>
         <item>
          <property name="text">
-          <string>309, 221, 204, 208</string>
+          <string>221, 217, 208, 309</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>309, 221, 204, 208, 202</string>
+          <string>221, 217, 208, 202, 309</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>309, 221, 204, 217, 208, 202</string>
+          <string>221, 217, 204, 208, 202, 309</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>309, 221, 204, 208, 202, 201</string>
+          <string>221, 217, 208, 202, 201, 309</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>309, 221, 204, 217, 208, 202, 201</string>
+          <string>221, 217, 204, 208, 202, 201, 309</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>309, 221, 204, 217</string>
+          <string>221, 217, 204, 309</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>309, 221, 204, 217, 208</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>309, 221, 217</string>
+          <string>221, 217, 309</string>
          </property>
         </item>
        </widget>

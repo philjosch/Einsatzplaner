@@ -125,13 +125,13 @@
     </property>
     <widget class="QMenu" name="menuRecentlyused">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="title">
       <string>Zuletzt benutzt</string>
      </property>
-     <addaction name="separator"/>
      <addaction name="actionClear"/>
+     <addaction name="separator"/>
     </widget>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
@@ -356,6 +356,9 @@
    </property>
    <property name="text">
     <string>Liste leeren</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionSavePersonal">

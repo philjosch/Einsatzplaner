@@ -17,7 +17,7 @@ class CalendarDay : public QFrame
     Q_OBJECT
 
 public:
-    explicit CalendarDay(QWidget *parent = 0);
+    explicit CalendarDay(QWidget *parent = nullptr);
     ~CalendarDay();
     void show(QDate datum);
     void setGray(bool gray);
@@ -28,10 +28,13 @@ public:
     QListWidgetItem *insert(AActivity *a);
 signals:
     void clickedItem(AActivity *);
+    void addActivity(QDate);
 private slots:
     void handler(QListWidgetItem *item);
+    void on_buttonAdd_clicked();
 private:
     Ui::CalendarDay *ui;
+    QDate date;
     QMap<AActivity*, QListWidgetItem*> *actToItem;
     QMap<QListWidgetItem*, AActivity*> *itemToAct;
 };

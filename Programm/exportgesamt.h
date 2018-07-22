@@ -14,7 +14,7 @@ class ExportGesamt : public QDialog
     Q_OBJECT
 
 public:
-    explicit ExportGesamt(Manager *m, QWidget *parent = 0);
+    explicit ExportGesamt(Manager *m, QWidget *parent = nullptr);
     ~ExportGesamt();
 
     void reload();

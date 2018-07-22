@@ -64,6 +64,7 @@ private slots:
     void on_checkShowVorbereiten_clicked(bool checked);
     void on_checkShowWerkstatt_clicked(bool checked);
     void on_checkShowBuero_clicked(bool checked);
+    void on_checkShowAusbildung_clicked(bool checked);
     void on_checkShowSonstiges_clicked(bool checked);
     void on_checkShowKilometer_clicked(bool checked);
 
@@ -79,6 +80,8 @@ private slots:
     void on_doubleKilometer_valueChanged(double arg1);
 
     void editMinimumHours();
+
+    void on_doubleAnzahl_valueChanged(double arg1);
 
 private:
     Ui::PersonalWindow *ui;
@@ -102,6 +105,7 @@ private:
      *  8: büro
      *  9: sonstiges
      * 10: kilometer
+     * 11: ausbildung
      * */
 
     void print(QPrinter *p);
