@@ -213,7 +213,7 @@ void MainWindow::on_menuRecentlyused_aboutToShow()
         foreach (QString entry, list) {
             QAction *a = new QAction(entry, this);
             connect(a, SIGNAL(triggered(bool)), this, SLOT(open()));
-            ui->menuRecentlyused->insertAction(0, a);
+            ui->menuRecentlyused->insertAction(nullptr, a);
         }
     }
 }

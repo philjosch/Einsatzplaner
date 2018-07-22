@@ -24,18 +24,18 @@ class Export
 {
 public:
     // Drucken von Fahrtagen und Aktivitäten
-    static bool printFahrtag(Fahrtag *f, QPrinter *pdf=0, QPrinter *paper=0);
-    static bool printActivity(Activity *a, QPrinter *pdf=0, QPrinter *paper=0);
+    static bool printFahrtag(Fahrtag *f, QPrinter *pdf=nullptr, QPrinter *paper=nullptr);
+    static bool printActivity(Activity *a, QPrinter *pdf=nullptr, QPrinter *paper=nullptr);
 
-    static bool printSingle(QList<AActivity*> *liste, QPrinter *pdf=0, QPrinter *paper=0);
-    static bool printList(QList<AActivity*> *liste, QPrinter *pdf=0, QPrinter *paper=0);
+    static bool printSingle(QList<AActivity*> *liste, QPrinter *pdf=nullptr, QPrinter *paper=nullptr);
+    static bool printList(QList<AActivity*> *liste, QPrinter *pdf=nullptr, QPrinter *paper=nullptr);
 
     // Reservierungen
-    static bool printReservierung(Fahrtag *f, QPrinter *pdf=0, QPrinter *paper=0); // Gibt nur die Reservierungen aus sortiert nach Wagen und dann nach Name
+    static bool printReservierung(Fahrtag *f, QPrinter *pdf=nullptr, QPrinter *paper=nullptr); // Gibt nur die Reservierungen aus sortiert nach Wagen und dann nach Name
 
     // Drucken von Personen
     static bool printPerson(ManagerPersonal *m, QPrinter *printer);
-    static bool printPersonen(QList<Person *> *personen, QList<double> *gesamt, QList<bool> *data, QPrinter *pdf=0, QPrinter *paper=0);
+    static bool printPersonen(QList<Person *> *personen, QList<double> *gesamt, QList<bool> *data, QPrinter *pdf=nullptr, QPrinter *paper=nullptr);
 
     static QPrinter *getPrinterPaper(QWidget *parent);
     static QPrinter *getPrinterPDF(QWidget *parent, QString path);

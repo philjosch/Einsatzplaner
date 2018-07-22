@@ -15,7 +15,7 @@ class MinimumHoursEditorDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit MinimumHoursEditorDialog(ManagerPersonal *manager, QWidget *parent = 0);
+    explicit MinimumHoursEditorDialog(ManagerPersonal *manager, QWidget *parent = nullptr);
     ~MinimumHoursEditorDialog();
 
 private slots:

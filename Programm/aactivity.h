@@ -7,12 +7,11 @@
 #include <QComboBox>
 #include <QTimeEdit>
 
-//class AActivity;
-//enum Category { Tf, Tb, Zf, Service, Zub, Begleiter, Buero, Werkstatt, ZugVorbereiten, Sonstiges=100 };
+#ifndef PERSON_H
+class Person;
+#endif
 
 #include "managerpersonal.h"
-
-class Person;
 
 class AActivity
 {
@@ -101,5 +100,6 @@ protected:
 
     static QString COLOR_REQUIRED;
 };
+
 
 #endif // AACTIVITY_H

@@ -564,28 +564,28 @@ void PersonalWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 
 void PersonalWindow::on_pushPDF_clicked()
 {
-    QPrinter *pdf = 0;
+    QPrinter *pdf = nullptr;
     pdf = Export::getPrinterPDF(this, "Personal-Gesamt.pdf");
     print(pdf);
 }
 
 void PersonalWindow::on_pushPrint_clicked()
 {
-    QPrinter *paper = 0;
+    QPrinter *paper = nullptr;
     paper = Export::getPrinterPaper(this);
     print(paper);
 }
 
 void PersonalWindow::on_pushPDFEinzel_clicked()
 {
-    QPrinter *pdf = 0;
+    QPrinter *pdf = nullptr;
     pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf");
     Export::printPerson(manager, pdf);
 }
 
 void PersonalWindow::on_pushPrintEinzel_clicked()
 {
-    QPrinter *paper = 0;
+    QPrinter *paper = nullptr;
     paper = Export::getPrinterPaper(this);
     Export::printPerson(manager, paper);
 }
@@ -828,7 +828,7 @@ void PersonalWindow::on_doubleSonstiges_valueChanged(double arg1)
 void PersonalWindow::on_doubleAnzahl_valueChanged(double arg1)
 {
     if (enabled) {
-        aktuellePerson->setAdditionalAnzahl(arg1);
+        aktuellePerson->setAdditionalAnzahl(int(arg1));
         ui->lineAnzahl->setText(QString::number(aktuellePerson->getSumAnzahl()));
         emit changed();
     }

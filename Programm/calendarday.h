@@ -17,7 +17,7 @@ class CalendarDay : public QFrame
     Q_OBJECT
 
 public:
-    explicit CalendarDay(QWidget *parent = 0);
+    explicit CalendarDay(QWidget *parent = nullptr);
     ~CalendarDay();
     void show(QDate datum);
     void setGray(bool gray);

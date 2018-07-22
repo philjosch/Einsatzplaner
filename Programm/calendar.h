@@ -19,7 +19,7 @@ class Calendar : public QFrame, public Manager
     Q_OBJECT
 
 public:
-    explicit Calendar(QWidget *parent = 0);
+    explicit Calendar(QWidget *parent = nullptr);
     ~Calendar();
 
     QJsonObject toJson();
