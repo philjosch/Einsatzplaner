@@ -65,6 +65,10 @@ public:
     bool removePerson(QString p);
     void setPersonen(QMap<Person *, Infos *> *value);
 
+    bool operator >(AActivity *second);
+    bool operator <(AActivity *second);
+    bool operator ==(AActivity *second);
+
     virtual QString getKurzbeschreibung() = 0;
     virtual QString getListString() = 0;
     virtual QString getListStringShort() = 0;

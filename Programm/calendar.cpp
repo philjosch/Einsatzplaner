@@ -270,7 +270,7 @@ void Calendar::activityChanged(AActivity *a)
     AActivity *ref;
     while (i > 0) {
         ref = itemToList->value(ui->listWidget->item(i-1));
-        if (ref->getDatum() > a->getDatum()) {
+        if (ref->operator>(a)) {
             ui->listWidget->insertItem(i-1, ui->listWidget->takeItem(i));
             i--;
         } else {
@@ -281,7 +281,7 @@ void Calendar::activityChanged(AActivity *a)
     // Prüfen, ob das element weit genug hinten (unten) ist
     while (i < ui->listWidget->count()-1) {
         ref = itemToList->value(ui->listWidget->item(i+1));
-        if (ref->getDatum() < a->getDatum()) {
+        if (ref->operator<(a)) {
             ui->listWidget->insertItem(i, ui->listWidget->takeItem(i+1));
             i++;
         } else {

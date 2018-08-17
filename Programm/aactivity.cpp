@@ -1,5 +1,7 @@
 #include "aactivity.h"
 #include "person.h"
+#include "fahrtag.h"
+#include "activity.h"
 
 #include <QMap>
 #include <QDebug>
@@ -299,6 +301,60 @@ void AActivity::setPersonen(QMap<Person *, Infos *> *value)
 {
     personen = value;
     emitter();
+}
+
+bool AActivity::operator >(AActivity *second)
+{
+    return(second->operator<(this));
+}
+
+bool AActivity::operator <(AActivity *second)
+{
+    // Datum
+    if (this->datum < second->datum)
+        return true;
+    else if (this->datum > second->datum)
+        return false;
+    // Beginn
+    if (this->zeitAnfang < second->zeitAnfang)
+        return true;
+    else if (this->zeitAnfang > second->zeitAnfang)
+        return false;
+    // Ende
+    if (this->zeitEnde < second->zeitEnde)
+        return true;
+    else if (this->zeitEnde > second->zeitEnde)
+        return false;
+    // Art und beliebig, bei gleicher Art
+    if (Fahrtag *f = dynamic_cast<Fahrtag*>(this))
+        return true;
+    if (Activity *a = dynamic_cast<Activity*>(second))
+        return true;
+    return false;
+}
+
+bool AActivity::operator ==(AActivity *second)
+{
+    // Datum
+    if (this->datum != second->datum)
+        return false;
+    // Beginn
+    if (this->zeitAnfang != second->zeitAnfang)
+        return false;
+    // Ende
+    if (this->zeitEnde != second->zeitEnde)
+        return false;
+    // Art und beliebig, bei gleicher Art
+    if (Fahrtag *f = dynamic_cast<Fahrtag*>(this)) {
+        if (Fahrtag *g = dynamic_cast<Fahrtag*>(second))
+            return true;
+        else
+            return false;
+    } else {
+        if (Activity *a = dynamic_cast<Activity*>(second))
+            return true;
+        return false;
+    }
 }
 
 ManagerPersonal *AActivity::getPersonal() const
