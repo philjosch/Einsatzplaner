@@ -290,14 +290,10 @@ void FahrtagWindow::itemChanged(QListWidgetItem *item , Category kat)
 {
     /* item: Das Item das Verändert wurde */
     /* kat: Die Kategorie, auf die gebucht wird */
-    // Laden der Informationen zur geänderten Person
     QString text = item->text();
     QStringList liste = text.split(QRegExp("\\s*;\\s*"));
     QString name = liste.at(0);
     liste.removeFirst();
-    QTime start = QTime(0,0);
-    QTime ende = QTime(0,0);
-    // Speichere alle Bemerkungen im String bem
     QString bem = "";
     while (liste.length() > 0) {
         bem += liste.first();
@@ -305,80 +301,69 @@ void FahrtagWindow::itemChanged(QListWidgetItem *item , Category kat)
         liste.removeFirst();
     }
 
-    bool add = false;
-    bool del = false;
+    if (listeMitNamen->contains(item)) {
+        QString nameAlt = listeMitNamen->value(item);
+        if (name == nameAlt) {
+            // Bemerkung aktualisieren und speichern
+            int row = ui->tablePersonen->row((listToTable->value(item)));
+            QTime beginn = dynamic_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->time();
+            QTime ende = dynamic_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
+            Mistake antw = fahrtag->addPerson(name, bem, beginn, ende, kat);
+            switch (antw) {
+            case OK:
+                ui->tablePersonen->item(row, 4)->setText(bem);
+                break;
+            default:
+                QMessageBox::warning(this, "Fehler", "Bei der Eintragung der Person ist ein Fehler aufgetreten, bitte überprüfen Sie Ihre Eingaben. Die Person wurde nicht gespeichert!");
+            }
+            return;
+        } else {
+            // Eintrag der alten person löschen
+            fahrtag->removePerson(nameAlt);
+            namen->remove(nameAlt);
+            listeMitNamen->remove(item);
+            ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
+            listToTable->remove(item);
+        }
+    }
 
-    Mistake antw = fahrtag->addPerson(name, bem, start, ende, kat);
+    QTime beginn = QTime(0,0);
+    QTime ende = QTime(0,0);
+    Mistake antw = fahrtag->addPerson(name, bem, beginn, ende, kat);
     switch (antw) {
+    case Mistake::ExternOk:
+        break;
+        // Verfahren, ähnlich wie bei einer normalen person, außer dass die Person nicht in die Tabelle eingefügt wird
+    case Mistake::OK:
+        // Neue Person in Ordnung:
+        namen->insert(name);
+        listeMitNamen->insert(item, name);
+
+        // Zeile für die Person in die Tabelle einfügen
+        on_buttonInsert_clicked();
+        // Name
+        ui->tablePersonen->item(0, 0)->setText(name);
+        ui->tablePersonen->item(0, 0)->setFlags(Qt::NoItemFlags);
+        // Aufgabe
+        (dynamic_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1)))->setCurrentText(AActivity::getStringFromCategory(kat));
+        ui->tablePersonen->cellWidget(0, 1)->setDisabled(true);
+        // Bemerkung
+        ui->tablePersonen->item(0, 4)->setText(bem);
+        ui->tablePersonen->item(0, 4)->setFlags(Qt::NoItemFlags);
+
+        listToTable->insert(item, ui->tablePersonen->item(0, 0));
+        break;
+
     case Mistake::FalscheQualifikation:
         QMessageBox::warning(this, "Fehlende Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
-        del = true;
         break;
     case Mistake::PersonNichtGefunden:
         QMessageBox::information(this, "Person nicht gefunden", "Die eingegebene Person konnte nicht gefunden werden!");
-        del = true;
-        break;
-    case Mistake::ExternOk:
-        del = true;
-        break;
-        // Verfahren, wie bei einer normalen person, außer dass der
-    case Mistake::OK:
-        // Neue Person in Ordnung:
-        // Alte person entfernen, wenn benötigt und die neue in die Liste einfügen
-        if (listeMitNamen->contains(item)) {
-           QString nameAlt = listeMitNamen->value(item);
-           if (nameAlt != name) {
-               namen->remove(nameAlt);
-               fahrtag->removePerson(nameAlt);
-               listeMitNamen->remove(item);
-               ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
-               listToTable->remove(item);
-               add = true;
-           } else {
-               ui->tablePersonen->item(ui->tablePersonen->row(listToTable->value(item)), 4)->setText(bem);
-           }
-        } else {
-            add = true;
-        }
-
-        if (add) {
-            listeMitNamen->insert(item, name);
-
-            // Zeile für die Person in die Tabelle einfügen
-            on_buttonInsert_clicked();
-            // Name
-            ui->tablePersonen->item(0, 0)->setText(name);
-            ui->tablePersonen->item(0, 0)->setFlags(Qt::NoItemFlags);
-            // Aufgabe
-            ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
-            ui->tablePersonen->cellWidget(0, 1)->setDisabled(true);
-            // Beginn: do nothing
-            // Ende: do nothing
-            // Bemerkung
-            ui->tablePersonen->item(0, 4)->setText(bem);
-            ui->tablePersonen->item(0, 4)->setFlags(Qt::NoItemFlags);
-
-        //    QTableWidgetItem *zelleName = new QTableWidgetItem(name);
-
-            listToTable->insert(item, ui->tablePersonen->item(0, 0));
-            namen->insert(name);
-        }
         break;
     case Mistake::SonstigerFehler:
     default:
         QMessageBox::information(this, "Fehler", "Beim Hinzufügen der Person zum Fahrtag ist ein Fehler aufgetreten! Bitte überprüfen Sie ihre Eingaben!");
         break;
-    }
-
-    if (del) {
-        if (listeMitNamen->contains(item)) {
-            namen->remove(listeMitNamen->value(item));
-            fahrtag->removePerson(listeMitNamen->value(item));
-            listeMitNamen->remove(item);
-            ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable->value(item)));
-            listToTable->remove(item);
-        }
-        return;
     }
 }
 
