@@ -129,7 +129,7 @@ void Verteiler::verteile(double bewertung, QSet<Reservierung *> rest, int puffer
             break;
         }
         Reservierung *r = anzahlToReservierung.value(sortiert.at(j));
-        QList<int> *liste = aktuellerWagen->besetzePlaetze(r);
+        QList<int> liste = aktuellerWagen->besetzePlaetze(r);
         Wagen *alt = aktuellerWagen;
         if (aktuellerWagen->getAnzahlFrei() == 0) {
             if (wagen->indexOf(aktuellerWagen) == wagen->length()-1) {
@@ -155,7 +155,6 @@ void Verteiler::verteile(double bewertung, QSet<Reservierung *> rest, int puffer
         alt = nullptr;
         r = nullptr;
         aktuellerWagen->verlassePlaetze(liste);
-        delete liste;
     }
     delete extra;
 }
