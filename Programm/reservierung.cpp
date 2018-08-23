@@ -22,7 +22,7 @@ Reservierung::Reservierung(QMap<int, Wagen *> *wagen)
     hps->append("-");
     hps->append("-");
     this->wagen = wagen;
-    sitzplatz = new QMap<int, QList<int>*>();
+    sitzplatz = new QMap<int, QList<int>>();
     fahrrad = false;
     sonstiges = "";
 }
@@ -45,7 +45,7 @@ Reservierung::Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen)
         hps->append(val.toString());
     }
     this->wagen = wagen;
-    sitzplatz = new QMap<int, QList<int>*>();
+    sitzplatz = new QMap<int, QList<int>>();
     setSitzplatz(ManagerReservierungen::getPlaetzeFromString(o.value("sitzplaetze").toString()));
     fahrrad = o.value("fahrrad").toBool();
     sonstiges = o.value("sonstiges").toString();
@@ -203,12 +203,12 @@ QString Reservierung::getHtmlForDetailTable()
     return html;
 }
 
-QMap<int, QList<int> *> *Reservierung::getSitzplatz() const
+QMap<int, QList<int>> *Reservierung::getSitzplatz() const
 {
     return sitzplatz;
 }
 
-void Reservierung::setSitzplatz(QMap<int, QList<int> *> *value)
+void Reservierung::setSitzplatz(QMap<int, QList<int>> *value)
 {
     removePlaetze();
     // die neuen belegen, wenn möglich

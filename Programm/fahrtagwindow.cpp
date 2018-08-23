@@ -899,7 +899,7 @@ void FahrtagWindow::on_comboEnde2Hp_currentIndexChanged()
 void FahrtagWindow::on_lineSitze_textChanged(const QString &arg1)
 {
     if (nehmeRes) {
-        QMap<int, QList<int>*> *plaetze = ManagerReservierungen::getPlaetzeFromString(arg1);
+        QMap<int, QList<int>> *plaetze = ManagerReservierungen::getPlaetzeFromString(arg1);
         bool ok = fahrtag->checkPlaetze(plaetze, aktuelleRes);
         aktuelleRes->setSitzplatz(plaetze);
         update();
@@ -918,7 +918,7 @@ void FahrtagWindow::on_lineSitze_returnPressed()
 {
     // prüfe, ob die sitzplätze valide sidn und speichere sie
     if (nehmeRes) {
-        QMap<int, QList<int>*> *plaetze = ManagerReservierungen::getPlaetzeFromString(ui->lineSitze->text());
+        QMap<int, QList<int>> *plaetze = ManagerReservierungen::getPlaetzeFromString(ui->lineSitze->text());
         bool ok = fahrtag->checkPlaetze(plaetze, aktuelleRes);
         aktuelleRes->setSitzplatz(plaetze);
         update();

@@ -17,14 +17,14 @@ public:
 
     int getAnzahlFreiePlaetzeInSitzgruppe();
 
-    void verlassePlaetze(QList<int> *liste);
+    void verlassePlaetze(QList<int> liste);
 
-    QList<int> *besetzePlaetze(Reservierung *r);
-    bool besetzePlaetze(Reservierung *r, QList<int> *plaetze);
+    QList<int> besetzePlaetze(Reservierung *r);
+    bool besetzePlaetze(Reservierung *r, QList<int> plaetze);
 
     double getStrafpunkteFuerPlaetze(int anzahl, int start = 0);
 
-    bool testPlaetze(QList<int> *liste, Reservierung *r); // Testet ob die Plätze frei sind, externe Darstellung
+    bool testPlaetze(QList<int> liste, Reservierung *r); // Testet ob die Plätze frei sind, externe Darstellung
 
     int getAnzahlFrei();
     int getAnzahlBelegt();
@@ -44,8 +44,8 @@ protected:
     static double GEWICHT_STRAFE_TEIL_2;
 
 private slots:
-    QList<int> extToInt(QList<int> *liste);
-    QList<int> *intToExt(QList<int> liste);
+    QList<int> extToInt(QList<int> liste);
+    QList<int> intToExt(QList<int> liste);
     bool test(QList<int> liste, Reservierung *r); // Testet mit der Internen Darstellung
 
 private:
@@ -59,8 +59,8 @@ private:
     QList<int> *sitzGruppen;
     QHash<int, Reservierung *> *verteilung;
 
-    QList<int> *internToExtern; // Übersetzt die Sitzplätze von der internen Kodierung in die Externe, menschenlesbare Form
-    QHash<int, int> *externToIntern; // Reverse von internToExtern, nur als Hash
+    QList<int> internToExtern; // Übersetzt die Sitzplätze von der internen Kodierung in die Externe, menschenlesbare Form
+    QHash<int, int> externToIntern; // Reverse von internToExtern, nur als Hash
 };
 
 #endif // WAGEN_H

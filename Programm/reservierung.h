@@ -34,8 +34,8 @@ public:
     QList<QString> *getZuege() const;
     void setZuege(QList<QString> *value);
 
-    QMap<int, QList<int> *> *getSitzplatz() const;
-    void setSitzplatz(QMap<int, QList<int> *> *value);
+    QMap<int, QList<int> > *getSitzplatz() const;
+    void setSitzplatz(QMap<int, QList<int> > *value);
 
     bool getFahrrad() const;
     void setFahrrad(bool value);
@@ -56,7 +56,7 @@ private:
     int klasse; // 1 = 1. Klasse | 0 = 2./3. Klasse
     QList<QString> *zuege;
     QList<QString> *hps;
-    QMap<int, QList<int> *> *sitzplatz;
+    QMap<int, QList<int>> *sitzplatz;
     bool fahrrad;
     QString sonstiges;
     QMap<int, Wagen *> *wagen;

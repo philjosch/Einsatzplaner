@@ -16,7 +16,7 @@ Wagen::Wagen(int nummer)
 
     sitzGruppen = new QList<int>();
     verteilung = new QHash<int, Reservierung*>();
-    internToExtern = new QList<int>();
+    internToExtern = *new QList<int>();
     // Reihe1 = Oben (Nord)
     // Reihe2 = Unten (Süden)
     // Nummerrierung von Links nach Rechts (West nach Ost)
@@ -41,20 +41,20 @@ Wagen::Wagen(int nummer)
         for (int i = 51; i < 56; i++) { sitzGruppen->append(12); } // 5
         for (int i = 56; i < 58; i++) { sitzGruppen->append(13); } // 2
         for (int i = 58; i < 60; i++) { sitzGruppen->append(14); } // 2
-        *internToExtern << 58 << 57 << 54 << 55 << 56; // 1
-        *internToExtern << 60 << 59; // 2
-        *internToExtern << 52 << 53 << 50 << 51; // 3
-        *internToExtern << 49 << 48 << 47 << 44 << 45 << 46; // 4
-        *internToExtern << 37 << 38 << 39 << 34 << 35 << 36; // 5
-        *internToExtern << 43 << 42 << 41 << 40; // 6
-        *internToExtern << 32 << 33 << 30 << 31; // 7
-        *internToExtern << 29 << 28 << 27 << 24 << 25 << 26; // 8
-        *internToExtern << 17 << 18 << 19 << 14 << 15 << 16; // 9
-        *internToExtern << 23 << 22 << 21 << 20; // 10
-        *internToExtern << 12 << 13 << 10 << 11; // 11
-        *internToExtern <<  9 <<  8 <<  7 <<  5 <<  6; // 12
-        *internToExtern <<  1 <<  2; // 13
-        *internToExtern <<  3 <<  4; // 14
+        internToExtern << 58 << 57 << 54 << 55 << 56; // 1
+        internToExtern << 60 << 59; // 2
+        internToExtern << 52 << 53 << 50 << 51; // 3
+        internToExtern << 49 << 48 << 47 << 44 << 45 << 46; // 4
+        internToExtern << 37 << 38 << 39 << 34 << 35 << 36; // 5
+        internToExtern << 43 << 42 << 41 << 40; // 6
+        internToExtern << 32 << 33 << 30 << 31; // 7
+        internToExtern << 29 << 28 << 27 << 24 << 25 << 26; // 8
+        internToExtern << 17 << 18 << 19 << 14 << 15 << 16; // 9
+        internToExtern << 23 << 22 << 21 << 20; // 10
+        internToExtern << 12 << 13 << 10 << 11; // 11
+        internToExtern <<  9 <<  8 <<  7 <<  5 <<  6; // 12
+        internToExtern <<  1 <<  2; // 13
+        internToExtern <<  3 <<  4; // 14
         // C3YG
         break;
     case 202:
@@ -75,20 +75,20 @@ Wagen::Wagen(int nummer)
         for (int i = 51; i < 57; i++) { sitzGruppen->append(12); } // 6
         for (int i = 57; i < 60; i++) { sitzGruppen->append(13); } // 3
         for (int i = 60; i < 62; i++) { sitzGruppen->append(14); } // 2
-        *internToExtern << 59 << 60 << 56 << 57 << 58; // 1
-        *internToExtern << 62 << 61; // 2
-        *internToExtern << 55 << 54 << 53 << 52; // 3
-        *internToExtern << 51 << 50 << 49 << 46 << 47 << 48; // 4
-        *internToExtern << 39 << 40 << 41 << 36 << 37 << 38; // 5
-        *internToExtern << 45 << 44 << 43 << 42; // 6
-        *internToExtern << 34 << 35 << 32 << 33; // 7
-        *internToExtern << 31 << 30 << 29 << 26 << 27 << 28; // 8
-        *internToExtern << 19 << 20 << 21 << 16 << 17 << 18; // 9
-        *internToExtern << 25 << 24 << 23 << 22; // 10
-        *internToExtern << 14 << 15 << 12 << 13; // 11
-        *internToExtern << 11 << 10 <<  9 <<  6 <<  7 <<  8; // 12
-        *internToExtern <<  1 <<  2 <<  3; // 13
-        *internToExtern <<  5 <<  4; // 14
+        internToExtern << 59 << 60 << 56 << 57 << 58; // 1
+        internToExtern << 62 << 61; // 2
+        internToExtern << 55 << 54 << 53 << 52; // 3
+        internToExtern << 51 << 50 << 49 << 46 << 47 << 48; // 4
+        internToExtern << 39 << 40 << 41 << 36 << 37 << 38; // 5
+        internToExtern << 45 << 44 << 43 << 42; // 6
+        internToExtern << 34 << 35 << 32 << 33; // 7
+        internToExtern << 31 << 30 << 29 << 26 << 27 << 28; // 8
+        internToExtern << 19 << 20 << 21 << 16 << 17 << 18; // 9
+        internToExtern << 25 << 24 << 23 << 22; // 10
+        internToExtern << 14 << 15 << 12 << 13; // 11
+        internToExtern << 11 << 10 <<  9 <<  6 <<  7 <<  8; // 12
+        internToExtern <<  1 <<  2 <<  3; // 13
+        internToExtern <<  5 <<  4; // 14
         // B3YG
         break;
     case 201:
@@ -102,13 +102,13 @@ Wagen::Wagen(int nummer)
         for (int i = 17; i < 23; i++) { sitzGruppen->append(5); } // 6
         for (int i = 23; i < 29; i++) { sitzGruppen->append(6); } // 6
         for (int i = 29; i < 33; i++) { sitzGruppen->append(7); } // 4
-        *internToExtern <<  3 <<  2 <<  1; // 1
-        *internToExtern <<  4 <<  5 <<  6 <<  7 <<  8 <<  9; // 2
-        *internToExtern << 11 << 10 << 12 << 13; // 3
-        *internToExtern << 21 << 20 << 22 << 23; // 4
-        *internToExtern << 16 << 15 << 14 << 17 << 18 << 19; // 5
-        *internToExtern << 24 << 25 << 26 << 27 << 28 << 29; // 6
-        *internToExtern << 31 << 30 << 32 << 33; // 7
+        internToExtern <<  3 <<  2 <<  1; // 1
+        internToExtern <<  4 <<  5 <<  6 <<  7 <<  8 <<  9; // 2
+        internToExtern << 11 << 10 << 12 << 13; // 3
+        internToExtern << 21 << 20 << 22 << 23; // 4
+        internToExtern << 16 << 15 << 14 << 17 << 18 << 19; // 5
+        internToExtern << 24 << 25 << 26 << 27 << 28 << 29; // 6
+        internToExtern << 31 << 30 << 32 << 33; // 7
         // BD3YG
         break;
     case 204:
@@ -127,16 +127,16 @@ Wagen::Wagen(int nummer)
         for (int i = 28; i < 32; i++) { sitzGruppen->append(8); } // 4
         for (int i = 32; i < 36; i++) { sitzGruppen->append(9); } // 4
         for (int i = 36; i < 40; i++) { sitzGruppen->append(10); } // 4
-        *internToExtern <<  6 <<  5 <<  7 <<  8; //  1
-        *internToExtern <<  2 <<  1 <<  3 <<  4; //  2
-        *internToExtern << 14 << 13 << 15 << 16; //  3
-        *internToExtern << 10 <<  9 << 11 << 12; //  4
-        *internToExtern << 22 << 21 << 23 << 24; //  5
-        *internToExtern << 18 << 17 << 19 << 20; //  6
-        *internToExtern << 30 << 29 << 31 << 32; //  7
-        *internToExtern << 26 << 25 << 27 << 28; //  8
-        *internToExtern << 38 << 37 << 39 << 40; //  9
-        *internToExtern << 34 << 33 << 35 << 36; // 10
+        internToExtern <<  6 <<  5 <<  7 <<  8; //  1
+        internToExtern <<  2 <<  1 <<  3 <<  4; //  2
+        internToExtern << 14 << 13 << 15 << 16; //  3
+        internToExtern << 10 <<  9 << 11 << 12; //  4
+        internToExtern << 22 << 21 << 23 << 24; //  5
+        internToExtern << 18 << 17 << 19 << 20; //  6
+        internToExtern << 30 << 29 << 31 << 32; //  7
+        internToExtern << 26 << 25 << 27 << 28; //  8
+        internToExtern << 38 << 37 << 39 << 40; //  9
+        internToExtern << 34 << 33 << 35 << 36; // 10
         // WG3YG neu
         break;
 
@@ -146,9 +146,9 @@ Wagen::Wagen(int nummer)
         reihe2 = 0;
     }
 
-    externToIntern = new QHash<int, int>();
-    for(int i = 0; i < internToExtern->length(); ++i) {
-        externToIntern->insert(internToExtern->at(i), i);
+    externToIntern = *new QHash<int, int>();
+    for(int i = 0; i < internToExtern.length(); ++i) {
+        externToIntern.insert(internToExtern.at(i), i);
     }
 }
 
@@ -191,38 +191,36 @@ int Wagen::getAnzahlFreiePlaetzeInSitzgruppe()
     return anzahl;
 }
 
-void Wagen::verlassePlaetze(QList<int> *liste)
+void Wagen::verlassePlaetze(QList<int> liste)
 {
     // Umrechnen in Interne Darstellung
-    if (liste == nullptr) return;
+    if (liste.isEmpty()) return;
     QList<int> intern = extToInt(liste);
-    for(int i = intern.length()-1; i >= 0; i--) {
+    if (intern.isEmpty()) return;
+    for(int i = 0; i < intern.length(); i++) {
         verteilung->remove(intern.at(i));
     }
-    if (intern.length() > 0)
-        if (aktuellePosition > intern.first())
-            aktuellePosition = intern.first();
+    if (aktuellePosition > intern.first())
+        aktuellePosition = intern.first();
 }
 
-QList<int> *Wagen::besetzePlaetze(Reservierung *r)
+QList<int> Wagen::besetzePlaetze(Reservierung *r)
 {
     QList<int> liste;
-    if (r->getAnzahl() > getAnzahlFrei()) return nullptr;
+    if (r->getAnzahl() > getAnzahlFrei()) return liste;
     int i = 0;
     while (i < r->getAnzahl()) {
-        if (verteilung->contains(aktuellePosition)) {
-            aktuellePosition ++;
-        } else {
+        if (! verteilung->contains(aktuellePosition)) {
             liste.append(aktuellePosition);
             verteilung->insert(aktuellePosition, r);
-            ++aktuellePosition;
             ++i;
         }
+        aktuellePosition ++;
     }
     return intToExt(liste);
 }
 
-bool Wagen::besetzePlaetze(Reservierung *r, QList<int> *plaetze)
+bool Wagen::besetzePlaetze(Reservierung *r, QList<int> plaetze)
 {
     // Umrechnen in interne Darstellung
     QList<int> intern = extToInt(plaetze);
@@ -286,7 +284,7 @@ double Wagen::getStrafpunkteFuerPlaetze(int anzahl, int start)
     return GEWICHT_STRAFE_TEIL_1 * sp1 + GEWICHT_STRAFE_TEIL_2 * sp2;
 }
 
-bool Wagen::testPlaetze(QList<int> *liste, Reservierung *r)
+bool Wagen::testPlaetze(QList<int> liste, Reservierung *r)
 {
     // Prüft, ob die Plätze frei sind.
     return test(extToInt(liste), r);
@@ -309,22 +307,25 @@ int Wagen::getKapazitaet()
 
 bool Wagen::isEmpty()
 {
-    return verteilung->size() == 0;
+    return verteilung->isEmpty();
 }
 
 void Wagen::weisePlaetzeZu()
 {
-    QMap<Reservierung*, QList<int>*> intern; // Plaetze in interner Darstellung
+    QMap<Reservierung*, QList<int>> intern; // Plaetze in interner Darstellung
     for(int i: verteilung->keys()) {
         Reservierung *r = verteilung->value(i);
         if (!intern.contains(r))
-            intern.insert(r, new QList<int>());
-        intern.value(r)->append(i);
+            intern.insert(r, QList<int>());
+        QList<int> help = intern.value(r);
+        help.append(i);
+        intern.insert(r, help);
+//        intern.value(r).append(i);
     }
 
     for(Reservierung *r: intern.keys()) {
-        QMap<int, QList<int>*> *plaetze = new QMap<int, QList<int>*>();
-        plaetze->insert(nummer, intToExt(*intern.value(r)));
+        QMap<int, QList<int>> *plaetze = new QMap<int, QList<int>>();
+        plaetze->insert(nummer, intToExt(intern.value(r)));
         r->setSitzplatz(plaetze);
     }
 }
@@ -356,21 +357,21 @@ bool Wagen::test(QList<int> liste, Reservierung *r)
     return true;
 }
 
-QList<int> *Wagen::intToExt(QList<int> liste)
+QList<int> Wagen::intToExt(QList<int> liste)
 {
-    QList<int> *ext = new QList<int>();
+    QList<int> ext;
     for(int i: liste) {
-        ext->append(internToExtern->at(i));
+        ext.append(internToExtern.at(i));
     }
-    qSort(*ext);
+    qSort(ext);
     return ext;
 }
 
-QList<int> Wagen::extToInt(QList<int> *liste)
+QList<int> Wagen::extToInt(QList<int> liste)
 {
     QList<int> intern;
-    for(int i: *liste) {
-        intern.append(externToIntern->value(i));
+    for(int i: liste) {
+        intern.append(externToIntern.value(i));
     }
     qSort(intern);
     return intern;
