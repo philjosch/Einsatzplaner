@@ -10,12 +10,31 @@
 class Verteiler
 {
 public:
-    Verteiler(QList<Wagen*> *wagen, QSet<Reservierung*> *reservierungen);
+    Verteiler(QList<Wagen*> wagen, QSet<Reservierung*> reservierungen);
     bool verteile();
+    bool verteile2();
     void setCheckAll(bool value);
 
+    struct Configuration {
+        double bewertung;
+        QSet<Reservierung *> rest;
+        int puffer;
+        int aktWagen;
+        Reservierung *res;
+        QList<int> sitze;
+    };
+
 private:
+
+    struct ResBewTuple {
+        QList<Reservierung*> res;
+        QList<double> bew;
+        Reservierung *extra;
+    };
+
+
     void verteile(double bewertung, QSet<Reservierung*> rest, int puffer);
+
     void dePlatziere(Reservierung *res);
     bool platziere(Reservierung *res);
 
@@ -24,13 +43,15 @@ private:
 
     void weisePlaetzeZu();
 
-    double getMinBewertung(QSet<Reservierung *> *liste);
+    double getMinBewertung(QSet<Reservierung *> liste);
 
-    QList<Wagen*> *wagen;
-    QSet<Reservierung*> *reservierungen;
+    ResBewTuple getNaechsteReservierungen(QSet<Reservierung*> res, int aktWagen, double bewertung, int puffer=0);
+
+    QList<Wagen*> wagen;
+    QSet<Reservierung*> reservierungen;
     bool found;
     double besteBewertung;
-    Wagen *aktuellerWagen;
+    int aktWg;
     int count;
     bool checkAll;
     double mindestbewertung;

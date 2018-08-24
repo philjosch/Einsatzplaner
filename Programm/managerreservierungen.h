@@ -51,11 +51,11 @@ public slots:
 
 protected:
     QString wagenreihung;
-    QSet<Reservierung*> *reservierungen;
+    QSet<Reservierung*> reservierungen;
     bool checkAll;
 
-    QList<Wagen *> *wagen;
-    QMap<int,Wagen*> *nummerToWagen;
+    QList<Wagen *> wagen;
+    QMap<int,Wagen*> nummerToWagen;
 
     bool createWagen();
 };

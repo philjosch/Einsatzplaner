@@ -199,7 +199,7 @@ QString Fahrtag::getHtmlForSingleView()
         }
         if (art != Fahrtag::Nikolauszug) {
             html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
-            for(Reservierung *r: *reservierungen) {
+            for(Reservierung *r: reservierungen) {
                 html += r->getTableRow();
             }
             html += "</tbody></table>";

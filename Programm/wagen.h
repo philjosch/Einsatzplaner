@@ -56,7 +56,7 @@ private:
     int reihe1;
     int reihe2;
 
-    QList<int> *sitzGruppen;
+    QList<int> sitzGruppen;
     QHash<int, Reservierung *> *verteilung;
 
     QList<int> internToExtern; // Übersetzt die Sitzplätze von der internen Kodierung in die Externe, menschenlesbare Form

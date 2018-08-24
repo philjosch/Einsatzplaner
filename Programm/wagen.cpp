@@ -14,7 +14,7 @@ Wagen::Wagen(int nummer)
     aktuellePosition = 0;
     this->nummer = nummer;
 
-    sitzGruppen = new QList<int>();
+    sitzGruppen = QList<int>();
     verteilung = new QHash<int, Reservierung*>();
     internToExtern = *new QList<int>();
     // Reihe1 = Oben (Nord)
@@ -27,20 +27,20 @@ Wagen::Wagen(int nummer)
         size = 60;
         reihe1 = 3;
         reihe2 = 2;
-        for (int i =  0; i <  5; i++) { sitzGruppen->append(1); } // 5
-        for (int i =  5; i <  7; i++) { sitzGruppen->append(2); } // 2
-        for (int i =  7; i < 11; i++) { sitzGruppen->append(3); } // 4
-        for (int i = 11; i < 17; i++) { sitzGruppen->append(4); } // 6
-        for (int i = 17; i < 23; i++) { sitzGruppen->append(5); } // 6
-        for (int i = 23; i < 27; i++) { sitzGruppen->append(6); } // 4
-        for (int i = 27; i < 31; i++) { sitzGruppen->append(7); } // 4
-        for (int i = 31; i < 37; i++) { sitzGruppen->append(8); } // 6
-        for (int i = 37; i < 43; i++) { sitzGruppen->append(9); } // 6
-        for (int i = 43; i < 47; i++) { sitzGruppen->append(10); } // 4
-        for (int i = 47; i < 51; i++) { sitzGruppen->append(11); } // 4
-        for (int i = 51; i < 56; i++) { sitzGruppen->append(12); } // 5
-        for (int i = 56; i < 58; i++) { sitzGruppen->append(13); } // 2
-        for (int i = 58; i < 60; i++) { sitzGruppen->append(14); } // 2
+        for (int i =  0; i <  5; i++) { sitzGruppen.append(1); } // 5
+        for (int i =  5; i <  7; i++) { sitzGruppen.append(2); } // 2
+        for (int i =  7; i < 11; i++) { sitzGruppen.append(3); } // 4
+        for (int i = 11; i < 17; i++) { sitzGruppen.append(4); } // 6
+        for (int i = 17; i < 23; i++) { sitzGruppen.append(5); } // 6
+        for (int i = 23; i < 27; i++) { sitzGruppen.append(6); } // 4
+        for (int i = 27; i < 31; i++) { sitzGruppen.append(7); } // 4
+        for (int i = 31; i < 37; i++) { sitzGruppen.append(8); } // 6
+        for (int i = 37; i < 43; i++) { sitzGruppen.append(9); } // 6
+        for (int i = 43; i < 47; i++) { sitzGruppen.append(10); } // 4
+        for (int i = 47; i < 51; i++) { sitzGruppen.append(11); } // 4
+        for (int i = 51; i < 56; i++) { sitzGruppen.append(12); } // 5
+        for (int i = 56; i < 58; i++) { sitzGruppen.append(13); } // 2
+        for (int i = 58; i < 60; i++) { sitzGruppen.append(14); } // 2
         internToExtern << 58 << 57 << 54 << 55 << 56; // 1
         internToExtern << 60 << 59; // 2
         internToExtern << 52 << 53 << 50 << 51; // 3
@@ -61,20 +61,20 @@ Wagen::Wagen(int nummer)
         size = 62;
         reihe1 = 3;
         reihe2 = 2;
-        for (int i =  0; i <  5; i++) { sitzGruppen->append(1); } // 5
-        for (int i =  5; i <  7; i++) { sitzGruppen->append(2); } // 2
-        for (int i =  7; i < 11; i++) { sitzGruppen->append(3); } // 4
-        for (int i = 11; i < 17; i++) { sitzGruppen->append(4); } // 6
-        for (int i = 17; i < 23; i++) { sitzGruppen->append(5); } // 6
-        for (int i = 23; i < 27; i++) { sitzGruppen->append(6); } // 4
-        for (int i = 27; i < 31; i++) { sitzGruppen->append(7); } // 4
-        for (int i = 31; i < 37; i++) { sitzGruppen->append(8); } // 6
-        for (int i = 37; i < 43; i++) { sitzGruppen->append(9); } // 6
-        for (int i = 43; i < 47; i++) { sitzGruppen->append(10); } // 4
-        for (int i = 47; i < 51; i++) { sitzGruppen->append(11); } // 4
-        for (int i = 51; i < 57; i++) { sitzGruppen->append(12); } // 6
-        for (int i = 57; i < 60; i++) { sitzGruppen->append(13); } // 3
-        for (int i = 60; i < 62; i++) { sitzGruppen->append(14); } // 2
+        for (int i =  0; i <  5; i++) { sitzGruppen.append(1); } // 5
+        for (int i =  5; i <  7; i++) { sitzGruppen.append(2); } // 2
+        for (int i =  7; i < 11; i++) { sitzGruppen.append(3); } // 4
+        for (int i = 11; i < 17; i++) { sitzGruppen.append(4); } // 6
+        for (int i = 17; i < 23; i++) { sitzGruppen.append(5); } // 6
+        for (int i = 23; i < 27; i++) { sitzGruppen.append(6); } // 4
+        for (int i = 27; i < 31; i++) { sitzGruppen.append(7); } // 4
+        for (int i = 31; i < 37; i++) { sitzGruppen.append(8); } // 6
+        for (int i = 37; i < 43; i++) { sitzGruppen.append(9); } // 6
+        for (int i = 43; i < 47; i++) { sitzGruppen.append(10); } // 4
+        for (int i = 47; i < 51; i++) { sitzGruppen.append(11); } // 4
+        for (int i = 51; i < 57; i++) { sitzGruppen.append(12); } // 6
+        for (int i = 57; i < 60; i++) { sitzGruppen.append(13); } // 3
+        for (int i = 60; i < 62; i++) { sitzGruppen.append(14); } // 2
         internToExtern << 59 << 60 << 56 << 57 << 58; // 1
         internToExtern << 62 << 61; // 2
         internToExtern << 55 << 54 << 53 << 52; // 3
@@ -95,13 +95,13 @@ Wagen::Wagen(int nummer)
         size = 33;
         reihe1 = 2;
         reihe2 = 3;
-        for (int i =  0; i <  3; i++) { sitzGruppen->append(1); } // 3
-        for (int i =  3; i <  9; i++) { sitzGruppen->append(2); } // 6
-        for (int i =  9; i < 13; i++) { sitzGruppen->append(3); } // 4
-        for (int i = 13; i < 17; i++) { sitzGruppen->append(4); } // 4
-        for (int i = 17; i < 23; i++) { sitzGruppen->append(5); } // 6
-        for (int i = 23; i < 29; i++) { sitzGruppen->append(6); } // 6
-        for (int i = 29; i < 33; i++) { sitzGruppen->append(7); } // 4
+        for (int i =  0; i <  3; i++) { sitzGruppen.append(1); } // 3
+        for (int i =  3; i <  9; i++) { sitzGruppen.append(2); } // 6
+        for (int i =  9; i < 13; i++) { sitzGruppen.append(3); } // 4
+        for (int i = 13; i < 17; i++) { sitzGruppen.append(4); } // 4
+        for (int i = 17; i < 23; i++) { sitzGruppen.append(5); } // 6
+        for (int i = 23; i < 29; i++) { sitzGruppen.append(6); } // 6
+        for (int i = 29; i < 33; i++) { sitzGruppen.append(7); } // 4
         internToExtern <<  3 <<  2 <<  1; // 1
         internToExtern <<  4 <<  5 <<  6 <<  7 <<  8 <<  9; // 2
         internToExtern << 11 << 10 << 12 << 13; // 3
@@ -117,16 +117,16 @@ Wagen::Wagen(int nummer)
         size = 40;
         reihe1 = 2;
         reihe2 = 2;
-        for (int i =  0; i <  4; i++) { sitzGruppen->append(1); } // 4
-        for (int i =  4; i <  8; i++) { sitzGruppen->append(2); } // 4
-        for (int i =  8; i < 12; i++) { sitzGruppen->append(3); } // 4
-        for (int i = 12; i < 16; i++) { sitzGruppen->append(4); } // 4
-        for (int i = 16; i < 20; i++) { sitzGruppen->append(5); } // 4
-        for (int i = 20; i < 24; i++) { sitzGruppen->append(6); } // 4
-        for (int i = 24; i < 28; i++) { sitzGruppen->append(7); } // 4
-        for (int i = 28; i < 32; i++) { sitzGruppen->append(8); } // 4
-        for (int i = 32; i < 36; i++) { sitzGruppen->append(9); } // 4
-        for (int i = 36; i < 40; i++) { sitzGruppen->append(10); } // 4
+        for (int i =  0; i <  4; i++) { sitzGruppen.append(1); } // 4
+        for (int i =  4; i <  8; i++) { sitzGruppen.append(2); } // 4
+        for (int i =  8; i < 12; i++) { sitzGruppen.append(3); } // 4
+        for (int i = 12; i < 16; i++) { sitzGruppen.append(4); } // 4
+        for (int i = 16; i < 20; i++) { sitzGruppen.append(5); } // 4
+        for (int i = 20; i < 24; i++) { sitzGruppen.append(6); } // 4
+        for (int i = 24; i < 28; i++) { sitzGruppen.append(7); } // 4
+        for (int i = 28; i < 32; i++) { sitzGruppen.append(8); } // 4
+        for (int i = 32; i < 36; i++) { sitzGruppen.append(9); } // 4
+        for (int i = 36; i < 40; i++) { sitzGruppen.append(10); } // 4
         internToExtern <<  6 <<  5 <<  7 <<  8; //  1
         internToExtern <<  2 <<  1 <<  3 <<  4; //  2
         internToExtern << 14 << 13 << 15 << 16; //  3
@@ -146,7 +146,7 @@ Wagen::Wagen(int nummer)
         reihe2 = 0;
     }
 
-    externToIntern = *new QHash<int, int>();
+    externToIntern = QHash<int, int>();
     for(int i = 0; i < internToExtern.length(); ++i) {
         externToIntern.insert(internToExtern.at(i), i);
     }
@@ -177,18 +177,9 @@ int Wagen::klasse()
 int Wagen::getAnzahlFreiePlaetzeInSitzgruppe()
 {
     if (aktuellePosition == size) return 0; // Out of range
-    int anzahl = 0;
-    int startGruppe = sitzGruppen->at(aktuellePosition);
-    bool does = true;
-    for(int i = aktuellePosition; does; i++) {
-        if (! verteilung->contains(i))
-            anzahl ++;
-        if (i < size)
-            does = (startGruppe == sitzGruppen->at(i));
-        else
-            does = false;
-    }
-    return anzahl;
+    int gruppe = sitzGruppen.at(aktuellePosition);
+    int ende = sitzGruppen.lastIndexOf(gruppe);
+    return ende-aktuellePosition+1;
 }
 
 void Wagen::verlassePlaetze(QList<int> liste)
@@ -243,14 +234,14 @@ double Wagen::getStrafpunkteFuerPlaetze(int anzahl, int start)
     int ende = start + anzahl - 1;
     if (ende >= size) return -1; // wenn die Plätze nicht in diesem Wagen platziert werden können
 
-    int sitzGruppeStart = sitzGruppen->at(start);
-    int sitzGruppeEnde = sitzGruppen->at(ende);
+    int sitzGruppeStart = sitzGruppen.at(start);
+    int sitzGruppeEnde = sitzGruppen.at(ende);
 
-    int beginnErste = sitzGruppen->indexOf(sitzGruppeStart);
-    int endeErste = sitzGruppen->lastIndexOf(sitzGruppeStart);
+    int beginnErste = sitzGruppen.indexOf(sitzGruppeStart);
+    int endeErste = sitzGruppen.lastIndexOf(sitzGruppeStart);
 
-    int beginnLetzte = sitzGruppen->indexOf(sitzGruppeEnde);
-    int endeLetzte = sitzGruppen->lastIndexOf(sitzGruppeEnde);
+    int beginnLetzte = sitzGruppen.indexOf(sitzGruppeEnde);
+    int endeLetzte = sitzGruppen.lastIndexOf(sitzGruppeEnde);
 
     // Berechnung der Strafpunkte
     double sp1 = 0;
@@ -260,8 +251,7 @@ double Wagen::getStrafpunkteFuerPlaetze(int anzahl, int start)
     double maxB = ceil(anzahl / fmax(2*reihe1, 2*reihe2));
 
     // Bestimme die belegten Sitzgruppen
-    double benoetigt = sitzGruppeEnde - sitzGruppeStart + 1;
-    sp1 = benoetigt - maxB;
+    int benoetigt = sitzGruppeEnde - sitzGruppeStart + 1;
 
     // Sp 2 //
     int ueV = start - beginnErste;; // Anzahl der durch fremde Reservierungen belegten Plätze am Anfang
@@ -269,16 +259,16 @@ double Wagen::getStrafpunkteFuerPlaetze(int anzahl, int start)
     int ueH = endeLetzte - ende; // Anzahl der durch fremde Reservierungen belegten Sitzplaetze in der letzten Sitzgruppe
     int sgH = endeLetzte - beginnLetzte + 1; // Anzahl der Plaetze in letzter Sitzgruppe
 
-    if (sitzGruppen->at(start) != sitzGruppen->at(ende)) {
-        sp2 += ueV*ueV + ueH *ueH;
-    } else {
-        sp2 += ueV*ueV;
-    }
-
     // Zweite Neue Variante zur Berechnung des Fehlers:
-    sp1 = ((double) (benoetigt - maxB)) / ((double) maxB);
-    sp2 = (ueV*ueV)/(double)(sgV*sgV) + (ueH*ueH)/ (double)(sgH*sgH);
-    sp2 = ((double) sp2)/((double)2.0);
+    sp1 = (benoetigt - maxB) / maxB;
+//    sp2 = (ueV*ueV)/(double)(sgV*sgV) + (ueH*ueH)/ (double)(sgH*sgH);
+//    sp2 = sp2/2. - 1.;
+
+    if (benoetigt > 1) {
+        sp2 = ueV*ueV + ueH*ueH;
+//    } else {
+//        sp2 = 0;
+    }
 
     // Gewichtung der einzelnen Strafpunkte //
     return GEWICHT_STRAFE_TEIL_1 * sp1 + GEWICHT_STRAFE_TEIL_2 * sp2;
@@ -345,10 +335,8 @@ bool Wagen::test(QList<int> liste, Reservierung *r)
 {
     for(int pos: liste) {
         if (pos < size && pos >= 0) {
-            if (verteilung->contains(pos)) {
-                if (verteilung->value(pos) != r) {
-                    return false;
-                }
+            if (verteilung->contains(pos) && verteilung->value(pos) != r) {
+                return false;
             }
         } else {
             return false;

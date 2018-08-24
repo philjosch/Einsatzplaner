@@ -81,25 +81,25 @@ QMap<int, QList<int>> *ManagerReservierungen::getPlaetzeFromString(QString plaet
 
 ManagerReservierungen::ManagerReservierungen()
 {
-    wagen = new QList<Wagen *>;
-    nummerToWagen = new QMap<int, Wagen*>();
+    wagen = QList<Wagen *>();
+    nummerToWagen = QMap<int, Wagen*>();
     wagenreihung = "221, 217, 208, 309";
     createWagen();
     checkAll = false;
-    reservierungen = new QSet<Reservierung*>();
+    reservierungen = QSet<Reservierung*>();
 }
 
 ManagerReservierungen::ManagerReservierungen(QJsonObject o)
 {
-    wagen = new QList<Wagen*>();
-    nummerToWagen = new QMap<int, Wagen*>();
+    wagen = QList<Wagen*>();
+    nummerToWagen = QMap<int, Wagen*>();
     wagenreihung = o.value("wagenreihung").toString();
     createWagen();
     checkAll = o.value("checkAll").toBool();
-    reservierungen = new QSet<Reservierung*>();
+    reservierungen = QSet<Reservierung*>();
     QJsonArray array = o.value("reservierungen").toArray();
     for(int i = 0; i < array.size(); i++) {
-        reservierungen->insert(new Reservierung(array.at(i).toObject(), nummerToWagen));
+        reservierungen.insert(new Reservierung(array.at(i).toObject(), &nummerToWagen));
     }
 }
 
@@ -113,7 +113,7 @@ QJsonObject ManagerReservierungen::toJson(QJsonObject o)
     o.insert("wagenreihung", wagenreihung);
     o.insert("checkAll", checkAll);
     QJsonArray array;
-    for(Reservierung *r: reservierungen->values()) {
+    for(Reservierung *r: reservierungen.values()) {
         array.append(r->toJson());
     }
     o.insert("reservierungen", array);
@@ -145,7 +145,7 @@ bool ManagerReservierungen::setWagenreihung(const QString &value)
 int ManagerReservierungen::getBelegtGesamt()
 {
     int summe = 0;
-    for(Reservierung *r: *reservierungen) {
+    for(Reservierung *r: reservierungen) {
         summe += r->getAnzahl();
     }
     return summe;
@@ -153,7 +153,7 @@ int ManagerReservierungen::getBelegtGesamt()
 int ManagerReservierungen::getCapacityGesamt()
 {
     int summe = 0;
-    for(Wagen *w: *wagen) {
+    for(Wagen *w: wagen) {
         summe += w->getKapazitaet();
     }
     return summe;
@@ -163,7 +163,7 @@ int ManagerReservierungen::getCapacityGesamt()
 int ManagerReservierungen::getBelegtErste()
 {
     int summe = 0;
-    for(Wagen *w: *wagen) {
+    for(Wagen *w: wagen) {
         if (w->klasse() == 1) {
             summe += w->getAnzahlBelegt();
         }
@@ -173,7 +173,7 @@ int ManagerReservierungen::getBelegtErste()
 int ManagerReservierungen::getCapacityErste()
 {
     int summe = 0;
-    for(Wagen *w: *wagen) {
+    for(Wagen *w: wagen) {
         if (w->klasse() == 1)
             summe += w->getKapazitaet();
     }
@@ -183,7 +183,7 @@ int ManagerReservierungen::getCapacityErste()
 int ManagerReservierungen::getBelegtZweite()
 {
     int summe = 0;
-    for(Wagen *w: *wagen) {
+    for(Wagen *w: wagen) {
         if (w->klasse() == 2) {
             summe += w->getAnzahlBelegt();
         }
@@ -193,7 +193,7 @@ int ManagerReservierungen::getBelegtZweite()
 int ManagerReservierungen::getCapacityZweite()
 {
     int summe = 0;
-    for(Wagen *w: *wagen) {
+    for(Wagen *w: wagen) {
         if (w->klasse() == 2)
             summe += w->getKapazitaet();
     }
@@ -203,7 +203,7 @@ int ManagerReservierungen::getCapacityZweite()
 int ManagerReservierungen::getBelegtDritte()
 {
     int summe = 0;
-    for(Wagen *w: *wagen) {
+    for(Wagen *w: wagen) {
         if (w->klasse() == 3) {
             summe += w->getAnzahlBelegt();
         }
@@ -213,7 +213,7 @@ int ManagerReservierungen::getBelegtDritte()
 int ManagerReservierungen::getCapacityDritte()
 {
     int summe = 0;
-    for(Wagen *w: *wagen) {
+    for(Wagen *w: wagen) {
         if (w->klasse() == 3)
             summe += w->getKapazitaet();
     }
@@ -222,59 +222,59 @@ int ManagerReservierungen::getCapacityDritte()
 
 int ManagerReservierungen::getAnzahl()
 {
-    return reservierungen->size();
+    return reservierungen.size();
 }
 
 QSetIterator<Reservierung *> ManagerReservierungen::getReservierungen()
 {
-    QSetIterator<Reservierung*> r(*reservierungen);
+    QSetIterator<Reservierung*> r(reservierungen);
     return r;
 }
 
 bool ManagerReservierungen::verteileSitzplaetze()
 {
     // aufteilen der Wagen auf die beiden Gruppen
-    QList<Wagen*> *ersteKlasse = new QList<Wagen*>();
-    QList<Wagen*> *andereKlasse = new QList<Wagen*>();
+    QList<Wagen*> ersteKlasse = QList<Wagen*>();
+    QList<Wagen*> andereKlasse = QList<Wagen*>();
     QStringList wagenR = wagenreihung.split(QRegExp("\\s*,\\s*"));
     for(QString s: wagenR) {
         int nummer = s.toInt();
         switch (Wagen::klasse(nummer)) {
-        case 1: ersteKlasse->append(new Wagen(nummer)); break;
+        case 1: ersteKlasse.append(new Wagen(nummer)); break;
         case 2:
-        case 3: andereKlasse->append(new Wagen(nummer)); break;
+        case 3: andereKlasse.append(new Wagen(nummer)); break;
         default: break;
         }
     }
     // Aufteilen der Resevierungen auf die beiden gruppen
-    QSet<Reservierung*> *resErste = new QSet<Reservierung*>();
-    QSet<Reservierung*> *resAndere = new QSet<Reservierung*>();
-    for(Reservierung *r: *reservierungen) {
+    QSet<Reservierung*> resErste = QSet<Reservierung*>();
+    QSet<Reservierung*> resAndere = QSet<Reservierung*>();
+    for(Reservierung *r: reservierungen) {
         if (r->getKlasse() == 1)
-            resErste->insert(r);
+            resErste.insert(r);
         else
-            resAndere->insert(r);
+            resAndere.insert(r);
     }
     // Verteilen der Sitzplätze
     bool ok = true;
     // Erste klasse verteilen
-    if (resErste->size() > 0 && ersteKlasse->length() > 0) {
+    if (resErste.size() > 0 && ersteKlasse.length() > 0) {
         Verteiler *erste = new Verteiler(ersteKlasse, resErste);
         erste->setCheckAll(checkAll);
-        ok = ok && erste->verteile();
-    } else if (resErste->size() > 0 && ersteKlasse->length() == 0) {
+        ok = ok && erste->verteile2();
+    } else if (resErste.size() > 0 && ersteKlasse.length() == 0) {
         ok = false;
     }
     // 2./3. Klasse verteilen
-    if (resAndere->size() > 0 && andereKlasse->length() > 0) {
+    if (resAndere.size() > 0 && andereKlasse.length() > 0) {
         Verteiler *andere = new Verteiler(andereKlasse, resAndere);
         andere->setCheckAll(checkAll);
-        ok = ok && andere->verteile();
-    } else if (resAndere->size() > 0 && andereKlasse->length() == 0) {
+        ok = ok && andere->verteile2();
+    } else if (resAndere.size() > 0 && andereKlasse.length() == 0) {
         ok = false;
     }
     // Die Sitzplätze zuweisen, sodass sie in den Wagen erscheinen.
-    for(Reservierung *r: reservierungen->values()) {
+    for(Reservierung *r: reservierungen.values()) {
         r->setSitzplatz(r->getSitzplatz());
     }
     return ok;
@@ -285,13 +285,13 @@ bool ManagerReservierungen::checkPlaetze(QMap<int, QList<int>> *p, Reservierung 
     // Überprüft, ob die eingegebenen Sitzplätze frei sind, oder ob sie schon belegt wurden
     int summe = 0;
     for(int w: p->keys()) {
-        if (! nummerToWagen->contains(w)) return false;
-        if (r->getKlasse() == 1 && nummerToWagen->value(w)->klasse() != 1) return false;
-        if (r->getKlasse() == 0 && (nummerToWagen->value(w)->klasse() != 2 &&
-                                    nummerToWagen->value(w)->klasse() != 3)) return false;
+        if (! nummerToWagen.contains(w)) return false;
+        if (r->getKlasse() == 1 && nummerToWagen.value(w)->klasse() != 1) return false;
+        if (r->getKlasse() == 0 && (nummerToWagen.value(w)->klasse() != 2 &&
+                                    nummerToWagen.value(w)->klasse() != 3)) return false;
         summe += p->value(w).length();
         // für jeden Wagen prüfen, ob die Plätze belegt sind
-        if (! nummerToWagen->value(w)->testPlaetze(p->value(w), r)) return false;
+        if (! nummerToWagen.value(w)->testPlaetze(p->value(w), r)) return false;
     }
     if (summe != r->getAnzahl()) return false;
     return true;
@@ -299,25 +299,25 @@ bool ManagerReservierungen::checkPlaetze(QMap<int, QList<int>> *p, Reservierung 
 
 Reservierung *ManagerReservierungen::createReservierung()
 {
-    Reservierung *r = new Reservierung(nummerToWagen);
-    reservierungen->insert(r);
+    Reservierung *r = new Reservierung(&nummerToWagen);
+    reservierungen.insert(r);
     return r;
 }
 
 bool ManagerReservierungen::removeReservierung(Reservierung *res)
 {
     res->removePlaetze();
-    return reservierungen->remove(res);
+    return reservierungen.remove(res);
 }
 
 bool ManagerReservierungen::createWagen()
 {
     QHash<int,Wagen*> wagenNummer;
-    for(Wagen *w: *wagen) {
+    for(Wagen *w: wagen) {
         wagenNummer.insert(w->getNummer(), w);
     }
 
-    QList<Wagen*> *wagenNeu = new QList<Wagen*>();
+    QList<Wagen*> wagenNeu = QList<Wagen*>();
     QStringList wagenSplit = wagenreihung.split(QRegExp("\\s*,\\s*"));
     for(QString s: wagenSplit) {
         int nummer = s.toInt();
@@ -329,7 +329,7 @@ bool ManagerReservierungen::createWagen()
             if (Wagen::klasse(nummer) == 0) continue;
             w = new Wagen(nummer);
         }
-        wagenNeu->append(w);
+        wagenNeu.append(w);
     }
     if (! wagenNummer.isEmpty()) {
         // Prüfe ob die nicht gelöschten Wagen leer sind
@@ -340,9 +340,9 @@ bool ManagerReservierungen::createWagen()
         // Wenn test für alle Wagen überstanden ist, können sie gelöscht werden
     }
     wagen = wagenNeu;
-    nummerToWagen->clear();
-    for(Wagen *w: *wagen) {
-        nummerToWagen->insert(w->getNummer(), w);
+    nummerToWagen.clear();
+    for(Wagen *w: wagen) {
+        nummerToWagen.insert(w->getNummer(), w);
     }
     return true;
 }
