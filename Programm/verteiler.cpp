@@ -29,9 +29,6 @@ bool Verteiler::verteile()
     if (puffer < 0) return false;
     verteile(0, reservierungen, puffer);
 
-    for(Wagen *w: wagen) {
-        qDebug() << w->getNummer() << w->counter;
-    }
     return found;
 }
 
@@ -185,12 +182,7 @@ bool Verteiler::verteile2()
     int aktWg = 0;
     Reservierung *r;
     ResBewTuple sortiert;
-    int counter = 0;
     while(! stack.isEmpty()) {
-        if (counter++ == 10000000) {
-            qDebug() << wagen.first()->counter;
-            counter = 0;
-        }
         Configuration config = stack.pop();
         if (! config.sitze.isEmpty()) {
             wagen.at(config.aktWagen)->verlassePlaetze(config.sitze);
@@ -233,9 +225,6 @@ bool Verteiler::verteile2()
 
             stack.push(newConfig);
         }
-    }
-    for(Wagen *w: wagen) {
-        qDebug() << w->getNummer() << w->counter;
     }
 
     return found;
