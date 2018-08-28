@@ -218,11 +218,13 @@ bool Calendar::removeActivity(AActivity *a)
     ui->listWidget->takeItem(ui->listWidget->row(listitem->value(a)));
     itemToList->remove(listitem->value(a));
     listitem->remove(a);
-    calendaritem->value(a)->remove(a);
-    calendaritem->remove(a);
-    Manager::removeActivity(a);
+    if (calendaritem->contains(a)) {
+        calendaritem->value(a)->remove(a);
+        calendaritem->remove(a);
+    }
+    bool ret = Manager::removeActivity(a);
     emit changed();
-    return true;
+    return ret;
 }
 
 void Calendar::activityChanged(AActivity *a)
