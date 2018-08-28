@@ -104,7 +104,7 @@ void Manager::update(int pos)
     // Verschieb das Objekt an Stelle pos an die Richtige Stelle, sodass später schneller darauf zugegriffen werden kann
     int i = pos;
     while (i < activities->length()-1) {
-        if (activities->at(i) > activities->at(i+1)) {
+        if (*activities->at(i) > *activities->at(i+1)) {
 //        if (activities->at(i)->getDatum() >  activities->at(i+1)->getDatum()) {
             activities->swap(i, i+1);
             i++;
@@ -113,7 +113,7 @@ void Manager::update(int pos)
         }
     }
     while (i > 0) {
-        if (activities->at(i) <  activities->at(i-1)) {
+        if (*activities->at(i) <  *activities->at(i-1)) {
             activities->swap(i, i-1);
             i--;
         } else {

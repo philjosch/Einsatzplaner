@@ -65,9 +65,9 @@ public:
     bool removePerson(QString p);
     void setPersonen(QMap<Person *, Infos *> *value);
 
-    bool operator >(AActivity *second);
-    bool operator <(AActivity *second);
-    bool operator ==(AActivity *second);
+    bool operator>(const AActivity &second) const;
+    bool operator<(const AActivity &second) const;
+    bool operator==(const AActivity &second) const;
 
     virtual QString getKurzbeschreibung() = 0;
     virtual QString getListString() = 0;

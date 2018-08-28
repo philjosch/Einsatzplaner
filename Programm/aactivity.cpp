@@ -303,55 +303,55 @@ void AActivity::setPersonen(QMap<Person *, Infos *> *value)
     emitter();
 }
 
-bool AActivity::operator >(AActivity *second)
+bool AActivity::operator >(const AActivity &second) const
 {
-    return(second->operator<(this));
+    return second.operator<(*this);
 }
 
-bool AActivity::operator <(AActivity *second)
+bool AActivity::operator <(const AActivity &second) const
 {
     // Datum
-    if (this->datum < second->datum)
+    if (this->datum < second.datum)
         return true;
-    else if (this->datum > second->datum)
+    else if (this->datum > second.datum)
         return false;
     // Beginn
-    if (this->zeitAnfang < second->zeitAnfang)
+    if (this->zeitAnfang < second.zeitAnfang)
         return true;
-    else if (this->zeitAnfang > second->zeitAnfang)
+    else if (this->zeitAnfang > second.zeitAnfang)
         return false;
     // Ende
-    if (this->zeitEnde < second->zeitEnde)
+    if (this->zeitEnde < second.zeitEnde)
         return true;
-    else if (this->zeitEnde > second->zeitEnde)
+    else if (this->zeitEnde > second.zeitEnde)
         return false;
     // Art und beliebig, bei gleicher Art
-    if (Fahrtag *f = dynamic_cast<Fahrtag*>(this))
+    if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(this))
         return true;
-    if (Activity *a = dynamic_cast<Activity*>(second))
+    if (const Activity *a = dynamic_cast<const Activity*>(&second))
         return true;
     return false;
 }
 
-bool AActivity::operator ==(AActivity *second)
+bool AActivity::operator ==(const AActivity &second) const
 {
     // Datum
-    if (this->datum != second->datum)
+    if (this->datum != second.datum)
         return false;
     // Beginn
-    if (this->zeitAnfang != second->zeitAnfang)
+    if (this->zeitAnfang != second.zeitAnfang)
         return false;
     // Ende
-    if (this->zeitEnde != second->zeitEnde)
+    if (this->zeitEnde != second.zeitEnde)
         return false;
     // Art und beliebig, bei gleicher Art
-    if (Fahrtag *f = dynamic_cast<Fahrtag*>(this)) {
-        if (Fahrtag *g = dynamic_cast<Fahrtag*>(second))
+    if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(this)) {
+        if (const Fahrtag *g = dynamic_cast<const Fahrtag*>(&second))
             return true;
         else
             return false;
     } else {
-        if (Activity *a = dynamic_cast<Activity*>(second))
+        if (const Activity *a = dynamic_cast<const Activity*>(&second))
             return true;
         return false;
     }
