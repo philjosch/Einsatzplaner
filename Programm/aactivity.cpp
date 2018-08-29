@@ -72,7 +72,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
     for(int i = 0; i < array.size(); i++) {
         QJsonObject aO = array.at(i).toObject();
         QString name = aO.value("name").toString();
-        Category kat = (Category) aO.value("kat").toInt();
+        Category kat = static_cast<Category>(aO.value("kat").toInt(100));
 
         Person *p;
         if (personal->personExists(name)) {
@@ -126,7 +126,7 @@ QJsonObject AActivity::toJson()
         persJson.insert("name", p->getName());
         persJson.insert("beginn", personen->value(p)->beginn.toString("hh:mm"));
         persJson.insert("ende", personen->value(p)->ende.toString("hh:mm"));
-        persJson.insert("kat", (int) personen->value(p)->kategorie);
+        persJson.insert("kat", personen->value(p)->kategorie);
         persJson.insert("bemerkung", personen->value(p)->bemerkung);
         personenJSON.append(persJson);
     }
