@@ -11,11 +11,12 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(paren
     ui->setupUi(this);
     ui->tablePersonen->resizeColumnsToContents();
     activity = a;
-    loadData();
-    setWindowTitle("Arbeitseinsatz am "+activity->getDatum().toString("dddd dd. MM. yyyy"));
 
     namen = new QSet<QString>();
     predefinedValueForTable = Category::Sonstiges;
+
+    loadData();
+    setWindowTitle("Arbeitseinsatz am "+activity->getDatum().toString("dddd dd. MM. yyyy"));
 }
 
 ActivityWindow::~ActivityWindow()
@@ -37,24 +38,11 @@ void ActivityWindow::on_lineOrt_textChanged(const QString &arg1)
         activity->setOrt(arg1);
 }
 
-void ActivityWindow::on_lineAnlass_textChanged()
+void ActivityWindow::on_lineAnlass_textChanged(const QString &arg1)
 {
-    if (nehme) {
-        QString anlass = ui->lineAnlass->text();
-        activity->setAnlass(anlass);
-        anlass = anlass.replace(" ", "").toLower();
-        if (anlass.contains(tr("Vorbereiten").toLower()) || anlass.contains(tr("Vorbereitung").toLower())) {
-            predefinedValueForTable = Category::ZugVorbereiten;
-        } else if (anlass.contains(tr("Werkstatt").toLower())) {
-            predefinedValueForTable = Category::Werkstatt;
-        } else if (anlass.contains(tr("Ausbildung").toLower())) {
-            predefinedValueForTable = Category::Ausbildung;
-        } else if (anlass.contains(tr("Büro").toLower())) {
-            predefinedValueForTable = Category::Buero;
-        } else {
-            predefinedValueForTable = Category::Sonstiges;
-        }
-    }
+    if (nehme)
+        activity->setAnlass(arg1);
+    setPredefinedValue(arg1);
 }
 
 void ActivityWindow::on_plainBeschreibung_textChanged()
@@ -220,6 +208,7 @@ void ActivityWindow::loadData()
     ui->dateDatum->setDate(activity->getDatum());
     ui->lineOrt->setText(activity->getOrt());
     ui->lineAnlass->setText(activity->getAnlass());
+    setPredefinedValue(activity->getAnlass());
     ui->plainBeschreibung->setPlainText(activity->getBemerkungen());
     ui->timeBeginn->setTime(activity->getZeitAnfang());
     ui->timeEnde->setTime(activity->getZeitEnde());
@@ -245,4 +234,20 @@ void ActivityWindow::loadData()
         ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(info->bemerkung));
     }
     nehme = true;
+}
+
+void ActivityWindow::setPredefinedValue(QString anlass)
+{
+    anlass = anlass.replace(" ", "").toLower();
+    if (anlass.contains(tr("Vorbereiten").toLower()) || anlass.contains(tr("Vorbereitung").toLower())) {
+        predefinedValueForTable = Category::ZugVorbereiten;
+    } else if (anlass.contains(tr("Werkstatt").toLower())) {
+        predefinedValueForTable = Category::Werkstatt;
+    } else if (anlass.contains(tr("Ausbildung").toLower())) {
+        predefinedValueForTable = Category::Ausbildung;
+    } else if (anlass.contains(tr("Büro").toLower())) {
+        predefinedValueForTable = Category::Buero;
+    } else {
+        predefinedValueForTable = Category::Sonstiges;
+    }
 }
