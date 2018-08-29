@@ -67,7 +67,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
     zeitAnfang = QTime::fromString(o.value("zeitAnfang").toString(), "hh:mm");
     zeitEnde = QTime::fromString(o.value("zeitEnde").toString(), "hh:mm");
     anlass = o.value("anlass").toString();
-    bemerkungen = o.value("bemerkungen").toString();
+    bemerkungen = o.value("bemerkungen").toString().replace("<br/>", "\n");
     QJsonArray array = o.value("personen").toArray();
     for(int i = 0; i < array.size(); i++) {
         QJsonObject aO = array.at(i).toObject();

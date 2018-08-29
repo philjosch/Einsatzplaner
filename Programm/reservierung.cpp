@@ -48,7 +48,7 @@ Reservierung::Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen)
     sitzplatz = new QMap<int, QList<int>>();
     setSitzplatz(ManagerReservierungen::getPlaetzeFromString(o.value("sitzplaetze").toString()));
     fahrrad = o.value("fahrrad").toBool();
-    sonstiges = o.value("sonstiges").toString();
+    sonstiges = o.value("sonstiges").toString().replace("<br/>", "\n");
 }
 
 QJsonObject Reservierung::toJson()
