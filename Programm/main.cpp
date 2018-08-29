@@ -20,7 +20,7 @@
 #include <QLocale>
 #include <QLibraryInfo>
 
-const CoreApplication::Version AKTUELLE_VERSION = {1, 4, 0};
+const CoreApplication::Version AKTUELLE_VERSION = {1, 4, 1};
 
 int main(int argc, char *argv[])
 {
