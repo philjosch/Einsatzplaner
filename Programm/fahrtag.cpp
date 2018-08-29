@@ -73,7 +73,7 @@ QString Fahrtag::getKurzbeschreibung()
 
 QString Fahrtag::getListString()
 {
-    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – "+QObject::tr("Fahrtag");
+    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – "+getStringFromArt(art);
     if (wichtig) {
         s += " WICHTIG!";
     }
@@ -81,10 +81,9 @@ QString Fahrtag::getListString()
 }
 
 QString Fahrtag::getListStringShort() {
-    if (anlass.length() == 0) {
-        return QObject::tr("Fahrtag");
-    }
-    return anlass;
+    if (anlass.length() != 0)
+        return anlass;
+    return getStringFromArt(art);
 }
 
 AActivity::Infos *Fahrtag::getIndividual(Person *person)
