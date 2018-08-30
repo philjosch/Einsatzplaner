@@ -271,35 +271,29 @@ QString Person::getHtmlForTableView(QList<bool> *liste)
     while (liste->length() < 11) {
         liste->append(0);
     }
-    QString html;
-    if (manager->pruefeStunden(this)) {
-        html = "<tr>";
-    } else {
-        html = "<tr style='background-color:"+PersonalWindow::nichtGenugStunden+";'>";
-    }
-    html += "<td>"+getName()+"</td>";
+    QString html = "<tr><td style='background-color:"+(manager->pruefeStunden(this) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+getName()+"</td>";
     if (liste->at(0))
-        html += "<td>"+QString::number(getTimeSum())+"</td>";
+        html += "<td style='background-color:"+(manager->pruefeStunden(this) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeSum())+"</td>";
     if (liste->at(1))
         html += "<td>"+QString::number(getSumAnzahl())+"</td>";
     if (liste->at(2))
-        html += "<td>"+QString::number(getTimeTf())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Tf) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeTf())+"</td>";
     if (liste->at(3))
-        html += "<td>"+QString::number(getTimeZf())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Zf) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeZf())+"</td>";
     if (liste->at(4))
-        html += "<td>"+QString::number(getTimeZub())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Zub) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeZub())+"</td>";
     if (liste->at(5))
-        html += "<td>"+QString::number(getTimeService())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Service) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeService())+"</td>";
     if (liste->at(6))
-        html += "<td>"+QString::number(getTimeVorbereiten())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::ZugVorbereiten) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeVorbereiten())+"</td>";
     if (liste->at(7))
-        html += "<td>"+QString::number(getTimeWerkstatt())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Werkstatt) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeWerkstatt())+"</td>";
     if (liste->at(8))
-        html += "<td>"+QString::number(getTimeBuero())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Buero) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeBuero())+"</td>";
     if (liste->at(11))
-        html += "<td>"+QString::number(getTimeAusbildung())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Ausbildung) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeAusbildung())+"</td>";
     if (liste->at(9))
-        html += "<td>"+QString::number(getTimeSonstiges())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Sonstiges) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeSonstiges())+"</td>";
     if (liste->at(10))
         html += "<td>"+QString::number(getSumKilometer())+"</td>";
     html += "</tr>";
