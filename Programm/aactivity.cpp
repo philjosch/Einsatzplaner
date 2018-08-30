@@ -30,17 +30,17 @@ Category AActivity::getCategoryFromString(QString s)
 QString AActivity::getStringFromCategory(Category c)
 {
     switch (c) {
-    case Tf: return "Tf";
-    case Tb: return "Tb";
-    case Zf: return "Zf";
-    case Service: return "Service";
-    case Zub: return "Zugbegleiter";
-    case Begleiter: return "Begl.o.b.A.";
-    case Buero: return "Büro";
-    case Werkstatt: return "Werkstatt";
-    case ZugVorbereiten: return "Zug Vorbereiten";
-    case Ausbildung: return "Ausbildung";
-    default: return "Sonstiges";
+    case Tf: return QObject::tr("Tf");
+    case Tb: return QObject::tr("Tb");
+    case Zf: return QObject::tr("Zf");
+    case Service: return QObject::tr("Service");
+    case Zub: return QObject::tr("Zugbegleiter");
+    case Begleiter: return QObject::tr("Begl.o.b.A.");
+    case Buero: return QObject::tr("Büro");
+    case Werkstatt: return QObject::tr("Werkstatt");
+    case ZugVorbereiten: return QObject::tr("Zug Vorbereiten");
+    case Ausbildung: return QObject::tr("Ausbildung");
+    default: return QObject::tr("Sonstiges");
     }
 }
 
@@ -67,12 +67,12 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
     zeitAnfang = QTime::fromString(o.value("zeitAnfang").toString(), "hh:mm");
     zeitEnde = QTime::fromString(o.value("zeitEnde").toString(), "hh:mm");
     anlass = o.value("anlass").toString();
-    bemerkungen = o.value("bemerkungen").toString();
+    bemerkungen = o.value("bemerkungen").toString().replace("<br/>", "\n");
     QJsonArray array = o.value("personen").toArray();
     for(int i = 0; i < array.size(); i++) {
         QJsonObject aO = array.at(i).toObject();
         QString name = aO.value("name").toString();
-        Category kat = (Category) aO.value("kat").toInt();
+        Category kat = static_cast<Category>(aO.value("kat").toInt(100));
 
         Person *p;
         if (personal->personExists(name)) {
@@ -126,7 +126,7 @@ QJsonObject AActivity::toJson()
         persJson.insert("name", p->getName());
         persJson.insert("beginn", personen->value(p)->beginn.toString("hh:mm"));
         persJson.insert("ende", personen->value(p)->ende.toString("hh:mm"));
-        persJson.insert("kat", (int) personen->value(p)->kategorie);
+        persJson.insert("kat", personen->value(p)->kategorie);
         persJson.insert("bemerkung", personen->value(p)->bemerkung);
         personenJSON.append(persJson);
     }

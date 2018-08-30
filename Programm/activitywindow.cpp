@@ -11,11 +11,12 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(paren
     ui->setupUi(this);
     ui->tablePersonen->resizeColumnsToContents();
     activity = a;
-    loadData();
-    setWindowTitle("Arbeitseinsatz am "+activity->getDatum().toString("dddd dd. MM. yyyy"));
 
     namen = new QSet<QString>();
     predefinedValueForTable = Category::Sonstiges;
+
+    loadData();
+    setWindowTitle("Arbeitseinsatz am "+activity->getDatum().toString("dddd dd. MM. yyyy"));
 }
 
 ActivityWindow::~ActivityWindow()
@@ -37,24 +38,11 @@ void ActivityWindow::on_lineOrt_textChanged(const QString &arg1)
         activity->setOrt(arg1);
 }
 
-void ActivityWindow::on_lineAnlass_textChanged()
+void ActivityWindow::on_lineAnlass_textChanged(const QString &arg1)
 {
-    if (nehme) {
-        QString anlass = ui->lineAnlass->text();
-        activity->setAnlass(anlass);
-        anlass = anlass.replace(" ", "").toLower();
-        if (anlass.contains(tr("Vorbereiten").toLower()) || anlass.contains(tr("Vorbereitung").toLower())) {
-            predefinedValueForTable = Category::ZugVorbereiten;
-        } else if (anlass.contains(tr("Werkstatt").toLower())) {
-            predefinedValueForTable = Category::Werkstatt;
-        } else if (anlass.contains(tr("Ausbildung").toLower())) {
-            predefinedValueForTable = Category::Ausbildung;
-        } else if (anlass.contains(tr("Büro").toLower())) {
-            predefinedValueForTable = Category::Buero;
-        } else {
-            predefinedValueForTable = Category::Sonstiges;
-        }
-    }
+    if (nehme)
+        activity->setAnlass(arg1);
+    setPredefinedValue(arg1);
 }
 
 void ActivityWindow::on_plainBeschreibung_textChanged()
@@ -135,9 +123,9 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         }
 
         QString name = (ui->tablePersonen->item(row,0) == nullptr) ? "" : ui->tablePersonen->item(row,0)->text();
-        Category kat = AActivity::getCategoryFromString(((QComboBox*)ui->tablePersonen->cellWidget(row, 1))->currentText());
-        QTime beginnZ = ((QTimeEdit*)ui->tablePersonen->cellWidget(row, 2))->time();
-        QTime endeZ = ((QTimeEdit*)ui->tablePersonen->cellWidget(row, 3))->time();
+        Category kat = AActivity::getCategoryFromString(static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->currentText());
+        QTime beginnZ = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->time();
+        QTime endeZ = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
 
         switch (activity->addPerson(name, bemerkung, beginnZ, endeZ, kat)) {
@@ -220,6 +208,7 @@ void ActivityWindow::loadData()
     ui->dateDatum->setDate(activity->getDatum());
     ui->lineOrt->setText(activity->getOrt());
     ui->lineAnlass->setText(activity->getAnlass());
+    setPredefinedValue(activity->getAnlass());
     ui->plainBeschreibung->setPlainText(activity->getBemerkungen());
     ui->timeBeginn->setTime(activity->getZeitAnfang());
     ui->timeEnde->setTime(activity->getZeitEnde());
@@ -239,10 +228,26 @@ void ActivityWindow::loadData()
         Category kat = info->kategorie;
         if (kat == Category::Begleiter)
             kat = Category::Zub;
-        ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
-        ((QTimeEdit*)ui->tablePersonen->cellWidget(0, 2))->setTime(info->beginn);
-        ((QTimeEdit*)ui->tablePersonen->cellWidget(0, 3))->setTime(info->ende);
+        static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
+        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(info->beginn);
+        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(info->ende);
         ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(info->bemerkung));
     }
     nehme = true;
+}
+
+void ActivityWindow::setPredefinedValue(QString anlass)
+{
+    anlass = anlass.replace(" ", "").toLower();
+    if (anlass.contains(tr("Vorbereiten").toLower()) || anlass.contains(tr("Vorbereitung").toLower())) {
+        predefinedValueForTable = Category::ZugVorbereiten;
+    } else if (anlass.contains(tr("Werkstatt").toLower())) {
+        predefinedValueForTable = Category::Werkstatt;
+    } else if (anlass.contains(tr("Ausbildung").toLower())) {
+        predefinedValueForTable = Category::Ausbildung;
+    } else if (anlass.contains(tr("Büro").toLower())) {
+        predefinedValueForTable = Category::Buero;
+    } else {
+        predefinedValueForTable = Category::Sonstiges;
+    }
 }

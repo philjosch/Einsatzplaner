@@ -45,7 +45,7 @@ void FahrtagWindow::on_dateDate_dateChanged(const QDate &date)
 
 void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
 {
-    Fahrtag::Art art = (Fahrtag::Art) index;
+    Fahrtag::Art art = static_cast<Fahrtag::Art>(index);
     if (nehme) {
         fahrtag->setArt(art);
     }
@@ -164,7 +164,7 @@ void FahrtagWindow::loadData()
         ui->buttonVerteile->setEnabled(fahrtag->getArt() == Fahrtag::Nikolauszug);
 
         // Daten von Fahrtag
-        ui->comboArt->setCurrentIndex((int)fahrtag->getArt());
+        ui->comboArt->setCurrentIndex(fahrtag->getArt());
         ui->comboTimeTfH->setCurrentText(fahrtag->getZeitTf().toString("HH"));
         ui->comboTimeTfM->setCurrentText(fahrtag->getZeitTf().toString("mm"));
         ui->comboTimeZH->setCurrentText(fahrtag->getZeitAnfang().toString("HH"));
@@ -234,10 +234,10 @@ void FahrtagWindow::loadData()
                 if (block) ui->tablePersonen->item(0, 0)->setFlags(Qt::NoItemFlags);
                 Category kat = info->kategorie;
                 if (kat == Category::Begleiter) kat = Category::Zub;
-                ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
-                ((QComboBox*)ui->tablePersonen->cellWidget(0, 1))->setEnabled(!block);
-                ((QTimeEdit*)ui->tablePersonen->cellWidget(0, 2))->setTime(info->beginn);
-                ((QTimeEdit*)ui->tablePersonen->cellWidget(0, 3))->setTime(info->ende);
+                static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
+                static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setEnabled(!block);
+                static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(info->beginn);
+                static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(info->ende);
                 QTableWidgetItem *zelleBemerkung = new QTableWidgetItem(info->bemerkung);
                 if(block) zelleBemerkung->setFlags(Qt::NoItemFlags);
                 ui->tablePersonen->setItem(0, 4, zelleBemerkung);
@@ -360,7 +360,6 @@ void FahrtagWindow::itemChanged(QListWidgetItem *item , Category kat)
     case Mistake::PersonNichtGefunden:
         QMessageBox::information(this, "Person nicht gefunden", "Die eingegebene Person konnte nicht gefunden werden!");
         break;
-    case Mistake::SonstigerFehler:
     default:
         QMessageBox::information(this, "Fehler", "Beim Hinzufügen der Person zum Fahrtag ist ein Fehler aufgetreten! Bitte überprüfen Sie ihre Eingaben!");
         break;
@@ -503,9 +502,9 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
         }
 
         QString name = (ui->tablePersonen->item(row,0) == nullptr) ? "" : ui->tablePersonen->item(row,0)->text();
-        Category kat = AActivity::getCategoryFromString(((QComboBox*)ui->tablePersonen->cellWidget(row, 1))->currentText());
-        QTime beginn = ((QTimeEdit*)ui->tablePersonen->cellWidget(row, 2))->time();
-        QTime ende = ((QTimeEdit*)ui->tablePersonen->cellWidget(row, 3))->time();
+        Category kat = AActivity::getCategoryFromString(static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->currentText());
+        QTime beginn = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->time();
+        QTime ende = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
 
         switch (fahrtag->addPerson(name, bemerkung, beginn, ende, kat)) {

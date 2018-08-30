@@ -29,15 +29,19 @@ QString Activity::getKurzbeschreibung()
 }
 
 QString Activity::getListStringShort() {
-    if (anlass == "") {
-        return "Aktivität";
-    }
-    return anlass;
+    if (anlass != "")
+        return anlass;
+    if (bemerkungen != "")
+        return bemerkungen;
+    return "Aktivität";
 }
 
 QString Activity::getListString()
 {
-    return datum.toString("dddd dd.MM.yyyy")+" – Aktivität";
+    QString scnd = tr("Aktivität");
+    if (anlass != "")
+        scnd = anlass;
+    return datum.toString("dddd dd.MM.yyyy")+" – "+scnd;
 }
 
 AActivity::Infos *Activity::getIndividual(Person *person)

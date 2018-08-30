@@ -76,31 +76,142 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <item row="0" column="1">
-         <layout class="QGridLayout" name="gridZf">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="1" column="0" colspan="2">
-           <widget class="QCheckBox" name="checkZf">
-            <property name="text">
-             <string>Zugführer benötigt</string>
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridTf" rowstretch="0,0,1">
+          <item row="2" column="0" colspan="3">
+           <widget class="QListWidget" name="listTf">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>75</height>
+             </size>
+            </property>
+            <property name="verticalScrollMode">
+             <enum>QAbstractItemView::ScrollPerPixel</enum>
+            </property>
+            <property name="horizontalScrollMode">
+             <enum>QAbstractItemView::ScrollPerPixel</enum>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
-          <item row="3" column="0" colspan="2">
+          <item row="0" column="0" colspan="3">
+           <widget class="QLabel" name="labelTf">
+            <property name="toolTip">
+             <string>Triebfahrzeugführer, Triebfahrzeugbegleiter</string>
+            </property>
+            <property name="whatsThis">
+             <string>Wahts This</string>
+            </property>
+            <property name="text">
+             <string>Triebfahrzeugführer (Tf), -begleiter (Tb)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="buttonTfAdd">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="statusTip">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="text">
+             <string>+</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="buttonTfDelete">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="statusTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="checkTf">
+            <property name="text">
+             <string>Triebfahrzeugpersonal benötigt</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="1">
+         <layout class="QGridLayout" name="gridZf" rowstretch="0,0,1">
+          <item row="0" column="0" colspan="3">
+           <widget class="QLabel" name="labelZf">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="statusTip">
+             <string>Zugbegleiter, Begleiter ohne betriebliche Aufgaben</string>
+            </property>
+            <property name="text">
+             <string>Zugführer (Zf)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="3">
            <widget class="QListWidget" name="listZf">
             <property name="enabled">
              <bool>true</bool>
@@ -122,23 +233,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QLabel" name="LabelZf">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="statusTip">
-             <string>Zugbegleiter, Begleiter ohne betriebliche Aufgaben</string>
-            </property>
-            <property name="text">
-             <string>Zugführer (Zf)</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
+          <item row="1" column="0">
            <widget class="QPushButton" name="buttonZfAdd">
             <property name="enabled">
              <bool>true</bool>
@@ -149,6 +244,12 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="toolTip">
              <string>Name hinzufügen</string>
             </property>
@@ -166,7 +267,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="1" column="1">
            <widget class="QPushButton" name="buttonZfDelete">
             <property name="enabled">
              <bool>false</bool>
@@ -177,6 +278,12 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="toolTip">
              <string>Ausgewählten Namen löschen</string>
             </property>
@@ -191,92 +298,40 @@
             </property>
             <property name="text">
              <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="checkZf">
+            <property name="minimumSize">
+             <size>
+              <width>218</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Zugführer benötigt</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
         <item row="1" column="0">
-         <layout class="QGridLayout" name="gridZub">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="1" column="0" colspan="2">
-           <widget class="QCheckBox" name="checkZub">
-            <property name="text">
-             <string>Zugpersonal benötigt</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QPushButton" name="buttonZubAdd">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+         <layout class="QGridLayout" name="gridZub" rowstretch="0,0,1">
+          <item row="0" column="0" colspan="3">
+           <widget class="QLabel" name="labelZub">
             <property name="toolTip">
-             <string>Name hinzufügen</string>
-            </property>
-            <property name="statusTip">
-             <string>Name hinzufügen</string>
-            </property>
-            <property name="whatsThis">
-             <string>Name hinzufügen</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Name hinzufügen</string>
+             <string/>
             </property>
             <property name="text">
-             <string>+</string>
+             <string>Zub, Zs, Begl. o.b.A.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QPushButton" name="buttonZubDelete">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>Ausgewählten Namen löschen</string>
-            </property>
-            <property name="statusTip">
-             <string>Ausgewählten Namen löschen</string>
-            </property>
-            <property name="whatsThis">
-             <string>Ausgewählten Namen löschen</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Ausgewählten Namen löschen</string>
-            </property>
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="2">
+          <item row="2" column="0" colspan="3">
            <widget class="QListWidget" name="listZub">
             <property name="enabled">
              <bool>true</bool>
@@ -295,76 +350,42 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QLabel" name="LabelZub">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Zub, Zs, Begl o.b.A</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="1">
-         <layout class="QGridLayout" name="gridService">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="1" column="0" colspan="2">
-           <widget class="QCheckBox" name="checkService">
-            <property name="text">
-             <string>Servicepersonal benötigt</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="2">
-           <widget class="QListWidget" name="listService">
+          <item row="1" column="0">
+           <widget class="QPushButton" name="buttonZubAdd">
             <property name="enabled">
              <bool>true</bool>
             </property>
-            <property name="verticalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <property name="horizontalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
             </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QLabel" name="LabelService">
             <property name="toolTip">
-             <string/>
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="statusTip">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Name hinzufügen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Name hinzufügen</string>
             </property>
             <property name="text">
-             <string>Service</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <string>+</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QPushButton" name="buttonServiceDelete">
+          <item row="1" column="1">
+           <widget class="QPushButton" name="buttonZubDelete">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -373,6 +394,12 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
             </property>
             <property name="toolTip">
              <string>Ausgewählten Namen löschen</string>
@@ -391,7 +418,53 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="checkZub">
+            <property name="minimumSize">
+             <size>
+              <width>218</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Zugpersonal benötigt</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="1">
+         <layout class="QGridLayout" name="gridService" rowstretch="0,0,1">
+          <item row="0" column="0" colspan="3">
+           <widget class="QLabel" name="labelService">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>Service</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="3">
+           <widget class="QListWidget" name="listService">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="verticalScrollMode">
+             <enum>QAbstractItemView::ScrollPerPixel</enum>
+            </property>
+            <property name="horizontalScrollMode">
+             <enum>QAbstractItemView::ScrollPerPixel</enum>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
            <widget class="QPushButton" name="buttonServiceAdd">
             <property name="enabled">
              <bool>true</bool>
@@ -401,6 +474,12 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
             </property>
             <property name="toolTip">
              <string>Name hinzufügen</string>
@@ -416,6 +495,53 @@
             </property>
             <property name="text">
              <string>+</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="buttonServiceDelete">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="statusTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="checkService">
+            <property name="minimumSize">
+             <size>
+              <width>218</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Servicepersonal benötigt</string>
             </property>
            </widget>
           </item>
@@ -445,31 +571,6 @@
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="LabelBemerkungen">
-            <property name="toolTip">
-             <string notr="true"/>
-            </property>
-            <property name="statusTip">
-             <string notr="true"/>
-            </property>
-            <property name="whatsThis">
-             <string notr="true"/>
-            </property>
-            <property name="accessibleName">
-             <string notr="true"/>
-            </property>
-            <property name="accessibleDescription">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string>Bemerkungen:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QPlainTextEdit" name="textBemerkungen">
             <property name="enabled">
@@ -495,120 +596,25 @@
             </property>
            </widget>
           </item>
-         </layout>
-        </item>
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridTf">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="1" column="0" colspan="2">
-           <widget class="QCheckBox" name="checkTf">
-            <property name="text">
-             <string>Triebfahrzeugpersonal benötigt</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QPushButton" name="buttonTfAdd">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelBemerkungen">
             <property name="toolTip">
-             <string>Name hinzufügen</string>
+             <string notr="true"/>
             </property>
             <property name="statusTip">
-             <string>Name hinzufügen</string>
+             <string notr="true"/>
             </property>
             <property name="whatsThis">
-             <string>Name hinzufügen</string>
+             <string notr="true"/>
+            </property>
+            <property name="accessibleName">
+             <string notr="true"/>
             </property>
             <property name="accessibleDescription">
-             <string>Name hinzufügen</string>
+             <string notr="true"/>
             </property>
             <property name="text">
-             <string>+</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QPushButton" name="buttonTfDelete">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>Ausgewählten Namen löschen</string>
-            </property>
-            <property name="statusTip">
-             <string>Ausgewählten Namen löschen</string>
-            </property>
-            <property name="whatsThis">
-             <string>Ausgewählten Namen löschen</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Ausgewählten Namen löschen</string>
-            </property>
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="2">
-           <widget class="QListWidget" name="listTf">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>75</height>
-             </size>
-            </property>
-            <property name="verticalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
-            </property>
-            <property name="horizontalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QLabel" name="LabelTf">
-            <property name="toolTip">
-             <string>Triebfahrzeugführer, Triebfahrzeugbegleiter</string>
-            </property>
-            <property name="whatsThis">
-             <string>Wahts This</string>
-            </property>
-            <property name="text">
-             <string>Triebfahrzeugführer (Tf), -begleiter (Tb)</string>
+             <string>Bemerkungen:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -1680,7 +1686,7 @@
        </widget>
       </item>
       <item row="3" column="2">
-       <widget class="QLabel" name="LabelTimeZ">
+       <widget class="QLabel" name="labelTimeZ">
         <property name="toolTip">
          <string notr="true"/>
         </property>
@@ -1769,7 +1775,7 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QLabel" name="LabelWagenreihung">
+       <widget class="QLabel" name="labelWagenreihung">
         <property name="text">
          <string>Wagenreihung</string>
         </property>
@@ -2701,22 +2707,10 @@
   <tabstop>comboTimeZH</tabstop>
   <tabstop>comboTimeZM</tabstop>
   <tabstop>tabEingabeWizard</tabstop>
-  <tabstop>checkTf</tabstop>
-  <tabstop>buttonTfAdd</tabstop>
   <tabstop>listTf</tabstop>
-  <tabstop>buttonTfDelete</tabstop>
-  <tabstop>checkZf</tabstop>
-  <tabstop>buttonZfAdd</tabstop>
   <tabstop>listZf</tabstop>
-  <tabstop>buttonZfDelete</tabstop>
-  <tabstop>checkZub</tabstop>
-  <tabstop>buttonZubAdd</tabstop>
   <tabstop>listZub</tabstop>
-  <tabstop>buttonZubDelete</tabstop>
-  <tabstop>checkService</tabstop>
-  <tabstop>buttonServiceAdd</tabstop>
   <tabstop>listService</tabstop>
-  <tabstop>buttonServiceDelete</tabstop>
   <tabstop>textBemerkungen</tabstop>
   <tabstop>buttonAdd</tabstop>
   <tabstop>listRes</tabstop>
