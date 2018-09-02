@@ -335,7 +335,8 @@ void PersonalWindow::refreshGesamt()
 
     while(iterator.hasNext()) {
         Person *p = iterator.next();
-        QString farbe = "#ffffff";
+        QString defaultFarbe = "#ffffff";
+        QString farbe = defaultFarbe;
         if (! manager->pruefeStunden(p)) {
             farbe = nichtGenugStunden;
         }
@@ -359,70 +360,75 @@ void PersonalWindow::refreshGesamt()
         if (anzeige->at(1)) {
             i = new QTableWidgetItem();
             i->setData(Qt::EditRole, p->getSumAnzahl());
-            i->setBackgroundColor(farbe);
             ui->tabelleGesamt->setItem(0, pos, i);
             pos++;
         }
         if (anzeige->at(2)) {
             i = new QTableWidgetItem();
             i->setData(Qt::EditRole, p->getTimeTf());
-            i->setBackgroundColor(farbe);
+            i->setBackgroundColor(manager->checkHours(p, Category::Tf) ? defaultFarbe : nichtGenugStunden);
             ui->tabelleGesamt->setItem(0, pos, i);
             pos++;
         }
         if (anzeige->at(3)) {
             i = new QTableWidgetItem();
             i->setData(Qt::EditRole, p->getTimeZf());
-            i->setBackgroundColor(farbe);
+            i->setBackgroundColor(manager->checkHours(p, Category::Zf) ? defaultFarbe : nichtGenugStunden);
             ui->tabelleGesamt->setItem(0, pos, i);
             pos++;
         }
         if (anzeige->at(4)) {
             i = new QTableWidgetItem();
             i->setData(Qt::EditRole, p->getTimeZub());
-            i->setBackgroundColor(farbe);
+            i->setBackgroundColor(manager->checkHours(p, Category::Zub) ? defaultFarbe : nichtGenugStunden);
             ui->tabelleGesamt->setItem(0, pos, i);
             pos++;
         }
         if (anzeige->at(5)) {
             i = new QTableWidgetItem();
             i->setData(Qt::EditRole, p->getTimeService());
-            i->setBackgroundColor(farbe);
+            i->setBackgroundColor(manager->checkHours(p, Category::Service) ? defaultFarbe : nichtGenugStunden);
             ui->tabelleGesamt->setItem(0, pos, i);
             pos++;
         }
         if (anzeige->at(6)) {
             i = new QTableWidgetItem();
             i->setData(Qt::EditRole, p->getTimeVorbereiten());
-            i->setBackgroundColor(farbe);
+            i->setBackgroundColor(manager->checkHours(p, Category::ZugVorbereiten) ? defaultFarbe : nichtGenugStunden);
             ui->tabelleGesamt->setItem(0, pos, i);
             pos++;
         }
         if (anzeige->at(7)) {
             i = new QTableWidgetItem();
             i->setData(Qt::EditRole, p->getTimeWerkstatt());
-            i->setBackgroundColor(farbe);
+            i->setBackgroundColor(manager->checkHours(p, Category::Werkstatt) ? defaultFarbe : nichtGenugStunden);
             ui->tabelleGesamt->setItem(0, pos, i);
             pos++;
         }
         if (anzeige->at(8)) {
             i = new QTableWidgetItem();
             i->setData(Qt::EditRole, p->getTimeBuero());
-            i->setBackgroundColor(farbe);
+            i->setBackgroundColor(manager->checkHours(p, Category::Buero) ? defaultFarbe : nichtGenugStunden);
+            ui->tabelleGesamt->setItem(0, pos, i);
+            pos++;
+        }
+        if (anzeige->at(11)) {
+            i = new QTableWidgetItem();
+            i->setData(Qt::EditRole, p->getTimeAusbildung());
+            i->setBackgroundColor(manager->checkHours(p, Category::Ausbildung) ? defaultFarbe : nichtGenugStunden);
             ui->tabelleGesamt->setItem(0, pos, i);
             pos++;
         }
         if (anzeige->at(9)) {
             i = new QTableWidgetItem();
             i->setData(Qt::EditRole, p->getTimeSonstiges());
-            i->setBackgroundColor(farbe);
+            i->setBackgroundColor(manager->checkHours(p, Category::Sonstiges) ? defaultFarbe : nichtGenugStunden);
             ui->tabelleGesamt->setItem(0, pos, i);
             pos++;
         }
         if (anzeige->at(10)) {
             i = new QTableWidgetItem();
             i->setData(Qt::EditRole, p->getSumKilometer());
-            i->setBackgroundColor(farbe);
             ui->tabelleGesamt->setItem(0, pos, i);
         }
     }
@@ -615,6 +621,7 @@ void PersonalWindow::print(QPrinter *p)
     gesamt->append(manager->getTimeBuero());
     gesamt->append(manager->getTimeSonstiges());
     gesamt->append(manager->getSumKilometer());
+    gesamt->append(manager->getTimeAusbildung());
     Export::printPersonen(liste, gesamt, anzeige, p);
 }
 
