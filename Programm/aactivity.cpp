@@ -366,7 +366,7 @@ QString AActivity::listToString(QMap<Person *, AActivity::Infos *> *liste, QStri
         }
         if (aufgabe && (liste->value(p)->kategorie != Category::Sonstiges)) {
             if (strichPunkt) {
-                a += " ";
+                a += ", ";
             } else {
                 a += "; ";
                 strichPunkt = true;
