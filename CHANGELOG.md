@@ -1,5 +1,5 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 02. September 2018
+Stand: 24. September 2018
 
 ## Version 1.4.1 – 2018-09-??
 ### Neu
@@ -7,13 +7,15 @@ Stand: 02. September 2018
 
 ### Verbessert
 - Fahrtagfenster und Fenster für Aktivitäten optimiert, sodass sie den Platz besser nutzen
-- Fahrtage und Aktivitäten werden jetzt nicht nur nach Datum sondern auch nach Beginn und Endzeit sortiert
+- Verbesserter Export von Arbeitseinsätzen, sowohl in der Listen- als auch in der Einzelansich
+- Fahrtage und Aktivitäten werden jetzt nicht mehr nur nach Datum sondern auch nach Beginn und Endzeit sortiert
+- Die Sitzplätze werden jetzt besser und schneller verteilt
+- Das Programm benötigt bei längerem Betrieb weniger Arbeitsspeicher
 - Code optimiert und kleinere Funktionen verbessert
 
 ### Fehlerbehebungen
 - Begleiter ohne betriebliche Aufgaben erschienen unter Umständen nicht in der Einzelansicht
-- Die Sitzplätze werden jetzt besser und schneller verteilt
-- Fahrtage und Aktivitäen können jetzt ohne Probleme gelöscht werden
+- Fahrtage und Aktivitäten können jetzt ohne Probleme gelöscht werden
 - Bei einem Arbeitseinsatz wird jetzt die Kategorie auch nach einem erneuten Öffnen intelligent bestimmt
 - Bei der Personalübersicht werden die Zeiten für die Ausbildung verlässlich angezeigt
 - Weitere Fehlerbehebungen zur Verbesserung der Stabilität
