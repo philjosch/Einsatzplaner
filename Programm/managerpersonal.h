@@ -2,7 +2,6 @@
 #define MANAGERPERSONAL_H
 
 #include <QJsonObject>
-#include <QObject>
 #include <QSet>
 
 #include "enums.h"
@@ -72,10 +71,10 @@ public slots:
     void reloadSettings();
 
 private:
-    QSet<Person *> *personen;
-    QHash<QString, Person*> *personenSorted;
+    QSet<Person *> personen;
+    QHash<QString, Person*> personenSorted;
 
-    QHash<Category, double> *minimumHours;
+    QHash<Category, double> minimumHours;
     double minimumTotal;
 
     static QHash<Category, double> minimumHoursDefault;

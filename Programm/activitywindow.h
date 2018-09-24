@@ -1,11 +1,10 @@
 #ifndef ACTIVITYWINDOW_H
 #define ACTIVITYWINDOW_H
 
-#include <QMainWindow>
-#include <QSet>
-
 #include "activity.h"
 #include "person.h"
+
+#include <QMainWindow>
 
 namespace Ui {
 class ActivityWindow;
@@ -50,7 +49,7 @@ private:
 
     void loadData();
 
-    QSet<QString> *namen;
+    QSet<QString> namen;
     Category predefinedValueForTable;
 
     void setPredefinedValue(QString anlass);

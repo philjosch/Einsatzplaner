@@ -1,9 +1,6 @@
 #ifndef VERTEILER_H
 #define VERTEILER_H
 
-#include <QList>
-#include <QSet>
-
 #include "reservierung.h"
 #include "wagen.h"
 #include "enums.h"

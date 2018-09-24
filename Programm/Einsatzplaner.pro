@@ -79,7 +79,7 @@ win32 {
     RC_ICONS = ../Icon/keks.ico
     QMAKE_TARGET_COMPANY = Philipp Schepper
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
-    QMAKE_TARGET_COPYRIGHT = Rechte bei Philipp Schepper 2016-2018
+    QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2018
     QMAKE_TARGET_PRODUCT = Einsatzplaner
     VERSION = 1.4.1.1
 }

@@ -3,8 +3,6 @@
 #include "fahrtag.h"
 #include "activity.h"
 
-#include <QMap>
-#include <QDebug>
 #include <QJsonArray>
 
 QStringList AActivity::EXTERNAL_LIST = QStringList() << "Extern" << "Führerstand" << "FS" << "Schnupperkurs" << "ELF" << "Ehrenlokführer" << "ELF-Kurs";
@@ -52,7 +50,7 @@ AActivity::AActivity(QDate date, ManagerPersonal *p)
     zeitEnde = QTime(16, 0);
     anlass = "";
     bemerkungen = "";
-    personen = new QMap<Person *, Infos*>();
+    personen = QMap<Person *, Infos*>();
     personalBenoetigt = true;
     personal = p;
 }
@@ -60,7 +58,7 @@ AActivity::AActivity(QDate date, ManagerPersonal *p)
 AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
 {
     personal = p;
-    personen = new QMap<Person*, Infos*>();
+    personen = QMap<Person*, Infos*>();
 
     datum = QDate::fromString(o.value("datum").toString(), "yyyy-MM-dd");
     ort = o.value("ort").toString();
@@ -91,7 +89,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
 
         if (p != nullptr) {
             p->addActivity(this, kat);
-            personen->insert(p, info);
+            personen.insert(p, info);
         }
 
     }
@@ -105,7 +103,7 @@ AActivity::~AActivity()
 
 bool AActivity::remove()
 {
-    for(Person *p: personen->keys()) {
+    for(Person *p: personen.keys()) {
         p->removeActivity(this);
     }
     return true;
@@ -121,13 +119,13 @@ QJsonObject AActivity::toJson()
     data.insert("anlass", anlass);
     data.insert("bemerkungen", bemerkungen);
     QJsonArray personenJSON;
-    for(Person *p: personen->keys()) {
+    for(Person *p: personen.keys()) {
         QJsonObject persJson;
         persJson.insert("name", p->getName());
-        persJson.insert("beginn", personen->value(p)->beginn.toString("hh:mm"));
-        persJson.insert("ende", personen->value(p)->ende.toString("hh:mm"));
-        persJson.insert("kat", personen->value(p)->kategorie);
-        persJson.insert("bemerkung", personen->value(p)->bemerkung);
+        persJson.insert("beginn", personen.value(p)->beginn.toString("hh:mm"));
+        persJson.insert("ende", personen.value(p)->ende.toString("hh:mm"));
+        persJson.insert("kat", personen.value(p)->kategorie);
+        persJson.insert("bemerkung", personen.value(p)->bemerkung);
         personenJSON.append(persJson);
     }
     data.insert("personen", personenJSON);
@@ -213,14 +211,14 @@ void AActivity::setPersonalBenoetigt(bool value)
     emitter();
 }
 
-QMap<Person *, AActivity::Infos *> *AActivity::getPersonen() const
+QMap<Person *, AActivity::Infos *> AActivity::getPersonen()
 {
     return personen;
 }
 
 bool AActivity::removePerson(Person *p)
 {
-    personen->remove(p);
+    personen.remove(p);
     emitter();
     return p->removeActivity(this);
 }
@@ -233,14 +231,14 @@ bool AActivity::removePerson(QString p)
         return removePerson(pers);
     }
     Person *gefunden = nullptr;
-    for(Person *pers: personen->keys()) {
+    for(Person *pers: personen.keys()) {
         if (pers->getName() == p) {
             gefunden = pers;
             break;
         }
     }
     if (gefunden != nullptr) {
-        personen->remove(gefunden);
+        personen.remove(gefunden);
         emitter();
         return true;
     }
@@ -268,7 +266,7 @@ Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime en
     info->kategorie = kat;
     info->bemerkung = bemerkung;
 
-    personen->insert(p, info);
+    personen.insert(p, info);
 
     emitter();
     return Mistake::OK;
@@ -294,13 +292,7 @@ Mistake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime en
 
 void AActivity::updatePersonBemerkung(Person *p, QString bemerkung)
 {
-    personen->value(p)->bemerkung = bemerkung;
-}
-
-void AActivity::setPersonen(QMap<Person *, Infos *> *value)
-{
-    personen = value;
-    emitter();
+    personen.value(p)->bemerkung = bemerkung;
 }
 
 bool AActivity::operator >(const AActivity &second) const

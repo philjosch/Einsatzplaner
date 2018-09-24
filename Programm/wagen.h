@@ -39,7 +39,6 @@ public:
     void clear();
 
 protected:
-    static double FAKTOR_FUER_FREIE_PLAETZE;
     static double GEWICHT_STRAFE_TEIL_1;
     static double GEWICHT_STRAFE_TEIL_2;
 
@@ -57,7 +56,7 @@ private:
     int reihe2;
 
     QList<int> sitzGruppen;
-    QHash<int, Reservierung *> *verteilung;
+    QHash<int, Reservierung *> verteilung;
 
     QList<int> internToExtern; // Übersetzt die Sitzplätze von der internen Kodierung in die Externe, menschenlesbare Form
     QHash<int, int> externToIntern; // Reverse von internToExtern, nur als Hash

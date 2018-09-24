@@ -2,11 +2,6 @@
 #include "managerpersonal.h"
 #include "person.h"
 
-#include <QMap>
-#include <QListIterator>
-#include <QDebug>
-#include <QVariant>
-
 Person::Person(QString vorname, QString nachname, ManagerPersonal *manager)
 {
     personConstructor(vorname, nachname, manager);
@@ -146,13 +141,13 @@ void Person::berechne()
     timeAusbildung = 0;
     timeSonstiges = 0;
     timeSum = 0;
-    sumAnzahl = activities->size();
+    sumAnzahl = activities.size();
     sumKilometer = 0;
 
     QDate today = QDate::currentDate();
-    for(AActivity *a: activities->keys()) {
+    for(AActivity *a: activities.keys()) {
         if (a->getDatum() <= today) {
-            Category cat = activities->value(a);
+            Category cat = activities.value(a);
             AActivity::Infos *info = a->getIndividual(this);
 
             // Einsatzstunden
@@ -196,14 +191,14 @@ void Person::berechne()
 
 bool Person::addActivity(AActivity *a, Category category)
 {
-    activities->insert(a, category);
+    activities.insert(a, category);
     valuesInvalid = true;
     return true;
 }
 
 bool Person::removeActivity(AActivity *a)
 {
-    if (activities->remove(a) != 0) {
+    if (activities.remove(a) != 0) {
         valuesInvalid = true;
         return true;
     }
@@ -212,7 +207,7 @@ bool Person::removeActivity(AActivity *a)
 
 QListIterator<AActivity *> *Person::getActivities()
 {
-    QListIterator<AActivity*> *i = new QListIterator<AActivity*>(activities->keys());
+    QListIterator<AActivity*> *i = new QListIterator<AActivity*>(activities.keys());
     return i;
 }
 
@@ -371,11 +366,11 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     }
 
     // Hier kommt die liste mit den Arbeitseinsätzen
-    if (activities->size() > 0) {
+    if (activities.size() > 0) {
         html += "<h4>Übersicht über die einzelnen Aktivitäten</h4>";
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
-        for(AActivity *a: activities->keys()) {
+        for(AActivity *a: activities.keys()) {
             AActivity::Infos *info = a->getIndividual(this);
             html += "<tr><td>"+a->getDatum().toString("dd. MM. yyyy")+"<br/>"+a->getKurzbeschreibung()+"<br/>"+a->getAnlass()+"</td><td>"
                     + info->beginn.toString("HH:mm")+"-"+info->ende.toString("HH:mm")+"</td><td>"
@@ -548,7 +543,7 @@ void Person::personConstructor(QString vorname, QString nachname, ManagerPersona
     additionalKilometer = 0;
     valuesInvalid = true;
 
-    activities = new QMap<AActivity *, Category>();
+    activities = QMap<AActivity *, Category>();
 }
 
 double Person::getTimeTf()
@@ -613,7 +608,7 @@ double Person::getTimeSum()
 
 int Person::getAnzahl()
 {
-    return activities->size();
+    return activities.size();
 }
 
 int Person::getSumAnzahl()

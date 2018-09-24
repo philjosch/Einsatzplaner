@@ -1,15 +1,11 @@
 #include "coreapplication.h"
 #include "mainwindow.h"
 
-#include <QApplication>
-#include <QFileOpenEvent>
 #include <QDesktopServices>
 #include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QMessageBox>
 #include <QWindow>
-
 
 CoreApplication::Version CoreApplication::aktuelleVersion = {-1, -1, -1};
 bool CoreApplication::developerMode = false;

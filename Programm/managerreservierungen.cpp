@@ -3,36 +3,31 @@
 #include "verteiler.h"
 #include "enums.h"
 
-#include <QMessageBox>
-#include <QSetIterator>
-#include <QSet>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QDebug>
-#include <QTime>
 
-QString ManagerReservierungen::getStringFromPlaetze(QMap<int, QList<int>> *liste)
+QString ManagerReservierungen::getStringFromPlaetze(QMap<int, QList<int> > liste)
 {
     QString s = "";
-    for(int i: liste->keys()) {
+    for(int i: liste.keys()) {
         s += QString::number(i)+": ";
         int old = -1;
         bool strich = false;
-        for (int j : liste->value(i)) {
+        for (int j : liste.value(i)) {
             if (old+1 == j) {
-                if ((strich && (j == liste->value(i).last()))) {
+                if ((strich && (j == liste.value(i).last()))) {
                     s += QString::number(j);
                 } else if (! strich) {
                     s += "-";
                     strich = true;
-                    if (j == liste->value(i).last()) {
+                    if (j == liste.value(i).last()) {
                         s += QString::number(j);
                     }
                 }
             } else {
                 if (strich)
                     s += QString::number(old);
-                if (j != liste->value(i).first()) s += ", ";
+                if (j != liste.value(i).first()) s += ", ";
                 s += QString::number(j);
                 strich = false;
             }
@@ -47,9 +42,9 @@ QString ManagerReservierungen::getStringFromPlaetze(QMap<int, QList<int>> *liste
     return s;
 }
 
-QMap<int, QList<int>> *ManagerReservierungen::getPlaetzeFromString(QString plaetze)
+QMap<int, QList<int> > ManagerReservierungen::getPlaetzeFromString(QString plaetze)
 {
-    QMap<int, QList<int>> *map = new QMap<int, QList<int>>();
+    QMap<int, QList<int>> map = QMap<int, QList<int>>();
     if (plaetze == "") {
         return map;
     }
@@ -71,9 +66,9 @@ QMap<int, QList<int>> *ManagerReservierungen::getPlaetzeFromString(QString plaet
                     l.append(s2.toInt());
                 }
             }
-            map->insert(wagen, l);
+            map.insert(wagen, l);
         } else {
-            map->insert(wagen, QList<int>());
+            map.insert(wagen, QList<int>());
         }
     }
     return map;
@@ -287,18 +282,18 @@ QList<Mistake> ManagerReservierungen::verteileSitzplaetze()
     return {okAndere, okErste};
 }
 
-bool ManagerReservierungen::checkPlaetze(QMap<int, QList<int>> *p, Reservierung *r)
+bool ManagerReservierungen::checkPlaetze(QMap<int, QList<int>> p, Reservierung *r)
 {
     // Überprüft, ob die eingegebenen Sitzplätze frei sind, oder ob sie schon belegt wurden
     int summe = 0;
-    for(int w: p->keys()) {
+    for(int w: p.keys()) {
         if (! nummerToWagen.contains(w)) return false;
         if (r->getKlasse() == 1 && nummerToWagen.value(w)->klasse() != 1) return false;
         if (r->getKlasse() == 0 && (nummerToWagen.value(w)->klasse() != 2 &&
                                     nummerToWagen.value(w)->klasse() != 3)) return false;
-        summe += p->value(w).length();
+        summe += p.value(w).length();
         // für jeden Wagen prüfen, ob die Plätze belegt sind
-        if (! nummerToWagen.value(w)->testPlaetze(p->value(w), r)) return false;
+        if (! nummerToWagen.value(w)->testPlaetze(p.value(w), r)) return false;
     }
     if (summe != r->getAnzahl()) return false;
     return true;

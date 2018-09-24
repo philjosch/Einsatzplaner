@@ -2,9 +2,7 @@
 #include "ui_activitywindow.h"
 #include "export.h"
 
-#include <QComboBox>
 #include <QMessageBox>
-#include <QPrinter>
 
 ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(parent), ui(new Ui::ActivityWindow)
 {
@@ -12,7 +10,7 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(paren
     ui->tablePersonen->resizeColumnsToContents();
     activity = a;
 
-    namen = new QSet<QString>();
+    namen = QSet<QString>();
     predefinedValueForTable = Category::Sonstiges;
 
     loadData();
@@ -95,7 +93,7 @@ void ActivityWindow::on_buttonRemove_clicked()
     if (i == -1) return;
     QString n = (ui->tablePersonen->item(i, 0) == nullptr) ? "" : ui->tablePersonen->item(i, 0)->text();
     if (activity->removePerson(n)) {
-        namen->remove(n);
+        namen.remove(n);
     }
     ui->tablePersonen->removeRow(i);
     ui->buttonRemove->setEnabled(ui->tablePersonen->rowCount() > 0);
@@ -109,16 +107,16 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         // column 0: Name, 1: Aufgabe, 2: Beginn, 3: Ende, 4: Bemerkung
         // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
         if (column == 0) {
-            QSet<QString> *neu = new QSet<QString>();
+            QSet<QString> neu = QSet<QString>();
             for( int i = 0; i < ui->tablePersonen->rowCount(); i++) {
                 QString n = (ui->tablePersonen->item(i, 0) == nullptr) ? "" : ui->tablePersonen->item(i, 0)->text();
-                neu->insert(n);
-                if (namen->contains(n)) {
-                    namen->remove(n);
+                neu.insert(n);
+                if (namen.contains(n)) {
+                    namen.remove(n);
                 }
             }
 
-            if (namen->size() == 1) activity->removePerson(namen->values().at(0));
+            if (namen.size() == 1) activity->removePerson(namen.values().at(0));
             namen = neu;
         }
 
@@ -215,14 +213,14 @@ void ActivityWindow::loadData()
     ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
 
     // Tabelle laden und alles einfügen
-    namen = new QSet<QString>();
+    namen = QSet<QString>();
 
-    for(Person *p: activity->getPersonen()->keys()) {
+    for(Person *p: activity->getPersonen().keys()) {
         on_buttonInsert_clicked();
 
-        namen->insert(p->getName());
+        namen.insert(p->getName());
 
-        AActivity::Infos *info = activity->getPersonen()->value(p);
+        AActivity::Infos *info = activity->getPersonen().value(p);
 
         ui->tablePersonen->setItem(0, 0, new QTableWidgetItem(p->getName()));
         Category kat = info->kategorie;

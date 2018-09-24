@@ -1,10 +1,6 @@
 #ifndef CALENDAR_H
 #define CALENDAR_H
 
-#include <QFrame>
-#include <QDate>
-#include <QListWidgetItem>
-
 #include "manager.h"
 #include "activity.h"
 #include "fahrtag.h"
@@ -57,12 +53,12 @@ protected:
     void setListItemC(QListWidgetItem *i, AActivity *a);
     void setListItem(QListWidgetItem *i, AActivity *a);
     Ui::Calendar *ui;
-    QList<CalendarDay*> *tage;
+    QList<CalendarDay*> tage;
 
-    QMap<AActivity*, CalendarDay*> *calendaritem; // Gibt an, in welchem Tag die Elemente momentan angezeigt werden
+    QMap<AActivity*, CalendarDay*> calendaritem; // Gibt an, in welchem Tag die Elemente momentan angezeigt werden
 
-    QMap<AActivity*, QListWidgetItem*> *listitem; // Gibt an, welcher Aktivität welches Listenelement in der gesamtListe zugeordnet ist
-    QMap<QListWidgetItem*, AActivity*> *itemToList;
+    QMap<AActivity*, QListWidgetItem*> listitem; // Gibt an, welcher Aktivität welches Listenelement in der gesamtListe zugeordnet ist
+    QMap<QListWidgetItem*, AActivity*> itemToList;
 
     int scrollOffSet;
 };

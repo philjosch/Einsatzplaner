@@ -1,9 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QMap>
-
 #include "aactivity.h"
 #include "fahrtag.h"
 #include "fahrtagwindow.h"
@@ -11,6 +8,9 @@
 #include "activitywindow.h"
 #include "personalwindow.h"
 #include "exportgesamt.h"
+
+#include <QMainWindow>
+#include <QMap>
 
 namespace Ui {
 class MainWindow;
@@ -30,7 +30,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QMap<AActivity*, QMainWindow*> *fenster;
+    QMap<AActivity*, QMainWindow*> fenster;
 
     QString filePath;
     bool saved;

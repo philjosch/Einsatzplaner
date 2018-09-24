@@ -1,8 +1,6 @@
 #include "verteiler.h"
 
-#include <QDebug>
 #include <QStack>
-#include <QTime>
 
 Verteiler::Verteiler(QList<Wagen *> wagen, QSet<Reservierung *> reservierungen)
 {

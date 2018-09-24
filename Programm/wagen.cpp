@@ -1,11 +1,8 @@
 #include "wagen.h"
 #include "managerreservierungen.h"
 
-#include <math.h>
 #include <cmath>
-#include <QDebug>
 
-double Wagen::FAKTOR_FUER_FREIE_PLAETZE = 0.9;
 double Wagen::GEWICHT_STRAFE_TEIL_1 = 10.0;
 double Wagen::GEWICHT_STRAFE_TEIL_2 = 11.0;
 
@@ -15,8 +12,8 @@ Wagen::Wagen(int nummer)
     this->nummer = nummer;
 
     sitzGruppen = QList<int>();
-    verteilung = new QHash<int, Reservierung*>();
-    internToExtern = *new QList<int>();
+    verteilung = QHash<int, Reservierung*>();
+    internToExtern = QList<int>();
     // Reihe1 = Oben (Nord)
     // Reihe2 = Unten (Süden)
     // Nummerrierung von Links nach Rechts (West nach Ost)
@@ -189,7 +186,7 @@ void Wagen::verlassePlaetze(QList<int> liste)
     QList<int> intern = extToInt(liste);
     if (intern.isEmpty()) return;
     for(int i = 0; i < intern.length(); i++) {
-        verteilung->remove(intern.at(i));
+        verteilung.remove(intern.at(i));
     }
     if (aktuellePosition > intern.first())
         aktuellePosition = intern.first();
@@ -201,12 +198,12 @@ QList<int> Wagen::besetzePlaetze(Reservierung *r)
     if (r->getAnzahl() > getAnzahlFrei()) return liste;
     int i = 0;
     while (i < r->getAnzahl()) {
-        if (! verteilung->contains(aktuellePosition)) {
+        if (! verteilung.contains(aktuellePosition)) {
             liste.append(aktuellePosition);
-            verteilung->insert(aktuellePosition, r);
+            verteilung.insert(aktuellePosition, r);
             ++i;
         }
-        aktuellePosition ++;
+        ++aktuellePosition;
     }
     return intToExt(liste);
 }
@@ -219,9 +216,9 @@ bool Wagen::besetzePlaetze(Reservierung *r, QList<int> plaetze)
     for (int pos: intern) {
         if (pos < 0 || pos > size)
             return false;
-        verteilung->insert(pos, r);
+        verteilung.insert(pos, r);
         if (pos == aktuellePosition)
-            aktuellePosition++;
+            ++aktuellePosition;
     }
     return true;
 }
@@ -238,9 +235,6 @@ double Wagen::getStrafpunkteFuerPlaetze(int anzahl, int start)
     int sitzGruppeEnde = sitzGruppen.at(ende);
 
     int beginnErste = sitzGruppen.indexOf(sitzGruppeStart);
-    int endeErste = sitzGruppen.lastIndexOf(sitzGruppeStart);
-
-    int beginnLetzte = sitzGruppen.indexOf(sitzGruppeEnde);
     int endeLetzte = sitzGruppen.lastIndexOf(sitzGruppeEnde);
 
     // Berechnung der Strafpunkte
@@ -255,19 +249,13 @@ double Wagen::getStrafpunkteFuerPlaetze(int anzahl, int start)
 
     // Sp 2 //
     int ueV = start - beginnErste;; // Anzahl der durch fremde Reservierungen belegten Plätze am Anfang
-    int sgV = endeErste - beginnErste + 1; // Anzahl der Plaetze in der ersten Sitzgruppe
     int ueH = endeLetzte - ende; // Anzahl der durch fremde Reservierungen belegten Sitzplaetze in der letzten Sitzgruppe
-    int sgH = endeLetzte - beginnLetzte + 1; // Anzahl der Plaetze in letzter Sitzgruppe
 
     // Zweite Neue Variante zur Berechnung des Fehlers:
     sp1 = (benoetigt - maxB) / maxB;
-//    sp2 = (ueV*ueV)/(double)(sgV*sgV) + (ueH*ueH)/ (double)(sgH*sgH);
-//    sp2 = sp2/2. - 1.;
 
     if (benoetigt > 1) {
         sp2 = ueV*ueV + ueH*ueH;
-//    } else {
-//        sp2 = 0;
     }
 
     // Gewichtung der einzelnen Strafpunkte //
@@ -282,12 +270,12 @@ bool Wagen::testPlaetze(QList<int> liste, Reservierung *r)
 
 int Wagen::getAnzahlFrei()
 {
-    return size-(verteilung->size());
+    return size-(verteilung.size());
 }
 
 int Wagen::getAnzahlBelegt()
 {
-    return verteilung->size();
+    return verteilung.size();
 }
 
 int Wagen::getKapazitaet()
@@ -297,25 +285,25 @@ int Wagen::getKapazitaet()
 
 bool Wagen::isEmpty()
 {
-    return verteilung->isEmpty();
+    return verteilung.isEmpty();
 }
 
 void Wagen::weisePlaetzeZu()
 {
     QMap<Reservierung*, QList<int>> intern; // Plaetze in interner Darstellung
-    for(int i: verteilung->keys()) {
-        Reservierung *r = verteilung->value(i);
+    Reservierung *r;
+    for(int i: verteilung.keys()) {
+        r = verteilung.value(i);
         if (!intern.contains(r))
             intern.insert(r, QList<int>());
         QList<int> help = intern.value(r);
         help.append(i);
         intern.insert(r, help);
-//        intern.value(r).append(i);
     }
 
     for(Reservierung *r: intern.keys()) {
-        QMap<int, QList<int>> *plaetze = new QMap<int, QList<int>>();
-        plaetze->insert(nummer, intToExt(intern.value(r)));
+        QMap<int, QList<int>> plaetze = QMap<int, QList<int>>();
+        plaetze.insert(nummer, intToExt(intern.value(r)));
         r->setSitzplatz(plaetze);
     }
 }
@@ -328,14 +316,14 @@ int Wagen::getAktuellePosition() const
 void Wagen::clear()
 {
     aktuellePosition = 0;
-    verteilung->clear();
+    verteilung.clear();
 }
 
 bool Wagen::test(QList<int> liste, Reservierung *r)
 {
     for(int pos: liste) {
         if (pos < size && pos >= 0) {
-            if (verteilung->contains(pos) && verteilung->value(pos) != r) {
+            if (verteilung.contains(pos) && verteilung.value(pos) != r) {
                 return false;
             }
         } else {

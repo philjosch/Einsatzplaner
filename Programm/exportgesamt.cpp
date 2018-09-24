@@ -3,9 +3,6 @@
 #include "mainwindow.h"
 #include "export.h"
 
-#include <QPrinter>
-#include <QPrintDialog>
-
 ExportGesamt::ExportGesamt(Manager *m, QWidget *parent) : QDialog(parent), ui(new Ui::ExportGesamt)
 {
     ui->setupUi(this);

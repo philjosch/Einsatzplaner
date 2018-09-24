@@ -47,7 +47,7 @@ QString Activity::getListString()
 AActivity::Infos *Activity::getIndividual(Person *person)
 {
     if (person == nullptr) return nullptr;
-    Infos *alt = personen->value(person);
+    Infos *alt = personen.value(person);
     if (alt == nullptr) return nullptr;
     Infos *neu = new Infos();
     neu->kategorie = alt->kategorie;
@@ -85,10 +85,10 @@ QString Activity::getHtmlForSingleView()
     html += "<p><b>Helfer";
     html += (personalBenoetigt ? required1+" werden benötigt"+required2:"");
     html += ":</b></p>";
-    if (personen->count() > 0) {
+    if (personen.count() > 0) {
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Name</th><th>Beginn*</th><th>Ende*</th><th>Aufgabe</th></tr></thead><tbody>";
-        for(Person *p: personen->keys()) {
-            Infos *info = personen->value(p);
+        for(Person *p: personen.keys()) {
+            Infos *info = personen.value(p);
             html += "<tr><td>"+p->getName()+"</td><td>";
             html += (info->beginn == QTime(0,0) ? "" : info->beginn.toString("hh:mm"));
             html += "</td><td>";
@@ -117,15 +117,15 @@ QString Activity::getHtmlForTableView()
     QMap<Person*, AActivity::Infos*> sonstige;
 
     // Aufsplitten der Personen auf die Einzelnen Listen
-    for(Person *p: personen->keys()) {
-        switch (personen->value(p)->kategorie) {
+    for(Person *p: personen.keys()) {
+        switch (personen.value(p)->kategorie) {
         case Category::Tf:
-        case Category::Tb: tf.insert(p, personen->value(p)); break;
-        case Category::Zf: zf.insert(p, personen->value(p)); break;
-        case Category::Zub: zub.insert(p, personen->value(p)); break;
-        case Category::Begleiter: begl.insert(p, personen->value(p)); break;
-        case Category::Service: service.insert(p, personen->value(p)); break;
-        default: sonstige.insert(p, personen->value(p)); break;
+        case Category::Tb: tf.insert(p, personen.value(p)); break;
+        case Category::Zf: zf.insert(p, personen.value(p)); break;
+        case Category::Zub: zub.insert(p, personen.value(p)); break;
+        case Category::Begleiter: begl.insert(p, personen.value(p)); break;
+        case Category::Service: service.insert(p, personen.value(p)); break;
+        default: sonstige.insert(p, personen.value(p)); break;
         }
     }
 

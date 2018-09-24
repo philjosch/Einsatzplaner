@@ -1,11 +1,11 @@
 #ifndef PERSONALWINDOW_H
 #define PERSONALWINDOW_H
 
+#include "managerpersonal.h"
+
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <QPrinter>
-
-#include "managerpersonal.h"
 
 namespace Ui {
 class PersonalWindow;
@@ -89,8 +89,8 @@ private:
 
     Person *aktuellePerson;
 
-    QHash<QListWidgetItem*, Person*> *itemToPerson;
-    QHash<Person*, QListWidgetItem*> *personToItem;
+    QHash<QListWidgetItem*, Person*> itemToPerson;
+    QHash<Person*, QListWidgetItem*> personToItem;
 
     QList<bool> *anzeige;
     /* Gibt an, welche Werte in der Tabelle angezeigt werden

@@ -4,12 +4,7 @@
 #include "export.h"
 #include "minimumhourseditordialog.h"
 
-#include <QHash>
-#include <QListWidgetItem>
 #include <QMessageBox>
-#include <QPrinter>
-#include <QSettings>
-#include <QDebug>
 
 const QString PersonalWindow::nichtGenugStunden = "#ff9999";
 
@@ -22,8 +17,8 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     manager = m;
     setWindowTitle(tr("Personalmanagement"));
 
-    itemToPerson = new QHash<QListWidgetItem*, Person*>();
-    personToItem = new QHash<Person*, QListWidgetItem*>();
+    itemToPerson = QHash<QListWidgetItem*, Person*>();
+    personToItem = QHash<Person*, QListWidgetItem*>();
     enabled = false;
 
     QSetIterator<Person*> i = manager->getPersonen();
@@ -31,8 +26,8 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
         Person *p = i.next();
         QListWidgetItem *item = new QListWidgetItem(p->getName());
         ui->listWidget->insertItem(0, item);
-        itemToPerson->insert(item, p);
-        personToItem->insert(p, item);
+        itemToPerson.insert(item, p);
+        personToItem.insert(p, item);
         ui->pushDelete->setEnabled(true);
     }
     refreshEinzel();
@@ -165,8 +160,8 @@ void PersonalWindow::loadData()
         Person *p = i.next();
         QListWidgetItem *item = new QListWidgetItem(p->getName());
         ui->listWidget->insertItem(ui->listWidget->count(), item);
-        itemToPerson->insert(item, p);
-        personToItem->insert(p, item);
+        itemToPerson.insert(item, p);
+        personToItem.insert(p, item);
     }
     refresh();
 }
@@ -440,7 +435,7 @@ void PersonalWindow::refreshEinzel()
     // hier müssen nur die Farben angepasst werden
     for(int i = 0; i < ui->listWidget->count(); i++) {
         QListWidgetItem *item = ui->listWidget->item(i);
-        Person *p = itemToPerson->value(item);
+        Person *p = itemToPerson.value(item);
         if (manager->pruefeStunden(p)) {
             item->setBackgroundColor(QColor("#ffffff"));
         } else {
@@ -459,8 +454,8 @@ void PersonalWindow::on_pushAdd_clicked()
     aktuellePerson = p;
     QListWidgetItem *item = new QListWidgetItem(aktuellePerson->getName());
     ui->listWidget->insertItem(0, item);
-    itemToPerson->insert(item, aktuellePerson);
-    personToItem->insert(aktuellePerson, item);
+    itemToPerson.insert(item, aktuellePerson);
+    personToItem.insert(aktuellePerson, item);
     showPerson(aktuellePerson);
     ui->pushDelete->setEnabled(true);
     refreshEinzel();
@@ -475,7 +470,7 @@ void PersonalWindow::on_lineVorname_textChanged(const QString &arg1)
             QMessageBox::information(this, tr("Name doppelt vergeben"), tr("Der eingegebene Namen ist bereits im System registriert.\nSomit kann keine zweite Personen den gleichen Namen haben!"));
         } else {
             aktuellePerson->setVorname(arg1);
-            personToItem->value(aktuellePerson)->setText(aktuellePerson->getName());
+            personToItem.value(aktuellePerson)->setText(aktuellePerson->getName());
             ui->listWidget->sortItems();
         }
         emit changed();
@@ -490,7 +485,7 @@ void PersonalWindow::on_lineNachname_textChanged(const QString &arg1)
             QMessageBox::information(this, tr("Name doppelt vergeben"), tr("Der eingegebene Namen ist bereits im System registriert.\nSomit kann keine zweite Personen den gleichen Namen haben!"));
         } else {
             aktuellePerson->setNachname(arg1);
-            personToItem->value(aktuellePerson)->setText(aktuellePerson->getName());
+            personToItem.value(aktuellePerson)->setText(aktuellePerson->getName());
             ui->listWidget->sortItems();
         }
         emit changed();
@@ -536,7 +531,7 @@ void PersonalWindow::on_pushDelete_clicked()
     if (ui->listWidget->selectedItems().length() > 0 && enabled) {
         enabled = false;
         QListWidgetItem *i = ui->listWidget->selectedItems().at(0);
-        Person *p = itemToPerson->value(i);
+        Person *p = itemToPerson.value(i);
         if (p->getAnzahl() > 0) {
             QMessageBox::information(this, tr("Warnung"), tr("Die ausgewählte Person kann nicht gelöscht werden, da Sie noch bei Aktivitäten eingetragen ist.\nBitte lösen Sie diese Verbindung bevor Sie die Person löschen!"));
             enabled = true;
@@ -545,8 +540,8 @@ void PersonalWindow::on_pushDelete_clicked()
         if (p == aktuellePerson) {
             aktuellePerson = nullptr;
         }
-        itemToPerson->remove(i);
-        personToItem->remove(p);
+        itemToPerson.remove(i);
+        personToItem.remove(p);
         manager->removePerson(p);
         delete p;
         ui->listWidget->takeItem(ui->listWidget->row(i));
@@ -555,7 +550,7 @@ void PersonalWindow::on_pushDelete_clicked()
             disableFields();
             ui->pushDelete->setEnabled(false);
         } else {
-            aktuellePerson = itemToPerson->value(ui->listWidget->item(0));
+            aktuellePerson = itemToPerson.value(ui->listWidget->item(0));
             showPerson(aktuellePerson);
             enabled = true;
         }
@@ -565,7 +560,7 @@ void PersonalWindow::on_pushDelete_clicked()
 
 void PersonalWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
-    showPerson(itemToPerson->value(item));
+    showPerson(itemToPerson.value(item));
 }
 
 void PersonalWindow::on_pushPDF_clicked()
