@@ -796,6 +796,9 @@ void FahrtagWindow::on_buttonVerteile_clicked()
         if (ok.count(Mistake::OK) == ok.length()) {
             QMessageBox::information(this, tr("Fertig"), tr("Die Reservierungen in allen Klassen wurden erfolgreich verteilt.\nBenötigte Zeit in mSek: ")+QString::number(start.msecsTo(ende)));
         }
+        if (CoreApplication::isDeveloperVersion()) {
+            QMessageBox::information(this, tr("Fertig"), "mSek: "+QString::number(start.msecsTo(ende)));
+        }
         fahrtag->emitter();
         update();
     }
