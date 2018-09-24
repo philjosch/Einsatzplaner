@@ -1,6 +1,7 @@
 #include "managerreservierungen.h"
 #include "wagen.h"
 #include "verteiler.h"
+#include "enums.h"
 
 #include <QMessageBox>
 #include <QSetIterator>
@@ -231,7 +232,7 @@ QSetIterator<Reservierung *> ManagerReservierungen::getReservierungen()
     return r;
 }
 
-bool ManagerReservierungen::verteileSitzplaetze()
+QList<Mistake> ManagerReservierungen::verteileSitzplaetze()
 {
     // aufteilen der Wagen auf die beiden Gruppen
     QList<Wagen*> ersteKlasse = QList<Wagen*>();
@@ -255,29 +256,35 @@ bool ManagerReservierungen::verteileSitzplaetze()
         else
             resAndere.insert(r);
     }
+
     // Verteilen der Sitzplätze
-    bool ok = true;
+
     // Erste klasse verteilen
+    Mistake okErste = Mistake::OK;
     if (resErste.size() > 0 && ersteKlasse.length() > 0) {
-        Verteiler *erste = new Verteiler(ersteKlasse, resErste);
-        erste->setCheckAll(checkAll);
-        ok = ok && erste->verteile2();
+        Verteiler erste = Verteiler(ersteKlasse, resErste);
+        erste.setCheckAll(checkAll);
+        okErste = erste.verteile();
     } else if (resErste.size() > 0 && ersteKlasse.length() == 0) {
-        ok = false;
+        okErste = Mistake::KapazitaetUeberlauf;
     }
+
     // 2./3. Klasse verteilen
+    Mistake okAndere = Mistake::OK;
     if (resAndere.size() > 0 && andereKlasse.length() > 0) {
-        Verteiler *andere = new Verteiler(andereKlasse, resAndere);
-        andere->setCheckAll(checkAll);
-        ok = ok && andere->verteile2();
+        Verteiler andere = Verteiler(andereKlasse, resAndere);
+        andere.setCheckAll(checkAll);
+        okAndere = andere.verteile();
     } else if (resAndere.size() > 0 && andereKlasse.length() == 0) {
-        ok = false;
+        okAndere = Mistake::KapazitaetUeberlauf;
     }
+
     // Die Sitzplätze zuweisen, sodass sie in den Wagen erscheinen.
     for(Reservierung *r: reservierungen.values()) {
         r->setSitzplatz(r->getSitzplatz());
     }
-    return ok;
+
+    return {okAndere, okErste};
 }
 
 bool ManagerReservierungen::checkPlaetze(QMap<int, QList<int>> *p, Reservierung *r)

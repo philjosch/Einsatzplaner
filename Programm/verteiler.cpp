@@ -15,149 +15,7 @@ Verteiler::Verteiler(QList<Wagen *> wagen, QSet<Reservierung *> reservierungen)
     checkAll = false;
 }
 
-bool Verteiler::verteile()
-{
-    return false;
-    // berechne untere Schranke für die Güte dees ergebnisses
-    int puffer = 0;
-    for (Wagen *w: wagen) {
-        puffer += w->getKapazitaet();
-    }
-    for (Reservierung *r: reservierungen) {
-        puffer -= r->getAnzahl();
-    }
-    if (puffer < 0) return false;
-    verteile(0, reservierungen, puffer);
-
-    return found;
-}
-
-void Verteiler::verteile(double bewertung, QSet<Reservierung *> rest, int puffer)
-{
-    if (bewertung > besteBewertung) return;
-
-    // Alles wurde Verteilt
-    if (rest.isEmpty()) {
-        count ++;
-        weisePlaetzeZu();
-        besteBewertung = bewertung;
-        found = true;
-        return;
-    }
-
-    if (aktWg >= wagen.size()) return;
-
-    // Berechne den kleinsten Fehler und prüfe, ob Ziel noch erreicht werden kann
-    if (bewertung + getMinBewertung(rest) > besteBewertung) return;
-
-    Wagen *aktuellerWagen = wagen.at(aktWg);
-
-    QHash<int, Reservierung*> anzahlToReservierung;
-    QHash<double, QList<int>> bewertungDerReservierungen;
-    for(Reservierung *r: rest.values()) {
-
-        if (anzahlToReservierung.contains(r->getAnzahl())) continue;
-        if (aktuellerWagen->getAnzahlFrei() < r->getAnzahl()) continue;
-
-        double bewertungReservierung = aktuellerWagen->getStrafpunkteFuerPlaetze(r->getAnzahl());
-
-        if (bewertung + bewertungReservierung < besteBewertung) {
-            anzahlToReservierung.insert(r->getAnzahl(), r);
-            if (! bewertungDerReservierungen.contains(bewertungReservierung)) {
-                bewertungDerReservierungen.insert(bewertungReservierung, QList<int>());
-            }
-            QList<int> help = bewertungDerReservierungen.value(bewertungReservierung);
-            help.append(r->getAnzahl());
-            bewertungDerReservierungen.insert(bewertungReservierung, help);
-        } else {
-            continue;
-        }
-    }
-
-    int freiePlaetze = aktuellerWagen->getAnzahlFreiePlaetzeInSitzgruppe();
-    Reservierung *extra = new Reservierung(nullptr);
-    extra->setAnzahl(freiePlaetze);
-    if ((! anzahlToReservierung.contains(freiePlaetze)) && freiePlaetze <= puffer && freiePlaetze > 0) {
-        anzahlToReservierung.insert(freiePlaetze, extra);
-        double bewertungExtra = aktuellerWagen->getStrafpunkteFuerPlaetze(freiePlaetze);
-        if (! bewertungDerReservierungen.contains(bewertungExtra))
-            bewertungDerReservierungen.insert(bewertungExtra, QList<int>());
-        QList<int> help = bewertungDerReservierungen.value(bewertungExtra);
-        help.append(freiePlaetze);
-        bewertungDerReservierungen.insert(bewertungExtra, help);
-    }
-
-    if(anzahlToReservierung.isEmpty()) return;
-
-    // Sortiere die Liste mit Reservierungen zuerst nach Bewertung und 2. rangig nach Anzahl absteigend
-    QList<double> keys = bewertungDerReservierungen.keys();
-    qSort(keys);
-    QList<int> sortiert;
-    QHash<int,double> anzahlToBewertung;
-    if (checkAll) {
-        for (double d: keys) {
-            QList<int> liste = bewertungDerReservierungen.value(d);
-            qSort(liste);
-            for(int i = liste.length()-1; i >= 0; --i) {
-                sortiert.append(liste.at(i));
-                anzahlToBewertung.insert(liste.at(i), d);
-            }
-        }
-    } else {
-        double d = keys.first();
-        QList<int> liste = bewertungDerReservierungen.value(d);
-        qSort(liste);
-        for(int i = liste.length()-1; i >= 0; --i) {
-            sortiert.append(liste.at(i));
-            anzahlToBewertung.insert(liste.at(i), d);
-        }
-//        if (keys.length() >= 2) {
-//            d = keys.at(1);
-//            liste = bewertungDerReservierungen.value(d);
-//            qSort(liste);
-//            for(int i = liste.length()-1; i >= 0; --i) {
-//                sortiert.append(liste.at(i));
-//                anzahlToBewertung.insert(liste.at(i), d);
-//            }
-//        }
-
-    }
-    bewertungDerReservierungen.clear();
-
-    Reservierung *r = nullptr;
-    int alt = aktWg;
-    for(int j = 0; j < sortiert.length() /* && (checkAll || ! found) */; j++) {
-        // wenn es perfekt passende Plaetze gibt, prüfe nur diese!
-//        if ((anzahlToBewertung.value(sortiert.first()) == 0) && (anzahlToBewertung.value(sortiert.at(j)) != 0)) {
-//            qDebug() << "Hier";
-//            break;
-//        }
-        r = anzahlToReservierung.value(sortiert.at(j));
-        QList<int> liste = aktuellerWagen->besetzePlaetze(r);
-        if (aktuellerWagen->getAnzahlFrei() == 0) {
-            aktWg++;
-        }
-        double bewertungNeu = bewertung;
-        int pufferNeu = puffer;
-        if (r == extra) {
-            pufferNeu -= extra->getAnzahl();
-        } else {
-            bewertungNeu += anzahlToBewertung.value(sortiert.at(j));
-        }
-        QSet<Reservierung*> restNeu = rest;
-        restNeu.remove(r);
-
-        if (bewertungNeu + getMinBewertung(restNeu) < besteBewertung) {
-            verteile(bewertungNeu, restNeu, pufferNeu);
-        }
-        aktWg = alt;
-        aktuellerWagen->verlassePlaetze(liste);
-    }
-    r = nullptr;
-    delete extra;
-}
-
-bool Verteiler::verteile2()
+Mistake Verteiler::verteile()
 {
     // berechne untere Schranke für die Güte dees ergebnisses
     int puffer = 0;
@@ -167,7 +25,7 @@ bool Verteiler::verteile2()
     for (Reservierung *r: reservierungen) {
         puffer -= r->getAnzahl();
     }
-    if (puffer < 0) return false;
+    if (puffer < 0) return Mistake::KapazitaetUeberlauf;
 
 
     QStack<Configuration> stack{};
@@ -232,7 +90,8 @@ bool Verteiler::verteile2()
         }
     }
 
-    return found;
+    if (found) return Mistake::OK;
+    else return Mistake::SonstigerFehler;
 }
 
 void Verteiler::weisePlaetzeZu()

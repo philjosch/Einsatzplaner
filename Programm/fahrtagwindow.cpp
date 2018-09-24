@@ -2,6 +2,7 @@
 #include "person.h"
 #include "ui_fahrtagwindow.h"
 #include "export.h"
+#include "coreapplication.h"
 
 #include <QDebug>
 #include <QMessageBox>
@@ -775,13 +776,25 @@ void FahrtagWindow::on_buttonVerteile_clicked()
 {
     // Informationen, wie lange es gedauert hat
     QTime start = QTime::currentTime();
-    bool ok = fahrtag->verteileSitzplaetze();
+    QList<Mistake> ok = fahrtag->verteileSitzplaetze();
     QTime ende = QTime::currentTime();
     if (nehme) {
-        if (ok) {
-            QMessageBox::information(this, tr("Fertig"), tr("Die Sitzplätze wurden in ")+QString::number(start.msecsTo(ende))+tr(" mSekunden verteilt."));
-        } else {
-            QMessageBox::information(this, tr("Fehler"), tr("Es konnten nicht alle Reservierungen verteilt werden!\nBitte prüfen Sie die Verteilung auf mögliche Fehler!"));
+        for(int i = 0; i < ok.length(); ++i) {
+            switch (ok.at(i)) {
+            case OK:
+                if (ok.count(Mistake::OK) != ok.length())
+                    QMessageBox::information(this, tr("Fertig"), tr("Die Reservierungen in der ") + (i==0 ? "2. und 3" : QString::number(i)) + tr(". Klasse wurden erfolgreich verteilt."));
+                break;
+            case KapazitaetUeberlauf:
+                QMessageBox::information(this, tr("Fehler"), tr("Die Reservierungen in der ") + (i==0 ? "2. und 3" : QString::number(i)) + tr(". Klasse konnten nicht verteilt werden, da nicht genügend Sitzplätze zur Verfügung stehen!"));
+                break;
+            default:
+                QMessageBox::information(this, tr("Fehler"), tr("Die Reservierungen in der ") + (i==0 ? "2. und 3" : QString::number(i)) + tr(". Klasse konnten nicht verteilt werden!\nBitte prüfen Sie die Eingaben auf mögliche Fehler!"));
+                break;
+            }
+        }
+        if (ok.count(Mistake::OK) == ok.length()) {
+            QMessageBox::information(this, tr("Fertig"), tr("Die Reservierungen in allen Klassen wurden erfolgreich verteilt.\nBenötigte Zeit in mSek: ")+QString::number(start.msecsTo(ende)));
         }
         fahrtag->emitter();
         update();

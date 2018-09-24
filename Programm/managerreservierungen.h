@@ -5,6 +5,7 @@
 
 #include "reservierung.h"
 #include "wagen.h"
+#include "enums.h"
 
 class ManagerReservierungen
 {
@@ -43,7 +44,7 @@ public:
     void setCheckAll(bool value);
 
 public slots:
-    bool verteileSitzplaetze();
+    QList<Mistake> verteileSitzplaetze();
     bool checkPlaetze(QMap<int, QList<int> > *p, Reservierung *r);
 
     Reservierung *createReservierung();
