@@ -1,13 +1,13 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 24. September 2018
+Stand: 25. September 2018
 
-## Version 1.4.1 – 2018-09-??
+## Version 1.4.1 – 2018-09-25
 ### Neu
 - Kalender zeigt jetzt den Anlass einer Aktivität und eines Fahrtages an, sofern es möglich ist
 
 ### Verbessert
 - Fahrtagfenster und Fenster für Aktivitäten optimiert, sodass sie den Platz besser nutzen
-- Verbesserter Export von Arbeitseinsätzen, sowohl in der Listen- als auch in der Einzelansich
+- Verbesserter Export von Arbeitseinsätzen, sowohl in der Listen- als auch in der Einzelansicht
 - Fahrtage und Aktivitäten werden jetzt nicht mehr nur nach Datum sondern auch nach Beginn und Endzeit sortiert
 - Die Sitzplätze werden jetzt besser und schneller verteilt
 - Das Programm benötigt bei längerem Betrieb weniger Arbeitsspeicher
