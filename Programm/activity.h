@@ -1,10 +1,6 @@
 #ifndef ACTIVITY_H
 #define ACTIVITY_H
 
-#include <QDate>
-#include <QTime>
-#include <QObject>
-
 #include "person.h"
 #include "aactivity.h"
 

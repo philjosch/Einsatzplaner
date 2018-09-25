@@ -1,9 +1,9 @@
 #ifndef EXPORTGESAMT_H
 #define EXPORTGESAMT_H
 
-#include <QDialog>
-
 #include "manager.h"
+
+#include <QDialog>
 
 namespace Ui {
 class ExportGesamt;

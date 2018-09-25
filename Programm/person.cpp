@@ -2,11 +2,6 @@
 #include "managerpersonal.h"
 #include "person.h"
 
-#include <QMap>
-#include <QListIterator>
-#include <QDebug>
-#include <QVariant>
-
 Person::Person(QString vorname, QString nachname, ManagerPersonal *manager)
 {
     personConstructor(vorname, nachname, manager);
@@ -146,13 +141,13 @@ void Person::berechne()
     timeAusbildung = 0;
     timeSonstiges = 0;
     timeSum = 0;
-    sumAnzahl = activities->size();
+    sumAnzahl = activities.size();
     sumKilometer = 0;
 
     QDate today = QDate::currentDate();
-    for(AActivity *a: activities->keys()) {
+    for(AActivity *a: activities.keys()) {
         if (a->getDatum() <= today) {
-            Category cat = activities->value(a);
+            Category cat = activities.value(a);
             AActivity::Infos *info = a->getIndividual(this);
 
             // Einsatzstunden
@@ -196,14 +191,14 @@ void Person::berechne()
 
 bool Person::addActivity(AActivity *a, Category category)
 {
-    activities->insert(a, category);
+    activities.insert(a, category);
     valuesInvalid = true;
     return true;
 }
 
 bool Person::removeActivity(AActivity *a)
 {
-    if (activities->remove(a) != 0) {
+    if (activities.remove(a) != 0) {
         valuesInvalid = true;
         return true;
     }
@@ -212,7 +207,7 @@ bool Person::removeActivity(AActivity *a)
 
 QListIterator<AActivity *> *Person::getActivities()
 {
-    QListIterator<AActivity*> *i = new QListIterator<AActivity*>(activities->keys());
+    QListIterator<AActivity*> *i = new QListIterator<AActivity*>(activities.keys());
     return i;
 }
 
@@ -271,35 +266,29 @@ QString Person::getHtmlForTableView(QList<bool> *liste)
     while (liste->length() < 11) {
         liste->append(0);
     }
-    QString html;
-    if (manager->pruefeStunden(this)) {
-        html = "<tr>";
-    } else {
-        html = "<tr style='background-color:"+PersonalWindow::nichtGenugStunden+";'>";
-    }
-    html += "<td>"+getName()+"</td>";
+    QString html = "<tr><td style='background-color:"+(manager->pruefeStunden(this) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+getName()+"</td>";
     if (liste->at(0))
-        html += "<td>"+QString::number(getTimeSum())+"</td>";
+        html += "<td style='background-color:"+(manager->pruefeStunden(this) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeSum())+"</td>";
     if (liste->at(1))
         html += "<td>"+QString::number(getSumAnzahl())+"</td>";
     if (liste->at(2))
-        html += "<td>"+QString::number(getTimeTf())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Tf) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeTf())+"</td>";
     if (liste->at(3))
-        html += "<td>"+QString::number(getTimeZf())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Zf) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeZf())+"</td>";
     if (liste->at(4))
-        html += "<td>"+QString::number(getTimeZub())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Zub) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeZub())+"</td>";
     if (liste->at(5))
-        html += "<td>"+QString::number(getTimeService())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Service) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeService())+"</td>";
     if (liste->at(6))
-        html += "<td>"+QString::number(getTimeVorbereiten())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::ZugVorbereiten) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeVorbereiten())+"</td>";
     if (liste->at(7))
-        html += "<td>"+QString::number(getTimeWerkstatt())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Werkstatt) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeWerkstatt())+"</td>";
     if (liste->at(8))
-        html += "<td>"+QString::number(getTimeBuero())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Buero) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeBuero())+"</td>";
     if (liste->at(11))
-        html += "<td>"+QString::number(getTimeAusbildung())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Ausbildung) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeAusbildung())+"</td>";
     if (liste->at(9))
-        html += "<td>"+QString::number(getTimeSonstiges())+"</td>";
+        html += "<td style='background-color:"+(manager->checkHours(this, Category::Sonstiges) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(getTimeSonstiges())+"</td>";
     if (liste->at(10))
         html += "<td>"+QString::number(getSumKilometer())+"</td>";
     html += "</tr>";
@@ -377,11 +366,11 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     }
 
     // Hier kommt die liste mit den Arbeitseinsätzen
-    if (activities->size() > 0) {
+    if (activities.size() > 0) {
         html += "<h4>Übersicht über die einzelnen Aktivitäten</h4>";
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
-        for(AActivity *a: activities->keys()) {
+        for(AActivity *a: activities.keys()) {
             AActivity::Infos *info = a->getIndividual(this);
             html += "<tr><td>"+a->getDatum().toString("dd. MM. yyyy")+"<br/>"+a->getKurzbeschreibung()+"<br/>"+a->getAnlass()+"</td><td>"
                     + info->beginn.toString("HH:mm")+"-"+info->ende.toString("HH:mm")+"</td><td>"
@@ -554,7 +543,7 @@ void Person::personConstructor(QString vorname, QString nachname, ManagerPersona
     additionalKilometer = 0;
     valuesInvalid = true;
 
-    activities = new QMap<AActivity *, Category>();
+    activities = QMap<AActivity *, Category>();
 }
 
 double Person::getTimeTf()
@@ -619,7 +608,7 @@ double Person::getTimeSum()
 
 int Person::getAnzahl()
 {
-    return activities->size();
+    return activities.size();
 }
 
 int Person::getSumAnzahl()

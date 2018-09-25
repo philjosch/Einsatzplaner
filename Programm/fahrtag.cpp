@@ -2,10 +2,6 @@
 #include "mainwindow.h"
 #include "managerreservierungen.h"
 
-#include <QDebug>
-#include <QTime>
-#include <QObject>
-
 Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p), ManagerReservierungen()
 {
     art = Fahrtag::Museumszug;
@@ -73,7 +69,7 @@ QString Fahrtag::getKurzbeschreibung()
 
 QString Fahrtag::getListString()
 {
-    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – "+QObject::tr("Fahrtag");
+    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – "+getStringFromArt(art);
     if (wichtig) {
         s += " WICHTIG!";
     }
@@ -81,16 +77,15 @@ QString Fahrtag::getListString()
 }
 
 QString Fahrtag::getListStringShort() {
-    if (anlass.length() == 0) {
-        return QObject::tr("Fahrtag");
-    }
-    return anlass;
+    if (anlass.length() != 0)
+        return anlass;
+    return getStringFromArt(art);
 }
 
 AActivity::Infos *Fahrtag::getIndividual(Person *person)
 {
     if (person == nullptr) return nullptr;
-    Infos *alt = personen->value(person);
+    Infos *alt = personen.value(person);
     if (alt == nullptr) return nullptr;
     Infos *neu = new Infos();
     neu->bemerkung = alt->bemerkung;
@@ -137,15 +132,15 @@ QString Fahrtag::getHtmlForSingleView()
     QMap<Person*, AActivity::Infos*> sonstige;
 
     // Aufsplitten der Personen auf die Einzelnen Listen
-    for(Person *p: personen->keys()) {
-        switch (personen->value(p)->kategorie) {
+    for(Person *p: personen.keys()) {
+        switch (personen.value(p)->kategorie) {
         case Category::Tf:
-        case Category::Tb: tf.insert(p, personen->value(p)); break;
-        case Category::Zf: zf.insert(p, personen->value(p)); break;
-        case Category::Zub: zub.insert(p, personen->value(p)); break;
-        case Category::Begleiter: begl.insert(p, personen->value(p)); break;
-        case Category::Service: service.insert(p, personen->value(p)); break;
-        default: sonstige.insert(p, personen->value(p)); break;
+        case Category::Tb: tf.insert(p, personen.value(p)); break;
+        case Category::Zf: zf.insert(p, personen.value(p)); break;
+        case Category::Zub: zub.insert(p, personen.value(p)); break;
+        case Category::Begleiter: begl.insert(p, personen.value(p)); break;
+        case Category::Service: service.insert(p, personen.value(p)); break;
+        default: sonstige.insert(p, personen.value(p)); break;
         }
     }
     // *Tf/Tb
@@ -161,7 +156,7 @@ QString Fahrtag::getHtmlForSingleView()
         html += ":</b><br/>"+listToString(&zf, " | ")+"</p>";
     }
     // *Zub, Begl.o.b.A
-    if ((benoetigeZub && (art != Fahrtag::Schnupperkurs)) || zub.size() > 0) {
+    if ((benoetigeZub && (art != Fahrtag::Schnupperkurs)) || (zub.size() > 0 || begl.size() > 0)) {
         html += "<p><b>Zugbegleiter und <i>Begleiter ohne betriebliche Ausbildung</i>";
         html += (benoetigeZub && (art != Fahrtag::Schnupperkurs) ? required1+" werden benötigt"+required2:"");
         html += ":</b><br/>";
@@ -199,7 +194,7 @@ QString Fahrtag::getHtmlForSingleView()
         }
         if (art != Fahrtag::Nikolauszug) {
             html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
-            for(Reservierung *r: *reservierungen) {
+            for(Reservierung *r: reservierungen) {
                 html += r->getTableRow();
             }
             html += "</tbody></table>";
@@ -235,15 +230,15 @@ QString Fahrtag::getHtmlForTableView()
     QMap<Person*, AActivity::Infos*> sonstige;
 
     // Aufsplitten der Personen auf die Einzelnen Listen
-    for(Person *p: personen->keys()) {
-        switch (personen->value(p)->kategorie) {
+    for(Person *p: personen.keys()) {
+        switch (personen.value(p)->kategorie) {
         case Category::Tf:
-        case Category::Tb: tf.insert(p, personen->value(p)); break;
-        case Category::Zf: zf.insert(p, personen->value(p)); break;
-        case Category::Zub: zub.insert(p, personen->value(p)); break;
-        case Category::Begleiter: begl.insert(p, personen->value(p)); break;
-        case Category::Service: service.insert(p, personen->value(p)); break;
-        default: sonstige.insert(p, personen->value(p)); break;
+        case Category::Tb: tf.insert(p, personen.value(p)); break;
+        case Category::Zf: zf.insert(p, personen.value(p)); break;
+        case Category::Zub: zub.insert(p, personen.value(p)); break;
+        case Category::Begleiter: begl.insert(p, personen.value(p)); break;
+        case Category::Service: service.insert(p, personen.value(p)); break;
+        default: sonstige.insert(p, personen.value(p)); break;
         }
     }
 

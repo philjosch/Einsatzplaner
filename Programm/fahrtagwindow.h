@@ -1,12 +1,11 @@
 #ifndef FAHRTAGWINDOW_H
 #define FAHRTAGWINDOW_H
 
+#include "fahrtag.h"
+
 #include <QMainWindow>
-#include <QListWidgetItem>
 #include <QTableWidgetItem>
 #include <QPushButton>
-
-#include "fahrtag.h"
 
 namespace Ui {
 class FahrtagWindow;
@@ -117,9 +116,9 @@ private:
     void loadData();
 
     // Personal Verwaltung
-    QMap<QListWidgetItem *, QString> *listeMitNamen; // Liste mit den Namen, die in den Listen verwaltet werden
-    QMap<QListWidgetItem*, QTableWidgetItem*> *listToTable; // Mapt von den Listen auf den Tabelleneintrag der Person
-    QSet<QString> *namen;
+    QMap<QListWidgetItem *, QString> listeMitNamen; // Liste mit den Namen, die in den Listen verwaltet werden
+    QMap<QListWidgetItem*, QTableWidgetItem*> listToTable; // Mapt von den Listen auf den Tabelleneintrag der Person
+    QSet<QString> namen;
 
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);
@@ -127,8 +126,8 @@ private:
 
     // Reservierungen
     void plausibilityCheck();
-    QMap<Reservierung*, QListWidgetItem*> *resToItem;
-    QMap<QListWidgetItem*, Reservierung*> *itemToRes;
+    QMap<Reservierung*, QListWidgetItem*> resToItem;
+    QMap<QListWidgetItem*, Reservierung*> itemToRes;
 
     Reservierung *aktuelleRes;
     bool nehmeRes;
@@ -137,7 +136,7 @@ private:
     void saveResFahrt();
     void setEnabledFieldsForReservierung(bool enabled);
 
-    QMap<QWidget*, QTableWidgetItem*> *widgetInTableToTableWidget;
+    QMap<QWidget*, QTableWidgetItem*> widgetInTableToTableWidget;
 };
 
 #endif // FAHRTAGWINDOW_H

@@ -1,11 +1,10 @@
 #ifndef ACTIVITYWINDOW_H
 #define ACTIVITYWINDOW_H
 
-#include <QMainWindow>
-#include <QSet>
-
 #include "activity.h"
 #include "person.h"
+
+#include <QMainWindow>
 
 namespace Ui {
 class ActivityWindow;
@@ -21,19 +20,14 @@ public:
 
 private slots:
     void on_buttonInsert_clicked();
-
     void on_buttonRemove_clicked();
 
     void on_dateDatum_dateChanged(const QDate &date);
-
     void on_lineOrt_textChanged(const QString &arg1);
-
-    void on_lineAnlass_textChanged();
-
+    void on_lineAnlass_textChanged(const QString &arg1);
     void on_plainBeschreibung_textChanged();
 
     void on_timeBeginn_timeChanged(const QTime &time);
-
     void on_timeEnde_timeChanged(const QTime &time);
 
     void on_checkBoxBenoetigt_toggled(bool checked);
@@ -55,8 +49,10 @@ private:
 
     void loadData();
 
-    QSet<QString> *namen;
+    QSet<QString> namen;
     Category predefinedValueForTable;
+
+    void setPredefinedValue(QString anlass);
 };
 
 #endif // ACTIVITYWINDOW_H

@@ -2,6 +2,7 @@
 #define RESERVIERUNG_H
 
 #include <QObject>
+#include <QMap>
 
 class Wagen;
 
@@ -28,14 +29,14 @@ public:
     int getKlasse() const;
     void setKlasse(const int &value);
 
-    QList<QString> *getHps() const;
-    void setHps(QList<QString> *value);
+    QList<QString> getHps() const;
+    void setHps(QList<QString> value);
 
-    QList<QString> *getZuege() const;
-    void setZuege(QList<QString> *value);
+    QList<QString> getZuege() const;
+    void setZuege(QList<QString> value);
 
-    QMap<int, QList<int> *> *getSitzplatz() const;
-    void setSitzplatz(QMap<int, QList<int> *> *value);
+    QMap<int, QList<int> > getSitzplatz() const;
+    void setSitzplatz(QMap<int, QList<int> > value);
 
     bool getFahrrad() const;
     void setFahrrad(bool value);
@@ -54,9 +55,9 @@ private:
     QString telefon;
     int anzahl;
     int klasse; // 1 = 1. Klasse | 0 = 2./3. Klasse
-    QList<QString> *zuege;
-    QList<QString> *hps;
-    QMap<int, QList<int> *> *sitzplatz;
+    QList<QString> zuege;
+    QList<QString> hps;
+    QMap<int, QList<int>> sitzplatz;
     bool fahrrad;
     QString sonstiges;
     QMap<int, Wagen *> *wagen;

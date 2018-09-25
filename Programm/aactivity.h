@@ -1,9 +1,7 @@
 #ifndef AACTIVITY_H
 #define AACTIVITY_H
 
-#include <QDate>
 #include <QTime>
-#include <QObject>
 #include <QComboBox>
 #include <QTimeEdit>
 
@@ -56,14 +54,17 @@ public:
     bool getPersonalBenoetigt() const;
     void setPersonalBenoetigt(bool value);
 
-    QMap<Person *,  Infos*> *getPersonen() const;
+    QMap<Person*,  Infos*> getPersonen();
     virtual Infos *getIndividual(Person *person) = 0;
     Mistake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
     Mistake addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
     void updatePersonBemerkung(Person *p, QString bemerkung);
     bool removePerson(Person *p);
     bool removePerson(QString p);
-    void setPersonen(QMap<Person *, Infos *> *value);
+
+    bool operator>(const AActivity &second) const;
+    bool operator<(const AActivity &second) const;
+    bool operator==(const AActivity &second) const;
 
     virtual QString getKurzbeschreibung() = 0;
     virtual QString getListString() = 0;
@@ -91,7 +92,7 @@ protected:
     QTime zeitEnde;
     QString anlass;
     QString bemerkungen;
-    QMap<Person *, Infos*> *personen; // Für Infos siehe oben
+    QMap<Person *, Infos*> personen; // Für Infos siehe oben
     bool personalBenoetigt;
 
     ManagerPersonal *personal;

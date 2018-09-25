@@ -1,6 +1,8 @@
 #include "export.h"
 #include "fileio.h"
 
+#include <QPrintDialog>
+
 bool Export::printFahrtag(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
 {
     QList<AActivity*> *liste = new QList<AActivity*>();
@@ -105,7 +107,7 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
     QSetIterator<Reservierung*> it = f->getReservierungen();
     while(it.hasNext()) {
         Reservierung *r = it.next();
-        for(int i: r->getSitzplatz()->keys()) {
+        for(int i: r->getSitzplatz().keys()) {
             if (!wagenZuRes.contains(i))
                 wagenZuRes.insert(i, new QList<Reservierung*>());
             int pos = 0;
@@ -116,7 +118,7 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
                 pos++;
             }
         }
-        if (r->getSitzplatz()->isEmpty()) {
+        if (r->getSitzplatz().isEmpty()) {
             if (! wagenZuRes.contains(999))
                 wagenZuRes.insert(999, new QList<Reservierung*>());
             int pos = 0;
@@ -222,7 +224,7 @@ bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QLi
     preparePrinterLandscape(pdf);
     preparePrinterLandscape(paper);
     QTextDocument *d = new QTextDocument();
-    d->setDefaultStyleSheet("body, tr, td, p { font-size: 20px; }"
+    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
                             "table { border-width: 1px; border-style: solid; border-color: black; }"
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
                             "table tr, table td { page-break-inside: avoid; }"
@@ -267,6 +269,8 @@ bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QLi
         a += "<th>Werkstatt</th>";
     if (data->at(8))
         a += "<th>Büro</th>";
+    if (data->at(11))
+        a += "<th>Ausbildung</th>";
     if (data->at(9))
         a += "<th>Sonstiges</th>";
     if (data->at(10))
@@ -277,10 +281,16 @@ bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QLi
     }
     a += "</tbody><tfoot><tr>";
     a += "<td></td>";
-    for(int i = 0; i <= 10; i++) {
+    for(int i = 0; i <= 8; i++) {
         if (data->at(i))
             a += "<td>"+QString::number(gesamt->at(i))+"</td>";
     }
+    if (data->at(11))
+        a += "<td>"+QString::number(gesamt->at(11))+"</td>";
+    if (data->at(9))
+        a += "<td>"+QString::number(gesamt->at(9))+"</td>";
+    if (data->at(10))
+        a += "<td>"+QString::number(gesamt->at(10))+"</td>";
     a += "</tr></tfoot></table>";
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
     d->setHtml(a);

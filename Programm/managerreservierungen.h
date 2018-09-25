@@ -1,10 +1,11 @@
 #ifndef MANAGERRESERVIERUNGEN_H
 #define MANAGERRESERVIERUNGEN_H
 
-#include <QListWidgetItem>
-
 #include "reservierung.h"
 #include "wagen.h"
+#include "enums.h"
+
+#include <QListWidgetItem>
 
 class ManagerReservierungen
 {
@@ -36,26 +37,26 @@ public:
 
     QSetIterator<Reservierung *> getReservierungen();
 
-    static QString getStringFromPlaetze(QMap<int, QList<int> *> *liste);
-    static QMap<int, QList<int>*> *getPlaetzeFromString(QString plaetze);
+    static QString getStringFromPlaetze(QMap<int, QList<int> > liste);
+    static QMap<int, QList<int> > getPlaetzeFromString(QString plaetze);
 
     bool getCheckAll() const;
     void setCheckAll(bool value);
 
 public slots:
-    bool verteileSitzplaetze();
-    bool checkPlaetze(QMap<int, QList<int> *> *p, Reservierung *r);
+    QList<Mistake> verteileSitzplaetze();
+    bool checkPlaetze(QMap<int, QList<int> > p, Reservierung *r);
 
     Reservierung *createReservierung();
     bool removeReservierung(Reservierung *res);
 
 protected:
     QString wagenreihung;
-    QSet<Reservierung*> *reservierungen;
+    QSet<Reservierung*> reservierungen;
     bool checkAll;
 
-    QList<Wagen *> *wagen;
-    QMap<int,Wagen*> *nummerToWagen;
+    QList<Wagen *> wagen;
+    QMap<int,Wagen*> nummerToWagen;
 
     bool createWagen();
 };

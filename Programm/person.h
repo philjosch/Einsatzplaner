@@ -1,9 +1,6 @@
 #ifndef PERSON_H
 #define PERSON_H
 
-#include <QObject>
-#include <QVariant>
-
 #include "aactivity.h"
 
 class Person : public QObject
@@ -94,7 +91,7 @@ protected:
     bool ausbildungZf;
     bool ausbildungRangierer;
     int strecke; // Entfernung vom Wohnort nach Schwarzerden, wird benötigt, um die Kilometer zu berechnen.
-    QMap<AActivity*, Category> *activities;
+    QMap<AActivity*, Category> activities;
 
 private:
     void personConstructor(QString vorname, QString nachname, ManagerPersonal *manager);
