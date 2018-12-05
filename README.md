@@ -9,6 +9,7 @@ Weitere Informationen findet man unter [bahn.philipp-schepper.de](http://bahn.ph
 - in `Icon` finden Sie die Dokumente für das Icon des Programms
 - in `Installer` finden Sie Dateien eine Installer-Datei für Windows zu erstellen
 - in `Mockup` werden verschiedene Design-Studien gespeichert
+- in `Plugin` befindet sich der Code für das Plugin auf dem Server
 - in `Programm` findet man den eigentlichen Quelltext für das Programm
 - `CHANGELOG.md` Die Veränderungshistorie des Programms
 - `README.md` ist diese Datei
