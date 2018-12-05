@@ -5,6 +5,7 @@
 #include "fileio.h"
 #include "coreapplication.h"
 #include "preferencesdialog.h"
+#include "filesettings.h"
 
 #include <QMessageBox>
 
@@ -368,6 +369,12 @@ void MainWindow::on_actionSavePersonal_triggered()
     if (! FileIO::saveJsonToFile(filePath, object)) {
         QMessageBox::warning(this, tr("Fehler"), tr("Das speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
     }
+}
+
+void MainWindow::on_actionSettings_triggered()
+{
+    FileSettings *s = new FileSettings(this);
+    s->exec();
 }
 
 bool MainWindow::on_actionClose_triggered()
