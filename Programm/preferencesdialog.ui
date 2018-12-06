@@ -84,20 +84,8 @@
    </item>
    <item row="1" column="1" colspan="2">
     <widget class="QPushButton" name="pushSearch">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>25</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>25</height>
-      </size>
-     </property>
      <property name="text">
-      <string>Jezt suchen</string>
+      <string>Jetzt suchen</string>
      </property>
     </widget>
    </item>
@@ -118,18 +106,6 @@
     <widget class="QPushButton" name="pushDownload">
      <property name="enabled">
       <bool>false</bool>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>25</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>25</height>
-      </size>
      </property>
      <property name="text">
       <string>Herunterladen</string>
@@ -222,7 +198,7 @@
     </widget>
    </item>
    <item row="5" column="1" colspan="3">
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="checkAutoUpload">
      <property name="text">
       <string>Automatische Uploads aktivieren</string>
      </property>
