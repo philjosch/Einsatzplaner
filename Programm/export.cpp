@@ -316,6 +316,11 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path)
     return p;
 }
 
+bool Export::testServerConnection(QString server, QString path, QString id)
+{
+    return false;
+}
+
 bool Export::print(QPrinter *pdf, QPrinter *paper, QTextDocument *d)
 {
     if (pdf != nullptr) {
