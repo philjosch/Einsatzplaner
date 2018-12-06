@@ -5,8 +5,8 @@
 #include <QSettings>
 #include <QTranslator>
 
-const CoreApplication::Version AKTUELLE_VERSION = {1, 4, 1};
-const bool IS_DEVELOPER_VERSION = false;
+const CoreApplication::Version AKTUELLE_VERSION = {99, 0, 0};
+const bool IS_DEVELOPER_VERSION = true;
 
 int main(int argc, char *argv[])
 {
