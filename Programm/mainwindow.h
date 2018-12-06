@@ -8,6 +8,7 @@
 #include "activitywindow.h"
 #include "personalwindow.h"
 #include "exportgesamt.h"
+#include "managerfilesettings.h"
 
 #include <QMainWindow>
 #include <QMap>
@@ -38,6 +39,8 @@ private:
     PersonalWindow *personalfenster;
 
     ExportGesamt *exportDialog;
+
+    ManagerFileSettings *settings;
 
 public slots:
     void openFahrtag(Fahrtag *f);

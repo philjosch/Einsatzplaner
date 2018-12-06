@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     personalfenster = new PersonalWindow(this, ui->calendar->getPersonal());
     exportDialog = new ExportGesamt(ui->calendar, this);
+    settings = new ManagerFileSettings();
     connect(personalfenster, SIGNAL(changed()), this, SLOT(unsave()));
 }
 
@@ -255,6 +256,7 @@ void MainWindow::on_actionSave_triggered()
     QJsonObject object;
     object.insert("calendar", calendarJSON);
     object.insert("view", viewJSON);
+    object.insert("settings", settings->toJson());
     object.insert("general", generalJSON);
 
     bool erfolg = FileIO::saveJsonToFile(filePath, object);
@@ -313,6 +315,8 @@ bool MainWindow::openFile(QString filePath)
     } else {
         personalfenster->hide();
     }
+
+    settings->fromJson(object.value("settings").toObject());
     return true;
 }
 
@@ -373,8 +377,13 @@ void MainWindow::on_actionSavePersonal_triggered()
 
 void MainWindow::on_actionSettings_triggered()
 {
-    FileSettings *s = new FileSettings(this);
-    s->exec();
+    FileSettings s(this, settings);
+    if (s.exec() == QDialog::Accepted) {
+        s.getSettings(settings);
+        emit unsave();
+
+        // Update the settings
+    }
 }
 
 bool MainWindow::on_actionClose_triggered()
