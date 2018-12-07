@@ -1,12 +1,11 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
-#include <QJsonObject>
-#include <QList>
-
 #include "fahrtag.h"
 #include "activity.h"
 #include "managerpersonal.h"
+
+#include <QJsonObject>
 
 class Manager
 {
@@ -31,7 +30,7 @@ public slots:
     void activityChanged(AActivity *a);
 
 protected:
-    QList<AActivity *> *activities;
+    QList<AActivity *> activities;
     void update(int pos);
     ManagerPersonal *personal;
 

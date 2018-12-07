@@ -1,18 +1,15 @@
 #ifndef VERTEILER_H
 #define VERTEILER_H
 
-#include <QList>
-#include <QSet>
-
 #include "reservierung.h"
 #include "wagen.h"
+#include "enums.h"
 
 class Verteiler
 {
 public:
     Verteiler(QList<Wagen*> wagen, QSet<Reservierung*> reservierungen);
-    bool verteile();
-    bool verteile2();
+    Mistake verteile();
     void setCheckAll(bool value);
 
     struct Configuration {
@@ -31,9 +28,6 @@ private:
         QList<double> bew;
         Reservierung *extra;
     };
-
-
-    void verteile(double bewertung, QSet<Reservierung*> rest, int puffer);
 
     void dePlatziere(Reservierung *res);
     bool platziere(Reservierung *res);

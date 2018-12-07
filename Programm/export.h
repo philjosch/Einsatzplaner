@@ -1,18 +1,14 @@
 #ifndef EXPORT_H
 #define EXPORT_H
 
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QFileDialog>
-#include <QTextDocument>
-#include <QMap>
-
 #include "aactivity.h"
 #include "fahrtag.h"
 #include "activity.h"
 #include "person.h"
 #include "managerpersonal.h"
 #include "mainwindow.h"
+
+#include <QTextDocument>
 
 /*
  * Die Datei mit der Logik für den Export von Daten

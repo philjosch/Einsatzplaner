@@ -7,12 +7,6 @@
 #include "preferencesdialog.h"
 
 #include <QMessageBox>
-#include <QSettings>
-#include <QCloseEvent>
-#include <QWindow>
-#include <QPixmap>
-
-#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -24,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->actionNeuer_Arbeitseinsatz, SIGNAL(triggered(bool)), ui->calendar, SLOT(newActivity()));
     connect(ui->actionNeuer_Fahrtag, SIGNAL(triggered(bool)), ui->calendar, SLOT(newFahrtag()));
 
-    fenster = new QMap<AActivity*, QMainWindow*>();
+    fenster = QMap<AActivity*, QMainWindow*>();
     ui->calendar->setPersonal(new ManagerPersonal());
 
     setWindowTitle(tr("Neues Dokument – Übersicht"));
@@ -83,30 +77,30 @@ void MainWindow::open(QString filepath)
 
 void MainWindow::openFahrtag(Fahrtag *f)
 {
-    if (fenster->contains(f)) {
-        fenster->value(f)->show();
-        fenster->value(f)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-        fenster->value(f)->raise();  // for MacOS
-        fenster->value(f)->activateWindow(); // for Windows
+    if (fenster.contains(f)) {
+        fenster.value(f)->show();
+        fenster.value(f)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+        fenster.value(f)->raise();  // for MacOS
+        fenster.value(f)->activateWindow(); // for Windows
     } else {
         FahrtagWindow *w = new FahrtagWindow(this, f);
         w->setWindowFilePath(filePath);
-        fenster->insert(f, w);
+        fenster.insert(f, w);
         w->show();
     }
 }
 
 void MainWindow::openActivity(Activity *a)
 {
-    if (fenster->contains(a)) {
-        fenster->value(a)->show();
-        fenster->value(a)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-        fenster->value(a)->raise();  // for MacOS
-        fenster->value(a)->activateWindow(); // for Windows
+    if (fenster.contains(a)) {
+        fenster.value(a)->show();
+        fenster.value(a)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+        fenster.value(a)->raise();  // for MacOS
+        fenster.value(a)->activateWindow(); // for Windows
     } else {
         ActivityWindow *w = new ActivityWindow(this, a);
         w->setWindowFilePath(filePath);
-        fenster->insert(a, w);
+        fenster.insert(a, w);
         w->show();
     }
 }
@@ -140,7 +134,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     if (toClose) {
         personalfenster->close();
-        for(QMainWindow *m: fenster->values()) {
+        for(QMainWindow *m: fenster.values()) {
             m->close();
         }
     }
@@ -180,7 +174,7 @@ void MainWindow::on_actionAboutQt_triggered()
 
 void MainWindow::on_actionAboutApp_triggered()
 {
-    QMessageBox::about(this, tr("Über Einsatzplaner"), "<h1>Einsatzplaner</h1>"+QCoreApplication::applicationVersion()+"<br/>Copyright © 2016-2018 Philipp Schepper<br/>Alle Rechte vorbehalten.");
+    QMessageBox::about(this, tr("Über Einsatzplaner"), "<h1>Einsatzplaner</h1>"+QCoreApplication::applicationVersion()+(CoreApplication::isDeveloperVersion()?" (dev) ":"")+ "<br/>Copyright © 2016-2018 Philipp Schepper<br/>Alle Rechte vorbehalten.");
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -336,7 +330,7 @@ void MainWindow::on_actionSaveas_triggered()
         setWindowTitle(tr("Übersicht"));
         setWindowFilePath(filePath);
         personalfenster->setWindowFilePath(filePath);
-        for(QMainWindow *mw: fenster->values()) {
+        for(QMainWindow *mw: fenster.values()) {
             mw->setWindowFilePath(filePath);
         }
         on_actionSave_triggered();

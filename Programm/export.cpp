@@ -1,6 +1,8 @@
 #include "export.h"
 #include "fileio.h"
 
+#include <QPrintDialog>
+
 bool Export::printFahrtag(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
 {
     QList<AActivity*> *liste = new QList<AActivity*>();
@@ -105,7 +107,7 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
     QSetIterator<Reservierung*> it = f->getReservierungen();
     while(it.hasNext()) {
         Reservierung *r = it.next();
-        for(int i: r->getSitzplatz()->keys()) {
+        for(int i: r->getSitzplatz().keys()) {
             if (!wagenZuRes.contains(i))
                 wagenZuRes.insert(i, new QList<Reservierung*>());
             int pos = 0;
@@ -116,7 +118,7 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
                 pos++;
             }
         }
-        if (r->getSitzplatz()->isEmpty()) {
+        if (r->getSitzplatz().isEmpty()) {
             if (! wagenZuRes.contains(999))
                 wagenZuRes.insert(999, new QList<Reservierung*>());
             int pos = 0;

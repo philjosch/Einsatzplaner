@@ -2,10 +2,6 @@
 #include "mainwindow.h"
 #include "managerreservierungen.h"
 
-#include <QDebug>
-#include <QTime>
-#include <QObject>
-
 Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p), ManagerReservierungen()
 {
     art = Fahrtag::Museumszug;
@@ -89,7 +85,7 @@ QString Fahrtag::getListStringShort() {
 AActivity::Infos *Fahrtag::getIndividual(Person *person)
 {
     if (person == nullptr) return nullptr;
-    Infos *alt = personen->value(person);
+    Infos *alt = personen.value(person);
     if (alt == nullptr) return nullptr;
     Infos *neu = new Infos();
     neu->bemerkung = alt->bemerkung;
@@ -136,15 +132,15 @@ QString Fahrtag::getHtmlForSingleView()
     QMap<Person*, AActivity::Infos*> sonstige;
 
     // Aufsplitten der Personen auf die Einzelnen Listen
-    for(Person *p: personen->keys()) {
-        switch (personen->value(p)->kategorie) {
+    for(Person *p: personen.keys()) {
+        switch (personen.value(p)->kategorie) {
         case Category::Tf:
-        case Category::Tb: tf.insert(p, personen->value(p)); break;
-        case Category::Zf: zf.insert(p, personen->value(p)); break;
-        case Category::Zub: zub.insert(p, personen->value(p)); break;
-        case Category::Begleiter: begl.insert(p, personen->value(p)); break;
-        case Category::Service: service.insert(p, personen->value(p)); break;
-        default: sonstige.insert(p, personen->value(p)); break;
+        case Category::Tb: tf.insert(p, personen.value(p)); break;
+        case Category::Zf: zf.insert(p, personen.value(p)); break;
+        case Category::Zub: zub.insert(p, personen.value(p)); break;
+        case Category::Begleiter: begl.insert(p, personen.value(p)); break;
+        case Category::Service: service.insert(p, personen.value(p)); break;
+        default: sonstige.insert(p, personen.value(p)); break;
         }
     }
     // *Tf/Tb
@@ -234,15 +230,15 @@ QString Fahrtag::getHtmlForTableView()
     QMap<Person*, AActivity::Infos*> sonstige;
 
     // Aufsplitten der Personen auf die Einzelnen Listen
-    for(Person *p: personen->keys()) {
-        switch (personen->value(p)->kategorie) {
+    for(Person *p: personen.keys()) {
+        switch (personen.value(p)->kategorie) {
         case Category::Tf:
-        case Category::Tb: tf.insert(p, personen->value(p)); break;
-        case Category::Zf: zf.insert(p, personen->value(p)); break;
-        case Category::Zub: zub.insert(p, personen->value(p)); break;
-        case Category::Begleiter: begl.insert(p, personen->value(p)); break;
-        case Category::Service: service.insert(p, personen->value(p)); break;
-        default: sonstige.insert(p, personen->value(p)); break;
+        case Category::Tb: tf.insert(p, personen.value(p)); break;
+        case Category::Zf: zf.insert(p, personen.value(p)); break;
+        case Category::Zub: zub.insert(p, personen.value(p)); break;
+        case Category::Begleiter: begl.insert(p, personen.value(p)); break;
+        case Category::Service: service.insert(p, personen.value(p)); break;
+        default: sonstige.insert(p, personen.value(p)); break;
         }
     }
 

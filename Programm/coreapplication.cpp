@@ -1,24 +1,22 @@
 #include "coreapplication.h"
 #include "mainwindow.h"
 
-#include <QApplication>
-#include <QFileOpenEvent>
 #include <QDesktopServices>
 #include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QMessageBox>
 #include <QWindow>
 
-
 CoreApplication::Version CoreApplication::aktuelleVersion = {-1, -1, -1};
+bool CoreApplication::developerMode = false;
 QUrl CoreApplication::urlDownload = QUrl("http://bahn.philipp-schepper.de/#downloads");
 QUrl CoreApplication::urlVersion = QUrl("http://bahn.philipp-schepper.de/version.txt");
 QString CoreApplication::urlNotes = "http://bahn.philipp-schepper.de/version/";
 
-CoreApplication::CoreApplication(int &argc, char **argv, CoreApplication::Version version) : QApplication(argc, argv)
+CoreApplication::CoreApplication(int &argc, char **argv, CoreApplication::Version version, bool devVersion) : QApplication(argc, argv)
 {
     aktuelleVersion = version;
+    developerMode = devVersion;
 
     QCoreApplication::setOrganizationName("Philipp Schepper");
     QCoreApplication::setOrganizationDomain("philipp-schepper.de");
@@ -138,4 +136,9 @@ CoreApplication::Version CoreApplication::loadVersion()
         delete reply;
         return Version {-1, -1, -1};
     }
+}
+
+bool CoreApplication::isDeveloperVersion()
+{
+    return developerMode;
 }

@@ -62,7 +62,7 @@ public:
         }
     };
 
-    CoreApplication(int &argc, char **argv, CoreApplication::Version version);
+    CoreApplication(int &argc, char **argv, CoreApplication::Version version, bool devVersion);
     ~CoreApplication();
 
     bool isFirst;
@@ -74,6 +74,8 @@ public:
     static Version *getAktuelleVersion();
     static Version loadVersion();
 
+    static bool isDeveloperVersion();
+
     static QString loadNotes(Version v);
 
     static QUrl getUrlDownload();
@@ -84,6 +86,7 @@ public slots:
 
 protected:
     static Version aktuelleVersion;
+    static bool developerMode;
 
     static QUrl urlVersion;
     static QUrl urlDownload;

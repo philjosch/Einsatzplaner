@@ -1,10 +1,6 @@
 #ifndef CALENDARDAY_H
 #define CALENDARDAY_H
 
-#include <QFrame>
-#include <QDate>
-#include <QListWidgetItem>
-
 #include "aactivity.h"
 #include "fahrtag.h"
 
@@ -35,8 +31,8 @@ private slots:
 private:
     Ui::CalendarDay *ui;
     QDate date;
-    QMap<AActivity*, QListWidgetItem*> *actToItem;
-    QMap<QListWidgetItem*, AActivity*> *itemToAct;
+    QMap<AActivity*, QListWidgetItem*> actToItem;
+    QMap<QListWidgetItem*, AActivity*> itemToAct;
 };
 
 #endif // CALENDARDAY_H

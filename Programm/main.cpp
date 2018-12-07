@@ -2,29 +2,15 @@
 #include "fileio.h"
 #include "coreapplication.h"
 
-#include <QApplication>
-#include <QVariant>
 #include <QSettings>
-#include <QCoreApplication>
-#include <QDesktopServices>
-#include <QMessageBox>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QUrl>
-#include <QUrlQuery>
-#include <QFileOpenEvent>
-#include <QMenuBar>
-#include <QMenu>
 #include <QTranslator>
-#include <QLocale>
-#include <QLibraryInfo>
 
 const CoreApplication::Version AKTUELLE_VERSION = {1, 4, 1};
+const bool IS_DEVELOPER_VERSION = false;
 
 int main(int argc, char *argv[])
 {
-    CoreApplication a(argc, argv, AKTUELLE_VERSION);
+    CoreApplication a(argc, argv, AKTUELLE_VERSION, IS_DEVELOPER_VERSION);
 
     QTranslator qtTranslator;
     qtTranslator.load(":/translations/qt_" + QLocale::system().name());
