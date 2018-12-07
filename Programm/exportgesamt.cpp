@@ -3,10 +3,13 @@
 #include "mainwindow.h"
 #include "export.h"
 
-ExportGesamt::ExportGesamt(Manager *m, QWidget *parent) : QDialog(parent), ui(new Ui::ExportGesamt)
+#include <QMessageBox>
+
+ExportGesamt::ExportGesamt(Manager *m, ManagerFileSettings *settings, QWidget *parent) : QDialog(parent), ui(new Ui::ExportGesamt)
 {
     ui->setupUi(this);
     p = parent;
+    this->settings = settings;
     ui->dateVon->setDate(QDate::currentDate());
     ui->dateBis->setDate(QDate::currentDate().addDays(60)); // Anzeige für zwei Monate in der Zukunft
     manager = m;
@@ -88,6 +91,14 @@ void ExportGesamt::on_pushDrucken_clicked()
     QPrinter *pdfListe = nullptr;
     QPrinter *pdfEinzel = nullptr;
     if (ui->checkListe->isChecked() && listeListe->length() > 0) {
+        if (ui->checkUpload->isChecked()) {
+            if (Export::uploadToServer(listeListe, settings)) {
+                QMessageBox::information(nullptr, "Erfolg", "Datei wurde erfolgreich hochgeladen!");
+            } else {
+                QMessageBox::information(nullptr, "Fehler", "Die Datei konnte ncht hochgeladen werden! :(");
+            }
+        }
+
         if (ui->checkPDF->isChecked())
             pdfListe = Export::getPrinterPDF(p, "Listenansicht.pdf");
         if (ui->checkAusdruck->isChecked())

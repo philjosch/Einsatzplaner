@@ -28,8 +28,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setWindowModified(false);
 
     personalfenster = new PersonalWindow(this, ui->calendar->getPersonal());
-    exportDialog = new ExportGesamt(ui->calendar, this);
     settings = new ManagerFileSettings();
+    exportDialog = new ExportGesamt(ui->calendar, settings, this);
     connect(personalfenster, SIGNAL(changed()), this, SLOT(unsave()));
 }
 
