@@ -37,6 +37,7 @@ public:
     static QPrinter *getPrinterPDF(QWidget *parent, QString path);
 
     static bool testServerConnection(QString server, QString path, QString id);
+    static bool uploadToServer(QList<AActivity*> *liste, ManagerFileSettings *settings);
 
 private:
     static bool print(QPrinter *pdf, QPrinter *print, QTextDocument *d);

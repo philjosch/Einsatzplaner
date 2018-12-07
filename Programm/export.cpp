@@ -1,7 +1,11 @@
 #include "export.h"
 #include "fileio.h"
 
+#include <QEventLoop>
+#include <QNetworkReply>
 #include <QPrintDialog>
+#include <QNetworkAccessManager>
+#include <QTemporaryFile>
 
 bool Export::printFahrtag(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
 {
@@ -318,7 +322,90 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path)
 
 bool Export::testServerConnection(QString server, QString path, QString id)
 {
-    return false;
+    // create custom temporary event loop on stack
+    QEventLoop eventLoop;
+
+    // "quit()" the event-loop, when the network request "finished()"
+    QNetworkAccessManager mgr;
+    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+    // the HTTP request
+    QString request = server+"/"+path+"?id="+id;
+    qDebug() << request;
+    QNetworkRequest req(request);
+    QNetworkReply *reply = mgr.get(req);
+    eventLoop.exec(); // blocks stack until "finished()" has been called
+
+    QString s = "";
+    if (reply->error() == QNetworkReply::NoError) {
+        //success
+        s = QString(reply->readAll());
+        qDebug() << "--" << s << "--";
+    } else {
+        qDebug() << "eeee";
+    }
+    delete reply;
+    return (s == "OK");
+}
+
+bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *settings)
+{
+    if (! settings->getEnabled()) return true;
+    QString server = settings->getServer();
+    QString path = settings->getPath();
+    QString id = settings->getId();
+
+    QEventLoop eventLoop;
+
+    QNetworkAccessManager am;
+    QObject::connect(&am, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+    QTemporaryFile tempFile;
+    tempFile.open();
+    QString localFile = tempFile.fileName(); //FileIO::getFilePathOpen(nullptr, ""); // ("something temporary");
+    QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
+    p->setOutputFormat(QPrinter::PdfFormat);
+    p->setOutputFileName(localFile);
+
+    printList(liste, p, nullptr);
+
+    QNetworkRequest request(QUrl(server+"/"+path)); //our server with php-script
+
+    QString bound="margin"; //name of the boundary
+    //according to rfc 1867 we need to put this string here:
+    QByteArray data;
+    data.append("--" + bound + "\r\n");
+    data.append("Content-Disposition: form-data; name='id'; filename='"+id+"'\r\n\r\n");
+    data.append("--" + bound + "\r\n");
+    data.append("Content-Disposition: form-data; name='action'\r\n\r\n");
+    data.append("--" + bound + "\r\n"); //according to rfc 1867
+    data.append("Content-Disposition: form-data; name='uploaded'; filename='"+id+"-test.pdf'\r\n"); //name of the input is "uploaded" in my form, next one is a file name.
+    data.append("Content-Type: application/pdf\r\n\r\n"); //data type
+//    QFile file(localFile);
+//    if (!file.open(QIODevice::ReadOnly)) {
+//        return false;
+//    }
+    data.append(tempFile.readAll()); //let's read the file
+    data.append("\r\n");
+    data.append("--" + bound + "--\r\n"); //closing boundary according to rfc 1867
+    request.setRawHeader(QString("Content-Type").toUtf8(),QString("multipart/form-data; boundary=" + bound).toUtf8());
+    request.setRawHeader(QString("Content-Length").toUtf8(), QString::number(data.length()).toUtf8());
+
+//    qDebug() << data.data();
+
+    QNetworkReply *reply = am.post(request,data);
+    eventLoop.exec();
+
+    QString s = "";
+    if (reply->error() == QNetworkReply::NoError) {
+        //success
+        s = QString(reply->readAll());
+        qDebug() << "--" << s << "--";
+    } else {
+        qDebug() << "eeee";
+    }
+    delete reply;
+    return (s == "OK");
 }
 
 bool Export::print(QPrinter *pdf, QPrinter *paper, QTextDocument *d)
