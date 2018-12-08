@@ -5,6 +5,7 @@
 #include "coreapplication.h"
 
 #include <QMessageBox>
+#include <QDebug>
 
 FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent), ui(new Ui::FahrtagWindow)
 {
