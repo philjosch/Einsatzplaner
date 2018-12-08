@@ -1029,3 +1029,13 @@ void FahrtagWindow::complexWidgetInTableChanged()
         on_tablePersonen_cellChanged(ui->tablePersonen->row(tableItem), 1);
     }
 }
+
+void FahrtagWindow::on_checkBox_clicked(bool checked)
+{
+    ui->comboTimeTfH->setEnabled(!checked);
+    ui->comboTimeTfM->setEnabled(!checked);
+    ui->comboTimeZH->setEnabled(!checked);
+    ui->comboTimeZM->setEnabled(!checked);
+    ui->comboTimeEndeH->setEnabled(!checked);
+    ui->comboTimeEndeM->setEnabled(!checked);
+}

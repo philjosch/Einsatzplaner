@@ -107,6 +107,8 @@ private slots:
 
     void complexWidgetInTableChanged();
 
+    void on_checkBox_clicked(bool checked);
+
 private:
     // Allgemeines
     Ui::FahrtagWindow *ui;
