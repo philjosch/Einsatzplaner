@@ -1,32 +1,35 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Bericht zur Verbesserung
 title: ''
 labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
+**Fehlerbeschreibung*
 A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior:
+**Zum Reproduzieren**
+Schritte, um den Fehler zu reporduzieren
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Erwartetes Verhalten**
+Genaue Beschreibung, was die Funktion machen sollte.
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+Bilder, die zeigen, wo der Fehler liegt, bzw. auftritt.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+**Umgebung**
+ - macOS [z.B. High Sierra, Mojave]
+ - Windows [z.B. Win10]
+ - Programmversion [z.B. 1.4.1]
 
-**Additional context**
-Add any other context about the problem here.
+**Weiter Informationen**
+Sonstige Weiter Informationen
+
+**Mögliche Gründe und Ursachen für Fehler**
+Potentielle Daten und Funktionen nennen, die den Fehler verursachen könnten
