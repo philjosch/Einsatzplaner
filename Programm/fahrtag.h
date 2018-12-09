@@ -43,7 +43,7 @@ public:
     bool getBenoetigeService() const;
     void setBenoetigeService(bool value);
 
-    AActivity::Infos *getIndividual(Person *person);
+    AActivity::Infos getIndividual(Person *person);
 
     QString getHtmlForSingleView();
     QString getHtmlForTableView();

@@ -130,6 +130,19 @@ void FahrtagWindow::on_comboTimeEndeM_currentTextChanged(const QString &arg1)
         fahrtag->setZeitEnde(QTime(fahrtag->getZeitEnde().hour(), arg1.toInt()));
 }
 
+void FahrtagWindow::on_checkZeiten_clicked(bool checked)
+{
+    ui->comboTimeTfH->setEnabled(!checked);
+    ui->comboTimeTfM->setEnabled(!checked);
+    ui->comboTimeZH->setEnabled(!checked);
+    ui->comboTimeZM->setEnabled(!checked);
+    ui->comboTimeEndeH->setEnabled(!checked);
+    ui->comboTimeEndeM->setEnabled(!checked);
+    if (nehme)
+        fahrtag->setZeitenUnbekannt(checked);
+
+}
+
 void FahrtagWindow::loadData()
 {
     if (nehme) {
@@ -140,6 +153,7 @@ void FahrtagWindow::loadData()
         ui->textAnlass->insertPlainText(fahrtag->getAnlass());
         ui->comboTimeEndeH->setCurrentText(fahrtag->getZeitEnde().toString("HH"));
         ui->comboTimeEndeM->setCurrentText(fahrtag->getZeitEnde().toString("mm"));
+        ui->checkZeiten->setChecked(fahrtag->getZeitenUnbekannt());
         ui->checkBoxBenoetigt->setChecked(fahrtag->getPersonalBenoetigt());
         ui->textBemerkungen->clear();
         ui->textBemerkungen->insertPlainText(fahrtag->getBemerkungen());
@@ -1028,14 +1042,4 @@ void FahrtagWindow::complexWidgetInTableChanged()
         QTableWidgetItem *tableItem = widgetInTableToTableWidget.value(obj);
         on_tablePersonen_cellChanged(ui->tablePersonen->row(tableItem), 1);
     }
-}
-
-void FahrtagWindow::on_checkBox_clicked(bool checked)
-{
-    ui->comboTimeTfH->setEnabled(!checked);
-    ui->comboTimeTfM->setEnabled(!checked);
-    ui->comboTimeZH->setEnabled(!checked);
-    ui->comboTimeZM->setEnabled(!checked);
-    ui->comboTimeEndeH->setEnabled(!checked);
-    ui->comboTimeEndeM->setEnabled(!checked);
 }

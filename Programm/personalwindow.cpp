@@ -96,15 +96,15 @@ void PersonalWindow::showPerson(Person *p)
         i0->setData(Qt::EditRole, a->getDatum());
         ui->tabelle->setItem(0, 0, i0);
 
-        AActivity::Infos *infos = a->getIndividual(p);
+        AActivity::Infos infos = a->getIndividual(p);
 
         // Aufgabe
-        QTableWidgetItem *i1 = new QTableWidgetItem(AActivity::getStringFromCategory(infos->kategorie));
+        QTableWidgetItem *i1 = new QTableWidgetItem(AActivity::getStringFromCategory(infos.kategorie));
         ui->tabelle->setItem(0, 1, i1);
 
         // Einsatzstunden
-        QTime start = infos->beginn;
-        QTime ende = infos->ende;
+        QTime start = infos.beginn;
+        QTime ende = infos.ende;
 
         QTime duration = QTime::fromMSecsSinceStartOfDay(start.msecsTo(ende));
 

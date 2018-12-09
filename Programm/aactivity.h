@@ -45,6 +45,9 @@ public:
     QTime getZeitEnde();
     void setZeitEnde(QTime value);
 
+    bool getZeitenUnbekannt() const;
+    void setZeitenUnbekannt(bool value);
+
     QString getAnlass() const;
     void setAnlass(const QString &value);
 
@@ -55,7 +58,7 @@ public:
     void setPersonalBenoetigt(bool value);
 
     QMap<Person*,  Infos*> getPersonen();
-    virtual Infos *getIndividual(Person *person) = 0;
+    virtual Infos getIndividual(Person *person) = 0;
     Mistake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
     Mistake addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
     void updatePersonBemerkung(Person *p, QString bemerkung);
@@ -85,11 +88,13 @@ public:
 
     static bool hasQualification(Person *p, Category kat, QString bemerkung);
     static bool isExtern(QString bemerkung);
+
 protected:
     QDate datum;
     QString ort;
     QTime zeitAnfang;
     QTime zeitEnde;
+    bool zeitenUnbekannt;
     QString anlass;
     QString bemerkungen;
     QMap<Person *, Infos*> personen; // Für Infos siehe oben

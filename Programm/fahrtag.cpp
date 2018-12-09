@@ -82,26 +82,31 @@ QString Fahrtag::getListStringShort() {
     return getStringFromArt(art);
 }
 
-AActivity::Infos *Fahrtag::getIndividual(Person *person)
+AActivity::Infos Fahrtag::getIndividual(Person *person)
 {
-    if (person == nullptr) return nullptr;
+    if (person == nullptr) return Infos();
     Infos *alt = personen.value(person);
-    if (alt == nullptr) return nullptr;
-    Infos *neu = new Infos();
-    neu->bemerkung = alt->bemerkung;
-    neu->kategorie = alt->kategorie;
-    neu->beginn = alt->beginn;
-    neu->ende = alt->ende;
+    if (alt == nullptr) return Infos();
+    Infos neu = Infos();
+    neu.bemerkung = alt->bemerkung;
+    neu.kategorie = alt->kategorie;
+    neu.beginn = alt->beginn;
+    neu.ende = alt->ende;
 
-    if (alt->beginn == QTime(0,0)) {
-        if (alt->kategorie == Tf || alt->kategorie == Tb) {
-            neu->beginn = zeitTf;
-        } else {
-            neu->beginn = zeitAnfang;
+    if (zeitenUnbekannt) {
+        neu.beginn = QTime(0,0);
+        neu.ende = QTime(0,0);
+    } else {
+        if (alt->beginn == QTime(0,0)) {
+            if (alt->kategorie == Tf || alt->kategorie == Tb) {
+                neu.beginn = zeitTf;
+            } else {
+                neu.beginn = zeitAnfang;
+            }
         }
-    }
-    if (alt->ende == QTime(0,0)) {
-        neu->ende = zeitEnde;
+        if (alt->ende == QTime(0,0)) {
+            neu.ende = zeitEnde;
+        }
     }
     return neu;
 }
@@ -120,8 +125,12 @@ QString Fahrtag::getHtmlForSingleView()
     // Wagenreihung
     html += "<p><b>Wagenreihung:</b> "+getWagenreihung()+"</p>";
     // Dienstzeiten
-    html += "<p><b>Dienstzeiten</b>:<br/>Beginn Tf, Tb: "+zeitTf.toString("hh:mm")+"<br/>Beginn Sonstige: "+zeitAnfang.toString("hh:mm")+"<br/>";
-    html += "Ungefähres Dienstende: "+zeitEnde.toString("hh:mm")+"</p>";
+    if (zeitenUnbekannt) {
+        html += "<p><b>Dienstszeiten werden noch bekannt gegeben!</b></p>";
+    } else {
+        html += "<p><b>Dienstzeiten</b>:<br/>Beginn Tf, Tb: "+zeitTf.toString("hh:mm")+"<br/>Beginn Sonstige: "+zeitAnfang.toString("hh:mm")+"<br/>";
+        html += "Ungefähres Dienstende: "+zeitEnde.toString("hh:mm")+"</p>";
+    }
 
     // Personal
     QMap<Person*, AActivity::Infos*> tf;
@@ -283,11 +292,15 @@ QString Fahrtag::getHtmlForTableView()
     html += "</td>";
 
     // Dienstzeiten
-    html += "<td>Beginn Tf, Tb: "+zeitTf.toString("hh:mm") + "<br/>";
-    if (art != Schnupperkurs) {
-        html += "Sonstige: "+zeitAnfang.toString("hh:mm") + "<br/>";
+    if (zeitenUnbekannt) {
+        html += "<td>Dienstzeiten werden noch bekannt gegeben!</td>";
+    } else {
+        html += "<td>Beginn Tf, Tb: "+zeitTf.toString("hh:mm") + "<br/>";
+        if (art != Schnupperkurs) {
+            html += "Sonstige: "+zeitAnfang.toString("hh:mm") + "<br/>";
+        }
+        html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
     }
-    html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
 
     // Sonstiges
     html += "<td>";

@@ -41,6 +41,8 @@ private slots:
     void comboInTableChanged();
     void timeEditInTableChanged();
 
+    void on_checkZeiten_clicked(bool checked);
+
 private:
     Ui::ActivityWindow *ui;
     Activity *activity;

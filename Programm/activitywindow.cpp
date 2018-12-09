@@ -210,6 +210,7 @@ void ActivityWindow::loadData()
     ui->plainBeschreibung->setPlainText(activity->getBemerkungen());
     ui->timeBeginn->setTime(activity->getZeitAnfang());
     ui->timeEnde->setTime(activity->getZeitEnde());
+    ui->checkZeiten->setChecked(activity->getZeitenUnbekannt());
     ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
 
     // Tabelle laden und alles einfügen
@@ -248,4 +249,12 @@ void ActivityWindow::setPredefinedValue(QString anlass)
     } else {
         predefinedValueForTable = Category::Sonstiges;
     }
+}
+
+void ActivityWindow::on_checkZeiten_clicked(bool checked)
+{
+    ui->timeBeginn->setEnabled(!checked);
+    ui->timeEnde->setEnabled(!checked);
+    if (nehme)
+        activity->setZeitenUnbekannt(checked);
 }

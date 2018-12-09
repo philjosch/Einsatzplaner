@@ -33,7 +33,7 @@
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0,0,0,0">
       <property name="horizontalSpacing">
-       <number>-1</number>
+       <number>6</number>
       </property>
       <property name="verticalSpacing">
        <number>0</number>
@@ -516,7 +516,7 @@
        </widget>
       </item>
       <item row="2" column="6" rowspan="3">
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="checkZeiten">
         <property name="text">
          <string>Zeiten
 noch
@@ -817,7 +817,20 @@ unbekannt</string>
       </item>
      </layout>
     </item>
-    <item row="1" column="0">
+    <item row="0" column="1">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabEingabeWizard">
       <property name="enabled">
        <bool>true</bool>

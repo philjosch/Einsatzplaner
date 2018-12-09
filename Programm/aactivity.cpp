@@ -64,6 +64,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
     ort = o.value("ort").toString();
     zeitAnfang = QTime::fromString(o.value("zeitAnfang").toString(), "hh:mm");
     zeitEnde = QTime::fromString(o.value("zeitEnde").toString(), "hh:mm");
+    zeitenUnbekannt = o.value("zeitenUnbekannt").toBool();
     anlass = o.value("anlass").toString();
     bemerkungen = o.value("bemerkungen").toString().replace("<br/>", "\n");
     QJsonArray array = o.value("personen").toArray();
@@ -116,6 +117,7 @@ QJsonObject AActivity::toJson()
     data.insert("ort", ort);
     data.insert("zeitAnfang", zeitAnfang.toString("hh:mm"));
     data.insert("zeitEnde", zeitEnde.toString("hh:mm"));
+    data.insert("zeitenUnbekannt", zeitenUnbekannt);
     data.insert("anlass", anlass);
     data.insert("bemerkungen", bemerkungen);
     QJsonArray personenJSON;
@@ -415,6 +417,16 @@ bool AActivity::isExtern(QString bemerkung)
         }
     }
     return false;
+}
+
+bool AActivity::getZeitenUnbekannt() const
+{
+    return zeitenUnbekannt;
+}
+
+void AActivity::setZeitenUnbekannt(bool value)
+{
+    zeitenUnbekannt = value;
 }
 
 QComboBox *AActivity::generateNewCategoryComboBox()

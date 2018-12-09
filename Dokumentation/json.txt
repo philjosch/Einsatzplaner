@@ -30,6 +30,7 @@ calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die P
 		ort (string)
                 zeitAnfang (string)
                 zeitEnde (string)
+		zeitenUnbekannt (bool)		-> True <-> Zeiten sind noch unbekannt und werden noch bekanntgegeben
 		anlass (string)
 		bemerkungen (string)
 		personen (array)		-> Daten für die Zuordnung, ob welche aufgaben eine zugeordnete person hat

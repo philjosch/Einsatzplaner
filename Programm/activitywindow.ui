@@ -255,14 +255,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0" colspan="4">
-     <widget class="QCheckBox" name="checkUnbekannt">
-      <property name="text">
-       <string>Zeiten noch nicht bekannt</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="4" rowspan="4">
+    <item row="0" column="4" rowspan="5">
      <widget class="QPlainTextEdit" name="plainBeschreibung">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
@@ -275,6 +268,13 @@
       </property>
       <property name="placeholderText">
        <string>Ausführliche Beschreibung</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="3">
+     <widget class="QCheckBox" name="checkZeiten">
+      <property name="text">
+       <string>Zeiten noch nicht bekannt</string>
       </property>
      </widget>
     </item>
@@ -346,7 +346,7 @@
   <tabstop>plainBeschreibung</tabstop>
   <tabstop>timeBeginn</tabstop>
   <tabstop>timeEnde</tabstop>
-  <tabstop>checkUnbekannt</tabstop>
+  <tabstop>checkZeiten</tabstop>
   <tabstop>checkBoxBenoetigt</tabstop>
   <tabstop>buttonInsert</tabstop>
   <tabstop>tablePersonen</tabstop>

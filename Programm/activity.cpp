@@ -44,21 +44,26 @@ QString Activity::getListString()
     return datum.toString("dddd dd.MM.yyyy")+" – "+scnd;
 }
 
-AActivity::Infos *Activity::getIndividual(Person *person)
+AActivity::Infos Activity::getIndividual(Person *person)
 {
-    if (person == nullptr) return nullptr;
+    if (person == nullptr) return Infos();
     Infos *alt = personen.value(person);
-    if (alt == nullptr) return nullptr;
-    Infos *neu = new Infos();
-    neu->kategorie = alt->kategorie;
-    neu->beginn = alt->beginn;
-    neu->ende = alt->ende;
+    if (alt == nullptr) return Infos();
+    Infos neu = Infos();
+    neu.kategorie = alt->kategorie;
+    neu.beginn = alt->beginn;
+    neu.ende = alt->ende;
 
-    if (alt->beginn == QTime(0,0)) {
-        neu->beginn = QTime(zeitAnfang.hour(), zeitAnfang.minute());
-    }
-    if (alt->ende == QTime(0,0)) {
-        neu->ende = QTime(zeitEnde.hour(), zeitEnde.minute());
+    if (zeitenUnbekannt) {
+        neu.beginn = QTime(0,0);
+        neu.ende = QTime(0,0);
+    } else {
+        if (alt->beginn == QTime(0,0)) {
+            neu.beginn = QTime(zeitAnfang.hour(), zeitAnfang.minute());
+        }
+        if (alt->ende == QTime(0,0)) {
+            neu.ende = QTime(zeitEnde.hour(), zeitEnde.minute());
+        }
     }
     return neu;
 }
@@ -79,8 +84,12 @@ QString Activity::getHtmlForSingleView()
     if (bemerkungen!= "")
         html += "<p><b>Bemerkungen:</b><br/>"+bemerkungen+"</p>";
     // Zeiten
-    html += "<p><b>Zeiten</b>:<br/>Beginn: "+zeitAnfang.toString("hh:mm")+"<br/>";
-    html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+    if (zeitenUnbekannt) {
+        html += "<p><b>Zeiten werden noch bekannt gegeben!</b></p>";
+    } else {
+        html += "<p><b>Zeiten</b>:<br/>Beginn: "+zeitAnfang.toString("hh:mm")+"<br/>";
+        html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+    }
     // Personal
     html += "<p><b>Helfer";
     html += (personalBenoetigt ? required1+" werden benötigt"+required2:"");
@@ -167,8 +176,12 @@ QString Activity::getHtmlForTableView()
     html += "</td>";
 
     // Dienstzeiten
-    html += "<td>Beginn: "+zeitAnfang.toString("hh:mm") + "<br/>";
-    html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+    if (zeitenUnbekannt) {
+        html += "<td>Zeiten werden noch bekannt gegeben!</td>";
+    } else {
+        html += "<td>Beginn: "+zeitAnfang.toString("hh:mm") + "<br/>";
+        html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+    }
 
     // Sonstiges
     html += "<td>";
