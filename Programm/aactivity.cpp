@@ -427,6 +427,7 @@ bool AActivity::getZeitenUnbekannt() const
 void AActivity::setZeitenUnbekannt(bool value)
 {
     zeitenUnbekannt = value;
+    emitter();
 }
 
 QComboBox *AActivity::generateNewCategoryComboBox()

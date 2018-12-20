@@ -211,6 +211,7 @@ void ActivityWindow::loadData()
     ui->timeBeginn->setTime(activity->getZeitAnfang());
     ui->timeEnde->setTime(activity->getZeitEnde());
     ui->checkZeiten->setChecked(activity->getZeitenUnbekannt());
+    on_checkZeiten_clicked(activity->getZeitenUnbekannt());
     ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
 
     // Tabelle laden und alles einfügen
