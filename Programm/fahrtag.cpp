@@ -126,7 +126,7 @@ QString Fahrtag::getHtmlForSingleView()
     html += "<p><b>Wagenreihung:</b> "+getWagenreihung()+"</p>";
     // Dienstzeiten
     if (zeitenUnbekannt) {
-        html += "<p><b>Dienstszeiten werden noch bekannt gegeben!</b></p>";
+        html += "<p><b>Dienstzeiten werden noch bekannt gegeben!</b></p>";
     } else {
         html += "<p><b>Dienstzeiten</b>:<br/>Beginn Tf, Tb: "+zeitTf.toString("hh:mm")+"<br/>Beginn Sonstige: "+zeitAnfang.toString("hh:mm")+"<br/>";
         html += "Ungefähres Dienstende: "+zeitEnde.toString("hh:mm")+"</p>";
