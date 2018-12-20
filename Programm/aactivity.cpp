@@ -309,16 +309,24 @@ bool AActivity::operator <(const AActivity &second) const
         return true;
     else if (this->datum > second.datum)
         return false;
-    // Beginn
-    if (this->zeitAnfang < second.zeitAnfang)
+    // Zeiten?
+    if (this->zeitenUnbekannt && !second.zeitenUnbekannt)
         return true;
-    else if (this->zeitAnfang > second.zeitAnfang)
+    else if (!this->zeitenUnbekannt && second.zeitenUnbekannt)
         return false;
-    // Ende
-    if (this->zeitEnde < second.zeitEnde)
-        return true;
-    else if (this->zeitEnde > second.zeitEnde)
-        return false;
+
+    if (!this->zeitenUnbekannt) {
+        // Beginn
+        if (this->zeitAnfang < second.zeitAnfang)
+            return true;
+        else if (this->zeitAnfang > second.zeitAnfang)
+            return false;
+        // Ende
+        if (this->zeitEnde < second.zeitEnde)
+            return true;
+        else if (this->zeitEnde > second.zeitEnde)
+            return false;
+    }
     // Art und beliebig, bei gleicher Art
     if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(this))
         return true;
@@ -332,12 +340,18 @@ bool AActivity::operator ==(const AActivity &second) const
     // Datum
     if (this->datum != second.datum)
         return false;
-    // Beginn
-    if (this->zeitAnfang != second.zeitAnfang)
+    // Zeiten?
+    if (this->zeitenUnbekannt != second.zeitenUnbekannt)
         return false;
-    // Ende
-    if (this->zeitEnde != second.zeitEnde)
-        return false;
+
+    if (! this->zeitenUnbekannt) {
+        // Beginn
+        if (this->zeitAnfang != second.zeitAnfang)
+            return false;
+        // Ende
+        if (this->zeitEnde != second.zeitEnde)
+            return false;
+    }
     // Art und beliebig, bei gleicher Art
     if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(this)) {
         if (const Fahrtag *g = dynamic_cast<const Fahrtag*>(&second))
