@@ -79,6 +79,7 @@ public:
     virtual QString getHtmlForTableView() = 0;
 
     virtual void emitter() = 0;
+    virtual void deletter() = 0;
 
     static QComboBox *generateNewCategoryComboBox();
     static QTimeEdit *generateNewTimeEdit();

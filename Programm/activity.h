@@ -25,8 +25,10 @@ public:
     QString getHtmlForTableView();
 
     void emitter();
+    void deletter();
 
 signals:
     void changed(AActivity *);
+    void del(AActivity *);
 };
 #endif // ACTIVITY_H

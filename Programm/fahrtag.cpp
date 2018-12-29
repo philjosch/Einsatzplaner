@@ -335,6 +335,11 @@ void Fahrtag::emitter()
     emit changed(this);
 }
 
+void Fahrtag::deletter()
+{
+    emit del(this);
+}
+
 bool Fahrtag::getBenoetigeService() const
 {
     return benoetigeService;

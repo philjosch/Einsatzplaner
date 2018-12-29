@@ -49,9 +49,11 @@ public:
     QString getHtmlForTableView();
 
     void emitter();
+    void deletter();
 
 signals:
     void changed(AActivity *);
+    void del(AActivity *);
 
 protected:
     Fahrtag::Art art;

@@ -236,3 +236,8 @@ void Activity::emitter()
 {
     emit changed(this);
 }
+
+void Activity::deletter()
+{
+    emit del(this);
+}
