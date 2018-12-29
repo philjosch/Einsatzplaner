@@ -2412,9 +2412,6 @@ unbekannt</string>
    </property>
   </action>
   <action name="actionDelete">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>Löschen</string>
    </property>

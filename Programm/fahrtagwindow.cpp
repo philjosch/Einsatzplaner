@@ -596,7 +596,11 @@ void FahrtagWindow::on_buttonRemove_clicked()
 
 void FahrtagWindow::on_actionDelete_triggered()
 {
-
+    if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie diesen Fahrtag wirklich unwiderruflich löschen?")) == QMessageBox::Yes) {
+        fahrtag->deletter();
+        this->close();
+        deleteLater();
+    }
 }
 
 void FahrtagWindow::on_actionPrint_triggered()

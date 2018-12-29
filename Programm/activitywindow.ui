@@ -20,7 +20,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,1,0,0" columnstretch="0,0,0,0,1" columnminimumwidth="50,100,70,80,0">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,1,0" columnstretch="0,0,0,0,1" columnminimumwidth="50,100,70,80,0">
     <property name="leftMargin">
      <number>6</number>
     </property>
@@ -255,9 +255,6 @@ unbekannt</string>
       </item>
       <item row="0" column="2">
        <widget class="QPushButton" name="buttonDelete">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="text">
          <string>Arbeitseinsatz löschen</string>
         </property>
@@ -306,9 +303,6 @@ unbekannt</string>
    </property>
   </action>
   <action name="actionDelete">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>Löschen</string>
    </property>

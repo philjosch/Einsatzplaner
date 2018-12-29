@@ -41,6 +41,7 @@ private slots:
     void on_actionPrint_triggered();
     void on_actionPdf_triggered();
 
+    void on_buttonDelete_clicked();
 
 
 private:

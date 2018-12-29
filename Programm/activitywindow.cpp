@@ -66,6 +66,7 @@ void ActivityWindow::on_checkZeiten_clicked(bool checked)
     if (nehme)
         activity->setZeitenUnbekannt(checked);
 }
+
 void ActivityWindow::on_checkBoxBenoetigt_toggled(bool checked)
 {
     if (nehme)
@@ -149,11 +150,6 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         nehme = true;
     }
 }
-
-void ActivityWindow::on_actionDelete_triggered()
-{
-
-}
 void ActivityWindow::comboInTableChanged()
 {
     QComboBox* combo = qobject_cast<QComboBox*>(sender());
@@ -190,6 +186,11 @@ void ActivityWindow::timeEditInTableChanged()
     }
 }
 
+void ActivityWindow::on_actionDelete_triggered()
+{
+    on_buttonDelete_clicked();
+}
+
 void ActivityWindow::on_actionPrint_triggered()
 {
     QPrinter *p = Export::getPrinterPaper(this);
@@ -200,6 +201,15 @@ void ActivityWindow::on_actionPdf_triggered()
 {
     QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf");
     Export::printActivity(activity, p);
+}
+
+void ActivityWindow::on_buttonDelete_clicked()
+{
+    if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie diesen Arbeitseinsatz wirklich unwiderruflich löschen?")) == QMessageBox::Yes) {
+        activity->deletter();
+        this->close();
+        deleteLater();
+    }
 }
 
 void ActivityWindow::loadData()
