@@ -3,6 +3,7 @@
 #include "ui_filesettings.h"
 
 #include <QMessageBox>
+#include <QSettings>
 
 FileSettings::FileSettings(QWidget *parent, ManagerFileSettings *manager) : QDialog(parent), ui(new Ui::FileSettings)
 {
@@ -41,7 +42,12 @@ void FileSettings::getSettings(ManagerFileSettings *mgr)
 
 void FileSettings::on_checkEnable_clicked(bool checked)
 {
-    ui->checkAuto->setEnabled(checked);
+    QSettings settings;
+    if (settings.value("online/useautoupload").toBool() && checked)
+        ui->checkAuto->setEnabled(true);
+    else
+        ui->checkAuto->setEnabled(false);
+
     ui->lineServer->setEnabled(checked);
     ui->linePath->setEnabled(checked);
     ui->lineID->setEnabled(checked);

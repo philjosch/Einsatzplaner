@@ -62,16 +62,6 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Aktivieren</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
@@ -96,6 +86,9 @@
     <widget class="QComboBox" name="comboFrom">
      <property name="enabled">
       <bool>false</bool>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
      </property>
      <item>
       <property name="text">
@@ -134,7 +127,7 @@
    <item row="0" column="1">
     <widget class="QCheckBox" name="checkEnable">
      <property name="text">
-      <string>Tool aktivieren</string>
+      <string>Upload-Tool aktivieren</string>
      </property>
     </widget>
    </item>
@@ -165,12 +158,12 @@
      </property>
      <item>
       <property name="text">
-       <string>Ende dieser Woche</string>
+       <string>Ende nächster Woche</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Ende des aktuellen Monats</string>
+       <string>Ende des nächsten Monats</string>
       </property>
      </item>
      <item>
@@ -222,6 +215,9 @@
      </property>
      <property name="text">
       <string>Keine Verbindungsdaten</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>

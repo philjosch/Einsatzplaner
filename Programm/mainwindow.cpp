@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "calendar.h"
+#include "export.h"
 #include "exportgesamt.h"
 #include "fileio.h"
 #include "coreapplication.h"
@@ -263,6 +264,12 @@ void MainWindow::on_actionSave_triggered()
     if (erfolg) {
         saved = true;
         setWindowModified(false);
+        int result = Export::autoUploadToServer(ui->calendar, settings);
+        if (result == 0)
+            ui->statusBar->showMessage("Datei konnte nicht hochgeladen werden!", 5000);
+        else if (result > 0)
+            ui->statusBar->showMessage("Datei wurde erfolgreich hochgeladen!", 5000);
+
     } else {
         QMessageBox::warning(this, tr("Fehler"), tr("Das speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
         filePath = "";

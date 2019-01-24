@@ -6,6 +6,7 @@
 #include <QPrintDialog>
 #include <QNetworkAccessManager>
 #include <QTemporaryFile>
+#include <QSettings>
 
 bool Export::printFahrtag(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
 {
@@ -362,7 +363,7 @@ bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *sett
 
     QTemporaryFile tempFile;
     tempFile.open();
-    QString localFile = tempFile.fileName(); //FileIO::getFilePathOpen(nullptr, ""); // ("something temporary");
+    QString localFile = tempFile.fileName();
     QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
     p->setOutputFormat(QPrinter::PdfFormat);
     p->setOutputFileName(localFile);
@@ -406,6 +407,66 @@ bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *sett
     }
     delete reply;
     return (s == "OK");
+}
+
+int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
+{
+    QSettings s;
+    if (!s.value("online/useautoupload").toBool()) return -1;
+    if (!settings->getAutom()) return -1;
+
+    QList<AActivity *> *liste = new QList<AActivity*>();
+
+    QListIterator<AActivity*> iter = mgr->getActivities();
+    while(iter.hasNext()) {
+        AActivity *a = iter.next();
+        // Beginndatum
+        if (settings->getStartdate() == "tdy") {
+            if (a->getDatum() < QDate::currentDate()) {
+                continue;
+            }
+        } else if (settings->getStartdate() == "all") {
+
+        } else if (settings->getStartdate() == "bgn") {
+            if (a->getDatum().year() < QDate::currentDate().year()) {
+                continue;
+            }
+        }
+        // Enddatum
+        if (settings->getEnddate() == "eow") {
+            if (a->getDatum() > QDate::currentDate().addDays(7)) {
+                continue;
+            }
+        } else if (settings->getEnddate() == "eom") {
+            if ((a->getDatum().year() != QDate::currentDate().year()) &&
+                   (a->getDatum().month() > QDate::currentDate().month()+1)) {
+                continue;
+            }
+        } else if (settings->getStartdate() == "eoy") {
+            if (a->getDatum().year() > QDate::currentDate().year()) {
+                continue;
+            }
+        } else if (settings->getStartdate() == "all") {
+
+        }
+        // Auch Aktivitäten?
+        if (!settings->getActivities()) {
+            if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(a)) {
+            } else {
+                continue;
+            }
+        }
+        liste->append(a);
+    }
+
+
+    // Hier muessen die Aktivitaeten ausgewaehlt werden
+    if (liste->length() == 0)
+        return -1;
+    if (uploadToServer(liste, settings))
+        return 1;
+    else
+        return 0;
 }
 
 bool Export::print(QPrinter *pdf, QPrinter *paper, QTextDocument *d)

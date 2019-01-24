@@ -93,9 +93,9 @@ void ExportGesamt::on_pushDrucken_clicked()
     if (ui->checkListe->isChecked() && listeListe->length() > 0) {
         if (ui->checkUpload->isChecked()) {
             if (Export::uploadToServer(listeListe, settings)) {
-                QMessageBox::information(nullptr, "Erfolg", "Datei wurde erfolgreich hochgeladen!");
+                QMessageBox::information(nullptr, tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
             } else {
-                QMessageBox::information(nullptr, "Fehler", "Die Datei konnte ncht hochgeladen werden! :(");
+                QMessageBox::information(nullptr, tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden! :("));
             }
         }
 

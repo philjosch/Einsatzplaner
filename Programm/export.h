@@ -38,6 +38,7 @@ public:
 
     static bool testServerConnection(QString server, QString path, QString id);
     static bool uploadToServer(QList<AActivity*> *liste, ManagerFileSettings *settings);
+    static int autoUploadToServer(Manager *mgr, ManagerFileSettings *settings);
 
 private:
     static bool print(QPrinter *pdf, QPrinter *print, QTextDocument *d);
