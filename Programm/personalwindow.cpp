@@ -143,6 +143,26 @@ void PersonalWindow::showPerson(Person *p)
     ui->doubleAnzahl->setValue(p->getAdditionalAnzahl());
     ui->doubleKilometer->setValue(p->getAdditionalKilometer());
 
+    if (p->getAusbildungTf() && manager->getMinimumHours(Tf) > 0)
+        ui->lineMinTf->setText(QString::number(manager->getMinimumHours(Tf)));
+    if (p->getAusbildungZf() && manager->getMinimumHours(Zf) > 0)
+        ui->lineMinZf->setText(QString::number(manager->getMinimumHours(Zf)));
+    if (manager->getMinimumHours(Zub) > 0)
+        ui->lineMinZub->setText(QString::number(manager->getMinimumHours(Zub)));
+    if (manager->getMinimumHours(Service) > 0)
+        ui->lineMinService->setText(QString::number(manager->getMinimumHours(Service)));
+    if (manager->getMinimumHours(ZugVorbereiten) > 0)
+        ui->lineMinZugVorbereiten->setText(QString::number(manager->getMinimumHours(ZugVorbereiten)));
+    if (manager->getMinimumHours(Werkstatt) > 0)
+        ui->lineMinWerkstatt->setText(QString::number(manager->getMinimumHours(Werkstatt)));
+    if (manager->getMinimumHours(Buero) > 0)
+        ui->lineMinBuero->setText(QString::number(manager->getMinimumHours(Buero)));
+    if ((p->getAusbildungTf() || p->getAusbildungZf() || p->getAusbildungRangierer())
+            && manager->getMinimumHours(Ausbildung) > 0)
+        ui->lineMinAusbildung->setText(QString::number(manager->getMinimumHours(Ausbildung)));
+    if (manager->getMinimumHours(Sonstiges) > 0)
+        ui->lineMinSonstiges->setText(QString::number(manager->getMinimumHours(Sonstiges)));
+
     enabled = true;
 }
 

@@ -106,7 +106,7 @@
    <item row="4" column="1">
     <widget class="QLabel" name="labelZub">
      <property name="text">
-      <string>Zugbegleiter/Begl.o.b.A.</string>
+      <string>Service</string>
      </property>
     </widget>
    </item>
@@ -211,7 +211,7 @@
     </widget>
    </item>
    <item row="3" column="2">
-    <widget class="QDoubleSpinBox" name="doubleService">
+    <widget class="QDoubleSpinBox" name="doubleZub">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -260,7 +260,7 @@
    <item row="3" column="1">
     <widget class="QLabel" name="labelService">
      <property name="text">
-      <string>Service</string>
+      <string>Zugbegleiter/Begl.o.b.A.</string>
      </property>
     </widget>
    </item>
@@ -304,7 +304,7 @@
     </widget>
    </item>
    <item row="4" column="2">
-    <widget class="QDoubleSpinBox" name="doubleZub">
+    <widget class="QDoubleSpinBox" name="doubleService">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -335,8 +335,8 @@
   <tabstop>doubleTf</tabstop>
   <tabstop>doubleTb</tabstop>
   <tabstop>doubleZf</tabstop>
-  <tabstop>doubleService</tabstop>
   <tabstop>doubleZub</tabstop>
+  <tabstop>doubleService</tabstop>
   <tabstop>doubleBuero</tabstop>
   <tabstop>doubleWerkstatt</tabstop>
   <tabstop>doubleZugVorbereiten</tabstop>
