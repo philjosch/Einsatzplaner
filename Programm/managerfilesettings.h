@@ -24,6 +24,8 @@ public:
     QString getPath() const;
     void setPath(const QString &value);
 
+    QString getFullServer() const;
+
     QString getId() const;
     void setId(const QString &value);
 
