@@ -114,6 +114,13 @@ void MainWindow::unsave()
     setWindowModified(true);
 }
 
+void MainWindow::autoSave()
+{
+    if (filePath == "") return;
+    if (saved) return;
+    saveToPath(filePath+".autosave.ako");
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     bool toClose = false;
@@ -140,6 +147,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
         for(QMainWindow *m: fenster.values()) {
             m->close();
         }
+        if (filePath != "") {
+            QFile file (filePath+".autosave.ako");
+            file.remove();
+        }
     }
 
     if (toClose) {
@@ -147,6 +158,33 @@ void MainWindow::closeEvent(QCloseEvent *event)
     } else {
         event->ignore();
     }
+}
+
+bool MainWindow::saveToPath(QString path)
+{
+    QJsonObject calendarJSON = ui->calendar->toJson();
+
+    QJsonObject viewJSON;
+    viewJSON.insert("xMain", this->x());
+    viewJSON.insert("yMain", this->y());
+    viewJSON.insert("widthMain", this->width());
+    viewJSON.insert("heightMain", this->height());
+    viewJSON.insert("xPersonal", personalfenster->x());
+    viewJSON.insert("yPersonal", personalfenster->y());
+    viewJSON.insert("widthPersonal", personalfenster->width());
+    viewJSON.insert("heightPersonal", personalfenster->height());
+/*    viewJSON.insert("showPersonal", false); CURRENTLY NOT USED*/
+
+    QJsonObject generalJSON;
+    generalJSON.insert("version", CoreApplication::getAktuelleVersion()->toStringShort());
+
+    QJsonObject object;
+    object.insert("calendar", calendarJSON);
+    object.insert("view", viewJSON);
+    object.insert("settings", settings->toJson());
+    object.insert("general", generalJSON);
+
+    return FileIO::saveJsonToFile(path, object);
 }
 
 void MainWindow::on_buttonPersonal_clicked()
@@ -238,32 +276,15 @@ void MainWindow::on_actionSave_triggered()
         return;
     }
 
-    QJsonObject calendarJSON = ui->calendar->toJson();
-
-    QJsonObject viewJSON;
-    viewJSON.insert("xMain", this->x());
-    viewJSON.insert("yMain", this->y());
-    viewJSON.insert("widthMain", this->width());
-    viewJSON.insert("heightMain", this->height());
-    viewJSON.insert("xPersonal", personalfenster->x());
-    viewJSON.insert("yPersonal", personalfenster->y());
-    viewJSON.insert("widthPersonal", personalfenster->width());
-    viewJSON.insert("heightPersonal", personalfenster->height());
-/*    viewJSON.insert("showPersonal", false); CURRENTLY NOT USED*/
-
-    QJsonObject generalJSON;
-    generalJSON.insert("version", CoreApplication::getAktuelleVersion()->toStringShort());
-
-    QJsonObject object;
-    object.insert("calendar", calendarJSON);
-    object.insert("view", viewJSON);
-    object.insert("settings", settings->toJson());
-    object.insert("general", generalJSON);
-
-    bool erfolg = FileIO::saveJsonToFile(filePath, object);
+    bool erfolg = saveToPath(filePath);
     if (erfolg) {
         saved = true;
         setWindowModified(false);
+        if (filePath != "") {
+            QFile file (filePath+".autosave.ako");
+            file.remove();
+        }
+
         int result = Export::autoUploadToServer(ui->calendar, settings);
         if (result == 0)
             ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);

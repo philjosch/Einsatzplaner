@@ -6,6 +6,7 @@
 #include <QNetworkReply>
 #include <QMessageBox>
 #include <QWindow>
+#include <QTimer>
 
 CoreApplication::Version CoreApplication::aktuelleVersion = {-1, -1, -1};
 bool CoreApplication::developerMode = false;
@@ -81,6 +82,30 @@ void CoreApplication::closeAllWindows()
 QUrl CoreApplication::getUrlDownload()
 {
     return urlDownload;
+}
+
+void CoreApplication::startAutoSave(int delay)
+{
+    autoSaveTimer = new QTimer();
+    connect(autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveWindows()));
+    autoSaveTimer->start(delay*1000);
+}
+void CoreApplication::autoSaveWindows()
+{
+    qDebug() << "Timer wurde ausgeloest";
+    foreach (QWidget *w, allWidgets()) {
+        if (MainWindow *mW = dynamic_cast<MainWindow*>(w)) {
+            mW->autoSave();
+        }
+    }
+}
+void CoreApplication::stopAutoSave()
+{
+    // Auto-Save Thread beenden, falls er gestartet wurde
+    if (autoSaveTimer != nullptr) {
+        qDebug() << "timer gestoppt";
+        autoSaveTimer->stop();
+    }
 }
 
 QString CoreApplication::loadNotes(Version v)

@@ -80,9 +80,12 @@ public:
 
     static QUrl getUrlDownload();
 
+    void startAutoSave(int delay); // Delay in Seconds!
+    void stopAutoSave();
 
 public slots:
     static void closeAllWindows();
+    static void autoSaveWindows();
 
 protected:
     static Version aktuelleVersion;
@@ -91,6 +94,8 @@ protected:
     static QUrl urlVersion;
     static QUrl urlDownload;
     static QString urlNotes;
+
+    QTimer *autoSaveTimer;
 };
 
 #endif // COREAPPLICATION_H

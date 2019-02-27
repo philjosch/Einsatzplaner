@@ -28,10 +28,15 @@ int main(int argc, char *argv[])
     if (settings.value("general/autosearchupdate", true).toBool()) {
         a.checkVersion();
     }
+    if (int delay = settings.value("io/autoSave", 0).toInt())
+        a.startAutoSave(delay*60); // Funktion nimmt Wert in Sekunden!
+
     if (a.isFirst == true) {
         MainWindow *w = new MainWindow();
         w->show();
     }
-    return a.exec();
+    int code = a.exec();
+    a.stopAutoSave();
+    return code;
 }
 

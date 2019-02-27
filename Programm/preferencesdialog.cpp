@@ -14,6 +14,16 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new 
     QSettings settings;
     ui->checkSearchAtStart->setChecked(settings.value("general/autosearchupdate", true).toBool());
     ui->checkAutoUpload->setChecked(settings.value("online/useautoupload", true).toBool());
+    int index = settings.value("io/autoSave", 4).toInt();
+    if (index == 5) {
+        ui->comboAutoSave->setCurrentIndex(0);
+    } else if (index == 10) {
+        ui->comboAutoSave->setCurrentIndex(1);
+    } else if (index == 15) {
+        ui->comboAutoSave->setCurrentIndex(2);
+    } else if (index == 30) {
+        ui->comboAutoSave->setCurrentIndex(3);
+    }
     setWindowFilePath("");
 }
 
@@ -53,6 +63,18 @@ void PreferencesDialog::saveSettings()
 {
     QSettings settings;
     settings.setValue("general/autosearchupdate", ui->checkSearchAtStart->isChecked());
+    int value = 0;
+    int index = ui->comboAutoSave->currentIndex();
+    if (index == 0) {
+        value = 5;
+    } else if (index == 1) {
+        value = 10;
+    } else if (index == 2) {
+        value = 15;
+    } else if (index == 3) {
+        value = 30;
+    }
+    settings.setValue("io/autoSave", value);
     settings.setValue("online/useautoupload", ui->checkAutoUpload->isChecked());
 }
 

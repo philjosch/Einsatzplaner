@@ -50,9 +50,11 @@ public slots:
     bool openFile(QString filePath); // Tells the window to open the file
 
     void unsave();
+    void autoSave();
 
 protected:
     void closeEvent(QCloseEvent *event);
+    bool saveToPath(QString path);
 
 private slots:
     // Einsatzplaner

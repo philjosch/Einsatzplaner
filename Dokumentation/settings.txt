@@ -3,6 +3,7 @@ general/
 io/
 	lastpath		-> letzter erfolgreich benutzter pfad von FileIO
 	lastused		-> Array mit den 5 zuletzt genutzten .ako Dokumenten
+	autoSave		-> Positive Zahl zwischen zwei Vorgängen zum automatischen Sichern in Minuten, 0=ausgeschaltet
 
 online/				-> Dient der Kompatibilität mit dem Upload-Tool für die PDF-Dateien
 	useautoupload		-> aktiviert oder deaktiviert das automatische(!) hochladen
