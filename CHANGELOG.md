@@ -1,5 +1,20 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 25. September 2018
+Stand: 28. Februar 2019
+
+## Version 1.5 – 2019-0x-xx
+### Neu
+- Der Einsatzplan kann direkt aus dem Programm auf einen vorher konfigurierten Webserver hochgeladen werden. Dies geschieht entweder beim Speichern oder Manuell
+- Automatisches Sichern: Das Programm speichert bei Wunsch nach einer bestimmten Zeit automatisch eine Backup-Datei
+- Noch unbekannte Einsatzzeiten können jetzt als solche ausgewiesen werden
+- ~~Fahrtage und Arbeitseinsätze können direkt aus dem Fenster heraus gelöscht werden~~
+
+### Verbessert
+- In der Personalübersicht werden jetzt auch die Mindeststunden der Personen angezeigt
+
+### Fehlerbehebungen
+- Kleinere Optimierungen und Verbesserungen
+
+---
 
 ## Version 1.4.1 – 2018-09-25
 ### Neu
