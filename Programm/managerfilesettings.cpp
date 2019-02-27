@@ -70,6 +70,11 @@ void ManagerFileSettings::setPath(const QString &value)
     path = value;
 }
 
+QString ManagerFileSettings::getFullServer() const
+{
+    return server + "/" + path;
+}
+
 QString ManagerFileSettings::getId() const
 {
     return id;

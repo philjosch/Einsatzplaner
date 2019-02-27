@@ -352,15 +352,8 @@ bool Export::testServerConnection(QString server, QString path, QString id)
 bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *settings)
 {
     if (! settings->getEnabled()) return true;
-    QString server = settings->getServer();
-    QString path = settings->getPath();
-    QString id = settings->getId();
 
-    QEventLoop eventLoop;
-
-    QNetworkAccessManager am;
-    QObject::connect(&am, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
+    /* ERSTELLEN DER DATEI */
     QTemporaryFile tempFile;
     tempFile.open();
     QString localFile = tempFile.fileName();
@@ -370,26 +363,30 @@ bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *sett
 
     printList(liste, p, nullptr);
 
-    QNetworkRequest request(QUrl(server+"/"+path)); //our server with php-script
+    /* HOCHLADEN DER DATEI AUF DEN SERVER */
+    QString server = settings->getFullServer();
+    QString id = settings->getId();
 
-    QString bound="margin"; //name of the boundary
+    QEventLoop eventLoop;
+
+    QNetworkAccessManager am;
+    QObject::connect(&am, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+    QNetworkRequest request(server);
+
     //according to rfc 1867 we need to put this string here:
     QByteArray data;
-    data.append("--" + bound + "\r\n");
+    data.append("--margin\r\n");
     data.append("Content-Disposition: form-data; name='id'; filename='"+id+"'\r\n\r\n");
-    data.append("--" + bound + "\r\n");
+    data.append("--margin\r\n");
     data.append("Content-Disposition: form-data; name='action'\r\n\r\n");
-    data.append("--" + bound + "\r\n"); //according to rfc 1867
-    data.append("Content-Disposition: form-data; name='uploaded'; filename='"+id+"-test.pdf'\r\n"); //name of the input is "uploaded" in my form, next one is a file name.
+    data.append("--margin\r\n"); //according to rfc 1867
+    data.append("Content-Disposition: form-data; name='uploaded'; filename='"+id+".pdf'\r\n"); //name of the input is "uploaded" in my form, next one is a file name.
     data.append("Content-Type: application/pdf\r\n\r\n"); //data type
-//    QFile file(localFile);
-//    if (!file.open(QIODevice::ReadOnly)) {
-//        return false;
-//    }
     data.append(tempFile.readAll()); //let's read the file
     data.append("\r\n");
-    data.append("--" + bound + "--\r\n"); //closing boundary according to rfc 1867
-    request.setRawHeader(QString("Content-Type").toUtf8(),QString("multipart/form-data; boundary=" + bound).toUtf8());
+    data.append("--margin--\r\n"); //closing boundary according to rfc 1867
+    request.setRawHeader(QString("Content-Type").toUtf8(), QString("multipart/form-data; boundary=margin").toUtf8());
     request.setRawHeader(QString("Content-Length").toUtf8(), QString::number(data.length()).toUtf8());
 
 //    qDebug() << data.data();
@@ -433,13 +430,12 @@ int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
             }
         }
         // Enddatum
-        if (settings->getEnddate() == "eow") {
+        if (settings->getEnddate() == "p1w") {
             if (a->getDatum() > QDate::currentDate().addDays(7)) {
                 continue;
             }
-        } else if (settings->getEnddate() == "eom") {
-            if ((a->getDatum().year() != QDate::currentDate().year()) &&
-                   (a->getDatum().month() > QDate::currentDate().month()+1)) {
+        } else if (settings->getEnddate() == "p1m") {
+            if (a->getDatum() > QDate::currentDate().addMonths(1)) {
                 continue;
             }
         } else if (settings->getStartdate() == "eoy") {
@@ -449,7 +445,7 @@ int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
         } else if (settings->getStartdate() == "all") {
 
         }
-        // Auch Aktivitäten?
+        // Auch Aktivitaeten?
         if (!settings->getActivities()) {
             if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(a)) {
             } else {
@@ -458,7 +454,6 @@ int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
         }
         liste->append(a);
     }
-
 
     // Hier muessen die Aktivitaeten ausgewaehlt werden
     if (liste->length() == 0)
