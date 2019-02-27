@@ -8,6 +8,7 @@
 #include "activitywindow.h"
 #include "personalwindow.h"
 #include "exportgesamt.h"
+#include "managerfilesettings.h"
 
 #include <QMainWindow>
 #include <QMap>
@@ -39,6 +40,8 @@ private:
 
     ExportGesamt *exportDialog;
 
+    ManagerFileSettings *settings;
+
 public slots:
     void openFahrtag(Fahrtag *f);
     void openActivity(Activity *a);
@@ -67,6 +70,8 @@ private slots:
     void on_actionSave_triggered();
     void on_actionSaveas_triggered();
     void on_actionSavePersonal_triggered();
+    void on_actionSettings_triggered();
+
     bool on_actionClose_triggered();
 
     // Bearbeiten

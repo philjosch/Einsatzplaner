@@ -2,6 +2,7 @@
 #define EXPORTGESAMT_H
 
 #include "manager.h"
+#include "managerfilesettings.h"
 
 #include <QDialog>
 
@@ -14,7 +15,7 @@ class ExportGesamt : public QDialog
     Q_OBJECT
 
 public:
-    explicit ExportGesamt(Manager *m, QWidget *parent = nullptr);
+    explicit ExportGesamt(Manager *m, ManagerFileSettings *settings, QWidget *parent = nullptr);
     ~ExportGesamt();
 
     void reload();
@@ -47,6 +48,7 @@ private:
     QList<AActivity*> liste;
     QMap<AActivity*, QListWidgetItem*> actToList;
     QMap<QListWidgetItem*, AActivity*> listToAct;
+    ManagerFileSettings *settings;
 
     bool testShow(AActivity *a);
 };

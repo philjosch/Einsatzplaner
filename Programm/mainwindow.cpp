@@ -1,10 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "calendar.h"
+#include "export.h"
 #include "exportgesamt.h"
 #include "fileio.h"
 #include "coreapplication.h"
 #include "preferencesdialog.h"
+#include "filesettings.h"
 
 #include <QMessageBox>
 
@@ -27,7 +29,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setWindowModified(false);
 
     personalfenster = new PersonalWindow(this, ui->calendar->getPersonal());
-    exportDialog = new ExportGesamt(ui->calendar, this);
+    settings = new ManagerFileSettings();
+    exportDialog = new ExportGesamt(ui->calendar, settings, this);
     connect(personalfenster, SIGNAL(changed()), this, SLOT(unsave()));
 }
 
@@ -254,14 +257,21 @@ void MainWindow::on_actionSave_triggered()
     QJsonObject object;
     object.insert("calendar", calendarJSON);
     object.insert("view", viewJSON);
+    object.insert("settings", settings->toJson());
     object.insert("general", generalJSON);
 
     bool erfolg = FileIO::saveJsonToFile(filePath, object);
     if (erfolg) {
         saved = true;
         setWindowModified(false);
+        int result = Export::autoUploadToServer(ui->calendar, settings);
+        if (result == 0)
+            ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
+        else if (result > 0)
+            ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
+
     } else {
-        QMessageBox::warning(this, tr("Fehler"), tr("Das speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+        QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
         filePath = "";
     }
 }
@@ -312,6 +322,8 @@ bool MainWindow::openFile(QString filePath)
     } else {
         personalfenster->hide();
     }
+
+    settings->fromJson(object.value("settings").toObject());
     return true;
 }
 
@@ -367,6 +379,17 @@ void MainWindow::on_actionSavePersonal_triggered()
 
     if (! FileIO::saveJsonToFile(filePath, object)) {
         QMessageBox::warning(this, tr("Fehler"), tr("Das speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+    }
+}
+
+void MainWindow::on_actionSettings_triggered()
+{
+    FileSettings s(this, settings);
+    if (s.exec() == QDialog::Accepted) {
+        s.getSettings(settings);
+        emit unsave();
+
+        // Update the settings
     }
 }
 

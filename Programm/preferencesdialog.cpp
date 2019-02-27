@@ -13,6 +13,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(closeDialogOk()));
     QSettings settings;
     ui->checkSearchAtStart->setChecked(settings.value("general/autosearchupdate", true).toBool());
+    ui->checkAutoUpload->setChecked(settings.value("online/useautoupload", true).toBool());
     setWindowFilePath("");
 }
 
@@ -52,6 +53,7 @@ void PreferencesDialog::saveSettings()
 {
     QSettings settings;
     settings.setValue("general/autosearchupdate", ui->checkSearchAtStart->isChecked());
+    settings.setValue("online/useautoupload", ui->checkAutoUpload->isChecked());
 }
 
 void PreferencesDialog::on_pushNotes_clicked()

@@ -141,6 +141,8 @@
     <addaction name="actionSaveas"/>
     <addaction name="actionSavePersonal"/>
     <addaction name="separator"/>
+    <addaction name="actionSettings"/>
+    <addaction name="separator"/>
     <addaction name="actionClose"/>
     <addaction name="separator"/>
     <addaction name="actionPrint"/>
@@ -364,6 +366,11 @@
   <action name="actionSavePersonal">
    <property name="text">
     <string>Personaldaten sichern unter</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Eigenschaften</string>
    </property>
   </action>
  </widget>

@@ -82,6 +82,17 @@ view/ (object)			-> Die Daten der Ansicht, war Personalansicht sichtbar, wo ware
 	heightPersonal(int)	-> Höhe des Personalfenster
 	showPersonal(bool)	-> Personal fenster wird angezeigt (currently not used)
 
+settings/			-> Speichert alle Einstelleungen zur Datei
+	online/ (object)	-> Speichert Daten, die verwendet werden, um die Datei auf einen Webserver hochzuladen
+		enabled (bool)		-> Gibt an, ob das Tool verwendet werden kann
+		auto (bool)		-> Stellt fest, ob die Datei bei jedem Sichern hochgeladen werden soll, oder nur manuell
+		server (string)		-> Server für die Datei
+		path (string)		-> Pfad zur Datei, die den Upload durchführt
+		id (string)		-> Identifikationsstring für die hinterlegte Konfiguration des Uplaods
+		startdate (string)	-> Startdatum für die Übersicht (Format:tdy|all|bgn) (Heute | Alle | Beginn des aktuellen Monats)
+		enddate (string)	-> Enddatum für die Übersicht (Format: p1w|p1m|eoy|all) (1 Woche ab heute | 1 Monat ab heute | Ende des Jahres | Alle)
+		activities (bool)	-> Gibt an, ob die Arbeitseinsätze auch ausgegeben werden soll, oder nur die Fahrtage
+
 general/ (object)
 	version (string)	-> Version die mindestens benötigt wird, um die Datei korrekt zu öffnen
 
