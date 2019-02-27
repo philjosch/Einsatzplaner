@@ -29,19 +29,6 @@ public:
     static QString getFarbeArbeit();
     static QString getFarbe(AActivity *a);
 
-private:
-    Ui::MainWindow *ui;
-    QMap<AActivity*, QMainWindow*> fenster;
-
-    QString filePath;
-    bool saved;
-
-    PersonalWindow *personalfenster;
-
-    ExportGesamt *exportDialog;
-
-    ManagerFileSettings *settings;
-
 public slots:
     void openFahrtag(Fahrtag *f);
     void openActivity(Activity *a);
@@ -81,6 +68,19 @@ private slots:
     // Ansicht
     void on_buttonPersonal_clicked();
     void on_buttonExport_clicked();
+
+private:
+    Ui::MainWindow *ui;
+    QMap<AActivity*, QMainWindow*> fenster;
+
+    QString filePath;
+    bool saved;
+
+    PersonalWindow *personalfenster;
+
+    ExportGesamt *exportDialog;
+
+    ManagerFileSettings *settings;
 };
 
 #endif // MAINWINDOW_H

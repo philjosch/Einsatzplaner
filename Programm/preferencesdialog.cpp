@@ -34,14 +34,14 @@ PreferencesDialog::~PreferencesDialog()
 
 void PreferencesDialog::on_pushSearch_clicked()
 {
-    CoreApplication::Version *aktuell = CoreApplication::getAktuelleVersion();
+    CoreApplication::Version aktuell = CoreApplication::getAktuelleVersion();
     online = CoreApplication::loadVersion();
     bool old = online>aktuell;
     QString s;
     if (old) {
-        s = tr("Sie verwenden Version %1. Es ist Version %2 verfügbar.").arg(aktuell->toString(), online.toString());
+        s = tr("Sie verwenden Version %1. Es ist Version %2 verfügbar.").arg(aktuell.toString(), online.toString());
     } else {
-        s =  tr("Sie verwenden bereits die neuste Version: %1.").arg(aktuell->toString());
+        s =  tr("Sie verwenden bereits die neuste Version: %1.").arg(aktuell.toString());
     }
     ui->labelVersion->setText(s);
     ui->pushDownload->setEnabled(old);

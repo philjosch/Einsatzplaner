@@ -176,7 +176,7 @@ bool MainWindow::saveToPath(QString path)
 /*    viewJSON.insert("showPersonal", false); CURRENTLY NOT USED*/
 
     QJsonObject generalJSON;
-    generalJSON.insert("version", CoreApplication::getAktuelleVersion()->toStringShort());
+    generalJSON.insert("version", CoreApplication::getAktuelleVersion().toStringShort());
 
     QJsonObject object;
     object.insert("calendar", calendarJSON);
@@ -215,7 +215,7 @@ void MainWindow::on_actionAboutQt_triggered()
 
 void MainWindow::on_actionAboutApp_triggered()
 {
-    QMessageBox::about(this, tr("Über Einsatzplaner"), "<h1>Einsatzplaner</h1>"+QCoreApplication::applicationVersion()+(CoreApplication::isDeveloperVersion()?" (dev) ":"")+ "<br/>Copyright © 2016-2018 Philipp Schepper<br/>Alle Rechte vorbehalten.");
+    QMessageBox::about(this, tr("Über Einsatzplaner"), "<h1>Einsatzplaner</h1>"+QCoreApplication::applicationVersion()+(CoreApplication::isDeveloperVersion()?" (dev) ":"")+ "<br/>Copyright © 2016-2019 Philipp Schepper<br/>Alle Rechte vorbehalten.");
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -306,7 +306,7 @@ bool MainWindow::openFile(QString filePath)
     // Prüfen, ob Version kompatibel ist
     QJsonObject generalJSON = object.value("general").toObject();
     CoreApplication::Version version = CoreApplication::Version::stringToVersion(generalJSON.value("version").toString());
-    if (version > CoreApplication::getAktuelleVersion() || CoreApplication::Version{-1,-1,-1} == &version) {
+    if (version > (CoreApplication::getAktuelleVersion()) || CoreApplication::Version{-1,-1,-1} == version) {
         QMessageBox::warning(this, tr("Nicht kompatibel"),
                              tr("Die Datei kann nicht mit dieser Version geöffnet werden.\nDas Dokument benötigt mindestens Version ")+
                              version.toString()+tr(".\nDie aktuellste Version finden Sie auf der Webseite des Programms.\nBei weiteren Fragen wenden Sie sich bitte an den Support."));
@@ -391,7 +391,7 @@ void MainWindow::on_actionSavePersonal_triggered()
 /*    viewJSON.insert("showPersonal", false); CURRENTLY NOT USED*/
 
     QJsonObject generalJSON;
-    generalJSON.insert("version", CoreApplication::getAktuelleVersion()->toStringShort());
+    generalJSON.insert("version", CoreApplication::getAktuelleVersion().toStringShort());
 
     QJsonObject object;
     object.insert("calendar", calendarJSON);
@@ -399,7 +399,7 @@ void MainWindow::on_actionSavePersonal_triggered()
     object.insert("general", generalJSON);
 
     if (! FileIO::saveJsonToFile(filePath, object)) {
-        QMessageBox::warning(this, tr("Fehler"), tr("Das speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+        QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
     }
 }
 

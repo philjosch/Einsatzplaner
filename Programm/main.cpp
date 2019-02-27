@@ -25,9 +25,9 @@ int main(int argc, char *argv[])
 
     QSettings settings;
 
-    if (settings.value("general/autosearchupdate", true).toBool()) {
+    if (settings.value("general/autosearchupdate", true).toBool())
         a.checkVersion();
-    }
+
     if (int delay = settings.value("io/autoSave", 0).toInt())
         a.startAutoSave(delay*60); // Funktion nimmt Wert in Sekunden!
 

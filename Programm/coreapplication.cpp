@@ -33,6 +33,11 @@ CoreApplication::~CoreApplication()
 
 }
 
+bool CoreApplication::getIsFirst() const
+{
+    return isFirst;
+}
+
 bool CoreApplication::event(QEvent *event)
 {
     if (event->type() == QEvent::FileOpen) {
@@ -51,7 +56,7 @@ bool CoreApplication::event(QEvent *event)
 void CoreApplication::checkVersion()
 {
     Version v = loadVersion();
-    if (v>&aktuelleVersion) {
+    if (v>aktuelleVersion) {
         QString message = tr("Es ist Version ")+v.toString()+tr(" des Programms verfügbar.\nSie benutzen Version ")+aktuelleVersion.toString()+".\n\n";
         QMessageBox::StandardButton answ = QMessageBox::information(nullptr, tr("Neue Version"), message, QMessageBox::Ignore|QMessageBox::Help|QMessageBox::Open, QMessageBox::Open);
         if (answ == QMessageBox::Open) {
@@ -62,26 +67,6 @@ void CoreApplication::checkVersion()
             }
         }
     }
-}
-
-CoreApplication::Version *CoreApplication::getAktuelleVersion()
-{
-    return &aktuelleVersion;
-}
-
-void CoreApplication::closeAllWindows()
-{
-    bool ok = true;
-    QWindowList liste = allWindows();
-    for (int i = 0; i < liste.length(); i++) {
-        ok = ok && liste.at(i)->close();
-    }
-    if (ok) quit();
-}
-
-QUrl CoreApplication::getUrlDownload()
-{
-    return urlDownload;
 }
 
 void CoreApplication::startAutoSave(int delay)
@@ -105,6 +90,40 @@ void CoreApplication::stopAutoSave()
     if (autoSaveTimer != nullptr) {
         qDebug() << "timer gestoppt";
         autoSaveTimer->stop();
+    }
+}
+
+bool CoreApplication::isDeveloperVersion()
+{
+    return developerMode;
+}
+CoreApplication::Version CoreApplication::getAktuelleVersion()
+{
+    return aktuelleVersion;
+}
+CoreApplication::Version CoreApplication::loadVersion()
+{
+    // create custom temporary event loop on stack
+    QEventLoop eventLoop;
+
+    // "quit()" the event-loop, when the network request "finished()"
+    QNetworkAccessManager mgr;
+    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+    // the HTTP request
+    QNetworkRequest req( urlVersion );
+    QNetworkReply *reply = mgr.get(req);
+    eventLoop.exec(); // blocks stack until "finished()" has been called
+
+    if (reply->error() == QNetworkReply::NoError) {
+        //success
+        QString s = QString(reply->readAll());
+        delete reply;
+        return Version::stringToVersion(s);
+    } else {
+        //failure
+        delete reply;
+        return Version {-1, -1, -1};
     }
 }
 
@@ -137,33 +156,17 @@ QString CoreApplication::loadNotes(Version v)
     }
 }
 
-CoreApplication::Version CoreApplication::loadVersion()
+QUrl CoreApplication::getUrlDownload()
 {
-    // create custom temporary event loop on stack
-    QEventLoop eventLoop;
-
-    // "quit()" the event-loop, when the network request "finished()"
-    QNetworkAccessManager mgr;
-    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-    // the HTTP request
-    QNetworkRequest req( urlVersion );
-    QNetworkReply *reply = mgr.get(req);
-    eventLoop.exec(); // blocks stack until "finished()" has been called
-
-    if (reply->error() == QNetworkReply::NoError) {
-        //success
-        QString s = QString(reply->readAll());
-        delete reply;
-        return Version::stringToVersion(s);
-    } else {
-        //failure
-        delete reply;
-        return Version {-1, -1, -1};
-    }
+    return urlDownload;
 }
 
-bool CoreApplication::isDeveloperVersion()
+void CoreApplication::closeAllWindows()
 {
-    return developerMode;
+    bool ok = true;
+    QWindowList liste = allWindows();
+    for (int i = 0; i < liste.length(); i++) {
+        ok = ok && liste.at(i)->close();
+    }
+    if (ok) quit();
 }
