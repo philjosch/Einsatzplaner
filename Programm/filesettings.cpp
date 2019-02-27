@@ -32,8 +32,8 @@ void FileSettings::getSettings(ManagerFileSettings *mgr)
     default: mgr->setStartdate("tdy"); break;
     }
     switch (ui->comboTo->currentIndex()) {
-    case 0: mgr->setEnddate("eow"); break;
-    case 1: mgr->setEnddate("eom"); break;
+    case 0: mgr->setEnddate("p1w"); break;
+    case 1: mgr->setEnddate("p1m"); break;
     case 2: mgr->setEnddate("eoy"); break;
     default: mgr->setEnddate("all"); break;
     }
@@ -90,9 +90,9 @@ void FileSettings::loadSettings()
         ui->comboFrom->setCurrentIndex(2);
     }
     QString end = mngr->getEnddate();
-    if (end == "eow") {
+    if (end == "p1w") {
         ui->comboTo->setCurrentIndex(0);
-    } else if (end == "eom") {
+    } else if (end == "p1m") {
         ui->comboTo->setCurrentIndex(1);
     } else if (end == "eoy") {
         ui->comboTo->setCurrentIndex(2);

@@ -266,9 +266,9 @@ void MainWindow::on_actionSave_triggered()
         setWindowModified(false);
         int result = Export::autoUploadToServer(ui->calendar, settings);
         if (result == 0)
-            ui->statusBar->showMessage("Datei konnte nicht hochgeladen werden!", 5000);
+            ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
         else if (result > 0)
-            ui->statusBar->showMessage("Datei wurde erfolgreich hochgeladen!", 5000);
+            ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
 
     } else {
         QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));

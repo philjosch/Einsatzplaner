@@ -339,11 +339,7 @@ bool Export::testServerConnection(QString server, QString path, QString id)
 
     QString s = "";
     if (reply->error() == QNetworkReply::NoError) {
-        //success
         s = QString(reply->readAll());
-        qDebug() << "--" << s << "--";
-    } else {
-        qDebug() << "eeee";
     }
     delete reply;
     return (s == "OK");
@@ -374,33 +370,26 @@ bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *sett
 
     QNetworkRequest request(server);
 
-    //according to rfc 1867 we need to put this string here:
     QByteArray data;
     data.append("--margin\r\n");
     data.append("Content-Disposition: form-data; name='id'; filename='"+id+"'\r\n\r\n");
     data.append("--margin\r\n");
     data.append("Content-Disposition: form-data; name='action'\r\n\r\n");
-    data.append("--margin\r\n"); //according to rfc 1867
+    data.append("--margin\r\n");
     data.append("Content-Disposition: form-data; name='uploaded'; filename='"+id+".pdf'\r\n"); //name of the input is "uploaded" in my form, next one is a file name.
-    data.append("Content-Type: application/pdf\r\n\r\n"); //data type
-    data.append(tempFile.readAll()); //let's read the file
+    data.append("Content-Type: application/pdf\r\n\r\n");
+    data.append(tempFile.readAll());
     data.append("\r\n");
     data.append("--margin--\r\n"); //closing boundary according to rfc 1867
     request.setRawHeader(QString("Content-Type").toUtf8(), QString("multipart/form-data; boundary=margin").toUtf8());
     request.setRawHeader(QString("Content-Length").toUtf8(), QString::number(data.length()).toUtf8());
-
-//    qDebug() << data.data();
 
     QNetworkReply *reply = am.post(request,data);
     eventLoop.exec();
 
     QString s = "";
     if (reply->error() == QNetworkReply::NoError) {
-        //success
         s = QString(reply->readAll());
-        qDebug() << "--" << s << "--";
-    } else {
-        qDebug() << "eeee";
     }
     delete reply;
     return (s == "OK");
@@ -408,12 +397,13 @@ bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *sett
 
 int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
 {
+    /* EINSTELLUNGEN LESEN */
     QSettings s;
     if (!s.value("online/useautoupload").toBool()) return -1;
     if (!settings->getAutom()) return -1;
 
+    /* LISTE MIT DEN AKTIVITAETEN ERSTELLEN */
     QList<AActivity *> *liste = new QList<AActivity*>();
-
     QListIterator<AActivity*> iter = mgr->getActivities();
     while(iter.hasNext()) {
         AActivity *a = iter.next();
@@ -455,7 +445,7 @@ int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
         liste->append(a);
     }
 
-    // Hier muessen die Aktivitaeten ausgewaehlt werden
+    /* UPLOADFUNKTION NUTZEN; UM DATEIEN HOCHZULADEN */
     if (liste->length() == 0)
         return -1;
     if (uploadToServer(liste, settings))

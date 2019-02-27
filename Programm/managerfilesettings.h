@@ -2,7 +2,6 @@
 #define MANAGERFILESETTINGS_H
 
 #include <QJsonObject>
-#include <QString>
 
 class ManagerFileSettings
 {
