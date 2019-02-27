@@ -96,15 +96,15 @@ void PersonalWindow::showPerson(Person *p)
         i0->setData(Qt::EditRole, a->getDatum());
         ui->tabelle->setItem(0, 0, i0);
 
-        AActivity::Infos *infos = a->getIndividual(p);
+        AActivity::Infos infos = a->getIndividual(p);
 
         // Aufgabe
-        QTableWidgetItem *i1 = new QTableWidgetItem(AActivity::getStringFromCategory(infos->kategorie));
+        QTableWidgetItem *i1 = new QTableWidgetItem(AActivity::getStringFromCategory(infos.kategorie));
         ui->tabelle->setItem(0, 1, i1);
 
         // Einsatzstunden
-        QTime start = infos->beginn;
-        QTime ende = infos->ende;
+        QTime start = infos.beginn;
+        QTime ende = infos.ende;
 
         QTime duration = QTime::fromMSecsSinceStartOfDay(start.msecsTo(ende));
 
@@ -142,6 +142,26 @@ void PersonalWindow::showPerson(Person *p)
     ui->doubleSonstiges->setValue(p->getAdditionalTimeSonstiges());
     ui->doubleAnzahl->setValue(p->getAdditionalAnzahl());
     ui->doubleKilometer->setValue(p->getAdditionalKilometer());
+
+    if (p->getAusbildungTf() && manager->getMinimumHours(Tf) > 0)
+        ui->lineMinTf->setText(QString::number(manager->getMinimumHours(Tf)));
+    if (p->getAusbildungZf() && manager->getMinimumHours(Zf) > 0)
+        ui->lineMinZf->setText(QString::number(manager->getMinimumHours(Zf)));
+    if (manager->getMinimumHours(Zub) > 0)
+        ui->lineMinZub->setText(QString::number(manager->getMinimumHours(Zub)));
+    if (manager->getMinimumHours(Service) > 0)
+        ui->lineMinService->setText(QString::number(manager->getMinimumHours(Service)));
+    if (manager->getMinimumHours(ZugVorbereiten) > 0)
+        ui->lineMinZugVorbereiten->setText(QString::number(manager->getMinimumHours(ZugVorbereiten)));
+    if (manager->getMinimumHours(Werkstatt) > 0)
+        ui->lineMinWerkstatt->setText(QString::number(manager->getMinimumHours(Werkstatt)));
+    if (manager->getMinimumHours(Buero) > 0)
+        ui->lineMinBuero->setText(QString::number(manager->getMinimumHours(Buero)));
+    if ((p->getAusbildungTf() || p->getAusbildungZf() || p->getAusbildungRangierer())
+            && manager->getMinimumHours(Ausbildung) > 0)
+        ui->lineMinAusbildung->setText(QString::number(manager->getMinimumHours(Ausbildung)));
+    if (manager->getMinimumHours(Sonstiges) > 0)
+        ui->lineMinSonstiges->setText(QString::number(manager->getMinimumHours(Sonstiges)));
 
     enabled = true;
 }

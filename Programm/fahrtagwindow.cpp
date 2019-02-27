@@ -5,6 +5,7 @@
 #include "coreapplication.h"
 
 #include <QMessageBox>
+#include <QDebug>
 
 FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent), ui(new Ui::FahrtagWindow)
 {
@@ -129,6 +130,19 @@ void FahrtagWindow::on_comboTimeEndeM_currentTextChanged(const QString &arg1)
         fahrtag->setZeitEnde(QTime(fahrtag->getZeitEnde().hour(), arg1.toInt()));
 }
 
+void FahrtagWindow::on_checkZeiten_clicked(bool checked)
+{
+    ui->comboTimeTfH->setEnabled(!checked);
+    ui->comboTimeTfM->setEnabled(!checked);
+    ui->comboTimeZH->setEnabled(!checked);
+    ui->comboTimeZM->setEnabled(!checked);
+    ui->comboTimeEndeH->setEnabled(!checked);
+    ui->comboTimeEndeM->setEnabled(!checked);
+    if (nehme)
+        fahrtag->setZeitenUnbekannt(checked);
+
+}
+
 void FahrtagWindow::loadData()
 {
     if (nehme) {
@@ -139,6 +153,8 @@ void FahrtagWindow::loadData()
         ui->textAnlass->insertPlainText(fahrtag->getAnlass());
         ui->comboTimeEndeH->setCurrentText(fahrtag->getZeitEnde().toString("HH"));
         ui->comboTimeEndeM->setCurrentText(fahrtag->getZeitEnde().toString("mm"));
+        ui->checkZeiten->setChecked(fahrtag->getZeitenUnbekannt());
+        on_checkZeiten_clicked(fahrtag->getZeitenUnbekannt());
         ui->checkBoxBenoetigt->setChecked(fahrtag->getPersonalBenoetigt());
         ui->textBemerkungen->clear();
         ui->textBemerkungen->insertPlainText(fahrtag->getBemerkungen());
@@ -488,13 +504,16 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
         // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
         if (column == 0) {
             QSet<QString> neu = QSet<QString>();
-            for( int i = 0; i <= ui->tablePersonen->rowCount(); i++) {
+            qDebug() << namen;
+            for( int i = 0; i < ui->tablePersonen->rowCount(); i++) {
                 QString n = (ui->tablePersonen->item(i, 0) == nullptr) ? "" : ui->tablePersonen->item(i, 0)->text();
+                qDebug() << n;
                 neu.insert(n);
                 if (namen.contains(n)) {
                     namen.remove(n);
                 }
             }
+            qDebug() << neu;
 
             if (namen.size() == 1) fahrtag->removePerson(namen.values().at(0));
             namen = neu;
@@ -577,7 +596,11 @@ void FahrtagWindow::on_buttonRemove_clicked()
 
 void FahrtagWindow::on_actionDelete_triggered()
 {
-
+    if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie diesen Fahrtag wirklich unwiderruflich löschen?")) == QMessageBox::Yes) {
+        fahrtag->deletter();
+        this->close();
+        deleteLater();
+    }
 }
 
 void FahrtagWindow::on_actionPrint_triggered()

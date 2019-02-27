@@ -43,15 +43,17 @@ public:
     bool getBenoetigeService() const;
     void setBenoetigeService(bool value);
 
-    AActivity::Infos *getIndividual(Person *person);
+    AActivity::Infos getIndividual(Person *person);
 
     QString getHtmlForSingleView();
     QString getHtmlForTableView();
 
     void emitter();
+    void deletter();
 
 signals:
     void changed(AActivity *);
+    void del(AActivity *);
 
 protected:
     Fahrtag::Art art;

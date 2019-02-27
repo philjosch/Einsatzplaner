@@ -54,11 +54,17 @@ void ActivityWindow::on_timeBeginn_timeChanged(const QTime &time)
     if (nehme)
         activity->setZeitAnfang(time);
 }
-
 void ActivityWindow::on_timeEnde_timeChanged(const QTime &time)
 {
     if (nehme)
         activity->setZeitEnde(time);
+}
+void ActivityWindow::on_checkZeiten_clicked(bool checked)
+{
+    ui->timeBeginn->setEnabled(!checked);
+    ui->timeEnde->setEnabled(!checked);
+    if (nehme)
+        activity->setZeitenUnbekannt(checked);
 }
 
 void ActivityWindow::on_checkBoxBenoetigt_toggled(bool checked)
@@ -144,24 +150,6 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         nehme = true;
     }
 }
-
-void ActivityWindow::on_actionDelete_triggered()
-{
-
-}
-
-void ActivityWindow::on_actionPrint_triggered()
-{
-    QPrinter *p = Export::getPrinterPaper(this);
-    Export::printActivity(activity, nullptr, p);
-}
-
-void ActivityWindow::on_actionPdf_triggered()
-{
-    QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf");
-    Export::printActivity(activity, p);
-}
-
 void ActivityWindow::comboInTableChanged()
 {
     QComboBox* combo = qobject_cast<QComboBox*>(sender());
@@ -176,7 +164,6 @@ void ActivityWindow::comboInTableChanged()
         on_tablePersonen_cellChanged(row, 1);
     }
 }
-
 void ActivityWindow::timeEditInTableChanged()
 {
     QTimeEdit *time = qobject_cast<QTimeEdit*>(sender());
@@ -199,6 +186,32 @@ void ActivityWindow::timeEditInTableChanged()
     }
 }
 
+void ActivityWindow::on_actionDelete_triggered()
+{
+    on_buttonDelete_clicked();
+}
+
+void ActivityWindow::on_actionPrint_triggered()
+{
+    QPrinter *p = Export::getPrinterPaper(this);
+    Export::printActivity(activity, nullptr, p);
+}
+
+void ActivityWindow::on_actionPdf_triggered()
+{
+    QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf");
+    Export::printActivity(activity, p);
+}
+
+void ActivityWindow::on_buttonDelete_clicked()
+{
+    if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie diesen Arbeitseinsatz wirklich unwiderruflich löschen?")) == QMessageBox::Yes) {
+        activity->deletter();
+        this->close();
+        deleteLater();
+    }
+}
+
 void ActivityWindow::loadData()
 {
     nehme = false;
@@ -210,6 +223,8 @@ void ActivityWindow::loadData()
     ui->plainBeschreibung->setPlainText(activity->getBemerkungen());
     ui->timeBeginn->setTime(activity->getZeitAnfang());
     ui->timeEnde->setTime(activity->getZeitEnde());
+    ui->checkZeiten->setChecked(activity->getZeitenUnbekannt());
+    on_checkZeiten_clicked(activity->getZeitenUnbekannt());
     ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
 
     // Tabelle laden und alles einfügen
@@ -220,16 +235,16 @@ void ActivityWindow::loadData()
 
         namen.insert(p->getName());
 
-        AActivity::Infos *info = activity->getPersonen().value(p);
+        AActivity::Infos info = *(activity->getPersonen().value(p));
 
         ui->tablePersonen->setItem(0, 0, new QTableWidgetItem(p->getName()));
-        Category kat = info->kategorie;
+        Category kat = info.kategorie;
         if (kat == Category::Begleiter)
             kat = Category::Zub;
         static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
-        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(info->beginn);
-        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(info->ende);
-        ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(info->bemerkung));
+        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(info.beginn);
+        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(info.ende);
+        ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(info.bemerkung));
     }
     nehme = true;
 }

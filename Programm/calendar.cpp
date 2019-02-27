@@ -186,6 +186,7 @@ Fahrtag *Calendar::newFahrtag(QDate d)
     // Anlegen des Fahrtags
     Fahrtag *f = Manager::newFahrtag(d);
     connect(f, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
+    connect(f, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
 
     // Einfügen in Seitenliste und Kalender
     insert(f);
@@ -202,6 +203,7 @@ Activity *Calendar::newActivity(QDate d)
     // Anlegen der Aktivität
     Activity *a = Manager::newActivity(d);
     connect(a, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
+    connect(a, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
 
     // Einfügen in die Seitenleiste
     insert(a);

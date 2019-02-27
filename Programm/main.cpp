@@ -5,7 +5,7 @@
 #include <QSettings>
 #include <QTranslator>
 
-const CoreApplication::Version AKTUELLE_VERSION = {99, 0, 0};
+const CoreApplication::Version AKTUELLE_VERSION = {1, 5, 0};
 const bool IS_DEVELOPER_VERSION = true;
 
 int main(int argc, char *argv[])
@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     a.installTranslator(&qtTranslator);
 
     QTranslator myappTranslator;
-    myappTranslator.load(":translations/einsatzplaner_" + QLocale::system().name());
+    myappTranslator.load(":/translations/einsatzplaner_" + QLocale::system().name());
     a.installTranslator(&myappTranslator);
 
     // Laden der Einstellungen

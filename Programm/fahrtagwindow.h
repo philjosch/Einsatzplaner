@@ -32,6 +32,7 @@ private slots:
     void on_comboTimeZM_currentTextChanged(const QString &arg1);
     void on_comboTimeEndeH_currentTextChanged(const QString &arg1);
     void on_comboTimeEndeM_currentTextChanged(const QString &arg1);
+    void on_checkZeiten_clicked(bool checked);
 
     // Personaltab
     void on_listTf_itemChanged(QListWidgetItem *item);
