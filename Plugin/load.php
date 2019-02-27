@@ -1,54 +1,35 @@
 <?php
-    $validId = "samson";
-    if (isset($_GET["id"])) {
-        if ($_GET["id"] == $validId) {
-            die("OK");
-        } else {
-            die("error");
-        }
-    }
-    
-    
-    $target = "files/";
-    $target = $target . basename( $_FILES['uploaded']['name']) ;
-//    echo $target;
-    $ok=1;
-    
-//    print_r($_FILES);
-//    print_r($_POST);
-//    print_r($_GET);
-    
-    //This is our size condition
-    if ($uploaded_size > 10000000)
-    {
-        echo "Your file is too large.<br>";
-        $ok=0;
-    }
-    
-    //This is our limit file type condition
-    if ($uploaded_type =="text/php")
-    {
-        echo "No PHP files<br>";
-        $ok=0;
-    }
-    
-    //Here we check that $ok was not set to 0 by an error
-    if ($ok==0)
-    {
-        echo "Sorry your file was not uploaded";
-    }
-    
-    //If everything is ok we try to upload it
-    else
-    {
-        if(move_uploaded_file($_FILES['uploaded']['tmp_name'], $target))
-        {
-            die("OK");
-            echo "The file successfully ". basename( $_FILES['uploadedfile']['name']). " has been uploaded";
-        }
-        else
-        {
-            echo "Sorry, there was a problem uploading your file.";
-        }
+    /* -------------------------------------------------
+     *
+     * All Rights by Philipp Schepper 2016-2019
+     *
+     * -------------------------------------------------
+     */
+
+
+    // Die Datei mit der Konfiguration des Servers einbinden.
+    require './config.php';
+
+    // Pruefen, ob ueberhaupt Dateien hochgeladen wurden.
+    if (! isset($_FILES['uploaded'])) { die("FILE"); }
+
+    // Datei Variablen auslesen
+    $name = $_FILES['uploaded']['name'];
+    $type = $_FILES['uploaded']['type'];
+    $tmp_name = $_FILES['uploaded']['tmp_name'];
+    $size = $_FILES['uploaded']['size'];
+
+    // Groesse der Datei beschraenken
+    if ($uploaded_size > 10000000) { die("SIZE"); }
+    // Nur PDF-Dateien erlauben
+    if ($type != "application/pdf") { die("TYPE"); }
+
+    // Pfad erstellen
+    $target = BASE_DIRECTORY . basename($name) ;
+    // Datei hochladen
+    if(move_uploaded_file($tmp_name, $target)) {
+        die("OK");
+    } else {
+        die("ERROR");
     }
     ?>
