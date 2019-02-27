@@ -271,7 +271,7 @@ void MainWindow::on_actionSave_triggered()
             ui->statusBar->showMessage("Datei wurde erfolgreich hochgeladen!", 5000);
 
     } else {
-        QMessageBox::warning(this, tr("Fehler"), tr("Das speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+        QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
         filePath = "";
     }
 }
