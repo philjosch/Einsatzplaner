@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->calendar, SIGNAL(changed()), this, SLOT(unsave()));
     connect(ui->actionNeuer_Arbeitseinsatz, SIGNAL(triggered(bool)), ui->calendar, SLOT(newActivity()));
     connect(ui->actionNeuer_Fahrtag, SIGNAL(triggered(bool)), ui->calendar, SLOT(newFahrtag()));
+    connect(ui->calendar, SIGNAL(deleteAActivity(AActivity*)), this, SLOT(closeAActivity(AActivity*)));
 
     fenster = QMap<AActivity*, QMainWindow*>();
     ui->calendar->setPersonal(new ManagerPersonal());
@@ -106,6 +107,12 @@ void MainWindow::openActivity(Activity *a)
         fenster.insert(a, w);
         w->show();
     }
+}
+
+void MainWindow::closeAActivity(AActivity *a)
+{
+    if (fenster.contains(a))
+        fenster.remove(a);
 }
 
 void MainWindow::unsave()

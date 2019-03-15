@@ -33,6 +33,8 @@ public slots:
     void openFahrtag(Fahrtag *f);
     void openActivity(Activity *a);
 
+    void closeAActivity(AActivity *a);
+
     void open(QString filepath); // Open the file in a new window
     bool openFile(QString filePath); // Tells the window to open the file
 

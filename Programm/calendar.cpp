@@ -74,9 +74,11 @@ void Calendar::fromJson(QJsonObject o)
         QListWidgetItem *i = new QListWidgetItem("");
         if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
             connect(f, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
+            connect(f, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
         } else {
             Activity *a_cast = dynamic_cast<Activity*>(a);
             connect(a_cast, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
+            connect(a_cast, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
         }
         setListItem(i, a);
         ui->listWidget->insertItem(ui->listWidget->count(), i);
@@ -226,6 +228,7 @@ bool Calendar::removeActivity(AActivity *a)
     }
     bool ret = Manager::removeActivity(a);
     emit changed();
+    emit deleteAActivity(a);
     return ret;
 }
 
