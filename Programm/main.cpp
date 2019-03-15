@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     if (int delay = settings.value("io/autoSave", 0).toInt())
         a.startAutoSave(delay*60); // Funktion nimmt Wert in Sekunden!
 
-    if (a.isFirst == true) {
+    if (a.getIsFirst() == true) {
         MainWindow *w = new MainWindow();
         w->show();
     }
