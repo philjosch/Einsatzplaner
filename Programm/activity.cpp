@@ -25,6 +25,8 @@ QJsonObject Activity::toJson()
 
 QString Activity::getKurzbeschreibung()
 {
+    if (anlass != "")
+        return anlass;
     return "Arbeitseinsatz";
 }
 
@@ -33,12 +35,12 @@ QString Activity::getListStringShort() {
         return anlass;
     if (bemerkungen != "")
         return bemerkungen;
-    return "Aktivität";
+    return "Arbeitseinsatz";
 }
 
 QString Activity::getListString()
 {
-    QString scnd = tr("Aktivität");
+    QString scnd = tr("Arbeitseinsatz");
     if (anlass != "")
         scnd = anlass;
     return datum.toString("dddd dd.MM.yyyy")+" – "+scnd;
@@ -120,7 +122,13 @@ QString Activity::getHtmlForTableView()
     QString html = "<tr bgcolor='"+MainWindow::getFarbeArbeit()+"'>";
     // Datum, Anlass
     html += "<td>";
-    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>(Arbeitseinsatz)<br/>"+anlass+"</td>";
+    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br</>";
+    if (anlass != "") {
+        html += anlass;
+    } else {
+        html += "Arbeitseinsatz";
+    }
+    html += "</td>";
 
     QMap<Person*, AActivity::Infos*> tf;
     QMap<Person*, AActivity::Infos*> zf;

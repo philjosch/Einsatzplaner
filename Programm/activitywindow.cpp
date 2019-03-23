@@ -14,7 +14,7 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(paren
     predefinedValueForTable = Category::Sonstiges;
 
     loadData();
-    setWindowTitle("Arbeitseinsatz am "+activity->getDatum().toString("dddd dd. MM. yyyy"));
+    setWindowTitle(tr("%1 am %2").arg(activity->getKurzbeschreibung()).arg(activity->getDatum().toString("dddd dd.MM. yyyy")));
 }
 
 ActivityWindow::~ActivityWindow()
@@ -27,7 +27,7 @@ void ActivityWindow::on_dateDatum_dateChanged(const QDate &date)
     if (nehme) {
         activity->setDatum(date);
     }
-    setWindowTitle("Arbeitseinsatz am "+date.toString("dddd dd. MM. yyyy"));
+    setWindowTitle(tr("%1 am %2").arg(activity->getKurzbeschreibung()).arg(activity->getDatum().toString("dddd dd.MM. yyyy")));
 }
 
 void ActivityWindow::on_lineOrt_textChanged(const QString &arg1)
@@ -41,6 +41,7 @@ void ActivityWindow::on_lineAnlass_textChanged(const QString &arg1)
     if (nehme)
         activity->setAnlass(arg1);
     setPredefinedValue(arg1);
+    setWindowTitle(tr("%1 am %2").arg(activity->getKurzbeschreibung()).arg(activity->getDatum().toString("dddd dd.MM. yyyy")));
 }
 
 void ActivityWindow::on_plainBeschreibung_textChanged()
