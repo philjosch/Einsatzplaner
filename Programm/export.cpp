@@ -332,7 +332,6 @@ bool Export::testServerConnection(QString server, QString path, QString id)
 
     // the HTTP request
     QString request = server+"/"+path+"?id="+id;
-    qDebug() << request;
     QNetworkRequest req(request);
     QNetworkReply *reply = mgr.get(req);
     eventLoop.exec(); // blocks stack until "finished()" has been called

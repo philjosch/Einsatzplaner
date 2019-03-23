@@ -3,7 +3,6 @@
 #include "mainwindow.h"
 
 #include <QMessageBox>
-#include <QDebug>
 
 Calendar::Calendar(QWidget *parent) : QFrame(parent), Manager(), ui(new Ui::Calendar)
 {

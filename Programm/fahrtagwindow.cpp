@@ -5,7 +5,6 @@
 #include "coreapplication.h"
 
 #include <QMessageBox>
-#include <QDebug>
 
 FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent), ui(new Ui::FahrtagWindow)
 {
@@ -504,16 +503,13 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
         // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
         if (column == 0) {
             QSet<QString> neu = QSet<QString>();
-            qDebug() << namen;
             for( int i = 0; i < ui->tablePersonen->rowCount(); i++) {
                 QString n = (ui->tablePersonen->item(i, 0) == nullptr) ? "" : ui->tablePersonen->item(i, 0)->text();
-                qDebug() << n;
                 neu.insert(n);
                 if (namen.contains(n)) {
                     namen.remove(n);
                 }
             }
-            qDebug() << neu;
 
             if (namen.size() == 1) fahrtag->removePerson(namen.values().at(0));
             namen = neu;

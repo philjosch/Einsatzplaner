@@ -77,7 +77,6 @@ void CoreApplication::startAutoSave(int delay)
 }
 void CoreApplication::autoSaveWindows()
 {
-    qDebug() << "Timer wurde ausgeloest";
     foreach (QWidget *w, allWidgets()) {
         if (MainWindow *mW = dynamic_cast<MainWindow*>(w)) {
             mW->autoSave();
@@ -88,7 +87,6 @@ void CoreApplication::stopAutoSave()
 {
     // Auto-Save Thread beenden, falls er gestartet wurde
     if (autoSaveTimer != nullptr) {
-        qDebug() << "timer gestoppt";
         autoSaveTimer->stop();
     }
 }
