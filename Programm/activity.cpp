@@ -128,6 +128,9 @@ QString Activity::getHtmlForTableView()
     } else {
         html += "Arbeitseinsatz";
     }
+    if (ort != "") {
+        html += " | Ort: "+ort;
+    }
     html += "</td>";
 
     QMap<Person*, AActivity::Infos*> tf;
