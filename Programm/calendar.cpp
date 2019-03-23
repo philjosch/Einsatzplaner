@@ -176,10 +176,16 @@ void Calendar::goToday()
 bool Calendar::removeSelected()
 {
     QList<QListWidgetItem*> selected = ui->listWidget->selectedItems();
-    for(QListWidgetItem *item: selected) {
-        removeActivity(itemToList.value(item));
+    if (! selected.isEmpty()) {
+        if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie die ausgewählten Aktivitäten wirklich unwiderruflich löschen?")) == QMessageBox::Yes) {
+            bool ok = true;
+            for(QListWidgetItem *item: selected) {
+                ok = ok && removeActivity(itemToList.value(item));
+            }
+            return ok;
+        }
     }
-    return false;
+    return true;
 }
 
 Fahrtag *Calendar::newFahrtag(QDate d)
