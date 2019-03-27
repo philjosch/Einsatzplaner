@@ -3,13 +3,16 @@ Stand: 28. Februar 2019
 
 ## Version 1.5 – 2019-0x-xx
 ### Neu
-- Der Einsatzplan kann direkt aus dem Programm auf einen vorher konfigurierten Webserver hochgeladen werden. Dies geschieht entweder beim Speichern oder Manuell
+- Der Einsatzplan kann als PDF direkt aus dem Programm auf einen vorher konfigurierten Webserver hochgeladen werden. Dies geschieht entweder beim Speichern oder manuell
 - Automatisches Sichern: Das Programm speichert bei Wunsch nach einer bestimmten Zeit automatisch eine Backup-Datei
 - Noch unbekannte Einsatzzeiten können jetzt als solche ausgewiesen werden
-- ~~Fahrtage und Arbeitseinsätze können direkt aus dem Fenster heraus gelöscht werden~~
+- Fahrtage und Arbeitseinsätze können direkt aus dem jeweiligen Fenster heraus gelöscht werden
 
 ### Verbessert
 - In der Personalübersicht werden jetzt auch die Mindeststunden der Personen angezeigt
+- Redundante Informationen in der Listenansicht von Arbeitseinsätzen entfernt
+- In der Listenansicht von Arbeitseinsätzen wird jetzt auch ein etwaiger Ort angegeben.
+- Sicherheitsabfrage, wenn eine Aktivität gelöscht werden soll
 
 ### Fehlerbehebungen
 - Kleinere Optimierungen und Verbesserungen
