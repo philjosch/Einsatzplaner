@@ -31,7 +31,7 @@ void FileIO::loadSettings()
 
 QString FileIO::getFilePathOpen(QWidget *parent, QString filter)
 {
-    QString path = QFileDialog::getOpenFileName(parent, parent->tr("Datei öffnen ..."), currentPath, filter);
+    QString path = QFileDialog::getOpenFileName(parent, QObject::tr("Datei öffnen ..."), currentPath, filter);
     if (path != "") {
         QFileInfo info(path);
         currentPath = info.absolutePath();
@@ -42,7 +42,7 @@ QString FileIO::getFilePathOpen(QWidget *parent, QString filter)
 
 QString FileIO::getFilePathSave(QWidget *parent, QString filename, QString filter)
 {
-    QString path = QFileDialog::getSaveFileName(parent, parent->tr("Datei speichern ..."), currentPath+"/"+filename, filter);
+    QString path = QFileDialog::getSaveFileName(parent, QObject::tr("Datei speichern ..."), currentPath+"/"+filename, filter);
     if (path != "") {
         QFileInfo info(path);
         currentPath = info.absolutePath();

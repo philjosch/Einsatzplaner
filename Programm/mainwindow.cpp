@@ -315,8 +315,10 @@ bool MainWindow::openFile(QString filePath)
     CoreApplication::Version version = CoreApplication::Version::stringToVersion(generalJSON.value("version").toString());
     if (version > (CoreApplication::getAktuelleVersion()) || CoreApplication::Version{-1,-1,-1} == version) {
         QMessageBox::warning(this, tr("Nicht kompatibel"),
-                             tr("Die Datei kann nicht mit dieser Version geöffnet werden.\nDas Dokument benötigt mindestens Version ")+
-                             version.toString()+tr(".\nDie aktuellste Version finden Sie auf der Webseite des Programms.\nBei weiteren Fragen wenden Sie sich bitte an den Support."));
+                             tr("Die Datei kann nicht mit dieser Version geöffnet werden.\n"
+                                "Das Dokument benötigt mindestens Version %1.\n"
+                                "Die aktuellste Version finden Sie auf der Webseite des Programms.\n"
+                                "Bei weiteren Fragen wenden Sie sich bitte an den Support.").arg(version.toString()));
         return false;
     }
     setWindowTitle(tr("Übersicht"));
