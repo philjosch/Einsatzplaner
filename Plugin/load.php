@@ -18,7 +18,7 @@
             die("ID");
         }
     }
-    
+
     // Pruefen, ob ueberhaupt Dateien hochgeladen wurden.
     if (! isset($_FILES['uploaded'])) { die("FILE"); }
 
@@ -31,6 +31,11 @@
     $type = $_FILES['uploaded']['type'];
     $tmp_name = $_FILES['uploaded']['tmp_name'];
     $size = $_FILES['uploaded']['size'];
+
+    // Abpruefen, ob der Dateiname geaendert werden soll
+    if (! empty($fileNames[array_search($_POST['id'], $validIDs)])) {
+        $name = $fileNames[array_search($_POST['id'], $validIDs)];
+    }
 
     // Groesse der Datei beschraenken
     if ($uploaded_size > 10000000) { die("SIZE"); }

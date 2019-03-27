@@ -371,10 +371,10 @@ bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *sett
 
     QByteArray data;
     data.append("--margin\r\n");
-    data.append("Content-Disposition: form-data; name='id'; filename='"+id+"'\r\n\r\n");
+    data.append("Content-Disposition: form-data; name='id'\r\n\r\n"+id+"\r\n");
     data.append("--margin\r\n");
-    data.append("Content-Disposition: form-data; name='action'\r\n\r\n");
-    data.append("--margin\r\n");
+//    data.append("Content-Disposition: form-data; name='action'\r\n\r\n");
+//    data.append("--margin\r\n");
     data.append("Content-Disposition: form-data; name='uploaded'; filename='"+id+".pdf'\r\n"); //name of the input is "uploaded" in my form, next one is a file name.
     data.append("Content-Type: application/pdf\r\n\r\n");
     data.append(tempFile.readAll());
