@@ -73,6 +73,7 @@ void CoreApplication::startAutoSave(int delay)
 {
     autoSaveTimer = new QTimer();
     connect(autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveWindows()));
+    if (delay <= 0) return;
     autoSaveTimer->start(delay*1000);
 }
 void CoreApplication::autoSaveWindows()
