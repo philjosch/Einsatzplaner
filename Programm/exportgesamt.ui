@@ -314,19 +314,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
      <item row="2" column="1">
       <widget class="QCheckBox" name="checkPDF">
        <property name="text">
@@ -354,7 +341,7 @@
      <item row="4" column="0">
       <widget class="QPushButton" name="pushAbbruch">
        <property name="text">
-        <string>Abbruch</string>
+        <string>Schließen</string>
        </property>
       </widget>
      </item>
@@ -374,7 +361,7 @@
      <item row="4" column="2">
       <widget class="QPushButton" name="pushDrucken">
        <property name="text">
-        <string>Drucken</string>
+        <string>Exportieren</string>
        </property>
       </widget>
      </item>
@@ -382,6 +369,13 @@
       <widget class="QPushButton" name="pushButton">
        <property name="text">
         <string>Aktualisieren</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="checkUpload">
+       <property name="text">
+        <string>Upload (nur Liste)</string>
        </property>
       </widget>
      </item>

@@ -148,11 +148,11 @@ void Person::berechne()
     for(AActivity *a: activities.keys()) {
         if (a->getDatum() <= today) {
             Category cat = activities.value(a);
-            AActivity::Infos *info = a->getIndividual(this);
+            AActivity::Infos info = a->getIndividual(this);
 
             // Einsatzstunden
-            QTime start = info->beginn;
-            QTime ende = info->ende;
+            QTime start = info.beginn;
+            QTime ende = info.ende;
             int duration = start.msecsTo(ende);
             switch (cat) {
             case Category::Tb:
@@ -371,11 +371,11 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
         for(AActivity *a: activities.keys()) {
-            AActivity::Infos *info = a->getIndividual(this);
+            AActivity::Infos info = a->getIndividual(this);
             html += "<tr><td>"+a->getDatum().toString("dd. MM. yyyy")+"<br/>"+a->getKurzbeschreibung()+"<br/>"+a->getAnlass()+"</td><td>"
-                    + info->beginn.toString("HH:mm")+"-"+info->ende.toString("HH:mm")+"</td><td>"
-                    + AActivity::getStringFromCategory(info->kategorie) + "</td><td>"
-                    + info->bemerkung + "</td></tr>";
+                    + info.beginn.toString("HH:mm")+"-"+info.ende.toString("HH:mm")+"</td><td>"
+                    + AActivity::getStringFromCategory(info.kategorie) + "</td><td>"
+                    + info.bemerkung + "</td></tr>";
         }
         html += "</tbody></table>";
     } else {

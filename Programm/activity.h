@@ -19,14 +19,16 @@ public:
     QString getListStringShort();
     QString getListString();
 
-    AActivity::Infos *getIndividual(Person *person);
+    AActivity::Infos getIndividual(Person *person);
 
     QString getHtmlForSingleView();
     QString getHtmlForTableView();
 
     void emitter();
+    void deletter();
 
 signals:
     void changed(AActivity *);
+    void del(AActivity *);
 };
 #endif // ACTIVITY_H

@@ -3,16 +3,9 @@ general/
 io/
 	lastpath		-> letzter erfolgreich benutzter pfad von FileIO
 	lastused		-> Array mit den 5 zuletzt genutzten .ako Dokumenten
-window/
-	mainwindow/
-		positionx	-> x-position des Fensters beim schließen
-		positiony	-> y-position des Fensters beim schließen
-		width		-> breite des Fensters beim schließen
-		height		-> hoehe des Fensters beim schließen
-	personal/
-		positionx	-> x-position des Fensters beim schließen
-		positiony	-> y-position des Fensters beim schließen
-		width		-> breite des Fensters beim schließen
-		height		-> hoehe des Fensters beim schließen
-		visible		-> gibt an, ob das fenster versteckt ist
+	autoSave		-> Positive Zahl zwischen zwei Vorgängen zum automatischen Sichern in Minuten, 0=ausgeschaltet
+
+online/				-> Dient der Kompatibilität mit dem Upload-Tool für die PDF-Dateien
+	useautoupload		-> aktiviert oder deaktiviert das automatische(!) hochladen
+	
 test/				-> Verzeichnis für tests

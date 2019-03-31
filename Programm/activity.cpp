@@ -25,6 +25,8 @@ QJsonObject Activity::toJson()
 
 QString Activity::getKurzbeschreibung()
 {
+    if (anlass != "")
+        return anlass;
     return "Arbeitseinsatz";
 }
 
@@ -33,32 +35,37 @@ QString Activity::getListStringShort() {
         return anlass;
     if (bemerkungen != "")
         return bemerkungen;
-    return "Aktivität";
+    return "Arbeitseinsatz";
 }
 
 QString Activity::getListString()
 {
-    QString scnd = tr("Aktivität");
+    QString scnd = tr("Arbeitseinsatz");
     if (anlass != "")
         scnd = anlass;
     return datum.toString("dddd dd.MM.yyyy")+" – "+scnd;
 }
 
-AActivity::Infos *Activity::getIndividual(Person *person)
+AActivity::Infos Activity::getIndividual(Person *person)
 {
-    if (person == nullptr) return nullptr;
+    if (person == nullptr) return Infos();
     Infos *alt = personen.value(person);
-    if (alt == nullptr) return nullptr;
-    Infos *neu = new Infos();
-    neu->kategorie = alt->kategorie;
-    neu->beginn = alt->beginn;
-    neu->ende = alt->ende;
+    if (alt == nullptr) return Infos();
+    Infos neu = Infos();
+    neu.kategorie = alt->kategorie;
+    neu.beginn = alt->beginn;
+    neu.ende = alt->ende;
 
-    if (alt->beginn == QTime(0,0)) {
-        neu->beginn = QTime(zeitAnfang.hour(), zeitAnfang.minute());
-    }
-    if (alt->ende == QTime(0,0)) {
-        neu->ende = QTime(zeitEnde.hour(), zeitEnde.minute());
+    if (zeitenUnbekannt) {
+        neu.beginn = QTime(0,0);
+        neu.ende = QTime(0,0);
+    } else {
+        if (alt->beginn == QTime(0,0)) {
+            neu.beginn = QTime(zeitAnfang.hour(), zeitAnfang.minute());
+        }
+        if (alt->ende == QTime(0,0)) {
+            neu.ende = QTime(zeitEnde.hour(), zeitEnde.minute());
+        }
     }
     return neu;
 }
@@ -79,8 +86,12 @@ QString Activity::getHtmlForSingleView()
     if (bemerkungen!= "")
         html += "<p><b>Bemerkungen:</b><br/>"+bemerkungen+"</p>";
     // Zeiten
-    html += "<p><b>Zeiten</b>:<br/>Beginn: "+zeitAnfang.toString("hh:mm")+"<br/>";
-    html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+    if (zeitenUnbekannt) {
+        html += "<p><b>Zeiten werden noch bekannt gegeben!</b></p>";
+    } else {
+        html += "<p><b>Zeiten</b>:<br/>Beginn: "+zeitAnfang.toString("hh:mm")+"<br/>";
+        html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+    }
     // Personal
     html += "<p><b>Helfer";
     html += (personalBenoetigt ? required1+" werden benötigt"+required2:"");
@@ -111,7 +122,16 @@ QString Activity::getHtmlForTableView()
     QString html = "<tr bgcolor='"+MainWindow::getFarbeArbeit()+"'>";
     // Datum, Anlass
     html += "<td>";
-    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>(Arbeitseinsatz)<br/>"+anlass+"</td>";
+    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br</>";
+    if (anlass != "") {
+        html += anlass;
+    } else {
+        html += "Arbeitseinsatz";
+    }
+    if (ort != "") {
+        html += " | Ort: "+ort;
+    }
+    html += "</td>";
 
     QMap<Person*, AActivity::Infos*> tf;
     QMap<Person*, AActivity::Infos*> zf;
@@ -167,8 +187,12 @@ QString Activity::getHtmlForTableView()
     html += "</td>";
 
     // Dienstzeiten
-    html += "<td>Beginn: "+zeitAnfang.toString("hh:mm") + "<br/>";
-    html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+    if (zeitenUnbekannt) {
+        html += "<td>Zeiten werden noch bekannt gegeben!</td>";
+    } else {
+        html += "<td>Beginn: "+zeitAnfang.toString("hh:mm") + "<br/>";
+        html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+    }
 
     // Sonstiges
     html += "<td>";
@@ -222,4 +246,9 @@ QString Activity::getHtmlForTableView()
 void Activity::emitter()
 {
     emit changed(this);
+}
+
+void Activity::deletter()
+{
+    emit del(this);
 }

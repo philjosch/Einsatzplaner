@@ -43,6 +43,7 @@ public slots:
 signals:
     void showFahrtag(Fahrtag*);
     void showActivity(Activity*);
+    void deleteAActivity(AActivity *);
 
     void changed();
 

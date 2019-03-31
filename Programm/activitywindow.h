@@ -29,17 +29,20 @@ private slots:
 
     void on_timeBeginn_timeChanged(const QTime &time);
     void on_timeEnde_timeChanged(const QTime &time);
+    void on_checkZeiten_clicked(bool checked);
 
     void on_checkBoxBenoetigt_toggled(bool checked);
 
     void on_tablePersonen_cellChanged(int row, int column);
+    void comboInTableChanged();
+    void timeEditInTableChanged();
 
     void on_actionDelete_triggered();
     void on_actionPrint_triggered();
     void on_actionPdf_triggered();
 
-    void comboInTableChanged();
-    void timeEditInTableChanged();
+    void on_buttonDelete_clicked();
+
 
 private:
     Ui::ActivityWindow *ui;

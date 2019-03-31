@@ -2,7 +2,7 @@
 #
 # Project created by QtCreator 2016-06-05T18:01:55
 #
-# All Rights by Philipp Schepper 2016-2018
+# All Rights by Philipp Schepper 2016-2019
 #
 #-------------------------------------------------
 
@@ -33,7 +33,9 @@ SOURCES += main.cpp\
     wagen.cpp \
     verteiler.cpp \
     preferencesdialog.cpp \
-    minimumhourseditordialog.cpp
+    minimumhourseditordialog.cpp \
+    filesettings.cpp \
+    managerfilesettings.cpp
 
 HEADERS  += mainwindow.h \
     person.h \
@@ -57,7 +59,9 @@ HEADERS  += mainwindow.h \
     verteiler.h \
     preferencesdialog.h \
     minimumhourseditordialog.h \
-    enums.h
+    enums.h \
+    filesettings.h \
+    managerfilesettings.h
 
 FORMS    += mainwindow.ui \
     fahrtagwindow.ui \
@@ -67,7 +71,8 @@ FORMS    += mainwindow.ui \
     calendarday.ui \
     exportgesamt.ui \
     preferencesdialog.ui \
-    minimumhourseditordialog.ui
+    minimumhourseditordialog.ui \
+    filesettings.ui
 
 TRANSLATIONS += einsatzplaner_de.ts
 
@@ -79,17 +84,16 @@ win32 {
     RC_ICONS = ../Icon/keks.ico
     QMAKE_TARGET_COMPANY = Philipp Schepper
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
-    QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2018
+    QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2019
     QMAKE_TARGET_PRODUCT = Einsatzplaner
-    VERSION = 1.4.1.1
+    VERSION = 1.5.0.1
 }
 
 macx {
-    VERSION = 1.4.1
+    VERSION = 1.5.0
     OTHER_FILES += Info.plist ../Icon/keks.icns
     QMAKE_INFO_PLIST = Info.plist
     DISTFILES += Info.plist
-    # Bundle identifier for your application
     BUNDLEID = de.philipp-schepper.einsatzplaner
     ICON = ../Icon/keks.icns
 }

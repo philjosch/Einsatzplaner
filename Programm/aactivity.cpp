@@ -64,6 +64,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
     ort = o.value("ort").toString();
     zeitAnfang = QTime::fromString(o.value("zeitAnfang").toString(), "hh:mm");
     zeitEnde = QTime::fromString(o.value("zeitEnde").toString(), "hh:mm");
+    zeitenUnbekannt = o.value("zeitenUnbekannt").toBool();
     anlass = o.value("anlass").toString();
     bemerkungen = o.value("bemerkungen").toString().replace("<br/>", "\n");
     QJsonArray array = o.value("personen").toArray();
@@ -116,6 +117,7 @@ QJsonObject AActivity::toJson()
     data.insert("ort", ort);
     data.insert("zeitAnfang", zeitAnfang.toString("hh:mm"));
     data.insert("zeitEnde", zeitEnde.toString("hh:mm"));
+    data.insert("zeitenUnbekannt", zeitenUnbekannt);
     data.insert("anlass", anlass);
     data.insert("bemerkungen", bemerkungen);
     QJsonArray personenJSON;
@@ -307,16 +309,24 @@ bool AActivity::operator <(const AActivity &second) const
         return true;
     else if (this->datum > second.datum)
         return false;
-    // Beginn
-    if (this->zeitAnfang < second.zeitAnfang)
+    // Zeiten?
+    if (this->zeitenUnbekannt && !second.zeitenUnbekannt)
         return true;
-    else if (this->zeitAnfang > second.zeitAnfang)
+    else if (!this->zeitenUnbekannt && second.zeitenUnbekannt)
         return false;
-    // Ende
-    if (this->zeitEnde < second.zeitEnde)
-        return true;
-    else if (this->zeitEnde > second.zeitEnde)
-        return false;
+
+    if (!this->zeitenUnbekannt) {
+        // Beginn
+        if (this->zeitAnfang < second.zeitAnfang)
+            return true;
+        else if (this->zeitAnfang > second.zeitAnfang)
+            return false;
+        // Ende
+        if (this->zeitEnde < second.zeitEnde)
+            return true;
+        else if (this->zeitEnde > second.zeitEnde)
+            return false;
+    }
     // Art und beliebig, bei gleicher Art
     if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(this))
         return true;
@@ -330,12 +340,18 @@ bool AActivity::operator ==(const AActivity &second) const
     // Datum
     if (this->datum != second.datum)
         return false;
-    // Beginn
-    if (this->zeitAnfang != second.zeitAnfang)
+    // Zeiten?
+    if (this->zeitenUnbekannt != second.zeitenUnbekannt)
         return false;
-    // Ende
-    if (this->zeitEnde != second.zeitEnde)
-        return false;
+
+    if (! this->zeitenUnbekannt) {
+        // Beginn
+        if (this->zeitAnfang != second.zeitAnfang)
+            return false;
+        // Ende
+        if (this->zeitEnde != second.zeitEnde)
+            return false;
+    }
     // Art und beliebig, bei gleicher Art
     if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(this)) {
         if (const Fahrtag *g = dynamic_cast<const Fahrtag*>(&second))
@@ -415,6 +431,17 @@ bool AActivity::isExtern(QString bemerkung)
         }
     }
     return false;
+}
+
+bool AActivity::getZeitenUnbekannt() const
+{
+    return zeitenUnbekannt;
+}
+
+void AActivity::setZeitenUnbekannt(bool value)
+{
+    zeitenUnbekannt = value;
+    emitter();
 }
 
 QComboBox *AActivity::generateNewCategoryComboBox()

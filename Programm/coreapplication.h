@@ -33,56 +33,58 @@ public:
             return v;
         }
 
-        bool operator ==(Version *second) {
-            if ((major == second->major) && (minor == second->minor) && (patch == second->patch)) {
+        bool operator ==(Version second) {
+            if ((major == second.major) && (minor == second.minor) && (patch == second.patch)) {
                 return true;
             }
             return false;
         }
-        bool operator >(Version *second) {
-            if ((major > second->major) || (second->major == -1)) {
+        bool operator >(Version second) {
+            if ((major > second.major) || (second.major == -1)) {
                 return true;
             }
-            if ((major == second->major) && ((minor > second->minor) || (second->minor == -1))) {
+            if ((major == second.major) && ((minor > second.minor) || (second.minor == -1))) {
                 return true;
             }
-            if ((major == second->major) && (minor == second->minor) && ((patch > second->patch) || (second->patch == -1))) {
+            if ((major == second.major) && (minor == second.minor) && ((patch > second.patch) || (second.patch == -1))) {
                 return true;
             }
             return false;
         }
-        bool operator <(Version *second) {
-            return second>this;
+        bool operator <(Version second) {
+            return second>*this;
         }
-        bool operator >=(Version *second) {
-            return this == second || this > second;
+        bool operator >=(Version second) {
+            return *this == second || *this > second;
         }
-        bool operator <=(Version *second) {
-            return this == second || second > this;
+        bool operator <=(Version second) {
+            return *this == second || second > *this;
         }
     };
 
     CoreApplication(int &argc, char **argv, CoreApplication::Version version, bool devVersion);
     ~CoreApplication();
 
-    bool isFirst;
+    bool getIsFirst() const;
 
     bool event(QEvent *event);
 
     void checkVersion();
 
-    static Version *getAktuelleVersion();
-    static Version loadVersion();
+    void startAutoSave(int delay); // Delay in Seconds!
+    void stopAutoSave();
 
     static bool isDeveloperVersion();
+    static Version getAktuelleVersion();
+    static Version loadVersion();
 
     static QString loadNotes(Version v);
 
     static QUrl getUrlDownload();
 
-
 public slots:
     static void closeAllWindows();
+    static void autoSaveWindows();
 
 protected:
     static Version aktuelleVersion;
@@ -91,6 +93,10 @@ protected:
     static QUrl urlVersion;
     static QUrl urlDownload;
     static QString urlNotes;
+
+    QTimer *autoSaveTimer;
+    bool isFirst;
+
 };
 
 #endif // COREAPPLICATION_H

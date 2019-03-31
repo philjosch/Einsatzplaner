@@ -8,6 +8,7 @@
 #include "activitywindow.h"
 #include "personalwindow.h"
 #include "exportgesamt.h"
+#include "managerfilesettings.h"
 
 #include <QMainWindow>
 #include <QMap>
@@ -28,28 +29,21 @@ public:
     static QString getFarbeArbeit();
     static QString getFarbe(AActivity *a);
 
-private:
-    Ui::MainWindow *ui;
-    QMap<AActivity*, QMainWindow*> fenster;
-
-    QString filePath;
-    bool saved;
-
-    PersonalWindow *personalfenster;
-
-    ExportGesamt *exportDialog;
-
 public slots:
     void openFahrtag(Fahrtag *f);
     void openActivity(Activity *a);
+
+    void closeAActivity(AActivity *a);
 
     void open(QString filepath); // Open the file in a new window
     bool openFile(QString filePath); // Tells the window to open the file
 
     void unsave();
+    void autoSave();
 
 protected:
     void closeEvent(QCloseEvent *event);
+    bool saveToPath(QString path);
 
 private slots:
     // Einsatzplaner
@@ -67,6 +61,8 @@ private slots:
     void on_actionSave_triggered();
     void on_actionSaveas_triggered();
     void on_actionSavePersonal_triggered();
+    void on_actionSettings_triggered();
+
     bool on_actionClose_triggered();
 
     // Bearbeiten
@@ -74,6 +70,19 @@ private slots:
     // Ansicht
     void on_buttonPersonal_clicked();
     void on_buttonExport_clicked();
+
+private:
+    Ui::MainWindow *ui;
+    QMap<AActivity*, QMainWindow*> fenster;
+
+    QString filePath;
+    bool saved;
+
+    PersonalWindow *personalfenster;
+
+    ExportGesamt *exportDialog;
+
+    ManagerFileSettings *settings;
 };
 
 #endif // MAINWINDOW_H

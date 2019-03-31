@@ -12,7 +12,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>480</width>
+    <width>495</width>
     <height>400</height>
    </size>
   </property>
@@ -20,7 +20,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout" columnminimumwidth="50,50,50,50,0">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,1,0" columnstretch="0,0,0,0,1" columnminimumwidth="50,100,70,80,0">
     <property name="leftMargin">
      <number>6</number>
     </property>
@@ -31,69 +31,12 @@
      <number>6</number>
     </property>
     <property name="bottomMargin">
-     <number>6</number>
+     <number>0</number>
     </property>
     <property name="spacing">
      <number>6</number>
     </property>
-    <item row="1" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineOrt"/>
-    </item>
-    <item row="0" column="1" colspan="3">
-     <widget class="QDateEdit" name="dateDatum">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>21</height>
-       </size>
-      </property>
-      <property name="displayFormat">
-       <string>dddd, dd. MMMM yyyy</string>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Ort</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="3">
-     <widget class="QTimeEdit" name="timeEnde">
-      <property name="time">
-       <time>
-        <hour>16</hour>
-        <minute>0</minute>
-        <second>0</second>
-       </time>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="0" colspan="5">
-     <widget class="Line" name="line">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2">
-     <widget class="QLabel" name="label_6">
-      <property name="text">
-       <string>Ende</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
+    <item row="3" column="1" colspan="2">
      <widget class="QTimeEdit" name="timeBeginn">
       <property name="time">
        <time>
@@ -101,6 +44,13 @@
         <minute>0</minute>
         <second>0</second>
        </time>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="3">
+     <widget class="QLineEdit" name="lineAnlass">
+      <property name="placeholderText">
+       <string>Arbeitseinsatz</string>
       </property>
      </widget>
     </item>
@@ -114,36 +64,20 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0" colspan="2">
-     <widget class="QPushButton" name="buttonInsert">
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_6">
       <property name="text">
-       <string>Name hinzufügen</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Anlass</string>
+       <string>Ende</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="0" column="4" rowspan="4">
-     <widget class="QPlainTextEdit" name="plainBeschreibung">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
-      </property>
-      <property name="placeholderText">
-       <string>Ausführliche Beschreibung</string>
+    <item row="6" column="0" colspan="2">
+     <widget class="QPushButton" name="buttonInsert">
+      <property name="text">
+       <string>Name hinzufügen</string>
       </property>
      </widget>
     </item>
@@ -157,58 +91,47 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineAnlass"/>
+    <item row="6" column="2" colspan="2">
+     <widget class="QPushButton" name="buttonRemove">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string>Name entfernen</string>
+      </property>
+     </widget>
     </item>
-    <item row="9" column="0" colspan="5">
-     <layout class="QGridLayout" name="gridLayout_2">
-      <property name="leftMargin">
-       <number>0</number>
+    <item row="4" column="1" colspan="2">
+     <widget class="QTimeEdit" name="timeEnde">
+      <property name="time">
+       <time>
+        <hour>16</hour>
+        <minute>0</minute>
+        <second>0</second>
+       </time>
       </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <property name="spacing">
-       <number>6</number>
-      </property>
-      <item row="0" column="0">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>232</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="1">
-       <widget class="QPushButton" name="buttonDelete">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>Arbeitseinsatz löschen</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     </widget>
     </item>
-    <item row="6" column="0" colspan="5">
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Ort</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="3">
+     <widget class="QLineEdit" name="lineOrt"/>
+    </item>
+    <item row="7" column="0" colspan="5">
      <widget class="QTableWidget" name="tablePersonen">
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-       <bool>true</bool>
+       <bool>false</bool>
       </attribute>
       <column>
        <property name="text">
@@ -240,36 +163,115 @@
       </column>
      </widget>
     </item>
-    <item row="7" column="0" colspan="5">
-     <widget class="QLabel" name="label_8">
-      <property name="text">
-       <string>* abweichend zur Oben angegebenen Zeit</string>
+    <item row="5" column="0" colspan="5">
+     <widget class="Line" name="line_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
-    <item row="5" column="4">
+    <item row="3" column="3" rowspan="2">
+     <widget class="QCheckBox" name="checkZeiten">
+      <property name="text">
+       <string>Zeiten noch
+unbekannt</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" colspan="3">
+     <widget class="QDateEdit" name="dateDatum">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>21</height>
+       </size>
+      </property>
+      <property name="displayFormat">
+       <string>dddd, dd. MMMM yyyy</string>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Anlass</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="4">
      <widget class="QCheckBox" name="checkBoxBenoetigt">
       <property name="text">
        <string>Personal wird benötigt</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="2" colspan="2">
-     <widget class="QPushButton" name="buttonRemove">
-      <property name="enabled">
-       <bool>false</bool>
+    <item row="0" column="4" rowspan="5">
+     <widget class="QPlainTextEdit" name="plainBeschreibung">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <property name="text">
-       <string>Name entfernen</string>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+      </property>
+      <property name="placeholderText">
+       <string>Ausführliche Beschreibung</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="0" colspan="5">
-     <widget class="Line" name="line_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+    <item row="8" column="0" colspan="5">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="leftMargin">
+       <number>0</number>
       </property>
-     </widget>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <item row="0" column="1">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>232</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="buttonDelete">
+        <property name="text">
+         <string>Arbeitseinsatz löschen</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>* abweichend zur Oben angegebenen Zeit</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -305,9 +307,6 @@
    </property>
   </action>
   <action name="actionDelete">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>Löschen</string>
    </property>
@@ -336,13 +335,14 @@
   <tabstop>dateDatum</tabstop>
   <tabstop>lineOrt</tabstop>
   <tabstop>lineAnlass</tabstop>
-  <tabstop>plainBeschreibung</tabstop>
   <tabstop>timeBeginn</tabstop>
   <tabstop>timeEnde</tabstop>
-  <tabstop>checkBoxBenoetigt</tabstop>
+  <tabstop>checkZeiten</tabstop>
+  <tabstop>plainBeschreibung</tabstop>
   <tabstop>buttonInsert</tabstop>
-  <tabstop>tablePersonen</tabstop>
   <tabstop>buttonRemove</tabstop>
+  <tabstop>checkBoxBenoetigt</tabstop>
+  <tabstop>tablePersonen</tabstop>
   <tabstop>buttonDelete</tabstop>
  </tabstops>
  <resources/>

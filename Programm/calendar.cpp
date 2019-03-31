@@ -3,7 +3,6 @@
 #include "mainwindow.h"
 
 #include <QMessageBox>
-#include <QDebug>
 
 Calendar::Calendar(QWidget *parent) : QFrame(parent), Manager(), ui(new Ui::Calendar)
 {
@@ -74,9 +73,11 @@ void Calendar::fromJson(QJsonObject o)
         QListWidgetItem *i = new QListWidgetItem("");
         if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
             connect(f, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
+            connect(f, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
         } else {
             Activity *a_cast = dynamic_cast<Activity*>(a);
             connect(a_cast, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
+            connect(a_cast, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
         }
         setListItem(i, a);
         ui->listWidget->insertItem(ui->listWidget->count(), i);
@@ -175,10 +176,16 @@ void Calendar::goToday()
 bool Calendar::removeSelected()
 {
     QList<QListWidgetItem*> selected = ui->listWidget->selectedItems();
-    for(QListWidgetItem *item: selected) {
-        removeActivity(itemToList.value(item));
+    if (! selected.isEmpty()) {
+        if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie die ausgewählten Aktivitäten wirklich unwiderruflich löschen?")) == QMessageBox::Yes) {
+            bool ok = true;
+            for(QListWidgetItem *item: selected) {
+                ok = ok && removeActivity(itemToList.value(item));
+            }
+            return ok;
+        }
     }
-    return false;
+    return true;
 }
 
 Fahrtag *Calendar::newFahrtag(QDate d)
@@ -186,6 +193,7 @@ Fahrtag *Calendar::newFahrtag(QDate d)
     // Anlegen des Fahrtags
     Fahrtag *f = Manager::newFahrtag(d);
     connect(f, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
+    connect(f, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
 
     // Einfügen in Seitenliste und Kalender
     insert(f);
@@ -202,6 +210,7 @@ Activity *Calendar::newActivity(QDate d)
     // Anlegen der Aktivität
     Activity *a = Manager::newActivity(d);
     connect(a, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
+    connect(a, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
 
     // Einfügen in die Seitenleiste
     insert(a);
@@ -224,6 +233,7 @@ bool Calendar::removeActivity(AActivity *a)
     }
     bool ret = Manager::removeActivity(a);
     emit changed();
+    emit deleteAActivity(a);
     return ret;
 }
 

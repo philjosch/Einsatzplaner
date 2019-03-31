@@ -1,10 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "calendar.h"
+#include "export.h"
 #include "exportgesamt.h"
 #include "fileio.h"
 #include "coreapplication.h"
 #include "preferencesdialog.h"
+#include "filesettings.h"
 
 #include <QMessageBox>
 
@@ -17,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->calendar, SIGNAL(changed()), this, SLOT(unsave()));
     connect(ui->actionNeuer_Arbeitseinsatz, SIGNAL(triggered(bool)), ui->calendar, SLOT(newActivity()));
     connect(ui->actionNeuer_Fahrtag, SIGNAL(triggered(bool)), ui->calendar, SLOT(newFahrtag()));
+    connect(ui->calendar, SIGNAL(deleteAActivity(AActivity*)), this, SLOT(closeAActivity(AActivity*)));
 
     fenster = QMap<AActivity*, QMainWindow*>();
     ui->calendar->setPersonal(new ManagerPersonal());
@@ -27,7 +30,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setWindowModified(false);
 
     personalfenster = new PersonalWindow(this, ui->calendar->getPersonal());
-    exportDialog = new ExportGesamt(ui->calendar, this);
+    settings = new ManagerFileSettings();
+    exportDialog = new ExportGesamt(ui->calendar, settings, this);
     connect(personalfenster, SIGNAL(changed()), this, SLOT(unsave()));
 }
 
@@ -105,10 +109,23 @@ void MainWindow::openActivity(Activity *a)
     }
 }
 
+void MainWindow::closeAActivity(AActivity *a)
+{
+    if (fenster.contains(a))
+        fenster.remove(a);
+}
+
 void MainWindow::unsave()
 {
     this->saved = false;
     setWindowModified(true);
+}
+
+void MainWindow::autoSave()
+{
+    if (filePath == "") return;
+    if (saved) return;
+    saveToPath(filePath+".autosave.ako");
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -137,6 +154,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
         for(QMainWindow *m: fenster.values()) {
             m->close();
         }
+        if (filePath != "") {
+            QFile file (filePath+".autosave.ako");
+            file.remove();
+        }
     }
 
     if (toClose) {
@@ -144,6 +165,33 @@ void MainWindow::closeEvent(QCloseEvent *event)
     } else {
         event->ignore();
     }
+}
+
+bool MainWindow::saveToPath(QString path)
+{
+    QJsonObject calendarJSON = ui->calendar->toJson();
+
+    QJsonObject viewJSON;
+    viewJSON.insert("xMain", this->x());
+    viewJSON.insert("yMain", this->y());
+    viewJSON.insert("widthMain", this->width());
+    viewJSON.insert("heightMain", this->height());
+    viewJSON.insert("xPersonal", personalfenster->x());
+    viewJSON.insert("yPersonal", personalfenster->y());
+    viewJSON.insert("widthPersonal", personalfenster->width());
+    viewJSON.insert("heightPersonal", personalfenster->height());
+/*    viewJSON.insert("showPersonal", false); CURRENTLY NOT USED*/
+
+    QJsonObject generalJSON;
+    generalJSON.insert("version", CoreApplication::getAktuelleVersion().toStringShort());
+
+    QJsonObject object;
+    object.insert("calendar", calendarJSON);
+    object.insert("view", viewJSON);
+    object.insert("settings", settings->toJson());
+    object.insert("general", generalJSON);
+
+    return FileIO::saveJsonToFile(path, object);
 }
 
 void MainWindow::on_buttonPersonal_clicked()
@@ -174,7 +222,7 @@ void MainWindow::on_actionAboutQt_triggered()
 
 void MainWindow::on_actionAboutApp_triggered()
 {
-    QMessageBox::about(this, tr("Über Einsatzplaner"), "<h1>Einsatzplaner</h1>"+QCoreApplication::applicationVersion()+(CoreApplication::isDeveloperVersion()?" (dev) ":"")+ "<br/>Copyright © 2016-2018 Philipp Schepper<br/>Alle Rechte vorbehalten.");
+    QMessageBox::about(this, tr("Über Einsatzplaner"), "<h1>Einsatzplaner</h1>"+QCoreApplication::applicationVersion()+(CoreApplication::isDeveloperVersion()?" (dev) ":"")+ "<br/>Copyright © 2016-2019 Philipp Schepper<br/>Alle Rechte vorbehalten.");
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -235,33 +283,23 @@ void MainWindow::on_actionSave_triggered()
         return;
     }
 
-    QJsonObject calendarJSON = ui->calendar->toJson();
-
-    QJsonObject viewJSON;
-    viewJSON.insert("xMain", this->x());
-    viewJSON.insert("yMain", this->y());
-    viewJSON.insert("widthMain", this->width());
-    viewJSON.insert("heightMain", this->height());
-    viewJSON.insert("xPersonal", personalfenster->x());
-    viewJSON.insert("yPersonal", personalfenster->y());
-    viewJSON.insert("widthPersonal", personalfenster->width());
-    viewJSON.insert("heightPersonal", personalfenster->height());
-/*    viewJSON.insert("showPersonal", false); CURRENTLY NOT USED*/
-
-    QJsonObject generalJSON;
-    generalJSON.insert("version", CoreApplication::getAktuelleVersion()->toStringShort());
-
-    QJsonObject object;
-    object.insert("calendar", calendarJSON);
-    object.insert("view", viewJSON);
-    object.insert("general", generalJSON);
-
-    bool erfolg = FileIO::saveJsonToFile(filePath, object);
+    bool erfolg = saveToPath(filePath);
     if (erfolg) {
         saved = true;
         setWindowModified(false);
+        if (filePath != "") {
+            QFile file (filePath+".autosave.ako");
+            file.remove();
+        }
+
+        int result = Export::autoUploadToServer(ui->calendar, settings);
+        if (result == 0)
+            ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
+        else if (result > 0)
+            ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
+
     } else {
-        QMessageBox::warning(this, tr("Fehler"), tr("Das speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+        QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
         filePath = "";
     }
 }
@@ -275,10 +313,12 @@ bool MainWindow::openFile(QString filePath)
     // Prüfen, ob Version kompatibel ist
     QJsonObject generalJSON = object.value("general").toObject();
     CoreApplication::Version version = CoreApplication::Version::stringToVersion(generalJSON.value("version").toString());
-    if (version > CoreApplication::getAktuelleVersion() || CoreApplication::Version{-1,-1,-1} == &version) {
+    if (version > (CoreApplication::getAktuelleVersion()) || CoreApplication::Version{-1,-1,-1} == version) {
         QMessageBox::warning(this, tr("Nicht kompatibel"),
-                             tr("Die Datei kann nicht mit dieser Version geöffnet werden.\nDas Dokument benötigt mindestens Version ")+
-                             version.toString()+tr(".\nDie aktuellste Version finden Sie auf der Webseite des Programms.\nBei weiteren Fragen wenden Sie sich bitte an den Support."));
+                             tr("Die Datei kann nicht mit dieser Version geöffnet werden.\n"
+                                "Das Dokument benötigt mindestens Version %1.\n"
+                                "Die aktuellste Version finden Sie auf der Webseite des Programms.\n"
+                                "Bei weiteren Fragen wenden Sie sich bitte an den Support.").arg(version.toString()));
         return false;
     }
     setWindowTitle(tr("Übersicht"));
@@ -312,6 +352,8 @@ bool MainWindow::openFile(QString filePath)
     } else {
         personalfenster->hide();
     }
+
+    settings->fromJson(object.value("settings").toObject());
     return true;
 }
 
@@ -358,7 +400,7 @@ void MainWindow::on_actionSavePersonal_triggered()
 /*    viewJSON.insert("showPersonal", false); CURRENTLY NOT USED*/
 
     QJsonObject generalJSON;
-    generalJSON.insert("version", CoreApplication::getAktuelleVersion()->toStringShort());
+    generalJSON.insert("version", CoreApplication::getAktuelleVersion().toStringShort());
 
     QJsonObject object;
     object.insert("calendar", calendarJSON);
@@ -366,7 +408,18 @@ void MainWindow::on_actionSavePersonal_triggered()
     object.insert("general", generalJSON);
 
     if (! FileIO::saveJsonToFile(filePath, object)) {
-        QMessageBox::warning(this, tr("Fehler"), tr("Das speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+        QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+    }
+}
+
+void MainWindow::on_actionSettings_triggered()
+{
+    FileSettings s(this, settings);
+    if (s.exec() == QDialog::Accepted) {
+        s.getSettings(settings);
+        emit unsave();
+
+        // Update the settings
     }
 }
 

@@ -26,10 +26,9 @@ private slots:
     void on_pushNotes_clicked();
 
 private:
-    Ui::PreferencesDialog *ui;
-
     void saveSettings();
 
+    Ui::PreferencesDialog *ui;
     CoreApplication::Version online;
 };
 
