@@ -1,7 +1,7 @@
 # Einsatzplaner - Veränderungshistorie
 Stand: 31. März 2019
 
-## Version 1.5 – 2019-0x-xx
+## Version 1.5 – 2019-03-31
 ### Neu
 - Der Einsatzplan kann als PDF direkt aus dem Programm auf einen vorher konfigurierten Webserver hochgeladen werden. Dies geschieht entweder beim Speichern oder manuell.
 - Automatisches Sichern: Das Programm speichert bei Wunsch nach einer bestimmten Zeit automatisch eine Backup-Datei.
