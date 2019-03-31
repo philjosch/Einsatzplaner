@@ -136,6 +136,8 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         switch (activity->addPerson(name, bemerkung, beginnZ, endeZ, kat)) {
         case Mistake::OK:
         case Mistake::ExternOk:
+            ui->tablePersonen->sortItems(0);
+            ui->tablePersonen->setSortingEnabled(false);
             break;
         case Mistake::PersonNichtGefunden:
             QMessageBox::warning(this, tr("Fehler"), tr("Die eingegebene Person konnte im System nicht gefunden werden."));
@@ -155,22 +157,23 @@ void ActivityWindow::comboInTableChanged()
 {
     QComboBox* combo = qobject_cast<QComboBox*>(sender());
     if (combo) {
-        int row = 0;
+        int row = -1;
         for(int i = 0; i < ui->tablePersonen->rowCount(); i++) {
             if (ui->tablePersonen->cellWidget(i, 1) == combo) {
                 row = i;
                 break;
             }
         }
-        on_tablePersonen_cellChanged(row, 1);
+        if (row >= 0)
+            on_tablePersonen_cellChanged(row, 1);
     }
 }
 void ActivityWindow::timeEditInTableChanged()
 {
     QTimeEdit *time = qobject_cast<QTimeEdit*>(sender());
     if (time) {
-        int row = 0;
-        int column = 2;
+        int row = -1;
+        int column = -1;
         for(int i = 0; i < ui->tablePersonen->rowCount(); i++) {
             if (ui->tablePersonen->cellWidget(i, 2) == time) {
                 row = i;
@@ -183,7 +186,8 @@ void ActivityWindow::timeEditInTableChanged()
                 break;
             }
         }
-        on_tablePersonen_cellChanged(row, column);
+        if (row >= 0 && column >= 0)
+            on_tablePersonen_cellChanged(row, column);
     }
 }
 

@@ -259,6 +259,8 @@ void FahrtagWindow::loadData()
                 listToTable.insert(item, ui->tablePersonen->item(0,0));
             }
         }
+        ui->tablePersonen->sortItems(0);
+        ui->tablePersonen->setSortingEnabled(false);
         nehme = true;
     }
 }
@@ -366,6 +368,8 @@ void FahrtagWindow::itemChanged(QListWidgetItem *item , Category kat)
         ui->tablePersonen->item(0, 4)->setFlags(Qt::NoItemFlags);
 
         listToTable.insert(item, ui->tablePersonen->item(0, 0));
+        ui->tablePersonen->sortItems(0);
+        ui->tablePersonen->setSortingEnabled(false);
         break;
 
     case Mistake::FalscheQualifikation:
@@ -524,6 +528,8 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
         switch (fahrtag->addPerson(name, bemerkung, beginn, ende, kat)) {
         case Mistake::OK:
         case Mistake::ExternOk:
+            ui->tablePersonen->sortItems(0);
+            ui->tablePersonen->setSortingEnabled(false);
             break;
         case Mistake::PersonNichtGefunden:
             QMessageBox::warning(this, "Fehler", "Die eingegebene Person konnte im System nicht gefunden werden.");

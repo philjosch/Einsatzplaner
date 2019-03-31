@@ -128,10 +128,10 @@
     <item row="7" column="0" colspan="5">
      <widget class="QTableWidget" name="tablePersonen">
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-       <bool>true</bool>
+       <bool>false</bool>
       </attribute>
       <column>
        <property name="text">
