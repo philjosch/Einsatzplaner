@@ -341,7 +341,7 @@
      <item row="4" column="0">
       <widget class="QPushButton" name="pushAbbruch">
        <property name="text">
-        <string>Abbruch</string>
+        <string>Schließen</string>
        </property>
       </widget>
      </item>

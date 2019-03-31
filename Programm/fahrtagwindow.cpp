@@ -9,7 +9,6 @@
 FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent), ui(new Ui::FahrtagWindow)
 {
     ui->setupUi(this);
-//    ui->lineSitze->setValidator(new QRegExpValidator(QRegExp("2[0-9]{2}\\s*\\:\\s*(((([1-9][0-9]?)\\s*-\\s*([1-9][0-9]?))|([1-9][0-9]?)))(\\s*,\\s*((([1-9][0-9]?)-([1-9][0-9]?))|([1-9][0-9]?)))*(;\\s*[1-9][0-9]?\\s*\\:\\s*(((([1-9][0-9]?)\\s*-\\s*([1-9][0-9]?))|([1-9][0-9]?)))(\\s*,\\s*((([1-9][0-9]?)-([1-9][0-9]?))|([1-9][0-9]?)))*\\s*)*")));
 
     fahrtag = f;
     nehme = true;
@@ -330,7 +329,7 @@ void FahrtagWindow::itemChanged(QListWidgetItem *item , Category kat)
                 ui->tablePersonen->item(row, 4)->setText(bem);
                 break;
             default:
-                QMessageBox::warning(this, "Fehler", "Bei der Eintragung der Person ist ein Fehler aufgetreten, bitte überprüfen Sie Ihre Eingaben. Die Person wurde nicht gespeichert!");
+                QMessageBox::warning(this, tr("Fehler"), tr("Bei der Eintragung der Person ist ein Fehler aufgetreten. Bitte überprüfen Sie Ihre Eingaben. Die Person wurde nicht gespeichert!"));
             }
             return;
         } else {
@@ -373,13 +372,13 @@ void FahrtagWindow::itemChanged(QListWidgetItem *item , Category kat)
         break;
 
     case Mistake::FalscheQualifikation:
-        QMessageBox::warning(this, "Fehlende Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
+        QMessageBox::warning(this, tr("Fehlende Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt."));
         break;
     case Mistake::PersonNichtGefunden:
-        QMessageBox::information(this, "Person nicht gefunden", "Die eingegebene Person konnte nicht gefunden werden!");
+        QMessageBox::information(this, tr("Person nicht gefunden"), tr("Die eingegebene Person konnte nicht gefunden werden!"));
         break;
     default:
-        QMessageBox::information(this, "Fehler", "Beim Hinzufügen der Person zum Fahrtag ist ein Fehler aufgetreten! Bitte überprüfen Sie ihre Eingaben!");
+        QMessageBox::information(this, tr("Fehler"), tr("Beim Hinzufügen der Person zum Fahrtag ist ein Fehler aufgetreten! Bitte überprüfen Sie ihre Eingaben!"));
         break;
     }
 }
@@ -407,7 +406,7 @@ void FahrtagWindow::plausibilityCheck()
             && (h4 == 11 || z4 == 6 || ((z4%2 != 0 || h4 !=  0) && (z4%2 != 1 || h4 != 10)));
 
     if (! (z_ok && h_ok1 && h_ok2)) {
-        QMessageBox::warning(this, "Plausibilitätsprüfung", "Bitte überprüfen Sie ihre Eingaben bezüglich der Fahrstrecken, da das System eine mögliche Unstimmigkeit festgestllt hat. Ihre Daten werden dennoch gespeichert!");
+        QMessageBox::warning(this, tr("Plausibilitätsprüfung"), tr("Bitte überprüfen Sie ihre Eingaben bezüglich der Fahrstrecken, da das System eine mögliche Unstimmigkeit festgestllt hat. Ihre Daten werden dennoch gespeichert!"));
     }
 }
 
@@ -532,13 +531,13 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
             ui->tablePersonen->setSortingEnabled(false);
             break;
         case Mistake::PersonNichtGefunden:
-            QMessageBox::warning(this, "Fehler", "Die eingegebene Person konnte im System nicht gefunden werden.");
+            QMessageBox::warning(this, tr("Fehler"), tr("Die eingegebene Person konnte im System nicht gefunden werden."));
             break;
         case Mistake::FalscheQualifikation:
-            QMessageBox::warning(this, "Fehlene Qualifikation", "Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt.");
+            QMessageBox::warning(this, tr("Fehlene Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt."));
             break;
         default:
-            QMessageBox::warning(this, "Sonstiger Fehler", "Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!");
+            QMessageBox::warning(this, tr("Sonstiger Fehler"), tr("Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!"));
             break;
         }
         nehme = true;
@@ -584,7 +583,7 @@ void FahrtagWindow::on_buttonRemove_clicked()
     QString n = "";
     if (ui->tablePersonen->item(i, 0) != nullptr) {
         if (ui->tablePersonen->item(i, 0)->flags() == Qt::NoItemFlags) {
-            QMessageBox::information(this, "Nicht löschbar", "Diese Person müssen Sie in der ensprechenden Liste löschen!");
+            QMessageBox::information(this, tr("Nicht löschbar"), tr("Diese Person müssen Sie in der ensprechenden Liste löschen!"));
             return;
         }
         n = ui->tablePersonen->item(i, 0)->text();
@@ -767,7 +766,7 @@ void FahrtagWindow::on_buttonAdd_clicked()
 void FahrtagWindow::on_buttonDelete_clicked()
 {
     // Nachfrage ob wirklcih löschen
-    if (QMessageBox::question(this, "Wirklich löschen?", "Möchten Sie die ausgwählte Reservierung unwiderruflich löschen?") == QMessageBox::Yes) {
+    if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie die ausgwählte Reservierung unwiderruflich löschen?")) == QMessageBox::Yes) {
         QListWidgetItem *i = ui->listRes->takeItem(ui->listRes->currentRow());
         Reservierung *r = itemToRes.value(i);
         fahrtag->removeReservierung(r);
@@ -965,7 +964,7 @@ void FahrtagWindow::on_lineSitze_returnPressed()
             ui->lineSitze->setStyleSheet("background-color: #b9ceac");
         } else {
             ui->lineSitze->setStyleSheet("background-color: #cb555d");
-            QMessageBox::information(this, "Sitzplätze fehlerhaft", "Die eingegebenen Sitzplätze sind möglicherweise belegt! Bitte überprüfen Sie ihre Eingabe.");
+            QMessageBox::information(this, tr("Sitzplätze fehlerhaft"), tr("Die eingegebenen Sitzplätze sind möglicherweise belegt! Bitte überprüfen Sie ihre Eingabe."));
         }
         ui->lineSitze->repaint();
         fahrtag->emitter();
