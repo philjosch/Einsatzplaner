@@ -30,14 +30,14 @@ void ExportGesamt::reload()
         AActivity *a = iter.next();
         if (actToList.contains(a)) {
             QString farbe = MainWindow::getFarbe(a);
-            actToList.value(a)->setBackgroundColor(QColor(farbe));
+            actToList.value(a)->setBackground(QBrush(QColor(farbe)));
             actToList.value(a)->setToolTip(a->getAnlass());
             i++;
             continue;
         }
         QString farbe = MainWindow::getFarbe(a);
         QListWidgetItem *item = new QListWidgetItem(a->getListString());
-        item->setBackgroundColor(QColor(farbe));
+        item->setBackground(QBrush(QColor(farbe)));
         item->setToolTip(a->getAnlass());
         ui->listAnzeige->insertItem(i, item);
         liste.insert(i, a);
@@ -60,7 +60,7 @@ void ExportGesamt::hardReload()
         AActivity *a = iter.next();
         QString farbe = MainWindow::getFarbe(a);
         QListWidgetItem *item = new QListWidgetItem(a->getListString());
-        item->setBackgroundColor(QColor(farbe));
+        item->setBackground(QBrush(QColor(farbe)));
         item->setToolTip(a->getAnlass());
         ui->listAnzeige->insertItem(ui->listAnzeige->count(), item);
         liste.append(a);

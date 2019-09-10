@@ -6,6 +6,8 @@
 #
 #-------------------------------------------------
 
+!versionAtLeast(QT_VERSION, 5.13.0):error("Qt version 5.13 is required for this project")
+
 QT       += core gui printsupport network widgets
 
 TARGET = Einsatzplaner

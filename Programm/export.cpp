@@ -119,7 +119,7 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
             QList<Reservierung*> *list= wagenZuRes.value(i);
             list->insert(0, r);
             while (pos+1 < list->length() && list->at(pos)->getName() > list->at(pos+1)->getName()) {
-                list->swap(pos, pos+1);
+                list->swapItemsAt(pos, pos+1);
                 pos++;
             }
         }
@@ -130,7 +130,7 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
             QList<Reservierung*> *list= wagenZuRes.value(999);
             list->insert(0, r);
             while (pos+1 < list->length() && list->at(pos)->getName() > list->at(pos+1)->getName()) {
-                list->swap(pos, pos+1);
+                list->swapItemsAt(pos, pos+1);
                 pos++;
             }
         }
