@@ -60,7 +60,7 @@ bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper
     preparePrinterLandscape(pdf);
     preparePrinterLandscape(paper);
     QTextDocument *d = new QTextDocument();
-    d->setDefaultStyleSheet("body, td, p { font-size: 11px; font-weight: normal !important;}"
+    d->setDefaultStyleSheet("body, td, p { font-size: 10px; font-weight: normal !important;}"
                             "table { border-width: 1px; border-style: solid; border-color: black; } "
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black;}"
                             "table tr, table td { page-break-inside: avoid; }"
@@ -89,7 +89,7 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
     preparePrinterLandscape(pdf);
     preparePrinterLandscape(paper);
     QTextDocument *d = new QTextDocument();
-    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
+    d->setDefaultStyleSheet("body, tr, td, p { font-size: 11px; }"
                             "table { border-width: 1px; border-style: solid; border-color: black; }"
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
                             "table tr, table td { page-break-inside: avoid; }"
@@ -285,7 +285,7 @@ bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QLi
         a += p->getHtmlForTableView(data);
     }
     a += "</tbody><tfoot><tr>";
-    a += "<td></td>";
+    a += "<td>Summe:</td>";
     for(int i = 0; i <= 8; i++) {
         if (data->at(i))
             a += "<td>"+QString::number(gesamt->at(i))+"</td>";
@@ -470,7 +470,7 @@ void Export::preparePrinterPortrait(QPrinter *p)
 {
     if (p == nullptr) return;
     p->setFullPage(true);
-    p->setPageMargins(25, 15, 15, 20, QPrinter::Millimeter);
+    p->setPageMargins(20, 15, 15, 15, QPrinter::Millimeter);
     p->setPageOrientation(QPageLayout::Portrait);
 }
 
@@ -478,7 +478,7 @@ void Export::preparePrinterLandscape(QPrinter *p)
 {
     if (p == nullptr) return;
     p->setFullPage(true);
-    p->setPageMargins(15, 25, 15, 20, QPrinter::Millimeter);
+    p->setPageMargins(15, 20, 15, 15, QPrinter::Millimeter);
     p->setPageOrientation(QPageLayout::Landscape);
 }
 
