@@ -420,18 +420,20 @@ int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
         }
         // Enddatum
         if (settings->getEnddate() == "p1w") {
-            if (a->getDatum() > QDate::currentDate().addDays(7)) {
+            if ((a->getDatum().year() > QDate::currentDate().year()) || (a->getDatum().weekNumber() > QDate::currentDate().addDays(7).weekNumber())) {
                 continue;
             }
         } else if (settings->getEnddate() == "p1m") {
-            if (a->getDatum() > QDate::currentDate().addMonths(1)) {
+            QDate ref = QDate(QDate::currentDate().year(), QDate::currentDate().month()+1, 1);
+            ref = QDate(ref.year(), ref.month(), ref.daysInMonth());
+            if (a->getDatum() > ref) {
                 continue;
             }
-        } else if (settings->getStartdate() == "eoy") {
+        } else if (settings->getEnddate() == "eoy") {
             if (a->getDatum().year() > QDate::currentDate().year()) {
                 continue;
             }
-        } else if (settings->getStartdate() == "all") {
+        } else if (settings->getEnddate() == "all") {
 
         }
         // Auch Aktivitaeten?
