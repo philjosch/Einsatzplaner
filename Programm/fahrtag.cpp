@@ -284,7 +284,7 @@ QString Fahrtag::getHtmlForTableView()
     // Service
     html += "<td>";
     if (benoetigeService && (art != Schnupperkurs)) {
-        html += "<b>Service-Personal wird benötigt!</b><br/>";
+        html += "<b>Service-Personal wird benötigt!</b>";
     }
     if (service.size() > 0) {
         html += "<ul><li>" + listToString(&service, "</li><li>") + "</li></ul>";

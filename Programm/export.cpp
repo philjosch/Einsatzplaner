@@ -64,7 +64,7 @@ bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper
                             "table { border-width: 1px; border-style: solid; border-color: black; } "
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black;}"
                             "table tr, table td { page-break-inside: avoid; }"
-                            "ul { -qt-list-indent: 0; }"
+                            "ul { -qt-list-indent: 0; margin-top: 0px !important; margin-bottom: 0px !important }"
                             "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
     d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
     d->setDocumentMargin(0);
