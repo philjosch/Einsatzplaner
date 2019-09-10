@@ -222,12 +222,12 @@ QString Fahrtag::getHtmlForTableView()
         html += "<td>";
     }
     html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>("+Fahrtag::getStringFromArt(art)+")";
-    if (anlass != "") {
-        html += "<br/>"+anlass;
-    }
     // Wagenreihung
     if (wagenreihung != "") {
         html += "<br/>"+ wagenreihung;
+    }
+    if (anlass != "") {
+        html += "<br/>"+anlass.replace("\n", "<br/>");
     }
     html += "</td>";
 
