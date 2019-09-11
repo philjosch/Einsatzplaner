@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Einsatzplaner</DisplayName>
+    <Description>Das Programm, dass der Verwaltung der Arbeitseinsätze und Fahrtage dient.</Description>
+    <Version>1.5.1</Version>
+    <ReleaseDate>2019-09-20</ReleaseDate>
+    <Licenses>
+        <License name="GNU LGPLv3" file="license.txt" />
+    </Licenses>
+    <Default>true</Default>
+    <ForcedInstallation>false</ForcedInstallation>
+<!--    <RequiresAdminRights>true</RequiresAdminRights>-->
+<!--    <UserInterfaces>
+    <UserInterface>page.ui</UserInterface>
+    </UserInterfaces>-->
+<!--    <Translations>
+        <Translation>de.qm</Translation>
+     </Translations>-->
+</Package>
