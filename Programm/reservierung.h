@@ -49,6 +49,8 @@ public:
 
     QString getHtmlForDetailTable();
 
+    bool inZug(int zug);
+
 private:
     QString name;
     QString mail;

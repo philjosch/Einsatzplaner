@@ -200,6 +200,19 @@ QString Reservierung::getHtmlForDetailTable()
     return html;
 }
 
+bool Reservierung::inZug(int zug)
+{
+    if (zuege.contains(QString(zug))) return true;
+
+    if (zuege.at(0) > zug) return false;
+    if (zuege.length() < 2) return false;
+    if (zuege.at(1) < zug) {
+        if (zuege.at(2) > zug) return false;
+        if (zuege.at(3) < zug) return false;
+    }
+    return true;
+}
+
 QMap<int, QList<int> > Reservierung::getSitzplatz() const
 {
     return sitzplatz;

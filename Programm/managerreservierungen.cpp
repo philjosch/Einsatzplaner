@@ -176,6 +176,29 @@ int ManagerReservierungen::getCapacityErste()
     return summe;
 }
 
+int ManagerReservierungen::getBelegtErsteGesamt()
+{
+    return getBelegtErste()
+            +getBelegtErste(2201)
+            +getBelegtErste(2202)
+            +getBelegtErste(2203)
+            +getBelegtErste(2204)
+            +getBelegtErste(2205)
+            +getBelegtErste(2206);
+}
+
+int ManagerReservierungen::getBelegtErste(int zug)
+{
+    int count = 0;
+    for(Reservierung *r: reservierungen) {
+        if (r->inZug(zug)) {
+            count += r->getAnzahl();
+        }
+    }
+    return count;
+
+}
+
 int ManagerReservierungen::getBelegtZweite()
 {
     int summe = 0;

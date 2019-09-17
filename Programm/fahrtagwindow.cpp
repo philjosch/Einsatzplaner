@@ -995,32 +995,39 @@ void FahrtagWindow::on_listRes_itemClicked(QListWidgetItem *item)
 void FahrtagWindow::update()
 {
     int belegtErste  = fahrtag->getBelegtErste();
-    int belegtZweite = fahrtag->getBelegtZweite();
-    int belegtDritte = fahrtag->getBelegtDritte();
+    int belegtAndere = fahrtag->getBelegtZweite() + fahrtag->getBelegtDritte();
     int belegtGesamt = fahrtag->getBelegtGesamt();
 
     int kapErste  = fahrtag->getCapacityErste();
-    int kapZweite = fahrtag->getCapacityZweite();
-    int kapDritte = fahrtag->getCapacityDritte();
+    int kapAndere = fahrtag->getCapacityZweite() + fahrtag->getCapacityDritte();
     int kapGesamt = fahrtag->getCapacityGesamt();
 
-    QString darstellung = "%1/%2 (%3 %)";
-    QString erste  = darstellung.arg(belegtErste ).arg(kapErste ).arg(belegtErste *100.0/(kapErste ), 0, 'g', 3);
-    QString zweite = darstellung.arg(belegtZweite).arg(kapZweite).arg(belegtZweite*100.0/(kapZweite), 0, 'g', 3);
-    QString dritte = darstellung.arg(belegtDritte).arg(kapDritte).arg(belegtDritte*100.0/(kapDritte), 0, 'g', 3);
-    QString gesamt = darstellung.arg(belegtGesamt).arg(kapGesamt).arg(belegtGesamt*100.0/(kapGesamt), 0, 'g', 3);
-    if (kapErste  == 0) erste  = "-";
-    if (kapZweite == 0) zweite = "-";
-    if (kapDritte == 0) dritte = "-";
+    QString darstellung = "%1 (%2 %)";
+    QString erste  = darstellung.arg(belegtErste ).arg(belegtErste *100.0/(kapErste ), 0, 'g', 3);
+    QString andere = darstellung.arg(belegtAndere).arg(belegtAndere*100.0/(kapAndere), 0, 'g', 3);
+    QString gesamt = darstellung.arg(belegtGesamt).arg(belegtGesamt*100.0/(kapGesamt), 0, 'g', 3);
+    if (kapErste  == 0) erste  = darstellung.arg(belegtErste).arg("?");
+    if (kapAndere == 0) andere = darstellung.arg(belegtErste).arg("?");
     ui->labelBelegtErste ->setText(erste );
-    ui->labelBelegtZweite->setText(zweite);
-    ui->labelBelegtDritte->setText(dritte);
+    ui->labelBelegtAndere->setText(andere);
     ui->labelBelegtGesamt->setText(gesamt);
 
-    ui->labelBelegtErste->repaint();
-    ui->labelBelegtZweite->repaint();
-    ui->labelBelegtDritte->repaint();
-    ui->labelBelegtGesamt->repaint();
+
+    ui->labelBelegtErsteGesamt->setNum(fahrtag->getBelegtErsteGesamt());
+    ui->labelBelegtErste01->setNum(fahrtag->getBelegtErste(2201));
+    ui->labelBelegtErste02->setNum(fahrtag->getBelegtErste(2202));
+    ui->labelBelegtErste03->setNum(fahrtag->getBelegtErste(2203));
+    ui->labelBelegtErste04->setNum(fahrtag->getBelegtErste(2204));
+    ui->labelBelegtErste05->setNum(fahrtag->getBelegtErste(2205));
+    ui->labelBelegtErste06->setNum(fahrtag->getBelegtErste(2206));
+
+    ui->labelKapErste->setNum(kapErste);
+    ui->labelKapAndere->setNum(kapAndere);
+    ui->labelKapGesamt->setNum(kapGesamt);
+
+//    ui->labelBelegtErste->repaint();
+//    ui->labelBelegtAndere->repaint();
+//    ui->labelBelegtGesamt->repaint();
 }
 
 void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)
