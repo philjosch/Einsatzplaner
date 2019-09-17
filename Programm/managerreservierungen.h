@@ -26,6 +26,8 @@ public:
 
     int getBelegtErste();
     int getCapacityErste();
+    int getBelegtErsteGesamt();
+    int getBelegtErste(int zug);
 
     int getBelegtZweite();
     int getCapacityZweite();
