@@ -420,12 +420,14 @@ int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
         }
         // Enddatum
         if (settings->getEnddate() == "p1w") {
-            if ((a->getDatum().year() > QDate::currentDate().year()) || (a->getDatum().weekNumber() > QDate::currentDate().addDays(7).weekNumber())) {
+            QDate ref = QDate::currentDate().addDays(7); // naechste Woche
+            ref = ref.addDays(7-ref.dayOfWeek()); // Ende der Woche
+            if (a->getDatum() > ref) {
                 continue;
             }
         } else if (settings->getEnddate() == "p1m") {
-            QDate ref = QDate(QDate::currentDate().year(), QDate::currentDate().month()+1, 1);
-            ref = QDate(ref.year(), ref.month(), ref.daysInMonth());
+            QDate ref = QDate::currentDate().addMonths(1); // naechster Monat
+            ref = QDate(ref.year(), ref.month(), ref.daysInMonth()); // Ende des Monats
             if (a->getDatum() > ref) {
                 continue;
             }
