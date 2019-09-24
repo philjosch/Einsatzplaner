@@ -65,7 +65,7 @@ QJsonObject FileIO::getJsonFromFile(QString filepath)
     return json->object();
 }
 
-bool FileIO::saveJsonToFile(QString filepath, QJsonObject object)
+bool FileIO::saveJsonToFile(QString filepath, QJsonObject object, bool showInMenu)
 {
     QJsonDocument saveDoc = QJsonDocument(object);
     QFile datei(filepath);
@@ -74,7 +74,7 @@ bool FileIO::saveJsonToFile(QString filepath, QJsonObject object)
     } else {
         datei.write(saveDoc.toJson());
         datei.close();
-        insert(filepath);
+        if (showInMenu) insert(filepath);
         return true;
     }
 }
