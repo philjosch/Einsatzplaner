@@ -224,7 +224,7 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     return print(nullptr, printer, d);
 }
 
-bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QList<bool> *data, QPrinter *pdf, QPrinter *paper)
+bool Export::printPersonen(QList<Person *> *personen, QMap<Category, double> gesamt, QList<Category> data, QPrinter *pdf, QPrinter *paper)
 {
     preparePrinterLandscape(pdf);
     preparePrinterLandscape(paper);
@@ -249,36 +249,34 @@ bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QLi
     //  6: zug vorbereiten
     //  7: werkstatt
     //  8: büro
-    //  9: sonstiges
-    // 10: kilometer
+    //  9: ausbildung
+    // 10: sonstiges
+    // 11: kilometer
     QString a = "<h3>Personalübersicht</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
-    while (data->length() < 11) {
-        data->append(false);
-    }
-    if (data->at(0))
+    if (data.contains(Category::Gesamt))
         a += "<th>Stunden</th>";
-    if (data->at(1))
+    if (data.contains(Category::Anzahl))
         a += "<th>Anzahl</th>";
-    if (data->at(2))
+    if (data.contains(Tf))
         a += "<th>Tf/Tb</th>";
-    if (data->at(3))
+    if (data.contains(Category::Zf))
         a += "<th>Zf</th>";
-    if (data->at(4))
+    if (data.contains(Category::Zub))
         a += "<th>Zub/Begl.o.b.A.</th>";
-    if (data->at(5))
+    if (data.contains(Category::Service))
         a += "<th>Service</th>";
-    if (data->at(6))
+    if (data.contains(Category::ZugVorbereiten))
         a += "<th>Zug Vorbereiten</th>";
-    if (data->at(7))
+    if (data.contains(Category::Werkstatt))
         a += "<th>Werkstatt</th>";
-    if (data->at(8))
+    if (data.contains(Category::Buero))
         a += "<th>Büro</th>";
-    if (data->at(11))
+    if (data.contains(Category::Ausbildung))
         a += "<th>Ausbildung</th>";
-    if (data->at(9))
+    if (data.contains(Category::Sonstiges))
         a += "<th>Sonstiges</th>";
-    if (data->at(10))
+    if (data.contains(Category::Kilometer))
         a += "<th>Kilometer</th>";
     a += "</thead><tbody>";
     for(Person *p: *personen) {
@@ -286,16 +284,9 @@ bool Export::printPersonen(QList<Person *> *personen, QList<double> *gesamt, QLi
     }
     a += "</tbody><tfoot><tr>";
     a += "<td>Summe:</td>";
-    for(int i = 0; i <= 8; i++) {
-        if (data->at(i))
-            a += "<td>"+QString::number(gesamt->at(i))+"</td>";
+    foreach (Category cat, data) {
+        a += "<td>"+QString::number(gesamt.value(cat))+"</td>";
     }
-    if (data->at(11))
-        a += "<td>"+QString::number(gesamt->at(11))+"</td>";
-    if (data->at(9))
-        a += "<td>"+QString::number(gesamt->at(9))+"</td>";
-    if (data->at(10))
-        a += "<td>"+QString::number(gesamt->at(10))+"</td>";
     a += "</tr></tfoot></table>";
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
     d->setHtml(a);

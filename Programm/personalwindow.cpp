@@ -7,6 +7,7 @@
 #include <QMessageBox>
 
 const QString PersonalWindow::nichtGenugStunden = "#ff9999";
+const QList<Category> PersonalWindow::anzeigeReihenfolge = {Category::Gesamt, Category::Anzahl, Category::Tf, Category::Zf, Category::Zub, Category::Service, Category::ZugVorbereiten, Category::Werkstatt, Category::Buero, Category::Ausbildung, Category::Sonstiges, Category::Kilometer};
 
 PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
 {
@@ -32,10 +33,7 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     }
     refreshEinzel();
 
-    anzeige = new QList<bool>();
-    while(anzeige->length() <= 11) {
-        anzeige->append(false);
-    }
+    anzeige = new QSet<Category>();
     ui->checkShowGesamt->setChecked(true);
     ui->checkShowAnzahl->setChecked(true);
     ui->checkShowKilometer->setChecked(true);
@@ -193,11 +191,19 @@ void PersonalWindow::on_pushAktualisieren_clicked()
 
 void PersonalWindow::refreshGesamt()
 {
+    int origSort = ui->tabelleGesamt->horizontalHeader()->sortIndicatorSection();
+    int newSort = 0;
+    Qt::SortOrder sortOrder = ui->tabelleGesamt->horizontalHeader()->sortIndicatorOrder();
+    QString origSortName = "";
+    QTableWidgetItem *view = (ui->tabelleGesamt->horizontalHeaderItem(origSort));
+    if (view != nullptr)
+        origSortName = view->text();
     while(ui->tabelleGesamt->rowCount() > 0) {
         ui->tabelleGesamt->removeRow(0);
     }
-    QSetIterator<Person*> iterator = manager->getPersonen();
     ui->tabelleGesamt->setSortingEnabled(false);
+
+    QSetIterator<Person*> iterator = manager->getPersonen();
     //  0: summe gesamt
     //  1: anzahl
     //  2: tf/tb
@@ -207,60 +213,72 @@ void PersonalWindow::refreshGesamt()
     //  6: zug vorbereiten
     //  7: werkstatt
     //  8: büro
-    //  9: sonstiges
-    // 10: kilometer
-    // 11: ausbildung
+    //  9: ausbildung
+    // 10: sonstiges
+    // 11: kilometer
     while (ui->tabelleGesamt->columnCount() > 2) {
         ui->tabelleGesamt->removeColumn(2);
     }
 
-    if (anzeige->at(10)) {
+    if (anzeige->contains(Category::Kilometer)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Kilometer")));
+        if (origSortName == tr("Kilometer")) newSort = 2;
     }
-    if (anzeige->at(9)) {
+    if (anzeige->contains(Category::Sonstiges)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Sonstiges")));
+        if (origSortName == tr("Sonstiges")) newSort = 2; else newSort++;
     }
-    if (anzeige->at(11)) {
+    if (anzeige->contains(Category::Ausbildung)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Ausbildung")));
+        if (origSortName == tr("Ausbildung")) newSort = 2; else newSort++;
     }
-    if (anzeige->at(8)) {
+    if (anzeige->contains(Category::Buero)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Büro")));
+        if (origSortName == tr("Büro")) newSort = 2; else newSort++;
     }
-    if (anzeige->at(7)) {
+    if (anzeige->contains(Category::Werkstatt)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Werkstatt")));
+        if (origSortName == tr("Werkstatt")) newSort = 2; else newSort++;
     }
-    if (anzeige->at(6)) {
+    if (anzeige->contains(Category::ZugVorbereiten)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Zug\nVorbereiten")));
+        if (origSortName == tr("Zug\nVorbereiten")) newSort = 2; else newSort++;
     }
-    if (anzeige->at(5)) {
+    if (anzeige->contains(Category::Service)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Service")));
+        if (origSortName == tr("Service")) newSort = 2; else newSort++;
     }
-    if (anzeige->at(4)) {
+    if (anzeige->contains(Category::Zub)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Zub")));
+        if (origSortName == tr("Zub")) newSort = 2; else newSort++;
     }
-    if (anzeige->at(3)) {
+    if (anzeige->contains(Category::Zf)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Zf")));
+        if (origSortName == tr("Zf")) newSort = 2; else newSort++;
     }
-    if (anzeige->at(2)) {
+    if (anzeige->contains(Category::Tf)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Tf/Tb")));
+        if (origSortName == tr("Tf/Tb")) newSort = 2; else newSort++;
     }
-    if (anzeige->at(1)) {
+    if (anzeige->contains(Category::Anzahl)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Anzahl")));
+        if (origSortName == tr("Anzahl")) newSort = 2; else newSort++;
     }
-    if (anzeige->at(0)) {
+    if (anzeige->contains(Category::Gesamt)) {
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Gesamt")));
+        if (origSortName == tr("Gesamt")) newSort = 2; else newSort++;
     }
     ui->tabelleGesamt->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
@@ -271,79 +289,15 @@ void PersonalWindow::refreshGesamt()
     QTableWidgetItem *ii = new QTableWidgetItem();
     ui->tabelleGesamt->setItem(0, 0, ii);
 
-    ii = new QTableWidgetItem("Gesamt");
+    ii = new QTableWidgetItem(" Gesamt");
     ui->tabelleGesamt->setItem(0, 1, ii);
 
     int pos = 2;
-    if (anzeige->at(0)) {
+    foreach(Category cat, anzeigeReihenfolge) {
+        if (! anzeige->contains(cat)) continue;
         ii = new QTableWidgetItem();
-        ii->setData(Qt::EditRole, manager->getTimeSum());
-        ui->tabelleGesamt->setItem(0, pos, ii);
-        pos++;
-    }
-    if (anzeige->at(1)) {
-        ii = new QTableWidgetItem();
-        ui->tabelleGesamt->setItem(0, pos, ii);
-        pos++;
-    }
-    if (anzeige->at(2)) {
-        ii = new QTableWidgetItem();
-        ii->setData(Qt::EditRole, manager->getTimeTf());
-        ui->tabelleGesamt->setItem(0, pos, ii);
-        pos++;
-    }
-    if (anzeige->at(3)) {
-        ii = new QTableWidgetItem();
-        ii->setData(Qt::EditRole, manager->getTimeZf());
-        ui->tabelleGesamt->setItem(0, pos, ii);
-        pos++;
-    }
-    if (anzeige->at(4)) {
-        ii = new QTableWidgetItem();
-        ii->setData(Qt::EditRole, manager->getTimeZub());
-        ui->tabelleGesamt->setItem(0, pos, ii);
-        pos++;
-    }
-    if (anzeige->at(5)) {
-        ii = new QTableWidgetItem();
-        ii->setData(Qt::EditRole, manager->getTimeService());
-        ui->tabelleGesamt->setItem(0, pos, ii);
-        pos++;
-    }
-    if (anzeige->at(6)) {
-        ii = new QTableWidgetItem();
-        ii->setData(Qt::EditRole, manager->getTimeVorbereiten());
-        ui->tabelleGesamt->setItem(0, pos, ii);
-        pos++;
-    }
-    if (anzeige->at(7)) {
-        ii = new QTableWidgetItem();
-        ii->setData(Qt::EditRole, manager->getTimeWerkstatt());
-        ui->tabelleGesamt->setItem(0, pos, ii);
-        pos++;
-    }
-    if (anzeige->at(8)) {
-        ii = new QTableWidgetItem();
-        ii->setData(Qt::EditRole, manager->getTimeBuero());
-        ui->tabelleGesamt->setItem(0, pos, ii);
-        pos++;
-    }
-    if (anzeige->at(11)) {
-        ii = new QTableWidgetItem();
-        ii->setData(Qt::EditRole, manager->getTimeAusbildung());
-        ui->tabelleGesamt->setItem(0, pos, ii);
-        pos++;
-    }
-    if (anzeige->at(9)) {
-        ii = new QTableWidgetItem();
-        ii->setData(Qt::EditRole, manager->getTimeSonstiges());
-        ui->tabelleGesamt->setItem(0, pos, ii);
-        pos++;
-    }
-    if (anzeige->at(10)) {
-        ii = new QTableWidgetItem();
-        ii->setData(Qt::EditRole, manager->getSumKilometer());
-        ui->tabelleGesamt->setItem(0, pos, ii);
+        ii->setData(Qt::EditRole, manager->getTime(cat));
+        ui->tabelleGesamt->setItem(0, pos++, ii);
     }
     // End of insert the sum of each column
 
@@ -364,89 +318,19 @@ void PersonalWindow::refreshGesamt()
         i->setBackground(QBrush(QColor(farbe)));
         ui->tabelleGesamt->setItem(0, 1, i);
 
-        int pos = 2;
-        if (anzeige->at(0)) {
+        pos = 2;
+        foreach(Category cat, anzeigeReihenfolge) {
+            if (! anzeige->contains(cat)) continue;
             i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getTimeSum());
-            i->setBackground(QBrush(QColor(farbe)));
-            ui->tabelleGesamt->setItem(0, pos, i);
-            pos++;
-        }
-        if (anzeige->at(1)) {
-            i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getSumAnzahl());
-            ui->tabelleGesamt->setItem(0, pos, i);
-            pos++;
-        }
-        if (anzeige->at(2)) {
-            i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getTimeTf());
-            i->setBackground(QBrush(QColor(manager->checkHours(p, Category::Tf) ? defaultFarbe : nichtGenugStunden)));
-            ui->tabelleGesamt->setItem(0, pos, i);
-            pos++;
-        }
-        if (anzeige->at(3)) {
-            i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getTimeZf());
-            i->setBackground(QBrush(QColor(manager->checkHours(p, Category::Zf) ? defaultFarbe : nichtGenugStunden)));
-            ui->tabelleGesamt->setItem(0, pos, i);
-            pos++;
-        }
-        if (anzeige->at(4)) {
-            i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getTimeZub());
-            i->setBackground(QBrush(QColor(manager->checkHours(p, Category::Zub) ? defaultFarbe : nichtGenugStunden)));
-            ui->tabelleGesamt->setItem(0, pos, i);
-            pos++;
-        }
-        if (anzeige->at(5)) {
-            i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getTimeService());
-            i->setBackground(QBrush(QColor(manager->checkHours(p, Category::Service) ? defaultFarbe : nichtGenugStunden)));
-            ui->tabelleGesamt->setItem(0, pos, i);
-            pos++;
-        }
-        if (anzeige->at(6)) {
-            i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getTimeVorbereiten());
-            i->setBackground(QBrush(QColor(manager->checkHours(p, Category::ZugVorbereiten) ? defaultFarbe : nichtGenugStunden)));
-            ui->tabelleGesamt->setItem(0, pos, i);
-            pos++;
-        }
-        if (anzeige->at(7)) {
-            i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getTimeWerkstatt());
-            i->setBackground(QBrush(QColor(manager->checkHours(p, Category::Werkstatt) ? defaultFarbe : nichtGenugStunden)));
-            ui->tabelleGesamt->setItem(0, pos, i);
-            pos++;
-        }
-        if (anzeige->at(8)) {
-            i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getTimeBuero());
-            i->setBackground(QBrush(QColor(manager->checkHours(p, Category::Buero) ? defaultFarbe : nichtGenugStunden)));
-            ui->tabelleGesamt->setItem(0, pos, i);
-            pos++;
-        }
-        if (anzeige->at(11)) {
-            i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getTimeAusbildung());
-            i->setBackground(QBrush(QColor(manager->checkHours(p, Category::Ausbildung) ? defaultFarbe : nichtGenugStunden)));
-            ui->tabelleGesamt->setItem(0, pos, i);
-            pos++;
-        }
-        if (anzeige->at(9)) {
-            i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getTimeSonstiges());
-            i->setBackground(QBrush(QColor(manager->checkHours(p, Category::Sonstiges) ? defaultFarbe : nichtGenugStunden)));
-            ui->tabelleGesamt->setItem(0, pos, i);
-            pos++;
-        }
-        if (anzeige->at(10)) {
-            i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getSumKilometer());
-            ui->tabelleGesamt->setItem(0, pos, i);
+            i->setData(Qt::EditRole, p->getTime(cat));
+            i->setBackground(QBrush(QColor(manager->checkHours(p, cat) ? defaultFarbe : nichtGenugStunden)));
+            ui->tabelleGesamt->setItem(0, pos++, i);
         }
     }
+    if (origSort < 2) {
+        newSort = origSort;
+    }
+    ui->tabelleGesamt->sortByColumn(newSort, sortOrder);
     ui->tabelleGesamt->setSortingEnabled(true);
 }
 
@@ -624,20 +508,24 @@ void PersonalWindow::print(QPrinter *p)
         if (pers != nullptr)
             liste->append(pers);
     }
-    QList<double> *gesamt = new QList<double>();
-    gesamt->append(manager->getTimeSum());
-    gesamt->append(0);
-    gesamt->append(manager->getTimeTf());
-    gesamt->append(manager->getTimeZf());
-    gesamt->append(manager->getTimeZub());
-    gesamt->append(manager->getTimeService());
-    gesamt->append(manager->getTimeVorbereiten());
-    gesamt->append(manager->getTimeWerkstatt());
-    gesamt->append(manager->getTimeBuero());
-    gesamt->append(manager->getTimeSonstiges());
-    gesamt->append(manager->getSumKilometer());
-    gesamt->append(manager->getTimeAusbildung());
-    Export::printPersonen(liste, gesamt, anzeige, p);
+    QMap<Category, double> gesamt = QMap<Category, double>();
+    gesamt.insert(Category::Gesamt, manager->getTimeSum());
+    gesamt.insert(Category::Anzahl, 0);
+    gesamt.insert(Category::Tf, manager->getTimeTf());
+    gesamt.insert(Category::Zf, manager->getTimeZf());
+    gesamt.insert(Category::Zub, manager->getTimeZub());
+    gesamt.insert(Category::Service, manager->getTimeService());
+    gesamt.insert(Category::ZugVorbereiten, manager->getTimeVorbereiten());
+    gesamt.insert(Category::Werkstatt, manager->getTimeWerkstatt());
+    gesamt.insert(Category::Buero, manager->getTimeBuero());
+    gesamt.insert(Category::Ausbildung, manager->getTimeAusbildung());
+    gesamt.insert(Category::Sonstiges, manager->getTimeSonstiges());
+    gesamt.insert(Category::Kilometer, manager->getSumKilometer());
+    QList<Category> anzeigeListe = QList<Category>();
+    foreach(Category cat, anzeigeReihenfolge) {
+        if (anzeige->contains(cat)) anzeigeListe.append(cat);
+    }
+    Export::printPersonen(liste, gesamt, anzeigeListe, p);
 }
 
 void PersonalWindow::disableFields()
@@ -687,73 +575,85 @@ void PersonalWindow::on_tabWidgetMain_tabBarClicked(int index)
 
 void PersonalWindow::on_checkShowGesamt_clicked(bool checked)
 {
-    anzeige->replace(0, checked);
+    if (checked) anzeige->insert(Category::Gesamt);
+    else anzeige->remove(Category::Gesamt);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowAnzahl_clicked(bool checked)
 {
-    anzeige->replace(1, checked);
+    if (checked) anzeige->insert(Category::Anzahl);
+    else anzeige->remove(Category::Anzahl);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowTf_clicked(bool checked)
 {
-    anzeige->replace(2, checked);
+    if (checked) anzeige->insert(Category::Tf);
+    else anzeige->remove(Category::Tf);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowZf_clicked(bool checked)
 {
-    anzeige->replace(3, checked);
+    if (checked) anzeige->insert(Category::Zf);
+    else anzeige->remove(Category::Zf);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowZub_clicked(bool checked)
 {
-    anzeige->replace(4, checked);
+    if (checked) anzeige->insert(Category::Zub);
+    else anzeige->remove(Category::Zub);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowService_clicked(bool checked)
 {
-    anzeige->replace(5, checked);
+    if (checked) anzeige->insert(Category::Service);
+    else anzeige->remove(Category::Service);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowVorbereiten_clicked(bool checked)
 {
-    anzeige->replace(6, checked);
+    if (checked) anzeige->insert(Category::ZugVorbereiten);
+    else anzeige->remove(Category::ZugVorbereiten);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowWerkstatt_clicked(bool checked)
 {
-    anzeige->replace(7, checked);
+    if (checked) anzeige->insert(Category::Werkstatt);
+    else anzeige->remove(Category::Werkstatt);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowBuero_clicked(bool checked)
 {
-    anzeige->replace(8, checked);
+    if (checked) anzeige->insert(Category::Buero);
+    else anzeige->remove(Category::Buero);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowAusbildung_clicked(bool checked)
 {
-    anzeige->replace(11, checked);
+    if (checked) anzeige->insert(Category::Ausbildung);
+    else anzeige->remove(Category::Ausbildung);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowSonstiges_clicked(bool checked)
 {
-    anzeige->replace(9, checked);
+    if (checked) anzeige->insert(Category::Sonstiges);
+    else anzeige->remove(Category::Sonstiges);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowKilometer_clicked(bool checked)
 {
-    anzeige->replace(10, checked);
+    if (checked) anzeige->insert(Category::Kilometer);
+    else anzeige->remove(Category::Kilometer);
     refreshGesamt();
 }
 

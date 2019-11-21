@@ -92,7 +92,7 @@ private:
     QHash<QListWidgetItem*, Person*> itemToPerson;
     QHash<Person*, QListWidgetItem*> personToItem;
 
-    QList<bool> *anzeige;
+    QSet<Category> *anzeige;
     /* Gibt an, welche Werte in der Tabelle angezeigt werden
      * 0: gesamtstunden
      * 1: anzahl
@@ -112,5 +112,7 @@ private:
     void disableFields();
 
     bool enabled; // Gibt an, ob das Formualr aktiviert ist oder nicht, und ob Änderungen übernommen werden
+
+    const static QList<Category> anzeigeReihenfolge;
 };
 #endif // PERSONALWINDOW_H

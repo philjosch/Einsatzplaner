@@ -15,6 +15,7 @@ public:
     QJsonObject personalToJson();
     static Person *fromJson(QJsonObject o, ManagerPersonal *manager);
 
+    double getTime(Category cat);
     double getTimeTf();
     double getTimeZf();
     double getTimeZub();
@@ -56,7 +57,7 @@ public:
     QString getNachname() const;
     void setNachname(const QString &value);
 
-    QString getHtmlForTableView(QList<bool> *liste);
+    QString getHtmlForTableView(QList<Category> liste);
     QString getHtmlForDetailPage(ManagerPersonal *m);
 
     double getAdditionalTimeTf() const;

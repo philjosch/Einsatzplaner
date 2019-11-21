@@ -34,9 +34,9 @@ public:
     bool removePerson(QString name);
     bool removePerson(Person *p);
 
-    bool pruefeStunden(Person *p); // Gibt true zurueck, genau dann wenn die Person die notwenidgen stunden erbracht hat!
-    bool checkHours(Person *p, Category kat); // Gibt true zurueck, genau dann wenn die Person die notwenidgen stunden erbracht hat!
-    bool checkHours(Person *p); // Gibt true zurueck, genau dann wenn die Person die notwenidgen stunden erbracht hat!
+    bool pruefeStunden(Person *p); // Gibt true zurueck, genau dann wenn die Person fuer **alle** Kategorien die notwendigen Stunden erbracht hat!
+    bool checkHours(Person *p, Category kat); // Gibt true zurueck, genau dann wenn die Person die notwendigen Stunden fuer die Kategorie erbracht hat!
+    bool checkHours(Person *p); // Gibt true zurueck, genau dann wenn die Person die allgemeinen Mindeststunden erbracht hat!
 
     void setMinimumHours(Category cat, double amount);
     void setMinimumHours(double amount);
