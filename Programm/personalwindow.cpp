@@ -116,18 +116,18 @@ void PersonalWindow::showPerson(Person *p)
     ui->tabelle->setSortingEnabled(sortingSaved);
     ui->tabelle->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    ui->lineTf->setText(QString::number(p->getTimeTf()));
-    ui->lineZf->setText(QString::number(p->getTimeZf()));
-    ui->lineZub->setText(QString::number(p->getTimeZub()));
-    ui->lineService->setText(QString::number(p->getTimeService()));
-    ui->lineZugVorbereiten->setText(QString::number(p->getTimeVorbereiten()));
-    ui->lineWerkstatt->setText(QString::number(p->getTimeWerkstatt()));
-    ui->lineBuero->setText(QString::number(p->getTimeBuero()));
-    ui->lineAusbildung->setText(QString::number(p->getTimeAusbildung()));
-    ui->lineSonstiges->setText(QString::number(p->getTimeSonstiges()));
-    ui->lineAnzahl->setText(QString::number(p->getSumAnzahl()));
-    ui->lineKilometer->setText(QString::number(p->getSumKilometer()));
-    ui->lineGesamt->setText(QString::number(p->getTimeSum()));
+    ui->labelTfSum->setText(QString::number(p->getTimeTf())+" h");
+    ui->labelZfSum->setText(QString::number(p->getTimeZf())+" h");
+    ui->labelZubSum->setText(QString::number(p->getTimeZub())+" h");
+    ui->labelServiceSum->setText(QString::number(p->getTimeService())+" h");
+    ui->labelZugVorbereitenSum->setText(QString::number(p->getTimeVorbereiten())+" h");
+    ui->labelWerkstattSum->setText(QString::number(p->getTimeWerkstatt())+" h");
+    ui->labelBueroSum->setText(QString::number(p->getTimeBuero())+" h");
+    ui->labelAusbildungSum->setText(QString::number(p->getTimeAusbildung())+" h");
+    ui->labelSonstigesSum->setText(QString::number(p->getTimeSonstiges())+" h");
+    ui->labelAnzahlSum->setText(QString::number(p->getSumAnzahl()));
+    ui->labelKilometerSum->setText(QString::number(p->getSumKilometer())+" km");
+    ui->labelGesamt->setText(QString::number(p->getTimeSum())+" h");
 
     ui->doubleTf->setValue(p->getAdditionalTimeTf());
     ui->doubleZf->setValue(p->getAdditionalTimeZf());
@@ -142,24 +142,24 @@ void PersonalWindow::showPerson(Person *p)
     ui->doubleKilometer->setValue(p->getAdditionalKilometer());
 
     if (p->getAusbildungTf() && manager->getMinimumHours(Tf) > 0)
-        ui->lineMinTf->setText(QString::number(manager->getMinimumHours(Tf)));
+        ui->labelMinTf->setText(QString::number(manager->getMinimumHours(Tf))+" h");
     if (p->getAusbildungZf() && manager->getMinimumHours(Zf) > 0)
-        ui->lineMinZf->setText(QString::number(manager->getMinimumHours(Zf)));
+        ui->labelMinZf->setText(QString::number(manager->getMinimumHours(Zf))+" h");
     if (manager->getMinimumHours(Zub) > 0)
-        ui->lineMinZub->setText(QString::number(manager->getMinimumHours(Zub)));
+        ui->labelMinZub->setText(QString::number(manager->getMinimumHours(Zub))+" h");
     if (manager->getMinimumHours(Service) > 0)
-        ui->lineMinService->setText(QString::number(manager->getMinimumHours(Service)));
+        ui->labelMinService->setText(QString::number(manager->getMinimumHours(Service))+" h");
     if (manager->getMinimumHours(ZugVorbereiten) > 0)
-        ui->lineMinZugVorbereiten->setText(QString::number(manager->getMinimumHours(ZugVorbereiten)));
+        ui->labelMinZugVorbereiten->setText(QString::number(manager->getMinimumHours(ZugVorbereiten))+" h");
     if (manager->getMinimumHours(Werkstatt) > 0)
-        ui->lineMinWerkstatt->setText(QString::number(manager->getMinimumHours(Werkstatt)));
+        ui->labelMinWerkstatt->setText(QString::number(manager->getMinimumHours(Werkstatt))+" h");
     if (manager->getMinimumHours(Buero) > 0)
-        ui->lineMinBuero->setText(QString::number(manager->getMinimumHours(Buero)));
+        ui->labelMinBuero->setText(QString::number(manager->getMinimumHours(Buero))+" h");
     if ((p->getAusbildungTf() || p->getAusbildungZf() || p->getAusbildungRangierer())
             && manager->getMinimumHours(Ausbildung) > 0)
-        ui->lineMinAusbildung->setText(QString::number(manager->getMinimumHours(Ausbildung)));
+        ui->labelMinAusbildung->setText(QString::number(manager->getMinimumHours(Ausbildung))+" h");
     if (manager->getMinimumHours(Sonstiges) > 0)
-        ui->lineMinSonstiges->setText(QString::number(manager->getMinimumHours(Sonstiges)));
+        ui->labelMinSonstiges->setText(QString::number(manager->getMinimumHours(Sonstiges))+" h");
 
     enabled = true;
 }
@@ -400,7 +400,7 @@ void PersonalWindow::on_spinKm_valueChanged(int arg1)
 {
     if (enabled) {
         aktuellePerson->setStrecke(arg1);
-        ui->lineKilometer->setText(QString::number(aktuellePerson->getSumKilometer()));
+        ui->labelKilometerSum->setText(QString::number(aktuellePerson->getSumKilometer()));
         emit changed();
     }
 }
@@ -550,19 +550,6 @@ void PersonalWindow::disableFields()
     ui->doubleAnzahl->setEnabled(false);
     ui->doubleKilometer->setEnabled(false);
 
-    ui->lineTf->setEnabled(false);
-    ui->lineZf->setEnabled(false);
-    ui->lineZub->setEnabled(false);
-    ui->lineService->setEnabled(false);
-    ui->lineZugVorbereiten->setEnabled(false);
-    ui->lineWerkstatt->setEnabled(false);
-    ui->lineBuero->setEnabled(false);
-    ui->lineAusbildung->setEnabled(false);
-    ui->lineSonstiges->setEnabled(false);
-    ui->lineAnzahl->setEnabled(false);
-    ui->lineKilometer->setEnabled(false);
-
-    ui->lineGesamt->setEnabled(false);
 }
 
 void PersonalWindow::on_tabWidgetMain_tabBarClicked(int index)
@@ -661,8 +648,8 @@ void PersonalWindow::on_doubleTf_valueChanged(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditionalTimeTf(arg1);
-        ui->lineTf->setText(QString::number(aktuellePerson->getTimeTf()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
+        ui->labelTfSum->setText(QString::number(aktuellePerson->getTimeTf()));
+        ui->labelGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
         emit changed();
     }
 }
@@ -671,8 +658,8 @@ void PersonalWindow::on_doubleZf_valueChanged(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditionalTimeZf(arg1);
-        ui->lineZf->setText(QString::number(aktuellePerson->getTimeZf()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
+        ui->labelZfSum->setText(QString::number(aktuellePerson->getTimeZf()));
+        ui->labelGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
         emit changed();
     }
 }
@@ -681,8 +668,8 @@ void PersonalWindow::on_doubleZub_valueChanged(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditionalTimeZub(arg1);
-        ui->lineZub->setText(QString::number(aktuellePerson->getTimeZub()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
+        ui->labelZubSum->setText(QString::number(aktuellePerson->getTimeZub()));
+        ui->labelGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
         emit changed();
     }
 }
@@ -691,8 +678,8 @@ void PersonalWindow::on_doubleService_valueChanged(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditionalTimeService(arg1);
-        ui->lineService->setText(QString::number(aktuellePerson->getTimeService()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
+        ui->labelServiceSum->setText(QString::number(aktuellePerson->getTimeService()));
+        ui->labelGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
         emit changed();
     }
 }
@@ -701,8 +688,8 @@ void PersonalWindow::on_doubleZugVorbereiten_valueChanged(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditionalTimeVorbereiten(arg1);
-        ui->lineZugVorbereiten->setText(QString::number(aktuellePerson->getTimeVorbereiten()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
+        ui->labelZugVorbereitenSum->setText(QString::number(aktuellePerson->getTimeVorbereiten()));
+        ui->labelGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
         emit changed();
     }
 }
@@ -711,8 +698,8 @@ void PersonalWindow::on_doubleWerkstatt_valueChanged(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditionalTimeWerkstatt(arg1);
-        ui->lineWerkstatt->setText(QString::number(aktuellePerson->getTimeWerkstatt()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
+        ui->labelWerkstattSum->setText(QString::number(aktuellePerson->getTimeWerkstatt()));
+        ui->labelGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
         emit changed();
     }
 }
@@ -721,8 +708,8 @@ void PersonalWindow::on_doubleBuero_valueChanged(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditionalTimeBuero(arg1);
-        ui->lineBuero->setText(QString::number(aktuellePerson->getTimeBuero()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
+        ui->labelBueroSum->setText(QString::number(aktuellePerson->getTimeBuero()));
+        ui->labelGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
         emit changed();
     }
 }
@@ -731,8 +718,8 @@ void PersonalWindow::on_doubleAusbildung_valueChanged(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditionalTimeAusbildung(arg1);
-        ui->lineAusbildung->setText(QString::number(aktuellePerson->getTimeAusbildung()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
+        ui->labelAusbildungSum->setText(QString::number(aktuellePerson->getTimeAusbildung()));
+        ui->labelGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
         emit changed();
     }
 }
@@ -741,8 +728,8 @@ void PersonalWindow::on_doubleSonstiges_valueChanged(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditionalTimeSonstiges(arg1);
-        ui->lineSonstiges->setText(QString::number(aktuellePerson->getTimeSonstiges()));
-        ui->lineGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
+        ui->labelSonstigesSum->setText(QString::number(aktuellePerson->getTimeSonstiges()));
+        ui->labelGesamt->setText(QString::number(aktuellePerson->getTimeSum()));
         emit changed();
     }
 }
@@ -751,7 +738,7 @@ void PersonalWindow::on_doubleAnzahl_valueChanged(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditionalAnzahl(int(arg1));
-        ui->lineAnzahl->setText(QString::number(aktuellePerson->getSumAnzahl()));
+        ui->labelAnzahlSum->setText(QString::number(aktuellePerson->getSumAnzahl()));
         emit changed();
     }
 }
@@ -760,7 +747,7 @@ void PersonalWindow::on_doubleKilometer_valueChanged(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditionalKilometer(arg1);
-        ui->lineKilometer->setText(QString::number(aktuellePerson->getSumKilometer()));
+        ui->labelKilometerSum->setText(QString::number(aktuellePerson->getSumKilometer()));
         emit changed();
     }
 }
