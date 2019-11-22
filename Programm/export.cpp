@@ -175,8 +175,8 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     // Add the title page
     m->berechne();
     QString help = "<li>%1: %2h</li>";
-    QString a = "<h3>Personalübersicht - Gesamt</h3>"
-                "<h4>Geleistete Stunden</h4><ul>";
+    QString a = "<h1>Personalübersicht - Gesamt</h1>"
+                "<h2>Geleistete Stunden</h2><ul>";
     if (m->getTime(Tf) > 0) a += help.arg("Tf").arg(m->getTime(Tf), 0, 'f', 0);
     if (m->getTime(Zf) > 0) a += help.arg("Zf").arg(m->getTime(Zf), 0, 'f', 0);
     if (m->getTime(Zub) > 0) a += help.arg("Zub").arg(m->getTime(Zub), 0, 'f', 0);
@@ -192,7 +192,7 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     a += "<li>Gefahrene Kilometer gesamt: "+QString::number(m->getSumKilometer())+" km</li></ul>";
 
     help = "<li>%1: %2h</li>";
-    a += "<h4>Mindeststunden</h4><ul>";
+    a += "<h2>Mindeststunden</h2><ul>";
     if (m->getMinimumHours() > 0) a += help.arg("Insgesamt").arg(m->getMinimumHours(), 0, 'f', 1);
     if (m->getMinimumHours(Tf) > 0) a += help.arg("Tf").arg(m->getMinimumHours(Tf), 0, 'f', 1);
     if (m->getMinimumHours(Tb) > 0) a += help.arg("Tb").arg(m->getMinimumHours(Tb), 0, 'f', 1);

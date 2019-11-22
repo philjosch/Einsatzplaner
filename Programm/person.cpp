@@ -294,12 +294,12 @@ QString Person::getHtmlForTableView(QList<Category> liste)
 
 QString Person::getHtmlForDetailPage(ManagerPersonal *m)
 {
-    QString html = "<h3>"+vorname+" "+nachname+"</h3>";
+    QString html = "<h2>"+vorname+" "+nachname+"</h2>";
     if (ausbildungRangierer || ausbildungTf || ausbildungZf)
         html = html + "<p>Ausbildung zum: " + (ausbildungTf? "Triebfahrzeugführer, ":" ") + (ausbildungZf? "Zugführer, ":" ")
                 + (ausbildungRangierer? "Rangierer":" ") + "<br/>";
     html += "Entfernung zum Bahnhof: "+QString::number(strecke) + "km</p>";
-    html += "<h4>Geleistete Stunden</h4>";
+    html += "<h3>Geleistete Stunden</h3>";
     html += "<ul>";
     QString help = "<li %1>%3: %4h%2</li>";
     QString helpcurrent;
@@ -363,22 +363,22 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     }
 
     // Hier kommt die liste mit den Arbeitseinsätzen
+    html += "<h3>Übersicht über die einzelnen Aktivitäten</h3>";
     if (activities.size() > 0) {
-        html += "<h4>Übersicht über die einzelnen Aktivitäten</h4>";
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
         for(AActivity *a: activities.keys()) {
             AActivity::Infos info = a->getIndividual(this);
-            html += "<tr><td>"+a->getDatum().toString("dd. MM. yyyy")+"<br/>"+a->getKurzbeschreibung()+"<br/>"+a->getAnlass()+"</td><td>"
+            html += "<tr><td>"+a->getDatum().toString("dd.MM.yyyy")+"<br/>"+a->getKurzbeschreibung()+"<br/>"+a->getAnlass()+"</td><td>"
                     + info.beginn.toString("HH:mm")+"-"+info.ende.toString("HH:mm")+"</td><td>"
                     + AActivity::getStringFromCategory(info.kategorie) + "</td><td>"
                     + info.bemerkung + "</td></tr>";
         }
         html += "</tbody></table>";
     } else {
-        html += QString("<p>%1 %2 hat an keinen erfassten Aktivitäten teilgenommen!</p>").arg(vorname, nachname);
+        html += QString("<p>%1 %2 hat an keinen eingetragenen Aktivitäten teilgenommen!</p>").arg(vorname, nachname);
     }
-    html+= "<h5>Zusätzliche nicht in der Tabelle erfassten Stunden</h5><ul>";
+    html+= "<h4>Zusätzliche nicht in der Tabelle erfassten Stunden</h4><ul>";
     help = "<li>%1: %2h</li>";
     if (additionalTimeTf > 0) html+= help.arg("Tf").arg(additionalTimeTf, 0, 'f', 1);
     if (additionalTimeZf > 0) html+= help.arg("Zf").arg(additionalTimeZf, 0, 'f', 1);

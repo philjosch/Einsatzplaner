@@ -248,7 +248,7 @@ double Wagen::getStrafpunkteFuerPlaetze(int anzahl, int start)
     int benoetigt = sitzGruppeEnde - sitzGruppeStart + 1;
 
     // Sp 2 //
-    int ueV = start - beginnErste;; // Anzahl der durch fremde Reservierungen belegten Plätze am Anfang
+    int ueV = start - beginnErste; // Anzahl der durch fremde Reservierungen belegten Plätze am Anfang
     int ueH = endeLetzte - ende; // Anzahl der durch fremde Reservierungen belegten Sitzplaetze in der letzten Sitzgruppe
 
     // Zweite Neue Variante zur Berechnung des Fehlers:
