@@ -132,6 +132,7 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         QTime beginnZ = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->time();
         QTime endeZ = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
+        if (activity->isExtern(bemerkung)) activity->removePerson(name);
 
         switch (activity->addPerson(name, bemerkung, beginnZ, endeZ, kat)) {
         case Mistake::OK:

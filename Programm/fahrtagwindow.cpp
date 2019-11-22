@@ -238,7 +238,7 @@ void FahrtagWindow::loadData()
                     break;
             }
 
-            if (! AActivity::isExtern(info->bemerkung)) {
+//            if (! AActivity::isExtern(info->bemerkung)) {
                 // Zeile für die Person in die Tabelle einfügen
                 namen.insert(p->getName());
                 on_buttonInsert_clicked();
@@ -256,7 +256,7 @@ void FahrtagWindow::loadData()
                 ui->tablePersonen->setItem(0, 4, zelleBemerkung);
 
                 listToTable.insert(item, ui->tablePersonen->item(0,0));
-            }
+//            }
         }
         ui->tablePersonen->sortItems(0);
         ui->tablePersonen->setSortingEnabled(false);
@@ -523,6 +523,7 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
         QTime beginn = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->time();
         QTime ende = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
+        if (fahrtag->isExtern(bemerkung)) fahrtag->removePerson(name);
 
         switch (fahrtag->addPerson(name, bemerkung, beginn, ende, kat)) {
         case Mistake::OK:
