@@ -5,6 +5,7 @@
 #include "minimumhourseditordialog.h"
 
 #include <QMessageBox>
+#include <math.h>
 
 const QString PersonalWindow::nichtGenugStunden = "#ff9999";
 const QList<Category> PersonalWindow::anzeigeReihenfolge = {Category::Gesamt, Category::Anzahl, Category::Tf, Category::Zf, Category::Zub, Category::Service, Category::ZugVorbereiten, Category::Werkstatt, Category::Buero, Category::Ausbildung, Category::Sonstiges, Category::Kilometer};
@@ -116,18 +117,18 @@ void PersonalWindow::showPerson(Person *p)
     ui->tabelle->setSortingEnabled(sortingSaved);
     ui->tabelle->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    ui->labelTfSum->setText(QString::number(p->getTimeTf())+" h");
-    ui->labelZfSum->setText(QString::number(p->getTimeZf())+" h");
-    ui->labelZubSum->setText(QString::number(p->getTimeZub())+" h");
-    ui->labelServiceSum->setText(QString::number(p->getTimeService())+" h");
-    ui->labelZugVorbereitenSum->setText(QString::number(p->getTimeVorbereiten())+" h");
-    ui->labelWerkstattSum->setText(QString::number(p->getTimeWerkstatt())+" h");
-    ui->labelBueroSum->setText(QString::number(p->getTimeBuero())+" h");
-    ui->labelAusbildungSum->setText(QString::number(p->getTimeAusbildung())+" h");
-    ui->labelSonstigesSum->setText(QString::number(p->getTimeSonstiges())+" h");
+    ui->labelTfSum->setText(QString::number(p->getTimeTf(), 'f', 2)+" h");
+    ui->labelZfSum->setText(QString::number(p->getTimeZf(), 'f', 2)+" h");
+    ui->labelZubSum->setText(QString::number(p->getTimeZub(), 'f', 2)+" h");
+    ui->labelServiceSum->setText(QString::number(p->getTimeService(), 'f', 2)+" h");
+    ui->labelZugVorbereitenSum->setText(QString::number(p->getTimeVorbereiten(), 'f', 2)+" h");
+    ui->labelWerkstattSum->setText(QString::number(p->getTimeWerkstatt(), 'f', 2)+" h");
+    ui->labelBueroSum->setText(QString::number(p->getTimeBuero(), 'f', 2)+" h");
+    ui->labelAusbildungSum->setText(QString::number(p->getTimeAusbildung(), 'f', 2)+" h");
+    ui->labelSonstigesSum->setText(QString::number(p->getTimeSonstiges(), 'f', 2)+" h");
     ui->labelAnzahlSum->setText(QString::number(p->getSumAnzahl()));
     ui->labelKilometerSum->setText(QString::number(p->getSumKilometer())+" km");
-    ui->labelGesamt->setText(QString::number(p->getTimeSum())+" h");
+    ui->labelGesamt->setText(QString::number(p->getTimeSum(), 'f', 2)+" h");
 
     ui->doubleTf->setValue(p->getAdditionalTimeTf());
     ui->doubleZf->setValue(p->getAdditionalTimeZf());
@@ -322,7 +323,7 @@ void PersonalWindow::refreshGesamt()
         foreach(Category cat, anzeigeReihenfolge) {
             if (! anzeige->contains(cat)) continue;
             i = new QTableWidgetItem();
-            i->setData(Qt::EditRole, p->getTime(cat));
+            i->setData(Qt::EditRole, round(p->getTime(cat)*100)/100);
             i->setBackground(QBrush(QColor(manager->checkHours(p, cat) ? defaultFarbe : nichtGenugStunden)));
             ui->tabelleGesamt->setItem(0, pos++, i);
         }

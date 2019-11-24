@@ -204,7 +204,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Ausgewähltes Objekt löschen</string>
+          <string>Ausgewählten Eintrag löschen</string>
          </property>
         </widget>
        </item>
