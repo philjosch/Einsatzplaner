@@ -1528,11 +1528,20 @@
     <property name="title">
      <string>Drucken</string>
     </property>
-    <addaction name="actionEinzelPDF"/>
-    <addaction name="actionEinzelPrint"/>
+    <widget class="QMenu" name="menuEinzelansichten">
+     <property name="title">
+      <string>Einzelansichten</string>
+     </property>
+     <addaction name="actionSinglePrint"/>
+     <addaction name="actionSinglePDF"/>
+     <addaction name="separator"/>
+     <addaction name="actionEinzelPrint_2"/>
+     <addaction name="actionEinzelPDF_2"/>
+    </widget>
+    <addaction name="menuEinzelansichten"/>
     <addaction name="separator"/>
-    <addaction name="actionGesamtPDF"/>
     <addaction name="actionGesamtDrucken"/>
+    <addaction name="actionGesamtPDF"/>
    </widget>
    <addaction name="menuPersonalmanagement"/>
    <addaction name="menuDrucken"/>
@@ -1584,6 +1593,9 @@
    <property name="text">
     <string>Gesamtansicht drucken …</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
   </action>
   <action name="actionEinzelPDF">
    <property name="text">
@@ -1593,6 +1605,26 @@
   <action name="actionEinzelPrint">
    <property name="text">
     <string>Einzelansicht drucken …</string>
+   </property>
+  </action>
+  <action name="actionSinglePrint">
+   <property name="text">
+    <string>Für eine Person drucken ...</string>
+   </property>
+  </action>
+  <action name="actionSinglePDF">
+   <property name="text">
+    <string>Für eine Person als PDF speichern ...</string>
+   </property>
+  </action>
+  <action name="actionEinzelPrint_2">
+   <property name="text">
+    <string>Für alle drucken ...</string>
+   </property>
+  </action>
+  <action name="actionEinzelPDF_2">
+   <property name="text">
+    <string>Für alle als PDF speichern ...</string>
    </property>
   </action>
  </widget>

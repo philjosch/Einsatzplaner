@@ -42,6 +42,7 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     on_checkShowAnzahl_clicked(true);
     on_checkShowKilometer_clicked(true);
     ui->tabelleGesamt->sortItems(1);
+    aktuellePerson = nullptr;
 }
 
 PersonalWindow::~PersonalWindow()
@@ -480,6 +481,20 @@ void PersonalWindow::on_pushPrint_clicked()
     QPrinter *paper = nullptr;
     paper = Export::getPrinterPaper(this);
     print(paper);
+}
+
+void PersonalWindow::on_actionSinglePrint_triggered()
+{
+    QPrinter *paper = nullptr;
+    paper = Export::getPrinterPaper(this);
+    Export::printPerson(manager, aktuellePerson, paper);
+}
+
+void PersonalWindow::on_actionSinglePDF_triggered()
+{
+    QPrinter *pdf = nullptr;
+    pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf");
+    Export::printPerson(manager, aktuellePerson, pdf);
 }
 
 void PersonalWindow::on_pushPDFEinzel_clicked()

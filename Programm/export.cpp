@@ -224,6 +224,31 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     return print(nullptr, printer, d);
 }
 
+bool Export::printPerson(ManagerPersonal *m, Person *p, QPrinter *printer)
+{
+    if (p == nullptr) return false;
+    preparePrinterPortrait(printer);
+    QTextDocument *d = new QTextDocument();
+    // Append a style sheet
+    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
+                            "table { border-width: 1px; border-style: solid; border-color: black; }"
+                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
+                            "table tr, table td { page-break-inside: avoid; }"
+                            "table tfoot tr, table tfoot td { border-width: 2px; }"
+                            "ul { -qt-list-indent: 0; }"
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
+    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
+    d->setDocumentMargin(0);
+
+    // Add the title page
+    m->berechne();
+    QString help = "<li>%1: %2h</li>";
+    QString a = p->getHtmlForDetailPage(m);
+    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+    d->setHtml(a);
+    return print(nullptr, printer, d);
+}
+
 bool Export::printPersonen(QList<Person *> *personen, QMap<Category, double> gesamt, QList<Category> data, QPrinter *pdf, QPrinter *paper)
 {
     preparePrinterLandscape(pdf);
