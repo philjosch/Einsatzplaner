@@ -98,7 +98,7 @@ AActivity::Infos Fahrtag::getIndividual(Person *person)
         neu.ende = QTime(0,0);
     } else {
         if (alt->beginn == QTime(0,0)) {
-            if (alt->kategorie == Tf || alt->kategorie == Tb) {
+            if (alt->kategorie == Tf) {
                 neu.beginn = zeitTf;
             } else {
                 neu.beginn = zeitAnfang;
@@ -128,8 +128,12 @@ QString Fahrtag::getHtmlForSingleView()
     if (zeitenUnbekannt) {
         html += "<p><b>Dienstzeiten werden noch bekannt gegeben!</b></p>";
     } else {
-        html += "<p><b>Dienstzeiten</b>:<br/>Beginn Tf, Tb: "+zeitTf.toString("hh:mm")+"<br/>Beginn Sonstige: "+zeitAnfang.toString("hh:mm")+"<br/>";
-        html += "Ungefähres Dienstende: "+zeitEnde.toString("hh:mm")+"</p>";
+        html += "<p><b>Dienstzeiten</b>:<br/>Beginn Tf: "+zeitTf.toString("hh:mm")+"<br/>Beginn Sonstige: "+zeitAnfang.toString("hh:mm")+"<br/>";
+        if (datum < QDate::currentDate()) {
+            html += "Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+        } else {
+            html += "Ungefähres Dienstende: "+zeitEnde.toString("hh:mm")+"</p>";
+        }
     }
 
     // Personal
@@ -295,11 +299,15 @@ QString Fahrtag::getHtmlForTableView()
     if (zeitenUnbekannt) {
         html += "<td>Dienstzeiten werden noch bekannt gegeben!</td>";
     } else {
-        html += "<td>Beginn Tf, Tb: "+zeitTf.toString("hh:mm") + "<br/>";
+        html += "<td>Beginn Tf: "+zeitTf.toString("hh:mm") + "<br/>";
         if (art != Schnupperkurs) {
             html += "Sonstige: "+zeitAnfang.toString("hh:mm") + "<br/>";
         }
-        html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+        if (datum < QDate::currentDate()) {
+            html += "Ende: "+zeitEnde.toString("hh:mm") + "</td>";
+        } else {
+            html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+        }
     }
 
     // Sonstiges
