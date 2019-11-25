@@ -250,12 +250,13 @@ bool AActivity::removePerson(QString p)
 Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat)
 {
    /*
-    * angabe über aufgabe prüfen
-    * p. ob person geeignet
-    * person hinzufügen
+    * Angaben fuer die Aufgabe pruefen
+    * pruefen ob die Person geeignet ist
+    * Person hinzufuegen oder Fehlermeldung zurueckgeben
     */
 
     if (kat == Zub && !hasQualification(p, kat, bemerkung)) kat = Begleiter;
+    if (kat == Tf && bemerkung.contains(QObject::tr("Tb"),Qt::CaseInsensitive)) kat = Tb;
 
     if (! hasQualification(p, kat, bemerkung)) return Mistake::FalscheQualifikation;
 
@@ -281,6 +282,7 @@ Mistake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime en
         return addPerson(pers, bemerkung, start, ende, kat);
     }
     if (isExtern(bemerkung)) {
+        if (kat == Category::Zub) kat = Category::Begleiter;
         Person *neuePerson = new Person(p, nullptr);
         neuePerson->setAusbildungTf(true);
         neuePerson->setAusbildungZf(true);
