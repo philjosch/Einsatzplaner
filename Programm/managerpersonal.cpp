@@ -10,7 +10,7 @@ double ManagerPersonal::minimumTotalDefault = 10.0;
 ManagerPersonal::ManagerPersonal()
 {
     personen = QSet<Person*>();
-    personenSorted = QHash<QString, Person*>();
+    personenSorted = QMap<QString, Person*>();
     minimumHours = QHash<Category, double>();
     foreach (Category cat, minimumHoursDefault.keys()) {
        minimumHours.insert(cat, minimumHoursDefault.value(cat));
@@ -165,6 +165,8 @@ bool ManagerPersonal::checkHours(Person *p, Category kat)
     switch (kat) {
     case Tf:
         return !(p->getAusbildungTf() && p->getTimeTf() < getMinimumHours(Category::Tf));
+    case Tb:
+        return true;
     case Zf:
         return !(p->getAusbildungZf() && p->getTimeZf() < getMinimumHours(Category::Zf));
     case Service:
@@ -181,6 +183,8 @@ bool ManagerPersonal::checkHours(Person *p, Category kat)
         return !((p->getAusbildungRangierer() || p->getAusbildungTf() || p->getAusbildungZf()) && (p->getTimeAusbildung() < getMinimumHours(Category::Ausbildung)));
     case Sonstiges:
         return !(p->getTimeSonstiges() < getMinimumHours(Category::Sonstiges));
+    case Gesamt:
+        return !(p->getTimeSum() < getMinimumHours());
     default:
         return true;
     }
@@ -188,7 +192,7 @@ bool ManagerPersonal::checkHours(Person *p, Category kat)
 
 bool ManagerPersonal::checkHours(Person *p)
 {
-    return !(p->getTimeSum() < getMinimumHours());
+    return checkHours(p, Category::Gesamt);
 }
 
 void ManagerPersonal::setMinimumHours(Category cat, double amount)
@@ -235,9 +239,9 @@ void ManagerPersonal::reloadSettings()
     mindestStundenZf = 0;*/
 }
 
-QSetIterator<Person *> ManagerPersonal::getPersonen() const
+QListIterator<Person *> ManagerPersonal::getPersonen() const
 {
-    QSetIterator<Person*> i(personen);
+    QListIterator<Person*> i(personenSorted.values());
     return i;
 }
 
@@ -279,6 +283,7 @@ double ManagerPersonal::getTime(Category kat)
     case Zf:
         return timeZf;
     case Zub:
+    case Begleiter:
         return timeZub;
     case Service:
         return timeService;
@@ -290,8 +295,14 @@ double ManagerPersonal::getTime(Category kat)
         return timeBuero;
     case Ausbildung:
         return timeAusbildung;
-    default:
+    case Sonstiges:
         return timeSonstiges;
+    case Gesamt:
+        return timeSum;
+    case Kilometer:
+        return sumKilometer;
+    default:
+        return 0;
     }
 }
 

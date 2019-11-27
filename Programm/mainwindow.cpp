@@ -69,10 +69,10 @@ QString MainWindow::getFarbe(AActivity *a)
         return getFarbeArbeit();
 }
 
-void MainWindow::open(QString filepath)
+void MainWindow::open(QString path)
 {
     MainWindow *newOpen = new MainWindow();
-    if (newOpen->openFile(filepath)) {
+    if (newOpen->openFile(path)) {
         newOpen->show();
     } else {
         newOpen->close();
@@ -125,7 +125,7 @@ void MainWindow::autoSave()
 {
     if (filePath == "") return;
     if (saved) return;
-    saveToPath(filePath+".autosave.ako");
+    saveToPath(filePath+".autosave.ako", false);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -167,7 +167,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-bool MainWindow::saveToPath(QString path)
+bool MainWindow::saveToPath(QString path, bool showInMenu)
 {
     QJsonObject calendarJSON = ui->calendar->toJson();
 
@@ -191,7 +191,7 @@ bool MainWindow::saveToPath(QString path)
     object.insert("settings", settings->toJson());
     object.insert("general", generalJSON);
 
-    return FileIO::saveJsonToFile(path, object);
+    return FileIO::saveJsonToFile(path, object, showInMenu);
 }
 
 void MainWindow::on_buttonPersonal_clicked()
@@ -304,10 +304,10 @@ void MainWindow::on_actionSave_triggered()
     }
 }
 
-bool MainWindow::openFile(QString filePath)
+bool MainWindow::openFile(QString path)
 {
     // Daten aus Datei laden
-    QJsonObject object = FileIO::getJsonFromFile(filePath);
+    QJsonObject object = FileIO::getJsonFromFile(path);
     if (object == QJsonObject()) return false;
 
     // Prüfen, ob Version kompatibel ist
@@ -322,7 +322,7 @@ bool MainWindow::openFile(QString filePath)
         return false;
     }
     setWindowTitle(tr("Übersicht"));
-    this->filePath = filePath;
+    filePath = path;
     setWindowFilePath(filePath);
     personalfenster->setWindowFilePath(filePath);
 
@@ -360,8 +360,9 @@ bool MainWindow::openFile(QString filePath)
 
 void MainWindow::on_actionSaveas_triggered()
 {
-    filePath = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
-    if (filePath != "") {
+    QString newPath = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
+    if (newPath != "") {
+        filePath = newPath;
         QJsonObject o;
         bool erfolg = FileIO::saveJsonToFile(filePath, o);
         if (! erfolg) {
@@ -381,8 +382,8 @@ void MainWindow::on_actionSaveas_triggered()
 
 void MainWindow::on_actionSavePersonal_triggered()
 {
-    QString filePath = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
-    if (filePath == "") {
+    QString path = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
+    if (path == "") {
         return;
     }
 
@@ -407,7 +408,7 @@ void MainWindow::on_actionSavePersonal_triggered()
     object.insert("view", viewJSON);
     object.insert("general", generalJSON);
 
-    if (! FileIO::saveJsonToFile(filePath, object)) {
+    if (! FileIO::saveJsonToFile(path, object)) {
         QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
     }
 }

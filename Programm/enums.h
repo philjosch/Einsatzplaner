@@ -13,7 +13,10 @@ enum Category {
     Werkstatt,
     ZugVorbereiten,
     Ausbildung, // In Version 1.3 eingefuehrt
-    Sonstiges=100
+    Sonstiges=100,
+    Gesamt=120,   // Wird nur verwendet, um Funktionsaufrufe einfacher zu gestalten
+    Kilometer=121,// Wird nur verwendet, um Funktionsaufrufe einfacher zu gestalten
+    Anzahl=122    // Wird nur verwendet, um Funktionsaufrufe einfacher zu gestalten
 };
 
 enum Mistake {

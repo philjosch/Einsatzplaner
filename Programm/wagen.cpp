@@ -248,7 +248,7 @@ double Wagen::getStrafpunkteFuerPlaetze(int anzahl, int start)
     int benoetigt = sitzGruppeEnde - sitzGruppeStart + 1;
 
     // Sp 2 //
-    int ueV = start - beginnErste;; // Anzahl der durch fremde Reservierungen belegten Plätze am Anfang
+    int ueV = start - beginnErste; // Anzahl der durch fremde Reservierungen belegten Plätze am Anfang
     int ueH = endeLetzte - ende; // Anzahl der durch fremde Reservierungen belegten Sitzplaetze in der letzten Sitzgruppe
 
     // Zweite Neue Variante zur Berechnung des Fehlers:
@@ -339,7 +339,7 @@ QList<int> Wagen::intToExt(QList<int> liste)
     for(int i: liste) {
         ext.append(internToExtern.at(i));
     }
-    qSort(ext);
+    std::sort(ext.begin(), ext.end());
     return ext;
 }
 
@@ -349,6 +349,6 @@ QList<int> Wagen::extToInt(QList<int> liste)
     for(int i: liste) {
         intern.append(externToIntern.value(i));
     }
-    qSort(intern);
+    std::sort(intern.begin(), intern.end());
     return intern;
 }

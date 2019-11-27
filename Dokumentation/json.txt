@@ -90,7 +90,7 @@ settings/			-> Speichert alle Einstelleungen zur Datei
 		path (string)		-> Pfad zur Datei, die den Upload durchführt
 		id (string)		-> Identifikationsstring für die hinterlegte Konfiguration des Uplaods
 		startdate (string)	-> Startdatum für die Übersicht (Format:tdy|all|bgn) (Heute | Alle | Beginn des aktuellen Monats)
-		enddate (string)	-> Enddatum für die Übersicht (Format: p1w|p1m|eoy|all) (1 Woche ab heute | 1 Monat ab heute | Ende des Jahres | Alle)
+		enddate (string)	-> Enddatum für die Übersicht (Format: p1w|p1m|eoy|all) (Bis Ende der nächsten Woche | Bis Ende des nächsten Monats | Ende des Jahres | Alle)
 		activities (bool)	-> Gibt an, ob die Arbeitseinsätze auch ausgegeben werden soll, oder nur die Fahrtage
 
 general/ (object)

@@ -14,7 +14,7 @@ public:
     static QString getFilePathSave(QWidget *parent, QString filename, QString filter);
 
     static QJsonObject getJsonFromFile(QString filepath);
-    static bool saveJsonToFile(QString filepath, QJsonObject object);
+    static bool saveJsonToFile(QString filepath, QJsonObject object, bool showInMenu=true);
 
     static QStringList getLastUsed();
     static void clearLastUsed();

@@ -4,6 +4,7 @@
 #include "activity.h"
 
 #include <QJsonArray>
+#include <QLinkedList>
 
 QStringList AActivity::EXTERNAL_LIST = QStringList() << "Extern" << "Führerstand" << "FS" << "Schnupperkurs" << "ELF" << "Ehrenlokführer" << "ELF-Kurs";
 QStringList AActivity::QUALIFICATION_LIST = QStringList() << "Azubi" << "Ausbildung" << "Tf-Ausbildung" << "Zf-Ausbildung" << "Tf-Unterricht" << "Zf-Unterricht" << "Weiterbildung";
@@ -65,7 +66,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
     zeitAnfang = QTime::fromString(o.value("zeitAnfang").toString(), "hh:mm");
     zeitEnde = QTime::fromString(o.value("zeitEnde").toString(), "hh:mm");
     zeitenUnbekannt = o.value("zeitenUnbekannt").toBool();
-    anlass = o.value("anlass").toString();
+    anlass = o.value("anlass").toString().replace("<br/>","\n");
     bemerkungen = o.value("bemerkungen").toString().replace("<br/>", "\n");
     QJsonArray array = o.value("personen").toArray();
     for(int i = 0; i < array.size(); i++) {
@@ -250,12 +251,13 @@ bool AActivity::removePerson(QString p)
 Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat)
 {
    /*
-    * angabe über aufgabe prüfen
-    * p. ob person geeignet
-    * person hinzufügen
+    * Angaben fuer die Aufgabe pruefen
+    * pruefen ob die Person geeignet ist
+    * Person hinzufuegen oder Fehlermeldung zurueckgeben
     */
 
     if (kat == Zub && !hasQualification(p, kat, bemerkung)) kat = Begleiter;
+    if (kat == Tf && bemerkung.contains(QObject::tr("Tb"),Qt::CaseInsensitive)) kat = Tb;
 
     if (! hasQualification(p, kat, bemerkung)) return Mistake::FalscheQualifikation;
 
@@ -281,6 +283,7 @@ Mistake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime en
         return addPerson(pers, bemerkung, start, ende, kat);
     }
     if (isExtern(bemerkung)) {
+        if (kat == Category::Zub) kat = Category::Begleiter;
         Person *neuePerson = new Person(p, nullptr);
         neuePerson->setAusbildungTf(true);
         neuePerson->setAusbildungZf(true);
@@ -297,34 +300,29 @@ void AActivity::updatePersonBemerkung(Person *p, QString bemerkung)
     personen.value(p)->bemerkung = bemerkung;
 }
 
-bool AActivity::operator >(const AActivity &second) const
-{
-    return second.operator<(*this);
-}
-
-bool AActivity::operator <(const AActivity &second) const
+bool AActivity::lesser(const AActivity &second) const
 {
     // Datum
     if (this->datum < second.datum)
         return true;
-    else if (this->datum > second.datum)
+    if (this->datum > second.datum)
         return false;
     // Zeiten?
     if (this->zeitenUnbekannt && !second.zeitenUnbekannt)
         return true;
-    else if (!this->zeitenUnbekannt && second.zeitenUnbekannt)
+    if (!this->zeitenUnbekannt && second.zeitenUnbekannt)
         return false;
 
     if (!this->zeitenUnbekannt) {
         // Beginn
         if (this->zeitAnfang < second.zeitAnfang)
             return true;
-        else if (this->zeitAnfang > second.zeitAnfang)
+        if (this->zeitAnfang > second.zeitAnfang)
             return false;
         // Ende
         if (this->zeitEnde < second.zeitEnde)
             return true;
-        else if (this->zeitEnde > second.zeitEnde)
+        if (this->zeitEnde > second.zeitEnde)
             return false;
     }
     // Art und beliebig, bei gleicher Art
@@ -333,36 +331,6 @@ bool AActivity::operator <(const AActivity &second) const
     if (const Activity *a = dynamic_cast<const Activity*>(&second))
         return true;
     return false;
-}
-
-bool AActivity::operator ==(const AActivity &second) const
-{
-    // Datum
-    if (this->datum != second.datum)
-        return false;
-    // Zeiten?
-    if (this->zeitenUnbekannt != second.zeitenUnbekannt)
-        return false;
-
-    if (! this->zeitenUnbekannt) {
-        // Beginn
-        if (this->zeitAnfang != second.zeitAnfang)
-            return false;
-        // Ende
-        if (this->zeitEnde != second.zeitEnde)
-            return false;
-    }
-    // Art und beliebig, bei gleicher Art
-    if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(this)) {
-        if (const Fahrtag *g = dynamic_cast<const Fahrtag*>(&second))
-            return true;
-        else
-            return false;
-    } else {
-        if (const Activity *a = dynamic_cast<const Activity*>(&second))
-            return true;
-        return false;
-    }
 }
 
 ManagerPersonal *AActivity::getPersonal() const
@@ -457,4 +425,58 @@ QTimeEdit *AActivity::generateNewTimeEdit()
     QTimeEdit *edit = new QTimeEdit();
     edit->setDisplayFormat("hh:mm");
     return edit;
+}
+
+void AActivity::sort(QList<AActivity *> *list)
+{
+    AActivity::mergeSort(list, 0, list->length()-1);
+}
+
+void AActivity::merge(QList<AActivity*> *arr, int l, int m, int r)
+{
+    // First subarray is arr[l..m]
+    // Second subarray is arr[m+1..r]
+    QLinkedList<AActivity*> L, R = QLinkedList<AActivity*>();
+
+    for (int i = l; i <= m; i++)
+        L.append(arr->at(i));
+    for (int j = m+1; j <= r; j++)
+        R.append(arr->at(j));
+
+    /* Merge the temp arrays back into arr[l..r]*/
+    int i = l;
+    while ((!(L.isEmpty())) && (!(R.isEmpty()))) {
+        if ( *(L.first()) <= *(R.first()) ) {
+            arr->replace(i++, L.first());
+            L.removeFirst();
+        } else {
+            arr->replace(i++, R.first());
+            R.removeFirst();
+        }
+    }
+    while(! L.isEmpty()) {
+        arr->replace(i++, L.first());
+        L.removeFirst();
+    }
+    while (! R.isEmpty()) {
+        arr->replace(i++, R.first());
+        R.removeFirst();
+    }
+}
+
+/* l is for left index and r is right index of the sub-array of arr to be sorted */
+void AActivity::mergeSort(QList<AActivity*> *arr, int l, int r)
+{
+    if (l < r)
+    {
+        // Same as (l+r)/2, but avoids overflow for
+        // large l and h
+        int m = l+(r-l)/2;
+
+        // Sort first and second halves
+        mergeSort(arr, l, m);
+        mergeSort(arr, m+1, r);
+
+        merge(arr, l, m, r);
+    }
 }

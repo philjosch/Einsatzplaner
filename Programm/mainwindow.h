@@ -35,15 +35,15 @@ public slots:
 
     void closeAActivity(AActivity *a);
 
-    void open(QString filepath); // Open the file in a new window
-    bool openFile(QString filePath); // Tells the window to open the file
+    void open(QString path); // Open the file in a new window
+    bool openFile(QString path); // Tells the window to open the file
 
     void unsave();
     void autoSave();
 
 protected:
     void closeEvent(QCloseEvent *event);
-    bool saveToPath(QString path);
+    bool saveToPath(QString path, bool showInMenu=true);
 
 private slots:
     // Einsatzplaner

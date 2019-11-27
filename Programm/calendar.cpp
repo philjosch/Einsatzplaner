@@ -282,7 +282,7 @@ void Calendar::activityChanged(AActivity *a)
     AActivity *ref;
     while (i > 0) {
         ref = itemToList.value(ui->listWidget->item(i-1));
-        if (*ref > *a) {
+        if (*a < *ref) {
             ui->listWidget->insertItem(i-1, ui->listWidget->takeItem(i));
             i--;
         } else {
@@ -375,7 +375,7 @@ void Calendar::setListItemC(QListWidgetItem *i, AActivity *a)
 {
     if (i == nullptr) return;
     i->setText(a->getListStringShort());
-    i->setBackgroundColor(MainWindow::getFarbe(a));
+    i->setBackground(QBrush(QColor(MainWindow::getFarbe(a))));
 }
 
 void Calendar::setListItem(QListWidgetItem *i, AActivity *a)
@@ -384,5 +384,5 @@ void Calendar::setListItem(QListWidgetItem *i, AActivity *a)
     i->setText(a->getListString());
     i->setToolTip(a->getAnlass());
     i->setWhatsThis(a->getAnlass());
-    i->setBackgroundColor(MainWindow::getFarbe(a));
+    i->setBackground(QBrush(QColor(MainWindow::getFarbe(a))));
 }

@@ -65,9 +65,11 @@ public:
     bool removePerson(Person *p);
     bool removePerson(QString p);
 
-    bool operator>(const AActivity &second) const;
-    bool operator<(const AActivity &second) const;
-    bool operator==(const AActivity &second) const;
+    friend bool operator<(const AActivity &lhs, const AActivity &rhs) { return lhs.lesser(rhs);}
+    friend bool operator>(const AActivity &lhs, const AActivity &rhs) { return rhs < lhs; }
+    friend bool operator==(const AActivity &lhs, const AActivity &rhs) { return (lhs <= rhs) && (lhs >= rhs);}
+    friend bool operator<=(const AActivity &lhs, const AActivity &rhs) { return !(lhs > rhs);}
+    friend bool operator>=(const AActivity &lhs, const AActivity &rhs) { return !(lhs < rhs);}
 
     virtual QString getKurzbeschreibung() = 0;
     virtual QString getListString() = 0;
@@ -90,6 +92,8 @@ public:
     static bool hasQualification(Person *p, Category kat, QString bemerkung);
     static bool isExtern(QString bemerkung);
 
+    static void sort(QList<AActivity *> *list);
+
 protected:
     QDate datum;
     QString ort;
@@ -106,6 +110,11 @@ protected:
     QString listToString(QMap<Person*, Infos*> *liste, QString seperator, bool aufgabe=false);
 
     static QString COLOR_REQUIRED;
+    bool lesser(const AActivity &second) const;
+
+private:
+    static void mergeSort(QList<AActivity *> *arr, int l, int r);
+    static void merge(QList<AActivity *> *arr, int l, int m, int r);
 };
 
 

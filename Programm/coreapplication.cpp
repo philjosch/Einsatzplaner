@@ -10,9 +10,9 @@
 
 CoreApplication::Version CoreApplication::aktuelleVersion = {-1, -1, -1};
 bool CoreApplication::developerMode = false;
-QUrl CoreApplication::urlDownload = QUrl("http://bahn.philipp-schepper.de/#downloads");
-QUrl CoreApplication::urlVersion = QUrl("http://bahn.philipp-schepper.de/version.txt");
-QString CoreApplication::urlNotes = "http://bahn.philipp-schepper.de/version/";
+QUrl CoreApplication::urlDownload = QUrl("http://epl.philipp-schepper.de/#downloads");
+QUrl CoreApplication::urlVersion = QUrl("http://epl.philipp-schepper.de/version.txt");
+QString CoreApplication::urlNotes = "http://epl.philipp-schepper.de/version/";
 
 CoreApplication::CoreApplication(int &argc, char **argv, CoreApplication::Version version, bool devVersion) : QApplication(argc, argv)
 {

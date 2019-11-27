@@ -1,5 +1,21 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 31. März 2019
+Stand: 27. November 2019
+
+## Version 1.5.1 – 2019-11-27
+### Neu
+- Die Einsatzzeiten einer einzelnen Person können ab sofort als PDF gespeichert und gedruckt werden.
+
+### Verbessert
+- Der Export der Aktivitäten als Listen- und Einzelansicht wurde optimiert.
+- Der Export der Personaldaten als Listen- und Einzelansicht wurde verbessert.
+
+### Fehlerbehebungen
+- Externes Personal eines Fahrtages wird jetzt wieder im entsprechenden Fenster dargestellt.
+- Die Personalübersicht bleibt sortiert, auch wenn sie aktualisiert wird.
+- Ein Problem beim automatischen Speichern wurde behoben.
+- Die Einstellung des Zeitraums beim Datei-Upload wird jetzt zuverlässig verwendet.
+- Kleinere Verbesserungen und Fehlerbehebungen
+
 
 ## Version 1.5 – 2019-03-31
 ### Neu

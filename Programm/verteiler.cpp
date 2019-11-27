@@ -145,13 +145,13 @@ Verteiler::ResBewTuple Verteiler::getNaechsteReservierungen(QSet<Reservierung *>
         int i = listRes.length()-1;
         while (i > 0) {
             if (listBew.at(i-1) > listBew.at(i)) {
-                listBew.swap(i-1, i);
-                listRes.swap(i-1, i);
+                listBew.swapItemsAt(i-1, i);
+                listRes.swapItemsAt(i-1, i);
                 i--;
             } else if (qFuzzyCompare(listBew.at(i-1)+1.0, listBew.at(i)+1.0)) {
                 if (listRes.at(i-1)->getAnzahl() < listRes.at(i)->getAnzahl()) {
-                    listBew.swap(i-1, i);
-                    listRes.swap(i-1, i);
+                    listBew.swapItemsAt(i-1, i);
+                    listRes.swapItemsAt(i-1, i);
                     i--;
                 } else {
                     break;
@@ -178,13 +178,13 @@ Verteiler::ResBewTuple Verteiler::getNaechsteReservierungen(QSet<Reservierung *>
             int i = listRes.length()-1;
             while (i > 0) {
                 if (listBew.at(i-1) > listBew.at(i)) {
-                    listBew.swap(i-1, i);
-                    listRes.swap(i-1, i);
+                    listBew.swapItemsAt(i-1, i);
+                    listRes.swapItemsAt(i-1, i);
                     i--;
                 } else if (qFuzzyCompare(listBew.at(i-1)+1.0, listBew.at(i)+1.0)) {
                     if (listRes.at(i-1)->getAnzahl() < listRes.at(i)->getAnzahl()) {
-                        listBew.swap(i-1, i);
-                        listRes.swap(i-1, i);
+                        listBew.swapItemsAt(i-1, i);
+                        listRes.swapItemsAt(i-1, i);
                         i--;
                     } else {
                         break;

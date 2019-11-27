@@ -6,6 +6,8 @@
 #
 #-------------------------------------------------
 
+!versionAtLeast(QT_VERSION, 5.13.0):error("Qt version 5.13 is required for this project")
+
 QT       += core gui printsupport network widgets
 
 TARGET = Einsatzplaner
@@ -86,11 +88,11 @@ win32 {
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
     QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2019
     QMAKE_TARGET_PRODUCT = Einsatzplaner
-    VERSION = 1.5.0.1
+    VERSION = 1.5.1.1
 }
 
 macx {
-    VERSION = 1.5.0
+    VERSION = 1.5.1
     OTHER_FILES += Info.plist ../Icon/keks.icns
     QMAKE_INFO_PLIST = Info.plist
     DISTFILES += Info.plist
