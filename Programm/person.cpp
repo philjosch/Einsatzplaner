@@ -370,7 +370,7 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
         QList<AActivity*> list = activities.keys();
-        AActivity::sort(list);
+        AActivity::sort(&list);
         for(int i=0; i<list.length(); i++) {
             AActivity *a = list.at(i);
 //            for(AActivity *a: activities.keys()) {
