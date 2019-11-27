@@ -2,15 +2,15 @@
    <autorun >1</>
    <autoclose >0</>
    <compname >Philipp Schepper</>
-   <produrl >http://bahn.philipp-schepper.de</>
-   <ver >Version 1.5.0</>
+   <produrl >http://epl.philipp-schepper.de</>
+   <ver >Version 1.5.1</>
    <supurl ></>
    <updurl ></>
    <dlgfont >verdana</>
    <headlogo >default - 1</>
    <dlgfontsize >s8</>
    <output >C:\Users\Virtual\Desktop</>
-   <exename >einsatzplaner-setup-v1-5-0.exe</>
+   <exename >einsatzplaner-setup-v1-5-1.exe</>
    <beffile ></>
    <aftfile ></>
    <uninclude >1</>
