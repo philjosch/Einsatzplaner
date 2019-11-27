@@ -92,6 +92,8 @@ public:
     static bool hasQualification(Person *p, Category kat, QString bemerkung);
     static bool isExtern(QString bemerkung);
 
+    static void sort(QList<AActivity*> list);
+
 protected:
     QDate datum;
     QString ort;
@@ -110,6 +112,9 @@ protected:
     static QString COLOR_REQUIRED;
     bool lesser(const AActivity &second) const;
 
+private:
+    static void mergeSort(QList<AActivity *> arr, int l, int r);
+    static void merge(QList<AActivity *> arr, int l, int m, int r);
 };
 
 

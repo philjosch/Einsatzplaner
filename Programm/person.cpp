@@ -369,12 +369,19 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     if (activities.size() > 0) {
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
-        for(AActivity *a: activities.keys()) {
+        QList<AActivity*> list = activities.keys();
+        AActivity::sort(list);
+        for(int i=0; i<list.length(); i++) {
+            AActivity *a = list.at(i);
+//            for(AActivity *a: activities.keys()) {
             AActivity::Infos info = a->getIndividual(this);
-            html += "<tr><td>"+a->getDatum().toString("dd.MM.yyyy")+"<br/>"+a->getKurzbeschreibung()+"<br/>"+a->getAnlass()+"</td><td>"
-                    + info.beginn.toString("HH:mm")+"-"+info.ende.toString("HH:mm")+"</td><td>"
-                    + AActivity::getStringFromCategory(info.kategorie) + "</td><td>"
-                    + info.bemerkung + "</td></tr>";
+            html += "<tr><td>"+a->getDatum().toString("dd.MM.yyyy")+"<br/>"+a->getKurzbeschreibung();
+            if (a->getAnlass() != a->getKurzbeschreibung())
+                html += "<br/>"+a->getAnlass();
+            html +="</td><td>"
+                 + info.beginn.toString("HH:mm")+"-"+info.ende.toString("HH:mm")+"</td><td>"
+                 + AActivity::getStringFromCategory(info.kategorie) + "</td><td>"
+                 + info.bemerkung + "</td></tr>";
         }
         html += "</tbody></table>";
     } else {

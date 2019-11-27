@@ -4,6 +4,7 @@
 #include "activity.h"
 
 #include <QJsonArray>
+#include <QLinkedList>
 
 QStringList AActivity::EXTERNAL_LIST = QStringList() << "Extern" << "Führerstand" << "FS" << "Schnupperkurs" << "ELF" << "Ehrenlokführer" << "ELF-Kurs";
 QStringList AActivity::QUALIFICATION_LIST = QStringList() << "Azubi" << "Ausbildung" << "Tf-Ausbildung" << "Zf-Ausbildung" << "Tf-Unterricht" << "Zf-Unterricht" << "Weiterbildung";
@@ -424,4 +425,58 @@ QTimeEdit *AActivity::generateNewTimeEdit()
     QTimeEdit *edit = new QTimeEdit();
     edit->setDisplayFormat("hh:mm");
     return edit;
+}
+
+void AActivity::sort(QList<AActivity *> list)
+{
+    AActivity::mergeSort(list, 0, list.length()-1);
+}
+
+void AActivity::merge(QList<AActivity*> arr, int l, int m, int r)
+{
+    // First subarray is arr[l..m]
+    // Second subarray is arr[m+1..r]
+    QLinkedList<AActivity*> L, R = QLinkedList<AActivity*>();
+
+    for (int i = l; i <= m; i++)
+        L.append(arr.at(i));
+    for (int j = m+1; j <= r; j++)
+        R.append(arr.at(j));
+
+    /* Merge the temp arrays back into arr[l..r]*/
+    arr.clear();
+    while (!L.isEmpty() && !R.isEmpty()) {
+        if ( *(L.first()) <= *(R.first()) ) {
+            arr.append(L.first());
+            L.removeFirst();
+        } else {
+            arr.append(R.first());
+            R.removeFirst();
+        }
+    }
+    while(! L.isEmpty()) {
+        arr.append(L.first());
+        L.removeFirst();
+    }
+    while (! R.isEmpty()) {
+        arr.append(R.first());
+        R.removeFirst();
+    }
+}
+
+/* l is for left index and r is right index of the sub-array of arr to be sorted */
+void AActivity::mergeSort(QList<AActivity*> arr, int l, int r)
+{
+    if (l < r)
+    {
+        // Same as (l+r)/2, but avoids overflow for
+        // large l and h
+        int m = l+(r-l)/2;
+
+        // Sort first and second halves
+        mergeSort(arr, l, m);
+        mergeSort(arr, m+1, r);
+
+        merge(arr, l, m, r);
+    }
 }
