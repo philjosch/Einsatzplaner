@@ -117,7 +117,7 @@ QString Fahrtag::getHtmlForSingleView()
     QString required2 = "</font>";
     QString html = "";
     // Überschrift
-    html += "<h1 class='pb'>" +Fahrtag::getStringFromArt(art) + " am " + datum.toString("dddd dd.MM.yyyy")+(wichtig?required1+" WICHTIG!"+required2:"")+"</h1>";
+    html += "<h2 class='pb'>" +Fahrtag::getStringFromArt(art) + " am " + datum.toString("dddd dd.MM.yyyy")+(wichtig?required1+" WICHTIG!"+required2:"")+"</h2>";
     // Anlass
     if (anlass != "") {
         html += "<p><b>Anlass:</b><br/>"+anlass+"</p>";

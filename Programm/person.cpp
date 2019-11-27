@@ -356,7 +356,7 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+QString::number(m->getMinimumHours())+"h)");
     html += helpcurrent.arg("Gesamte Stundenzahl").arg(timeSum, 0, 'f', 2);
     html += "<li>Anzahl Aktivitäten: "+QString::number(getSumAnzahl())+"</li>";
-    html += "<li>Gefahrene Strecke: "+QString::number(sumKilometer)+" km</li></ul>";
+    html += "<li>Gefahrene Strecke: "+QString::number(sumKilometer)+"km</li></ul>";
     html += "</p>";
     if (manager->pruefeStunden(this)) {
         html += "<p><br/>Die Person hat die für Sie notwendigen Stunden erbracht!</p>";
@@ -376,7 +376,7 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
 //            for(AActivity *a: activities.keys()) {
             AActivity::Infos info = a->getIndividual(this);
             html += "<tr><td>"+a->getDatum().toString("dd.MM.yyyy")+"<br/>"+a->getKurzbeschreibung();
-            if (a->getAnlass() != a->getKurzbeschreibung())
+            if (a->getAnlass() != a->getKurzbeschreibung() && a->getAnlass() != "")
                 html += "<br/>"+a->getAnlass();
             html +="</td><td>"
                  + info.beginn.toString("HH:mm")+"-"+info.ende.toString("HH:mm")+"</td><td>"
@@ -387,21 +387,22 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     } else {
         html += QString("<p>%1 %2 hat an keinen eingetragenen Aktivitäten teilgenommen!</p>").arg(vorname, nachname);
     }
-    html+= "<h4>Zusätzliche nicht in der Tabelle erfassten Stunden</h4><ul>";
     help = "<li>%1: %2h</li>";
-    if (additionalTimeTf > 0) html+= help.arg("Tf").arg(additionalTimeTf, 0, 'f', 1);
-    if (additionalTimeZf > 0) html+= help.arg("Zf").arg(additionalTimeZf, 0, 'f', 1);
-    if (additionalTimeZub > 0) html+= help.arg("Zub").arg(additionalTimeZub, 0, 'f', 1);
-    if (additionalTimeService > 0) html+= help.arg("Service").arg(additionalTimeService, 0, 'f', 1);
-    if (additionalTimeVorbereiten > 0) html+= help.arg("Vorbereiten").arg(additionalTimeVorbereiten, 0, 'f', 1);
-    if (additionalTimeWerkstatt > 0) html+= help.arg("Werkstatt").arg(additionalTimeWerkstatt, 0, 'f', 1);
-    if (additionalTimeBuero > 0) html+= help.arg("Büro").arg(additionalTimeBuero, 0, 'f', 1);
-    if (additionalTimeAusbildung > 0) html+= help.arg("Ausbildung").arg(additionalTimeAusbildung, 0, 'f', 1);
-    if (additionalTimeSonstiges > 0) html+= help.arg("Sonstiges").arg(additionalTimeSonstiges, 0, 'f', 1);
-    if (additionalAnzahl > 0) html+= help.arg("Zusätzliche Aktivitäten").arg(additionalAnzahl);
-    if (additionalKilometer > 0) html+= QString("<li>Kilometer: %1km</li>").arg(additionalKilometer, 0, 'f', 1);
-    html+= "</ul>";
-
+    QString h2 = "";
+    if (additionalTimeTf > 0) h2 += help.arg("Tf").arg(additionalTimeTf, 0, 'f', 1);
+    if (additionalTimeZf > 0) h2 += help.arg("Zf").arg(additionalTimeZf, 0, 'f', 1);
+    if (additionalTimeZub > 0) h2 += help.arg("Zub").arg(additionalTimeZub, 0, 'f', 1);
+    if (additionalTimeService > 0) h2 += help.arg("Service").arg(additionalTimeService, 0, 'f', 1);
+    if (additionalTimeVorbereiten > 0) h2 += help.arg("Vorbereiten").arg(additionalTimeVorbereiten, 0, 'f', 1);
+    if (additionalTimeWerkstatt > 0) h2 += help.arg("Werkstatt").arg(additionalTimeWerkstatt, 0, 'f', 1);
+    if (additionalTimeBuero > 0) h2 += help.arg("Büro").arg(additionalTimeBuero, 0, 'f', 1);
+    if (additionalTimeAusbildung > 0) h2 += help.arg("Ausbildung").arg(additionalTimeAusbildung, 0, 'f', 1);
+    if (additionalTimeSonstiges > 0) h2 += help.arg("Sonstiges").arg(additionalTimeSonstiges, 0, 'f', 1);
+    help = "<li>%1: %2%3</li>";
+    if (additionalAnzahl > 0) h2 += help.arg("Zusätzliche Aktivitäten").arg(additionalAnzahl).arg("");
+    if (additionalKilometer > 0) h2 += help.arg("Gefahrene Strecke").arg(additionalKilometer, 0, 'f', 1).arg("km");
+    if (h2 != "")
+        html+= "<h4>Zusätzliche nicht in der Tabelle erfassten Stunden</h4><ul>"+h2+"</ul>";
     return html;
 }
 

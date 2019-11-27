@@ -305,24 +305,24 @@ bool AActivity::lesser(const AActivity &second) const
     // Datum
     if (this->datum < second.datum)
         return true;
-    else if (this->datum > second.datum)
+    if (this->datum > second.datum)
         return false;
     // Zeiten?
     if (this->zeitenUnbekannt && !second.zeitenUnbekannt)
         return true;
-    else if (!this->zeitenUnbekannt && second.zeitenUnbekannt)
+    if (!this->zeitenUnbekannt && second.zeitenUnbekannt)
         return false;
 
     if (!this->zeitenUnbekannt) {
         // Beginn
         if (this->zeitAnfang < second.zeitAnfang)
             return true;
-        else if (this->zeitAnfang > second.zeitAnfang)
+        if (this->zeitAnfang > second.zeitAnfang)
             return false;
         // Ende
         if (this->zeitEnde < second.zeitEnde)
             return true;
-        else if (this->zeitEnde > second.zeitEnde)
+        if (this->zeitEnde > second.zeitEnde)
             return false;
     }
     // Art und beliebig, bei gleicher Art

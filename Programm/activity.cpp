@@ -76,13 +76,13 @@ QString Activity::getHtmlForSingleView()
     QString required2 = "</font>";
     QString html = "";
     // Überschrift
-    html += "<h1 class='pb'>Arbeitseinsatz am " + datum.toString("dddd dd.MM.yyyy")+"</h1>";
+    html += "<h2 class='pb'>"+(anlass != "" ? anlass : "Arbeitseinsatz")+" am " + datum.toString("dddd dd.MM.yyyy")+"</h2>";
     // Ort
     if (ort != "")
         html += "<p><b>Ort:</b> "+ort+"</p>";
     // Anlass
     if (anlass != "")
-        html += "<p><b>Anlass:</b><br/>"+anlass+"</p>";
+        html += "<p><b>Anlass Arbeitseinsatz:</b><br/>"+anlass+"</p>";
     if (bemerkungen!= "")
         html += "<p><b>Bemerkungen:</b><br/>"+bemerkungen+"</p>";
     // Zeiten
@@ -90,7 +90,11 @@ QString Activity::getHtmlForSingleView()
         html += "<p><b>Zeiten werden noch bekannt gegeben!</b></p>";
     } else {
         html += "<p><b>Zeiten</b>:<br/>Beginn: "+zeitAnfang.toString("hh:mm")+"<br/>";
-        html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+        if (datum < QDate::currentDate()) {
+            html += "Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+        } else {
+            html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+        }
     }
     // Personal
     html += "<p><b>Helfer";
@@ -106,7 +110,7 @@ QString Activity::getHtmlForSingleView()
             html += (info->ende == QTime(0,0) ? "" : info->ende.toString("hh:mm"));
             html += "</td><td>";
             if (info->kategorie != Category::Sonstiges) {
-                AActivity::getStringFromCategory(info->kategorie);
+                html += AActivity::getStringFromCategory(info->kategorie);
                 if (info->bemerkung != "") html += "<br/>";
             }
             html += info->bemerkung;
@@ -191,7 +195,11 @@ QString Activity::getHtmlForTableView()
         html += "<td>Zeiten werden noch bekannt gegeben!</td>";
     } else {
         html += "<td>Beginn: "+zeitAnfang.toString("hh:mm") + "<br/>";
-        html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+        if (datum < QDate::currentDate()) {
+            html += "Ende: "+zeitEnde.toString("hh:mm") + "</td>";
+        } else {
+            html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+        }
     }
 
     // Sonstiges

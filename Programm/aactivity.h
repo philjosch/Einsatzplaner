@@ -66,8 +66,8 @@ public:
     bool removePerson(QString p);
 
     friend bool operator<(const AActivity &lhs, const AActivity &rhs) { return lhs.lesser(rhs);}
-    friend bool operator>(const AActivity &lhs, const AActivity &rhs) { return rhs.lesser(lhs); }
-    friend bool operator==(const AActivity &lhs, const AActivity &rhs) { return !(lhs < rhs) && !(rhs < lhs);}
+    friend bool operator>(const AActivity &lhs, const AActivity &rhs) { return rhs < lhs; }
+    friend bool operator==(const AActivity &lhs, const AActivity &rhs) { return (lhs <= rhs) && (lhs >= rhs);}
     friend bool operator<=(const AActivity &lhs, const AActivity &rhs) { return !(lhs > rhs);}
     friend bool operator>=(const AActivity &lhs, const AActivity &rhs) { return !(lhs < rhs);}
 

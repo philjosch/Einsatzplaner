@@ -66,7 +66,7 @@ bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper
                             "table tr, table td { page-break-inside: avoid; }"
                             "ul { -qt-list-indent: 0; margin-top: 0px !important; margin-bottom: 0px !important }"
                             "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
-    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
+    d->setDefaultFont(QFont("Arial", 10, QFont::Normal));
     d->setDocumentMargin(0);
 
     QString a = "<h3>Übersicht über die Aktivitäten</h3>"
@@ -181,7 +181,7 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     if (m->getTime(Zf) > 0) a += help.arg("Zf").arg(m->getTime(Zf), 0, 'f', 0);
     if (m->getTime(Zub) > 0) a += help.arg("Zub").arg(m->getTime(Zub), 0, 'f', 0);
     if (m->getTime(Service) > 0) a += help.arg("Service").arg(m->getTime(Service), 0, 'f', 0);
-    if (m->getTime(ZugVorbereiten) > 0) a += help.arg("Vorbereiten").arg(m->getTime(ZugVorbereiten), 0, 'f', 0);
+    if (m->getTime(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten").arg(m->getTime(ZugVorbereiten), 0, 'f', 0);
     if (m->getTime(Werkstatt) > 0) a += help.arg("Werkstatt").arg(m->getTime(Werkstatt), 0, 'f', 0);
     if (m->getTime(Buero) > 0) a += help.arg("Büro").arg(m->getTime(Buero), 0, 'f', 0);
     if (m->getTime(Ausbildung) > 0) a += help.arg("Ausbildung").arg(m->getTime(Ausbildung), 0, 'f', 0);
@@ -199,7 +199,7 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     if (m->getMinimumHours(Zf) > 0) a += help.arg("Zf").arg(m->getMinimumHours(Zf), 0, 'f', 1);
     if (m->getMinimumHours(Zub) > 0) a += help.arg("Zub").arg(m->getMinimumHours(Zub), 0, 'f', 1);
     if (m->getMinimumHours(Service) > 0) a += help.arg("Service").arg(m->getMinimumHours(Service), 0, 'f', 1);
-    if (m->getMinimumHours(ZugVorbereiten) > 0) a += help.arg("Vorbereiten").arg(m->getMinimumHours(ZugVorbereiten), 0, 'f', 1);
+    if (m->getMinimumHours(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten").arg(m->getMinimumHours(ZugVorbereiten), 0, 'f', 1);
     if (m->getMinimumHours(Werkstatt) > 0) a += help.arg("Werkstatt").arg(m->getMinimumHours(Werkstatt), 0, 'f', 1);
     if (m->getMinimumHours(Buero) > 0) a += help.arg("Büro").arg(m->getMinimumHours(Buero), 0, 'f', 1);
     if (m->getMinimumHours(Ausbildung) > 0) a += help.arg("Ausbildung").arg(m->getMinimumHours(Ausbildung), 0, 'f', 1);
