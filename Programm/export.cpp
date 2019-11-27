@@ -209,7 +209,7 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     a += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
 
     // Add a papge for each person
-    QSetIterator<Person*> iter = m->getPersonen();
+    QListIterator<Person*> iter = m->getPersonen();
     while(iter.hasNext()) {
         Person *akt = iter.next();
         a += akt->getHtmlForDetailPage(m);

@@ -47,7 +47,7 @@ public:
     static double getMinimumHoursDefault(Category kat);
     static double getMinimumHoursDefault();
 
-    QSetIterator<Person *> getPersonen() const;
+    QListIterator<Person *> getPersonen() const;
 
     void berechne();
 
@@ -72,7 +72,7 @@ public slots:
 
 private:
     QSet<Person *> personen;
-    QHash<QString, Person*> personenSorted;
+    QMap<QString, Person*> personenSorted;
 
     QHash<Category, double> minimumHours;
     double minimumTotal;

@@ -23,7 +23,7 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     personToItem = QHash<Person*, QListWidgetItem*>();
     enabled = false;
 
-    QSetIterator<Person*> i = manager->getPersonen();
+    QListIterator<Person*> i = manager->getPersonen();
     while(i.hasNext()) {
         Person *p = i.next();
         QListWidgetItem *item = new QListWidgetItem(p->getName());
@@ -175,7 +175,7 @@ void PersonalWindow::refresh()
 
 void PersonalWindow::loadData()
 {
-    QSetIterator<Person*> i = manager->getPersonen();
+    QListIterator<Person*> i = manager->getPersonen();
     while(i.hasNext()) {
         Person *p = i.next();
         QListWidgetItem *item = new QListWidgetItem(p->getName());
@@ -205,7 +205,7 @@ void PersonalWindow::refreshGesamt()
     }
     ui->tabelleGesamt->setSortingEnabled(false);
 
-    QSetIterator<Person*> iterator = manager->getPersonen();
+    QListIterator<Person*> iterator = manager->getPersonen();
     //  0: summe gesamt
     //  1: anzahl
     //  2: tf/tb

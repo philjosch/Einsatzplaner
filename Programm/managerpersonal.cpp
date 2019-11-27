@@ -10,7 +10,7 @@ double ManagerPersonal::minimumTotalDefault = 10.0;
 ManagerPersonal::ManagerPersonal()
 {
     personen = QSet<Person*>();
-    personenSorted = QHash<QString, Person*>();
+    personenSorted = QMap<QString, Person*>();
     minimumHours = QHash<Category, double>();
     foreach (Category cat, minimumHoursDefault.keys()) {
        minimumHours.insert(cat, minimumHoursDefault.value(cat));
@@ -239,9 +239,9 @@ void ManagerPersonal::reloadSettings()
     mindestStundenZf = 0;*/
 }
 
-QSetIterator<Person *> ManagerPersonal::getPersonen() const
+QListIterator<Person *> ManagerPersonal::getPersonen() const
 {
-    QSetIterator<Person*> i(personen);
+    QListIterator<Person*> i(personenSorted.values());
     return i;
 }
 
