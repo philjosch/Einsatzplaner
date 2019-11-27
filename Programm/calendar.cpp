@@ -282,7 +282,7 @@ void Calendar::activityChanged(AActivity *a)
     AActivity *ref;
     while (i > 0) {
         ref = itemToList.value(ui->listWidget->item(i-1));
-        if (*ref > *a) {
+        if (*a < *ref) {
             ui->listWidget->insertItem(i-1, ui->listWidget->takeItem(i));
             i--;
         } else {

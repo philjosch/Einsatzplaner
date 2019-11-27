@@ -299,12 +299,7 @@ void AActivity::updatePersonBemerkung(Person *p, QString bemerkung)
     personen.value(p)->bemerkung = bemerkung;
 }
 
-bool AActivity::operator >(const AActivity &second) const
-{
-    return second.operator<(*this);
-}
-
-bool AActivity::operator <(const AActivity &second) const
+bool AActivity::lesser(const AActivity &second) const
 {
     // Datum
     if (this->datum < second.datum)
@@ -335,36 +330,6 @@ bool AActivity::operator <(const AActivity &second) const
     if (const Activity *a = dynamic_cast<const Activity*>(&second))
         return true;
     return false;
-}
-
-bool AActivity::operator ==(const AActivity &second) const
-{
-    // Datum
-    if (this->datum != second.datum)
-        return false;
-    // Zeiten?
-    if (this->zeitenUnbekannt != second.zeitenUnbekannt)
-        return false;
-
-    if (! this->zeitenUnbekannt) {
-        // Beginn
-        if (this->zeitAnfang != second.zeitAnfang)
-            return false;
-        // Ende
-        if (this->zeitEnde != second.zeitEnde)
-            return false;
-    }
-    // Art und beliebig, bei gleicher Art
-    if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(this)) {
-        if (const Fahrtag *g = dynamic_cast<const Fahrtag*>(&second))
-            return true;
-        else
-            return false;
-    } else {
-        if (const Activity *a = dynamic_cast<const Activity*>(&second))
-            return true;
-        return false;
-    }
 }
 
 ManagerPersonal *AActivity::getPersonal() const

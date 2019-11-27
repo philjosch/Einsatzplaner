@@ -339,7 +339,7 @@ QList<int> Wagen::intToExt(QList<int> liste)
     for(int i: liste) {
         ext.append(internToExtern.at(i));
     }
-    qSort(ext);
+    std::sort(ext.begin(), ext.end());
     return ext;
 }
 
@@ -349,6 +349,6 @@ QList<int> Wagen::extToInt(QList<int> liste)
     for(int i: liste) {
         intern.append(externToIntern.value(i));
     }
-    qSort(intern);
+    std::sort(intern.begin(), intern.end());
     return intern;
 }

@@ -1535,8 +1535,8 @@
      <addaction name="actionSinglePrint"/>
      <addaction name="actionSinglePDF"/>
      <addaction name="separator"/>
-     <addaction name="actionEinzelPrint_2"/>
-     <addaction name="actionEinzelPDF_2"/>
+     <addaction name="actionEinzelPrint"/>
+     <addaction name="actionEinzelPDF"/>
     </widget>
     <addaction name="menuEinzelansichten"/>
     <addaction name="separator"/>
@@ -1597,19 +1597,12 @@
     <string>Ctrl+P</string>
    </property>
   </action>
-  <action name="actionEinzelPDF">
-   <property name="text">
-    <string>Einzelansicht als PDF speichern …</string>
-   </property>
-  </action>
-  <action name="actionEinzelPrint">
-   <property name="text">
-    <string>Einzelansicht drucken …</string>
-   </property>
-  </action>
   <action name="actionSinglePrint">
    <property name="text">
     <string>Für eine Person drucken ...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+P</string>
    </property>
   </action>
   <action name="actionSinglePDF">
@@ -1617,12 +1610,12 @@
     <string>Für eine Person als PDF speichern ...</string>
    </property>
   </action>
-  <action name="actionEinzelPrint_2">
+  <action name="actionEinzelPrint">
    <property name="text">
     <string>Für alle drucken ...</string>
    </property>
   </action>
-  <action name="actionEinzelPDF_2">
+  <action name="actionEinzelPDF">
    <property name="text">
     <string>Für alle als PDF speichern ...</string>
    </property>
@@ -1755,38 +1748,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionEinzelPDF</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>pushPDFEinzel</receiver>
-   <slot>click()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>175</x>
-     <y>503</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionEinzelPrint</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>pushPrintEinzel</receiver>
-   <slot>click()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>509</x>
-     <y>503</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionGesamtDrucken</sender>
    <signal>triggered(bool)</signal>
    <receiver>pushPrint</receiver>
@@ -1815,6 +1776,38 @@
     <hint type="destinationlabel">
      <x>174</x>
      <y>504</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionEinzelPDF</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>pushPDFEinzel</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>175</x>
+     <y>503</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionEinzelPrint</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>pushPrintEinzel</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>503</y>
     </hint>
    </hints>
   </connection>
