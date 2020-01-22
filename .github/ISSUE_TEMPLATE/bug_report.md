@@ -2,16 +2,16 @@
 name: Bug report
 about: Bericht zur Verbesserung
 title: ''
-labels: bug
+labels: bug, Patch++
 assignees: ''
 
 ---
 
-**Fehlerbeschreibung*
+**Fehlerbeschreibung**
 A clear and concise description of what the bug is.
 
 **Zum Reproduzieren**
-Schritte, um den Fehler zu reporduzieren
+Schritte, um den Fehler zu reproduzieren
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
@@ -28,8 +28,8 @@ Bilder, die zeigen, wo der Fehler liegt, bzw. auftritt.
  - Windows [z.B. Win10]
  - Programmversion [z.B. 1.4.1]
 
-**Weiter Informationen**
-Sonstige Weiter Informationen
+**Weitere Informationen**
+Sonstige weitere Informationen
 
 **Mögliche Gründe und Ursachen für Fehler**
 Potentielle Daten und Funktionen nennen, die den Fehler verursachen könnten
