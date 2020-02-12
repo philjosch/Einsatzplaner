@@ -406,6 +406,7 @@ void MainWindow::on_actionSavePersonal_triggered()
     QJsonObject object;
     object.insert("calendar", calendarJSON);
     object.insert("view", viewJSON);
+    object.insert("settings", settings->toJson());
     object.insert("general", generalJSON);
 
     if (! FileIO::saveJsonToFile(path, object)) {
