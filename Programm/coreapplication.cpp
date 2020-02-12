@@ -26,6 +26,7 @@ CoreApplication::CoreApplication(int &argc, char **argv, CoreApplication::Versio
     QIcon icon(":/icons/square.png");
     setWindowIcon(icon);
     isFirst = true;
+    autoSaveTimer = nullptr;
 }
 
 CoreApplication::~CoreApplication()

@@ -1,8 +1,7 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2016-06-05T18:01:55
-#
-# All Rights by Philipp Schepper 2016-2019
+# Developers:
+# 2016-2020: Philipp Schepper
 #
 #-------------------------------------------------
 
@@ -86,13 +85,13 @@ win32 {
     RC_ICONS = ../Icon/keks.ico
     QMAKE_TARGET_COMPANY = Philipp Schepper
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
-    QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2019
+    QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2020
     QMAKE_TARGET_PRODUCT = Einsatzplaner
-    VERSION = 1.5.1.1
+    VERSION = 1.5.2.1
 }
 
 macx {
-    VERSION = 1.5.1
+    VERSION = 1.5.2
     OTHER_FILES += Info.plist ../Icon/keks.icns
     QMAKE_INFO_PLIST = Info.plist
     DISTFILES += Info.plist
