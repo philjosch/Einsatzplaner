@@ -117,5 +117,7 @@ private:
     bool enabled; // Gibt an, ob das Formualr aktiviert ist oder nicht, und ob Änderungen übernommen werden
 
     const static QList<Category> anzeigeReihenfolge;
+
+    QString getStringFromHours(double duration);
 };
 #endif // PERSONALWINDOW_H
