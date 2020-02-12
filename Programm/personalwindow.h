@@ -86,6 +86,8 @@ private slots:
 
     void on_doubleAnzahl_valueChanged(double arg1);
 
+    void on_tabelleGesamt_cellDoubleClicked(int row, int column);
+
 private:
     Ui::PersonalWindow *ui;
     ManagerPersonal *manager;

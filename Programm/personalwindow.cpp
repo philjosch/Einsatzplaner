@@ -785,3 +785,13 @@ void PersonalWindow::editMinimumHours()
        changed();
    }
 }
+
+void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, int column)
+{
+    QString name = ui->tabelleGesamt->item(row, 0)->text() + " " + ui->tabelleGesamt->item(row, 1)->text();
+    Person * p = manager->getPerson(name);
+    if (p != nullptr) {
+        showPerson(p);
+        ui->tabWidgetMain->setCurrentIndex(1);
+    }
+}
