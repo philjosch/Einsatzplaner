@@ -188,11 +188,11 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     if (m->getTime(Sonstiges) > 0) a += help.arg("Sonstiges", Person::getStringFromHours(m->getTime(Sonstiges)));
     a += "</ul>";
 
-    a += "<ul><li>Stunden gesamt: "+QString::number(m->getTimeSum())+"h</li>";
-    a += "<li>Gefahrene Kilometer gesamt: "+QString::number(m->getSumKilometer())+" km</li></ul>";
+    a += "<ul><li>Stunden gesamt: "+QString::number(m->getTime(Gesamt))+"h</li>";
+    a += "<li>Gefahrene Kilometer gesamt: "+QString::number(m->getTime(Kilometer))+" km</li></ul>";
 
     a += "<h2>Mindeststunden</h2><ul>";
-    if (m->getMinimumHours() > 0) a += help.arg("Insgesamt", Person::getStringFromHours(m->getMinimumHours()));
+    if (m->getMinimumHours(Gesamt) > 0) a += help.arg("Insgesamt", Person::getStringFromHours(m->getMinimumHours(Gesamt)));
     if (m->getMinimumHours(Tf) > 0) a += help.arg("Tf", Person::getStringFromHours(m->getMinimumHours(Tf)));
     if (m->getMinimumHours(Tb) > 0) a += help.arg("Tb", Person::getStringFromHours(m->getMinimumHours(Tb)));
     if (m->getMinimumHours(Zf) > 0) a += help.arg("Zf", Person::getStringFromHours(m->getMinimumHours(Zf)));

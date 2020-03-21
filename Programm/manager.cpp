@@ -37,14 +37,13 @@ QJsonObject Manager::personalToJson()
     return data;
 }
 
-void Manager::fromJson(QJsonObject o)
+void Manager::fromJson(QJsonObject c, QJsonObject p)
 {
-    QJsonObject personalJSON = o.value("personal").toObject();
-    personal->fromJson(personalJSON);
+    personal->fromJson(p);
 
     // Laden der Daten aus dem JSON Object
     activities = QList<AActivity*>();
-    QJsonArray array = o.value("activites").toArray();
+    QJsonArray array = c.value("activites").toArray();
     for(int i = 0; i < array.size(); i++) {
         QJsonObject aO = array.at(i).toObject();
         AActivity *akt;

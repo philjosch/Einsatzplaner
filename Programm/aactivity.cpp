@@ -71,31 +71,32 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
     QJsonArray array = o.value("personen").toArray();
     for(int i = 0; i < array.size(); i++) {
         QJsonObject aO = array.at(i).toObject();
-        QString name = aO.value("name").toString();
-        Category kat = static_cast<Category>(aO.value("kat").toInt(100));
 
-        Person *p;
-        if (personal->personExists(name)) {
-            p = personal->getPerson(name);
+        Person *person;
+        if (aO.contains("id")) {
+            person = p->getPersonFromID(aO.value("id").toString());
+        } else if (personal->personExists(aO.value("name").toString())) {
+            person = personal->getPerson(aO.value("name").toString());
         } else {
-            p = new Person(name, nullptr);
-            p->setAusbildungTf(true);
-            p->setAusbildungZf(true);
-            p->setAusbildungRangierer(true);
+            person = new Person(aO.value("name").toString(), nullptr);
+            person->setAusbildungTf(true);
+            person->setAusbildungZf(true);
+            person->setAusbildungRangierer(true);
         }
+
         Infos *info = new Infos();
         info->beginn = QTime::fromString(aO.value("beginn").toString(), "hh:mm");
         info->ende = QTime::fromString(aO.value("ende").toString(), "hh:mm");
-        info->kategorie = kat;
+        info->kategorie = static_cast<Category>(aO.value("kat").toInt(100));
         info->bemerkung = aO.value("bemerkung").toString();
 
-        if (p != nullptr) {
-            p->addActivity(this, kat);
-            personen.insert(p, info);
-        }
+//        if (p != nullptr) {
+            person->addActivity(this, info->kategorie);
+            personen.insert(person, info);
+//        }
 
     }
-    personalBenoetigt = o.value("personalBenoetigt").toBool();
+    personalBenoetigt = o.value("personalBenoetigt").toBool(true);
 }
 
 AActivity::~AActivity()
@@ -124,7 +125,11 @@ QJsonObject AActivity::toJson()
     QJsonArray personenJSON;
     for(Person *p: personen.keys()) {
         QJsonObject persJson;
-        persJson.insert("name", p->getName());
+        if (personal->personExists(p->getName())) {
+            persJson.insert("id", p->getId());
+        } else {
+            persJson.insert("name", p->getName());
+        }
         persJson.insert("beginn", personen.value(p)->beginn.toString("hh:mm"));
         persJson.insert("ende", personen.value(p)->ende.toString("hh:mm"));
         persJson.insert("kat", personen.value(p)->kategorie);

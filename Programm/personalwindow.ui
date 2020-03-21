@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>685</width>
-    <height>589</height>
+    <height>562</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -23,20 +23,20 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_3">
+   <layout class="QGridLayout" name="gridLayout_16">
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidgetMain">
       <property name="enabled">
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="gesamt">
        <attribute name="title">
         <string>Gesamtübersicht</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_5" rowstretch="1,0,0,0" columnstretch="1,1" rowminimumheight="0,0,20,20">
+       <layout class="QGridLayout" name="gridLayout_5">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -53,9 +53,102 @@
          <number>6</number>
         </property>
         <item row="0" column="0" colspan="2">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Anzeigen</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboGesamt">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Alle Mitglieder</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Aktiv</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Passiv</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Aktiv mit Stunden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Aktiv ohne Stunden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Passiv mit Stunden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ausgetreten</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Alle</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="3">
+           <widget class="QPushButton" name="pushEmail">
+            <property name="text">
+             <string>E-Mail an angezeigte Personen</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0" colspan="2">
          <widget class="QTableWidget" name="tabelleGesamt">
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::ExtendedSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
           </property>
           <property name="sortingEnabled">
            <bool>true</bool>
@@ -78,7 +171,7 @@
           </column>
          </widget>
         </item>
-        <item row="1" column="0" colspan="2">
+        <item row="2" column="0" colspan="2">
          <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0,1">
           <property name="horizontalSpacing">
            <number>12</number>
@@ -413,14 +506,8 @@
           </item>
          </layout>
         </item>
-        <item row="2" column="0">
+        <item row="3" column="0">
          <widget class="QPushButton" name="pushAktualisieren">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>24</height>
-           </size>
-          </property>
           <property name="toolTip">
            <string>Die Werte neuberechnen und die Anzeige aktualisieren</string>
           </property>
@@ -432,30 +519,18 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
+        <item row="3" column="1">
          <widget class="QPushButton" name="pushMindeststunden">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>24</height>
-           </size>
-          </property>
           <property name="text">
            <string>Mindestststunden …</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
+        <item row="4" column="0">
          <widget class="QPushButton" name="pushPDF">
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>24</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
             <height>24</height>
            </size>
           </property>
@@ -464,14 +539,8 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="4" column="1">
          <widget class="QPushButton" name="pushPrint">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>24</height>
-           </size>
-          </property>
           <property name="text">
            <string>Gesamtübersicht drucken …</string>
           </property>
@@ -483,7 +552,7 @@
        <attribute name="title">
         <string>Einzelansicht</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_9" rowstretch="0,0,0,0,0,0" columnstretch="1,2">
+       <layout class="QGridLayout" name="gridLayout_15" columnstretch="1,2">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -499,28 +568,53 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <item row="0" column="0" rowspan="4">
-         <layout class="QGridLayout" name="liste">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
+        <item row="0" column="0" rowspan="3">
+         <layout class="QGridLayout" name="gridLayout_14">
           <item row="0" column="0">
-           <widget class="QPushButton" name="pushAdd">
-            <property name="text">
-             <string>Neue Person anlegen</string>
+           <widget class="QComboBox" name="comboEinzel">
+            <property name="currentIndex">
+             <number>0</number>
             </property>
+            <item>
+             <property name="text">
+              <string>Alle Mitglieder</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Aktiv</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Passiv</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Aktiv mit Stunden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Aktiv ohne Stunden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Passiv mit Stunden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ausgetreten</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Alle</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="1" column="0">
@@ -531,12 +625,89 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QPushButton" name="pushDelete">
-            <property name="statusTip">
-             <string>Eine Person in der Liste auswählen und dann auf den Button drücken, um die Person aus dem System zu löschen</string>
+           <widget class="QPushButton" name="pushAdd">
+            <property name="text">
+             <string>Neue Person anlegen</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="1">
+         <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,1,0,0">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Vorname</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineVorname">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="placeholderText">
+             <string>Vorname</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>ID</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="lineID">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>75</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>Nachname</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineNachname">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Nachname</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2" colspan="2">
+           <widget class="QPushButton" name="pushAutoID">
+            <property name="enabled">
+             <bool>false</bool>
             </property>
             <property name="text">
-             <string>Ausgewählte Person löschen</string>
+             <string>autom.</string>
             </property>
            </widget>
           </item>
@@ -551,7 +722,7 @@
            </size>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>2</number>
           </property>
           <property name="tabsClosable">
            <bool>false</bool>
@@ -559,6 +730,533 @@
           <property name="movable">
            <bool>false</bool>
           </property>
+          <widget class="QWidget" name="tab">
+           <attribute name="title">
+            <string>Stammdaten</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_9">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>6</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QToolBox" name="toolBox">
+              <property name="currentIndex">
+               <number>0</number>
+              </property>
+              <widget class="QWidget" name="page_4">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>427</width>
+                 <height>151</height>
+                </rect>
+               </property>
+               <attribute name="label">
+                <string>Allgemein</string>
+               </attribute>
+               <layout class="QGridLayout" name="gridLayout_10" columnstretch="0,0,1">
+                <property name="leftMargin">
+                 <number>6</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>6</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <property name="spacing">
+                 <number>6</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_24">
+                  <property name="text">
+                   <string>Geburtstag</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QDateEdit" name="dateBirth">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>100</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="displayFormat">
+                   <string>dd.MM.yyyy</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_12">
+                  <property name="text">
+                   <string>Eintritt</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QDateEdit" name="dateEntry">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="minimumDate">
+                   <date>
+                    <year>1999</year>
+                    <month>11</month>
+                    <day>23</day>
+                   </date>
+                  </property>
+                  <property name="displayFormat">
+                   <string>dd.MM.yyyy</string>
+                  </property>
+                  <property name="calendarPopup">
+                   <bool>false</bool>
+                  </property>
+                  <property name="timeSpec">
+                   <enum>Qt::UTC</enum>
+                  </property>
+                  <property name="date">
+                   <date>
+                    <year>1999</year>
+                    <month>11</month>
+                    <day>26</day>
+                   </date>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_2">
+                  <property name="statusTip">
+                   <string>Die Entfernung zum Heimatbahnhof. Wird benötigt, um die Strecke auszurechnen.</string>
+                  </property>
+                  <property name="text">
+                   <string>Entfernung</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QSpinBox" name="spinKm">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="suffix">
+                   <string> km</string>
+                  </property>
+                  <property name="minimum">
+                   <number>0</number>
+                  </property>
+                  <property name="maximum">
+                   <number>40000</number>
+                  </property>
+                  <property name="value">
+                   <number>0</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_17">
+                  <property name="text">
+                   <string>Beruf</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1" colspan="2">
+                 <widget class="QLineEdit" name="lineJob"/>
+                </item>
+                <item row="4" column="1">
+                 <spacer name="verticalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>47</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QCheckBox" name="checkAktiv">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Aktiv</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="page_3">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>170</width>
+                 <height>92</height>
+                </rect>
+               </property>
+               <attribute name="label">
+                <string>Kontakt</string>
+               </attribute>
+               <layout class="QGridLayout" name="gridLayout_11">
+                <property name="leftMargin">
+                 <number>6</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>6</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <property name="spacing">
+                 <number>6</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_15">
+                  <property name="text">
+                   <string>Telefon</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="linePhone">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QCheckBox" name="checkPhone">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Veröffentlichen</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_16">
+                  <property name="text">
+                   <string>Mail</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLineEdit" name="lineMail">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QCheckBox" name="checkMail">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Veröffentlichen</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <spacer name="verticalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>66</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="page">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>195</width>
+                 <height>97</height>
+                </rect>
+               </property>
+               <attribute name="label">
+                <string>Betriebsdienst</string>
+               </attribute>
+               <layout class="QGridLayout" name="gridLayout_12">
+                <property name="leftMargin">
+                 <number>6</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>6</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <property name="spacing">
+                 <number>6</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
+                   <string>Ausbildung</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QCheckBox" name="checkTf">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Lokführer</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QCheckBox" name="checkZf">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Zugführer</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QCheckBox" name="checkRangierer">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Rangierer</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <spacer name="horizontalSpacer_2">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>228</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_14">
+                  <property name="text">
+                   <string>Tauglichkeit</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QDateEdit" name="dateDienst">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>100</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="minimumDate">
+                   <date>
+                    <year>1999</year>
+                    <month>11</month>
+                    <day>22</day>
+                   </date>
+                  </property>
+                  <property name="displayFormat">
+                   <string>dd.MM.yyyy</string>
+                  </property>
+                  <property name="timeSpec">
+                   <enum>Qt::UTC</enum>
+                  </property>
+                  <property name="date">
+                   <date>
+                    <year>1999</year>
+                    <month>11</month>
+                    <day>26</day>
+                   </date>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <spacer name="verticalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>58</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="page_2">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>264</width>
+                 <height>135</height>
+                </rect>
+               </property>
+               <attribute name="label">
+                <string>Sonstiges</string>
+               </attribute>
+               <layout class="QGridLayout" name="gridLayout_13">
+                <property name="leftMargin">
+                 <number>6</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>6</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <property name="spacing">
+                 <number>6</number>
+                </property>
+                <item row="1" column="1">
+                 <widget class="QDateEdit" name="dateExit">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="minimumDate">
+                   <date>
+                    <year>1999</year>
+                    <month>11</month>
+                    <day>23</day>
+                   </date>
+                  </property>
+                  <property name="displayFormat">
+                   <string>dd.MM.yyyy</string>
+                  </property>
+                  <property name="timeSpec">
+                   <enum>Qt::UTC</enum>
+                  </property>
+                  <property name="date">
+                   <date>
+                    <year>1999</year>
+                    <month>11</month>
+                    <day>26</day>
+                   </date>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <spacer name="horizontalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>165</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="1" colspan="3">
+                 <widget class="QPlainTextEdit" name="plainBemerkung">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_23">
+                  <property name="text">
+                   <string>Bemerkungen</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_13">
+                  <property name="text">
+                   <string>Austritt</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QPushButton" name="pushDelete">
+                  <property name="statusTip">
+                   <string>Aktuelle Person löschen</string>
+                  </property>
+                  <property name="text">
+                   <string>Person löschen</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </widget>
           <widget class="QWidget" name="tabWidgetEinzelAktivities">
            <attribute name="title">
             <string>Aktivitäten</string>
@@ -642,361 +1340,11 @@
            <attribute name="title">
             <string>Konto</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0,1" columnstretch="0,0,0,0,1" columnminimumwidth="0,100,75,75,0">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>6</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <property name="horizontalSpacing">
-             <number>6</number>
-            </property>
+           <layout class="QGridLayout" name="gridLayout_4">
             <property name="verticalSpacing">
              <number>0</number>
             </property>
-            <item row="0" column="1">
-             <widget class="QLabel" name="label_22">
-              <property name="statusTip">
-               <string>Tragen Sie hier die zusätzlichen Stunden ein, die eine Person geleistet hat</string>
-              </property>
-              <property name="text">
-               <string>Zusätzlich</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="label_21">
-              <property name="text">
-               <string>Summe</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="3">
-             <widget class="QLabel" name="label_32">
-              <property name="text">
-               <string>Min</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>Tf/Tb</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QDoubleSpinBox" name="doubleTf">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="suffix">
-               <string> h</string>
-              </property>
-              <property name="maximum">
-               <double>8784.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QLabel" name="labelTfSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="3">
-             <widget class="QLabel" name="labelMinTf">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_7">
-              <property name="text">
-               <string>Zf</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="doubleZf">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="suffix">
-               <string> h</string>
-              </property>
-              <property name="maximum">
-               <double>8784.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QLabel" name="labelZfSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QLabel" name="labelMinZf">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_18">
-              <property name="text">
-               <string>Zub/Begl.o.b.A.</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QDoubleSpinBox" name="doubleZub">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="suffix">
-               <string> h</string>
-              </property>
-              <property name="maximum">
-               <double>8784.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2">
-             <widget class="QLabel" name="labelZubSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="3">
-             <widget class="QLabel" name="labelMinZub">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="4">
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>98</width>
-                <height>17</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>Service</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QDoubleSpinBox" name="doubleService">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="suffix">
-               <string> h</string>
-              </property>
-              <property name="maximum">
-               <double>8784.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="2">
-             <widget class="QLabel" name="labelServiceSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="3">
-             <widget class="QLabel" name="labelMinService">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_19">
-              <property name="text">
-               <string>Zug Vorbereitung</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
-             <widget class="QDoubleSpinBox" name="doubleZugVorbereiten">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="suffix">
-               <string> h</string>
-              </property>
-              <property name="maximum">
-               <double>8784.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="2">
-             <widget class="QLabel" name="labelZugVorbereitenSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="3">
-             <widget class="QLabel" name="labelMinZugVorbereiten">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>Werkstatt</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="1">
-             <widget class="QDoubleSpinBox" name="doubleWerkstatt">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="suffix">
-               <string> h</string>
-              </property>
-              <property name="maximum">
-               <double>8784.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="2">
+            <item row="7" column="2">
              <widget class="QLabel" name="labelWerkstattSum">
               <property name="text">
                <string>0 h</string>
@@ -1009,98 +1357,7 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="3">
-             <widget class="QLabel" name="labelMinWerkstatt">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>Büro</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="1">
-             <widget class="QDoubleSpinBox" name="doubleBuero">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="suffix">
-               <string> h</string>
-              </property>
-              <property name="maximum">
-               <double>8784.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="2">
-             <widget class="QLabel" name="labelBueroSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="3">
-             <widget class="QLabel" name="labelMinBuero">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="0">
-             <widget class="QLabel" name="label_11">
-              <property name="text">
-               <string>Ausbildung</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="1">
-             <widget class="QDoubleSpinBox" name="doubleAusbildung">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="suffix">
-               <string> h</string>
-              </property>
-              <property name="maximum">
-               <double>8784.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="2">
+            <item row="9" column="2">
              <widget class="QLabel" name="labelAusbildungSum">
               <property name="text">
                <string>0 h</string>
@@ -1113,125 +1370,14 @@
               </property>
              </widget>
             </item>
-            <item row="8" column="3">
-             <widget class="QLabel" name="labelMinAusbildung">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="0">
+            <item row="10" column="0">
              <widget class="QLabel" name="label_20">
               <property name="text">
                <string>Sonstiges</string>
               </property>
              </widget>
             </item>
-            <item row="9" column="1">
-             <widget class="QDoubleSpinBox" name="doubleSonstiges">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="suffix">
-               <string> h</string>
-              </property>
-              <property name="maximum">
-               <double>8784.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="2">
-             <widget class="QLabel" name="labelSonstigesSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="3">
-             <widget class="QLabel" name="labelMinSonstiges">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="0" colspan="5">
-             <widget class="Line" name="line_4">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="11" column="0">
-             <widget class="QLabel" name="label_28">
-              <property name="text">
-               <string>Anzahl Einsätze</string>
-              </property>
-             </widget>
-            </item>
-            <item row="11" column="1">
-             <widget class="QDoubleSpinBox" name="doubleAnzahl">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>1000.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="11" column="2">
-             <widget class="QLabel" name="labelAnzahlSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="12" column="0">
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>Fahrstrecke</string>
-              </property>
-             </widget>
-            </item>
-            <item row="12" column="1">
+            <item row="13" column="1">
              <widget class="QDoubleSpinBox" name="doubleKilometer">
               <property name="enabled">
                <bool>false</bool>
@@ -1256,7 +1402,518 @@
               </property>
              </widget>
             </item>
+            <item row="12" column="1">
+             <widget class="QDoubleSpinBox" name="doubleAnzahl">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="decimals">
+               <number>0</number>
+              </property>
+              <property name="maximum">
+               <double>1000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="3">
+             <widget class="QLabel" name="labelMinZub">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="3">
+             <widget class="QLabel" name="labelMinZf">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Werkstatt</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QLabel" name="labelMinTf">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="0">
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>Ausbildung</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QLabel" name="labelZfSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="1">
+             <widget class="QLineEdit" name="lineBuero">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_18">
+              <property name="text">
+               <string>Zub/Begl.o.b.A.</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="1">
+             <widget class="QLineEdit" name="lineAusbildung">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="3">
+             <widget class="QLabel" name="labelMinBuero">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="3">
+             <widget class="QLabel" name="labelMinService">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QLineEdit" name="lineService">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="label_22">
+              <property name="statusTip">
+               <string>Tragen Sie hier die zusätzlichen Stunden ein, die eine Person geleistet hat</string>
+              </property>
+              <property name="text">
+               <string>Zusätzlich</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_21">
+              <property name="text">
+               <string>Summe</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Zf</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3" rowspan="2">
+             <widget class="QLabel" name="label_32">
+              <property name="text">
+               <string>Min</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="QLineEdit" name="lineWerkstatt">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="0" colspan="5">
+             <widget class="Line" name="line_4">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLabel" name="labelTfSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="2">
+             <widget class="QLabel" name="labelBueroSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
             <item row="12" column="2">
+             <widget class="QLabel" name="labelAnzahlSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="2">
+             <widget class="QLabel" name="labelServiceSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="0">
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Fahrstrecke</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="4">
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>54</width>
+                <height>17</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="4" column="2">
+             <widget class="QLabel" name="labelZubSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="3">
+             <widget class="QLabel" name="labelMinAusbildung">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="0">
+             <widget class="QLabel" name="label_28">
+              <property name="text">
+               <string>Anzahl Einsätze</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="lineZf">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="1">
+             <widget class="QLineEdit" name="lineSonstiges">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="3">
+             <widget class="QLabel" name="labelMinWerkstatt">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_19">
+              <property name="text">
+               <string>Zug Vorbereitung</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Service</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="2">
+             <widget class="QLabel" name="labelSonstigesSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="lineZub">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" rowspan="2">
+             <widget class="QLineEdit" name="lineTf">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="2">
+             <widget class="QLabel" name="labelZugVorbereitenSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="3">
+             <widget class="QLabel" name="labelMinZugVorbereiten">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Büro</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="3">
+             <widget class="QLabel" name="labelMinSonstiges">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="2">
              <widget class="QLabel" name="labelKilometerSum">
               <property name="text">
                <string>0 km</string>
@@ -1269,15 +1926,44 @@
               </property>
              </widget>
             </item>
-            <item row="13" column="0" colspan="4">
+            <item row="1" column="0" rowspan="2">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Tf/Tb</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLineEdit" name="lineZugVorbereiten">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="14" column="0" colspan="5">
              <spacer name="verticalSpacer_2">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>0</width>
-                <height>0</height>
+                <width>395</width>
+                <height>154</height>
                </size>
               </property>
              </spacer>
@@ -1286,183 +1972,7 @@
           </widget>
          </widget>
         </item>
-        <item row="0" column="1">
-         <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,0,0,0,0,1">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Vorname</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineVorname">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="placeholderText">
-             <string>Vorname</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" rowspan="3">
-           <widget class="Line" name="line">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>Ausbildung</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4">
-           <widget class="QCheckBox" name="checkTf">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Lokführer</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineNachname">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="placeholderText">
-             <string>Nachname</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4">
-           <widget class="QCheckBox" name="checkZf">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Zugführer</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="5">
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="statusTip">
-             <string>Die Entfernung zum Heimatbahnhof. Wird benötigt, um die Strecke auszurechnen.</string>
-            </property>
-            <property name="text">
-             <string>Entfernung</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSpinBox" name="spinKm">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="suffix">
-             <string> km</string>
-            </property>
-            <property name="minimum">
-             <number>0</number>
-            </property>
-            <property name="maximum">
-             <number>40000</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="4">
-           <widget class="QCheckBox" name="checkRangierer">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Rangierer</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_27">
-            <property name="text">
-             <string>Nachname</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="5" column="0" colspan="2">
-         <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,1">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QPushButton" name="pushPDFEinzel">
-            <property name="text">
-             <string>Einzelübersichten als PDF speichern …</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="pushPrintEinzel">
-            <property name="text">
-             <string>Einzelübersichten drucken …</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="4" column="0" colspan="2">
-         <widget class="Line" name="line_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
+        <item row="2" column="1">
          <layout class="QGridLayout" name="gridLayout_8" columnstretch="0,0,0">
           <property name="spacing">
            <number>6</number>
@@ -1491,6 +2001,34 @@
            <widget class="QLabel" name="label_9">
             <property name="text">
              <string>Gesamt</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0" colspan="2">
+         <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,1">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pushPrintEinzel">
+            <property name="text">
+             <string>Einzelübersichten drucken …</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pushPDFEinzel">
+            <property name="text">
+             <string>Einzelübersichten als PDF speichern …</string>
             </property>
            </widget>
           </item>
@@ -1623,6 +2161,8 @@
  </widget>
  <tabstops>
   <tabstop>tabWidgetMain</tabstop>
+  <tabstop>comboGesamt</tabstop>
+  <tabstop>pushEmail</tabstop>
   <tabstop>tabelleGesamt</tabstop>
   <tabstop>checkShowGesamt</tabstop>
   <tabstop>checkShowAnzahl</tabstop>
@@ -1640,26 +2180,40 @@
   <tabstop>pushMindeststunden</tabstop>
   <tabstop>pushPDF</tabstop>
   <tabstop>pushPrint</tabstop>
-  <tabstop>pushAdd</tabstop>
+  <tabstop>comboEinzel</tabstop>
   <tabstop>listWidget</tabstop>
-  <tabstop>pushDelete</tabstop>
+  <tabstop>pushAdd</tabstop>
   <tabstop>lineVorname</tabstop>
   <tabstop>lineNachname</tabstop>
+  <tabstop>lineID</tabstop>
+  <tabstop>pushAutoID</tabstop>
+  <tabstop>tabWidgetEinzel</tabstop>
+  <tabstop>dateBirth</tabstop>
+  <tabstop>dateEntry</tabstop>
+  <tabstop>checkAktiv</tabstop>
   <tabstop>spinKm</tabstop>
+  <tabstop>lineJob</tabstop>
+  <tabstop>linePhone</tabstop>
+  <tabstop>checkPhone</tabstop>
+  <tabstop>lineMail</tabstop>
+  <tabstop>checkMail</tabstop>
   <tabstop>checkTf</tabstop>
   <tabstop>checkZf</tabstop>
   <tabstop>checkRangierer</tabstop>
-  <tabstop>tabWidgetEinzel</tabstop>
+  <tabstop>dateDienst</tabstop>
+  <tabstop>plainBemerkung</tabstop>
+  <tabstop>dateExit</tabstop>
+  <tabstop>pushDelete</tabstop>
   <tabstop>tabelle</tabstop>
-  <tabstop>doubleTf</tabstop>
-  <tabstop>doubleZf</tabstop>
-  <tabstop>doubleZub</tabstop>
-  <tabstop>doubleService</tabstop>
-  <tabstop>doubleZugVorbereiten</tabstop>
-  <tabstop>doubleWerkstatt</tabstop>
-  <tabstop>doubleBuero</tabstop>
-  <tabstop>doubleAusbildung</tabstop>
-  <tabstop>doubleSonstiges</tabstop>
+  <tabstop>lineTf</tabstop>
+  <tabstop>lineZf</tabstop>
+  <tabstop>lineZub</tabstop>
+  <tabstop>lineService</tabstop>
+  <tabstop>lineZugVorbereiten</tabstop>
+  <tabstop>lineWerkstatt</tabstop>
+  <tabstop>lineBuero</tabstop>
+  <tabstop>lineAusbildung</tabstop>
+  <tabstop>lineSonstiges</tabstop>
   <tabstop>doubleAnzahl</tabstop>
   <tabstop>doubleKilometer</tabstop>
   <tabstop>pushPDFEinzel</tabstop>

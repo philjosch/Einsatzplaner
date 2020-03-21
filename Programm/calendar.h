@@ -20,7 +20,7 @@ public:
 
     QJsonObject toJson();
     QJsonObject personalToJson();
-    void fromJson(QJsonObject o);
+    void fromJson(QJsonObject c, QJsonObject p);
 
     void wheelEvent(QWheelEvent *event);
 

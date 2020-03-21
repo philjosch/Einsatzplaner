@@ -28,6 +28,9 @@ private:
     Ui::MinimumHoursEditorDialog *ui;
     ManagerPersonal *manager;
 
+    int timeFromString(QString arg);
+    QString stringFromTime(int arg);
+
 };
 
 #endif // MINIMUMHOURSEDITORDIALOG_H
