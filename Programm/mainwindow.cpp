@@ -292,7 +292,7 @@ void MainWindow::on_actionSave_triggered()
             file.remove();
         }
 
-        int result = Export::autoUploadToServer(ui->calendar, settings);
+        int result = Export::autoUploadToServer(settings, ui->calendar);
         if (result == 0)
             ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
         else if (result > 0)

@@ -32,13 +32,6 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
         current.append(i.next());
     }
     refreshEinzel();
-////        QListWidgetItem *item = new QListWidgetItem(p->getName());
-////        ui->listWidget->insertItem(0, item);
-////        itemToPerson.insert(item, p);
-////        personToItem.insert(p, item);
-//        current.append(p);
-//    }
-//    refreshEinzel();
 
     anzeige = new QSet<Category>();
     ui->checkShowGesamt->setChecked(true);
@@ -65,24 +58,15 @@ void PersonalWindow::showPerson(Person *p)
     p->berechne();
 
     enabled = false;
-    // Kopfzeile
-    ui->lineID->setEnabled(true);
-    ui->pushAutoID->setEnabled(true);
-    ui->lineVorname->setEnabled(true);
-    ui->lineNachname->setEnabled(true);
+    toggleFields(true);
 
+    // ** Kopfzeile
     ui->lineID->setText(QString::number(p->getNummer()));
     ui->lineVorname->setText(p->getVorname());
     ui->lineNachname->setText(p->getNachname());
 
     // ** Stammdaten
     // Allgemein
-    ui->dateBirth->setEnabled(true);
-    ui->dateEntry->setEnabled(true);
-    ui->checkAktiv->setEnabled(true);
-    ui->spinKm->setEnabled(true);
-    ui->lineJob->setEnabled(true);
-
     ui->dateBirth->setDate(p->getGeburtstag());
     ui->dateEntry->setDate(p->getEintritt());
     ui->checkAktiv->setChecked(p->getAktiv());
@@ -90,37 +74,22 @@ void PersonalWindow::showPerson(Person *p)
     ui->lineJob->setText(p->getBeruf());
 
     // Kontakt
-    ui->linePhone->setEnabled(true);
-    ui->checkPhone->setEnabled(true);
-    ui->lineMail->setEnabled(true);
-    ui->checkMail->setEnabled(true);
-
     ui->linePhone->setText(p->getTelefon());
     ui->checkPhone->setChecked(p->getTelefonOK());
     ui->lineMail->setText(p->getMail());
     ui->checkMail->setChecked(p->getMailOK());
 
     // Betriebsdienst
-    ui->checkTf->setEnabled(true);
-    ui->checkZf->setEnabled(true);
-    ui->checkRangierer->setEnabled(true);
-    ui->dateDienst->setEnabled(true);
-
     ui->checkTf->setChecked(p->getAusbildungTf());
     ui->checkZf->setChecked(p->getAusbildungZf());
     ui->checkRangierer->setChecked(p->getAusbildungRangierer());
     ui->dateDienst->setDate(p->getTauglichkeit());
 
     // Sonstiges
-    ui->plainBemerkung->setEnabled(true);
-    ui->dateExit->setEnabled(true);
-
     ui->plainBemerkung->setPlainText(p->getBemerkungen());
     ui->dateExit->setDate(p->getAustritt());
 
     // ** Aktivitaeten
-    ui->tabelle->setEnabled(true);
-
     while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
     QListIterator<AActivity*> *i = p->getActivities();
     bool sortingSaved = ui->tabelle->isSortingEnabled();
@@ -156,30 +125,18 @@ void PersonalWindow::showPerson(Person *p)
     ui->tabelle->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     // ** Konto
-    ui->lineTf->setEnabled(true);
-    ui->lineZf->setEnabled(true);
-    ui->lineService->setEnabled(true);
-    ui->lineZub->setEnabled(true);
-    ui->lineZugVorbereiten->setEnabled(true);
-    ui->lineWerkstatt->setEnabled(true);
-    ui->lineBuero->setEnabled(true);
-    ui->lineAusbildung->setEnabled(true);
-    ui->lineSonstiges->setEnabled(true);
-    ui->doubleAnzahl->setEnabled(true);
-    ui->doubleKilometer->setEnabled(true);
-
-    ui->labelTfSum->setText(getStringFromHours(p->get(Tf)));
-    ui->labelZfSum->setText(getStringFromHours(p->get(Zf)));
-    ui->labelZubSum->setText(getStringFromHours(p->get(Zub)));
-    ui->labelServiceSum->setText(getStringFromHours(p->get(Service)));
-    ui->labelZugVorbereitenSum->setText(getStringFromHours(p->get(ZugVorbereiten)));
-    ui->labelWerkstattSum->setText(getStringFromHours(p->get(Werkstatt)));
-    ui->labelBueroSum->setText(getStringFromHours(p->get(Buero)));
-    ui->labelAusbildungSum->setText(getStringFromHours(p->get(Ausbildung)));
-    ui->labelSonstigesSum->setText(getStringFromHours(p->get(Sonstiges)));
-    ui->labelAnzahlSum->setText(QString::number(p->get(Anzahl)));
-    ui->labelKilometerSum->setText(QString::number(p->get(Kilometer))+" km");
-    ui->labelGesamt->setText(getStringFromHours(p->get(Gesamt)));
+    ui->labelTfSum->setText(p->getString(Tf));
+    ui->labelZfSum->setText(p->getString(Zf));
+    ui->labelZubSum->setText((p->getString(Zub)));
+    ui->labelServiceSum->setText((p->getString(Service)));
+    ui->labelZugVorbereitenSum->setText((p->getString(ZugVorbereiten)));
+    ui->labelWerkstattSum->setText((p->getString(Werkstatt)));
+    ui->labelBueroSum->setText(p->getString(Buero));
+    ui->labelAusbildungSum->setText(p->getString(Ausbildung));
+    ui->labelSonstigesSum->setText(p->getString(Sonstiges));
+    ui->labelAnzahlSum->setText(p->getString(Anzahl));
+    ui->labelKilometerSum->setText(p->getString(Kilometer));
+    ui->labelGesamt->setText(p->getString(Gesamt));
 
     ui->lineTf->setText(stringFromTime(p->getAdditional(Tf)));
     ui->lineZf->setText(stringFromTime(p->getAdditional(Zf)));
@@ -194,24 +151,24 @@ void PersonalWindow::showPerson(Person *p)
     ui->doubleKilometer->setValue(p->getAdditional(Kilometer));
 
     if (p->getAusbildungTf() && manager->getMinimumHours(Tf) > 0)
-        ui->labelMinTf->setText(getStringFromHours(manager->getMinimumHours(Tf)));
+        ui->labelMinTf->setText(manager->getMinimumHoursString(Tf));
     if (p->getAusbildungZf() && manager->getMinimumHours(Zf) > 0)
-        ui->labelMinZf->setText(getStringFromHours(manager->getMinimumHours(Zf)));
+        ui->labelMinZf->setText(manager->getMinimumHoursString(Zf));
     if (manager->getMinimumHours(Zub) > 0)
-        ui->labelMinZub->setText(getStringFromHours(manager->getMinimumHours(Zub)));
+        ui->labelMinZub->setText(manager->getMinimumHoursString(Zub));
     if (manager->getMinimumHours(Service) > 0)
-        ui->labelMinService->setText(getStringFromHours(manager->getMinimumHours(Service)));
+        ui->labelMinService->setText(manager->getMinimumHoursString(Service));
     if (manager->getMinimumHours(ZugVorbereiten) > 0)
-        ui->labelMinZugVorbereiten->setText(getStringFromHours(manager->getMinimumHours(ZugVorbereiten)));
+        ui->labelMinZugVorbereiten->setText(manager->getMinimumHoursString(ZugVorbereiten));
     if (manager->getMinimumHours(Werkstatt) > 0)
-        ui->labelMinWerkstatt->setText(getStringFromHours(manager->getMinimumHours(Werkstatt)));
+        ui->labelMinWerkstatt->setText(manager->getMinimumHoursString(Werkstatt));
     if (manager->getMinimumHours(Buero) > 0)
-        ui->labelMinBuero->setText(getStringFromHours(manager->getMinimumHours(Buero)));
+        ui->labelMinBuero->setText(manager->getMinimumHoursString(Buero));
     if ((p->getAusbildungTf() || p->getAusbildungZf() || p->getAusbildungRangierer())
             && manager->getMinimumHours(Ausbildung) > 0)
-        ui->labelMinAusbildung->setText(getStringFromHours(manager->getMinimumHours(Ausbildung)));
+        ui->labelMinAusbildung->setText(manager->getMinimumHoursString(Ausbildung));
     if (manager->getMinimumHours(Sonstiges) > 0)
-        ui->labelMinSonstiges->setText(getStringFromHours(manager->getMinimumHours(Sonstiges)));
+        ui->labelMinSonstiges->setText(manager->getMinimumHoursString(Sonstiges));
 
     enabled = true;
 }
@@ -248,85 +205,22 @@ void PersonalWindow::refreshGesamt()
     }
     ui->tabelleGesamt->setSortingEnabled(false);
 
-    //  0: summe gesamt
-    //  1: anzahl
-    //  2: tf/tb
-    //  3: zf
-    //  4: zub/begl.o.b.a.
-    //  5: service
-    //  6: zug vorbereiten
-    //  7: werkstatt
-    //  8: büro
-    //  9: ausbildung
-    // 10: sonstiges
-    // 11: kilometer
+    // Alte Spalten entfernen und neue einfuegen
     while (ui->tabelleGesamt->columnCount() > 2) {
         ui->tabelleGesamt->removeColumn(2);
     }
 
-    if (anzeige->contains(Category::Kilometer)) {
+    for(int i = anzeigeReihenfolge.length()-1; i >= 0; --i) {
+        Category curr = anzeigeReihenfolge.at(i);
+        if (! anzeige->contains(curr)) continue;
         ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Kilometer")));
-        if (origSortName == tr("Kilometer")) newSort = 2;
-    }
-    if (anzeige->contains(Category::Sonstiges)) {
-        ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Sonstiges")));
-        if (origSortName == tr("Sonstiges")) newSort = 2; else newSort++;
-    }
-    if (anzeige->contains(Category::Ausbildung)) {
-        ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Ausbildung")));
-        if (origSortName == tr("Ausbildung")) newSort = 2; else newSort++;
-    }
-    if (anzeige->contains(Category::Buero)) {
-        ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Büro")));
-        if (origSortName == tr("Büro")) newSort = 2; else newSort++;
-    }
-    if (anzeige->contains(Category::Werkstatt)) {
-        ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Werkstatt")));
-        if (origSortName == tr("Werkstatt")) newSort = 2; else newSort++;
-    }
-    if (anzeige->contains(Category::ZugVorbereiten)) {
-        ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Zug\nVorbereiten")));
-        if (origSortName == tr("Zug\nVorbereiten")) newSort = 2; else newSort++;
-    }
-    if (anzeige->contains(Category::Service)) {
-        ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Service")));
-        if (origSortName == tr("Service")) newSort = 2; else newSort++;
-    }
-    if (anzeige->contains(Category::Zub)) {
-        ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Zub")));
-        if (origSortName == tr("Zub")) newSort = 2; else newSort++;
-    }
-    if (anzeige->contains(Category::Zf)) {
-        ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Zf")));
-        if (origSortName == tr("Zf")) newSort = 2; else newSort++;
-    }
-    if (anzeige->contains(Category::Tf)) {
-        ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Tf/Tb")));
-        if (origSortName == tr("Tf/Tb")) newSort = 2; else newSort++;
-    }
-    if (anzeige->contains(Category::Anzahl)) {
-        ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Anzahl")));
-        if (origSortName == tr("Anzahl")) newSort = 2; else newSort++;
-    }
-    if (anzeige->contains(Category::Gesamt)) {
-        ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Gesamt")));
-        if (origSortName == tr("Gesamt")) newSort = 2; else newSort++;
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(AActivity::getStringFromCategory(curr)));
+        if (origSortName == AActivity::getStringFromCategory(curr)) newSort = 2;
     }
     ui->tabelleGesamt->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    // Insert the sum of each column
+
+    // Zeile für "Gesamt" einfuegen
     manager->berechne();
 
     ui->tabelleGesamt->insertRow(0);
@@ -341,12 +235,12 @@ void PersonalWindow::refreshGesamt()
         if (! anzeige->contains(cat)) continue;
         ii = new QTableWidgetItem();
         ii->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
-        ii->setData(Qt::EditRole, manager->getTime(cat));
+        ii->setData(Qt::EditRole, round(manager->getTime(cat)*100.f/60.f)/100);
         ui->tabelleGesamt->setItem(0, pos++, ii);
     }
-    // End of insert the sum of each column
 
 
+    // Einzelne Personen einfuegen
     foreach (Person *p, current) {
         QString defaultFarbe = "#ffffff";
         QString farbe = defaultFarbe;
@@ -374,7 +268,7 @@ void PersonalWindow::refreshGesamt()
             if (! anzeige->contains(cat)) continue;
             i = new QTableWidgetItem();
             i->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
-            i->setData(Qt::EditRole, round(p->get(cat)/60*100)/100);
+            i->setData(Qt::EditRole, round(p->get(cat)*100.f/60.f)/100);
             if (p->getAktiv())
                 i->setBackground(QBrush(QColor(manager->checkHours(p, cat) ? defaultFarbe : nichtGenugStunden)));
             else
@@ -523,7 +417,7 @@ void PersonalWindow::on_pushDelete_clicked()
         ui->listWidget->takeItem(ui->listWidget->row(i));
 
         if (ui->listWidget->count() == 0) {
-            disableFields();
+            toggleFields(false);
             ui->pushDelete->setEnabled(false);
         } else {
             aktuellePerson = itemToPerson.value(ui->listWidget->item(0));
@@ -594,7 +488,7 @@ void PersonalWindow::print(QPrinter *p)
         if (pers != nullptr)
             liste->append(pers);
     }
-    QMap<Category, double> gesamt = QMap<Category, double>();
+    QMap<Category, int> gesamt = QMap<Category, int>();
     gesamt.insert(Category::Gesamt, manager->getTime(Gesamt));
     gesamt.insert(Category::Anzahl, 0);
     gesamt.insert(Category::Tf, manager->getTime(Tf));
@@ -614,53 +508,46 @@ void PersonalWindow::print(QPrinter *p)
     Export::printPersonen(liste, gesamt, anzeigeListe, p);
 }
 
-void PersonalWindow::disableFields()
+void PersonalWindow::toggleFields(bool state)
 {
-    ui->lineID->setEnabled(false);
-    ui->pushAutoID->setEnabled(false);
-    ui->lineVorname->setEnabled(false);
-    ui->lineNachname->setEnabled(false);
-    ui->dateBirth->setEnabled(false);
-    ui->dateEntry->setEnabled(false);
-    ui->checkAktiv->setEnabled(false);
+    ui->lineID->setEnabled(state);
+    ui->pushAutoID->setEnabled(state);
+    ui->lineVorname->setEnabled(state);
+    ui->lineNachname->setEnabled(state);
+    ui->dateBirth->setEnabled(state);
+    ui->dateEntry->setEnabled(state);
+    ui->checkAktiv->setEnabled(state);
 
-    ui->checkRangierer->setEnabled(false);
-    ui->checkTf->setEnabled(false);
-    ui->checkZf->setEnabled(false);
-    ui->dateDienst->setEnabled(false);
+    ui->checkRangierer->setEnabled(state);
+    ui->checkTf->setEnabled(state);
+    ui->checkZf->setEnabled(state);
+    ui->dateDienst->setEnabled(state);
 
-    ui->lineMail->setEnabled(false);
-    ui->checkMail->setEnabled(false);
-    ui->linePhone->setEnabled(false);
-    ui->checkPhone->setEnabled(false);
+    ui->lineMail->setEnabled(state);
+    ui->checkMail->setEnabled(state);
+    ui->linePhone->setEnabled(state);
+    ui->checkPhone->setEnabled(state);
 
-    ui->spinKm->setEnabled(false);
-    ui->lineJob->setEnabled(false);
-    ui->plainBemerkung->setEnabled(false);
+    ui->spinKm->setEnabled(state);
+    ui->lineJob->setEnabled(state);
+    ui->plainBemerkung->setEnabled(state);
+    ui->dateExit->setEnabled(state);
+    ui->pushDelete->setEnabled(state);
 
-    ui->pushDelete->setEnabled(false);
+    ui->tabelle->setEnabled(state);
 
-    ui->tabelle->setEnabled(false);
+    ui->lineTf->setEnabled(state);
+    ui->lineZf->setEnabled(state);
+    ui->lineZub->setEnabled(state);
+    ui->lineService->setEnabled(state);
+    ui->lineZugVorbereiten->setEnabled(state);
+    ui->lineWerkstatt->setEnabled(state);
+    ui->lineBuero->setEnabled(state);
+    ui->lineAusbildung->setEnabled(state);
+    ui->lineSonstiges->setEnabled(state);
+    ui->doubleAnzahl->setEnabled(state);
+    ui->doubleKilometer->setEnabled(state);
 
-    ui->lineTf->setEnabled(false);
-    ui->lineZf->setEnabled(false);
-    ui->lineZub->setEnabled(false);
-    ui->lineService->setEnabled(false);
-    ui->lineZugVorbereiten->setEnabled(false);
-    ui->lineWerkstatt->setEnabled(false);
-    ui->lineBuero->setEnabled(false);
-    ui->lineAusbildung->setEnabled(false);
-    ui->lineSonstiges->setEnabled(false);
-    ui->doubleAnzahl->setEnabled(false);
-    ui->doubleKilometer->setEnabled(false);
-
-}
-
-QString PersonalWindow::getStringFromHours(int duration)
-{
-    int hours = int(duration / 60);
-    int minutes = int(duration % 60);
-    return QString("%1:%2 h").arg(hours).arg(minutes, 2, 10, QChar(48));
 }
 
 int PersonalWindow::timeFromString(QString arg)
@@ -680,29 +567,29 @@ QString PersonalWindow::stringFromTime(int arg)
 void PersonalWindow::updateZeiten()
 {
     on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
-    ui->labelTfSum->setText(getStringFromHours(aktuellePerson->get(Tf)));
+    ui->labelTfSum->setText(aktuellePerson->getString(Tf));
     ui->labelTfSum->update();
-    ui->labelZfSum->setText(getStringFromHours(aktuellePerson->get(Zf)));
+    ui->labelZfSum->setText(aktuellePerson->getString(Zf));
     ui->labelZfSum->update();
-    ui->labelZubSum->setText(getStringFromHours(aktuellePerson->get(Zub)));
+    ui->labelZubSum->setText(aktuellePerson->getString(Zub));
     ui->labelZubSum->update();
-    ui->labelServiceSum->setText(getStringFromHours(aktuellePerson->get(Service)));
+    ui->labelServiceSum->setText(aktuellePerson->getString(Service));
     ui->labelServiceSum->update();
-    ui->labelZugVorbereitenSum->setText(getStringFromHours(aktuellePerson->get(ZugVorbereiten)));
+    ui->labelZugVorbereitenSum->setText(aktuellePerson->getString(ZugVorbereiten));
     ui->labelZugVorbereitenSum->update();
-    ui->labelWerkstattSum->setText(getStringFromHours(aktuellePerson->get(Werkstatt)));
+    ui->labelWerkstattSum->setText(aktuellePerson->getString(Werkstatt));
     ui->labelWerkstattSum->update();
-    ui->labelBueroSum->setText(getStringFromHours(aktuellePerson->get(Buero)));
+    ui->labelBueroSum->setText(aktuellePerson->getString(Buero));
     ui->labelBueroSum->update();
-    ui->labelAusbildungSum->setText(getStringFromHours(aktuellePerson->get(Ausbildung)));
+    ui->labelAusbildungSum->setText(aktuellePerson->getString(Ausbildung));
     ui->labelAusbildungSum->update();
-    ui->labelSonstigesSum->setText(getStringFromHours(aktuellePerson->get(Sonstiges)));
+    ui->labelSonstigesSum->setText(aktuellePerson->getString(Sonstiges));
     ui->labelSonstigesSum->update();
-    ui->labelAnzahlSum->setText(QString::number(aktuellePerson->get(Anzahl)));
+    ui->labelAnzahlSum->setText(aktuellePerson->getString(Anzahl));
     ui->labelAnzahlSum->update();
-    ui->labelKilometerSum->setText(QString::number(aktuellePerson->get(Kilometer)));
+    ui->labelKilometerSum->setText(aktuellePerson->getString(Kilometer));
     ui->labelKilometerSum->update();
-    ui->labelGesamt->setText(getStringFromHours(aktuellePerson->get(Gesamt)));
+    ui->labelGesamt->setText(aktuellePerson->getString(Gesamt));
     ui->labelGesamt->update();
 }
 

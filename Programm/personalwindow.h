@@ -133,29 +133,13 @@ private:
     QHash<Person*, QListWidgetItem*> personToItem;
 
     QSet<Category> *anzeige;
-    /* Gibt an, welche Werte in der Tabelle angezeigt werden
-     * 0: gesamtstunden
-     * 1: anzahl
-     *  2: tf/tb
-     *  3: zf
-     *  4: zub/begl.o.b.a.
-     *  5: service
-     *  6: zug vorbereiten
-     *  7: werkstatt
-     *  8: büro
-     *  9: sonstiges
-     * 10: kilometer
-     * 11: ausbildung
-     * */
 
     void print(QPrinter *p);
-    void disableFields();
+    void toggleFields(bool state);
 
-    bool enabled; // Gibt an, ob das Formualr aktiviert ist oder nicht, und ob Änderungen übernommen werden
+    bool enabled; // Gibt an, ob das Formular aktiviert ist oder nicht, und ob Änderungen übernommen werden
 
     const static QList<Category> anzeigeReihenfolge;
-
-    QString getStringFromHours(int duration);
 
     int timeFromString(QString arg);
     QString stringFromTime(int arg);

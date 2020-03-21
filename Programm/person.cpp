@@ -7,15 +7,6 @@
 #include <algorithm>
 #include <cmath>
 
-//Person::Person(QString vorname, QString nachname, ManagerPersonal *manager)
-//{
-//    personConstructor(vorname, nachname, manager);
-//}
-
-//Person::Person(QString vorname, QString nachname, QString id, ManagerPersonal *manager)
-//{
-//    personConstructor(vorname, nachname, manager, id);
-//}
 
 Person::Person(QString name, ManagerPersonal *manager) : QObject()
 {
@@ -209,6 +200,31 @@ int Person::get(Category cat)
     default:
         return zeiten.value(cat, 0);
 
+    }
+}
+
+QString Person::getString(Category cat)
+{
+    int value = get(cat);
+    switch (cat) {
+    case Category::Kilometer:
+        return QString("%1 km").arg(value);
+    case Category::Anzahl:
+        return QString("%1").arg(value);
+    default:
+        return getStringFromHours(value);
+    }
+}
+
+QString Person::getStringShort(Category cat)
+{
+    switch (cat) {
+    case Category::Anzahl:
+        return getString(cat);
+    case Category::Kilometer:
+        return getString(cat).chopped(3);
+    default:
+        return getString(cat).chopped(2);
     }
 }
 
@@ -442,16 +458,21 @@ void Person::setName(const QString &value)
 */
 QString Person::getHtmlForTableView(QList<Category> liste)
 {
-    QString html = "<tr><td style='background-color:"+(manager->pruefeStunden(this) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+getName()+"</td>";
+    QString html = "<tr><td style='background-color:";
+    switch (manager->pruefeStunden(this)) {
+    case 0:
+        html += PersonalWindow::nichtGenugStunden;
+        break;
+    case -1:
+        html += PersonalWindow::genugStunden;
+        break;
+    default:
+        html += "#ffffff";
+    }
+    html += "'>"+getName()+"</td>";
+
     foreach (Category cat, liste) {
-        switch (cat) {
-        case Category::Anzahl:
-        case Category::Kilometer:
-            html += "<td align='right' style='background-color:"+(manager->checkHours(this, cat) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+QString::number(get(cat))+"</td>";
-            break;
-        default:
-            html += "<td align='right' style='background-color:"+(manager->checkHours(this, cat) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+getStringFromHours(get(cat)).chopped(2)+"</td>";
-        }
+        html += "<td align='right' style='background-color:"+(manager->checkHours(this, cat) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+getStringShort(cat)+"</td>";
     }
     html += "</tr>";
     return html;
@@ -579,11 +600,9 @@ void Person::setAdditional(Category cat, int value)
     additional.insert(cat, value);
 }
 
-QString Person::getStringFromHours(double duration)
+QString Person::getStringFromHours(int duration)
 {
-    int hours = int(duration);
-    int minutes = int(round(fmod(duration, 1)*60));
-    return QString("%1:%2 h").arg(hours).arg(minutes, 2, 10, QChar(48));
+    return QString("%1:%2 h").arg(int(duration/60)).arg(duration % 60, 2, 10,QLatin1Char('0'));
 }
 
 QString Person::getId() const

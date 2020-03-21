@@ -26,15 +26,15 @@ private slots:
 
     void on_comboVon_currentIndexChanged(int index);
 
-    void on_dateVon_dateChanged(const QDate &date);
+    void on_dateVon_dateChanged();
 
     void on_comboBis_currentIndexChanged(int index);
 
-    void on_dateBis_dateChanged(const QDate &date);
+    void on_dateBis_dateChanged();
 
-    void on_comboFahrtag_currentIndexChanged(int index);
+    void on_comboFahrtag_currentIndexChanged();
 
-    void on_checkActivity_clicked(bool checked);
+    void on_checkActivity_clicked();
 
     void on_pushButton_clicked();
 

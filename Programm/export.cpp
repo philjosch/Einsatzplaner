@@ -8,27 +8,20 @@
 #include <QTemporaryFile>
 #include <QSettings>
 
-bool Export::printFahrtag(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
-{
-    QList<AActivity*> *liste = new QList<AActivity*>();
-    liste->append(f);
-    return printSingle(liste, pdf, paper);
-}
-
-bool Export::printActivity(Activity *a, QPrinter *pdf, QPrinter *paper)
+bool Export::print(AActivity *a, QPrinter *printer)
 {
     QList<AActivity*> *liste = new QList<AActivity*>();
     liste->append(a);
-    return printSingle(liste, pdf, paper);
+    return printSingle(liste, printer);
 }
 
-bool Export::printSingle(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper)
+bool Export::printSingle(QList<AActivity *> *liste, QPrinter *printer)
 {
+    if (printer == nullptr) return false;
     // Für jedes Objekt in der liste eine Einzelansicht erstellen mit der Methode generateSingle(...)
 
     // Vorbereiten des Druckers für den Ausdruck
-    preparePrinterPortrait(pdf);
-    preparePrinterPortrait(paper);
+    preparePrinterPortrait(printer);
 
 
     QTextDocument *d = new QTextDocument();
@@ -51,14 +44,15 @@ bool Export::printSingle(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *pap
     }
 
     d->setHtml(html);
-    return print(pdf, paper, d);
+    d->print(printer);
+    return true;
 }
 
-bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper)
+bool Export::printList(QList<AActivity *> *liste, QPrinter *printer)
 {
+    if (printer == nullptr) return false;
     // Vorbereiten des Druckers für den Ausdruck
-    preparePrinterLandscape(pdf);
-    preparePrinterLandscape(paper);
+    preparePrinterLandscape(printer);
     QTextDocument *d = new QTextDocument();
     d->setDefaultStyleSheet("body, td, p { font-size: 10px; font-weight: normal !important;}"
                             "table { border-width: 1px; border-style: solid; border-color: black; } "
@@ -79,15 +73,15 @@ bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper
     a += "</tbody></table>"
          "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     d->setHtml(a);
-    return print(pdf, paper, d);
+    d->print(printer);
+    return true;
 }
 
-bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
+bool Export::printReservierung(Fahrtag *f, QPrinter *printer)
 {
-    if (f->getAnzahl() == 0) return false;
+    if (f->getAnzahl() == 0 || printer == nullptr) return false;
     // Vorbereiten des Druckers für den Ausdruck
-    preparePrinterLandscape(pdf);
-    preparePrinterLandscape(paper);
+    preparePrinterLandscape(printer);
     QTextDocument *d = new QTextDocument();
     d->setDefaultStyleSheet("body, tr, td, p { font-size: 11px; }"
                             "table { border-width: 1px; border-style: solid; border-color: black; }"
@@ -154,11 +148,13 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
     a += "</tbody></table>";
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     d->setHtml(a);
-    return print(pdf, paper, d);
+    d->print(printer);
+    return true;
 }
 
 bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
 {
+    if (printer == nullptr) return false;
     preparePrinterPortrait(printer);
     QTextDocument *d = new QTextDocument();
     // Append a style sheet
@@ -220,12 +216,13 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
         }
     }
     d->setHtml(a);
-    return print(nullptr, printer, d);
+    d->print(printer);
+    return true;
 }
 
 bool Export::printPerson(ManagerPersonal *m, Person *p, QPrinter *printer)
 {
-    if (p == nullptr) return false;
+    if (p == nullptr || printer == nullptr) return false;
     preparePrinterPortrait(printer);
     QTextDocument *d = new QTextDocument();
     // Append a style sheet
@@ -244,13 +241,14 @@ bool Export::printPerson(ManagerPersonal *m, Person *p, QPrinter *printer)
     QString a = p->getHtmlForDetailPage(m);
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
     d->setHtml(a);
-    return print(nullptr, printer, d);
+    d->print(printer);
+    return true;
 }
 
-bool Export::printPersonen(QList<Person *> *personen, QMap<Category, double> gesamt, QList<Category> data, QPrinter *pdf, QPrinter *paper)
+bool Export::printPersonen(QList<Person *> *personen, QMap<Category, int> gesamt, QList<Category> data, QPrinter *printer)
 {
-    preparePrinterLandscape(pdf);
-    preparePrinterLandscape(paper);
+    if (printer == nullptr) return false;
+    preparePrinterLandscape(printer);
     QTextDocument *d = new QTextDocument();
     d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
                             "table { border-width: 1px; border-style: solid; border-color: black; }"
@@ -321,7 +319,8 @@ bool Export::printPersonen(QList<Person *> *personen, QMap<Category, double> ges
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
     d->setHtml(a);
 
-    return print(pdf, paper, d);
+    d->print(printer);
+    return true;
 }
 
 QPrinter *Export::getPrinterPaper(QWidget *parent)
@@ -342,8 +341,11 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path)
     return p;
 }
 
-bool Export::testServerConnection(QString server, QString path, QString id)
+bool Export::testServerConnection(ManagerFileSettings *settings)
 {
+    QString server = settings->getServer();
+    QString path = settings->getPath();
+    QString id = settings->getId();
     // create custom temporary event loop on stack
     QEventLoop eventLoop;
 
@@ -365,7 +367,7 @@ bool Export::testServerConnection(QString server, QString path, QString id)
     return (s == "OK");
 }
 
-bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *settings)
+bool Export::uploadToServer(ManagerFileSettings *settings, QList<AActivity *> *liste)
 {
     if (! settings->getEnabled()) return true;
 
@@ -377,7 +379,7 @@ bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *sett
     p->setOutputFormat(QPrinter::PdfFormat);
     p->setOutputFileName(localFile);
 
-    printList(liste, p, nullptr);
+    printList(liste, p);
 
     /* HOCHLADEN DER DATEI AUF DEN SERVER */
     QString server = settings->getFullServer();
@@ -415,7 +417,7 @@ bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *sett
     return (s == "OK");
 }
 
-int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
+int Export::autoUploadToServer(ManagerFileSettings *settings, Manager *mgr)
 {
     /* EINSTELLUNGEN LESEN */
     QSettings s;
@@ -472,21 +474,10 @@ int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
     /* UPLOADFUNKTION NUTZEN; UM DATEIEN HOCHZULADEN */
     if (liste->length() == 0)
         return -1;
-    if (uploadToServer(liste, settings))
+    if (uploadToServer(settings, liste))
         return 1;
     else
         return 0;
-}
-
-bool Export::print(QPrinter *pdf, QPrinter *paper, QTextDocument *d)
-{
-    if (pdf != nullptr) {
-        d->print(pdf);
-    }
-    if(paper != nullptr) {
-        d->print(paper);
-    }
-    return true;
 }
 
 void Export::preparePrinterPortrait(QPrinter *p)

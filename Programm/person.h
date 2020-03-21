@@ -8,15 +8,15 @@ class Person : public QObject
     Q_OBJECT
 
 public:
-//    Person(QString vorname, QString nachname, ManagerPersonal *manager);
-//    Person(QString vorname, QString nachname, QString id, ManagerPersonal *manager);
-    Person(QString name, ManagerPersonal *manager); // Fallback
+    Person(QString name, ManagerPersonal *manager);
     Person(QJsonObject o, ManagerPersonal *man); // Laden aus einem JSON-Objekt
 
     QJsonObject toJson();
     QJsonObject personalToJson();
 
     int get(Category cat);
+    QString getString(Category cat);
+    QString getStringShort(Category cat);
 
     int getAnzahl();
 
@@ -34,10 +34,13 @@ public:
     int getAdditional(Category cat);
     void setAdditional(Category cat, int value);
 
-    static QString getStringFromHours(double duration);
+    static QString getStringFromHours(int duration);
 
 
     QString getId() const;
+
+    int getNummer() const;
+    bool setNummer(int value);
 
     QString getName() const;
 
@@ -92,9 +95,6 @@ public:
     QString getBemerkungen() const;
     void setBemerkungen(const QString &value);
 
-    int getNummer() const;
-    bool setNummer(int value);
-
     bool isAusgetreten();
 
 protected:
@@ -123,7 +123,6 @@ protected:
     QString bemerkungen;
     // Zusätzliche Stunden
     QMap<Category, int> additional;
-
 
     QMap<Category, int> zeiten;
     QMap<AActivity*, Category> activities;

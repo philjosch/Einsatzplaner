@@ -608,13 +608,13 @@ void FahrtagWindow::on_actionDelete_triggered()
 void FahrtagWindow::on_actionPrint_triggered()
 {
     QPrinter *p = Export::getPrinterPaper(this);
-    Export::printFahrtag(fahrtag, nullptr, p);
+    Export::print(fahrtag, p);
 }
 
 void FahrtagWindow::on_actionPdf_triggered()
 {
     QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf");
-    Export::printFahrtag(fahrtag, p);
+    Export::print(fahrtag, p);
 }
 
 void FahrtagWindow::on_actionResPdf_triggered()
@@ -626,7 +626,7 @@ void FahrtagWindow::on_actionResPdf_triggered()
 void FahrtagWindow::on_actionResPrint_triggered()
 {
     QPrinter *p = Export::getPrinterPaper(this);
-    Export::printReservierung(fahrtag, nullptr, p);
+    Export::printReservierung(fahrtag, p);
 }
 
 void FahrtagWindow::loadReservierung(Reservierung *r)

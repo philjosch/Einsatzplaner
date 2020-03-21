@@ -40,6 +40,7 @@ public:
     void setMinimumHours(Category cat, int amount);
 
     int getMinimumHours(Category cat);
+    QString getMinimumHoursString(Category cat);
 
     static int getMinimumHoursDefault(Category kat);
 
@@ -47,7 +48,7 @@ public:
 
     void berechne();
 
-    double getTime(Category kat);
+    int getTime(Category kat);
 
     static QString getGoodName(QString name); // Wandlet einen Namen in das Format Vorname Nachname um
 
@@ -67,18 +68,7 @@ private:
 
     static QHash<Category, int> minimumHoursDefault;
 
-    double timeTf;
-    double timeZf;
-    double timeZub;
-    double timeService;
-    double timeBuero;
-    double timeWerkstatt;
-    double timeVorbereiten;
-    double timeAusbildung;
-    double timeSonstiges;
-    double timeSum;
-    double sumKilometer;
-
+    QMap<Category, int> time;
 };
 
 #endif // MANAGERPERSONAL_H

@@ -15,6 +15,7 @@ ManagerPersonal::ManagerPersonal()
     foreach (Category cat, minimumHoursDefault.keys()) {
        minimumHours.insert(cat, minimumHoursDefault.value(cat));
     }
+    time = QMap<Category,int>();
 }
 
 ManagerPersonal::~ManagerPersonal()
@@ -216,6 +217,12 @@ int ManagerPersonal::getMinimumHours(Category cat)
     return minimumHours.value(cat, 0);
 }
 
+QString ManagerPersonal::getMinimumHoursString(Category cat)
+{
+    int value = getMinimumHours(cat);
+    return QString("%1:%2 h").arg(int(value/60)).arg(value % 60, 2, 10,QLatin1Char('0'));
+}
+
 int ManagerPersonal::getMinimumHoursDefault(Category cat)
 {
     return minimumHoursDefault.value(cat, 0);
@@ -243,63 +250,27 @@ QListIterator<Person *> ManagerPersonal::getPersonen() const
 
 void ManagerPersonal::berechne()
 {
-    timeTf = 0;
-    timeZf = 0;
-    timeZub = 0;
-    timeService = 0;
-    timeBuero = 0;
-    timeWerkstatt = 0;
-    timeVorbereiten = 0;
-    timeAusbildung = 0;
-    timeSonstiges = 0;
-    timeSum = 0;
-    sumKilometer = 0;
+    time.clear();
     foreach (Person *p, personenSorted.values()) {
         p->berechne();
-        timeTf += p->get(Tf);
-        timeZf += p->get(Zf);
-        timeZub += p->get(Zub);
-        timeService += p->get(Service);
-        timeBuero += p->get(Buero);
-        timeWerkstatt += p->get(Werkstatt);
-        timeVorbereiten += p->get(ZugVorbereiten);
-        timeAusbildung += p->get(Ausbildung);
-        timeSonstiges += p->get(Sonstiges);
-        timeSum += p->get(Gesamt);
-        sumKilometer += p->get(Kilometer);
+        time.insert(Tf, time.value(Tf)+p->get(Tf));
+        time.insert(Zf, time.value(Zf)+p->get(Zf));
+        time.insert(Zub, time.value(Zub)+p->get(Zub));
+        time.insert(Service, time.value(Service)+p->get(Service));
+        time.insert(Buero, time.value(Buero)+p->get(Buero));
+        time.insert(Werkstatt, time.value(Werkstatt)+p->get(Werkstatt));
+        time.insert(ZugVorbereiten, time.value(ZugVorbereiten)+p->get(ZugVorbereiten));
+        time.insert(Ausbildung, time.value(Ausbildung)+p->get(Ausbildung));
+        time.insert(Sonstiges, time.value(Sonstiges)+p->get(Sonstiges));
+        time.insert(Gesamt, time.value(Gesamt)+p->get(Gesamt));
+        time.insert(Kilometer, time.value(Kilometer)+p->get(Kilometer));
     }
+    time.insert(Anzahl, 0);
 }
 
-double ManagerPersonal::getTime(Category kat)
+int ManagerPersonal::getTime(Category kat)
 {
-    switch (kat) {
-    case Tf:
-    case Tb:
-        return timeTf;
-    case Zf:
-        return timeZf;
-    case Zub:
-    case Begleiter:
-        return timeZub;
-    case Service:
-        return timeService;
-    case ZugVorbereiten:
-        return timeVorbereiten;
-    case Werkstatt:
-        return timeWerkstatt;
-    case Buero:
-        return timeBuero;
-    case Ausbildung:
-        return timeAusbildung;
-    case Sonstiges:
-        return timeSonstiges;
-    case Gesamt:
-        return timeSum;
-    case Kilometer:
-        return sumKilometer;
-    default:
-        return 0;
-    }
+    return time.value(kat, 0);
 }
 
 QString ManagerPersonal::getGoodName(QString name)

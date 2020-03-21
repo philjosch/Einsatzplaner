@@ -86,13 +86,9 @@ void ExportGesamt::on_pushDrucken_clicked()
     }
 
     // Lasse einene Drucker auswählen
-    QPrinter *paperListe = nullptr;
-    QPrinter *paperEinzel = nullptr;
-    QPrinter *pdfListe = nullptr;
-    QPrinter *pdfEinzel = nullptr;
     if (ui->checkListe->isChecked() && listeListe->length() > 0) {
         if (ui->checkUpload->isChecked()) {
-            if (Export::uploadToServer(listeListe, settings)) {
+            if (Export::uploadToServer(settings, listeListe)) {
                 QMessageBox::information(nullptr, tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
             } else {
                 QMessageBox::information(nullptr, tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden! :("));
@@ -100,17 +96,15 @@ void ExportGesamt::on_pushDrucken_clicked()
         }
 
         if (ui->checkPDF->isChecked())
-            pdfListe = Export::getPrinterPDF(p, "Listenansicht.pdf");
+            Export::printList(listeListe, Export::getPrinterPDF(p, "Listenansicht.pdf"));
         if (ui->checkAusdruck->isChecked())
-            paperListe = Export::getPrinterPaper(p);
-        Export::printList(listeListe, pdfListe, paperListe);
+            Export::printList(listeListe, Export::getPrinterPaper(p));
     }
     if (ui->checkEinzel->isChecked() && listeEinzel->length() > 0) {
         if (ui->checkPDF->isChecked())
-            pdfEinzel = Export::getPrinterPDF(p, "Einzelansicht.pdf");
+            Export::printSingle(listeEinzel, Export::getPrinterPDF(p, "Einzelansicht.pdf"));
         if (ui->checkAusdruck->isChecked())
-            paperEinzel = Export::getPrinterPaper(p);
-        Export::printSingle(listeEinzel, pdfEinzel, paperEinzel);
+            Export::printSingle(listeEinzel, Export::getPrinterPaper(p));
     }
 }
 
@@ -131,7 +125,7 @@ void ExportGesamt::on_comboVon_currentIndexChanged(int index)
     show();
 }
 
-void ExportGesamt::on_dateVon_dateChanged(const QDate &date)
+void ExportGesamt::on_dateVon_dateChanged()
 {
     show();
 }
@@ -153,17 +147,17 @@ void ExportGesamt::on_comboBis_currentIndexChanged(int index)
     show();
 }
 
-void ExportGesamt::on_dateBis_dateChanged(const QDate &date)
+void ExportGesamt::on_dateBis_dateChanged()
 {
     show();
 }
 
-void ExportGesamt::on_comboFahrtag_currentIndexChanged(int index)
+void ExportGesamt::on_comboFahrtag_currentIndexChanged()
 {
     show();
 }
 
-void ExportGesamt::on_checkActivity_clicked(bool checked)
+void ExportGesamt::on_checkActivity_clicked()
 {
     show();
 }

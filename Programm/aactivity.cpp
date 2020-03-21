@@ -23,6 +23,9 @@ Category AActivity::getCategoryFromString(QString s)
     if (s=="WERKSTATT") return Werkstatt;
     if (s=="VORBEREITEN" || s=="ZUG VORBEREITEN" || s=="ZUGVORBEREITEN") return ZugVorbereiten;
     if (s=="AUSBILDUNG") return Ausbildung;
+    if (s=="KILOMETER") return Kilometer;
+    if (s=="GESAMT") return Gesamt;
+    if (s=="ANZAHL") return Anzahl;
     return Sonstiges;
 }
 
@@ -39,7 +42,10 @@ QString AActivity::getStringFromCategory(Category c)
     case Werkstatt: return QObject::tr("Werkstatt");
     case ZugVorbereiten: return QObject::tr("Zug Vorbereiten");
     case Ausbildung: return QObject::tr("Ausbildung");
-    default: return QObject::tr("Sonstiges");
+    case Kilometer: return "Kilometer";
+    case Gesamt: return "Gesamt";
+    case Anzahl: return "Anzahl";
+    case Sonstiges: return "Sonstiges";
     }
 }
 
