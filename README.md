@@ -1,7 +1,7 @@
 # Einsatzplaner
 Ein Programm, um den Einsatzplan einer Museumseisenbahn zu verwalten.
 
-Weitere Informationen findet man unter [bahn.philipp-schepper.de](http://bahn.philipp-schepper.de "Hier geht es zur offiziellen Seite des Programms")
+Weitere Informationen findet man unter [epl.philipp-schepper.de](http://epl.philipp-schepper.de "Hier geht es zur offiziellen Seite des Programms")
 
 
 - in `Dokumentation` finden Sie die Dokumentation
@@ -11,5 +11,6 @@ Weitere Informationen findet man unter [bahn.philipp-schepper.de](http://bahn.ph
 - in `Mockup` werden verschiedene Design-Studien gespeichert
 - in `Plugin` befindet sich der Code für das Plugin auf dem Server
 - in `Programm` findet man den eigentlichen Quelltext für das Programm
-- `CHANGELOG.md` Die Veränderungshistorie des Programms
+- `CHANGELOG.md` enthält die Veränderungshistorie des Programms
+- `LICENSE` enthält die Lizenzbestimmungen, die durch das verwendete Framework erzwungen werden
 - `README.md` ist diese Datei
