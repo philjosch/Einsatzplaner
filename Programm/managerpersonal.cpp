@@ -3,7 +3,7 @@
 
 #include <QJsonArray>
 
-QHash<Category, int> ManagerPersonal::minimumHoursDefault {{Category::Tf, 100*60}, {Gesamt, 10*60}};
+QMap<Category, int> ManagerPersonal::minimumHoursDefault {{Category::Tf, 100*60}, {Gesamt, 10*60}};
 
 
 ManagerPersonal::ManagerPersonal()
@@ -181,27 +181,27 @@ bool ManagerPersonal::checkHours(Person *p, Category kat)
 {
     switch (kat) {
     case Tf:
-        return !(p->getAusbildungTf() && p->get(Tf) < getMinimumHours(Category::Tf));
+        return !(p->get(Tf) < getMinimumHours(Tf, p));
     case Tb:
         return true;
     case Zf:
-        return !(p->getAusbildungZf() && p->get(Zf) < getMinimumHours(Category::Zf));
+        return !(p->get(Zf) < getMinimumHours(Zf, p));
     case Service:
-        return !(p->get(Service) < getMinimumHours(Service));
+        return !(p->get(Service) < getMinimumHours(Service, p));
     case Zub:
-        return !(p->get(Zub) < getMinimumHours(Zub));
+        return !(p->get(Zub) < getMinimumHours(Zub, p));
     case Buero:
-        return !(p->get(Buero) < getMinimumHours(Buero));
+        return !(p->get(Buero) < getMinimumHours(Buero, p));
     case Werkstatt:
-        return !(p->get(Werkstatt) < getMinimumHours(Werkstatt));
+        return !(p->get(Werkstatt) < getMinimumHours(Werkstatt, p));
     case ZugVorbereiten:
-        return !(p->get(ZugVorbereiten) < getMinimumHours(ZugVorbereiten));
+        return !(p->get(ZugVorbereiten) < getMinimumHours(ZugVorbereiten, p));
     case Ausbildung:
-        return !((p->getAusbildungRangierer() || p->getAusbildungTf() || p->getAusbildungZf()) && (p->get(Ausbildung) < getMinimumHours(Category::Ausbildung)));
+        return !(p->get(Ausbildung) < getMinimumHours(Ausbildung, p));
     case Sonstiges:
-        return !(p->get(Sonstiges) < getMinimumHours(Sonstiges));
+        return !(p->get(Sonstiges) < getMinimumHours(Sonstiges, p));
     case Gesamt:
-        return !(p->get(Gesamt) < getMinimumHours(Gesamt));
+        return !(p->get(Gesamt) < getMinimumHours(Gesamt, p));
     default:
         return true;
     }
@@ -215,6 +215,23 @@ void ManagerPersonal::setMinimumHours(Category cat, int amount)
 int ManagerPersonal::getMinimumHours(Category cat)
 {
     return minimumHours.value(cat, 0);
+}
+
+int ManagerPersonal::getMinimumHours(Category cat, Person *p)
+{
+    switch (cat) {
+    case Tf:
+        if (! p->getAusbildungTf()) return 0;
+        return minimumHours.value(cat, 0);
+    case Zf:
+        if (! p->getAusbildungZf()) return 0;
+        return minimumHours.value(cat, 0);
+    case Ausbildung:
+        if (! p->getAusbildungTf() && ! p->getAusbildungZf() && ! p->getAusbildungRangierer()) return 0;
+        return minimumHours.value(cat, 0);
+    default:
+        return minimumHours.value(cat, 0);
+    }
 }
 
 QString ManagerPersonal::getMinimumHoursString(Category cat)

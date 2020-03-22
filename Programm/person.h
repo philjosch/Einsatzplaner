@@ -34,7 +34,6 @@ public:
     int getAdditional(Category cat);
     void setAdditional(Category cat, int value);
 
-    static QString getStringFromHours(int duration);
 
 
     QString getId() const;

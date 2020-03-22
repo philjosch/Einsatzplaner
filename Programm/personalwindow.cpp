@@ -150,24 +150,23 @@ void PersonalWindow::showPerson(Person *p)
     ui->doubleAnzahl->setValue(p->getAdditional(Anzahl));
     ui->doubleKilometer->setValue(p->getAdditional(Kilometer));
 
-    if (p->getAusbildungTf() && manager->getMinimumHours(Tf) > 0)
+    if (manager->getMinimumHours(Tf, p) > 0)
         ui->labelMinTf->setText(manager->getMinimumHoursString(Tf));
-    if (p->getAusbildungZf() && manager->getMinimumHours(Zf) > 0)
+    if (manager->getMinimumHours(Zf, p) > 0)
         ui->labelMinZf->setText(manager->getMinimumHoursString(Zf));
-    if (manager->getMinimumHours(Zub) > 0)
+    if (manager->getMinimumHours(Zub, p) > 0)
         ui->labelMinZub->setText(manager->getMinimumHoursString(Zub));
-    if (manager->getMinimumHours(Service) > 0)
+    if (manager->getMinimumHours(Service, p) > 0)
         ui->labelMinService->setText(manager->getMinimumHoursString(Service));
-    if (manager->getMinimumHours(ZugVorbereiten) > 0)
+    if (manager->getMinimumHours(ZugVorbereiten, p) > 0)
         ui->labelMinZugVorbereiten->setText(manager->getMinimumHoursString(ZugVorbereiten));
-    if (manager->getMinimumHours(Werkstatt) > 0)
+    if (manager->getMinimumHours(Werkstatt, p) > 0)
         ui->labelMinWerkstatt->setText(manager->getMinimumHoursString(Werkstatt));
-    if (manager->getMinimumHours(Buero) > 0)
+    if (manager->getMinimumHours(Buero, p) > 0)
         ui->labelMinBuero->setText(manager->getMinimumHoursString(Buero));
-    if ((p->getAusbildungTf() || p->getAusbildungZf() || p->getAusbildungRangierer())
-            && manager->getMinimumHours(Ausbildung) > 0)
+    if (manager->getMinimumHours(Ausbildung, p) > 0)
         ui->labelMinAusbildung->setText(manager->getMinimumHoursString(Ausbildung));
-    if (manager->getMinimumHours(Sonstiges) > 0)
+    if (manager->getMinimumHours(Sonstiges, p) > 0)
         ui->labelMinSonstiges->setText(manager->getMinimumHoursString(Sonstiges));
 
     enabled = true;

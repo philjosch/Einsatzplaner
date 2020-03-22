@@ -1,6 +1,7 @@
-#ifndef ENUMS_H
-#define ENUMS_H
+#ifndef BASICS_H
+#define BASICS_H
 
+#include <QDate>
 
 enum Category {
     Tf,
@@ -33,10 +34,16 @@ enum Mistake {
     KapazitaetUeberlauf // Thrown if there are not enough seats for the reservations
 };
 
-#endif // ENUMS_H
+
 struct Infos {
     QTime beginn;
     QTime ende;
     Category kategorie;
     QString bemerkung;
 };
+
+QString minutesToHourString(int min);
+QString minutesToHourStringShort(int min);
+
+
+#endif // BASICS_H

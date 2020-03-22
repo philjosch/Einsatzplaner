@@ -212,19 +212,19 @@ QString Person::getString(Category cat)
     case Category::Anzahl:
         return QString("%1").arg(value);
     default:
-        return getStringFromHours(value);
+        return minutesToHourString(value);
     }
 }
 
 QString Person::getStringShort(Category cat)
 {
+    int value = get(cat);
     switch (cat) {
-    case Category::Anzahl:
-        return getString(cat);
     case Category::Kilometer:
-        return getString(cat).chopped(3);
+    case Category::Anzahl:
+        return QString("%1").arg(value);
     default:
-        return getString(cat).chopped(2);
+        return minutesToHourStringShort(value);
     }
 }
 
@@ -358,7 +358,7 @@ void Person::berechne()
     for(AActivity *a: activities.keys()) {
         if (a->getDatum() <= today) {
             Category cat = activities.value(a);
-            AActivity::Infos info = a->getIndividual(this);
+            Infos info = a->getIndividual(this);
 
             // Einsatzstunden
             QTime start = info.beginn;
@@ -421,9 +421,9 @@ QListIterator<AActivity *> *Person::getActivities()
 QString Person::getName() const
 {
     QString nameKomplett;
-    if (vorname != "") nameKomplett = vorname + " " + nachname;
-    else nameKomplett = nachname;
-    return nameKomplett;
+    if (vorname != "" && nachname != "") return vorname + " " + nachname;
+    else if (vorname != "") return vorname;
+    else return nachname;
 }
 
 QString Person::getVorname() const
@@ -489,56 +489,56 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     html += "<ul>";
     QString help = "<li %1>%3: %4%2</li>";
     QString helpcurrent;
-    if (get(Tf) > 0 || ausbildungTf) {
+    if (get(Tf) > 0 || m->getMinimumHours(Tf, this)) {
         if (m->checkHours(this, Tf)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+getStringFromHours(m->getMinimumHours(Tf))+")");
-        html += helpcurrent.arg("Tf", getStringFromHours(get(Tf)));
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Tf, this))+")");
+        html += helpcurrent.arg("Tf", minutesToHourString(get(Tf)));
     }
-    if (get(Zf) > 0 || ausbildungZf) {
+    if (get(Zf) > 0 || m->getMinimumHours(Zf, this)) {
         if (m->checkHours(this, Zf)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+getStringFromHours(m->getMinimumHours(Zf))+")");
-        html += helpcurrent.arg("Zf", getStringFromHours(get(Zf)));
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Zf, this))+")");
+        html += helpcurrent.arg("Zf", minutesToHourString(get(Zf)));
     }
-    if (get(Zub) > 0) {
+    if (get(Zub) > 0 || m->getMinimumHours(Zub, this)) {
         if (m->checkHours(this, Zub)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+getStringFromHours(m->getMinimumHours(Zub))+")");
-        html += helpcurrent.arg("Zub/Begl.o.b.A.", getStringFromHours(get(Zub)));
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Zub, this))+")");
+        html += helpcurrent.arg("Zub/Begl.o.b.A.", minutesToHourString(get(Zub)));
     }
-    if (get(Service) > 0) {
+    if (get(Service) > 0 || m->getMinimumHours(Service, this)) {
         if (m->checkHours(this, Service)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+getStringFromHours(m->getMinimumHours(Service))+")");
-        html += helpcurrent.arg("Service", getStringFromHours(get(Service)));
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Service, this))+")");
+        html += helpcurrent.arg("Service", minutesToHourString(get(Service)));
     }
-    if (get(ZugVorbereiten) > 0) {
+    if (get(ZugVorbereiten) > 0 || m->getMinimumHours(ZugVorbereiten, this)) {
         if (m->checkHours(this, ZugVorbereiten)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+getStringFromHours(m->getMinimumHours(ZugVorbereiten))+")");
-        html += helpcurrent.arg("Zug Vorbereiten", getStringFromHours(get(ZugVorbereiten)));
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(ZugVorbereiten, this))+")");
+        html += helpcurrent.arg("Zug Vorbereiten", minutesToHourString(get(ZugVorbereiten)));
     }
-    if (get(Werkstatt) > 0) {
+    if (get(Werkstatt) > 0 || m->getMinimumHours(Werkstatt, this)) {
         if (m->checkHours(this, Werkstatt)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+getStringFromHours(m->getMinimumHours(Werkstatt))+")");
-        html += helpcurrent.arg("Werkstatt", getStringFromHours(get(Werkstatt)));
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Werkstatt, this))+")");
+        html += helpcurrent.arg("Werkstatt", minutesToHourString(get(Werkstatt)));
     }
-    if (get(Buero) > 0) {
+    if (get(Buero) > 0 || m->getMinimumHours(Buero, this)) {
         if (m->checkHours(this, Buero)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+getStringFromHours(m->getMinimumHours(Buero))+")");
-        html += helpcurrent.arg("Büro", getStringFromHours(get(Buero)));
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Buero, this))+")");
+        html += helpcurrent.arg("Büro", minutesToHourString(get(Buero)));
     }
-    if (get(Ausbildung) > 0 || ausbildungTf || ausbildungZf || ausbildungRangierer) {
+    if (get(Ausbildung) > 0 || m->getMinimumHours(Ausbildung, this)) {
         if (m->checkHours(this, Ausbildung)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+getStringFromHours(m->getMinimumHours(Ausbildung))+")");
-        html += helpcurrent.arg("Ausbildung", getStringFromHours(get(Ausbildung)));
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Ausbildung, this))+")");
+        html += helpcurrent.arg("Ausbildung", minutesToHourString(get(Ausbildung)));
     }
-    if (get(Sonstiges) > 0) {
+    if (get(Sonstiges) > 0 || m->getMinimumHours(Sonstiges, this)) {
         if (m->checkHours(this, Sonstiges)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+getStringFromHours(m->getMinimumHours(Sonstiges))+")");
-        html += helpcurrent.arg("Sonstiges", getStringFromHours(get(Sonstiges)));
+        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Sonstiges, this))+")");
+        html += helpcurrent.arg("Sonstiges", minutesToHourString(get(Sonstiges)));
     }
 
     html += "</ul><ul>";
     if (m->checkHours(this, Gesamt)) helpcurrent = help.arg("", "");
-    else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+getStringFromHours(m->getMinimumHours(Gesamt))+")");
-    html += helpcurrent.arg("Gesamte Stundenzahl", getStringFromHours(get(Gesamt)));
+    else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Gesamt, this))+")");
+    html += helpcurrent.arg("Gesamte Stundenzahl", minutesToHourString(get(Gesamt)));
     html += "<li>Anzahl Aktivitäten: "+QString::number(get(Anzahl))+"</li>";
     html += "<li>Gefahrene Strecke: "+QString::number(get(Kilometer))+"km</li></ul>";
     html += "</p>";
@@ -558,7 +558,7 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
         for(int i=0; i<list.length(); i++) {
             AActivity *a = list.at(i);
 //            for(AActivity *a: activities.keys()) {
-            AActivity::Infos info = a->getIndividual(this);
+            Infos info = a->getIndividual(this);
             html += "<tr><td>"+a->getDatum().toString("dd.MM.yyyy")+"<br/>"+a->getKurzbeschreibung();
             if (a->getAnlass() != a->getKurzbeschreibung() && a->getAnlass() != "")
                 html += "<br/>"+a->getAnlass();
@@ -573,15 +573,15 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     }
     help = "<li>%1: %2</li>";
     QString h2 = "";
-    if (getAdditional(Tf) > 0) h2 += help.arg("Tf", getStringFromHours(getAdditional(Tf)));
-    if (getAdditional(Zf) > 0) h2 += help.arg("Zf", getStringFromHours(getAdditional(Zf)));
-    if (getAdditional(Zub) > 0) h2 += help.arg("Zub", getStringFromHours(getAdditional(Zub)));
-    if (getAdditional(Service) > 0) h2 += help.arg("Service", getStringFromHours(getAdditional(Service)));
-    if (getAdditional(ZugVorbereiten) > 0) h2 += help.arg("Vorbereiten", getStringFromHours(getAdditional(ZugVorbereiten)));
-    if (getAdditional(Werkstatt) > 0) h2 += help.arg("Werkstatt", getStringFromHours(getAdditional(Werkstatt)));
-    if (getAdditional(Buero) > 0) h2 += help.arg("Büro", getStringFromHours(getAdditional(Buero)));
-    if (getAdditional(Ausbildung) > 0) h2 += help.arg("Ausbildung", getStringFromHours(getAdditional(Ausbildung)));
-    if (getAdditional(Sonstiges) > 0) h2 += help.arg("Sonstiges", getStringFromHours(getAdditional(Sonstiges)));
+    if (getAdditional(Tf) > 0) h2 += help.arg("Tf", minutesToHourString(getAdditional(Tf)));
+    if (getAdditional(Zf) > 0) h2 += help.arg("Zf", minutesToHourString(getAdditional(Zf)));
+    if (getAdditional(Zub) > 0) h2 += help.arg("Zub", minutesToHourString(getAdditional(Zub)));
+    if (getAdditional(Service) > 0) h2 += help.arg("Service", minutesToHourString(getAdditional(Service)));
+    if (getAdditional(ZugVorbereiten) > 0) h2 += help.arg("Vorbereiten", minutesToHourString(getAdditional(ZugVorbereiten)));
+    if (getAdditional(Werkstatt) > 0) h2 += help.arg("Werkstatt", minutesToHourString(getAdditional(Werkstatt)));
+    if (getAdditional(Buero) > 0) h2 += help.arg("Büro", minutesToHourString(getAdditional(Buero)));
+    if (getAdditional(Ausbildung) > 0) h2 += help.arg("Ausbildung", minutesToHourString(getAdditional(Ausbildung)));
+    if (getAdditional(Sonstiges) > 0) h2 += help.arg("Sonstiges", minutesToHourString(getAdditional(Sonstiges)));
     help = "<li>%1: %2%3</li>";
     if (getAdditional(Anzahl) > 0) h2 += help.arg("Zusätzliche Aktivitäten").arg(getAdditional(Anzahl)).arg("");
     if (getAdditional(Kilometer) > 0) h2 += help.arg("Gefahrene Strecke").arg(getAdditional(Kilometer)).arg("km");
@@ -598,11 +598,6 @@ int Person::getAdditional(Category cat)
 void Person::setAdditional(Category cat, int value)
 {
     additional.insert(cat, value);
-}
-
-QString Person::getStringFromHours(int duration)
-{
-    return QString("%1:%2 h").arg(int(duration/60)).arg(duration % 60, 2, 10,QLatin1Char('0'));
 }
 
 QString Person::getId() const

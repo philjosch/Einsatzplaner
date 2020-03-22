@@ -4,7 +4,7 @@
 #include <QJsonObject>
 #include <QSet>
 
-#include "enums.h"
+#include "basics.h"
 
 class ManagerPersonal;
 
@@ -40,6 +40,7 @@ public:
     void setMinimumHours(Category cat, int amount);
 
     int getMinimumHours(Category cat);
+    int getMinimumHours(Category cat, Person *p);
     QString getMinimumHoursString(Category cat);
 
     static int getMinimumHoursDefault(Category kat);
@@ -66,7 +67,7 @@ private:
 
     QMap<Category, int> minimumHours;
 
-    static QHash<Category, int> minimumHoursDefault;
+    static QMap<Category, int> minimumHoursDefault;
 
     QMap<Category, int> time;
 };

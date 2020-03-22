@@ -35,6 +35,7 @@ SOURCES += main.cpp\
     verteiler.cpp \
     preferencesdialog.cpp \
     minimumhourseditordialog.cpp \
+    basics.cpp
     filesettings.cpp \
     managerfilesettings.cpp
 
@@ -60,7 +61,7 @@ HEADERS  += mainwindow.h \
     verteiler.h \
     preferencesdialog.h \
     minimumhourseditordialog.h \
-    enums.h \
+    basics.h \
     filesettings.h \
     managerfilesettings.h
 

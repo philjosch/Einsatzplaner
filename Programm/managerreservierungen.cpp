@@ -1,7 +1,7 @@
 #include "managerreservierungen.h"
 #include "wagen.h"
 #include "verteiler.h"
-#include "enums.h"
+#include "basics.h"
 
 #include <QJsonObject>
 #include <QJsonArray>
