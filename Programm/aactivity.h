@@ -15,12 +15,6 @@ class AActivity
 {
 
 public:
-    struct Infos {
-        QTime beginn;
-        QTime ende;
-        Category kategorie;
-        QString bemerkung;
-    };
 
     AActivity(QDate date, ManagerPersonal *p);
     AActivity(QJsonObject o, ManagerPersonal *p);
@@ -57,7 +51,7 @@ public:
     bool getPersonalBenoetigt() const;
     void setPersonalBenoetigt(bool value);
 
-    QMap<Person*,  Infos*> getPersonen();
+    QMap<Person *, Infos> getPersonen();
     virtual Infos getIndividual(Person *person) = 0;
     Mistake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
     Mistake addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
@@ -102,12 +96,12 @@ protected:
     bool zeitenUnbekannt;
     QString anlass;
     QString bemerkungen;
-    QMap<Person *, Infos*> personen; // Für Infos siehe oben
+    QMap<Person *, Infos> personen; // Für Infos siehe oben
     bool personalBenoetigt;
 
     ManagerPersonal *personal;
 
-    QString listToString(QMap<Person*, Infos*> *liste, QString seperator, bool aufgabe=false);
+    QString listToString(QMap<Person *, Infos> liste, QString seperator, bool aufgabe=false);
 
     static QString COLOR_REQUIRED;
     bool lesser(const AActivity &second) const;

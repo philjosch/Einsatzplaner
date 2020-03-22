@@ -34,3 +34,9 @@ enum Mistake {
 };
 
 #endif // ENUMS_H
+struct Infos {
+    QTime beginn;
+    QTime ende;
+    Category kategorie;
+    QString bemerkung;
+};

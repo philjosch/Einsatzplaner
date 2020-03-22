@@ -241,7 +241,7 @@ void ActivityWindow::loadData()
 
         namen.insert(p->getName());
 
-        AActivity::Infos info = *(activity->getPersonen().value(p));
+        Infos info = activity->getPersonen().value(p);
 
         ui->tablePersonen->setItem(0, 0, new QTableWidgetItem(p->getName()));
         Category kat = info.kategorie;

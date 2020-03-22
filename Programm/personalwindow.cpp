@@ -102,7 +102,7 @@ void PersonalWindow::showPerson(Person *p)
         i0->setData(Qt::EditRole, a->getDatum());
         ui->tabelle->setItem(0, 0, i0);
 
-        AActivity::Infos infos = a->getIndividual(p);
+        Infos infos = a->getIndividual(p);
 
         // Aufgabe
         QTableWidgetItem *i1 = new QTableWidgetItem(AActivity::getStringFromCategory(infos.kategorie));
@@ -235,6 +235,15 @@ void PersonalWindow::refreshGesamt()
         if (! anzeige->contains(cat)) continue;
         ii = new QTableWidgetItem();
         ii->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
+        switch(cat) {
+        case Anzahl:
+        case Kilometer:
+            ii->setData(Qt::EditRole, manager->getTime(cat));
+            break;
+        default:
+            ii->setData(Qt::EditRole, round(manager->getTime(cat)*100.f/60.f)/100);
+        }
+
         ii->setData(Qt::EditRole, round(manager->getTime(cat)*100.f/60.f)/100);
         ui->tabelleGesamt->setItem(0, pos++, ii);
     }

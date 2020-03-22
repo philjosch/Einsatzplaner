@@ -57,7 +57,7 @@ AActivity::AActivity(QDate date, ManagerPersonal *p)
     zeitEnde = QTime(16, 0);
     anlass = "";
     bemerkungen = "";
-    personen = QMap<Person *, Infos*>();
+    personen = QMap<Person *, Infos>();
     personalBenoetigt = true;
     personal = p;
 }
@@ -65,7 +65,7 @@ AActivity::AActivity(QDate date, ManagerPersonal *p)
 AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
 {
     personal = p;
-    personen = QMap<Person*, Infos*>();
+    personen = QMap<Person*, Infos>();
 
     datum = QDate::fromString(o.value("datum").toString(), "yyyy-MM-dd");
     ort = o.value("ort").toString();
@@ -90,17 +90,14 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
             person->setAusbildungRangierer(true);
         }
 
-        Infos *info = new Infos();
-        info->beginn = QTime::fromString(aO.value("beginn").toString(), "hh:mm");
-        info->ende = QTime::fromString(aO.value("ende").toString(), "hh:mm");
-        info->kategorie = static_cast<Category>(aO.value("kat").toInt(100));
-        info->bemerkung = aO.value("bemerkung").toString();
+        Infos info = Infos();
+        info.beginn = QTime::fromString(aO.value("beginn").toString(), "hh:mm");
+        info.ende = QTime::fromString(aO.value("ende").toString(), "hh:mm");
+        info.kategorie = static_cast<Category>(aO.value("kat").toInt(100));
+        info.bemerkung = aO.value("bemerkung").toString();
 
-//        if (p != nullptr) {
-            person->addActivity(this, info->kategorie);
-            personen.insert(person, info);
-//        }
-
+        person->addActivity(this, info.kategorie);
+        personen.insert(person, info);
     }
     personalBenoetigt = o.value("personalBenoetigt").toBool(true);
 }
@@ -136,10 +133,10 @@ QJsonObject AActivity::toJson()
         } else {
             persJson.insert("name", p->getName());
         }
-        persJson.insert("beginn", personen.value(p)->beginn.toString("hh:mm"));
-        persJson.insert("ende", personen.value(p)->ende.toString("hh:mm"));
-        persJson.insert("kat", personen.value(p)->kategorie);
-        persJson.insert("bemerkung", personen.value(p)->bemerkung);
+        persJson.insert("beginn", personen.value(p).beginn.toString("hh:mm"));
+        persJson.insert("ende", personen.value(p).ende.toString("hh:mm"));
+        persJson.insert("kat", personen.value(p).kategorie);
+        persJson.insert("bemerkung", personen.value(p).bemerkung);
         personenJSON.append(persJson);
     }
     data.insert("personen", personenJSON);
@@ -225,7 +222,7 @@ void AActivity::setPersonalBenoetigt(bool value)
     emitter();
 }
 
-QMap<Person *, AActivity::Infos *> AActivity::getPersonen()
+QMap<Person *, Infos> AActivity::getPersonen()
 {
     return personen;
 }
@@ -275,11 +272,11 @@ Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime en
     // jetzt ist alles richtig und die person kann registiert werden.
     p->addActivity(this, kat);
 
-    Infos *info = new Infos();
-    info->beginn = start;
-    info->ende = ende;
-    info->kategorie = kat;
-    info->bemerkung = bemerkung;
+    Infos info = Infos();
+    info.beginn = start;
+    info.ende = ende;
+    info.kategorie = kat;
+    info.bemerkung = bemerkung;
 
     personen.insert(p, info);
 
@@ -306,9 +303,11 @@ Mistake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime en
     return Mistake::PersonNichtGefunden;
 }
 
-void AActivity::updatePersonBemerkung(Person *p, QString bemerkung)
+void AActivity::updatePersonBemerkung(Person *p, QString bem)
 {
-    personen.value(p)->bemerkung = bemerkung;
+    Infos i = personen.value(p);
+    i.bemerkung = bem;
+    personen.insert(p, i);
 }
 
 bool AActivity::lesser(const AActivity &second) const
@@ -349,26 +348,26 @@ ManagerPersonal *AActivity::getPersonal() const
     return personal;
 }
 
-QString AActivity::listToString(QMap<Person *, AActivity::Infos *> *liste, QString seperator, bool aufgabe)
+QString AActivity::listToString(QMap<Person *, Infos> liste, QString seperator, bool aufgabe)
 {
     QString a = "";
-    for(Person *p: liste->keys()) {
+    for(Person *p: liste.keys()) {
         a+= p->getName();
         bool strichPunkt = false;
-        if (liste->value(p)->bemerkung!= "") {
-            a += "; "+liste->value(p)->bemerkung;
+        if (liste.value(p).bemerkung!= "") {
+            a += "; "+liste.value(p).bemerkung;
             strichPunkt = true;
         }
-        if (aufgabe && (liste->value(p)->kategorie != Category::Sonstiges)) {
+        if (aufgabe && (liste.value(p).kategorie != Category::Sonstiges)) {
             if (strichPunkt) {
                 a += ", ";
             } else {
                 a += "; ";
                 strichPunkt = true;
             }
-            a += AActivity::getStringFromCategory(liste->value(p)->kategorie);
+            a += AActivity::getStringFromCategory(liste.value(p).kategorie);
         }
-        if (p != liste->keys().last()) {
+        if (p != liste.keys().last()) {
             a += seperator;
         }
     }
