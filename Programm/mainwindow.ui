@@ -365,7 +365,10 @@
   </action>
   <action name="actionSavePersonal">
    <property name="text">
-    <string>Personaldaten sichern unter</string>
+    <string>Stammdaten sichern unter</string>
+   </property>
+   <property name="toolTip">
+    <string>Stammdaten sichern unter</string>
    </property>
   </action>
   <action name="actionSettings">

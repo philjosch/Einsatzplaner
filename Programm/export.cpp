@@ -174,36 +174,35 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
 
     // Add the title page
     m->berechne();
-    QString help = "<li>%1: %2h</li>";
+    QString help = "<li>%1: %2</li>";
     QString a = "<h1>Personalübersicht - Gesamt</h1>"
                 "<h2>Geleistete Stunden</h2><ul>";
-    if (m->getTime(Tf) > 0) a += help.arg("Tf").arg(m->getTime(Tf), 0, 'f', 0);
-    if (m->getTime(Zf) > 0) a += help.arg("Zf").arg(m->getTime(Zf), 0, 'f', 0);
-    if (m->getTime(Zub) > 0) a += help.arg("Zub").arg(m->getTime(Zub), 0, 'f', 0);
-    if (m->getTime(Service) > 0) a += help.arg("Service").arg(m->getTime(Service), 0, 'f', 0);
-    if (m->getTime(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten").arg(m->getTime(ZugVorbereiten), 0, 'f', 0);
-    if (m->getTime(Werkstatt) > 0) a += help.arg("Werkstatt").arg(m->getTime(Werkstatt), 0, 'f', 0);
-    if (m->getTime(Buero) > 0) a += help.arg("Büro").arg(m->getTime(Buero), 0, 'f', 0);
-    if (m->getTime(Ausbildung) > 0) a += help.arg("Ausbildung").arg(m->getTime(Ausbildung), 0, 'f', 0);
-    if (m->getTime(Sonstiges) > 0) a += help.arg("Sonstiges").arg(m->getTime(Sonstiges), 0, 'f', 0);
+    if (m->getTime(Tf) > 0) a += help.arg("Tf", Person::getStringFromHours(m->getTime(Tf)));
+    if (m->getTime(Zf) > 0) a += help.arg("Zf", Person::getStringFromHours(m->getTime(Zf)));
+    if (m->getTime(Zub) > 0) a += help.arg("Zub", Person::getStringFromHours(m->getTime(Zub)));
+    if (m->getTime(Service) > 0) a += help.arg("Service", Person::getStringFromHours(m->getTime(Service)));
+    if (m->getTime(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten", Person::getStringFromHours(m->getTime(ZugVorbereiten)));
+    if (m->getTime(Werkstatt) > 0) a += help.arg("Werkstatt", Person::getStringFromHours(m->getTime(Werkstatt)));
+    if (m->getTime(Buero) > 0) a += help.arg("Büro", Person::getStringFromHours(m->getTime(Buero)));
+    if (m->getTime(Ausbildung) > 0) a += help.arg("Ausbildung", Person::getStringFromHours(m->getTime(Ausbildung)));
+    if (m->getTime(Sonstiges) > 0) a += help.arg("Sonstiges", Person::getStringFromHours(m->getTime(Sonstiges)));
     a += "</ul>";
 
     a += "<ul><li>Stunden gesamt: "+QString::number(m->getTimeSum())+"h</li>";
     a += "<li>Gefahrene Kilometer gesamt: "+QString::number(m->getSumKilometer())+" km</li></ul>";
 
-    help = "<li>%1: %2h</li>";
     a += "<h2>Mindeststunden</h2><ul>";
-    if (m->getMinimumHours() > 0) a += help.arg("Insgesamt").arg(m->getMinimumHours(), 0, 'f', 1);
-    if (m->getMinimumHours(Tf) > 0) a += help.arg("Tf").arg(m->getMinimumHours(Tf), 0, 'f', 1);
-    if (m->getMinimumHours(Tb) > 0) a += help.arg("Tb").arg(m->getMinimumHours(Tb), 0, 'f', 1);
-    if (m->getMinimumHours(Zf) > 0) a += help.arg("Zf").arg(m->getMinimumHours(Zf), 0, 'f', 1);
-    if (m->getMinimumHours(Zub) > 0) a += help.arg("Zub").arg(m->getMinimumHours(Zub), 0, 'f', 1);
-    if (m->getMinimumHours(Service) > 0) a += help.arg("Service").arg(m->getMinimumHours(Service), 0, 'f', 1);
-    if (m->getMinimumHours(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten").arg(m->getMinimumHours(ZugVorbereiten), 0, 'f', 1);
-    if (m->getMinimumHours(Werkstatt) > 0) a += help.arg("Werkstatt").arg(m->getMinimumHours(Werkstatt), 0, 'f', 1);
-    if (m->getMinimumHours(Buero) > 0) a += help.arg("Büro").arg(m->getMinimumHours(Buero), 0, 'f', 1);
-    if (m->getMinimumHours(Ausbildung) > 0) a += help.arg("Ausbildung").arg(m->getMinimumHours(Ausbildung), 0, 'f', 1);
-    if (m->getMinimumHours(Sonstiges) > 0) a += help.arg("Sonstiges").arg(m->getMinimumHours(Sonstiges), 0, 'f', 1);
+    if (m->getMinimumHours() > 0) a += help.arg("Insgesamt", Person::getStringFromHours(m->getMinimumHours()));
+    if (m->getMinimumHours(Tf) > 0) a += help.arg("Tf", Person::getStringFromHours(m->getMinimumHours(Tf)));
+    if (m->getMinimumHours(Tb) > 0) a += help.arg("Tb", Person::getStringFromHours(m->getMinimumHours(Tb)));
+    if (m->getMinimumHours(Zf) > 0) a += help.arg("Zf", Person::getStringFromHours(m->getMinimumHours(Zf)));
+    if (m->getMinimumHours(Zub) > 0) a += help.arg("Zub", Person::getStringFromHours(m->getMinimumHours(Zub)));
+    if (m->getMinimumHours(Service) > 0) a += help.arg("Service", Person::getStringFromHours(m->getMinimumHours(Service)));
+    if (m->getMinimumHours(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten", Person::getStringFromHours(m->getMinimumHours(ZugVorbereiten)));
+    if (m->getMinimumHours(Werkstatt) > 0) a += help.arg("Werkstatt", Person::getStringFromHours(m->getMinimumHours(Werkstatt)));
+    if (m->getMinimumHours(Buero) > 0) a += help.arg("Büro", Person::getStringFromHours(m->getMinimumHours(Buero)));
+    if (m->getMinimumHours(Ausbildung) > 0) a += help.arg("Ausbildung", Person::getStringFromHours(m->getMinimumHours(Ausbildung)));
+    if (m->getMinimumHours(Sonstiges) > 0) a += help.arg("Sonstiges", Person::getStringFromHours(m->getMinimumHours(Sonstiges)));
     a += "</ul>";
 
     a += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
@@ -242,7 +241,6 @@ bool Export::printPerson(ManagerPersonal *m, Person *p, QPrinter *printer)
 
     // Add the title page
     m->berechne();
-    QString help = "<li>%1: %2h</li>";
     QString a = p->getHtmlForDetailPage(m);
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
     d->setHtml(a);
@@ -310,7 +308,14 @@ bool Export::printPersonen(QList<Person *> *personen, QMap<Category, double> ges
     a += "</tbody><tfoot><tr>";
     a += "<td>Summe:</td>";
     foreach (Category cat, data) {
-        a += "<td>"+QString::number(gesamt.value(cat))+"</td>";
+        switch (cat) {
+        case Category::Anzahl:
+        case Category::Kilometer:
+            a += "<td align='right'>"+QString::number(gesamt.value(cat))+"</td>";
+            break;
+        default:
+            a += "<td align='right'>"+Person::getStringFromHours(gesamt.value(cat)).chopped(2)+"</td>";
+        }
     }
     a += "</tr></tfoot></table>";
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";

@@ -86,6 +86,8 @@ private slots:
 
     void on_doubleAnzahl_valueChanged(double arg1);
 
+    void on_tabelleGesamt_cellDoubleClicked(int row, int column);
+
 private:
     Ui::PersonalWindow *ui;
     ManagerPersonal *manager;
@@ -117,5 +119,7 @@ private:
     bool enabled; // Gibt an, ob das Formualr aktiviert ist oder nicht, und ob Änderungen übernommen werden
 
     const static QList<Category> anzeigeReihenfolge;
+
+    QString getStringFromHours(double duration);
 };
 #endif // PERSONALWINDOW_H

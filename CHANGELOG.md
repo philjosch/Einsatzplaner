@@ -1,5 +1,17 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 27. November 2019
+Stand: 22. März 2020
+
+## Version 1.5.2 – 2020-03-22
+### Neu
+- Durch einen Doppelklick auf eine Person in der Gesamtübersicht des Personalfensters wird die entsprechende Einzelansicht angezeigt.
+
+### Verbessert
+- Export der Personalübersichten verbessert, indem Stunden besser formatiert werden.
+
+### Fehlerbehebungen
+- Ein Fehler wurde behoben, bei dem das Programm beim Beenden abstürzt, wenn das automatische Speichern deaktiviert war.
+- Beim Export der Personaldaten werden die Dateieinstellungen übernommen.
+
 
 ## Version 1.5.1 – 2019-11-27
 ### Neu

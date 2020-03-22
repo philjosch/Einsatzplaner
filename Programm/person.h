@@ -85,6 +85,9 @@ public:
     void setAdditionalKilometer(double value);
 
 
+    static QString getStringFromHours(double duration);
+
+
 protected:
     QString vorname;
     QString nachname;
