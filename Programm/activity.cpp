@@ -110,7 +110,7 @@ QString Activity::getHtmlForSingleView()
             html += (info.ende == QTime(0,0) ? "" : info.ende.toString("hh:mm"));
             html += "</td><td>";
             if (info.kategorie != Category::Sonstiges) {
-                html += AActivity::getStringFromCategory(info.kategorie);
+                html += getLocalizedStringFromCategory(info.kategorie);
                 if (info.bemerkung != "") html += "<br/>";
             }
             html += info.bemerkung;

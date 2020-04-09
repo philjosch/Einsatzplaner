@@ -247,7 +247,7 @@ void FahrtagWindow::loadData()
                 if (block) ui->tablePersonen->item(0, 0)->setFlags(Qt::NoItemFlags);
                 Category kat = info.kategorie;
                 if (kat == Category::Begleiter) kat = Category::Zub;
-                static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
+                static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(getLocalizedStringFromCategory(kat));
                 static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setEnabled(!block);
                 static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(info.beginn);
                 static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(info.ende);
@@ -360,7 +360,7 @@ void FahrtagWindow::itemChanged(QListWidgetItem *item , Category kat)
         ui->tablePersonen->item(0, 0)->setText(name);
         ui->tablePersonen->item(0, 0)->setFlags(Qt::NoItemFlags);
         // Aufgabe
-        (dynamic_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1)))->setCurrentText(AActivity::getStringFromCategory(kat));
+        (dynamic_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1)))->setCurrentText(getLocalizedStringFromCategory(kat));
         ui->tablePersonen->cellWidget(0, 1)->setDisabled(true);
         // Bemerkung
         ui->tablePersonen->item(0, 4)->setText(bem);
@@ -519,7 +519,7 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
         }
 
         QString name = (ui->tablePersonen->item(row,0) == nullptr) ? "" : ui->tablePersonen->item(row,0)->text();
-        Category kat = AActivity::getCategoryFromString(static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->currentText());
+        Category kat = getCategoryFromLocalizedString(static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->currentText());
         QTime beginn = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->time();
         QTime ende = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();

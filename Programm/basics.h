@@ -45,5 +45,7 @@ struct Infos {
 QString minutesToHourString(int min);
 QString minutesToHourStringShort(int min);
 
+Category getCategoryFromLocalizedString(QString s);
+QString getLocalizedStringFromCategory(Category c);
 
 #endif // BASICS_H

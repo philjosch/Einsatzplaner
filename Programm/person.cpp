@@ -564,7 +564,7 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
                 html += "<br/>"+a->getAnlass();
             html +="</td><td>"
                  + info.beginn.toString("HH:mm")+"-"+info.ende.toString("HH:mm")+"</td><td>"
-                 + AActivity::getStringFromCategory(info.kategorie) + "</td><td>"
+                 + getLocalizedStringFromCategory(info.kategorie) + "</td><td>"
                  + info.bemerkung + "</td></tr>";
         }
         html += "</tbody></table>";

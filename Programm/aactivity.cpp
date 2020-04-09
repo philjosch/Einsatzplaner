@@ -10,44 +10,6 @@ QStringList AActivity::EXTERNAL_LIST = QStringList() << "Extern" << "Führerstan
 QStringList AActivity::QUALIFICATION_LIST = QStringList() << "Azubi" << "Ausbildung" << "Tf-Ausbildung" << "Zf-Ausbildung" << "Tf-Unterricht" << "Zf-Unterricht" << "Weiterbildung";
 QString AActivity::COLOR_REQUIRED = "#ff3333";
 
-Category AActivity::getCategoryFromString(QString s)
-{
-    s = s.toUpper();
-    if (s=="TF") return Tf;
-    if (s=="TB") return Tb;
-    if (s=="ZF") return Zf;
-    if (s=="SERVICE") return Service;
-    if (s=="ZUGBEGLEITER" || s=="ZUB") return Zub;
-    if (s=="BEGLEITER" || s=="BEGL.O.B.A.") return Begleiter;
-    if (s=="BÜRO" || s=="BUERO") return Buero;
-    if (s=="WERKSTATT") return Werkstatt;
-    if (s=="VORBEREITEN" || s=="ZUG VORBEREITEN" || s=="ZUGVORBEREITEN") return ZugVorbereiten;
-    if (s=="AUSBILDUNG") return Ausbildung;
-    if (s=="KILOMETER") return Kilometer;
-    if (s=="GESAMT") return Gesamt;
-    if (s=="ANZAHL") return Anzahl;
-    return Sonstiges;
-}
-
-QString AActivity::getStringFromCategory(Category c)
-{
-    switch (c) {
-    case Tf: return QObject::tr("Tf");
-    case Tb: return QObject::tr("Tb");
-    case Zf: return QObject::tr("Zf");
-    case Service: return QObject::tr("Service");
-    case Zub: return QObject::tr("Zugbegleiter");
-    case Begleiter: return QObject::tr("Begl.o.b.A.");
-    case Buero: return QObject::tr("Büro");
-    case Werkstatt: return QObject::tr("Werkstatt");
-    case ZugVorbereiten: return QObject::tr("Zug Vorbereiten");
-    case Ausbildung: return QObject::tr("Ausbildung");
-    case Kilometer: return "Kilometer";
-    case Gesamt: return "Gesamt";
-    case Anzahl: return "Anzahl";
-    case Sonstiges: return "Sonstiges";
-    }
-}
 
 AActivity::AActivity(QDate date, ManagerPersonal *p)
 {
@@ -365,7 +327,7 @@ QString AActivity::listToString(QMap<Person *, Infos> liste, QString seperator, 
                 a += "; ";
                 strichPunkt = true;
             }
-            a += AActivity::getStringFromCategory(liste.value(p).kategorie);
+            a += getLocalizedStringFromCategory(liste.value(p).kategorie);
         }
         if (p != liste.keys().last()) {
             a += seperator;
@@ -425,7 +387,16 @@ void AActivity::setZeitenUnbekannt(bool value)
 QComboBox *AActivity::generateNewCategoryComboBox()
 {
     QComboBox *box = new QComboBox();
-    box->insertItems(0, QStringList({"Tf","Tb","Zf","Service","Zugbegleiter","Büro","Werkstatt","Zug Vorbereiten","Ausbildung","Sonstiges"}));
+    box->insertItems(0, QStringList({getLocalizedStringFromCategory(Tf),
+                                     getLocalizedStringFromCategory(Tb),
+                                     getLocalizedStringFromCategory(Zf),
+                                     getLocalizedStringFromCategory(Service),
+                                     getLocalizedStringFromCategory(Zub),
+                                     getLocalizedStringFromCategory(Buero),
+                                     getLocalizedStringFromCategory(Werkstatt),
+                                     getLocalizedStringFromCategory(ZugVorbereiten),
+                                     getLocalizedStringFromCategory(Ausbildung),
+                                     getLocalizedStringFromCategory(Sonstiges)}));
     box->setCurrentIndex(9);
     return box;
 }

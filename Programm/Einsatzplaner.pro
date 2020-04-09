@@ -35,7 +35,7 @@ SOURCES += main.cpp\
     verteiler.cpp \
     preferencesdialog.cpp \
     minimumhourseditordialog.cpp \
-    basics.cpp
+    basics.cpp \
     filesettings.cpp \
     managerfilesettings.cpp
 

@@ -79,7 +79,7 @@ void ActivityWindow::on_buttonInsert_clicked()
     ui->tablePersonen->insertRow(0);
 
     QComboBox *box = activity->generateNewCategoryComboBox();
-    box->setCurrentText(AActivity::getStringFromCategory(predefinedValueForTable));
+    box->setCurrentText(getLocalizedStringFromCategory(predefinedValueForTable));
     connect(box, SIGNAL(currentTextChanged(QString)), this, SLOT(comboInTableChanged()));
     ui->tablePersonen->setCellWidget(0, 1, box);
 
@@ -128,7 +128,7 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         }
 
         QString name = (ui->tablePersonen->item(row,0) == nullptr) ? "" : ui->tablePersonen->item(row,0)->text();
-        Category kat = AActivity::getCategoryFromString(static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->currentText());
+        Category kat = getCategoryFromLocalizedString(static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->currentText());
         QTime beginnZ = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->time();
         QTime endeZ = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
@@ -247,7 +247,7 @@ void ActivityWindow::loadData()
         Category kat = info.kategorie;
         if (kat == Category::Begleiter)
             kat = Category::Zub;
-        static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
+        static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(getLocalizedStringFromCategory(kat));
         static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(info.beginn);
         static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(info.ende);
         ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(info.bemerkung));

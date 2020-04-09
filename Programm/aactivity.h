@@ -24,9 +24,6 @@ public:
 
     virtual QJsonObject toJson();
 
-    static Category getCategoryFromString(QString s);
-    static QString getStringFromCategory(Category c);
-
     QDate getDatum();
     void setDatum(QDate value);
 

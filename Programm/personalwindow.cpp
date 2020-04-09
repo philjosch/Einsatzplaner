@@ -105,7 +105,7 @@ void PersonalWindow::showPerson(Person *p)
         Infos infos = a->getIndividual(p);
 
         // Aufgabe
-        QTableWidgetItem *i1 = new QTableWidgetItem(AActivity::getStringFromCategory(infos.kategorie));
+        QTableWidgetItem *i1 = new QTableWidgetItem(getLocalizedStringFromCategory(infos.kategorie));
         ui->tabelle->setItem(0, 1, i1);
 
         // Einsatzstunden
@@ -213,8 +213,8 @@ void PersonalWindow::refreshGesamt()
         Category curr = anzeigeReihenfolge.at(i);
         if (! anzeige->contains(curr)) continue;
         ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(AActivity::getStringFromCategory(curr)));
-        if (origSortName == AActivity::getStringFromCategory(curr)) newSort = 2;
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(getLocalizedStringFromCategory(curr)));
+        if (origSortName == getLocalizedStringFromCategory(curr)) newSort = 2;
     }
     ui->tabelleGesamt->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 

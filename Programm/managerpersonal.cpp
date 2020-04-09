@@ -94,7 +94,7 @@ void ManagerPersonal::fromJson(QJsonObject o)
             minimumHours.clear();
             QJsonObject o2 = o.value("minimumHours").toObject();
             foreach (QString cat, o2.keys()) {
-                Category catt = AActivity::getCategoryFromString(cat);
+                Category catt = getCategoryFromLocalizedString(cat);
                 minimumHours.insert(catt, int(o2.value(cat).toDouble(0)*60));
             }
         }
