@@ -20,29 +20,28 @@ class Export
 {
 public:
     // Drucken von Fahrtagen und Aktivitäten
-    static bool printFahrtag(Fahrtag *f, QPrinter *pdf=nullptr, QPrinter *paper=nullptr);
-    static bool printActivity(Activity *a, QPrinter *pdf=nullptr, QPrinter *paper=nullptr);
-
-    static bool printSingle(QList<AActivity*> *liste, QPrinter *pdf=nullptr, QPrinter *paper=nullptr);
-    static bool printList(QList<AActivity*> *liste, QPrinter *pdf=nullptr, QPrinter *paper=nullptr);
+    static bool print(AActivity *a, QPrinter *printer);
+    static bool printSingle(QList<AActivity*> *liste, QPrinter *printer);
+    static bool printList(QList<AActivity*> *liste, QPrinter *printer);
 
     // Reservierungen
-    static bool printReservierung(Fahrtag *f, QPrinter *pdf=nullptr, QPrinter *paper=nullptr); // Gibt nur die Reservierungen aus sortiert nach Wagen und dann nach Name
+    static bool printReservierung(Fahrtag *f, QPrinter *printer); // Gibt nur die Reservierungen aus sortiert nach Wagen und dann nach Name
 
     // Drucken von Personen
     static bool printPerson(ManagerPersonal *m, QPrinter *printer);
     static bool printPerson(ManagerPersonal *m, Person *p, QPrinter *printer);
-    static bool printPersonen(QList<Person *> *personen, QMap<Category, double> gesamt, QList<Category> data, QPrinter *pdf=nullptr, QPrinter *paper=nullptr);
+    static bool printPersonen(QList<Person *> *personen, QMap<Category, int> gesamt, QList<Category> data, QPrinter *printer);
 
+    // Allgemeines
     static QPrinter *getPrinterPaper(QWidget *parent);
     static QPrinter *getPrinterPDF(QWidget *parent, QString path);
 
-    static bool testServerConnection(QString server, QString path, QString id);
-    static bool uploadToServer(QList<AActivity*> *liste, ManagerFileSettings *settings);
-    static int autoUploadToServer(Manager *mgr, ManagerFileSettings *settings);
+    // Datei-Upload
+    static bool testServerConnection(ManagerFileSettings *settings);
+    static bool uploadToServer(ManagerFileSettings *settings, QList<AActivity*> *liste);
+    static int autoUploadToServer(ManagerFileSettings *settings, Manager *mgr);
 
 private:
-    static bool print(QPrinter *pdf, QPrinter *print, QTextDocument *d);
     static QString listToString(QMap<Person *, QString> *map, QString seperator);
 
     static void preparePrinterPortrait(QPrinter *p);

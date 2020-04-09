@@ -82,29 +82,29 @@ QString Fahrtag::getListStringShort() {
     return getStringFromArt(art);
 }
 
-AActivity::Infos Fahrtag::getIndividual(Person *person)
+Infos Fahrtag::getIndividual(Person *person)
 {
     if (person == nullptr) return Infos();
-    Infos *alt = personen.value(person);
-    if (alt == nullptr) return Infos();
+    if (!personen.contains(person)) return Infos();
+    Infos alt = personen.value(person);
     Infos neu = Infos();
-    neu.bemerkung = alt->bemerkung;
-    neu.kategorie = alt->kategorie;
-    neu.beginn = alt->beginn;
-    neu.ende = alt->ende;
+    neu.bemerkung = alt.bemerkung;
+    neu.kategorie = alt.kategorie;
+    neu.beginn = alt.beginn;
+    neu.ende = alt.ende;
 
     if (zeitenUnbekannt) {
         neu.beginn = QTime(0,0);
         neu.ende = QTime(0,0);
     } else {
-        if (alt->beginn == QTime(0,0)) {
-            if (alt->kategorie == Tf) {
+        if (alt.beginn == QTime(0,0)) {
+            if (alt.kategorie == Tf) {
                 neu.beginn = zeitTf;
             } else {
                 neu.beginn = zeitAnfang;
             }
         }
-        if (alt->ende == QTime(0,0)) {
+        if (alt.ende == QTime(0,0)) {
             neu.ende = zeitEnde;
         }
     }
@@ -137,16 +137,16 @@ QString Fahrtag::getHtmlForSingleView()
     }
 
     // Personal
-    QMap<Person*, AActivity::Infos*> tf;
-    QMap<Person*, AActivity::Infos*> zf;
-    QMap<Person*, AActivity::Infos*> zub;
-    QMap<Person*, AActivity::Infos*> begl;
-    QMap<Person*, AActivity::Infos*> service;
-    QMap<Person*, AActivity::Infos*> sonstige;
+    QMap<Person*, Infos> tf;
+    QMap<Person*, Infos> zf;
+    QMap<Person*, Infos> zub;
+    QMap<Person*, Infos> begl;
+    QMap<Person*, Infos> service;
+    QMap<Person*, Infos> sonstige;
 
     // Aufsplitten der Personen auf die Einzelnen Listen
     for(Person *p: personen.keys()) {
-        switch (personen.value(p)->kategorie) {
+        switch (personen.value(p).kategorie) {
         case Category::Tf:
         case Category::Tb: tf.insert(p, personen.value(p)); break;
         case Category::Zf: zf.insert(p, personen.value(p)); break;
@@ -160,36 +160,36 @@ QString Fahrtag::getHtmlForSingleView()
     if (benoetigeTf || tf.size() > 0) {
         html += "<p><b>Triebfahrzeugführer (Tf), Triebfahrzeugbegleiter(Tb)";
         html += (benoetigeTf ? required1+" werden benötigt"+required2: "");
-        html += ":</b><br/>"+listToString(&tf, " | ")+"</p>";
+        html += ":</b><br/>"+listToString(tf, " | ")+"</p>";
     }
     // *Zf
     if ((benoetigeZf && (art != Fahrtag::Schnupperkurs)) || zf.size() > 0) {
         html += "<p><b>Zugführer";
         html += (benoetigeZf && (art != Fahrtag::Schnupperkurs) ? required1+" wird benötigt"+required2:"");
-        html += ":</b><br/>"+listToString(&zf, " | ")+"</p>";
+        html += ":</b><br/>"+listToString(zf, " | ")+"</p>";
     }
     // *Zub, Begl.o.b.A
     if ((benoetigeZub && (art != Fahrtag::Schnupperkurs)) || (zub.size() > 0 || begl.size() > 0)) {
         html += "<p><b>Zugbegleiter und <i>Begleiter ohne betriebliche Ausbildung</i>";
         html += (benoetigeZub && (art != Fahrtag::Schnupperkurs) ? required1+" werden benötigt"+required2:"");
         html += ":</b><br/>";
-        html += listToString(&zub, " | ");
+        html += listToString(zub, " | ");
         // Begl. o.b.A
         if (! zub.isEmpty() && ! begl.isEmpty())
             html += " | ";
-        html += "<i>"+listToString(&begl, "</i> | <i>") + "</i></p>";
+        html += "<i>"+listToString(begl, "</i> | <i>") + "</i></p>";
     }
     // *Service
     if ((benoetigeService && (art != Fahrtag::Schnupperkurs)) || service.size() > 0) {
         html += "<p><b>Service-Personal";
         html += (benoetigeService && (art != Fahrtag::Schnupperkurs) ? required1+" wird benötigt"+required2:"");
-        html += ":</b><br/>"+listToString(&service, " | ") +"</p>";
+        html += ":</b><br/>"+listToString(service, " | ") +"</p>";
     }
     // *Sonstiges personal
     if (sonstige.size() > 0) {
         html += "<p><b>Sonstiges Personal";
         html += (personalBenoetigt ? required1+" wird benötigt"+required2:"");
-        html += ":</b><br/>"+listToString(&sonstige, " | ", true) +"</p>";
+        html += ":</b><br/>"+listToString(sonstige, " | ", true) +"</p>";
     }
     if (bemerkungen != "") {
         html += "<p><b>Bemerkungen:</b><br/>"+bemerkungen.replace("\n", "<br/>")+"</p>";
@@ -235,16 +235,16 @@ QString Fahrtag::getHtmlForTableView()
     }
     html += "</td>";
 
-    QMap<Person*, AActivity::Infos*> tf;
-    QMap<Person*, AActivity::Infos*> zf;
-    QMap<Person*, AActivity::Infos*> zub;
-    QMap<Person*, AActivity::Infos*> begl;
-    QMap<Person*, AActivity::Infos*> service;
-    QMap<Person*, AActivity::Infos*> sonstige;
+    QMap<Person*, Infos> tf;
+    QMap<Person*, Infos> zf;
+    QMap<Person*, Infos> zub;
+    QMap<Person*, Infos> begl;
+    QMap<Person*, Infos> service;
+    QMap<Person*, Infos> sonstige;
 
     // Aufsplitten der Personen auf die Einzelnen Listen
     for(Person *p: personen.keys()) {
-        switch (personen.value(p)->kategorie) {
+        switch (personen.value(p).kategorie) {
         case Category::Tf:
         case Category::Tb: tf.insert(p, personen.value(p)); break;
         case Category::Zf: zf.insert(p, personen.value(p)); break;
@@ -261,7 +261,7 @@ QString Fahrtag::getHtmlForTableView()
         html += "<b>Lokführer werden benötigt!</b>";
     }
     if (tf.size() > 0) {
-        html += "<ul><li>" + listToString(&tf, "</li><li>") + "</li></ul>";
+        html += "<ul><li>" + listToString(tf, "</li><li>") + "</li></ul>";
     }
     html += "</td>";
 
@@ -275,13 +275,13 @@ QString Fahrtag::getHtmlForTableView()
     }
     html += "<ul>";
     if (zf.size() > 0) {
-        html += "<li><u>" + listToString(&zf, "</u></li><li><u>") + "</u></li>";
+        html += "<li><u>" + listToString(zf, "</u></li><li><u>") + "</u></li>";
     }
     if (zub.size() > 0) {
-        html += "<li>" + listToString(&zub, "</li><li>") + "</li>";
+        html += "<li>" + listToString(zub, "</li><li>") + "</li>";
     }
     if (begl.size() > 0) {
-        html += "<li><i>" + listToString(&begl, "</i></li><li><i>") + "</i></li>";
+        html += "<li><i>" + listToString(begl, "</i></li><li><i>") + "</i></li>";
     }
     html += "</ul></td>";
 
@@ -291,7 +291,7 @@ QString Fahrtag::getHtmlForTableView()
         html += "<b>Service-Personal wird benötigt!</b>";
     }
     if (service.size() > 0) {
-        html += "<ul><li>" + listToString(&service, "</li><li>") + "</li></ul>";
+        html += "<ul><li>" + listToString(service, "</li><li>") + "</li></ul>";
     }
     html += "</td>";
 
@@ -317,7 +317,7 @@ QString Fahrtag::getHtmlForTableView()
     }
     if (sonstige.size() > 0) {
         html += "<ul><li>";
-        html += listToString(&sonstige, "</li><li>", true);
+        html += listToString(sonstige, "</li><li>", true);
         html += "</li></ul>";
     }
     // Sneek-Peek Reservierungen

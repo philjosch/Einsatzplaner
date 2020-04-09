@@ -3,7 +3,7 @@
 
 #include "reservierung.h"
 #include "wagen.h"
-#include "enums.h"
+#include "basics.h"
 
 class Verteiler
 {

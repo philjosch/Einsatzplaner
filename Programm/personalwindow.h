@@ -20,6 +20,7 @@ public:
     ~PersonalWindow();
 
     static const QString nichtGenugStunden;
+    static const QString genugStunden;
 
 signals:
     void changed();
@@ -71,15 +72,15 @@ private slots:
     void on_checkShowSonstiges_clicked(bool checked);
     void on_checkShowKilometer_clicked(bool checked);
 
-    void on_doubleTf_valueChanged(double arg1);
-    void on_doubleZf_valueChanged(double arg1);
-    void on_doubleZub_valueChanged(double arg1);
-    void on_doubleService_valueChanged(double arg1);
-    void on_doubleZugVorbereiten_valueChanged(double arg1);
-    void on_doubleWerkstatt_valueChanged(double arg1);
-    void on_doubleBuero_valueChanged(double arg1);
-    void on_doubleAusbildung_valueChanged(double arg1);
-    void on_doubleSonstiges_valueChanged(double arg1);
+    void on_lineTf_textChanged(const QString &arg1);
+    void on_lineZf_textChanged(const QString &arg1);
+    void on_lineZub_textChanged(const QString &arg1);
+    void on_lineService_textChanged(const QString &arg1);
+    void on_lineZugVorbereiten_textChanged(const QString &arg1);
+    void on_lineWerkstatt_textChanged(const QString &arg1);
+    void on_lineBuero_textChanged(const QString &arg1);
+    void on_lineAusbildung_textChanged(const QString &arg1);
+    void on_lineSonstiges_textChanged(const QString &arg1);
     void on_doubleKilometer_valueChanged(double arg1);
 
     void editMinimumHours();
@@ -88,38 +89,61 @@ private slots:
 
     void on_tabelleGesamt_cellDoubleClicked(int row, int column);
 
+    void on_lineID_textChanged(const QString &arg1);
+
+    void on_dateBirth_dateChanged(const QDate &date);
+
+    void on_dateEntry_dateChanged(const QDate &date);
+
+    void on_lineJob_textChanged(const QString &arg1);
+
+    void on_checkAktiv_clicked(bool checked);
+
+    void on_linePhone_textChanged(const QString &arg1);
+
+    void on_checkPhone_clicked(bool checked);
+
+    void on_lineMail_textChanged(const QString &arg1);
+
+    void on_checkMail_clicked(bool checked);
+
+    void on_dateDienst_dateChanged(const QDate &date);
+
+    void on_plainBemerkung_textChanged();
+
+    void on_dateExit_dateChanged(const QDate &date);
+
+    void on_pushAutoID_clicked();
+
+    void on_comboEinzel_currentIndexChanged(int index);
+
+    void on_comboGesamt_currentIndexChanged(int index);
+
+    void on_pushEmail_clicked();
+
 private:
     Ui::PersonalWindow *ui;
     ManagerPersonal *manager;
 
     Person *aktuellePerson;
 
+    QList<Person*> current;
+
     QHash<QListWidgetItem*, Person*> itemToPerson;
     QHash<Person*, QListWidgetItem*> personToItem;
 
     QSet<Category> *anzeige;
-    /* Gibt an, welche Werte in der Tabelle angezeigt werden
-     * 0: gesamtstunden
-     * 1: anzahl
-     *  2: tf/tb
-     *  3: zf
-     *  4: zub/begl.o.b.a.
-     *  5: service
-     *  6: zug vorbereiten
-     *  7: werkstatt
-     *  8: büro
-     *  9: sonstiges
-     * 10: kilometer
-     * 11: ausbildung
-     * */
 
     void print(QPrinter *p);
-    void disableFields();
+    void toggleFields(bool state);
 
-    bool enabled; // Gibt an, ob das Formualr aktiviert ist oder nicht, und ob Änderungen übernommen werden
+    bool enabled; // Gibt an, ob das Formular aktiviert ist oder nicht, und ob Änderungen übernommen werden
 
     const static QList<Category> anzeigeReihenfolge;
 
-    QString getStringFromHours(double duration);
+    int timeFromString(QString arg);
+    QString stringFromTime(int arg);
+
+    void updateZeiten();
 };
 #endif // PERSONALWINDOW_H

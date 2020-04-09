@@ -67,7 +67,11 @@ void FileSettings::on_buttonBox_clicked(QAbstractButton *button)
 
 void FileSettings::on_pushCheck_clicked()
 {
-    if(Export::testServerConnection(ui->lineServer->text(), ui->linePath->text(), ui->lineID->text())) {
+    ManagerFileSettings m2 = ManagerFileSettings();
+    m2.setServer(ui->lineServer->text());
+    m2.setPath(ui->linePath->text());
+    m2.setId(ui->lineID->text());
+    if(Export::testServerConnection(mngr)) {
         ui->labelStatus->setText(tr("Verbindung erfolgreich getestet!"));
     } else {
         ui->labelStatus->setText(tr("Verbindung zum Server fehlgeschlagen!"));

@@ -1,39 +1,52 @@
-calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die Personalangelegenheiten (calendar)
-	currentDate (string)	-> Das Datum, das der DateSelektor gerade anzeigt, somit auch der Moant (Kodiert als 'yyyy-mm-dd')
-	personal/ (object)	-> hier werden die Personen gesichert
-		minimumHours (object)
-			key (AActivity::Category) 	-> Die Kategorie, fuer welche die Mindeststunden angegeben ist
-			value (int) 			-> Die Anzahl an Mindeststunden, fuer die korrespondierende Kategorie
-		minimumTotal (int)			-> Die Anzahl der Mindeststunden in der Summe
-		personen (array)	-> hier werden die Personen gelistet über ein (object)
-			vorname (string)-> Vorname der Person
-			nachname(string)-> Nachname der Person
-			ausTf (bool)	-> Ausbildung Lokführer
-			ausZf (bool)	-> Ausbildung Zugführer
-			ausRang	(bool)	-> Ausbildung Rangierer
-			strecke	(int)	-> strecke von zuhause zum Bahnhof
-			~Die zusätzlichen Zeiten/Werte für eine Person, die geleistet wurden, gespeichert in Stunden bzw. in Kilometern~
-			additionalTf (double)
-			additionalZf (double)
-			additionalZub (double)
-			additionalService (double)
-			additionalBuero (double)
-			additionalWerkstatt (double)
-			additionalVorbereiten (double)
-			additionalAusbildung (double)
-			additionalSonstiges (double)
-			additionalAnzahl (int)
-			additionalKilometer (double)
-	activities (array)	-> die einzelnen aktivitäten, gespeichert in Objekten
-		~Für Arbeitseinsatz~
-		datum (string)
+# (date) steht für einen Datumstring im Format yyyy-mm-dd
+personal/ (object)	-> hier werden die Personen gesichert
+	minimumKeys (array)	-> Liste mit den Kategorien für Mindeststunden
+		(int)		-> Zugehörige Integer der Kategorie AActivity::Category
+	minimumValues(array)	-> Liste mit den zusätzlichen Mindeststunden, entsprechend der Liste minimumKeys
+		(int)		-> Zeiten in Minuten
+	personen (array)	-> hier werden die Personen gelistet durch jeweils ein (object)
+		# Stammdaten
+		id (string)		-> Interne Nummer zur Repräsentation der Person, wird nicht als eigenes Datum ausgegeben
+		nummer (int)        	-> eindeutige Mitgliedsnummer
+		vorname (string)	-> Vorname der Person
+		nachname(string)	-> Nachname der Person
+		geburtstag (date) 	-> Geburtsdatum
+		eintritt (date)		-> Eintrittsdatum
+		aktiv (bool)		-> Gibt an, ob die Person aktiv ist
+		austritt (date)		-> Austrittsdatum, bzw. leer (=''), wenn nicht ausgetreten
+		# Betriebsdienstausbildung
+		ausTf (bool)		-> Ausbildung Lokführer
+		ausZf (bool)		-> Ausbildung Zugführer
+		ausRang (bool)		-> Ausbildung Rangierer
+		tauglichkeit (date)	-> Tag, bis zu dem die Betriebsdiensttauglichkeit gilt
+		# Kommunikationsdaten
+		mail (string)		-> Mail-Adresse des Mitglieds
+		mailOK (bool)		-> Einverständnis zum Veröffentlichen der Mail-Adresse
+		tel (string)		-> Telefonnummer
+		telOK (bool)		-> Einverständnis zum Veröffentlichen der Telefonnummer
+		# Sonstige Daten
+		strecke	(int)		-> strecke von zuhause zum Bahnhof
+		beruf (string)		-> Erlernter Beruf
+		bemerkung (string)	-> Optionale Bemerkung
+		additionalKeys (array)	-> Liste mit den Kategorien für zusätzliche Werte
+			(int)		-> Zugehörige Integer der Kategorie AActivity::Category
+		additionalValues(array)	-> Liste mit den zusätzlichen Werten, entsprechend der Liste additionalKeys
+			(int)		-> Zeiten in Minuten, Entfernung in km, Anzahl in 1
+
+
+calendar/ (object)		-> Objekt, das die Aktivitäten verwaltet (calendar)
+	currentDate (string)	-> Das Datum, das der DateSelektor gerade anzeigt, somit auch der Monat (Kodiert als 'yyyy-mm-dd')
+	activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten
+		# Für Arbeitseinsatz
+		datum (date)
 		ort (string)
                 zeitAnfang (string)
                 zeitEnde (string)
 		zeitenUnbekannt (bool)		-> True <-> Zeiten sind noch unbekannt und werden noch bekanntgegeben
 		anlass (string)
 		bemerkungen (string)
-		personen (array)		-> Daten für die Zuordnung, ob welche aufgaben eine zugeordnete person hat
+		personen (array)		-> Daten für die Zuordnung, welche Aufgaben eine Person hat
+			id (string)		-> Ist leer (='') bzw. ungesetzt genau dann, wenn eine Person extern ist und somit nur der Name angegeben ist
 			name (string)
 			beginn (string
 			ende (string)
@@ -41,9 +54,9 @@ calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die P
 			aufgabe (string)
 			bemerkung (string)
 		personalBenoetigt (bool)
-		isFahrtag (bool) 		-> Gibt an, ob es sich bei dem Datensatz um einen Fahrtag ahandelt, um die Erstellung eines neuen Dokumentes zu vereinfachen
+		isFahrtag (bool) 		-> Gibt an, ob es sich bei dem Datensatz um einen Fahrtag handelt, um die Erstellung eines neuen Dokumentes zu vereinfachen
 
-		~Für Fahrtag~			-> Folgendes kommt für Fahrtage hinzu
+		# Für Fahrtag kommt folgendes hinzu
 		art (int)
 		zeitTf (string)
 		wichtig (bool)
@@ -52,16 +65,16 @@ calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die P
 		benoetigeZub (bool)
 		benoetigeService (bool)
 
-		~Daten aus Reservierungsmanager~
-		wagenreihung (string)		-> Die wagenreihung, wagen getrennt durch ', '
-		checkAll (bool)			-> bei einer Verteilung der Sitzplätze werden alle möglichkeiten berechnet und nicht nur das erst beste
-		reservierungen (array)		-> Die liste mit den reservierungen jeweils als (object)
+		# Daten aus Reservierungsmanager
+		wagenreihung (string)		-> Die Wagenreihung, Wagen getrennt durch ', '
+		checkAll (bool)			-> bei einer Verteilung der Sitzplätze werden alle Möglichkeiten berechnet und nicht nur das erst beste
+		reservierungen (array)		-> Die Liste mit den Reservierungen jeweils als (object)
 			name (string)
 			telefon (string)
 			mail (string)
 			anzahl (int)		-> die Anzahl der Sitzplätze
 			klasse (int)		-> 0 bedeutet 2./3. Klasse und 1 = 1.Klasse
-			zuege (array)		-> die Zuege, auf denen man aus/ein steigt
+			zuege (array)		-> die Züge, auf denen man aus/ein steigt
 				(string)
 			hps (array)		-> die Haltepunkte, auf denen man aus/ein steigt
 				(string)
@@ -72,28 +85,28 @@ calendar/ (object)		-> Objekt, das die Daten aus dem Manager enthält auch die P
 
 
 view/ (object)			-> Die Daten der Ansicht, war Personalansicht sichtbar, wo waren Fenster positioniert
-	xMain(int)		-> x-Position des Haupfensters
+	xMain(int)		-> x-Position des Hauptfensters
 	yMain(int)		-> y-Position der Hauptfensters
 	widthMain(int)		-> Breite des Hauptfensters
 	heightMain(int)		-> Höhe des Hauptfensters
 	xPersonal(int)		-> x-Position Personalfenster
-	yPersonal(int)		-> y-Position des personalfensters
+	yPersonal(int)		-> y-Position des Personalfensters
 	widthPersonal(int)	-> Breite des Personalfensters
 	heightPersonal(int)	-> Höhe des Personalfenster
-	showPersonal(bool)	-> Personal fenster wird angezeigt (currently not used)
+	showPersonal(bool)	-> Personalfenster wird angezeigt (currently not used)
 
-settings/			-> Speichert alle Einstelleungen zur Datei
+settings/			-> Speichert alle Einstellungen zur Datei
 	online/ (object)	-> Speichert Daten, die verwendet werden, um die Datei auf einen Webserver hochzuladen
 		enabled (bool)		-> Gibt an, ob das Tool verwendet werden kann
 		auto (bool)		-> Stellt fest, ob die Datei bei jedem Sichern hochgeladen werden soll, oder nur manuell
 		server (string)		-> Server für die Datei
 		path (string)		-> Pfad zur Datei, die den Upload durchführt
-		id (string)		-> Identifikationsstring für die hinterlegte Konfiguration des Uplaods
-		startdate (string)	-> Startdatum für die Übersicht (Format:tdy|all|bgn) (Heute | Alle | Beginn des aktuellen Monats)
+		id (string)		-> Identifikationsstring für die hinterlegte Konfiguration des Uploads
+		startdate (string)	-> Startdatum für die Übersicht (Format: tdy|all|bgn) (Heute | Alle | Beginn des aktuellen Monats)
 		enddate (string)	-> Enddatum für die Übersicht (Format: p1w|p1m|eoy|all) (Bis Ende der nächsten Woche | Bis Ende des nächsten Monats | Ende des Jahres | Alle)
 		activities (bool)	-> Gibt an, ob die Arbeitseinsätze auch ausgegeben werden soll, oder nur die Fahrtage
 
 general/ (object)
-	version (string)	-> Version die mindestens benötigt wird, um die Datei korrekt zu öffnen
+	version (string)	-> Version die mindestens benötigt wird, um die Datei zu öffnen
 
 

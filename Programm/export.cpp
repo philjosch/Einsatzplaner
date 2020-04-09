@@ -8,27 +8,20 @@
 #include <QTemporaryFile>
 #include <QSettings>
 
-bool Export::printFahrtag(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
-{
-    QList<AActivity*> *liste = new QList<AActivity*>();
-    liste->append(f);
-    return printSingle(liste, pdf, paper);
-}
-
-bool Export::printActivity(Activity *a, QPrinter *pdf, QPrinter *paper)
+bool Export::print(AActivity *a, QPrinter *printer)
 {
     QList<AActivity*> *liste = new QList<AActivity*>();
     liste->append(a);
-    return printSingle(liste, pdf, paper);
+    return printSingle(liste, printer);
 }
 
-bool Export::printSingle(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper)
+bool Export::printSingle(QList<AActivity *> *liste, QPrinter *printer)
 {
+    if (printer == nullptr) return false;
     // Für jedes Objekt in der liste eine Einzelansicht erstellen mit der Methode generateSingle(...)
 
     // Vorbereiten des Druckers für den Ausdruck
-    preparePrinterPortrait(pdf);
-    preparePrinterPortrait(paper);
+    preparePrinterPortrait(printer);
 
 
     QTextDocument *d = new QTextDocument();
@@ -51,14 +44,15 @@ bool Export::printSingle(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *pap
     }
 
     d->setHtml(html);
-    return print(pdf, paper, d);
+    d->print(printer);
+    return true;
 }
 
-bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper)
+bool Export::printList(QList<AActivity *> *liste, QPrinter *printer)
 {
+    if (printer == nullptr) return false;
     // Vorbereiten des Druckers für den Ausdruck
-    preparePrinterLandscape(pdf);
-    preparePrinterLandscape(paper);
+    preparePrinterLandscape(printer);
     QTextDocument *d = new QTextDocument();
     d->setDefaultStyleSheet("body, td, p { font-size: 10px; font-weight: normal !important;}"
                             "table { border-width: 1px; border-style: solid; border-color: black; } "
@@ -79,15 +73,15 @@ bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper
     a += "</tbody></table>"
          "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     d->setHtml(a);
-    return print(pdf, paper, d);
+    d->print(printer);
+    return true;
 }
 
-bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
+bool Export::printReservierung(Fahrtag *f, QPrinter *printer)
 {
-    if (f->getAnzahl() == 0) return false;
+    if (f->getAnzahl() == 0 || printer == nullptr) return false;
     // Vorbereiten des Druckers für den Ausdruck
-    preparePrinterLandscape(pdf);
-    preparePrinterLandscape(paper);
+    preparePrinterLandscape(printer);
     QTextDocument *d = new QTextDocument();
     d->setDefaultStyleSheet("body, tr, td, p { font-size: 11px; }"
                             "table { border-width: 1px; border-style: solid; border-color: black; }"
@@ -154,11 +148,13 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
     a += "</tbody></table>";
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     d->setHtml(a);
-    return print(pdf, paper, d);
+    d->print(printer);
+    return true;
 }
 
 bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
 {
+    if (printer == nullptr) return false;
     preparePrinterPortrait(printer);
     QTextDocument *d = new QTextDocument();
     // Append a style sheet
@@ -177,32 +173,32 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     QString help = "<li>%1: %2</li>";
     QString a = "<h1>Personalübersicht - Gesamt</h1>"
                 "<h2>Geleistete Stunden</h2><ul>";
-    if (m->getTime(Tf) > 0) a += help.arg("Tf", Person::getStringFromHours(m->getTime(Tf)));
-    if (m->getTime(Zf) > 0) a += help.arg("Zf", Person::getStringFromHours(m->getTime(Zf)));
-    if (m->getTime(Zub) > 0) a += help.arg("Zub", Person::getStringFromHours(m->getTime(Zub)));
-    if (m->getTime(Service) > 0) a += help.arg("Service", Person::getStringFromHours(m->getTime(Service)));
-    if (m->getTime(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten", Person::getStringFromHours(m->getTime(ZugVorbereiten)));
-    if (m->getTime(Werkstatt) > 0) a += help.arg("Werkstatt", Person::getStringFromHours(m->getTime(Werkstatt)));
-    if (m->getTime(Buero) > 0) a += help.arg("Büro", Person::getStringFromHours(m->getTime(Buero)));
-    if (m->getTime(Ausbildung) > 0) a += help.arg("Ausbildung", Person::getStringFromHours(m->getTime(Ausbildung)));
-    if (m->getTime(Sonstiges) > 0) a += help.arg("Sonstiges", Person::getStringFromHours(m->getTime(Sonstiges)));
+    if (m->getTime(Tf) > 0) a += help.arg("Tf", minutesToHourString(m->getTime(Tf)));
+    if (m->getTime(Zf) > 0) a += help.arg("Zf", minutesToHourString(m->getTime(Zf)));
+    if (m->getTime(Zub) > 0) a += help.arg("Zub", minutesToHourString(m->getTime(Zub)));
+    if (m->getTime(Service) > 0) a += help.arg("Service", minutesToHourString(m->getTime(Service)));
+    if (m->getTime(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten", minutesToHourString(m->getTime(ZugVorbereiten)));
+    if (m->getTime(Werkstatt) > 0) a += help.arg("Werkstatt", minutesToHourString(m->getTime(Werkstatt)));
+    if (m->getTime(Buero) > 0) a += help.arg("Büro", minutesToHourString(m->getTime(Buero)));
+    if (m->getTime(Ausbildung) > 0) a += help.arg("Ausbildung", minutesToHourString(m->getTime(Ausbildung)));
+    if (m->getTime(Sonstiges) > 0) a += help.arg("Sonstiges", minutesToHourString(m->getTime(Sonstiges)));
     a += "</ul>";
 
-    a += "<ul><li>Stunden gesamt: "+QString::number(m->getTimeSum())+"h</li>";
-    a += "<li>Gefahrene Kilometer gesamt: "+QString::number(m->getSumKilometer())+" km</li></ul>";
+    a += "<ul><li>Stunden gesamt: "+QString::number(m->getTime(Gesamt))+"h</li>";
+    a += "<li>Gefahrene Kilometer gesamt: "+QString::number(m->getTime(Kilometer))+" km</li></ul>";
 
     a += "<h2>Mindeststunden</h2><ul>";
-    if (m->getMinimumHours() > 0) a += help.arg("Insgesamt", Person::getStringFromHours(m->getMinimumHours()));
-    if (m->getMinimumHours(Tf) > 0) a += help.arg("Tf", Person::getStringFromHours(m->getMinimumHours(Tf)));
-    if (m->getMinimumHours(Tb) > 0) a += help.arg("Tb", Person::getStringFromHours(m->getMinimumHours(Tb)));
-    if (m->getMinimumHours(Zf) > 0) a += help.arg("Zf", Person::getStringFromHours(m->getMinimumHours(Zf)));
-    if (m->getMinimumHours(Zub) > 0) a += help.arg("Zub", Person::getStringFromHours(m->getMinimumHours(Zub)));
-    if (m->getMinimumHours(Service) > 0) a += help.arg("Service", Person::getStringFromHours(m->getMinimumHours(Service)));
-    if (m->getMinimumHours(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten", Person::getStringFromHours(m->getMinimumHours(ZugVorbereiten)));
-    if (m->getMinimumHours(Werkstatt) > 0) a += help.arg("Werkstatt", Person::getStringFromHours(m->getMinimumHours(Werkstatt)));
-    if (m->getMinimumHours(Buero) > 0) a += help.arg("Büro", Person::getStringFromHours(m->getMinimumHours(Buero)));
-    if (m->getMinimumHours(Ausbildung) > 0) a += help.arg("Ausbildung", Person::getStringFromHours(m->getMinimumHours(Ausbildung)));
-    if (m->getMinimumHours(Sonstiges) > 0) a += help.arg("Sonstiges", Person::getStringFromHours(m->getMinimumHours(Sonstiges)));
+    if (m->getMinimumHours(Gesamt) > 0) a += help.arg("Insgesamt", minutesToHourString(m->getMinimumHours(Gesamt)));
+    if (m->getMinimumHours(Tf) > 0) a += help.arg("Tf", minutesToHourString(m->getMinimumHours(Tf)));
+    if (m->getMinimumHours(Tb) > 0) a += help.arg("Tb", minutesToHourString(m->getMinimumHours(Tb)));
+    if (m->getMinimumHours(Zf) > 0) a += help.arg("Zf", minutesToHourString(m->getMinimumHours(Zf)));
+    if (m->getMinimumHours(Zub) > 0) a += help.arg("Zub", minutesToHourString(m->getMinimumHours(Zub)));
+    if (m->getMinimumHours(Service) > 0) a += help.arg("Service", minutesToHourString(m->getMinimumHours(Service)));
+    if (m->getMinimumHours(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten", minutesToHourString(m->getMinimumHours(ZugVorbereiten)));
+    if (m->getMinimumHours(Werkstatt) > 0) a += help.arg("Werkstatt", minutesToHourString(m->getMinimumHours(Werkstatt)));
+    if (m->getMinimumHours(Buero) > 0) a += help.arg("Büro", minutesToHourString(m->getMinimumHours(Buero)));
+    if (m->getMinimumHours(Ausbildung) > 0) a += help.arg("Ausbildung", minutesToHourString(m->getMinimumHours(Ausbildung)));
+    if (m->getMinimumHours(Sonstiges) > 0) a += help.arg("Sonstiges", minutesToHourString(m->getMinimumHours(Sonstiges)));
     a += "</ul>";
 
     a += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
@@ -220,12 +216,13 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
         }
     }
     d->setHtml(a);
-    return print(nullptr, printer, d);
+    d->print(printer);
+    return true;
 }
 
 bool Export::printPerson(ManagerPersonal *m, Person *p, QPrinter *printer)
 {
-    if (p == nullptr) return false;
+    if (p == nullptr || printer == nullptr) return false;
     preparePrinterPortrait(printer);
     QTextDocument *d = new QTextDocument();
     // Append a style sheet
@@ -244,13 +241,14 @@ bool Export::printPerson(ManagerPersonal *m, Person *p, QPrinter *printer)
     QString a = p->getHtmlForDetailPage(m);
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
     d->setHtml(a);
-    return print(nullptr, printer, d);
+    d->print(printer);
+    return true;
 }
 
-bool Export::printPersonen(QList<Person *> *personen, QMap<Category, double> gesamt, QList<Category> data, QPrinter *pdf, QPrinter *paper)
+bool Export::printPersonen(QList<Person *> *personen, QMap<Category, int> gesamt, QList<Category> data, QPrinter *printer)
 {
-    preparePrinterLandscape(pdf);
-    preparePrinterLandscape(paper);
+    if (printer == nullptr) return false;
+    preparePrinterLandscape(printer);
     QTextDocument *d = new QTextDocument();
     d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
                             "table { border-width: 1px; border-style: solid; border-color: black; }"
@@ -314,14 +312,15 @@ bool Export::printPersonen(QList<Person *> *personen, QMap<Category, double> ges
             a += "<td align='right'>"+QString::number(gesamt.value(cat))+"</td>";
             break;
         default:
-            a += "<td align='right'>"+Person::getStringFromHours(gesamt.value(cat)).chopped(2)+"</td>";
+            a += "<td align='right'>"+minutesToHourString(gesamt.value(cat)).chopped(2)+"</td>";
         }
     }
     a += "</tr></tfoot></table>";
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
     d->setHtml(a);
 
-    return print(pdf, paper, d);
+    d->print(printer);
+    return true;
 }
 
 QPrinter *Export::getPrinterPaper(QWidget *parent)
@@ -342,8 +341,11 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path)
     return p;
 }
 
-bool Export::testServerConnection(QString server, QString path, QString id)
+bool Export::testServerConnection(ManagerFileSettings *settings)
 {
+    QString server = settings->getServer();
+    QString path = settings->getPath();
+    QString id = settings->getId();
     // create custom temporary event loop on stack
     QEventLoop eventLoop;
 
@@ -365,7 +367,7 @@ bool Export::testServerConnection(QString server, QString path, QString id)
     return (s == "OK");
 }
 
-bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *settings)
+bool Export::uploadToServer(ManagerFileSettings *settings, QList<AActivity *> *liste)
 {
     if (! settings->getEnabled()) return true;
 
@@ -377,7 +379,7 @@ bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *sett
     p->setOutputFormat(QPrinter::PdfFormat);
     p->setOutputFileName(localFile);
 
-    printList(liste, p, nullptr);
+    printList(liste, p);
 
     /* HOCHLADEN DER DATEI AUF DEN SERVER */
     QString server = settings->getFullServer();
@@ -415,7 +417,7 @@ bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *sett
     return (s == "OK");
 }
 
-int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
+int Export::autoUploadToServer(ManagerFileSettings *settings, Manager *mgr)
 {
     /* EINSTELLUNGEN LESEN */
     QSettings s;
@@ -472,21 +474,10 @@ int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
     /* UPLOADFUNKTION NUTZEN; UM DATEIEN HOCHZULADEN */
     if (liste->length() == 0)
         return -1;
-    if (uploadToServer(liste, settings))
+    if (uploadToServer(settings, liste))
         return 1;
     else
         return 0;
-}
-
-bool Export::print(QPrinter *pdf, QPrinter *paper, QTextDocument *d)
-{
-    if (pdf != nullptr) {
-        d->print(pdf);
-    }
-    if(paper != nullptr) {
-        d->print(paper);
-    }
-    return true;
 }
 
 void Export::preparePrinterPortrait(QPrinter *p)

@@ -64,10 +64,10 @@ QJsonObject Calendar::personalToJson()
     return o;
 }
 
-void Calendar::fromJson(QJsonObject o)
+void Calendar::fromJson(QJsonObject c, QJsonObject p)
 {
-    // Daten in den Manager laden und die ogik herstellen
-    Manager::fromJson(o);
+    // Daten in den Manager laden und die Logik herstellen
+    Manager::fromJson(c, p);
     // Alle aktivitäten in die seitenleiste eintragen
     for(AActivity *a: activities) {
         QListWidgetItem *i = new QListWidgetItem("");
@@ -85,7 +85,7 @@ void Calendar::fromJson(QJsonObject o)
         itemToList.insert(i, a);
     }
     // an das gespeicherte Datum gehen
-    ui->dateSelector->setDate(QDate::fromString(o.value("currentDate").toString(), "yyyy-MM-dd"));
+    ui->dateSelector->setDate(QDate::fromString(c.value("currentDate").toString(), "yyyy-MM-dd"));
     ui->dateSelector->repaint();
     goTo(ui->dateSelector->date());
 }

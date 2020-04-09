@@ -189,11 +189,11 @@ void FahrtagWindow::loadData()
         ui->checkService->setChecked(fahrtag->getBenoetigeService());
 
         /* LIstTf, ListZf, ListZub, ListService fehlt noch */
-        QMap<Person*, AActivity::Infos*> tf;
-        QMap<Person*, AActivity::Infos*> zf;
-        QMap<Person*, AActivity::Infos*> zub;
-        QMap<Person*, AActivity::Infos*> service;
-        QMap<Person*, AActivity::Infos*> sonstige;
+        QMap<Person*, Infos> tf;
+        QMap<Person*, Infos> zf;
+        QMap<Person*, Infos> zub;
+        QMap<Person*, Infos> service;
+        QMap<Person*, Infos> sonstige;
 
         listeMitNamen = QMap<QListWidgetItem*, QString>();
         listToTable = QMap<QListWidgetItem*, QTableWidgetItem*>();
@@ -201,14 +201,14 @@ void FahrtagWindow::loadData()
 
         // Fügt die Personen in das Fahrtagfesnter ein
         for(Person *p: fahrtag->getPersonen().keys()) {
-            AActivity::Infos *info = fahrtag->getPersonen().value(p);
+            Infos info = fahrtag->getPersonen().value(p);
 
             // Fügt die Personene in die einzelnen Listen ein, sodass es direkt geändert werden kann
-            QListWidgetItem *item = new QListWidgetItem(p->getName() + (info->bemerkung == "" ? "" : "; "+info->bemerkung));
+            QListWidgetItem *item = new QListWidgetItem(p->getName() + (info.bemerkung == "" ? "" : "; "+info.bemerkung));
             item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
             listeMitNamen.insert(item, p->getName());
             bool block = true;
-            switch (fahrtag->getPersonen().value(p)->kategorie) {
+            switch (fahrtag->getPersonen().value(p).kategorie) {
                 case Category::Tf:
                 case Category::Tb:
                     tf.insert(p, info);
@@ -245,13 +245,13 @@ void FahrtagWindow::loadData()
 
                 ui->tablePersonen->item(0, 0)->setText(p->getName());
                 if (block) ui->tablePersonen->item(0, 0)->setFlags(Qt::NoItemFlags);
-                Category kat = info->kategorie;
+                Category kat = info.kategorie;
                 if (kat == Category::Begleiter) kat = Category::Zub;
                 static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
                 static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setEnabled(!block);
-                static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(info->beginn);
-                static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(info->ende);
-                QTableWidgetItem *zelleBemerkung = new QTableWidgetItem(info->bemerkung);
+                static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(info.beginn);
+                static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(info.ende);
+                QTableWidgetItem *zelleBemerkung = new QTableWidgetItem(info.bemerkung);
                 if(block) zelleBemerkung->setFlags(Qt::NoItemFlags);
                 ui->tablePersonen->setItem(0, 4, zelleBemerkung);
 
@@ -608,13 +608,13 @@ void FahrtagWindow::on_actionDelete_triggered()
 void FahrtagWindow::on_actionPrint_triggered()
 {
     QPrinter *p = Export::getPrinterPaper(this);
-    Export::printFahrtag(fahrtag, nullptr, p);
+    Export::print(fahrtag, p);
 }
 
 void FahrtagWindow::on_actionPdf_triggered()
 {
     QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf");
-    Export::printFahrtag(fahrtag, p);
+    Export::print(fahrtag, p);
 }
 
 void FahrtagWindow::on_actionResPdf_triggered()
@@ -626,7 +626,7 @@ void FahrtagWindow::on_actionResPdf_triggered()
 void FahrtagWindow::on_actionResPrint_triggered()
 {
     QPrinter *p = Export::getPrinterPaper(this);
-    Export::printReservierung(fahrtag, nullptr, p);
+    Export::printReservierung(fahrtag, p);
 }
 
 void FahrtagWindow::loadReservierung(Reservierung *r)

@@ -292,7 +292,7 @@ void MainWindow::on_actionSave_triggered()
             file.remove();
         }
 
-        int result = Export::autoUploadToServer(ui->calendar, settings);
+        int result = Export::autoUploadToServer(settings, ui->calendar);
         if (result == 0)
             ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
         else if (result > 0)
@@ -328,7 +328,13 @@ bool MainWindow::openFile(QString path)
 
     // Daten in Manager laden und darstellen lassen
     QJsonObject calendarJSON = object.value("calendar").toObject();
-    ui->calendar->fromJson(calendarJSON);
+    QJsonObject personalJSON;
+    if (object.contains("personal")) {
+        personalJSON = object.value("personal").toObject();
+    } else {
+        personalJSON = calendarJSON.value("personal").toObject();
+    }
+    ui->calendar->fromJson(calendarJSON, personalJSON);
     personalfenster->loadData();
 
     //- Hier prüfen, ob Personalfenster angezeigt wurde und wiederherstellen der Fensterpositionen

@@ -46,24 +46,24 @@ QString Activity::getListString()
     return datum.toString("dddd dd.MM.yyyy")+" – "+scnd;
 }
 
-AActivity::Infos Activity::getIndividual(Person *person)
+Infos Activity::getIndividual(Person *person)
 {
     if (person == nullptr) return Infos();
-    Infos *alt = personen.value(person);
-    if (alt == nullptr) return Infos();
+    if (!personen.contains(person)) return Infos();
+    Infos alt = personen.value(person);
     Infos neu = Infos();
-    neu.kategorie = alt->kategorie;
-    neu.beginn = alt->beginn;
-    neu.ende = alt->ende;
+    neu.kategorie = alt.kategorie;
+    neu.beginn = alt.beginn;
+    neu.ende = alt.ende;
 
     if (zeitenUnbekannt) {
         neu.beginn = QTime(0,0);
         neu.ende = QTime(0,0);
     } else {
-        if (alt->beginn == QTime(0,0)) {
+        if (alt.beginn == QTime(0,0)) {
             neu.beginn = QTime(zeitAnfang.hour(), zeitAnfang.minute());
         }
-        if (alt->ende == QTime(0,0)) {
+        if (alt.ende == QTime(0,0)) {
             neu.ende = QTime(zeitEnde.hour(), zeitEnde.minute());
         }
     }
@@ -103,17 +103,17 @@ QString Activity::getHtmlForSingleView()
     if (personen.count() > 0) {
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Name</th><th>Beginn*</th><th>Ende*</th><th>Aufgabe</th></tr></thead><tbody>";
         for(Person *p: personen.keys()) {
-            Infos *info = personen.value(p);
+            Infos info = personen.value(p);
             html += "<tr><td>"+p->getName()+"</td><td>";
-            html += (info->beginn == QTime(0,0) ? "" : info->beginn.toString("hh:mm"));
+            html += (info.beginn == QTime(0,0) ? "" : info.beginn.toString("hh:mm"));
             html += "</td><td>";
-            html += (info->ende == QTime(0,0) ? "" : info->ende.toString("hh:mm"));
+            html += (info.ende == QTime(0,0) ? "" : info.ende.toString("hh:mm"));
             html += "</td><td>";
-            if (info->kategorie != Category::Sonstiges) {
-                html += AActivity::getStringFromCategory(info->kategorie);
-                if (info->bemerkung != "") html += "<br/>";
+            if (info.kategorie != Category::Sonstiges) {
+                html += AActivity::getStringFromCategory(info.kategorie);
+                if (info.bemerkung != "") html += "<br/>";
             }
-            html += info->bemerkung;
+            html += info.bemerkung;
             html +="</td></tr>";
         }
         html += "</tbody></table><p>* Abweichend von obigen Zeiten!</p>";
@@ -137,19 +137,19 @@ QString Activity::getHtmlForTableView()
     }
     html += "</td>";
 
-    QMap<Person*, AActivity::Infos*> tf;
-    QMap<Person*, AActivity::Infos*> zf;
-    QMap<Person*, AActivity::Infos*> zub;
-    QMap<Person*, AActivity::Infos*> begl;
-    QMap<Person*, AActivity::Infos*> service;
-    QMap<Person*, AActivity::Infos*> sonstige;
-    QMap<Person*, AActivity::Infos*> werkstatt;
-    QMap<Person*, AActivity::Infos*> ausbildung;
-    QMap<Person*, AActivity::Infos*> zugvorbereitung;
+    QMap<Person*, Infos> tf;
+    QMap<Person*, Infos> zf;
+    QMap<Person*, Infos> zub;
+    QMap<Person*, Infos> begl;
+    QMap<Person*, Infos> service;
+    QMap<Person*, Infos> sonstige;
+    QMap<Person*, Infos> werkstatt;
+    QMap<Person*, Infos> ausbildung;
+    QMap<Person*, Infos> zugvorbereitung;
 
     // Aufsplitten der Personen auf die Einzelnen Listen
     for(Person *p: personen.keys()) {
-        switch (personen.value(p)->kategorie) {
+        switch (personen.value(p).kategorie) {
         case Category::Tf:
         case Category::Tb: tf.insert(p, personen.value(p)); break;
         case Category::Zf: zf.insert(p, personen.value(p)); break;
@@ -166,27 +166,27 @@ QString Activity::getHtmlForTableView()
     // Tf, Tb
     html += "<td>";
     if (tf.size() > 0) {
-        html += "<ul><li>" + listToString(&tf, "</li><li>") + "</li></ul>";
+        html += "<ul><li>" + listToString(tf, "</li><li>") + "</li></ul>";
     }
     html += "</td>";
 
     // Zf, Zub, Begl.o.b.A.
     html += "<td><ul>";
     if (zf.size() > 0) {
-        html += "<li><u>" + listToString(&zf, "</u></li><li><u>") + "</u></li>";
+        html += "<li><u>" + listToString(zf, "</u></li><li><u>") + "</u></li>";
     }
     if (zub.size() > 0) {
-        html += "<li>" + listToString(&zub, "</li><li>") + "</li>";
+        html += "<li>" + listToString(zub, "</li><li>") + "</li>";
     }
     if (begl.size() > 0) {
-        html += "<li><i>" + listToString(&begl, "</i></li><li><i>") + "</i></li>";
+        html += "<li><i>" + listToString(begl, "</i></li><li><i>") + "</i></li>";
     }
     html += "</ul></td>";
 
     // Service
     html += "<td>";
     if (service.size() > 0) {
-        html += "<ul><li>" + listToString(&service, "</li><li>") + "</li></ul>";
+        html += "<ul><li>" + listToString(service, "</li><li>") + "</li></ul>";
     }
     html += "</td>";
 
@@ -209,7 +209,7 @@ QString Activity::getHtmlForTableView()
     }
     if (werkstatt.size() > 2) {
         html += "<b>Werkstatt:</b><ul style='margin-top: 0px; margin-bottom: 0px'><li>";
-        html += listToString(&werkstatt, "</li><li>");
+        html += listToString(werkstatt, "</li><li>");
         html += "</li></ul>";
     } else {
         for(Person *p: werkstatt.keys()) sonstige.insert(p, werkstatt.value(p));
@@ -217,7 +217,7 @@ QString Activity::getHtmlForTableView()
     }
     if (ausbildung.size() > 2) {
         html += "<b>Ausbildung:</b><ul style='margin-top: 0px; margin-bottom: 0px'><li>";
-        html += listToString(&ausbildung, "</li><li>");
+        html += listToString(ausbildung, "</li><li>");
         html += "</li></ul>";
     } else {
         for(Person *p: ausbildung.keys()) sonstige.insert(p, ausbildung.value(p));
@@ -225,7 +225,7 @@ QString Activity::getHtmlForTableView()
     }
     if (zugvorbereitung.size() > 2) {
         html += "<b>Zugvorbereitung:</b><ul style='margin-top: 0px; margin-bottom: 0px'><li>";
-        html += listToString(&zugvorbereitung, "</li><li>");
+        html += listToString(zugvorbereitung, "</li><li>");
         html += "</li></ul>";
     } else {
         for(Person *p: zugvorbereitung.keys()) sonstige.insert(p, zugvorbereitung.value(p));
@@ -237,7 +237,7 @@ QString Activity::getHtmlForTableView()
         } else {
             html += "<ul><li>";
         }
-        html += listToString(&sonstige, "</li><li>", true);
+        html += listToString(sonstige, "</li><li>", true);
         html += "</li></ul>";
     } else if (werkstatt.size() + ausbildung.size() + zugvorbereitung.size() == 0) {
         html += "<br/>";

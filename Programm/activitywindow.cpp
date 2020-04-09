@@ -200,13 +200,13 @@ void ActivityWindow::on_actionDelete_triggered()
 void ActivityWindow::on_actionPrint_triggered()
 {
     QPrinter *p = Export::getPrinterPaper(this);
-    Export::printActivity(activity, nullptr, p);
+    Export::print(activity, p);
 }
 
 void ActivityWindow::on_actionPdf_triggered()
 {
     QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf");
-    Export::printActivity(activity, p);
+    Export::print(activity, p);
 }
 
 void ActivityWindow::on_buttonDelete_clicked()
@@ -241,7 +241,7 @@ void ActivityWindow::loadData()
 
         namen.insert(p->getName());
 
-        AActivity::Infos info = *(activity->getPersonen().value(p));
+        Infos info = activity->getPersonen().value(p);
 
         ui->tablePersonen->setItem(0, 0, new QTableWidgetItem(p->getName()));
         Category kat = info.kategorie;
