@@ -69,6 +69,7 @@ private slots:
     void on_checkShowWerkstatt_clicked(bool checked);
     void on_checkShowBuero_clicked(bool checked);
     void on_checkShowAusbildung_clicked(bool checked);
+    void on_checkShowInfrastruktur_clicked(bool checked);
     void on_checkShowSonstiges_clicked(bool checked);
     void on_checkShowKilometer_clicked(bool checked);
 
@@ -80,6 +81,7 @@ private slots:
     void on_lineWerkstatt_textChanged(const QString &arg1);
     void on_lineBuero_textChanged(const QString &arg1);
     void on_lineAusbildung_textChanged(const QString &arg1);
+    void on_lineInfrastruktur_textChanged(const QString &arg1);
     void on_lineSonstiges_textChanged(const QString &arg1);
     void on_doubleKilometer_valueChanged(double arg1);
 

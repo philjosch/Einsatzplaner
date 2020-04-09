@@ -9,8 +9,6 @@ MinimumHoursEditorDialog::MinimumHoursEditorDialog(ManagerPersonal *manager, QWi
 {
     ui->setupUi(this);
     QDialog::setWindowModality(Qt::WindowModal);
-    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(save()));
-    connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(abstractButtonClickedSlot(QAbstractButton*)));
     this->manager = manager;
 
     ui->lineTf->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Tf)));
@@ -21,6 +19,7 @@ MinimumHoursEditorDialog::MinimumHoursEditorDialog(ManagerPersonal *manager, QWi
     ui->lineWerkstatt->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Werkstatt)));
     ui->lineZugVorbereiten->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::ZugVorbereiten)));
     ui->lineAusbildung->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Ausbildung)));
+    ui->lineInfrastruktur->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Infrastruktur)));
     ui->lineSonstiges->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Sonstiges)));
     ui->lineGesamt->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Gesamt)));
 }
@@ -48,21 +47,24 @@ void MinimumHoursEditorDialog::setDefault()
     ui->lineZugVorbereiten->update();
     ui->lineAusbildung->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Ausbildung)));
     ui->lineAusbildung->update();
+    ui->lineInfrastruktur->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Infrastruktur)));
+    ui->lineInfrastruktur->update();
     ui->lineSonstiges->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Sonstiges)));
     ui->lineSonstiges->update();
     ui->lineGesamt->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Gesamt)));
     ui->lineGesamt->update();
 }
 
-void MinimumHoursEditorDialog::abstractButtonClickedSlot(QAbstractButton *button)
+void MinimumHoursEditorDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
-    if (button == (QAbstractButton*)ui->buttonBox->button(QDialogButtonBox::RestoreDefaults)) {
+    if (ui->buttonBox->buttonRole(button) == QDialogButtonBox::ButtonRole::ResetRole) {
         setDefault();
-    } else if (button == (QAbstractButton*)ui->buttonBox->button(QDialogButtonBox::Ok)) {
+    } else if (ui->buttonBox->buttonRole(button) == QDialogButtonBox::ButtonRole::AcceptRole) {
         save();
-    } else if (button == (QAbstractButton*)ui->buttonBox->button(QDialogButtonBox::Cancel)) {
+    } else if (ui->buttonBox->buttonRole(button) == QDialogButtonBox::ButtonRole::RejectRole) {
         QDialog::close();
     }
+
 }
 
 void MinimumHoursEditorDialog::save()
@@ -75,6 +77,7 @@ void MinimumHoursEditorDialog::save()
     manager->setMinimumHours(Category::Werkstatt, minutesFromStringForDurationEditor(ui->lineWerkstatt->text()));
     manager->setMinimumHours(Category::ZugVorbereiten, minutesFromStringForDurationEditor(ui->lineZugVorbereiten->text()));
     manager->setMinimumHours(Category::Ausbildung, minutesFromStringForDurationEditor(ui->lineAusbildung->text()));
+    manager->setMinimumHours(Category::Infrastruktur, minutesFromStringForDurationEditor(ui->lineInfrastruktur->text()));
     manager->setMinimumHours(Category::Sonstiges, minutesFromStringForDurationEditor(ui->lineSonstiges->text()));
     manager->setMinimumHours(Category::Gesamt, minutesFromStringForDurationEditor(ui->lineGesamt->text()));
     QDialog::accept();

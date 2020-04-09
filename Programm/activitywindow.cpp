@@ -266,6 +266,8 @@ void ActivityWindow::setPredefinedValue(QString anlass)
         predefinedValueForTable = Category::Ausbildung;
     } else if (anlass.contains(tr("Büro").toLower())) {
         predefinedValueForTable = Category::Buero;
+    } else if (anlass.contains(tr("Vegetationsarbeiten").toLower())) {
+        predefinedValueForTable = Category::Infrastruktur;
     } else {
         predefinedValueForTable = Category::Sonstiges;
     }

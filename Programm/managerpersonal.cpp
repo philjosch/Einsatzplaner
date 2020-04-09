@@ -167,8 +167,8 @@ int ManagerPersonal::pruefeStunden(Person *p)
             checkHours(p, Zf) && checkHours(p, Zub) &&
             checkHours(p, Service) && checkHours(p, ZugVorbereiten) &&
             checkHours(p, Werkstatt) && checkHours(p, Buero) &&
-            checkHours(p, Ausbildung) && checkHours(p, Sonstiges) &&
-            checkHours(p, Gesamt);
+            checkHours(p, Ausbildung) && checkHours(p, Infrastruktur) &&
+            checkHours(p, Sonstiges) && checkHours(p, Gesamt);
     if (p->getAktiv() && (! ok))
         return 0;
     else if ((!p->getAktiv()) && ok)
@@ -198,6 +198,8 @@ bool ManagerPersonal::checkHours(Person *p, Category kat)
         return !(p->get(ZugVorbereiten) < getMinimumHours(ZugVorbereiten, p));
     case Ausbildung:
         return !(p->get(Ausbildung) < getMinimumHours(Ausbildung, p));
+    case Infrastruktur:
+        return !(p->get(Infrastruktur) < getMinimumHours(Infrastruktur, p));
     case Sonstiges:
         return !(p->get(Sonstiges) < getMinimumHours(Sonstiges, p));
     case Gesamt:
@@ -278,6 +280,7 @@ void ManagerPersonal::berechne()
         time.insert(Werkstatt, time.value(Werkstatt)+p->get(Werkstatt));
         time.insert(ZugVorbereiten, time.value(ZugVorbereiten)+p->get(ZugVorbereiten));
         time.insert(Ausbildung, time.value(Ausbildung)+p->get(Ausbildung));
+        time.insert(Infrastruktur, time.value(Infrastruktur)+p->get(Infrastruktur));
         time.insert(Sonstiges, time.value(Sonstiges)+p->get(Sonstiges));
         time.insert(Gesamt, time.value(Gesamt)+p->get(Gesamt));
         time.insert(Kilometer, time.value(Kilometer)+p->get(Kilometer));

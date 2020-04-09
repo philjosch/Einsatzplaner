@@ -144,8 +144,9 @@ QString Activity::getHtmlForTableView()
     QMap<Person*, Infos> service;
     QMap<Person*, Infos> sonstige;
     QMap<Person*, Infos> werkstatt;
-    QMap<Person*, Infos> ausbildung;
     QMap<Person*, Infos> zugvorbereitung;
+    QMap<Person*, Infos> ausbildung;
+    QMap<Person*, Infos> infrastruktur;
 
     // Aufsplitten der Personen auf die Einzelnen Listen
     for(Person *p: personen.keys()) {
@@ -157,8 +158,9 @@ QString Activity::getHtmlForTableView()
         case Category::Zub: zub.insert(p, personen.value(p)); break;
         case Category::Begleiter: begl.insert(p, personen.value(p)); break;
         case Category::Werkstatt: werkstatt.insert(p, personen.value(p)); break;
-        case Category::Ausbildung: ausbildung.insert(p, personen.value(p)); break;
         case Category::ZugVorbereiten: zugvorbereitung.insert(p, personen.value(p)); break;
+        case Category::Ausbildung: ausbildung.insert(p, personen.value(p)); break;
+        case Category::Infrastruktur: infrastruktur.insert(p, personen.value(p)); break;
         default: sonstige.insert(p, personen.value(p)); break;
         }
     }

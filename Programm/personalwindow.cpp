@@ -11,7 +11,7 @@
 
 const QString PersonalWindow::nichtGenugStunden = "#ff9999";
 const QString PersonalWindow::genugStunden = "#99ff99";
-const QList<Category> PersonalWindow::anzeigeReihenfolge = {Category::Gesamt, Category::Anzahl, Category::Tf, Category::Zf, Category::Zub, Category::Service, Category::ZugVorbereiten, Category::Werkstatt, Category::Buero, Category::Ausbildung, Category::Sonstiges, Category::Kilometer};
+const QList<Category> PersonalWindow::anzeigeReihenfolge = {Category::Gesamt, Category::Anzahl, Category::Tf, Category::Zf, Category::Zub, Category::Service, Category::ZugVorbereiten, Category::Werkstatt, Category::Buero, Category::Ausbildung, Category::Infrastruktur, Category::Sonstiges, Category::Kilometer};
 
 PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
 {
@@ -133,6 +133,7 @@ void PersonalWindow::showPerson(Person *p)
     ui->labelWerkstattSum->setText((p->getString(Werkstatt)));
     ui->labelBueroSum->setText(p->getString(Buero));
     ui->labelAusbildungSum->setText(p->getString(Ausbildung));
+    ui->labelInfrastrukturSum->setText(p->getString(Infrastruktur));
     ui->labelSonstigesSum->setText(p->getString(Sonstiges));
     ui->labelAnzahlSum->setText(p->getString(Anzahl));
     ui->labelKilometerSum->setText(p->getString(Kilometer));
@@ -146,6 +147,7 @@ void PersonalWindow::showPerson(Person *p)
     ui->lineWerkstatt->setText(stringForDurationEditorFromMinutes(p->getAdditional(Werkstatt)));
     ui->lineBuero->setText(stringForDurationEditorFromMinutes(p->getAdditional(Buero)));
     ui->lineAusbildung->setText(stringForDurationEditorFromMinutes(p->getAdditional(Ausbildung)));
+    ui->lineInfrastruktur->setText(stringForDurationEditorFromMinutes(p->getAdditional(Infrastruktur)));
     ui->lineSonstiges->setText(stringForDurationEditorFromMinutes(p->getAdditional(Sonstiges)));
     ui->doubleAnzahl->setValue(p->getAdditional(Anzahl));
     ui->doubleKilometer->setValue(p->getAdditional(Kilometer));
@@ -166,6 +168,8 @@ void PersonalWindow::showPerson(Person *p)
         ui->labelMinBuero->setText(manager->getMinimumHoursString(Buero));
     if (manager->getMinimumHours(Ausbildung, p) > 0)
         ui->labelMinAusbildung->setText(manager->getMinimumHoursString(Ausbildung));
+    if (manager->getMinimumHours(Infrastruktur, p) > 0)
+        ui->labelMinInfrastruktur->setText(manager->getMinimumHoursString(Infrastruktur));
     if (manager->getMinimumHours(Sonstiges, p) > 0)
         ui->labelMinSonstiges->setText(manager->getMinimumHoursString(Sonstiges));
 
@@ -507,6 +511,7 @@ void PersonalWindow::print(QPrinter *p)
     gesamt.insert(Category::Werkstatt, manager->getTime(Werkstatt));
     gesamt.insert(Category::Buero, manager->getTime(Buero));
     gesamt.insert(Category::Ausbildung, manager->getTime(Ausbildung));
+    gesamt.insert(Category::Infrastruktur, manager->getTime(Infrastruktur));
     gesamt.insert(Category::Sonstiges, manager->getTime(Sonstiges));
     gesamt.insert(Category::Kilometer, manager->getTime(Kilometer));
     QList<Category> anzeigeListe = QList<Category>();
@@ -552,6 +557,7 @@ void PersonalWindow::toggleFields(bool state)
     ui->lineWerkstatt->setEnabled(state);
     ui->lineBuero->setEnabled(state);
     ui->lineAusbildung->setEnabled(state);
+    ui->lineInfrastruktur->setEnabled(state);
     ui->lineSonstiges->setEnabled(state);
     ui->doubleAnzahl->setEnabled(state);
     ui->doubleKilometer->setEnabled(state);
@@ -577,6 +583,8 @@ void PersonalWindow::updateZeiten()
     ui->labelBueroSum->update();
     ui->labelAusbildungSum->setText(aktuellePerson->getString(Ausbildung));
     ui->labelAusbildungSum->update();
+    ui->labelInfrastrukturSum->setText(aktuellePerson->getString(Infrastruktur));
+    ui->labelInfrastrukturSum->update();
     ui->labelSonstigesSum->setText(aktuellePerson->getString(Sonstiges));
     ui->labelSonstigesSum->update();
     ui->labelAnzahlSum->setText(aktuellePerson->getString(Anzahl));
@@ -665,6 +673,13 @@ void PersonalWindow::on_checkShowAusbildung_clicked(bool checked)
     refreshGesamt();
 }
 
+void PersonalWindow::on_checkShowInfrastruktur_clicked(bool checked)
+{
+    if (checked) anzeige->insert(Category::Infrastruktur);
+    else anzeige->remove(Category::Infrastruktur);
+    refreshGesamt();
+}
+
 void PersonalWindow::on_checkShowSonstiges_clicked(bool checked)
 {
     if (checked) anzeige->insert(Category::Sonstiges);
@@ -746,6 +761,15 @@ void PersonalWindow::on_lineAusbildung_textChanged(const QString &arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditional(Ausbildung, minutesFromStringForDurationEditor(arg1));
+        updateZeiten();
+        emit changed();
+    }
+}
+
+void PersonalWindow::on_lineInfrastruktur_textChanged(const QString &arg1)
+{
+    if (enabled) {
+        aktuellePerson->setAdditional(Infrastruktur, minutesFromStringForDurationEditor(arg1));
         updateZeiten();
         emit changed();
     }

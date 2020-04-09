@@ -25,6 +25,7 @@ Category getCategoryFromLocalizedString(QString s)
     if (s==QObject::tr("Werkstatt").toUpper()) return Werkstatt;
     if (s==QObject::tr("Zug Vorbereiten").toUpper()) return ZugVorbereiten;
     if (s==QObject::tr("Ausbildung").toUpper()) return Ausbildung;
+    if (s==QObject::tr("Infrastruktur").toUpper()) return Infrastruktur;
     if (s==QObject::tr("Kilometer").toUpper()) return Kilometer;
     if (s==QObject::tr("Gesamt").toUpper()) return Gesamt;
     if (s==QObject::tr("Anzahl").toUpper()) return Anzahl;
@@ -44,6 +45,7 @@ QString getLocalizedStringFromCategory(Category c)
     case Werkstatt: return QObject::tr("Werkstatt");
     case ZugVorbereiten: return QObject::tr("Zug Vorbereiten");
     case Ausbildung: return QObject::tr("Ausbildung");
+    case Infrastruktur: return QObject::tr("Infrastruktur");
     case Kilometer: return QObject::tr("Kilometer");
     case Gesamt: return QObject::tr("Gesamt");
     case Anzahl: return QObject::tr("Anzahl");

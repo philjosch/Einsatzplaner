@@ -181,6 +181,7 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     if (m->getTime(Werkstatt) > 0) a += help.arg("Werkstatt", minutesToHourString(m->getTime(Werkstatt)));
     if (m->getTime(Buero) > 0) a += help.arg("Büro", minutesToHourString(m->getTime(Buero)));
     if (m->getTime(Ausbildung) > 0) a += help.arg("Ausbildung", minutesToHourString(m->getTime(Ausbildung)));
+    if (m->getTime(Infrastruktur) > 0) a += help.arg("Infrastruktur", minutesToHourString(m->getTime(Infrastruktur)));
     if (m->getTime(Sonstiges) > 0) a += help.arg("Sonstiges", minutesToHourString(m->getTime(Sonstiges)));
     a += "</ul>";
 
@@ -198,6 +199,7 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     if (m->getMinimumHours(Werkstatt) > 0) a += help.arg("Werkstatt", minutesToHourString(m->getMinimumHours(Werkstatt)));
     if (m->getMinimumHours(Buero) > 0) a += help.arg("Büro", minutesToHourString(m->getMinimumHours(Buero)));
     if (m->getMinimumHours(Ausbildung) > 0) a += help.arg("Ausbildung", minutesToHourString(m->getMinimumHours(Ausbildung)));
+    if (m->getMinimumHours(Infrastruktur) > 0) a += help.arg("Infrastruktur", minutesToHourString(m->getMinimumHours(Infrastruktur)));
     if (m->getMinimumHours(Sonstiges) > 0) a += help.arg("Sonstiges", minutesToHourString(m->getMinimumHours(Sonstiges)));
     a += "</ul>";
 
@@ -295,6 +297,8 @@ bool Export::printPersonen(QList<Person *> *personen, QMap<Category, int> gesamt
         a += "<th>Büro</th>";
     if (data.contains(Category::Ausbildung))
         a += "<th>Ausbildung</th>";
+    if (data.contains(Category::Infrastruktur))
+        a += "<th>Infrastruktur</th>";
     if (data.contains(Category::Sonstiges))
         a += "<th>Sonstiges</th>";
     if (data.contains(Category::Kilometer))
