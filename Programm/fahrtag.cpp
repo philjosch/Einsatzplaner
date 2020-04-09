@@ -22,7 +22,15 @@ Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p), ManagerRe
     art = static_cast<Fahrtag::Art>(o.value("art").toInt());
     zeitTf = QTime::fromString(o.value("zeitTf").toString(), "hh:mm");
     wichtig = o.value("wichtig").toBool();
-    benoetigeTf = o.value("benoetigeTf").toBool(true);
+    if (! o.value("benoetigeTf").isBool()) {
+        benoetigeTf = o.value("benoetigeTf").toInt(1);
+    } else {
+        if (o.value("benoetigeTf").toBool(true)) {
+            benoetigeTf = 1;
+        } else {
+            benoetigeTf = 0;
+        }
+    }
     benoetigeZf = o.value("benoetigeZf").toBool(true);
     benoetigeZub = o.value("benoetigeZub").toBool(true);
     benoetigeService = o.value("benoetigeService").toBool(true);
@@ -158,8 +166,14 @@ QString Fahrtag::getHtmlForSingleView()
     }
     // *Tf/Tb
     if (benoetigeTf || tf.size() > 0) {
-        html += "<p><b>Triebfahrzeugführer (Tf), Triebfahrzeugbegleiter(Tb)";
-        html += (benoetigeTf ? required1+" werden benötigt"+required2: "");
+        html += "<p><b>";
+        if (benoetigeTf) {
+            html += required1+QString::number(benoetigeTf)+required2
+                    +" Triebfahrzeugführer (Tf) "
+                    +required1+"benötigt"+required2;
+        } else {
+            html += "Triebfahrzeugführer (Tf)";
+        }
         html += ":</b><br/>"+listToString(tf, " | ")+"</p>";
     }
     // *Zf
@@ -257,8 +271,8 @@ QString Fahrtag::getHtmlForTableView()
 
     // Tf, Tb
     html += "<td>";
-    if (benoetigeTf) {
-        html += "<b>Lokführer werden benötigt!</b>";
+    if (benoetigeTf > 0) {
+        html += "<b>"+QString::number(benoetigeTf)+" Lokführer benötigt!</b>";
     }
     if (tf.size() > 0) {
         html += "<ul><li>" + listToString(tf, "</li><li>") + "</li></ul>";
@@ -381,12 +395,12 @@ void Fahrtag::setBenoetigeZf(bool value)
     emit changed(this);
 }
 
-bool Fahrtag::getBenoetigeTf() const
+int Fahrtag::getBenoetigeTf() const
 {
     return benoetigeTf;
 }
 
-void Fahrtag::setBenoetigeTf(bool value)
+void Fahrtag::setBenoetigeTf(int value)
 {
     benoetigeTf = value;
     emit changed(this);

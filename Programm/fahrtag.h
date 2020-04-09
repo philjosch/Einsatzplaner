@@ -31,8 +31,8 @@ public:
     bool getWichtig() const;
     void setWichtig(bool value);
 
-    bool getBenoetigeTf() const;
-    void setBenoetigeTf(bool value);
+    int getBenoetigeTf() const;
+    void setBenoetigeTf(int value);
 
     bool getBenoetigeZf() const;
     void setBenoetigeZf(bool value);
@@ -59,7 +59,7 @@ protected:
     Fahrtag::Art art;
     QTime zeitTf;
     bool wichtig;
-    bool benoetigeTf;
+    int benoetigeTf;
     bool benoetigeZf;
     bool benoetigeZub;
     bool benoetigeService;

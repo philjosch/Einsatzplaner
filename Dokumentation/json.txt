@@ -60,7 +60,7 @@ calendar/ (object)		-> Objekt, das die Aktivitäten verwaltet (calendar)
 		art (int)
 		zeitTf (string)
 		wichtig (bool)
-		benoetigeTf (bool)
+		benoetigeTf (int)		-> Bis Version <1.6 bool als Typ 
 		benoetigeZf (bool)
 		benoetigeZub (bool)
 		benoetigeService (bool)

@@ -38,7 +38,7 @@ private slots:
     void on_listTf_itemChanged(QListWidgetItem *item);
     void on_buttonTfAdd_clicked();
     void on_buttonTfDelete_clicked();
-    void on_checkTf_clicked(bool checked);
+    void on_buttonGroupTf_buttonClicked(int button);
 
     void on_listZub_itemChanged(QListWidgetItem *item);
     void on_buttonZfAdd_clicked();

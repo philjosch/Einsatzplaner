@@ -25,6 +25,10 @@ FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent),
     nehmeRes = false;
     widgetInTableToTableWidget = QMap<QWidget*, QTableWidgetItem*>();
 
+    ui->buttonGroupTf->setId(ui->radioButtonTf0, 0);
+    ui->buttonGroupTf->setId(ui->radioButtonTf1, 1);
+    ui->buttonGroupTf->setId(ui->radioButtonTf2, 2);
+
     loadData();
     update();
 }
@@ -183,7 +187,7 @@ void FahrtagWindow::loadData()
         ui->comboTimeZH->setCurrentText(fahrtag->getZeitAnfang().toString("HH"));
         ui->comboTimeZM->setCurrentText(fahrtag->getZeitAnfang().toString("mm"));
         ui->checkWichtig->setChecked(fahrtag->getWichtig());
-        ui->checkTf->setChecked(fahrtag->getBenoetigeTf());
+        ui->buttonGroupTf->button(fahrtag->getBenoetigeTf())->click();
         ui->checkZf->setChecked(fahrtag->getBenoetigeZf());
         ui->checkZub->setChecked(fahrtag->getBenoetigeZub());
         ui->checkService->setChecked(fahrtag->getBenoetigeService());
@@ -429,9 +433,9 @@ void FahrtagWindow::on_buttonTfDelete_clicked()
 {
     deleteItemFromList(ui->listTf, ui->buttonTfDelete);
 }
-void FahrtagWindow::on_checkTf_clicked(bool checked)
+void FahrtagWindow::on_buttonGroupTf_buttonClicked(int button)
 {
-    fahrtag->setBenoetigeTf(checked);
+    fahrtag->setBenoetigeTf(button);
 }
 
 void FahrtagWindow::on_listZf_itemChanged(QListWidgetItem *item)
