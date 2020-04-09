@@ -13,16 +13,16 @@ MinimumHoursEditorDialog::MinimumHoursEditorDialog(ManagerPersonal *manager, QWi
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(abstractButtonClickedSlot(QAbstractButton*)));
     this->manager = manager;
 
-    ui->lineTf->setText(stringFromTime(manager->getMinimumHours(Category::Tf)));
-    ui->lineZf->setText(stringFromTime(manager->getMinimumHours(Category::Zf)));
-    ui->lineService->setText(stringFromTime(manager->getMinimumHours(Category::Service)));
-    ui->lineZub->setText(stringFromTime(manager->getMinimumHours(Category::Zub)));
-    ui->lineBuero->setText(stringFromTime(manager->getMinimumHours(Category::Buero)));
-    ui->lineWerkstatt->setText(stringFromTime(manager->getMinimumHours(Category::Werkstatt)));
-    ui->lineZugVorbereiten->setText(stringFromTime(manager->getMinimumHours(Category::ZugVorbereiten)));
-    ui->lineAusbildung->setText(stringFromTime(manager->getMinimumHours(Category::Ausbildung)));
-    ui->lineSonstiges->setText(stringFromTime(manager->getMinimumHours(Category::Sonstiges)));
-    ui->lineGesamt->setText(stringFromTime(manager->getMinimumHours(Gesamt)));
+    ui->lineTf->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Tf)));
+    ui->lineZf->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Zf)));
+    ui->lineService->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Service)));
+    ui->lineZub->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Zub)));
+    ui->lineBuero->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Buero)));
+    ui->lineWerkstatt->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Werkstatt)));
+    ui->lineZugVorbereiten->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::ZugVorbereiten)));
+    ui->lineAusbildung->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Ausbildung)));
+    ui->lineSonstiges->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Sonstiges)));
+    ui->lineGesamt->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Gesamt)));
 }
 
 MinimumHoursEditorDialog::~MinimumHoursEditorDialog()
@@ -32,16 +32,26 @@ MinimumHoursEditorDialog::~MinimumHoursEditorDialog()
 
 void MinimumHoursEditorDialog::setDefault()
 {
-    ui->lineTf->setText(stringFromTime(manager->getMinimumHoursDefault(Category::Tf)));
-    ui->lineZf->setText(stringFromTime(manager->getMinimumHoursDefault(Category::Zf)));
-    ui->lineService->setText(stringFromTime(manager->getMinimumHoursDefault(Category::Service)));
-    ui->lineZub->setText(stringFromTime(manager->getMinimumHoursDefault(Category::Zub)));
-    ui->lineBuero->setText(stringFromTime(manager->getMinimumHoursDefault(Category::Buero)));
-    ui->lineWerkstatt->setText(stringFromTime(manager->getMinimumHoursDefault(Category::Werkstatt)));
-    ui->lineZugVorbereiten->setText(stringFromTime(manager->getMinimumHoursDefault(Category::ZugVorbereiten)));
-    ui->lineAusbildung->setText(stringFromTime(manager->getMinimumHoursDefault(Category::Ausbildung)));
-    ui->lineSonstiges->setText(stringFromTime(manager->getMinimumHoursDefault(Category::Sonstiges)));
-    ui->lineGesamt->setText(stringFromTime(manager->getMinimumHoursDefault(Gesamt)));
+    ui->lineTf->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Tf)));
+    ui->lineTf->update();
+    ui->lineZf->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Zf)));
+    ui->lineZf->update();
+    ui->lineService->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Service)));
+    ui->lineService->update();
+    ui->lineZub->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Zub)));
+    ui->lineZub->update();
+    ui->lineBuero->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Buero)));
+    ui->lineBuero->update();
+    ui->lineWerkstatt->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Werkstatt)));
+    ui->lineWerkstatt->update();
+    ui->lineZugVorbereiten->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::ZugVorbereiten)));
+    ui->lineZugVorbereiten->update();
+    ui->lineAusbildung->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Ausbildung)));
+    ui->lineAusbildung->update();
+    ui->lineSonstiges->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Sonstiges)));
+    ui->lineSonstiges->update();
+    ui->lineGesamt->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Gesamt)));
+    ui->lineGesamt->update();
 }
 
 void MinimumHoursEditorDialog::abstractButtonClickedSlot(QAbstractButton *button)
@@ -57,29 +67,15 @@ void MinimumHoursEditorDialog::abstractButtonClickedSlot(QAbstractButton *button
 
 void MinimumHoursEditorDialog::save()
 {
-    manager->setMinimumHours(Category::Tf, timeFromString(ui->lineTf->text()));
-    manager->setMinimumHours(Category::Zf, timeFromString(ui->lineZf->text()));
-    manager->setMinimumHours(Category::Service, timeFromString(ui->lineService->text()));
-    manager->setMinimumHours(Category::Zub, timeFromString(ui->lineZub->text()));
-    manager->setMinimumHours(Category::Buero, timeFromString(ui->lineBuero->text()));
-    manager->setMinimumHours(Category::Werkstatt, timeFromString(ui->lineWerkstatt->text()));
-    manager->setMinimumHours(Category::ZugVorbereiten, timeFromString(ui->lineZugVorbereiten->text()));
-    manager->setMinimumHours(Category::Ausbildung, timeFromString(ui->lineAusbildung->text()));
-    manager->setMinimumHours(Category::Sonstiges, timeFromString(ui->lineSonstiges->text()));
-    manager->setMinimumHours(Category::Gesamt, timeFromString(ui->lineGesamt->text()));
+    manager->setMinimumHours(Category::Tf, minutesFromStringForDurationEditor(ui->lineTf->text()));
+    manager->setMinimumHours(Category::Zf, minutesFromStringForDurationEditor(ui->lineZf->text()));
+    manager->setMinimumHours(Category::Service, minutesFromStringForDurationEditor(ui->lineService->text()));
+    manager->setMinimumHours(Category::Zub, minutesFromStringForDurationEditor(ui->lineZub->text()));
+    manager->setMinimumHours(Category::Buero, minutesFromStringForDurationEditor(ui->lineBuero->text()));
+    manager->setMinimumHours(Category::Werkstatt, minutesFromStringForDurationEditor(ui->lineWerkstatt->text()));
+    manager->setMinimumHours(Category::ZugVorbereiten, minutesFromStringForDurationEditor(ui->lineZugVorbereiten->text()));
+    manager->setMinimumHours(Category::Ausbildung, minutesFromStringForDurationEditor(ui->lineAusbildung->text()));
+    manager->setMinimumHours(Category::Sonstiges, minutesFromStringForDurationEditor(ui->lineSonstiges->text()));
+    manager->setMinimumHours(Category::Gesamt, minutesFromStringForDurationEditor(ui->lineGesamt->text()));
     QDialog::accept();
-}
-
-int MinimumHoursEditorDialog::timeFromString(QString arg)
-{
-    if (arg.contains(":")) {
-        QStringList l = arg.split(":");
-        return l.at(0).toInt()*60+l.at(1).toInt();
-    }
-    return arg.toInt();
-}
-
-QString MinimumHoursEditorDialog::stringFromTime(int arg)
-{
-    return QString("%1:%2").arg(int(arg/60), 4, 10, QLatin1Char('0')).arg(arg % 60, 2, 10,QLatin1Char('0'));
 }

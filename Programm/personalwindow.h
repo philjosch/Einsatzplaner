@@ -141,9 +141,6 @@ private:
 
     const static QList<Category> anzeigeReihenfolge;
 
-    int timeFromString(QString arg);
-    QString stringFromTime(int arg);
-
     void updateZeiten();
 };
 #endif // PERSONALWINDOW_H

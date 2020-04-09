@@ -504,6 +504,13 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="5">
+           <widget class="QCheckBox" name="checkShowInfrastruktur">
+            <property name="text">
+             <string>Infrastruktur</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item row="3" column="0">
@@ -825,7 +832,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>23</day>
+                    <day>22</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1107,7 +1114,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>22</day>
+                    <day>21</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1186,7 +1193,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>23</day>
+                    <day>22</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1344,110 +1351,80 @@
             <property name="verticalSpacing">
              <number>0</number>
             </property>
-            <item row="7" column="2">
-             <widget class="QLabel" name="labelWerkstattSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="2">
-             <widget class="QLabel" name="labelAusbildungSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="0">
-             <widget class="QLabel" name="label_20">
-              <property name="text">
-               <string>Sonstiges</string>
-              </property>
-             </widget>
-            </item>
-            <item row="13" column="1">
-             <widget class="QDoubleSpinBox" name="doubleKilometer">
+            <item row="1" column="1" rowspan="2">
+             <widget class="QLineEdit" name="lineTf">
               <property name="enabled">
                <bool>false</bool>
               </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
-              <property name="suffix">
-               <string> km</string>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
-            <item row="12" column="1">
-             <widget class="QDoubleSpinBox" name="doubleAnzahl">
+            <item row="0" column="3" rowspan="2">
+             <widget class="QLabel" name="label_32">
+              <property name="text">
+               <string>Min</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="0" colspan="5">
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>395</width>
+                <height>154</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="8" column="3">
+             <widget class="QLabel" name="labelMinBuero">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="1">
+             <widget class="QLineEdit" name="lineSonstiges">
               <property name="enabled">
                <bool>false</bool>
               </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <double>1000.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="3">
-             <widget class="QLabel" name="labelMinZub">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="3">
-             <widget class="QLabel" name="labelMinZf">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>Werkstatt</string>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -1461,28 +1438,40 @@
               </property>
              </widget>
             </item>
-            <item row="9" column="0">
-             <widget class="QLabel" name="label_11">
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="lineZf">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
               <property name="text">
-               <string>Ausbildung</string>
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
-            <item row="3" column="2">
-             <widget class="QLabel" name="labelZfSum">
+            <item row="11" column="3">
+             <widget class="QLabel" name="labelMinSonstiges">
               <property name="text">
                <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
-            <item row="8" column="1">
-             <widget class="QLineEdit" name="lineBuero">
+            <item row="7" column="1">
+             <widget class="QLineEdit" name="lineWerkstatt">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -1510,6 +1499,60 @@
               </property>
              </widget>
             </item>
+            <item row="13" column="0">
+             <widget class="QLabel" name="label_28">
+              <property name="text">
+               <string>Anzahl Einsätze</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="2">
+             <widget class="QLabel" name="labelBueroSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="3">
+             <widget class="QLabel" name="labelMinWerkstatt">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="3">
+             <widget class="QLabel" name="labelMinAusbildung">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Service</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Büro</string>
+              </property>
+             </widget>
+            </item>
             <item row="9" column="1">
              <widget class="QLineEdit" name="lineAusbildung">
               <property name="enabled">
@@ -1532,8 +1575,43 @@
               </property>
              </widget>
             </item>
-            <item row="8" column="3">
-             <widget class="QLabel" name="labelMinBuero">
+            <item row="6" column="1">
+             <widget class="QLineEdit" name="lineZugVorbereiten">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="4">
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>54</width>
+                <height>17</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="3" column="3">
+             <widget class="QLabel" name="labelMinZf">
               <property name="text">
                <string>0 h</string>
               </property>
@@ -1542,8 +1620,22 @@
               </property>
              </widget>
             </item>
-            <item row="5" column="3">
-             <widget class="QLabel" name="labelMinService">
+            <item row="7" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Werkstatt</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Zf</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="3">
+             <widget class="QLabel" name="labelMinZugVorbereiten">
               <property name="text">
                <string>0 h</string>
               </property>
@@ -1552,8 +1644,93 @@
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
-             <widget class="QLineEdit" name="lineService">
+            <item row="5" column="2">
+             <widget class="QLabel" name="labelServiceSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="1">
+             <widget class="QDoubleSpinBox" name="doubleAnzahl">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="decimals">
+               <number>0</number>
+              </property>
+              <property name="maximum">
+               <double>1000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="2">
+             <widget class="QLabel" name="labelWerkstattSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="14" column="2">
+             <widget class="QLabel" name="labelKilometerSum">
+              <property name="text">
+               <string>0 km</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_19">
+              <property name="text">
+               <string>Zug Vorbereitung</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_21">
+              <property name="text">
+               <string>Summe</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" rowspan="2">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Tf/Tb</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="lineZub">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -1587,35 +1764,102 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="label_21">
-              <property name="text">
-               <string>Summe</string>
+            <item row="14" column="1">
+             <widget class="QDoubleSpinBox" name="doubleKilometer">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="suffix">
+               <string> km</string>
+              </property>
+              <property name="decimals">
+               <number>0</number>
+              </property>
+              <property name="maximum">
+               <double>99999.000000000000000</double>
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_7">
+            <item row="13" column="2">
+             <widget class="QLabel" name="labelAnzahlSum">
               <property name="text">
-               <string>Zf</string>
+               <string>0 h</string>
               </property>
-             </widget>
-            </item>
-            <item row="0" column="3" rowspan="2">
-             <widget class="QLabel" name="label_32">
-              <property name="text">
-               <string>Min</string>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
-            <item row="7" column="1">
-             <widget class="QLineEdit" name="lineWerkstatt">
+            <item row="4" column="2">
+             <widget class="QLabel" name="labelZubSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="0">
+             <widget class="QLabel" name="label_20">
+              <property name="text">
+               <string>Sonstiges</string>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="0" colspan="5">
+             <widget class="Line" name="line_4">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="2">
+             <widget class="QLabel" name="labelSonstigesSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="2">
+             <widget class="QLabel" name="labelAusbildungSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QLineEdit" name="lineService">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -1636,13 +1880,33 @@
               </property>
              </widget>
             </item>
-            <item row="11" column="0" colspan="5">
-             <widget class="Line" name="line_4">
-              <property name="enabled">
-               <bool>false</bool>
+            <item row="5" column="3">
+             <widget class="QLabel" name="labelMinService">
+              <property name="text">
+               <string>0 h</string>
               </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="14" column="0">
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Fahrstrecke</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QLabel" name="labelZfSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1659,200 +1923,15 @@
               </property>
              </widget>
             </item>
-            <item row="8" column="2">
-             <widget class="QLabel" name="labelBueroSum">
+            <item row="9" column="0">
+             <widget class="QLabel" name="label_11">
               <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <string>Ausbildung</string>
               </property>
              </widget>
             </item>
-            <item row="12" column="2">
-             <widget class="QLabel" name="labelAnzahlSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="2">
-             <widget class="QLabel" name="labelServiceSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="13" column="0">
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>Fahrstrecke</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="4">
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>54</width>
-                <height>17</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="4" column="2">
-             <widget class="QLabel" name="labelZubSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="3">
-             <widget class="QLabel" name="labelMinAusbildung">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="12" column="0">
-             <widget class="QLabel" name="label_28">
-              <property name="text">
-               <string>Anzahl Einsätze</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QLineEdit" name="lineZf">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="inputMask">
-               <string>9999:99</string>
-              </property>
-              <property name="text">
-               <string>0000:00</string>
-              </property>
-              <property name="maxLength">
-               <number>7</number>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="clearButtonEnabled">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="1">
-             <widget class="QLineEdit" name="lineSonstiges">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="inputMask">
-               <string>9999:99</string>
-              </property>
-              <property name="text">
-               <string>0000:00</string>
-              </property>
-              <property name="maxLength">
-               <number>7</number>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="clearButtonEnabled">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="3">
-             <widget class="QLabel" name="labelMinWerkstatt">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
-             <widget class="QLabel" name="label_19">
-              <property name="text">
-               <string>Zug Vorbereitung</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>Service</string>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="2">
-             <widget class="QLabel" name="labelSonstigesSum">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QLineEdit" name="lineZub">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="inputMask">
-               <string>9999:99</string>
-              </property>
-              <property name="text">
-               <string>0000:00</string>
-              </property>
-              <property name="maxLength">
-               <number>7</number>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="clearButtonEnabled">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1" rowspan="2">
-             <widget class="QLineEdit" name="lineTf">
+            <item row="8" column="1">
+             <widget class="QLineEdit" name="lineBuero">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -1886,8 +1965,8 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="3">
-             <widget class="QLabel" name="labelMinZugVorbereiten">
+            <item row="4" column="3">
+             <widget class="QLabel" name="labelMinZub">
               <property name="text">
                <string>0 h</string>
               </property>
@@ -1896,45 +1975,8 @@
               </property>
              </widget>
             </item>
-            <item row="8" column="0">
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>Büro</string>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="3">
-             <widget class="QLabel" name="labelMinSonstiges">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="13" column="2">
-             <widget class="QLabel" name="labelKilometerSum">
-              <property name="text">
-               <string>0 km</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0" rowspan="2">
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>Tf/Tb</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="1">
-             <widget class="QLineEdit" name="lineZugVorbereiten">
+            <item row="10" column="1">
+             <widget class="QLineEdit" name="lineInfrastruktur">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -1944,9 +1986,6 @@
               <property name="text">
                <string>0000:00</string>
               </property>
-              <property name="maxLength">
-               <number>7</number>
-              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -1955,18 +1994,35 @@
               </property>
              </widget>
             </item>
-            <item row="14" column="0" colspan="5">
-             <spacer name="verticalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
+            <item row="10" column="2">
+             <widget class="QLabel" name="labelInfrastrukturSum">
+              <property name="text">
+               <string>0 h</string>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>395</width>
-                <height>154</height>
-               </size>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
               </property>
-             </spacer>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="3">
+             <widget class="QLabel" name="labelMinInfrastruktur">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="0">
+             <widget class="QLabel" name="label_35">
+              <property name="text">
+               <string>Infrastruktur</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -2176,6 +2232,7 @@
   <tabstop>checkShowBuero</tabstop>
   <tabstop>checkShowAusbildung</tabstop>
   <tabstop>checkShowSonstiges</tabstop>
+  <tabstop>checkShowInfrastruktur</tabstop>
   <tabstop>pushAktualisieren</tabstop>
   <tabstop>pushMindeststunden</tabstop>
   <tabstop>pushPDF</tabstop>
@@ -2213,6 +2270,7 @@
   <tabstop>lineWerkstatt</tabstop>
   <tabstop>lineBuero</tabstop>
   <tabstop>lineAusbildung</tabstop>
+  <tabstop>lineInfrastruktur</tabstop>
   <tabstop>lineSonstiges</tabstop>
   <tabstop>doubleAnzahl</tabstop>
   <tabstop>doubleKilometer</tabstop>

@@ -138,15 +138,15 @@ void PersonalWindow::showPerson(Person *p)
     ui->labelKilometerSum->setText(p->getString(Kilometer));
     ui->labelGesamt->setText(p->getString(Gesamt));
 
-    ui->lineTf->setText(stringFromTime(p->getAdditional(Tf)));
-    ui->lineZf->setText(stringFromTime(p->getAdditional(Zf)));
-    ui->lineZub->setText(stringFromTime(p->getAdditional(Zub)));
-    ui->lineService->setText(stringFromTime(p->getAdditional(Service)));
-    ui->lineZugVorbereiten->setText(stringFromTime(p->getAdditional(ZugVorbereiten)));
-    ui->lineWerkstatt->setText(stringFromTime(p->getAdditional(Werkstatt)));
-    ui->lineBuero->setText(stringFromTime(p->getAdditional(Buero)));
-    ui->lineAusbildung->setText(stringFromTime(p->getAdditional(Ausbildung)));
-    ui->lineSonstiges->setText(stringFromTime(p->getAdditional(Sonstiges)));
+    ui->lineTf->setText(stringForDurationEditorFromMinutes(p->getAdditional(Tf)));
+    ui->lineZf->setText(stringForDurationEditorFromMinutes(p->getAdditional(Zf)));
+    ui->lineZub->setText(stringForDurationEditorFromMinutes(p->getAdditional(Zub)));
+    ui->lineService->setText(stringForDurationEditorFromMinutes(p->getAdditional(Service)));
+    ui->lineZugVorbereiten->setText(stringForDurationEditorFromMinutes(p->getAdditional(ZugVorbereiten)));
+    ui->lineWerkstatt->setText(stringForDurationEditorFromMinutes(p->getAdditional(Werkstatt)));
+    ui->lineBuero->setText(stringForDurationEditorFromMinutes(p->getAdditional(Buero)));
+    ui->lineAusbildung->setText(stringForDurationEditorFromMinutes(p->getAdditional(Ausbildung)));
+    ui->lineSonstiges->setText(stringForDurationEditorFromMinutes(p->getAdditional(Sonstiges)));
     ui->doubleAnzahl->setValue(p->getAdditional(Anzahl));
     ui->doubleKilometer->setValue(p->getAdditional(Kilometer));
 
@@ -558,20 +558,6 @@ void PersonalWindow::toggleFields(bool state)
 
 }
 
-int PersonalWindow::timeFromString(QString arg)
-{
-    if (arg.contains(":")) {
-        QStringList l = arg.split(":");
-        return l.at(0).toInt()*60+l.at(1).toInt();
-    }
-    return arg.toInt();
-}
-
-QString PersonalWindow::stringFromTime(int arg)
-{
-    return QString("%1:%2").arg(int(arg/60), 4, 10, QLatin1Char('0')).arg(arg % 60, 2, 10,QLatin1Char('0'));
-}
-
 void PersonalWindow::updateZeiten()
 {
     on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
@@ -696,7 +682,7 @@ void PersonalWindow::on_checkShowKilometer_clicked(bool checked)
 void PersonalWindow::on_lineTf_textChanged(const QString &arg1)
 {
     if (enabled) {
-        aktuellePerson->setAdditional(Tf, timeFromString(arg1));
+        aktuellePerson->setAdditional(Tf, minutesFromStringForDurationEditor(arg1));
         updateZeiten();
         emit changed();
     }
@@ -705,7 +691,7 @@ void PersonalWindow::on_lineTf_textChanged(const QString &arg1)
 void PersonalWindow::on_lineZf_textChanged(const QString &arg1)
 {
     if (enabled) {
-        aktuellePerson->setAdditional(Zf, timeFromString(arg1));
+        aktuellePerson->setAdditional(Zf, minutesFromStringForDurationEditor(arg1));
         updateZeiten();
         emit changed();
     }
@@ -714,7 +700,7 @@ void PersonalWindow::on_lineZf_textChanged(const QString &arg1)
 void PersonalWindow::on_lineZub_textChanged(const QString &arg1)
 {
     if (enabled) {
-        aktuellePerson->setAdditional(Zub, timeFromString(arg1));
+        aktuellePerson->setAdditional(Zub, minutesFromStringForDurationEditor(arg1));
         updateZeiten();
         emit changed();
     }
@@ -723,7 +709,7 @@ void PersonalWindow::on_lineZub_textChanged(const QString &arg1)
 void PersonalWindow::on_lineService_textChanged(const QString &arg1)
 {
     if (enabled) {
-        aktuellePerson->setAdditional(Service, timeFromString(arg1));
+        aktuellePerson->setAdditional(Service, minutesFromStringForDurationEditor(arg1));
         updateZeiten();
         emit changed();
     }
@@ -732,7 +718,7 @@ void PersonalWindow::on_lineService_textChanged(const QString &arg1)
 void PersonalWindow::on_lineZugVorbereiten_textChanged(const QString &arg1)
 {
     if (enabled) {
-        aktuellePerson->setAdditional(ZugVorbereiten, timeFromString(arg1));
+        aktuellePerson->setAdditional(ZugVorbereiten, minutesFromStringForDurationEditor(arg1));
         updateZeiten();
         emit changed();
     }
@@ -741,7 +727,7 @@ void PersonalWindow::on_lineZugVorbereiten_textChanged(const QString &arg1)
 void PersonalWindow::on_lineWerkstatt_textChanged(const QString &arg1)
 {
     if (enabled) {
-        aktuellePerson->setAdditional(Werkstatt, timeFromString(arg1));
+        aktuellePerson->setAdditional(Werkstatt, minutesFromStringForDurationEditor(arg1));
         updateZeiten();
         emit changed();
     }
@@ -750,7 +736,7 @@ void PersonalWindow::on_lineWerkstatt_textChanged(const QString &arg1)
 void PersonalWindow::on_lineBuero_textChanged(const QString &arg1)
 {
     if (enabled) {
-        aktuellePerson->setAdditional(Buero, timeFromString(arg1));
+        aktuellePerson->setAdditional(Buero, minutesFromStringForDurationEditor(arg1));
         updateZeiten();
         emit changed();
     }
@@ -759,7 +745,7 @@ void PersonalWindow::on_lineBuero_textChanged(const QString &arg1)
 void PersonalWindow::on_lineAusbildung_textChanged(const QString &arg1)
 {
     if (enabled) {
-        aktuellePerson->setAdditional(Ausbildung, timeFromString(arg1));
+        aktuellePerson->setAdditional(Ausbildung, minutesFromStringForDurationEditor(arg1));
         updateZeiten();
         emit changed();
     }
@@ -768,7 +754,7 @@ void PersonalWindow::on_lineAusbildung_textChanged(const QString &arg1)
 void PersonalWindow::on_lineSonstiges_textChanged(const QString &arg1)
 {
     if (enabled) {
-        aktuellePerson->setAdditional(Sonstiges, timeFromString(arg1));
+        aktuellePerson->setAdditional(Sonstiges, minutesFromStringForDurationEditor(arg1));
         updateZeiten();
         emit changed();
     }

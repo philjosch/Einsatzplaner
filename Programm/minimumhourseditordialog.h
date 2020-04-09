@@ -23,14 +23,9 @@ private slots:
     void abstractButtonClickedSlot(QAbstractButton * button);
     void save();
 
-
 private:
     Ui::MinimumHoursEditorDialog *ui;
     ManagerPersonal *manager;
-
-    int timeFromString(QString arg);
-    QString stringFromTime(int arg);
-
 };
 
 #endif // MINIMUMHOURSEDITORDIALOG_H
