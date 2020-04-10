@@ -20,6 +20,9 @@ personal/ (object)	-> hier werden die Personen gesichert
 		ausRang (bool)		-> Ausbildung Rangierer
 		tauglichkeit (date)	-> Tag, bis zu dem die Betriebsdiensttauglichkeit gilt
 		# Kommunikationsdaten
+		plz (string)
+		ort (string)
+		strasse (string)	-> Enthält auch die Hausnummer
 		mail (string)		-> Mail-Adresse des Mitglieds
 		mailOK (bool)		-> Einverständnis zum Veröffentlichen der Mail-Adresse
 		tel (string)		-> Telefonnummer

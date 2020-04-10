@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>685</width>
-    <height>562</height>
+    <height>583</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -647,6 +647,9 @@
             <property name="text">
              <string>Vorname</string>
             </property>
+            <property name="buddy">
+             <cstring>lineVorname</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -676,6 +679,9 @@
             <property name="text">
              <string>ID</string>
             </property>
+            <property name="buddy">
+             <cstring>lineID</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="3">
@@ -695,6 +701,9 @@
            <widget class="QLabel" name="label_27">
             <property name="text">
              <string>Nachname</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineNachname</cstring>
             </property>
            </widget>
           </item>
@@ -765,7 +774,7 @@
                  <x>0</x>
                  <y>0</y>
                  <width>427</width>
-                 <height>151</height>
+                 <height>172</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -791,6 +800,9 @@
                  <widget class="QLabel" name="label_24">
                   <property name="text">
                    <string>Geburtstag</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>dateBirth</cstring>
                   </property>
                  </widget>
                 </item>
@@ -818,6 +830,9 @@
                   <property name="text">
                    <string>Eintritt</string>
                   </property>
+                  <property name="buddy">
+                   <cstring>dateEntry</cstring>
+                  </property>
                  </widget>
                 </item>
                 <item row="1" column="1">
@@ -832,7 +847,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>22</day>
+                    <day>19</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -860,6 +875,9 @@
                   </property>
                   <property name="text">
                    <string>Entfernung</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>spinKm</cstring>
                   </property>
                  </widget>
                 </item>
@@ -889,6 +907,9 @@
                  <widget class="QLabel" name="label_17">
                   <property name="text">
                    <string>Beruf</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>lineJob</cstring>
                   </property>
                  </widget>
                 </item>
@@ -925,14 +946,14 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>170</width>
-                 <height>92</height>
+                 <width>427</width>
+                 <height>172</height>
                 </rect>
                </property>
                <attribute name="label">
                 <string>Kontakt</string>
                </attribute>
-               <layout class="QGridLayout" name="gridLayout_11">
+               <layout class="QGridLayout" name="gridLayout_11" columnstretch="0,0,1">
                 <property name="leftMargin">
                  <number>6</number>
                 </property>
@@ -948,55 +969,7 @@
                 <property name="spacing">
                  <number>6</number>
                 </property>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_15">
-                  <property name="text">
-                   <string>Telefon</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QLineEdit" name="linePhone">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QCheckBox" name="checkPhone">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Veröffentlichen</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_16">
-                  <property name="text">
-                   <string>Mail</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QLineEdit" name="lineMail">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QCheckBox" name="checkMail">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Veröffentlichen</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
+                <item row="6" column="1">
                  <spacer name="verticalSpacer_3">
                   <property name="orientation">
                    <enum>Qt::Vertical</enum>
@@ -1009,6 +982,112 @@
                   </property>
                  </spacer>
                 </item>
+                <item row="2" column="0" rowspan="2">
+                 <widget class="QLabel" name="labelPhone">
+                  <property name="text">
+                   <string>Telefon</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                  </property>
+                  <property name="buddy">
+                   <cstring>linePhone</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="labelAdress">
+                  <property name="text">
+                   <string>Anschrift</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0" rowspan="2">
+                 <widget class="QLabel" name="labelMail">
+                  <property name="text">
+                   <string>Mail</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                  </property>
+                  <property name="buddy">
+                   <cstring>lineMail</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="linePLZ">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="maxLength">
+                   <number>14</number>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Postleitzahl</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QLineEdit" name="lineOrt">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Ort</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1" colspan="2">
+                 <widget class="QLineEdit" name="lineStrasse">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Straße und Hausnummer</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1" colspan="2">
+                 <widget class="QLineEdit" name="linePhone">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1" colspan="2">
+                 <widget class="QCheckBox" name="checkPhone">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Veröffentlichen</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1" colspan="2">
+                 <widget class="QLineEdit" name="lineMail">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="placeholderText">
+                   <string>beispiel@ostertalbahn.de</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1" colspan="2">
+                 <widget class="QCheckBox" name="checkMail">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Veröffentlichen</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </widget>
               <widget class="QWidget" name="page">
@@ -1016,8 +1095,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>195</width>
-                 <height>97</height>
+                 <width>427</width>
+                 <height>172</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -1094,6 +1173,9 @@
                   <property name="text">
                    <string>Tauglichkeit</string>
                   </property>
+                  <property name="buddy">
+                   <cstring>dateDienst</cstring>
+                  </property>
                  </widget>
                 </item>
                 <item row="3" column="1">
@@ -1114,7 +1196,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>21</day>
+                    <day>18</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1193,7 +1275,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>22</day>
+                    <day>19</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1239,12 +1321,18 @@
                   <property name="alignment">
                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                   </property>
+                  <property name="buddy">
+                   <cstring>plainBemerkung</cstring>
+                  </property>
                  </widget>
                 </item>
                 <item row="1" column="0">
                  <widget class="QLabel" name="label_13">
                   <property name="text">
                    <string>Austritt</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>dateExit</cstring>
                   </property>
                  </widget>
                 </item>
@@ -1497,12 +1585,18 @@
               <property name="text">
                <string>Zub/Begl.o.b.A.</string>
               </property>
+              <property name="buddy">
+               <cstring>lineZub</cstring>
+              </property>
              </widget>
             </item>
             <item row="13" column="0">
              <widget class="QLabel" name="label_28">
               <property name="text">
                <string>Anzahl Einsätze</string>
+              </property>
+              <property name="buddy">
+               <cstring>doubleAnzahl</cstring>
               </property>
              </widget>
             </item>
@@ -1544,12 +1638,18 @@
               <property name="text">
                <string>Service</string>
               </property>
+              <property name="buddy">
+               <cstring>lineService</cstring>
+              </property>
              </widget>
             </item>
             <item row="8" column="0">
              <widget class="QLabel" name="label_8">
               <property name="text">
                <string>Büro</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineBuero</cstring>
               </property>
              </widget>
             </item>
@@ -1625,12 +1725,18 @@
               <property name="text">
                <string>Werkstatt</string>
               </property>
+              <property name="buddy">
+               <cstring>lineWerkstatt</cstring>
+              </property>
              </widget>
             </item>
             <item row="3" column="0">
              <widget class="QLabel" name="label_7">
               <property name="text">
                <string>Zf</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineZf</cstring>
               </property>
              </widget>
             </item>
@@ -1710,6 +1816,9 @@
               <property name="text">
                <string>Zug Vorbereitung</string>
               </property>
+              <property name="buddy">
+               <cstring>lineZugVorbereiten</cstring>
+              </property>
              </widget>
             </item>
             <item row="0" column="2">
@@ -1726,6 +1835,9 @@
              <widget class="QLabel" name="label_4">
               <property name="text">
                <string>Tf/Tb</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineTf</cstring>
               </property>
              </widget>
             </item>
@@ -1820,6 +1932,9 @@
               <property name="text">
                <string>Sonstiges</string>
               </property>
+              <property name="buddy">
+               <cstring>lineSonstiges</cstring>
+              </property>
              </widget>
             </item>
             <item row="12" column="0" colspan="5">
@@ -1895,6 +2010,9 @@
               <property name="text">
                <string>Fahrstrecke</string>
               </property>
+              <property name="buddy">
+               <cstring>doubleKilometer</cstring>
+              </property>
              </widget>
             </item>
             <item row="3" column="2">
@@ -1927,6 +2045,9 @@
              <widget class="QLabel" name="label_11">
               <property name="text">
                <string>Ausbildung</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineAusbildung</cstring>
               </property>
              </widget>
             </item>
@@ -2021,6 +2142,9 @@
              <widget class="QLabel" name="label_35">
               <property name="text">
                <string>Infrastruktur</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineInfrastruktur</cstring>
               </property>
              </widget>
             </item>
@@ -2120,7 +2244,7 @@
    </widget>
    <widget class="QMenu" name="menuDrucken">
     <property name="title">
-     <string>Drucken</string>
+     <string>Exportieren</string>
     </property>
     <widget class="QMenu" name="menuEinzelansichten">
      <property name="title">
@@ -2136,6 +2260,10 @@
     <addaction name="separator"/>
     <addaction name="actionGesamtDrucken"/>
     <addaction name="actionGesamtPDF"/>
+    <addaction name="separator"/>
+    <addaction name="actionMitgliederDrucken"/>
+    <addaction name="actionMitgliederPDF"/>
+    <addaction name="actionMitgliederCSV"/>
    </widget>
    <addaction name="menuPersonalmanagement"/>
    <addaction name="menuDrucken"/>
@@ -2193,7 +2321,7 @@
   </action>
   <action name="actionSinglePrint">
    <property name="text">
-    <string>Für eine Person drucken ...</string>
+    <string>Für aktuelle Person drucken ...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+P</string>
@@ -2201,7 +2329,7 @@
   </action>
   <action name="actionSinglePDF">
    <property name="text">
-    <string>Für eine Person als PDF speichern ...</string>
+    <string>Für aktuelle Person als PDF speichern ...</string>
    </property>
   </action>
   <action name="actionEinzelPrint">
@@ -2212,6 +2340,21 @@
   <action name="actionEinzelPDF">
    <property name="text">
     <string>Für alle als PDF speichern ...</string>
+   </property>
+  </action>
+  <action name="actionMitgliederDrucken">
+   <property name="text">
+    <string>Mitgliederliste drucken …</string>
+   </property>
+  </action>
+  <action name="actionMitgliederPDF">
+   <property name="text">
+    <string>Mitgliederliste als PDF speichern …</string>
+   </property>
+  </action>
+  <action name="actionMitgliederCSV">
+   <property name="text">
+    <string>Mitgliederliste als CSV-Datei speichern …</string>
    </property>
   </action>
  </widget>
@@ -2250,6 +2393,9 @@
   <tabstop>checkAktiv</tabstop>
   <tabstop>spinKm</tabstop>
   <tabstop>lineJob</tabstop>
+  <tabstop>lineStrasse</tabstop>
+  <tabstop>linePLZ</tabstop>
+  <tabstop>lineOrt</tabstop>
   <tabstop>linePhone</tabstop>
   <tabstop>checkPhone</tabstop>
   <tabstop>lineMail</tabstop>

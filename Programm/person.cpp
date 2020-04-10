@@ -74,6 +74,9 @@ Person::Person(QJsonObject o, ManagerPersonal *man) : QObject()
     ausbildungTf = o.value("ausTf").toBool();
     tauglichkeit = QDate::fromString(o.value("tauglichkeit").toString(), "yyyy-MM-dd");
 
+    strasse = o.value("strasse").toString();
+    plz = o.value("plz").toString();
+    ort = o.value("ort").toString();
     mail = o.value("mail").toString();
     mailOK = o.value("mailOK").toBool(true);
     telefon = o.value("tel").toString();
@@ -134,6 +137,9 @@ void Person::personConstructor(QString vn, QString nn, ManagerPersonal *man, QSt
     ausbildungRangierer = false;
     tauglichkeit = QDate();
 
+    strasse = "";
+    plz = "";
+    ort = "";
     mail = "";
     mailOK = true;
     telefon = "";
@@ -178,6 +184,9 @@ QJsonObject Person::personalToJson()
     o.insert("ausRang", ausbildungRangierer);
     o.insert("tauglichkeit", tauglichkeit.toString("yyyy-MM-dd"));
 
+    o.insert("strasse", strasse);
+    o.insert("plz", plz);
+    o.insert("ort", ort);
     o.insert("mail", mail);
     o.insert("mailOK", mailOK);
     o.insert("tel", telefon);
@@ -349,11 +358,41 @@ bool Person::isAusgetreten()
     return (austritt <= QDate::currentDate());
 }
 
+QString Person::getPLZ() const
+{
+    return plz;
+}
+
+void Person::setPLZ(const QString &value)
+{
+    plz = value;
+}
+
+QString Person::getOrt() const
+{
+    return ort;
+}
+
+void Person::setOrt(const QString &value)
+{
+    ort = value;
+}
+
+QString Person::getStrasse() const
+{
+    return strasse;
+}
+
+void Person::setStrasse(const QString &value)
+{
+    strasse = value;
+}
+
 void Person::berechne()
 {
     zeiten.clear();
     zeiten.insert(Anzahl, activities.size());
-
+    
     QDate today = QDate::currentDate();
     for(AActivity *a: activities.keys()) {
         if (a->getDatum() <= today) {

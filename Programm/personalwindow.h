@@ -101,12 +101,14 @@ private slots:
 
     void on_checkAktiv_clicked(bool checked);
 
-    void on_linePhone_textChanged(const QString &arg1);
+    void on_lineStrasse_textChanged(const QString &arg1);
+    void on_linePLZ_textChanged(const QString &arg1);
+    void on_lineOrt_textChanged(const QString &arg1);
 
+    void on_linePhone_textChanged(const QString &arg1);
     void on_checkPhone_clicked(bool checked);
 
     void on_lineMail_textChanged(const QString &arg1);
-
     void on_checkMail_clicked(bool checked);
 
     void on_dateDienst_dateChanged(const QDate &date);

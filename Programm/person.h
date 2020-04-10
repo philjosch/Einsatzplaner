@@ -96,6 +96,15 @@ public:
 
     bool isAusgetreten();
 
+    QString getPLZ() const;
+    void setPLZ(const QString &value);
+
+    QString getOrt() const;
+    void setOrt(const QString &value);
+
+    QString getStrasse() const;
+    void setStrasse(const QString &value);
+
 protected:
     // Stammdaten
     QString id;
@@ -112,6 +121,9 @@ protected:
     bool ausbildungRangierer;
     QDate tauglichkeit;
     // Kontakt
+    QString plz;
+    QString ort;
+    QString strasse;
     QString mail;
     bool mailOK;
     QString telefon;

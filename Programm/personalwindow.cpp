@@ -74,6 +74,9 @@ void PersonalWindow::showPerson(Person *p)
     ui->lineJob->setText(p->getBeruf());
 
     // Kontakt
+    ui->lineStrasse->setText(p->getStrasse());
+    ui->linePLZ->setText(p->getPLZ());
+    ui->lineOrt->setText(p->getOrt());
     ui->linePhone->setText(p->getTelefon());
     ui->checkPhone->setChecked(p->getTelefonOK());
     ui->lineMail->setText(p->getMail());
@@ -536,6 +539,9 @@ void PersonalWindow::toggleFields(bool state)
     ui->checkZf->setEnabled(state);
     ui->dateDienst->setEnabled(state);
 
+    ui->lineStrasse->setEnabled(state);
+    ui->linePLZ->setEnabled(state);
+    ui->lineOrt->setEnabled(state);
     ui->lineMail->setEnabled(state);
     ui->checkMail->setEnabled(state);
     ui->linePhone->setEnabled(state);
@@ -862,6 +868,30 @@ void PersonalWindow::on_checkAktiv_clicked(bool checked)
     if (enabled) {
         aktuellePerson->setAktiv(checked);
         on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
+        emit changed();
+    }
+}
+
+void PersonalWindow::on_lineStrasse_textChanged(const QString &arg1)
+{
+    if (enabled) {
+        aktuellePerson->setStrasse(arg1);
+        emit changed();
+    }
+}
+
+void PersonalWindow::on_linePLZ_textChanged(const QString &arg1)
+{
+    if (enabled) {
+        aktuellePerson->setPLZ(arg1);
+        emit changed();
+    }
+}
+
+void PersonalWindow::on_lineOrt_textChanged(const QString &arg1)
+{
+    if (enabled) {
+        aktuellePerson->setOrt(arg1);
         emit changed();
     }
 }
