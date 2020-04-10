@@ -68,15 +68,11 @@ QJsonObject FileIO::getJsonFromFile(QString filepath)
 bool FileIO::saveJsonToFile(QString filepath, QJsonObject object, bool showInMenu)
 {
     QJsonDocument saveDoc = QJsonDocument(object);
-    QFile datei(filepath);
-    if (!datei.open(QIODevice::WriteOnly)) {
-        return false;
-    } else {
-        datei.write(saveDoc.toJson());
-        datei.close();
+    if (saveToFile(filepath, saveDoc.toJson())) {
         if (showInMenu) insert(filepath);
         return true;
     }
+    return false;
 }
 
 QStringList FileIO::getLastUsed()
@@ -89,6 +85,17 @@ void FileIO::clearLastUsed()
 {
     lastUsed = QStringList();
     saveSettings();
+}
+
+bool FileIO::saveToFile(QString path, QString content)
+{
+    QFile datei(path);
+    if (datei.open(QIODevice::WriteOnly)) {
+        datei.write(content.toUtf8());
+        datei.close();
+        return true;
+    }
+    return false;
 }
 
 void FileIO::insert(QString filepath)

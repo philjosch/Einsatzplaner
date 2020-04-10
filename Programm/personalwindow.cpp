@@ -450,43 +450,37 @@ void PersonalWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 
 void PersonalWindow::on_pushPDF_clicked()
 {
-    QPrinter *pdf = nullptr;
-    pdf = Export::getPrinterPDF(this, "Personal-Gesamt.pdf");
+    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Gesamt.pdf");
     print(pdf);
 }
 
 void PersonalWindow::on_pushPrint_clicked()
 {
-    QPrinter *paper = nullptr;
-    paper = Export::getPrinterPaper(this);
+    QPrinter *paper = Export::getPrinterPaper(this);
     print(paper);
 }
 
 void PersonalWindow::on_actionSinglePrint_triggered()
 {
-    QPrinter *paper = nullptr;
-    paper = Export::getPrinterPaper(this);
+    QPrinter *paper = Export::getPrinterPaper(this);
     Export::printPerson(manager, aktuellePerson, paper);
 }
 
 void PersonalWindow::on_actionSinglePDF_triggered()
 {
-    QPrinter *pdf = nullptr;
-    pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf");
+    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf");
     Export::printPerson(manager, aktuellePerson, pdf);
 }
 
 void PersonalWindow::on_pushPDFEinzel_clicked()
 {
-    QPrinter *pdf = nullptr;
-    pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf");
+    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf");
     Export::printPerson(manager, pdf);
 }
 
 void PersonalWindow::on_pushPrintEinzel_clicked()
 {
-    QPrinter *paper = nullptr;
-    paper = Export::getPrinterPaper(this);
+    QPrinter *paper = Export::getPrinterPaper(this);
     Export::printPerson(manager, paper);
 }
 
@@ -1020,11 +1014,24 @@ void PersonalWindow::on_pushEmail_clicked()
 {
     QString s = "mailto:?bcc=";
     QStringList mails;
+    QList<Person*> keineMail;
     foreach (Person *p, current) {
-        mails.append(p->getMail());
+        if (p->getMail() != "") {
+            mails.append(p->getMail());
+        } else {
+            keineMail.append(p);
+        }
     }
     s += mails.join(",");
     QDesktopServices::openUrl(QUrl(s));
-    //"mailto:info-gs@ostertalbahn.de?cc=ako@ostertalbahn.de&bcc=philjosch@t-online.de,philipp.hio@t-online.de"));
+    if (keineMail.isEmpty()) return;
 
+    if (QMessageBox::question(this, tr("Personen ohne E-Mail gefunden"), tr("Für %1 Personen ist keine E-Mail-Adresse hinterlegt.\nMöchten Sie die Liste der Personen speichern?").arg(keineMail.size())) == QMessageBox::Yes) {
+        s = "Name;Straße;PLZ;Ort\n";
+        foreach(Person *p, keineMail) {
+            s += p->getName() + ";"+p->getStrasse()+";"+p->getPLZ()+";"+p->getOrt()+"\n";
+        }
+        QString path = FileIO::getFilePathSave(this, "Adressen.csv", tr("CSV-Datei (*.csv)"));
+        FileIO::saveToFile(path, s);
+    }
 }

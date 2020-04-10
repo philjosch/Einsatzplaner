@@ -398,7 +398,7 @@ QComboBox *AActivity::generateNewCategoryComboBox()
                                      getLocalizedStringFromCategory(Ausbildung),
                                      getLocalizedStringFromCategory(Infrastruktur),
                                      getLocalizedStringFromCategory(Sonstiges)}));
-    box->setCurrentIndex(9);
+    box->setCurrentIndex(10);
     return box;
 }
 
