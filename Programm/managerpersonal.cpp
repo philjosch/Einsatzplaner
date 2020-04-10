@@ -267,6 +267,36 @@ QListIterator<Person *> ManagerPersonal::getPersonen() const
     return i;
 }
 
+QList<Person *> ManagerPersonal::getPersonenSortiertNachName()
+{
+    QList<Person *> l;
+    int i = 0;
+    foreach (Person *p, personen) {
+        l.append(p);
+        i = l.size()-1;
+        while(i > 0 && l.at(i-1)->getName() > l.at(i)->getName()) {
+            l.swapItemsAt(i, i-1);
+            i--;
+        }
+    }
+    return l;
+}
+
+QList<Person *> ManagerPersonal::getPersonenSortiertNachNummer()
+{
+    QList<Person *> l;
+    int i = 0;
+    foreach (Person *p, personen) {
+        l.append(p);
+        i = l.size()-1;
+        while(i > 0 && l.at(i-1)->getNummer() > l.at(i)->getNummer()) {
+            l.swapItemsAt(i, i-1);
+            i--;
+        }
+    }
+    return l;
+}
+
 void ManagerPersonal::berechne()
 {
     time.clear();

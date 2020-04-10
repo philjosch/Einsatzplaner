@@ -635,6 +635,89 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     return html;
 }
 
+QString Person::getHtmlForMitgliederListe()
+{
+    QString h = "<tr>";
+    h += "<td>"+getName() + "<br/>"+QString::number(nummer)+"</td>";
+
+    // Daten
+    h += "<td>"+geburtstag.toString("dd.MM.yyyy")+"<br/>"+eintritt.toString("dd.MM.yyyy");
+    if (isAusgetreten()) {
+        h += austritt.toString("-dd.MM.yyyy");
+    } else {
+        if (aktiv) h += " Aktiv";
+        else h += " Passiv";
+        if (!austritt.isNull())
+            h += "<br/>Austritt zum: "+austritt.toString("dd.MM.yyyy");
+    }
+    if (beruf != "")
+        h += "<br/>"+beruf;
+    h += "</td>";
+
+    // Kontakt
+    h += "<td>"+strasse + "<br/>"+plz + " "+ ort + "<br/><br/>";
+    if (mail != "") {
+        if (mailOK)
+            h += mail;
+        else
+            h += "("+mail+")";
+    }
+    h += "<br/>";
+    if (telefon != "") {
+        if (telefonOK)
+            h += telefon;
+        else
+            h += "("+telefon+")";
+    }
+    h += "</td>";
+
+    // Betriebsdienst
+    h = h + "<td>"+ (ausbildungTf? "Triebfahrzeugführer<br/>":"<br/>")
+            + (ausbildungZf? "Zugführer<br/>":"<br/>")
+            + (ausbildungRangierer? "Rangierer<br/>":"<br/>")
+            + tauglichkeit.toString("dd.MM.yyyy")
+            + "</td>";
+
+    // Sonstiges
+    h += "<td>";
+    if (strecke > 0) {
+        h += QString::number(strecke)+"km<br/>";
+    }
+    h += bemerkungen + "</td>";
+
+    h += "</tr>";
+    return h;
+}
+
+QString Person::getCSV()
+{
+    return QString::number(nummer)
+            +"|"+nachname
+            +"|"+vorname
+            +"|"+geburtstag.toString("dd.MM.yyyy")
+            +"|"+eintritt.toString("dd.MM.yyyy")
+            +"|"+(aktiv?"Aktiv":"Passiv")
+            +"|"+austritt.toString("dd.MM.yyyy")
+
+            +"|"+(ausbildungTf ? "WAHR":"FALSCH")
+            +"|"+(ausbildungZf ? "WAHR":"FALSCH")
+            +"|"+(ausbildungRangierer ? "WAHR":"FALSCH")
+            +"|"+tauglichkeit.toString("dd.MM.yyyy")
+
+            +"|"+strasse
+            +"|"+plz
+            +"|"+ort
+            +"|"+mail
+            +"|"+(mailOK ? "WAHR" : "FALSCH")
+            +"|"+telefon
+            +"|"+(telefonOK ? "WAHR" : "FALSCH")
+
+            +"|"+QString::number(strecke)
+            +"|"+beruf
+            +"|"+bemerkungen.replace("\n","<br/>")
+            +"\n";
+}
+
 int Person::getAdditional(Category cat)
 {
     return additional.value(cat, 0);

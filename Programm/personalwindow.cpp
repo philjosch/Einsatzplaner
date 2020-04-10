@@ -3,6 +3,7 @@
 #include "person.h"
 #include "export.h"
 #include "minimumhourseditordialog.h"
+#include "fileio.h"
 
 #include <QMessageBox>
 #include <math.h>
@@ -470,6 +471,24 @@ void PersonalWindow::on_actionSinglePDF_triggered()
 {
     QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf");
     Export::printPerson(manager, aktuellePerson, pdf);
+}
+
+void PersonalWindow::on_actionMitgliederDrucken_triggered()
+{
+    QPrinter *paper = Export::getPrinterPaper(this);
+    Export::printMitglieder(manager->getPersonenSortiertNachNummer(), paper);
+}
+
+void PersonalWindow::on_actionMitgliederPDF_triggered()
+{
+    QPrinter *pdf = Export::getPrinterPDF(this, "Mitgliederliste.pdf");
+    Export::printMitglieder(manager->getPersonenSortiertNachNummer(), pdf);
+}
+
+void PersonalWindow::on_actionMitgliederCSV_triggered()
+{
+    QString path = FileIO::getFilePathSave(this, "Mitglieder.csv", tr("CSV-Datei (*.csv)"));
+    Export::csvMitglieder(manager->getPersonenSortiertNachNummer(), path);
 }
 
 void PersonalWindow::on_pushPDFEinzel_clicked()

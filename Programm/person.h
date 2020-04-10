@@ -30,6 +30,9 @@ public:
 
     QString getHtmlForTableView(QList<Category> liste);
     QString getHtmlForDetailPage(ManagerPersonal *m);
+    QString getHtmlForMitgliederListe();
+
+    QString getCSV();
 
     int getAdditional(Category cat);
     void setAdditional(Category cat, int value);

@@ -46,6 +46,8 @@ public:
     static int getMinimumHoursDefault(Category kat);
 
     QListIterator<Person *> getPersonen() const;
+    QList<Person *> getPersonenSortiertNachName();
+    QList<Person *> getPersonenSortiertNachNummer();
 
     void berechne();
 

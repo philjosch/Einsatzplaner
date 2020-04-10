@@ -32,6 +32,10 @@ public:
     static bool printPerson(ManagerPersonal *m, Person *p, QPrinter *printer);
     static bool printPersonen(QList<Person *> *personen, QMap<Category, int> gesamt, QList<Category> data, QPrinter *printer);
 
+    // Mitgliederlisten
+    static bool printMitglieder(QList<Person*> p, QPrinter *printer);
+    static bool csvMitglieder(QList<Person*> p, QString path);
+
     // Allgemeines
     static QPrinter *getPrinterPaper(QWidget *parent);
     static QPrinter *getPrinterPDF(QWidget *parent, QString path);

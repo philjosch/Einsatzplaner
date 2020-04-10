@@ -327,6 +327,50 @@ bool Export::printPersonen(QList<Person *> *personen, QMap<Category, int> gesamt
     return true;
 }
 
+bool Export::printMitglieder(QList<Person *> p, QPrinter *printer)
+{
+    if (printer == nullptr) return false;
+    preparePrinterLandscape(printer);
+    QTextDocument *d = new QTextDocument();
+    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
+                            "table { border-width: 1px; border-style: solid; border-color: black; }"
+                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
+                            "table tr, table td { page-break-inside: avoid; }"
+                            "table tfoot tr, table tfoot td { border-width: 2px; }"
+                            "ul { -qt-list-indent: 0; }"
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
+    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
+    d->setDocumentMargin(0);
+
+    QString a = "<h3>Mitgliederliste – Stand "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</h3>"
+                "<table cellspacing='0' width='100%'><thead><tr>"
+                "<th>Name<br/>Mitgliedsnummer</th>"
+                "<th>Geburtsdatum<br/>Eintritt<br/>Beruf</th>"
+                "<th>Anschrift<br/>E-Mail<br/>Telefon</th>"
+                "<th>Betriebsdienst</th>"
+                "<th>Sonstiges</th>";
+    a += "</thead><tbody>";
+    foreach(Person *akt, p) {
+        a += akt->getHtmlForMitgliederListe();
+    }
+
+    a += "</tbody></table>";
+    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+    d->setHtml(a);
+
+    d->print(printer);
+    return true;
+}
+
+bool Export::csvMitglieder(QList<Person *> p, QString path)
+{
+    QString t = "Nummer;Nachname;Vorname;Geburtsdatum;Eintritt;Status;Austritt;Tf;Zf;Rangierer;Tauglichkeit;Straße;PLZ;Ort;Mail;Zustimmung Mail;Telefon;Zustimmung Telefon;Strecke;Beruf;Bemerkung\n";
+    foreach(Person *akt, p) {
+        t += akt->getCSV();
+    }
+    return FileIO::saveToFile(path, t);
+}
+
 QPrinter *Export::getPrinterPaper(QWidget *parent)
 {
     QPrinter *p = new QPrinter();
