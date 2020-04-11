@@ -199,14 +199,14 @@ void ActivityWindow::on_actionDelete_triggered()
 
 void ActivityWindow::on_actionPrint_triggered()
 {
-    QPrinter *p = Export::getPrinterPaper(this);
-    Export::print(activity, p);
+    QPrinter *p = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
+    Export::printEinzelansichten({activity}, p);
 }
 
 void ActivityWindow::on_actionPdf_triggered()
 {
-    QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf");
-    Export::print(activity, p);
+    QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf", QPrinter::Orientation::Portrait);
+    Export::printEinzelansichten({activity}, p);
 }
 
 void ActivityWindow::on_buttonDelete_clicked()

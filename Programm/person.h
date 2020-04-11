@@ -28,7 +28,7 @@ public:
     QListIterator<AActivity *> *getActivities();
 
 
-    QString getHtmlForTableView(QList<Category> liste);
+    QString getHtmlForTableView(QSet<Category> liste);
     QString getHtmlForDetailPage();
     QString getHtmlForMitgliederListe();
 

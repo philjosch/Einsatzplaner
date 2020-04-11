@@ -141,7 +141,7 @@ private:
     QHash<QListWidgetItem*, Person*> itemToPerson;
     QHash<Person*, QListWidgetItem*> personToItem;
 
-    QSet<Category> *anzeige;
+    QSet<Category> anzeige;
 
     void print(QPrinter *p);
     void toggleFields(bool state);

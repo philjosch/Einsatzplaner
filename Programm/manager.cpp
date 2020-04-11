@@ -98,6 +98,33 @@ QListIterator<AActivity *> Manager::getActivities() const
     return i;
 }
 
+QString Manager::getHtmlFuerListenansicht(QList<AActivity *> liste)
+{
+    QString a = "<h3>Übersicht über die Aktivitäten</h3>"
+                "<table cellspacing='0' width='100%'><thead><tr>"
+                "<th>Datum, Anlass</th> <th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th>"
+                "<th>Service</th> <th>Dienstzeiten</th> <th>Sonstiges</th></tr></thead><tbody>";
+    for(AActivity *akt: liste) {
+        a += akt->getHtmlForTableView();
+    }
+    a += "</tbody></table>";
+    return a;
+
+}
+
+QString Manager::getHtmlFuerEinzelansichten(QList<AActivity *> liste)
+{
+    QString html = "";
+    for(AActivity *a: liste) {
+        html += a->getHtmlForSingleView();
+        if(liste.last() != a)
+            html += "<p class='last'><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
+        else
+            html += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
+    }
+    return html;
+}
+
 void Manager::update(int pos)
 {
     // Verschieb das Objekt an Stelle pos an die Richtige Stelle, sodass später schneller darauf zugegriffen werden kann

@@ -33,7 +33,7 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     }
     refreshEinzel();
 
-    anzeige = new QSet<Category>();
+    anzeige = QSet<Category>();
     ui->checkShowGesamt->setChecked(true);
     ui->checkShowAnzahl->setChecked(true);
     ui->checkShowKilometer->setChecked(true);
@@ -218,7 +218,7 @@ void PersonalWindow::refreshGesamt()
 
     for(int i = ANZEIGEREIHENFOLGEGESAMT.length()-1; i >= 0; --i) {
         Category curr = ANZEIGEREIHENFOLGEGESAMT.at(i);
-        if (! anzeige->contains(curr)) continue;
+        if (! anzeige.contains(curr)) continue;
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(getLocalizedStringFromCategory(curr)));
         if (origSortName == getLocalizedStringFromCategory(curr)) newSort = 2;
@@ -239,7 +239,7 @@ void PersonalWindow::refreshGesamt()
 
     int pos = 2;
     foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
-        if (! anzeige->contains(cat)) continue;
+        if (! anzeige.contains(cat)) continue;
         ii = new QTableWidgetItem();
         ii->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
         switch(cat) {
@@ -279,7 +279,7 @@ void PersonalWindow::refreshGesamt()
 
         pos = 2;
         foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
-            if (! anzeige->contains(cat)) continue;
+            if (! anzeige.contains(cat)) continue;
             i = new QTableWidgetItem();
             i->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
             switch (cat) {
@@ -456,90 +456,66 @@ void PersonalWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 
 void PersonalWindow::on_pushPDF_clicked()
 {
-    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Gesamt.pdf");
+    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Gesamt.pdf", QPrinter::Orientation::Landscape);
     print(pdf);
 }
-
 void PersonalWindow::on_pushPrint_clicked()
 {
-    QPrinter *paper = Export::getPrinterPaper(this);
+    QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Landscape);
     print(paper);
 }
 
 void PersonalWindow::on_actionSinglePrint_triggered()
 {
-    QPrinter *paper = Export::getPrinterPaper(this);
+    QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
     Export::printPerson(aktuellePerson, paper);
 }
-
 void PersonalWindow::on_actionSinglePDF_triggered()
 {
-    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf");
+    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf", QPrinter::Orientation::Portrait);
     Export::printPerson(aktuellePerson, pdf);
 }
 
 void PersonalWindow::on_actionMitgliederDrucken_triggered()
 {
-    QPrinter *paper = Export::getPrinterPaper(this);
-    Export::printMitglieder(manager->getPersonenSortiertNachNummer(), paper);
+    QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Landscape);
+    Export::printMitglieder(manager, paper);
 }
-
 void PersonalWindow::on_actionMitgliederPDF_triggered()
 {
-    QPrinter *pdf = Export::getPrinterPDF(this, "Mitgliederliste.pdf");
-    Export::printMitglieder(manager->getPersonenSortiertNachNummer(), pdf);
+    QPrinter *pdf = Export::getPrinterPDF(this, "Mitgliederliste.pdf", QPrinter::Orientation::Portrait);
+    Export::printMitglieder(manager, pdf);
 }
 
 void PersonalWindow::on_actionMitgliederCSV_triggered()
 {
     QString path = FileIO::getFilePathSave(this, "Mitglieder.csv", tr("CSV-Datei (*.csv)"));
-    Export::csvMitglieder(manager->getPersonenSortiertNachNummer(), path);
+    FileIO::saveToFile(path, manager->getCSVnachNummer());
 }
 
 void PersonalWindow::on_pushPDFEinzel_clicked()
 {
-    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf");
+    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf", QPrinter::Orientation::Portrait);
     Export::printPerson(manager, pdf);
 }
-
 void PersonalWindow::on_pushPrintEinzel_clicked()
 {
-    QPrinter *paper = Export::getPrinterPaper(this);
+    QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
     Export::printPerson(manager, paper);
 }
 
 void PersonalWindow::print(QPrinter *p)
 {
-    refreshGesamt();
-    QList<Person*> *liste = new QList<Person*>();
-
+    QList<Person*> aktuelleSortierung = QList<Person*>();
     for(int i = 0; i < ui->tabelleGesamt->rowCount(); i++) {
         QString name = ui->tabelleGesamt->item(i, 0)->text();
         if (name != "") name += " ";
         name += ui->tabelleGesamt->item(i, 1)->text();
         Person *pers = manager->getPerson(name);
         if (pers != nullptr)
-            liste->append(pers);
+            aktuelleSortierung.append(pers);
     }
-    QMap<Category, int> gesamt = QMap<Category, int>();
-    gesamt.insert(Category::Gesamt, manager->getTime(Gesamt));
-    gesamt.insert(Category::Anzahl, 0);
-    gesamt.insert(Category::Tf, manager->getTime(Tf));
-    gesamt.insert(Category::Zf, manager->getTime(Zf));
-    gesamt.insert(Category::Zub, manager->getTime(Zub));
-    gesamt.insert(Category::Service, manager->getTime(Service));
-    gesamt.insert(Category::ZugVorbereiten, manager->getTime(ZugVorbereiten));
-    gesamt.insert(Category::Werkstatt, manager->getTime(Werkstatt));
-    gesamt.insert(Category::Buero, manager->getTime(Buero));
-    gesamt.insert(Category::Ausbildung, manager->getTime(Ausbildung));
-    gesamt.insert(Category::Infrastruktur, manager->getTime(Infrastruktur));
-    gesamt.insert(Category::Sonstiges, manager->getTime(Sonstiges));
-    gesamt.insert(Category::Kilometer, manager->getTime(Kilometer));
-    QList<Category> anzeigeListe = QList<Category>();
-    foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
-        if (anzeige->contains(cat)) anzeigeListe.append(cat);
-    }
-    Export::printPersonen(liste, anzeigeListe, p);
+    Export::printPersonenGesamtuebersicht(aktuelleSortierung, anzeige, p);
 }
 
 void PersonalWindow::toggleFields(bool state)
@@ -629,92 +605,92 @@ void PersonalWindow::on_tabWidgetMain_tabBarClicked(int index)
 
 void PersonalWindow::on_checkShowGesamt_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::Gesamt);
-    else anzeige->remove(Category::Gesamt);
+    if (checked) anzeige.insert(Category::Gesamt);
+    else anzeige.remove(Category::Gesamt);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowAnzahl_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::Anzahl);
-    else anzeige->remove(Category::Anzahl);
+    if (checked) anzeige.insert(Category::Anzahl);
+    else anzeige.remove(Category::Anzahl);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowTf_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::Tf);
-    else anzeige->remove(Category::Tf);
+    if (checked) anzeige.insert(Category::Tf);
+    else anzeige.remove(Category::Tf);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowZf_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::Zf);
-    else anzeige->remove(Category::Zf);
+    if (checked) anzeige.insert(Category::Zf);
+    else anzeige.remove(Category::Zf);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowZub_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::Zub);
-    else anzeige->remove(Category::Zub);
+    if (checked) anzeige.insert(Category::Zub);
+    else anzeige.remove(Category::Zub);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowService_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::Service);
-    else anzeige->remove(Category::Service);
+    if (checked) anzeige.insert(Category::Service);
+    else anzeige.remove(Category::Service);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowVorbereiten_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::ZugVorbereiten);
-    else anzeige->remove(Category::ZugVorbereiten);
+    if (checked) anzeige.insert(Category::ZugVorbereiten);
+    else anzeige.remove(Category::ZugVorbereiten);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowWerkstatt_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::Werkstatt);
-    else anzeige->remove(Category::Werkstatt);
+    if (checked) anzeige.insert(Category::Werkstatt);
+    else anzeige.remove(Category::Werkstatt);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowBuero_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::Buero);
-    else anzeige->remove(Category::Buero);
+    if (checked) anzeige.insert(Category::Buero);
+    else anzeige.remove(Category::Buero);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowAusbildung_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::Ausbildung);
-    else anzeige->remove(Category::Ausbildung);
+    if (checked) anzeige.insert(Category::Ausbildung);
+    else anzeige.remove(Category::Ausbildung);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowInfrastruktur_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::Infrastruktur);
-    else anzeige->remove(Category::Infrastruktur);
+    if (checked) anzeige.insert(Category::Infrastruktur);
+    else anzeige.remove(Category::Infrastruktur);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowSonstiges_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::Sonstiges);
-    else anzeige->remove(Category::Sonstiges);
+    if (checked) anzeige.insert(Category::Sonstiges);
+    else anzeige.remove(Category::Sonstiges);
     refreshGesamt();
 }
 
 void PersonalWindow::on_checkShowKilometer_clicked(bool checked)
 {
-    if (checked) anzeige->insert(Category::Kilometer);
-    else anzeige->remove(Category::Kilometer);
+    if (checked) anzeige.insert(Category::Kilometer);
+    else anzeige.remove(Category::Kilometer);
     refreshGesamt();
 }
 

@@ -487,7 +487,7 @@ void Person::setNachname(const QString &value)
     emit nameChanged(this, old);
 }
 
-QString Person::getHtmlForTableView(QList<Category> liste)
+QString Person::getHtmlForTableView(QSet<Category> liste)
 {
     QString html = "<tr><td style='background-color:";
     switch (manager->pruefeStunden(this)) {
@@ -502,7 +502,8 @@ QString Person::getHtmlForTableView(QList<Category> liste)
     }
     html += "'>"+getName()+"</td>";
 
-    foreach (Category cat, liste) {
+    foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+        if (!liste.contains(cat)) continue;
         html += "<td align='right' style='background-color:"+(manager->checkHours(this, cat) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+(get(cat) > 0? getStringShort(cat): "")+"</td>";
     }
     html += "</tr>";

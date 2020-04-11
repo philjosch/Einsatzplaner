@@ -2,6 +2,7 @@
 #define MANAGERPERSONAL_H
 
 #include <QJsonObject>
+#include <QObject>
 #include <QSet>
 
 #include "basics.h"
@@ -58,8 +59,10 @@ public:
     int getNextNummer();
     bool checkNummer(int neu);
 
-    static QString getHtmlFuerGesamtuebersicht(QList<Person *> *personen, QList<Category> spalten);
     QString getHtmlFuerEinzelansicht();
+    static QString getHtmlFuerGesamtuebersicht(QList<Person *> personen, QSet<Category> spalten);
+    QString getCSVnachNummer();
+    QString getHtmlFuerMitgliederliste();
 
 public slots:
     void personChangedName(Person *p, QString alt);

@@ -73,20 +73,20 @@ void ExportGesamt::hardReload()
 void ExportGesamt::on_pushDrucken_clicked()
 {
     // Erstelle eine liste mit den Objekten für die Einzelansicht
-    QList<AActivity*> *listeEinzel = new QList<AActivity*>();
+    QList<AActivity*> listeEinzel = QList<AActivity*>();
     // Erstelle eine Liste für die Listenansicht
-    QList<AActivity*> *listeListe = new QList<AActivity*>();
+    QList<AActivity*> listeListe = QList<AActivity*>();
     for (AActivity *a: liste) {
         if(! actToList.value(a)->isHidden()) {
-            listeListe->append(a);
+            listeListe.append(a);
             if (actToList.value(a)->isSelected()) {
-                listeEinzel->append(a);
+                listeEinzel.append(a);
             }
         }
     }
 
     // Lasse einene Drucker auswählen
-    if (ui->checkListe->isChecked() && listeListe->length() > 0) {
+    if (ui->checkListe->isChecked() && listeListe.length() > 0) {
         if (ui->checkUpload->isChecked()) {
             if (Export::uploadToServer(settings, listeListe)) {
                 QMessageBox::information(nullptr, tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
@@ -96,15 +96,15 @@ void ExportGesamt::on_pushDrucken_clicked()
         }
 
         if (ui->checkPDF->isChecked())
-            Export::printList(listeListe, Export::getPrinterPDF(p, "Listenansicht.pdf"));
+            Export::printList(listeListe, Export::getPrinterPDF(p, "Listenansicht.pdf", QPrinter::Orientation::Landscape));
         if (ui->checkAusdruck->isChecked())
-            Export::printList(listeListe, Export::getPrinterPaper(p));
+            Export::printList(listeListe, Export::getPrinterPaper(p, QPrinter::Orientation::Landscape));
     }
-    if (ui->checkEinzel->isChecked() && listeEinzel->length() > 0) {
+    if (ui->checkEinzel->isChecked() && listeEinzel.length() > 0) {
         if (ui->checkPDF->isChecked())
-            Export::printSingle(listeEinzel, Export::getPrinterPDF(p, "Einzelansicht.pdf"));
+            Export::printEinzelansichten(listeEinzel, Export::getPrinterPDF(p, "Einzelansicht.pdf", QPrinter::Orientation::Portrait));
         if (ui->checkAusdruck->isChecked())
-            Export::printSingle(listeEinzel, Export::getPrinterPaper(p));
+            Export::printEinzelansichten(listeEinzel, Export::getPrinterPaper(p, QPrinter::Orientation::Portrait));
     }
 }
 

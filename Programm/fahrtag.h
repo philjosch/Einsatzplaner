@@ -51,6 +51,8 @@ public:
     void emitter();
     void deletter();
 
+    QString getHtmlFuerReservierungsuebersicht();
+
 signals:
     void changed(AActivity *);
     void del(AActivity *);

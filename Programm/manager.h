@@ -20,6 +20,9 @@ public:
 
     QListIterator<AActivity *> getActivities() const;
 
+    static QString getHtmlFuerListenansicht(QList<AActivity *> liste);
+    static QString getHtmlFuerEinzelansichten(QList<AActivity *> liste);
+
 public slots:
     Fahrtag *newFahrtag(QDate datum);
     Activity *newActivity(QDate datum);

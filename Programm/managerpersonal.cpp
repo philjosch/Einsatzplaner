@@ -350,7 +350,7 @@ bool ManagerPersonal::checkNummer(int neu)
     return true;
 }
 
-QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> *personen, QList<Category> spalten)
+QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> personen, QSet<Category> spalten)
 {
     QString a = "<h3>Personalübersicht</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
@@ -370,7 +370,7 @@ QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> *personen, 
     a += "</thead><tbody>";
 
     QMap<Category, int> sum;
-    for(Person *p: *personen) {
+    for(Person *p: personen) {
         a += p->getHtmlForTableView(spalten);
         foreach (Category cat, spalten) {
             sum.insert(cat, sum.value(cat,0)+p->get(cat));
@@ -378,7 +378,8 @@ QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> *personen, 
     }
     a += "</tbody><tfoot><tr>";
     a += "<td>Summe:</td>";
-    foreach (Category cat, spalten) {
+    foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+        if (! spalten.contains(cat)) continue;
         switch (cat) {
         case Category::Anzahl:
         case Category::Kilometer:
@@ -416,16 +417,42 @@ QString ManagerPersonal::getHtmlFuerEinzelansicht()
     a += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
 
     // Add a papge for each person
-    QListIterator<Person*> iter = getPersonen();
-    while(iter.hasNext()) {
-        Person *akt = iter.next();
+    QList<Person *> personenSortiertNachName = getPersonenSortiertNachName();
+    foreach(Person *akt, personenSortiertNachName) {
         a += akt->getHtmlForDetailPage();
-        if (iter.hasNext()) {
+        if (akt != personenSortiertNachName.last()) {
             a += "<div style='page-break-after:always'>";
             a += "<p><small>Stand: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
         } else {
             a += "<p><small>Stand: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
         }
     }
+    return a;
+}
+
+QString ManagerPersonal::getCSVnachNummer()
+{
+    QString t = "Nummer;Nachname;Vorname;Geburtsdatum;Eintritt;Status;Austritt;Tf;Zf;Rangierer;Tauglichkeit;Straße;PLZ;Ort;Mail;Zustimmung Mail;Telefon;Zustimmung Telefon;Strecke;Beruf;Bemerkung\n";
+    foreach(Person *akt, getPersonenSortiertNachNummer()) {
+        t += akt->getCSV();
+    }
+    return t;
+}
+
+QString ManagerPersonal::getHtmlFuerMitgliederliste()
+{
+    QString a = "<h3>Mitgliederliste – Stand "+QDateTime::currentDateTime().toString("d.M.yyyy")+"</h3>"
+                "<table cellspacing='0' width='100%'><thead><tr>"
+                "<th>Name<br/>Mitgliedsnummer<br/>Status</th>"
+                "<th>Geburtsdatum<br/>Eintritt<br/>Beruf</th>"
+                "<th>Anschrift</th>"
+                "<th>E-Mail<br/>Telefon</th>"
+                "<th>Betriebsdienst</th>"
+                "<th>Sonstiges</th>"
+                "</thead><tbody>";
+    foreach(Person *akt, getPersonenSortiertNachNummer()) {
+        a += akt->getHtmlForMitgliederListe();
+    }
+    a += "</tbody></table>";
     return a;
 }
