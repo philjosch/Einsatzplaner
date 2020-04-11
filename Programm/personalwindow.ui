@@ -483,6 +483,13 @@
            </spacer>
           </item>
           <item row="2" column="4">
+           <widget class="QCheckBox" name="checkShowInfrastruktur">
+            <property name="text">
+             <string>Infrastruktur</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="5">
            <widget class="QCheckBox" name="checkShowSonstiges">
             <property name="minimumSize">
              <size>
@@ -501,13 +508,6 @@
             </property>
             <property name="checked">
              <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="5">
-           <widget class="QCheckBox" name="checkShowInfrastruktur">
-            <property name="text">
-             <string>Infrastruktur</string>
             </property>
            </widget>
           </item>
@@ -746,7 +746,7 @@
           <property name="movable">
            <bool>false</bool>
           </property>
-          <widget class="QWidget" name="tab">
+          <widget class="QWidget" name="tabStammdaten">
            <attribute name="title">
             <string>Stammdaten</string>
            </attribute>
@@ -764,11 +764,11 @@
              <number>0</number>
             </property>
             <item row="0" column="0">
-             <widget class="QToolBox" name="toolBox">
+             <widget class="QToolBox" name="toolBoxStammdaten">
               <property name="currentIndex">
                <number>0</number>
               </property>
-              <widget class="QWidget" name="page_4">
+              <widget class="QWidget" name="pageAllgemein">
                <property name="geometry">
                 <rect>
                  <x>0</x>
@@ -780,7 +780,7 @@
                <attribute name="label">
                 <string>Allgemein</string>
                </attribute>
-               <layout class="QGridLayout" name="gridLayout_10" columnstretch="0,0,1">
+               <layout class="QGridLayout" name="gridLayout_10" rowstretch="0,0,0,0,0,1" columnstretch="0,0,0,1">
                 <property name="leftMargin">
                  <number>6</number>
                 </property>
@@ -796,18 +796,51 @@
                 <property name="spacing">
                  <number>6</number>
                 </property>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_24">
+                <item row="3" column="0">
+                 <widget class="QLabel" name="labelEntfernung">
+                  <property name="statusTip">
+                   <string>Die Entfernung zum Heimatbahnhof. Wird benötigt, um die Strecke auszurechnen.</string>
+                  </property>
                   <property name="text">
-                   <string>Geburtstag</string>
+                   <string>Entfernung</string>
                   </property>
                   <property name="buddy">
-                   <cstring>dateBirth</cstring>
+                   <cstring>spinKm</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QCheckBox" name="checkGeburtstag">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Unbekannt</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="labelBeruf">
+                  <property name="text">
+                   <string>Beruf</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>lineJob</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QCheckBox" name="checkEintritt">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Unbekannt</string>
                   </property>
                  </widget>
                 </item>
                 <item row="0" column="1">
-                 <widget class="QDateEdit" name="dateBirth">
+                 <widget class="QDateEdit" name="dateGeburtstag">
                   <property name="enabled">
                    <bool>false</bool>
                   </property>
@@ -826,17 +859,17 @@
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QLabel" name="label_12">
+                 <widget class="QLabel" name="labelEintritt">
                   <property name="text">
                    <string>Eintritt</string>
                   </property>
                   <property name="buddy">
-                   <cstring>dateEntry</cstring>
+                   <cstring>dateEintritt</cstring>
                   </property>
                  </widget>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QDateEdit" name="dateEntry">
+                 <widget class="QDateEdit" name="dateEintritt">
                   <property name="enabled">
                    <bool>false</bool>
                   </property>
@@ -847,7 +880,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>19</day>
+                    <day>18</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -868,20 +901,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_2">
-                  <property name="statusTip">
-                   <string>Die Entfernung zum Heimatbahnhof. Wird benötigt, um die Strecke auszurechnen.</string>
-                  </property>
-                  <property name="text">
-                   <string>Entfernung</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>spinKm</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
+                <item row="3" column="1">
                  <widget class="QSpinBox" name="spinKm">
                   <property name="enabled">
                    <bool>false</bool>
@@ -903,20 +923,10 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_17">
-                  <property name="text">
-                   <string>Beruf</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>lineJob</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1" colspan="2">
+                <item row="4" column="1" colspan="3">
                  <widget class="QLineEdit" name="lineJob"/>
                 </item>
-                <item row="4" column="1">
+                <item row="5" column="1">
                  <spacer name="verticalSpacer">
                   <property name="orientation">
                    <enum>Qt::Vertical</enum>
@@ -929,7 +939,17 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="1" column="2">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="labelGeburtstag">
+                  <property name="text">
+                   <string>Geburtstag</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>dateGeburtstag</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
                  <widget class="QCheckBox" name="checkAktiv">
                   <property name="enabled">
                    <bool>false</bool>
@@ -939,9 +959,29 @@
                   </property>
                  </widget>
                 </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="labelAktiv">
+                  <property name="text">
+                   <string>Status</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <spacer name="horizontalSpacer_7">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="page_3">
+              <widget class="QWidget" name="pageKontakt">
                <property name="geometry">
                 <rect>
                  <x>0</x>
@@ -1090,7 +1130,7 @@
                 </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="page">
+              <widget class="QWidget" name="pageBetriebsdienst">
                <property name="geometry">
                 <rect>
                  <x>0</x>
@@ -1119,7 +1159,7 @@
                  <number>6</number>
                 </property>
                 <item row="0" column="0">
-                 <widget class="QLabel" name="label_3">
+                 <widget class="QLabel" name="labelAusbildung">
                   <property name="text">
                    <string>Ausbildung</string>
                   </property>
@@ -1135,27 +1175,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
-                 <widget class="QCheckBox" name="checkZf">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Zugführer</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QCheckBox" name="checkRangierer">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Rangierer</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="2">
+                <item row="2" column="3">
                  <spacer name="horizontalSpacer_2">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -1168,13 +1188,23 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_14">
-                  <property name="text">
-                   <string>Tauglichkeit</string>
+                <item row="2" column="1">
+                 <widget class="QCheckBox" name="checkRangierer">
+                  <property name="enabled">
+                   <bool>false</bool>
                   </property>
-                  <property name="buddy">
-                   <cstring>dateDienst</cstring>
+                  <property name="text">
+                   <string>Rangierer</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QCheckBox" name="checkZf">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Zugführer</string>
                   </property>
                  </widget>
                 </item>
@@ -1196,7 +1226,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>18</day>
+                    <day>17</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1227,38 +1257,83 @@
                   </property>
                  </spacer>
                 </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="labelDienst">
+                  <property name="text">
+                   <string>Tauglichkeit</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>dateDienst</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QCheckBox" name="checkDienst">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Unbekannt</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="page_2">
+              <widget class="QWidget" name="pageSonstiges">
                <property name="geometry">
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>264</width>
-                 <height>135</height>
+                 <width>427</width>
+                 <height>172</height>
                 </rect>
                </property>
                <attribute name="label">
                 <string>Sonstiges</string>
                </attribute>
-               <layout class="QGridLayout" name="gridLayout_13">
-                <property name="leftMargin">
-                 <number>6</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>6</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <property name="spacing">
-                 <number>6</number>
-                </property>
+               <layout class="QGridLayout" name="gridLayout_13" rowstretch="1,0,0" columnstretch="0,0,0,1">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="labelBemerkung">
+                  <property name="text">
+                   <string>Bemerkungen</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                  </property>
+                  <property name="buddy">
+                   <cstring>plainBemerkung</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1" colspan="3">
+                 <widget class="QPlainTextEdit" name="plainBemerkung">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="labelAustritt">
+                  <property name="text">
+                   <string>Austritt</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>dateAustritt</cstring>
+                  </property>
+                 </widget>
+                </item>
                 <item row="1" column="1">
-                 <widget class="QDateEdit" name="dateExit">
+                 <widget class="QCheckBox" name="checkAustritt">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Austritt zum</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QDateEdit" name="dateAustritt">
                   <property name="enabled">
                    <bool>false</bool>
                   </property>
@@ -1274,8 +1349,8 @@
                   <property name="minimumDate">
                    <date>
                     <year>1999</year>
-                    <month>11</month>
-                    <day>19</day>
+                    <month>1</month>
+                    <day>1</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1300,44 +1375,17 @@
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
-                    <width>165</width>
-                    <height>20</height>
+                    <width>40</width>
+                    <height>18</height>
                    </size>
                   </property>
                  </spacer>
                 </item>
-                <item row="0" column="1" colspan="3">
-                 <widget class="QPlainTextEdit" name="plainBemerkung">
+                <item row="2" column="1" colspan="2">
+                 <widget class="QPushButton" name="pushDelete">
                   <property name="enabled">
                    <bool>false</bool>
                   </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_23">
-                  <property name="text">
-                   <string>Bemerkungen</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                  </property>
-                  <property name="buddy">
-                   <cstring>plainBemerkung</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_13">
-                  <property name="text">
-                   <string>Austritt</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>dateExit</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QPushButton" name="pushDelete">
                   <property name="statusTip">
                    <string>Aktuelle Person löschen</string>
                   </property>
@@ -1352,7 +1400,7 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tabWidgetEinzelAktivities">
+          <widget class="QWidget" name="tabAktivitaeten">
            <attribute name="title">
             <string>Aktivitäten</string>
            </attribute>
@@ -1431,7 +1479,7 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tabWidgetEinzelZeiten">
+          <widget class="QWidget" name="tabZeiten">
            <attribute name="title">
             <string>Konto</string>
            </attribute>
@@ -1462,7 +1510,7 @@
              </widget>
             </item>
             <item row="0" column="3" rowspan="2">
-             <widget class="QLabel" name="label_32">
+             <widget class="QLabel" name="labelMin">
               <property name="text">
                <string>Min</string>
               </property>
@@ -1581,7 +1629,7 @@
              </widget>
             </item>
             <item row="4" column="0">
-             <widget class="QLabel" name="label_18">
+             <widget class="QLabel" name="labelZub">
               <property name="text">
                <string>Zub/Begl.o.b.A.</string>
               </property>
@@ -1591,7 +1639,7 @@
              </widget>
             </item>
             <item row="13" column="0">
-             <widget class="QLabel" name="label_28">
+             <widget class="QLabel" name="labelAnzahl">
               <property name="text">
                <string>Anzahl Einsätze</string>
               </property>
@@ -1634,7 +1682,7 @@
              </widget>
             </item>
             <item row="5" column="0">
-             <widget class="QLabel" name="label_6">
+             <widget class="QLabel" name="labelService">
               <property name="text">
                <string>Service</string>
               </property>
@@ -1644,7 +1692,7 @@
              </widget>
             </item>
             <item row="8" column="0">
-             <widget class="QLabel" name="label_8">
+             <widget class="QLabel" name="labelBuero">
               <property name="text">
                <string>Büro</string>
               </property>
@@ -1721,7 +1769,7 @@
              </widget>
             </item>
             <item row="7" column="0">
-             <widget class="QLabel" name="label_5">
+             <widget class="QLabel" name="labelWerkstatt">
               <property name="text">
                <string>Werkstatt</string>
               </property>
@@ -1731,7 +1779,7 @@
              </widget>
             </item>
             <item row="3" column="0">
-             <widget class="QLabel" name="label_7">
+             <widget class="QLabel" name="labelZf">
               <property name="text">
                <string>Zf</string>
               </property>
@@ -1812,7 +1860,7 @@
              </widget>
             </item>
             <item row="6" column="0">
-             <widget class="QLabel" name="label_19">
+             <widget class="QLabel" name="labelZugVorbereiten">
               <property name="text">
                <string>Zug Vorbereitung</string>
               </property>
@@ -1822,7 +1870,7 @@
              </widget>
             </item>
             <item row="0" column="2">
-             <widget class="QLabel" name="label_21">
+             <widget class="QLabel" name="labelSumme">
               <property name="text">
                <string>Summe</string>
               </property>
@@ -1832,7 +1880,7 @@
              </widget>
             </item>
             <item row="1" column="0" rowspan="2">
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="labelTf">
               <property name="text">
                <string>Tf/Tb</string>
               </property>
@@ -1864,7 +1912,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLabel" name="label_22">
+             <widget class="QLabel" name="labelZusaetzlich">
               <property name="statusTip">
                <string>Tragen Sie hier die zusätzlichen Stunden ein, die eine Person geleistet hat</string>
               </property>
@@ -1928,7 +1976,7 @@
              </widget>
             </item>
             <item row="11" column="0">
-             <widget class="QLabel" name="label_20">
+             <widget class="QLabel" name="labelSonstiges">
               <property name="text">
                <string>Sonstiges</string>
               </property>
@@ -2006,7 +2054,7 @@
              </widget>
             </item>
             <item row="14" column="0">
-             <widget class="QLabel" name="label_10">
+             <widget class="QLabel" name="labelStrecke">
               <property name="text">
                <string>Fahrstrecke</string>
               </property>
@@ -2042,7 +2090,7 @@
              </widget>
             </item>
             <item row="9" column="0">
-             <widget class="QLabel" name="label_11">
+             <widget class="QLabel" name="labelAusbildung_2">
               <property name="text">
                <string>Ausbildung</string>
               </property>
@@ -2139,7 +2187,7 @@
              </widget>
             </item>
             <item row="10" column="0">
-             <widget class="QLabel" name="label_35">
+             <widget class="QLabel" name="labelInfrastruktur">
               <property name="text">
                <string>Infrastruktur</string>
               </property>
@@ -2178,7 +2226,7 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_9">
+           <widget class="QLabel" name="labelGesamt_2">
             <property name="text">
              <string>Gesamt</string>
             </property>
@@ -2374,8 +2422,6 @@
   <tabstop>checkShowWerkstatt</tabstop>
   <tabstop>checkShowBuero</tabstop>
   <tabstop>checkShowAusbildung</tabstop>
-  <tabstop>checkShowSonstiges</tabstop>
-  <tabstop>checkShowInfrastruktur</tabstop>
   <tabstop>pushAktualisieren</tabstop>
   <tabstop>pushMindeststunden</tabstop>
   <tabstop>pushPDF</tabstop>
@@ -2388,9 +2434,8 @@
   <tabstop>lineID</tabstop>
   <tabstop>pushAutoID</tabstop>
   <tabstop>tabWidgetEinzel</tabstop>
-  <tabstop>dateBirth</tabstop>
-  <tabstop>dateEntry</tabstop>
-  <tabstop>checkAktiv</tabstop>
+  <tabstop>dateGeburtstag</tabstop>
+  <tabstop>dateEintritt</tabstop>
   <tabstop>spinKm</tabstop>
   <tabstop>lineJob</tabstop>
   <tabstop>lineStrasse</tabstop>
@@ -2405,7 +2450,7 @@
   <tabstop>checkRangierer</tabstop>
   <tabstop>dateDienst</tabstop>
   <tabstop>plainBemerkung</tabstop>
-  <tabstop>dateExit</tabstop>
+  <tabstop>dateAustritt</tabstop>
   <tabstop>pushDelete</tabstop>
   <tabstop>tabelle</tabstop>
   <tabstop>lineTf</tabstop>

@@ -67,8 +67,12 @@ void PersonalWindow::showPerson(Person *p)
 
     // ** Stammdaten
     // Allgemein
-    ui->dateBirth->setDate(p->getGeburtstag());
-    ui->dateEntry->setDate(p->getEintritt());
+    ui->checkGeburtstag->setChecked(p->getGeburtstag().isNull());
+    ui->dateGeburtstag->setEnabled(p->getGeburtstag().isValid());
+    ui->dateGeburtstag->setDate(p->getGeburtstag());
+    ui->checkEintritt->setChecked(p->getEintritt().isNull());
+    ui->dateEintritt->setEnabled(p->getEintritt().isValid());
+    ui->dateEintritt->setDate(p->getEintritt());
     ui->checkAktiv->setChecked(p->getAktiv());
     ui->spinKm->setValue(p->getStrecke());
     ui->lineJob->setText(p->getBeruf());
@@ -86,11 +90,16 @@ void PersonalWindow::showPerson(Person *p)
     ui->checkTf->setChecked(p->getAusbildungTf());
     ui->checkZf->setChecked(p->getAusbildungZf());
     ui->checkRangierer->setChecked(p->getAusbildungRangierer());
+
+    ui->checkDienst->setChecked(p->getTauglichkeit().isNull());
+    ui->dateDienst->setEnabled(p->getTauglichkeit().isValid());
     ui->dateDienst->setDate(p->getTauglichkeit());
 
     // Sonstiges
     ui->plainBemerkung->setPlainText(p->getBemerkungen());
-    ui->dateExit->setDate(p->getAustritt());
+    ui->checkAustritt->setChecked(p->getAustritt().isValid());
+    ui->dateAustritt->setEnabled(p->getAustritt().isValid());
+    ui->dateAustritt->setDate(p->getAustritt());
 
     // ** Aktivitaeten
     while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
@@ -524,14 +533,17 @@ void PersonalWindow::toggleFields(bool state)
     ui->pushAutoID->setEnabled(state);
     ui->lineVorname->setEnabled(state);
     ui->lineNachname->setEnabled(state);
-    ui->dateBirth->setEnabled(state);
-    ui->dateEntry->setEnabled(state);
+    ui->checkGeburtstag->setEnabled(state);
+    ui->dateGeburtstag->setEnabled(false);
+    ui->checkEintritt->setEnabled(state);
+    ui->dateEintritt->setEnabled(false);
     ui->checkAktiv->setEnabled(state);
 
     ui->checkRangierer->setEnabled(state);
     ui->checkTf->setEnabled(state);
     ui->checkZf->setEnabled(state);
-    ui->dateDienst->setEnabled(state);
+    ui->checkDienst->setEnabled(state);
+    ui->dateDienst->setEnabled(false);
 
     ui->lineStrasse->setEnabled(state);
     ui->linePLZ->setEnabled(state);
@@ -544,7 +556,8 @@ void PersonalWindow::toggleFields(bool state)
     ui->spinKm->setEnabled(state);
     ui->lineJob->setEnabled(state);
     ui->plainBemerkung->setEnabled(state);
-    ui->dateExit->setEnabled(state);
+    ui->checkAustritt->setEnabled(state);
+    ui->dateAustritt->setEnabled(false);
     ui->pushDelete->setEnabled(state);
 
     ui->tabelle->setEnabled(state);
@@ -1033,5 +1046,66 @@ void PersonalWindow::on_pushEmail_clicked()
         }
         QString path = FileIO::getFilePathSave(this, "Adressen.csv", tr("CSV-Datei (*.csv)"));
         FileIO::saveToFile(path, s);
+    }
+}
+
+void PersonalWindow::on_checkAustritt_clicked(bool checked)
+{
+    if (enabled) {
+        ui->dateAustritt->setEnabled(checked);
+        if (checked) {
+            ui->dateAustritt->setDate(QDate::currentDate());
+            aktuellePerson->setAustritt(QDate::currentDate());
+            emit changed();
+        } else {
+            aktuellePerson->setAustritt(QDate());
+            emit changed();
+        }
+    }
+}
+
+void PersonalWindow::on_checkGeburtstag_clicked(bool checked)
+{
+    if (enabled) {
+        ui->dateGeburtstag->setEnabled(!checked);
+        if (checked) {
+            aktuellePerson->setGeburtstag(QDate());
+            emit changed();
+        } else {
+            ui->dateGeburtstag->setDate(QDate::currentDate());
+            aktuellePerson->setGeburtstag(QDate::currentDate());
+            emit changed();
+        }
+        on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
+    }
+}
+
+void PersonalWindow::on_checkEintritt_clicked(bool checked)
+{
+    if (enabled) {
+        ui->dateEintritt->setEnabled(!checked);
+        if (checked) {
+            aktuellePerson->setEintritt(QDate());
+            emit changed();
+        } else {
+            ui->dateEintritt->setDate(QDate::currentDate());
+            aktuellePerson->setEintritt(QDate::currentDate());
+            emit changed();
+        }
+    }
+}
+
+void PersonalWindow::on_checkDienst_clicked(bool checked)
+{
+    if (enabled) {
+        ui->dateDienst->setEnabled(!checked);
+        if (checked) {
+            aktuellePerson->setTauglichkeit(QDate());
+            emit changed();
+        } else {
+            ui->dateDienst->setDate(QDate::currentDate());
+            aktuellePerson->setTauglichkeit(QDate::currentDate());
+            emit changed();
+        }
     }
 }

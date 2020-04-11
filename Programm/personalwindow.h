@@ -130,6 +130,14 @@ private slots:
 
     void on_pushEmail_clicked();
 
+    void on_checkAustritt_clicked(bool checked);
+
+    void on_checkGeburtstag_clicked(bool checked);
+
+    void on_checkEintritt_clicked(bool checked);
+
+    void on_checkDienst_clicked(bool checked);
+
 private:
     Ui::PersonalWindow *ui;
     ManagerPersonal *manager;
