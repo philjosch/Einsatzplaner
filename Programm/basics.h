@@ -2,6 +2,7 @@
 #define BASICS_H
 
 #include <QDate>
+#include <QMap>
 
 enum Category {
     Tf,
@@ -23,6 +24,29 @@ enum Category {
 
 const QList<Category> ANZEIGEREIHENFOLGE =                       {Tf, Zf, Zub, Service, ZugVorbereiten, Werkstatt, Buero, Ausbildung, Infrastruktur, Sonstiges};
 const QList<Category> ANZEIGEREIHENFOLGEGESAMT = {Gesamt, Anzahl, Tf, Zf, Zub, Service, ZugVorbereiten, Werkstatt, Buero, Ausbildung, Infrastruktur, Sonstiges, Kilometer};
+
+enum Art {
+    Museumszug,
+    Sonderzug,
+    Gesellschaftssonderzug,
+    Nikolauszug,
+    ELFundMuseumszug,
+    Schnupperkurs,
+    Bahnhofsfest,
+    SonstigerFahrtag,
+    Arbeitseinsatz = 100
+};
+
+const QMap<Art, QString> FARBE_FAHRTAGE = {{Museumszug, "#ffffff"},
+                                          {Sonderzug, "#ffcccc"},
+                                          {Gesellschaftssonderzug, "#ffcc66"},
+                                          {Nikolauszug, "#ffccff"},
+                                          {ELFundMuseumszug, "#e7e7fd"},
+                                          {Schnupperkurs, "#918fe3"},
+                                          {Bahnhofsfest, "#80e3b1"},
+                                          {SonstigerFahrtag, "#ffeb90"},
+                                          {Arbeitseinsatz, "#CCBEBE"}
+                                         };
 
 enum Mistake {
     // General errors

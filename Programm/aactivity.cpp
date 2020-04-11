@@ -462,3 +462,11 @@ void AActivity::mergeSort(QList<AActivity*> *arr, int l, int r)
         merge(arr, l, m, r);
     }
 }
+
+const QString getFarbe(AActivity *a)
+{
+    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a))
+        return FARBE_FAHRTAGE.value(f->getArt());
+    else
+        return FARBE_FAHRTAGE.value(Arbeitseinsatz);
+}

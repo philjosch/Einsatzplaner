@@ -15,15 +15,14 @@ public:
 
     QJsonObject toJson();
 
-    enum Art { Museumszug, Sonderzug, Gesellschaftssonderzug, Nikolauszug, ELFundMuseumszug, Schnupperkurs, Bahnhofsfest, Sonstiges };
-    static QString getStringFromArt(Fahrtag::Art art);
+    static QString getStringFromArt(Art art);
 
     QString getKurzbeschreibung();
     QString getListString();
     QString getListStringShort();
 
-    void setArt(const Fahrtag::Art &value);
-    Fahrtag::Art getArt() const;
+    void setArt(const Art &value);
+    Art getArt() const;
 
     QTime getZeitTf();
     void setZeitTf(QTime value);
@@ -53,12 +52,14 @@ public:
 
     QString getHtmlFuerReservierungsuebersicht();
 
+
+
 signals:
     void changed(AActivity *);
     void del(AActivity *);
 
 protected:
-    Fahrtag::Art art;
+    Art art;
     QTime zeitTf;
     bool wichtig;
     int benoetigeTf;

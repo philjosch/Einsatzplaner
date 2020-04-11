@@ -41,32 +41,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-QString MainWindow::getFarbeZug(Fahrtag::Art cat)
 {
-    switch (cat) {
-    case Fahrtag::Museumszug:           return "#ffffff"; // Museumszug
-    case Fahrtag::Sonderzug:            return "#ffcccc"; // Sonderzug -
-    case Fahrtag::Gesellschaftssonderzug: return "#ffcc66"; // Gesellschaft -
-    case Fahrtag::Nikolauszug:          return "#ffccff"; // Nikolausfahrt -
-    case Fahrtag::ELFundMuseumszug:     return "#e7e7fd"; // Museumszug mit ELF -
-    case Fahrtag::Schnupperkurs:        return "#918fe3"; // ELF-Schnupperkurs -
-    case Fahrtag::Bahnhofsfest:         return "#80e3b1"; // Bahnhofsfest
-    case Fahrtag::Sonstiges:            return "#ffeb90"; // Sonstiges
-    default:                            return "#dddddd";
     }
 }
 
-QString MainWindow::getFarbeArbeit()
 {
-    return "#CCBEBE";
 }
 
-QString MainWindow::getFarbe(AActivity *a)
 {
-    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a))
-        return getFarbeZug(f->getArt());
-    else
-        return getFarbeArbeit();
 }
 
 void MainWindow::open(QString path)

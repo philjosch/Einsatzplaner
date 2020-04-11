@@ -4,7 +4,7 @@
 
 Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p), ManagerReservierungen()
 {
-    art = Fahrtag::Museumszug;
+    art = Museumszug;
     wichtig = false;
     zeitTf = QTime(8, 15);
     zeitAnfang = QTime(8, 45);
@@ -19,7 +19,7 @@ Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p), ManagerRes
 Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p), ManagerReservierungen(o)
 {
     // Daten für Fahrtag extrahieren
-    art = static_cast<Fahrtag::Art>(o.value("art").toInt());
+    art = static_cast<Art>(o.value("art").toInt());
     zeitTf = QTime::fromString(o.value("zeitTf").toString(), "hh:mm");
     wichtig = o.value("wichtig").toBool();
     if (! o.value("benoetigeTf").isBool()) {
@@ -56,7 +56,7 @@ QJsonObject Fahrtag::toJson()
     return o;
 }
 
-QString Fahrtag::getStringFromArt(Fahrtag::Art art)
+QString Fahrtag::getStringFromArt(Art art)
 {
     switch (art) {
     case Museumszug: return "Museumszug";
@@ -177,15 +177,15 @@ QString Fahrtag::getHtmlForSingleView()
         html += ":</b><br/>"+listToString(tf, " | ")+"</p>";
     }
     // *Zf
-    if ((benoetigeZf && (art != Fahrtag::Schnupperkurs)) || zf.size() > 0) {
+    if ((benoetigeZf && (art != Schnupperkurs)) || zf.size() > 0) {
         html += "<p><b>Zugführer";
-        html += (benoetigeZf && (art != Fahrtag::Schnupperkurs) ? required1+" wird benötigt"+required2:"");
+        html += (benoetigeZf && (art != Schnupperkurs) ? required1+" wird benötigt"+required2:"");
         html += ":</b><br/>"+listToString(zf, " | ")+"</p>";
     }
     // *Zub, Begl.o.b.A
-    if ((benoetigeZub && (art != Fahrtag::Schnupperkurs)) || (zub.size() > 0 || begl.size() > 0)) {
+    if ((benoetigeZub && (art != Schnupperkurs)) || (zub.size() > 0 || begl.size() > 0)) {
         html += "<p><b>Zugbegleiter und <i>Begleiter ohne betriebliche Ausbildung</i>";
-        html += (benoetigeZub && (art != Fahrtag::Schnupperkurs) ? required1+" werden benötigt"+required2:"");
+        html += (benoetigeZub && (art != Schnupperkurs) ? required1+" werden benötigt"+required2:"");
         html += ":</b><br/>";
         html += listToString(zub, " | ");
         // Begl. o.b.A
@@ -194,9 +194,9 @@ QString Fahrtag::getHtmlForSingleView()
         html += "<i>"+listToString(begl, "</i> | <i>") + "</i></p>";
     }
     // *Service
-    if ((benoetigeService && (art != Fahrtag::Schnupperkurs)) || service.size() > 0) {
+    if ((benoetigeService && (art != Schnupperkurs)) || service.size() > 0) {
         html += "<p><b>Service-Personal";
-        html += (benoetigeService && (art != Fahrtag::Schnupperkurs) ? required1+" wird benötigt"+required2:"");
+        html += (benoetigeService && (art != Schnupperkurs) ? required1+" wird benötigt"+required2:"");
         html += ":</b><br/>"+listToString(service, " | ") +"</p>";
     }
     // *Sonstiges personal
@@ -212,14 +212,14 @@ QString Fahrtag::getHtmlForSingleView()
     // Reservierungen
     if (getAnzahl() > 0) {
         html += "<p><b>Reservierungen:</b>";
-        if (art != Fahrtag::Schnupperkurs && art != Fahrtag::Gesellschaftssonderzug) {
+        if (art != Schnupperkurs && art != Gesellschaftssonderzug) {
             html += "<br/>Bereits "+QString::number(getBelegtGesamt());
             html += (getBelegtGesamt() == 1 ? " Platz " :  " Plätze ");
             html += "belegt. Noch "+QString::number(getCapacityGesamt() - getBelegtGesamt())+" frei.</p>";
         } else {
             html += "</p>";
         }
-        if (art != Fahrtag::Nikolauszug) {
+        if (art != Nikolauszug) {
             html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
             for(Reservierung *r: reservierungen) {
                 html += r->getTableRow();
@@ -232,7 +232,7 @@ QString Fahrtag::getHtmlForSingleView()
 
 QString Fahrtag::getHtmlForTableView()
 {
-    QString html = "<tr bgcolor='"+MainWindow::getFarbeZug(art)+"'>";
+    QString html = "<tr bgcolor='"+FARBE_FAHRTAGE.value(art)+"'>";
     // Datum, Anlass
     if (wichtig) {
         html += "<td bgcolor='#ff8888'>";
@@ -485,12 +485,12 @@ void Fahrtag::setZeitTf(QTime value)
     emit changed(this);
 }
 
-Fahrtag::Art Fahrtag::getArt() const
+Art Fahrtag::getArt() const
 {
     return art;
 }
 
-void Fahrtag::setArt(const Fahrtag::Art &value)
+void Fahrtag::setArt(const Art &value)
 {
     art = value;
     emit changed(this);

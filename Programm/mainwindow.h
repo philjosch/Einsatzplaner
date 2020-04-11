@@ -25,9 +25,6 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    static QString getFarbeZug(Fahrtag::Art cat);
-    static QString getFarbeArbeit();
-    static QString getFarbe(AActivity *a);
 
 public slots:
     void openFahrtag(Fahrtag *f);

@@ -108,5 +108,6 @@ private:
     static void merge(QList<AActivity *> *arr, int l, int m, int r);
 };
 
+const QString getFarbe(AActivity *a);
 
 #endif // AACTIVITY_H

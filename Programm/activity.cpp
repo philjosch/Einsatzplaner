@@ -123,7 +123,7 @@ QString Activity::getHtmlForSingleView()
 
 QString Activity::getHtmlForTableView()
 {
-    QString html = "<tr bgcolor='"+MainWindow::getFarbeArbeit()+"'>";
+    QString html = "<tr bgcolor='"+FARBE_FAHRTAGE.value(Arbeitseinsatz)+"'>";
     // Datum, Anlass
     html += "<td>";
     html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br</>";

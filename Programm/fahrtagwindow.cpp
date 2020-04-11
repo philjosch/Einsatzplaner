@@ -47,17 +47,17 @@ void FahrtagWindow::on_dateDate_dateChanged(const QDate &date)
 
 void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
 {
-    Fahrtag::Art art = static_cast<Fahrtag::Art>(index);
+    Art art = static_cast<Art>(index);
     if (nehme) {
         fahrtag->setArt(art);
     }
-    ui->tabReservierungen->setEnabled(art != Fahrtag::Schnupperkurs);
-    ui->checkZf->setEnabled(art != Fahrtag::Schnupperkurs);
-    ui->checkZub->setEnabled(art != Fahrtag::Schnupperkurs);
-    ui->checkService->setEnabled(art != Fahrtag::Schnupperkurs);
+    ui->tabReservierungen->setEnabled(art != Schnupperkurs);
+    ui->checkZf->setEnabled(art != Schnupperkurs);
+    ui->checkZub->setEnabled(art != Schnupperkurs);
+    ui->checkService->setEnabled(art != Schnupperkurs);
 
-    ui->checkBoxAll->setEnabled(Fahrtag::Nikolauszug == art);
-    ui->buttonVerteile->setEnabled(Fahrtag::Nikolauszug == art);
+    ui->checkBoxAll->setEnabled(Nikolauszug == art);
+    ui->buttonVerteile->setEnabled(Nikolauszug == art);
 
     setWindowTitle(Fahrtag::getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum().toString("dddd dd. MM. yyyy"));
 }
@@ -174,11 +174,11 @@ void FahrtagWindow::loadData()
         }
         ui->listRes->sortItems();
         ui->checkBoxAll->setEnabled(false);
-        ui->buttonVerteile->setEnabled(Fahrtag::Nikolauszug == fahrtag->getArt());
+        ui->buttonVerteile->setEnabled(Nikolauszug == fahrtag->getArt());
 
         ui->checkBoxAll->setChecked(fahrtag->getCheckAll());
-        ui->checkBoxAll->setEnabled(fahrtag->getArt() == Fahrtag::Nikolauszug);
-        ui->buttonVerteile->setEnabled(fahrtag->getArt() == Fahrtag::Nikolauszug);
+        ui->checkBoxAll->setEnabled(fahrtag->getArt() == Nikolauszug);
+        ui->buttonVerteile->setEnabled(fahrtag->getArt() == Nikolauszug);
 
         // Daten von Fahrtag
         ui->comboArt->setCurrentIndex(fahrtag->getArt());

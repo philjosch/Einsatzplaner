@@ -375,7 +375,7 @@ void Calendar::setListItemC(QListWidgetItem *i, AActivity *a)
 {
     if (i == nullptr) return;
     i->setText(a->getListStringShort());
-    i->setBackground(QBrush(QColor(MainWindow::getFarbe(a))));
+    i->setBackground(QBrush(QColor(getFarbe(a))));
 }
 
 void Calendar::setListItem(QListWidgetItem *i, AActivity *a)
@@ -384,5 +384,5 @@ void Calendar::setListItem(QListWidgetItem *i, AActivity *a)
     i->setText(a->getListString());
     i->setToolTip(a->getAnlass());
     i->setWhatsThis(a->getAnlass());
-    i->setBackground(QBrush(QColor(MainWindow::getFarbe(a))));
+    i->setBackground(QBrush(QColor(getFarbe(a))));
 }

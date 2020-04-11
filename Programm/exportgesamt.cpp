@@ -29,13 +29,13 @@ void ExportGesamt::reload()
     while(iter.hasNext()) {
         AActivity *a = iter.next();
         if (actToList.contains(a)) {
-            QString farbe = MainWindow::getFarbe(a);
+            QString farbe = getFarbe(a);
             actToList.value(a)->setBackground(QBrush(QColor(farbe)));
             actToList.value(a)->setToolTip(a->getAnlass());
             i++;
             continue;
         }
-        QString farbe = MainWindow::getFarbe(a);
+        QString farbe = getFarbe(a);
         QListWidgetItem *item = new QListWidgetItem(a->getListString());
         item->setBackground(QBrush(QColor(farbe)));
         item->setToolTip(a->getAnlass());
@@ -58,7 +58,7 @@ void ExportGesamt::hardReload()
 
     while(iter.hasNext()) {
         AActivity *a = iter.next();
-        QString farbe = MainWindow::getFarbe(a);
+        QString farbe = getFarbe(a);
         QListWidgetItem *item = new QListWidgetItem(a->getListString());
         item->setBackground(QBrush(QColor(farbe)));
         item->setToolTip(a->getAnlass());
