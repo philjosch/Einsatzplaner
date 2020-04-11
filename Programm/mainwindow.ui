@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="0,1,0" columnstretch="2,0">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -27,76 +27,814 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <property name="horizontalSpacing">
+    <property name="spacing">
      <number>6</number>
     </property>
-    <property name="verticalSpacing">
-     <number>0</number>
-    </property>
-    <item row="0" column="0" colspan="4">
-     <widget class="Calendar" name="calendar">
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <property name="lineWidth">
+    <item row="1" column="0">
+     <layout class="QGridLayout" name="gridKalender" rowstretch="0,1,1,1,1,1,1">
+      <property name="spacing">
        <number>0</number>
       </property>
-     </widget>
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="dayOfWeek">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <spacer name="horizontalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="day_1">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Montag</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="day_2">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Dienstag</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QLabel" name="day_3">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Mittwoch</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QLabel" name="day_4">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Donnerstag</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="QLabel" name="day_5">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Freitag</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <widget class="QLabel" name="day_6">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Samstag</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="QLabel" name="day_7">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>Sonntag</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <layout class="QGridLayout" name="week_1" columnstretch="0,1,1,1,1,1,1,1">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="number1_1">
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>1</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="CalendarDay" name="day1_1" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="CalendarDay" name="day2_1" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="CalendarDay" name="day3_1" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="CalendarDay" name="day4_1" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="CalendarDay" name="day5_1" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <widget class="CalendarDay" name="day6_1" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="CalendarDay" name="day7_1" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0">
+       <layout class="QGridLayout" name="week_2" columnstretch="0,1,1,1,1,1,1,1">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="number1_2">
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>2</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="CalendarDay" name="day1_2" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="CalendarDay" name="day2_2" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="CalendarDay" name="day3_2" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="CalendarDay" name="day4_2" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="CalendarDay" name="day5_2" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <widget class="CalendarDay" name="day6_2" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="CalendarDay" name="day7_2" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="3" column="0">
+       <layout class="QGridLayout" name="week_3" columnstretch="0,1,1,1,1,1,1,1">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="number1_3">
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>3</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="CalendarDay" name="day1_3" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="CalendarDay" name="day2_3" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="CalendarDay" name="day3_3" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="CalendarDay" name="day4_3" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="CalendarDay" name="day5_3" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <widget class="CalendarDay" name="day6_3" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="CalendarDay" name="day7_3" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="4" column="0">
+       <layout class="QGridLayout" name="week_4" columnstretch="0,1,1,1,1,1,1,1">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="number1_4">
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>4</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="CalendarDay" name="day1_4" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="CalendarDay" name="day2_4" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="CalendarDay" name="day3_4" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="CalendarDay" name="day4_4" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="CalendarDay" name="day5_4" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <widget class="CalendarDay" name="day6_4" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="CalendarDay" name="day7_4" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="5" column="0">
+       <layout class="QGridLayout" name="week_5" columnstretch="0,1,1,1,1,1,1,1">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="number1_5">
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>5</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="CalendarDay" name="day1_5" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="CalendarDay" name="day2_5" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="CalendarDay" name="day3_5" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="CalendarDay" name="day4_5" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="CalendarDay" name="day5_5" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <widget class="CalendarDay" name="day6_5" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="CalendarDay" name="day7_5" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="6" column="0">
+       <layout class="QGridLayout" name="week_6" columnstretch="0,1,1,1,1,1,1,1">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="number1_6">
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>6</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="CalendarDay" name="day1_6" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="CalendarDay" name="day2_6" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="CalendarDay" name="day3_6" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="CalendarDay" name="day4_6" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="CalendarDay" name="day5_6" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <widget class="CalendarDay" name="day6_6" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="CalendarDay" name="day7_6" native="true">
+          <property name="lineWidth" stdset="0">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </item>
-    <item row="1" column="0">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridKopf" columnstretch="0,0,0,0,0,0">
+      <property name="horizontalSpacing">
+       <number>6</number>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>326</width>
-        <height>20</height>
-       </size>
+      <property name="verticalSpacing">
+       <number>0</number>
       </property>
-     </spacer>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="buttonPrev">
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Zurück</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>108</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="4">
+       <widget class="QPushButton" name="buttonToday">
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Heute</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="5">
+       <widget class="QPushButton" name="buttonNext">
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Vor</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QDateEdit" name="dateSelector">
+        <property name="currentSection">
+         <enum>QDateTimeEdit::MonthSection</enum>
+        </property>
+        <property name="displayFormat">
+         <string>MMMM yyyy</string>
+        </property>
+        <property name="date">
+         <date>
+          <year>2016</year>
+          <month>4</month>
+          <day>3</day>
+         </date>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
-    <item row="1" column="1">
-     <widget class="QPushButton" name="buttonPersonal">
-      <property name="minimumSize">
-       <size>
-        <width>160</width>
-        <height>0</height>
-       </size>
+    <item row="0" column="1" rowspan="2">
+     <layout class="QGridLayout" name="gridListe">
+      <property name="verticalSpacing">
+       <number>6</number>
       </property>
-      <property name="text">
-       <string>Personalübersicht</string>
-      </property>
-     </widget>
+      <item row="0" column="0">
+       <widget class="QListWidget" name="listWidget">
+        <property name="minimumSize">
+         <size>
+          <width>205</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="buttonAddFahrtag">
+        <property name="minimumSize">
+         <size>
+          <width>170</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Neuer Fahrtag</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="buttonAddActivity">
+        <property name="minimumSize">
+         <size>
+          <width>170</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Neuer Arbeitseinsatz</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QPushButton" name="buttonDelete">
+        <property name="minimumSize">
+         <size>
+          <width>205</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Ausgewählten Eintrag löschen</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
-    <item row="1" column="2">
-     <widget class="QPushButton" name="buttonExport">
-      <property name="minimumSize">
-       <size>
-        <width>160</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Exportieren</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="3">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>326</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
+    <item row="2" column="0" colspan="2">
+     <layout class="QGridLayout" name="gridFuss">
+      <item row="0" column="0">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>326</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="buttonPersonal">
+        <property name="minimumSize">
+         <size>
+          <width>160</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Personalverwaltung</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="buttonExport">
+        <property name="minimumSize">
+         <size>
+          <width>160</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Exportieren</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>326</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -151,7 +889,7 @@
     <property name="title">
      <string>Ansicht</string>
     </property>
-    <addaction name="actionPersonal_bersicht"/>
+    <addaction name="actionPersonal"/>
    </widget>
    <widget class="QMenu" name="menuApp">
     <property name="title">
@@ -266,7 +1004,7 @@
     <enum>Qt::WindowShortcut</enum>
    </property>
   </action>
-  <action name="actionPersonal_bersicht">
+  <action name="actionPersonal">
    <property name="checkable">
     <bool>false</bool>
    </property>
@@ -380,12 +1118,24 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>Calendar</class>
-   <extends>QFrame</extends>
-   <header>calendar.h</header>
+   <class>CalendarDay</class>
+   <extends>QWidget</extends>
+   <header location="global">calendarday.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>buttonPrev</tabstop>
+  <tabstop>dateSelector</tabstop>
+  <tabstop>buttonToday</tabstop>
+  <tabstop>buttonNext</tabstop>
+  <tabstop>buttonAddFahrtag</tabstop>
+  <tabstop>buttonAddActivity</tabstop>
+  <tabstop>listWidget</tabstop>
+  <tabstop>buttonDelete</tabstop>
+  <tabstop>buttonPersonal</tabstop>
+  <tabstop>buttonExport</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -399,13 +1149,13 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>592</x>
-     <y>709</y>
+     <x>560</x>
+     <y>560</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>actionPersonal_bersicht</sender>
+   <sender>actionPersonal</sender>
    <signal>triggered()</signal>
    <receiver>buttonPersonal</receiver>
    <slot>click()</slot>
@@ -415,8 +1165,8 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>316</x>
-     <y>565</y>
+     <x>398</x>
+     <y>560</y>
     </hint>
    </hints>
   </connection>
@@ -431,8 +1181,40 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>482</x>
-     <y>565</y>
+     <x>560</x>
+     <y>560</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionNeuer_Fahrtag</sender>
+   <signal>triggered()</signal>
+   <receiver>buttonAddFahrtag</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>665</x>
+     <y>459</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionNeuer_Arbeitseinsatz</sender>
+   <signal>triggered()</signal>
+   <receiver>buttonAddActivity</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>665</x>
+     <y>485</y>
     </hint>
    </hints>
   </connection>

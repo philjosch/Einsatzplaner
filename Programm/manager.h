@@ -15,10 +15,9 @@ public:
     QJsonObject personalToJson();
     void fromJson(QJsonObject c, QJsonObject p);
 
-    void setPersonal(ManagerPersonal *value);
     ManagerPersonal *getPersonal() const;
 
-    QListIterator<AActivity *> getActivities() const;
+    QList<AActivity *> getActivities();
 
     static QString getHtmlFuerListenansicht(QList<AActivity *> liste);
     static QString getHtmlFuerEinzelansichten(QList<AActivity *> liste);
@@ -33,8 +32,9 @@ public slots:
     void activityChanged(AActivity *a);
 
 protected:
-    QList<AActivity *> activities;
     void update(int pos);
+
+    QList<AActivity *> activities;
     ManagerPersonal *personal;
 
 };

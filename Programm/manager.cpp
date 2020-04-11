@@ -6,6 +6,7 @@
 Manager::Manager()
 {
     activities = QList<AActivity*>();
+    personal = new ManagerPersonal();
 }
 
 QJsonObject Manager::toJson()
@@ -92,10 +93,9 @@ void Manager::activityChanged(AActivity *a)
         update(pos);
 }
 
-QListIterator<AActivity *> Manager::getActivities() const
+QList<AActivity *> Manager::getActivities()
 {
-    QListIterator<AActivity*> i(activities);
-    return i;
+    return activities;
 }
 
 QString Manager::getHtmlFuerListenansicht(QList<AActivity *> liste)
@@ -151,9 +151,4 @@ void Manager::update(int pos)
 ManagerPersonal *Manager::getPersonal() const
 {
     return personal;
-}
-
-void Manager::setPersonal(ManagerPersonal *value)
-{
-    personal = value;
 }
