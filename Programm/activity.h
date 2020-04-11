@@ -24,7 +24,7 @@ public:
     QString getHtmlForSingleView();
     QString getHtmlForTableView();
 
-    void emitter();
+    void emitter(QDate oldDate = QDate());
     void deletter();
 
 signals:

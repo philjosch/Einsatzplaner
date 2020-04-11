@@ -114,8 +114,9 @@ QDate AActivity::getDatum()
 
 void AActivity::setDatum(QDate value)
 {
+    QDate oldDate = datum;
     datum = value;
-    emitter();
+    emitter(oldDate);
 }
 
 QString AActivity::getOrt() const

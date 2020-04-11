@@ -22,6 +22,7 @@ public:
     bool remove(AActivity *a);
 
     QListWidgetItem *insert(AActivity *a);
+    void clear();
 signals:
     void clickedItem(AActivity *);
     void addActivity(QDate);

@@ -10,47 +10,6 @@
 #include <QMessageBox>
 
 
-
-QJsonObject MainWindow::toJson()
-{
-    QJsonObject o = manager->toJson();
-    o.insert("currentDate", ui->dateSelector->date().toString("yyyy-MM-dd"));
-    return o;
-}
-
-QJsonObject MainWindow::personalToJson()
-{
-    QJsonObject o = manager->personalToJson();
-    o.insert("currentDate", ui->dateSelector->date().toString("yyyy-MM-dd"));
-    return o;
-}
-
-void MainWindow::fromJson(QJsonObject c, QJsonObject p)
-{
-    // Daten in den Manager laden und die Logik herstellen
-    manager->fromJson(c, p);
-    // Alle aktivitäten in die seitenleiste eintragen
-    for(AActivity *a: manager->getActivities()) {
-        QListWidgetItem *i = new QListWidgetItem("");
-        if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
-            connect(f, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
-            connect(f, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
-        } else {
-            Activity *a_cast = dynamic_cast<Activity*>(a);
-            connect(a_cast, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
-            connect(a_cast, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
-        }
-        setListItem(i, a);
-        ui->listWidget->insertItem(ui->listWidget->count(), i);
-        listitem.insert(a, i);
-        itemToList.insert(i, a);
-    }
-    // an das gespeicherte Datum gehen
-    ui->dateSelector->setDate(QDate::fromString(c.value("currentDate").toString(), "yyyy-MM-dd"));
-    ui->dateSelector->repaint();
-    showDate(ui->dateSelector->date());
-}
-
 void MainWindow::wheelEvent(QWheelEvent *event)
 {
 //    int scrollAmount = 30;
@@ -102,15 +61,13 @@ void MainWindow::showDate(QDate date)
         start = start.addDays(1);
     }
 
-    for(int i = 0; i < calendaritem.keys().length(); i++) {
-        calendaritem.value(calendaritem.keys().at(i))->remove(calendaritem.keys().at(i));
+    foreach (CalendarDay *d, tage) {
+        d->clear();
     }
     foreach (AActivity *a, manager->getActivities()) {
         int pos = getPosInCalendar(a->getDatum());
         if (pos != -1) {
             tage.at(pos)->insert(a);
-            calendaritem.insert(a, tage.at(pos));
-            setListItemC(calendaritem.value(a)->get(a), a);
         }
     }
 }
@@ -119,7 +76,7 @@ void MainWindow::newFahrtag(QDate d)
 {
     // Anlegen des Fahrtags
     Fahrtag *f = manager->newFahrtag(d);
-    connect(f, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
+    connect(f, SIGNAL(changed(AActivity*, QDate)), this, SLOT(activityChanged(AActivity*, QDate)));
     connect(f, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
 
     // Einfügen in Seitenliste und Kalender
@@ -135,7 +92,7 @@ void MainWindow::newActivity(QDate d)
 {
     // Anlegen der Aktivität
     Activity *a = manager->newActivity(d);
-    connect(a, SIGNAL(changed(AActivity*)), this, SLOT(activityChanged(AActivity*)));
+    connect(a, SIGNAL(changed(AActivity*, QDate)), this, SLOT(activityChanged(AActivity*, QDate)));
     connect(a, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
 
     // Einfügen in die Seitenleiste
@@ -152,10 +109,7 @@ bool MainWindow::removeActivity(AActivity *a)
     ui->listWidget->takeItem(ui->listWidget->row(listitem.value(a)));
     itemToList.remove(listitem.value(a));
     listitem.remove(a);
-    if (calendaritem.contains(a)) {
-        calendaritem.value(a)->remove(a);
-        calendaritem.remove(a);
-    }
+    tage.at(getPosInCalendar(a->getDatum()))->remove(a);
     bool ret = manager->removeActivity(a);
     unsave();
     if (fenster.contains(a))
@@ -163,41 +117,21 @@ bool MainWindow::removeActivity(AActivity *a)
     return ret;
 }
 
-void MainWindow::activityChanged(AActivity *a)
+void MainWindow::activityChanged(AActivity *a, QDate oldDate)
 {
     manager->activityChanged(a);
+    int oldPos = -1;
+    if (oldDate.isValid())
+        oldPos = getPosInCalendar(oldDate);
+
+    if (oldPos < 42 && oldPos >= 0) {
+        tage.at(oldPos)->remove(a);
+    }
 
     // Richtiges Anzeigen im Kalender
     int pos = getPosInCalendar(a->getDatum());
     if (pos < 42 && pos >= 0) {
-        /* Element befindet sich nach Aktualiserung im Kalender
-         * -> Befindet sich schon jetzt im Kalender
-         * ---> Position verändert
-         * ---> Position nciht verändert
-         * -> Befindet sich im Moment nicht im Kalender
-         * */
-        if (calendaritem.contains(a)) {
-            // Element ist bereits im Kalender
-            CalendarDay *pos_neu = tage.at(pos);
-            CalendarDay *pos_alt = calendaritem.value(a);
-            if ( ! (pos_neu == pos_alt)) {
-                pos_alt->remove(a);
-                pos_neu->insert(a);
-                calendaritem.insert(a, pos_neu);
-            }
-        } else {
-            // Element ist nciht im Kalender und muss eingefügt werden
-            CalendarDay *pos_neu = tage.at(pos);
-            calendaritem.insert(a, pos_neu);
-            pos_neu->insert(a);
-        }
-        setListItemC(calendaritem.value(a)->get(a), a);
-    } else {
-        // Element befindet sich nicht im Kalender
-        if (calendaritem.contains(a)) {
-            calendaritem.value(a)->remove(a);
-            calendaritem.remove(a);
-        }
+        tage.at(pos)->insert(a);
     }
 
     // Richtiges Anzeigen in der Übersichts liste
@@ -229,7 +163,7 @@ void MainWindow::activityChanged(AActivity *a)
     unsave();
 }
 
-void MainWindow::clickedItemCalendar(AActivity *a)
+void MainWindow::itemInCalendarDayClicked(AActivity *a)
 {
     if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
         openFahrtag(f);
@@ -239,21 +173,16 @@ void MainWindow::clickedItemCalendar(AActivity *a)
     }
 }
 
-int MainWindow::getItemFromDate(QDate date)
-{
-    int year = ui->dateSelector->date().year();
-    int month = ui->dateSelector->date().month();
-    int wochentag = QDate(year, month, 1).dayOfWeek();
-
-    return wochentag - 1 + date.day();
-}
-
 int MainWindow::getPosInCalendar(QDate date)
 {
     QDate ref = QDate(ui->dateSelector->date().year(), ui->dateSelector->date().month(), 1);
     // Eintrag auch anzeigen, wenn er im vorherigen Monat liegt
     if (date.month() == ref.month() && date.year() == ref.year()) {
-        return getItemFromDate(date)-1;
+        int year = ui->dateSelector->date().year();
+        int month = ui->dateSelector->date().month();
+        int wochentag = QDate(year, month, 1).dayOfWeek();
+
+        return wochentag - 1 + date.day() -1;
     } else if (date.addMonths(1).month() == ref.month() && date.addMonths(1).year() == ref.year()) {
         if (date.addDays(7) > ref && date.dayOfWeek() < ref.dayOfWeek()) {
             return date.dayOfWeek() - 1;
@@ -282,15 +211,7 @@ void MainWindow::insert(AActivity *a)
     int pos = getPosInCalendar(a->getDatum());
     if (pos != -1) {
         tage.at(pos)->insert(a);
-        calendaritem.insert(a, tage.at(pos));
     }
-}
-
-void MainWindow::setListItemC(QListWidgetItem *i, AActivity *a)
-{
-    if (i == nullptr) return;
-    i->setText(a->getListStringShort());
-    i->setBackground(QBrush(QColor(getFarbe(a))));
 }
 
 void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
@@ -318,7 +239,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Controller
     listitem = QMap<AActivity*, QListWidgetItem*>();
     itemToList = QMap<QListWidgetItem*, AActivity*>();
-    calendaritem = QMap<AActivity*, CalendarDay*>();
     fenster = QMap<AActivity*, QMainWindow*>();
     scrollOffSet = 0;
 
@@ -330,6 +250,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->buttonAddActivity, SIGNAL(clicked(bool)), this, SLOT(newActivity()));
     connect(ui->buttonAddFahrtag, SIGNAL(clicked(bool)), this, SLOT(newFahrtag()));
     connect(ui->dateSelector, SIGNAL(dateChanged(QDate)), this, SLOT(showDate(QDate)));
+    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), SLOT(onItemInListClicked(QListWidgetItem*)));
 
     // Setup fuer die Darstellung des Kalenders
     tage = QList<CalendarDay*>();
@@ -346,7 +267,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     tage.append(ui->day1_6);    tage.append(ui->day2_6);    tage.append(ui->day3_6);    tage.append(ui->day4_6);
     tage.append(ui->day5_6);    tage.append(ui->day6_6);    tage.append(ui->day7_6);
     for(CalendarDay *c: tage) {
-        connect(c, SIGNAL(clickedItem(AActivity*)), this, SLOT(clickedItemCalendar(AActivity*)));
+        connect(c, SIGNAL(clickedItem(AActivity*)), this, SLOT(itemInCalendarDayClicked(AActivity*)));
         connect(c, SIGNAL(addActivity(QDate)), this, SLOT(newActivity(QDate)));
     }
     on_buttonToday_clicked();
@@ -453,6 +374,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 bool MainWindow::saveToPath(QString path, bool showInMenu)
 {
     QJsonObject calendarJSON = manager->toJson();
+    calendarJSON.insert("currentDate", ui->dateSelector->date().toString("yyyy-MM-dd"));
 
     QJsonObject viewJSON;
     viewJSON.insert("xMain", this->x());
@@ -616,7 +538,33 @@ bool MainWindow::openFile(QString path)
         personalJSON = object.value("personal").toObject();
     } else {
         personalJSON = calendarJSON.value("personal").toObject();
-    }    manager->fromJson(calendarJSON, personalJSON);
+    }
+    // Daten in den Manager laden und die Logik herstellen
+    QJsonObject c = calendarJSON;
+    QJsonObject p = personalJSON;
+    manager->fromJson(c, p);
+    // Alle aktivitäten in die seitenleiste eintragen
+    for(AActivity *a: manager->getActivities()) {
+        QListWidgetItem *i = new QListWidgetItem("");
+        if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
+            connect(f, SIGNAL(changed(AActivity*, QDate)), this, SLOT(activityChanged(AActivity*, QDate)));
+            connect(f, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
+        } else {
+            Activity *a_cast = dynamic_cast<Activity*>(a);
+            connect(a_cast, SIGNAL(changed(AActivity*,QDate)), this, SLOT(activityChanged(AActivity*,QDate)));
+            connect(a_cast, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
+        }
+        setListItem(i, a);
+        ui->listWidget->insertItem(ui->listWidget->count(), i);
+        listitem.insert(a, i);
+        itemToList.insert(i, a);
+    }
+    // an das gespeicherte Datum gehen
+    ui->dateSelector->setDate(QDate::fromString(c.value("currentDate").toString(), "yyyy-MM-dd"));
+    ui->dateSelector->repaint();
+    showDate(ui->dateSelector->date());
+
+
     personalfenster->loadData();
 
     //- Hier prüfen, ob Personalfenster angezeigt wurde und wiederherstellen der Fensterpositionen
@@ -676,6 +624,8 @@ void MainWindow::on_actionSavePersonal_triggered()
     }
 
     QJsonObject calendarJSON = manager->personalToJson();
+    calendarJSON.insert("currentDate", ui->dateSelector->date().toString("yyyy-MM-dd"));
+
 
     QJsonObject viewJSON;
     viewJSON.insert("xMain", this->x());
@@ -749,7 +699,7 @@ void MainWindow::on_buttonDelete_clicked()
     }
 }
 
-void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
+void MainWindow::onItemInListClicked(QListWidgetItem *item)
 {
     AActivity *a = itemToList.value(item);
     if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {

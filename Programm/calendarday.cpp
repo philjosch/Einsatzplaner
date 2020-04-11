@@ -51,7 +51,17 @@ QListWidgetItem *CalendarDay::insert(AActivity *a)
     ui->listWidget->insertItem(ui->listWidget->count(), item);
     actToItem.insert(a, item);
     itemToAct.insert(item, a);
+    item->setText(a->getListStringShort());
+    item->setBackground(QBrush(QColor(getFarbe(a))));
+
     return item;
+}
+
+void CalendarDay::clear()
+{
+    ui->listWidget->clear();
+    actToItem.clear();
+    itemToAct.clear();
 }
 
 void CalendarDay::handler(QListWidgetItem *item)

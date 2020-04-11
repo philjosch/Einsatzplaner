@@ -20,7 +20,7 @@ Calendar::Calendar(QWidget *parent) : QFrame(parent), Manager(), ui(new Ui::Cale
     connect(ui->buttonToday, SIGNAL(clicked(bool)), this, SLOT(goToday()));
     connect(ui->dateSelector, SIGNAL(dateChanged(QDate)), this, SLOT(goTo(QDate)));
 
-    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), SLOT(clickedItem(QListWidgetItem*)));
+    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), SLOT(onItemInListClicked(QListWidgetItem*)));
 
     // Setup fuer die Darstellung des Kalenders
     tage = QList<CalendarDay*>();

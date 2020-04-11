@@ -352,9 +352,9 @@ QString Fahrtag::getHtmlForTableView()
     return html;
 }
 
-void Fahrtag::emitter()
+void Fahrtag::emitter(QDate oldDate)
 {
-    emit changed(this);
+    emit changed(this, oldDate);
 }
 
 void Fahrtag::deletter()

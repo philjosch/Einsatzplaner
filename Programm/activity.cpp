@@ -253,7 +253,7 @@ QString Activity::getHtmlForTableView()
     return html;
 }
 
-void Activity::emitter()
+void Activity::emitter(QDate oldDate)
 {
     emit changed(this);
 }
