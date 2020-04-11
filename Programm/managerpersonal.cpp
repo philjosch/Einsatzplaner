@@ -82,16 +82,16 @@ void ManagerPersonal::fromJson(QJsonObject o)
         connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
     }
     if (o.contains("minimumKeys") && o.contains("minimumValues")) {
+        minimumHours.clear();
         QJsonArray keys = o.value("minimumKeys").toArray();
         QJsonArray values = o.value("minimumValues").toArray();
-        minimumHours.clear();
         for (int i = 0; i < keys.size() && i < values.size() ; i++) {
             minimumHours.insert(Category(keys.at(i).toInt()), values.at(i).toInt());
         }
     } else {
+        minimumHours.clear();
         minimumHours.insert(Gesamt, int(o.value("minimumTotal").toDouble(0)*60));
         if (o.contains("minimumHours")) {
-            minimumHours.clear();
             QJsonObject o2 = o.value("minimumHours").toObject();
             foreach (QString cat, o2.keys()) {
                 Category catt = getCategoryFromLocalizedString(cat);
@@ -348,4 +348,84 @@ bool ManagerPersonal::checkNummer(int neu)
         if ((*i)->getNummer() == neu) return false;
     }
     return true;
+}
+
+QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> *personen, QList<Category> spalten)
+{
+    QString a = "<h3>Personalübersicht</h3>"
+                "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
+    foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+        if (! spalten.contains(cat)) continue;
+        switch (cat) {
+        case Tf:
+        case Tb:
+            a += "<th>Tf/Tb</th>"; break;
+        case Zub:
+        case Begleiter:
+            a += "<th>Zub/Begl.o.b.A.</th>"; break;
+        default:
+            a += "<th>"+getLocalizedStringFromCategory(cat)+"</th>";
+        }
+    }
+    a += "</thead><tbody>";
+
+    QMap<Category, int> sum;
+    for(Person *p: *personen) {
+        a += p->getHtmlForTableView(spalten);
+        foreach (Category cat, spalten) {
+            sum.insert(cat, sum.value(cat,0)+p->get(cat));
+        }
+    }
+    a += "</tbody><tfoot><tr>";
+    a += "<td>Summe:</td>";
+    foreach (Category cat, spalten) {
+        switch (cat) {
+        case Category::Anzahl:
+        case Category::Kilometer:
+            a += "<td align='right'>"+QString::number(sum.value(cat))+"</td>";
+            break;
+        default:
+            a += "<td align='right'>"+minutesToHourStringShort(sum.value(cat))+"</td>";
+        }
+    }
+    a += "</tr></tfoot></table>";
+    return a;
+}
+
+QString ManagerPersonal::getHtmlFuerEinzelansicht()
+{
+    berechne();
+    QString help = "<li>%1: %2</li>";
+    QString a = "<h1>Personalübersicht - Gesamt</h1>"
+                "<h2>Geleistete Stunden</h2><ul>";
+    foreach(Category cat, ANZEIGEREIHENFOLGE) {
+        if (getTime(cat) > 0) a += help.arg(getLocalizedStringFromCategory(cat), minutesToHourString(getTime(cat)));
+    }
+    a += "</ul>";
+
+    a += "<ul><li>Stunden gesamt: "+QString::number(getTime(Gesamt))+"h</li>";
+    a += "<li>Gefahrene Kilometer gesamt: "+QString::number(getTime(Kilometer))+" km</li></ul>";
+
+    a += "<h2>Mindeststunden</h2><ul>";
+    if (getMinimumHours(Gesamt) > 0) a += help.arg("Insgesamt", minutesToHourString(getMinimumHours(Gesamt)));
+    foreach (Category cat, ANZEIGEREIHENFOLGE) {
+        if (getMinimumHours(cat) > 0) a += help.arg(getLocalizedStringFromCategory(cat), minutesToHourString(getMinimumHours(cat)));
+    }
+    a += "</ul>";
+
+    a += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+
+    // Add a papge for each person
+    QListIterator<Person*> iter = getPersonen();
+    while(iter.hasNext()) {
+        Person *akt = iter.next();
+        a += akt->getHtmlForDetailPage();
+        if (iter.hasNext()) {
+            a += "<div style='page-break-after:always'>";
+            a += "<p><small>Stand: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+        } else {
+            a += "<p><small>Stand: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+        }
+    }
+    return a;
 }

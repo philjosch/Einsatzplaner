@@ -29,8 +29,8 @@ public:
 
     // Drucken von Personen
     static bool printPerson(ManagerPersonal *m, QPrinter *printer);
-    static bool printPerson(ManagerPersonal *m, Person *p, QPrinter *printer);
-    static bool printPersonen(QList<Person *> *personen, QMap<Category, int> gesamt, QList<Category> data, QPrinter *printer);
+    static bool printPerson(Person *p, QPrinter *printer);
+    static bool printPersonen(QList<Person *> *personen, QList<Category> data, QPrinter *printer);
 
     // Mitgliederlisten
     static bool printMitglieder(QList<Person*> p, QPrinter *printer);
@@ -50,6 +50,9 @@ private:
 
     static void preparePrinterPortrait(QPrinter *p);
     static void preparePrinterLandscape(QPrinter *p);
+
+    static const QString defaultStyleSheet;
+    static const QFont defaultFont;
 };
 
 #endif // EXPORT_H

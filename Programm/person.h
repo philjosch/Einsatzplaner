@@ -29,7 +29,7 @@ public:
 
 
     QString getHtmlForTableView(QList<Category> liste);
-    QString getHtmlForDetailPage(ManagerPersonal *m);
+    QString getHtmlForDetailPage();
     QString getHtmlForMitgliederListe();
 
     QString getCSV();

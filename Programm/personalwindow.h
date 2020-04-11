@@ -148,8 +148,6 @@ private:
 
     bool enabled; // Gibt an, ob das Formular aktiviert ist oder nicht, und ob Änderungen übernommen werden
 
-    const static QList<Category> anzeigeReihenfolge;
-
     void updateZeiten();
 };
 #endif // PERSONALWINDOW_H

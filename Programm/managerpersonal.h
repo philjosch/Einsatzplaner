@@ -58,6 +58,9 @@ public:
     int getNextNummer();
     bool checkNummer(int neu);
 
+    static QString getHtmlFuerGesamtuebersicht(QList<Person *> *personen, QList<Category> spalten);
+    QString getHtmlFuerEinzelansicht();
+
 public slots:
     void personChangedName(Person *p, QString alt);
     void reloadSettings();

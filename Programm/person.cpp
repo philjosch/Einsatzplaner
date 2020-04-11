@@ -487,14 +487,6 @@ void Person::setNachname(const QString &value)
     emit nameChanged(this, old);
 }
 
-/*
-void Person::setName(const QString &value)
-{
-    QString old = name;
-    name = value;
-    emit nameChanged(this, old);
-}
-*/
 QString Person::getHtmlForTableView(QList<Category> liste)
 {
     QString html = "<tr><td style='background-color:";
@@ -511,14 +503,15 @@ QString Person::getHtmlForTableView(QList<Category> liste)
     html += "'>"+getName()+"</td>";
 
     foreach (Category cat, liste) {
-        html += "<td align='right' style='background-color:"+(manager->checkHours(this, cat) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+getStringShort(cat)+"</td>";
+        html += "<td align='right' style='background-color:"+(manager->checkHours(this, cat) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+(get(cat) > 0? getStringShort(cat): "")+"</td>";
     }
     html += "</tr>";
     return html;
 }
 
-QString Person::getHtmlForDetailPage(ManagerPersonal *m)
+QString Person::getHtmlForDetailPage()
 {
+    berechne();
     QString html = "<h2>"+vorname+" "+nachname+"</h2>";
     if (ausbildungRangierer || ausbildungTf || ausbildungZf)
         html = html + "<p>Ausbildung zum: " + (ausbildungTf? "Triebfahrzeugführer, ":" ") + (ausbildungZf? "Zugführer, ":" ")
@@ -528,60 +521,17 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     html += "<ul>";
     QString help = "<li %1>%3: %4%2</li>";
     QString helpcurrent;
-    if (get(Tf) > 0 || m->getMinimumHours(Tf, this)) {
-        if (m->checkHours(this, Tf)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Tf, this))+")");
-        html += helpcurrent.arg("Tf", minutesToHourString(get(Tf)));
-    }
-    if (get(Zf) > 0 || m->getMinimumHours(Zf, this)) {
-        if (m->checkHours(this, Zf)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Zf, this))+")");
-        html += helpcurrent.arg("Zf", minutesToHourString(get(Zf)));
-    }
-    if (get(Zub) > 0 || m->getMinimumHours(Zub, this)) {
-        if (m->checkHours(this, Zub)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Zub, this))+")");
-        html += helpcurrent.arg("Zub/Begl.o.b.A.", minutesToHourString(get(Zub)));
-    }
-    if (get(Service) > 0 || m->getMinimumHours(Service, this)) {
-        if (m->checkHours(this, Service)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Service, this))+")");
-        html += helpcurrent.arg("Service", minutesToHourString(get(Service)));
-    }
-    if (get(ZugVorbereiten) > 0 || m->getMinimumHours(ZugVorbereiten, this)) {
-        if (m->checkHours(this, ZugVorbereiten)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(ZugVorbereiten, this))+")");
-        html += helpcurrent.arg("Zug Vorbereiten", minutesToHourString(get(ZugVorbereiten)));
-    }
-    if (get(Werkstatt) > 0 || m->getMinimumHours(Werkstatt, this)) {
-        if (m->checkHours(this, Werkstatt)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Werkstatt, this))+")");
-        html += helpcurrent.arg("Werkstatt", minutesToHourString(get(Werkstatt)));
-    }
-    if (get(Buero) > 0 || m->getMinimumHours(Buero, this)) {
-        if (m->checkHours(this, Buero)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Buero, this))+")");
-        html += helpcurrent.arg("Büro", minutesToHourString(get(Buero)));
-    }
-    if (get(Ausbildung) > 0 || m->getMinimumHours(Ausbildung, this)) {
-        if (m->checkHours(this, Ausbildung)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Ausbildung, this))+")");
-        html += helpcurrent.arg("Ausbildung", minutesToHourString(get(Ausbildung)));
-    }
-    if (get(Infrastruktur) > 0 || m->getMinimumHours(Infrastruktur, this)) {
-        if (m->checkHours(this, Infrastruktur)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Infrastruktur, this))+")");
-        html += helpcurrent.arg("Infrastruktur", minutesToHourString(get(Infrastruktur)));
-    }
-    if (get(Sonstiges) > 0 || m->getMinimumHours(Sonstiges, this)) {
-        if (m->checkHours(this, Sonstiges)) helpcurrent = help.arg("", "");
-        else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Sonstiges, this))+")");
-        html += helpcurrent.arg("Sonstiges", minutesToHourString(get(Sonstiges)));
+    foreach (Category cat, ANZEIGEREIHENFOLGE) {
+        if (get(cat) > 0 || manager->getMinimumHours(cat, this)) {
+            if (manager->checkHours(this, cat)) helpcurrent = help.arg("", "");
+            else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(manager->getMinimumHours(cat, this))+")");
+            html += helpcurrent.arg(getLocalizedStringFromCategory(cat), minutesToHourString(get(cat)));
+        }
     }
 
     html += "</ul><ul>";
-    if (m->checkHours(this, Gesamt)) helpcurrent = help.arg("", "");
-    else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(m->getMinimumHours(Gesamt, this))+")");
+    if (manager->checkHours(this, Gesamt)) helpcurrent = help.arg("", "");
+    else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(manager->getMinimumHours(Gesamt, this))+")");
     html += helpcurrent.arg("Gesamte Stundenzahl", minutesToHourString(get(Gesamt)));
     html += "<li>Anzahl Aktivitäten: "+QString::number(get(Anzahl))+"</li>";
     html += "<li>Gefahrene Strecke: "+QString::number(get(Kilometer))+"km</li></ul>";
@@ -601,7 +551,6 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
         AActivity::sort(&list);
         for(int i=0; i<list.length(); i++) {
             AActivity *a = list.at(i);
-//            for(AActivity *a: activities.keys()) {
             Infos info = a->getIndividual(this);
             html += "<tr><td>"+a->getDatum().toString("dd.MM.yyyy")+"<br/>"+a->getKurzbeschreibung();
             if (a->getAnlass() != a->getKurzbeschreibung() && a->getAnlass() != "")
@@ -617,19 +566,15 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
     }
     help = "<li>%1: %2</li>";
     QString h2 = "";
-    if (getAdditional(Tf) > 0) h2 += help.arg("Tf", minutesToHourString(getAdditional(Tf)));
-    if (getAdditional(Zf) > 0) h2 += help.arg("Zf", minutesToHourString(getAdditional(Zf)));
-    if (getAdditional(Zub) > 0) h2 += help.arg("Zub", minutesToHourString(getAdditional(Zub)));
-    if (getAdditional(Service) > 0) h2 += help.arg("Service", minutesToHourString(getAdditional(Service)));
-    if (getAdditional(ZugVorbereiten) > 0) h2 += help.arg("Vorbereiten", minutesToHourString(getAdditional(ZugVorbereiten)));
-    if (getAdditional(Werkstatt) > 0) h2 += help.arg("Werkstatt", minutesToHourString(getAdditional(Werkstatt)));
-    if (getAdditional(Buero) > 0) h2 += help.arg("Büro", minutesToHourString(getAdditional(Buero)));
-    if (getAdditional(Ausbildung) > 0) h2 += help.arg("Ausbildung", minutesToHourString(getAdditional(Ausbildung)));
-    if (getAdditional(Infrastruktur) > 0) h2 += help.arg("Infrastruktur", minutesToHourString(getAdditional(Infrastruktur)));
-    if (getAdditional(Sonstiges) > 0) h2 += help.arg("Sonstiges", minutesToHourString(getAdditional(Sonstiges)));
+    foreach (Category cat, ANZEIGEREIHENFOLGE) {
+        if (getAdditional(cat) > 0)
+            h2 += help.arg(getLocalizedStringFromCategory(cat), minutesToHourString(getAdditional(cat)));
+    }
     help = "<li>%1: %2%3</li>";
-    if (getAdditional(Anzahl) > 0) h2 += help.arg("Zusätzliche Aktivitäten").arg(getAdditional(Anzahl)).arg("");
-    if (getAdditional(Kilometer) > 0) h2 += help.arg("Gefahrene Strecke").arg(getAdditional(Kilometer)).arg("km");
+    if (getAdditional(Anzahl) > 0)
+        h2 += help.arg("Zusätzliche Aktivitäten").arg(getAdditional(Anzahl)).arg("");
+    if (getAdditional(Kilometer) > 0)
+        h2 += help.arg("Gefahrene Strecke").arg(getAdditional(Kilometer)).arg("km");
     if (h2 != "")
         html+= "<h4>Zusätzliche nicht in der Tabelle erfassten Stunden</h4><ul>"+h2+"</ul>";
     return html;
@@ -638,15 +583,17 @@ QString Person::getHtmlForDetailPage(ManagerPersonal *m)
 QString Person::getHtmlForMitgliederListe()
 {
     QString h = "<tr>";
-    h += "<td>"+getName() + "<br/>"+QString::number(nummer)+"</td>";
+    h += "<td>"+getName()+"<br/>"
+            +QString::number(nummer)+"<br/>";
+    if (isAusgetreten())
+        h += "Ehemals: ";
+    h = h + (aktiv ? "Aktiv":"Passiv")+"</td>";
 
     // Daten
     h += "<td>"+geburtstag.toString("dd.MM.yyyy")+"<br/>"+eintritt.toString("dd.MM.yyyy");
     if (isAusgetreten()) {
         h += austritt.toString("-dd.MM.yyyy");
     } else {
-        if (aktiv) h += " Aktiv";
-        else h += " Passiv";
         if (!austritt.isNull())
             h += "<br/>Austritt zum: "+austritt.toString("dd.MM.yyyy");
     }
@@ -654,8 +601,15 @@ QString Person::getHtmlForMitgliederListe()
         h += "<br/>"+beruf;
     h += "</td>";
 
+    // Anschrift
+    h += "<td>"+strasse + "<br/>"+plz + " "+ ort;
+    if (strecke > 0) {
+        h += "<br/>"+QString::number(strecke)+"km";
+    }
+    h += "</td>";
+
     // Kontakt
-    h += "<td>"+strasse + "<br/>"+plz + " "+ ort + "<br/><br/>";
+    h += "<td>";
     if (mail != "") {
         if (mailOK)
             h += mail;
@@ -672,18 +626,14 @@ QString Person::getHtmlForMitgliederListe()
     h += "</td>";
 
     // Betriebsdienst
-    h = h + "<td>"+ (ausbildungTf? "Triebfahrzeugführer<br/>":"<br/>")
-            + (ausbildungZf? "Zugführer<br/>":"<br/>")
-            + (ausbildungRangierer? "Rangierer<br/>":"<br/>")
+    h = h + "<td>"+ (ausbildungTf? "Triebfahrzeugführer<br/>":"")
+            + (ausbildungZf? "Zugführer<br/>":"")
+            + (ausbildungRangierer? "Rangierer<br/>":"")
             + tauglichkeit.toString("dd.MM.yyyy")
             + "</td>";
 
     // Sonstiges
-    h += "<td>";
-    if (strecke > 0) {
-        h += QString::number(strecke)+"km<br/>";
-    }
-    h += bemerkungen + "</td>";
+    h += "<td>" + bemerkungen + "</td>";
 
     h += "</tr>";
     return h;
@@ -692,29 +642,29 @@ QString Person::getHtmlForMitgliederListe()
 QString Person::getCSV()
 {
     return QString::number(nummer)
-            +"|"+nachname
-            +"|"+vorname
-            +"|"+geburtstag.toString("dd.MM.yyyy")
-            +"|"+eintritt.toString("dd.MM.yyyy")
-            +"|"+(aktiv?"Aktiv":"Passiv")
-            +"|"+austritt.toString("dd.MM.yyyy")
+            +";"+nachname
+            +";"+vorname
+            +";"+geburtstag.toString("dd.MM.yyyy")
+            +";"+eintritt.toString("dd.MM.yyyy")
+            +";"+(aktiv?"Aktiv":"Passiv")
+            +";"+austritt.toString("dd.MM.yyyy")
 
-            +"|"+(ausbildungTf ? "WAHR":"FALSCH")
-            +"|"+(ausbildungZf ? "WAHR":"FALSCH")
-            +"|"+(ausbildungRangierer ? "WAHR":"FALSCH")
-            +"|"+tauglichkeit.toString("dd.MM.yyyy")
+            +";"+(ausbildungTf ? "WAHR":"FALSCH")
+            +";"+(ausbildungZf ? "WAHR":"FALSCH")
+            +";"+(ausbildungRangierer ? "WAHR":"FALSCH")
+            +";"+tauglichkeit.toString("dd.MM.yyyy")
 
-            +"|"+strasse
-            +"|"+plz
-            +"|"+ort
-            +"|"+mail
-            +"|"+(mailOK ? "WAHR" : "FALSCH")
-            +"|"+telefon
-            +"|"+(telefonOK ? "WAHR" : "FALSCH")
+            +";"+strasse
+            +";"+plz
+            +";"+ort
+            +";"+mail
+            +";"+(mailOK ? "WAHR" : "FALSCH")
+            +";"+telefon
+            +";"+(telefonOK ? "WAHR" : "FALSCH")
 
-            +"|"+QString::number(strecke)
-            +"|"+beruf
-            +"|"+bemerkungen.replace("\n","<br/>")
+            +";"+QString::number(strecke)
+            +";"+beruf
+            +";"+bemerkungen.replace("\n","<br/>")
             +"\n";
 }
 

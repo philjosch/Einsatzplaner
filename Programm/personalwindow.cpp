@@ -12,7 +12,6 @@
 
 const QString PersonalWindow::nichtGenugStunden = "#ff9999";
 const QString PersonalWindow::genugStunden = "#99ff99";
-const QList<Category> PersonalWindow::anzeigeReihenfolge = {Category::Gesamt, Category::Anzahl, Category::Tf, Category::Zf, Category::Zub, Category::Service, Category::ZugVorbereiten, Category::Werkstatt, Category::Buero, Category::Ausbildung, Category::Infrastruktur, Category::Sonstiges, Category::Kilometer};
 
 PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
 {
@@ -217,12 +216,13 @@ void PersonalWindow::refreshGesamt()
         ui->tabelleGesamt->removeColumn(2);
     }
 
-    for(int i = anzeigeReihenfolge.length()-1; i >= 0; --i) {
-        Category curr = anzeigeReihenfolge.at(i);
+    for(int i = ANZEIGEREIHENFOLGEGESAMT.length()-1; i >= 0; --i) {
+        Category curr = ANZEIGEREIHENFOLGEGESAMT.at(i);
         if (! anzeige->contains(curr)) continue;
         ui->tabelleGesamt->insertColumn(2);
         ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(getLocalizedStringFromCategory(curr)));
         if (origSortName == getLocalizedStringFromCategory(curr)) newSort = 2;
+        else newSort++;
     }
     ui->tabelleGesamt->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
@@ -238,7 +238,7 @@ void PersonalWindow::refreshGesamt()
     ui->tabelleGesamt->setItem(0, 1, ii);
 
     int pos = 2;
-    foreach(Category cat, anzeigeReihenfolge) {
+    foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
         if (! anzeige->contains(cat)) continue;
         ii = new QTableWidgetItem();
         ii->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
@@ -250,8 +250,6 @@ void PersonalWindow::refreshGesamt()
         default:
             ii->setData(Qt::EditRole, round(manager->getTime(cat)*100.f/60.f)/100);
         }
-
-        ii->setData(Qt::EditRole, round(manager->getTime(cat)*100.f/60.f)/100);
         ui->tabelleGesamt->setItem(0, pos++, ii);
     }
 
@@ -280,11 +278,18 @@ void PersonalWindow::refreshGesamt()
         ui->tabelleGesamt->setItem(0, 1, i);
 
         pos = 2;
-        foreach(Category cat, anzeigeReihenfolge) {
+        foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
             if (! anzeige->contains(cat)) continue;
             i = new QTableWidgetItem();
             i->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
-            i->setData(Qt::EditRole, round(p->get(cat)*100.f/60.f)/100);
+            switch (cat) {
+            case Anzahl:
+            case Kilometer:
+                i->setData(Qt::EditRole, p->get(cat));
+                break;
+            default:
+                i->setData(Qt::EditRole, round(p->get(cat)*100.f/60.f)/100);
+            }
             if (p->getAktiv())
                 i->setBackground(QBrush(QColor(manager->checkHours(p, cat) ? defaultFarbe : nichtGenugStunden)));
             else
@@ -464,13 +469,13 @@ void PersonalWindow::on_pushPrint_clicked()
 void PersonalWindow::on_actionSinglePrint_triggered()
 {
     QPrinter *paper = Export::getPrinterPaper(this);
-    Export::printPerson(manager, aktuellePerson, paper);
+    Export::printPerson(aktuellePerson, paper);
 }
 
 void PersonalWindow::on_actionSinglePDF_triggered()
 {
     QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf");
-    Export::printPerson(manager, aktuellePerson, pdf);
+    Export::printPerson(aktuellePerson, pdf);
 }
 
 void PersonalWindow::on_actionMitgliederDrucken_triggered()
@@ -531,10 +536,10 @@ void PersonalWindow::print(QPrinter *p)
     gesamt.insert(Category::Sonstiges, manager->getTime(Sonstiges));
     gesamt.insert(Category::Kilometer, manager->getTime(Kilometer));
     QList<Category> anzeigeListe = QList<Category>();
-    foreach(Category cat, anzeigeReihenfolge) {
+    foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
         if (anzeige->contains(cat)) anzeigeListe.append(cat);
     }
-    Export::printPersonen(liste, gesamt, anzeigeListe, p);
+    Export::printPersonen(liste, anzeigeListe, p);
 }
 
 void PersonalWindow::toggleFields(bool state)

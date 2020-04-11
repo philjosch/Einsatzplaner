@@ -21,6 +21,9 @@ enum Category {
     Anzahl=122    // Wird nur verwendet, um Funktionsaufrufe einfacher zu gestalten
 };
 
+const QList<Category> ANZEIGEREIHENFOLGE =                       {Tf, Zf, Zub, Service, ZugVorbereiten, Werkstatt, Buero, Ausbildung, Infrastruktur, Sonstiges};
+const QList<Category> ANZEIGEREIHENFOLGEGESAMT = {Gesamt, Anzahl, Tf, Zf, Zub, Service, ZugVorbereiten, Werkstatt, Buero, Ausbildung, Infrastruktur, Sonstiges, Kilometer};
+
 enum Mistake {
     // General errors
     OK, // Everything went right and the process was successfully done

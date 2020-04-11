@@ -8,6 +8,16 @@
 #include <QTemporaryFile>
 #include <QSettings>
 
+const QString Export::defaultStyleSheet = "body, tr, td, p { font-size: 10px; font-weight: normal !important;}"
+                            "table { border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
+                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
+                            "table tr, table td { page-break-inside: avoid; }"
+                            "table tfoot tr, table tfoot td { border-width: 1px; }"
+                            "ul {  -qt-list-indent: 0; margin-top: 0px !important; margin-bottom: 0px !important }"
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }"
+                            "p.last { page-break-after: always; }";
+const QFont Export::defaultFont = QFont("Arial", 11, QFont::Normal);
+
 bool Export::print(AActivity *a, QPrinter *printer)
 {
     QList<AActivity*> *liste = new QList<AActivity*>();
@@ -25,11 +35,11 @@ bool Export::printSingle(QList<AActivity *> *liste, QPrinter *printer)
 
 
     QTextDocument *d = new QTextDocument();
-    d->setDefaultStyleSheet("body{float: none} body,td,th,p { font-size: 80%;}"
+    d->setDefaultStyleSheet(defaultStyleSheet);/*"body{float: none} body,td,th,p { font-size: 80%;}"
                             "table {border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
                             "p.last { page-break-after: always; }"
-                            " table th, table td { border-width: 1px; border-collapse: collapse; padding: 1px; border-style: solid; border-color: black; }");
-    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
+                            " table th, table td { border-width: 1px; border-collapse: collapse; padding: 1px; border-style: solid; border-color: black; }"); */
+    d->setDefaultFont(defaultFont);
     d->setDocumentMargin(0);
 
     //header zum Dokument hinzufügen
@@ -54,13 +64,13 @@ bool Export::printList(QList<AActivity *> *liste, QPrinter *printer)
     // Vorbereiten des Druckers für den Ausdruck
     preparePrinterLandscape(printer);
     QTextDocument *d = new QTextDocument();
-    d->setDefaultStyleSheet("body, td, p { font-size: 10px; font-weight: normal !important;}"
+    d->setDefaultStyleSheet(defaultStyleSheet);/*"body, td, p { font-size: 10px; font-weight: normal !important;}"
                             "table { border-width: 1px; border-style: solid; border-color: black; } "
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black;}"
                             "table tr, table td { page-break-inside: avoid; }"
                             "ul { -qt-list-indent: 0; margin-top: 0px !important; margin-bottom: 0px !important }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
-    d->setDefaultFont(QFont("Arial", 10, QFont::Normal));
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }"); */
+    d->setDefaultFont(defaultFont);
     d->setDocumentMargin(0);
 
     QString a = "<h3>Übersicht über die Aktivitäten</h3>"
@@ -83,13 +93,13 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *printer)
     // Vorbereiten des Druckers für den Ausdruck
     preparePrinterLandscape(printer);
     QTextDocument *d = new QTextDocument();
-    d->setDefaultStyleSheet("body, tr, td, p { font-size: 11px; }"
+    d->setDefaultStyleSheet(defaultStyleSheet); /*"body, tr, td, p { font-size: 11px; }"
                             "table { border-width: 1px; border-style: solid; border-color: black; }"
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
                             "table tr, table td { page-break-inside: avoid; }"
                             "ul { -qt-list-indent: 0; }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
-    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }"); */
+    d->setDefaultFont(defaultFont);//QFont("Arial", 11, QFont::Normal));
     d->setDocumentMargin(0);
 
     QString a = "<h3>";
@@ -158,169 +168,64 @@ bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
     preparePrinterPortrait(printer);
     QTextDocument *d = new QTextDocument();
     // Append a style sheet
-    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
+    d->setDefaultStyleSheet(defaultStyleSheet);/*"body, tr, td, p { font-size: 12px; }"
                             "table { border-width: 1px; border-style: solid; border-color: black; }"
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
                             "table tr, table td { page-break-inside: avoid; }"
                             "table tfoot tr, table tfoot td { border-width: 2px; }"
                             "ul { -qt-list-indent: 0; }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
-    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }"); */
+    d->setDefaultFont(defaultFont);//QFont("Arial", 11, QFont::Normal));
     d->setDocumentMargin(0);
 
-    // Add the title page
-    m->berechne();
-    QString help = "<li>%1: %2</li>";
-    QString a = "<h1>Personalübersicht - Gesamt</h1>"
-                "<h2>Geleistete Stunden</h2><ul>";
-    if (m->getTime(Tf) > 0) a += help.arg("Tf", minutesToHourString(m->getTime(Tf)));
-    if (m->getTime(Zf) > 0) a += help.arg("Zf", minutesToHourString(m->getTime(Zf)));
-    if (m->getTime(Zub) > 0) a += help.arg("Zub", minutesToHourString(m->getTime(Zub)));
-    if (m->getTime(Service) > 0) a += help.arg("Service", minutesToHourString(m->getTime(Service)));
-    if (m->getTime(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten", minutesToHourString(m->getTime(ZugVorbereiten)));
-    if (m->getTime(Werkstatt) > 0) a += help.arg("Werkstatt", minutesToHourString(m->getTime(Werkstatt)));
-    if (m->getTime(Buero) > 0) a += help.arg("Büro", minutesToHourString(m->getTime(Buero)));
-    if (m->getTime(Ausbildung) > 0) a += help.arg("Ausbildung", minutesToHourString(m->getTime(Ausbildung)));
-    if (m->getTime(Infrastruktur) > 0) a += help.arg("Infrastruktur", minutesToHourString(m->getTime(Infrastruktur)));
-    if (m->getTime(Sonstiges) > 0) a += help.arg("Sonstiges", minutesToHourString(m->getTime(Sonstiges)));
-    a += "</ul>";
-
-    a += "<ul><li>Stunden gesamt: "+QString::number(m->getTime(Gesamt))+"h</li>";
-    a += "<li>Gefahrene Kilometer gesamt: "+QString::number(m->getTime(Kilometer))+" km</li></ul>";
-
-    a += "<h2>Mindeststunden</h2><ul>";
-    if (m->getMinimumHours(Gesamt) > 0) a += help.arg("Insgesamt", minutesToHourString(m->getMinimumHours(Gesamt)));
-    if (m->getMinimumHours(Tf) > 0) a += help.arg("Tf", minutesToHourString(m->getMinimumHours(Tf)));
-    if (m->getMinimumHours(Tb) > 0) a += help.arg("Tb", minutesToHourString(m->getMinimumHours(Tb)));
-    if (m->getMinimumHours(Zf) > 0) a += help.arg("Zf", minutesToHourString(m->getMinimumHours(Zf)));
-    if (m->getMinimumHours(Zub) > 0) a += help.arg("Zub", minutesToHourString(m->getMinimumHours(Zub)));
-    if (m->getMinimumHours(Service) > 0) a += help.arg("Service", minutesToHourString(m->getMinimumHours(Service)));
-    if (m->getMinimumHours(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten", minutesToHourString(m->getMinimumHours(ZugVorbereiten)));
-    if (m->getMinimumHours(Werkstatt) > 0) a += help.arg("Werkstatt", minutesToHourString(m->getMinimumHours(Werkstatt)));
-    if (m->getMinimumHours(Buero) > 0) a += help.arg("Büro", minutesToHourString(m->getMinimumHours(Buero)));
-    if (m->getMinimumHours(Ausbildung) > 0) a += help.arg("Ausbildung", minutesToHourString(m->getMinimumHours(Ausbildung)));
-    if (m->getMinimumHours(Infrastruktur) > 0) a += help.arg("Infrastruktur", minutesToHourString(m->getMinimumHours(Infrastruktur)));
-    if (m->getMinimumHours(Sonstiges) > 0) a += help.arg("Sonstiges", minutesToHourString(m->getMinimumHours(Sonstiges)));
-    a += "</ul>";
-
-    a += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
-
-    // Add a papge for each person
-    QListIterator<Person*> iter = m->getPersonen();
-    while(iter.hasNext()) {
-        Person *akt = iter.next();
-        a += akt->getHtmlForDetailPage(m);
-        if (iter.hasNext()) {
-            a += "<div style='page-break-after:always'>";
-            a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
-        } else {
-            a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
-        }
-    }
+    QString a = m->getHtmlFuerEinzelansicht();
     d->setHtml(a);
     d->print(printer);
     return true;
 }
 
-bool Export::printPerson(ManagerPersonal *m, Person *p, QPrinter *printer)
+bool Export::printPerson(Person *p, QPrinter *printer)
 {
     if (p == nullptr || printer == nullptr) return false;
     preparePrinterPortrait(printer);
     QTextDocument *d = new QTextDocument();
     // Append a style sheet
-    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
+    d->setDefaultStyleSheet(defaultStyleSheet);/*"body, tr, td, p { font-size: 11px; }"
                             "table { border-width: 1px; border-style: solid; border-color: black; }"
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
                             "table tr, table td { page-break-inside: avoid; }"
                             "table tfoot tr, table tfoot td { border-width: 2px; }"
                             "ul { -qt-list-indent: 0; }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
-    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }"); */
+    d->setDefaultFont(defaultFont);//QFont("Arial", 11, QFont::Normal));
     d->setDocumentMargin(0);
 
     // Add the title page
-    m->berechne();
-    QString a = p->getHtmlForDetailPage(m);
+    QString a = p->getHtmlForDetailPage();
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
     d->setHtml(a);
     d->print(printer);
     return true;
 }
 
-bool Export::printPersonen(QList<Person *> *personen, QMap<Category, int> gesamt, QList<Category> data, QPrinter *printer)
+bool Export::printPersonen(QList<Person *> *personen, QList<Category> data, QPrinter *printer)
 {
     if (printer == nullptr) return false;
     preparePrinterLandscape(printer);
     QTextDocument *d = new QTextDocument();
-    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
+    d->setDefaultStyleSheet(defaultStyleSheet);/*"body, tr, td, p { font-size: 11px; }"
                             "table { border-width: 1px; border-style: solid; border-color: black; }"
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
                             "table tr, table td { page-break-inside: avoid; }"
                             "table tfoot tr, table tfoot td { border-width: 2px; }"
                             "ul { -qt-list-indent: 0; }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
-    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");*/
+    d->setDefaultFont(defaultFont);//QFont("Arial", 11, QFont::Normal));
     d->setDocumentMargin(0);
 
-
-    //  0: gesamtstunden
-    //  1: anzahl
-    //  2: tf/tb
-    //  3: zf
-    //  4: zub/begl.o.b.a.
-    //  5: service
-    //  6: zug vorbereiten
-    //  7: werkstatt
-    //  8: büro
-    //  9: ausbildung
-    // 10: sonstiges
-    // 11: kilometer
-    QString a = "<h3>Personalübersicht</h3>"
-                "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
-    if (data.contains(Category::Gesamt))
-        a += "<th>Stunden</th>";
-    if (data.contains(Category::Anzahl))
-        a += "<th>Anzahl</th>";
-    if (data.contains(Tf))
-        a += "<th>Tf/Tb</th>";
-    if (data.contains(Category::Zf))
-        a += "<th>Zf</th>";
-    if (data.contains(Category::Zub))
-        a += "<th>Zub/Begl.o.b.A.</th>";
-    if (data.contains(Category::Service))
-        a += "<th>Service</th>";
-    if (data.contains(Category::ZugVorbereiten))
-        a += "<th>Zug Vorbereiten</th>";
-    if (data.contains(Category::Werkstatt))
-        a += "<th>Werkstatt</th>";
-    if (data.contains(Category::Buero))
-        a += "<th>Büro</th>";
-    if (data.contains(Category::Ausbildung))
-        a += "<th>Ausbildung</th>";
-    if (data.contains(Category::Infrastruktur))
-        a += "<th>Infrastruktur</th>";
-    if (data.contains(Category::Sonstiges))
-        a += "<th>Sonstiges</th>";
-    if (data.contains(Category::Kilometer))
-        a += "<th>Kilometer</th>";
-    a += "</thead><tbody>";
-    for(Person *p: *personen) {
-        a += p->getHtmlForTableView(data);
-    }
-    a += "</tbody><tfoot><tr>";
-    a += "<td>Summe:</td>";
-    foreach (Category cat, data) {
-        switch (cat) {
-        case Category::Anzahl:
-        case Category::Kilometer:
-            a += "<td align='right'>"+QString::number(gesamt.value(cat))+"</td>";
-            break;
-        default:
-            a += "<td align='right'>"+minutesToHourString(gesamt.value(cat)).chopped(2)+"</td>";
-        }
-    }
-    a += "</tr></tfoot></table>";
+    QString a = ManagerPersonal::getHtmlFuerGesamtuebersicht(personen, data);
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+
     d->setHtml(a);
 
     d->print(printer);
@@ -332,21 +237,22 @@ bool Export::printMitglieder(QList<Person *> p, QPrinter *printer)
     if (printer == nullptr) return false;
     preparePrinterLandscape(printer);
     QTextDocument *d = new QTextDocument();
-    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
+    d->setDefaultStyleSheet(defaultStyleSheet);/*"body, tr, td, p { font-size: 12px; }"
                             "table { border-width: 1px; border-style: solid; border-color: black; }"
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
                             "table tr, table td { page-break-inside: avoid; }"
                             "table tfoot tr, table tfoot td { border-width: 2px; }"
                             "ul { -qt-list-indent: 0; }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
-    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");*/
+    d->setDefaultFont(defaultFont);//QFont("Arial", 11, QFont::Normal));
     d->setDocumentMargin(0);
 
-    QString a = "<h3>Mitgliederliste – Stand "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</h3>"
+    QString a = "<h3>Mitgliederliste – Stand "+QDateTime::currentDateTime().toString("d.M.yyyy")+"</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr>"
-                "<th>Name<br/>Mitgliedsnummer</th>"
+                "<th>Name<br/>Mitgliedsnummer<br/>Status</th>"
                 "<th>Geburtsdatum<br/>Eintritt<br/>Beruf</th>"
-                "<th>Anschrift<br/>E-Mail<br/>Telefon</th>"
+                "<th>Anschrift</th>"
+                "<th>E-Mail<br/>Telefon</th>"
                 "<th>Betriebsdienst</th>"
                 "<th>Sonstiges</th>";
     a += "</thead><tbody>";
