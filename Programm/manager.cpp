@@ -59,12 +59,6 @@ bool Manager::removeActivity(AActivity *a)
     return activities.removeOne(a);
 }
 
-void Manager::addActivity(AActivity *a)
-{
-    activities.append(a);
-    update(activities.length()-1);
-}
-
 void Manager::activityChanged(AActivity *a)
 {
     int pos = activities.indexOf(a);
@@ -88,7 +82,6 @@ QString Manager::getHtmlFuerListenansicht(QList<AActivity *> liste)
     }
     a += "</tbody></table>";
     return a;
-
 }
 
 QString Manager::getHtmlFuerEinzelansichten(QList<AActivity *> liste)
@@ -110,7 +103,6 @@ void Manager::update(int pos)
     int i = pos;
     while (i < activities.length()-1) {
         if (*activities.at(i) > *activities.at(i+1)) {
-//        if (activities->at(i)->getDatum() >  activities->at(i+1)->getDatum()) {
             activities.swapItemsAt(i, i+1);
             i++;
         } else {

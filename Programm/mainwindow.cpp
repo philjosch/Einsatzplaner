@@ -100,7 +100,7 @@ MainWindow::MainWindow(QJsonObject json, QString path) : MainWindow()
     ui->dateSelector->repaint();
     showDate(currentDate);
 
-    personalfenster->loadData();
+    personalfenster->refresh();
 
     //- Hier prüfen, ob Personalfenster angezeigt wurde und wiederherstellen der Fensterpositionen
     QJsonObject viewJSON = json.value("view").toObject();

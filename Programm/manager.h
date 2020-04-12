@@ -26,7 +26,6 @@ public slots:
     Activity *newActivity(QDate datum);
 
     bool removeActivity(AActivity *a);
-    void addActivity(AActivity *a);
 
     void activityChanged(AActivity *a);
 
