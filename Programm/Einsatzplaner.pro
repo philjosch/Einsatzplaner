@@ -24,7 +24,6 @@ SOURCES += main.cpp\
     activitywindow.cpp \
     personalwindow.cpp \
     fahrtag.cpp \
-    calendar.cpp \
     calendarday.cpp \
     aactivity.cpp \
     export.cpp \
@@ -50,7 +49,6 @@ HEADERS  += mainwindow.h \
     activitywindow.h \
     personalwindow.h \
     fahrtag.h \
-    calendar.h \
     calendarday.h \
     aactivity.h \
     export.h \
@@ -69,7 +67,6 @@ FORMS    += mainwindow.ui \
     fahrtagwindow.ui \
     activitywindow.ui \
     personalwindow.ui \
-    calendar.ui \
     calendarday.ui \
     exportgesamt.ui \
     preferencesdialog.ui \
