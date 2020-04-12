@@ -32,27 +32,27 @@ MinimumHoursEditorDialog::~MinimumHoursEditorDialog()
 void MinimumHoursEditorDialog::setDefault()
 {
     ui->lineTf->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Tf)));
-    ui->lineTf->update();
+    ui->lineTf->repaint();
     ui->lineZf->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Zf)));
-    ui->lineZf->update();
+    ui->lineZf->repaint();
     ui->lineService->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Service)));
-    ui->lineService->update();
+    ui->lineService->repaint();
     ui->lineZub->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Zub)));
-    ui->lineZub->update();
+    ui->lineZub->repaint();
     ui->lineBuero->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Buero)));
-    ui->lineBuero->update();
+    ui->lineBuero->repaint();
     ui->lineWerkstatt->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Werkstatt)));
-    ui->lineWerkstatt->update();
+    ui->lineWerkstatt->repaint();
     ui->lineZugVorbereiten->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::ZugVorbereiten)));
-    ui->lineZugVorbereiten->update();
+    ui->lineZugVorbereiten->repaint();
     ui->lineAusbildung->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Ausbildung)));
-    ui->lineAusbildung->update();
+    ui->lineAusbildung->repaint();
     ui->lineInfrastruktur->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Infrastruktur)));
-    ui->lineInfrastruktur->update();
+    ui->lineInfrastruktur->repaint();
     ui->lineSonstiges->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Sonstiges)));
-    ui->lineSonstiges->update();
+    ui->lineSonstiges->repaint();
     ui->lineGesamt->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Gesamt)));
-    ui->lineGesamt->update();
+    ui->lineGesamt->repaint();
 }
 
 void MinimumHoursEditorDialog::on_buttonBox_clicked(QAbstractButton *button)

@@ -98,9 +98,9 @@ private slots:
 
     void on_lineID_textChanged(const QString &arg1);
 
-    void on_dateBirth_dateChanged(const QDate &date);
+    void on_dateGeburtstag_dateChanged(const QDate &date);
 
-    void on_dateEntry_dateChanged(const QDate &date);
+    void on_dateEintritt_dateChanged(const QDate &date);
 
     void on_lineJob_textChanged(const QString &arg1);
 
@@ -120,13 +120,11 @@ private slots:
 
     void on_plainBemerkung_textChanged();
 
-    void on_dateExit_dateChanged(const QDate &date);
+    void on_dateAustritt_dateChanged(const QDate &date);
 
     void on_pushAutoID_clicked();
 
-    void on_comboEinzel_currentIndexChanged(int index);
-
-    void on_comboGesamt_currentIndexChanged(int index);
+    void on_comboAnzeige_currentIndexChanged(int index);
 
     void on_pushEmail_clicked();
 

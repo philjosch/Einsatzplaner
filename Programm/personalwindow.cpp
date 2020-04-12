@@ -16,11 +16,11 @@ const QString PersonalWindow::genugStunden = "#99ff99";
 PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
 {
     ui->setupUi(this);
-    connect(ui->pushMindeststunden, &QAbstractButton::clicked, this, &PersonalWindow::editMinimumHours);
+    connect(ui->actionMindeststunden, SIGNAL(triggered()), this, SLOT(editMinimumHours()));
 
     // Initalisieren der Statischen variablen
     manager = m;
-    setWindowTitle(tr("Personalmanagement"));
+    setWindowTitle(tr("Personalverwaltung"));
 
     itemToPerson = QHash<QListWidgetItem*, Person*>();
     personToItem = QHash<Person*, QListWidgetItem*>();
@@ -40,8 +40,8 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     on_checkShowGesamt_clicked(true);
     on_checkShowAnzahl_clicked(true);
     on_checkShowKilometer_clicked(true);
-    ui->comboEinzel->setCurrentIndex(1);
-    on_comboEinzel_currentIndexChanged(1);
+    ui->comboAnzeige->setCurrentIndex(1);
+    on_comboAnzeige_currentIndexChanged(1);
     ui->tabelleGesamt->sortItems(1);
     aktuellePerson = nullptr;
 }
@@ -197,12 +197,12 @@ void PersonalWindow::refresh()
 
 void PersonalWindow::loadData()
 {
-    on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
+    on_comboAnzeige_currentIndexChanged(ui->comboAnzeige->currentIndex());
 }
 
 void PersonalWindow::on_pushAktualisieren_clicked()
 {
-    on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
+    on_comboAnzeige_currentIndexChanged(ui->comboAnzeige->currentIndex());
     refreshGesamt();
 }
 
@@ -352,7 +352,7 @@ void PersonalWindow::on_pushAdd_clicked()
     ui->pushDelete->setEnabled(true);
     refreshEinzel();
     emit changed();
-    on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
+    on_comboAnzeige_currentIndexChanged(ui->comboAnzeige->currentIndex());
 }
 
 void PersonalWindow::on_lineVorname_textChanged(const QString &arg1)
@@ -402,7 +402,7 @@ void PersonalWindow::on_checkTf_clicked(bool checked)
 {
     if (enabled) {
         aktuellePerson->setAusbildungTf(checked);
-        on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
+        on_comboAnzeige_currentIndexChanged(ui->comboAnzeige->currentIndex());
         emit changed();
     }
 }
@@ -411,7 +411,7 @@ void PersonalWindow::on_checkZf_clicked(bool checked)
 {
     if (enabled) {
         aktuellePerson->setAusbildungZf(checked);
-        on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
+        on_comboAnzeige_currentIndexChanged(ui->comboAnzeige->currentIndex());
         emit changed();
     }
 }
@@ -420,7 +420,7 @@ void PersonalWindow::on_checkRangierer_clicked(bool checked)
 {
     if (enabled) {
         aktuellePerson->setAusbildungRangierer(checked);
-        on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
+        on_comboAnzeige_currentIndexChanged(ui->comboAnzeige->currentIndex());
         emit changed();
     }
 }
@@ -579,7 +579,7 @@ void PersonalWindow::toggleFields(bool state)
 
 void PersonalWindow::updateZeiten()
 {
-    on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
+    on_comboAnzeige_currentIndexChanged(ui->comboAnzeige->currentIndex());
     ui->labelTfSum->setText(aktuellePerson->getString(Tf));
     ui->labelTfSum->update();
     ui->labelZfSum->setText(aktuellePerson->getString(Zf));
@@ -846,7 +846,7 @@ void PersonalWindow::on_lineID_textChanged(const QString &arg1)
     }
 }
 
-void PersonalWindow::on_dateBirth_dateChanged(const QDate &date)
+void PersonalWindow::on_dateGeburtstag_dateChanged(const QDate &date)
 {
     if (enabled) {
         aktuellePerson->setGeburtstag(date);
@@ -854,7 +854,7 @@ void PersonalWindow::on_dateBirth_dateChanged(const QDate &date)
     }
 }
 
-void PersonalWindow::on_dateEntry_dateChanged(const QDate &date)
+void PersonalWindow::on_dateEintritt_dateChanged(const QDate &date)
 {
     if (enabled) {
         aktuellePerson->setEintritt(date);
@@ -874,7 +874,7 @@ void PersonalWindow::on_checkAktiv_clicked(bool checked)
 {
     if (enabled) {
         aktuellePerson->setAktiv(checked);
-        on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
+        on_comboAnzeige_currentIndexChanged(ui->comboAnzeige->currentIndex());
         emit changed();
     }
 }
@@ -951,11 +951,11 @@ void PersonalWindow::on_plainBemerkung_textChanged()
     }
 }
 
-void PersonalWindow::on_dateExit_dateChanged(const QDate &date)
+void PersonalWindow::on_dateAustritt_dateChanged(const QDate &date)
 {
     if (enabled) {
         aktuellePerson->setAustritt(date);
-        on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
+        on_comboAnzeige_currentIndexChanged(ui->comboAnzeige->currentIndex());
         emit changed();
     }
 }
@@ -970,7 +970,7 @@ void PersonalWindow::on_pushAutoID_clicked()
     }
 }
 
-void PersonalWindow::on_comboEinzel_currentIndexChanged(int index)
+void PersonalWindow::on_comboAnzeige_currentIndexChanged(int index)
 {
     /* 0 Alle Mitglieder
      * 1 Aktiv
@@ -981,7 +981,6 @@ void PersonalWindow::on_comboEinzel_currentIndexChanged(int index)
      * 6 Ausgetreten
      * 7 Alle
      * */
-    ui->comboGesamt->setCurrentIndex(index);
 
     current.clear();
     QListIterator<Person*> i = manager->getPersonen();
@@ -1015,12 +1014,6 @@ void PersonalWindow::on_comboEinzel_currentIndexChanged(int index)
         }
     }
     refresh();
-}
-
-void PersonalWindow::on_comboGesamt_currentIndexChanged(int index)
-{
-    ui->comboEinzel->setCurrentIndex(index);
-    on_comboEinzel_currentIndexChanged(index);
 }
 
 void PersonalWindow::on_pushEmail_clicked()
@@ -1076,7 +1069,7 @@ void PersonalWindow::on_checkGeburtstag_clicked(bool checked)
             aktuellePerson->setGeburtstag(QDate::currentDate());
             emit changed();
         }
-        on_comboEinzel_currentIndexChanged(ui->comboEinzel->currentIndex());
+        on_comboAnzeige_currentIndexChanged(ui->comboAnzeige->currentIndex());
     }
 }
 

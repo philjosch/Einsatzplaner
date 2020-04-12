@@ -37,53 +37,51 @@ personal/ (object)	-> hier werden die Personen gesichert
 			(int)		-> Zeiten in Minuten, Entfernung in km, Anzahl in 1
 
 
-calendar/ (object)		-> Objekt, das die Aktivitäten verwaltet (calendar)
-	currentDate (string)	-> Das Datum, das der DateSelektor gerade anzeigt, somit auch der Monat (Kodiert als 'yyyy-mm-dd')
-	activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten
-		# Für Arbeitseinsatz
-		datum (date)
-		ort (string)
-                zeitAnfang (string)
-                zeitEnde (string)
-		zeitenUnbekannt (bool)		-> True <-> Zeiten sind noch unbekannt und werden noch bekanntgegeben
-		anlass (string)
-		bemerkungen (string)
-		personen (array)		-> Daten für die Zuordnung, welche Aufgaben eine Person hat
-			id (string)		-> Ist leer (='') bzw. ungesetzt genau dann, wenn eine Person extern ist und somit nur der Name angegeben ist
-			name (string)
-			beginn (string
-			ende (string)
-			kat (int)
-			aufgabe (string)
-			bemerkung (string)
-		personalBenoetigt (bool)
-		isFahrtag (bool) 		-> Gibt an, ob es sich bei dem Datensatz um einen Fahrtag handelt, um die Erstellung eines neuen Dokumentes zu vereinfachen
+activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten. Bis Version <1.6 unter /calendar/activites [sic] zu finden.
+	# Für Arbeitseinsatz
+	datum (date)
+	ort (string)
+	zeitAnfang (string)
+	zeitEnde (string)
+	zeitenUnbekannt (bool)		-> True <-> Zeiten sind noch unbekannt und werden noch bekanntgegeben
+	anlass (string)
+	bemerkungen (string)
+	personen (array)		-> Daten für die Zuordnung, welche Aufgaben eine Person hat
+		id (string)		-> Ist leer (='') bzw. ungesetzt genau dann, wenn eine Person extern ist und somit nur der Name angegeben ist
+		name (string)
+		beginn (string
+		ende (string)
+		kat (int)
+		aufgabe (string)
+		bemerkung (string)
+	personalBenoetigt (bool)
+	isFahrtag (bool) 		-> Gibt an, ob es sich bei dem Datensatz um einen Fahrtag handelt, um die Erstellung eines neuen Dokumentes zu vereinfachen
 
-		# Für Fahrtag kommt folgendes hinzu
-		art (int)
-		zeitTf (string)
-		wichtig (bool)
-		benoetigeTf (int)		-> Bis Version <1.6 bool als Typ 
-		benoetigeZf (bool)
-		benoetigeZub (bool)
-		benoetigeService (bool)
+	# Für Fahrtag kommt folgendes hinzu
+	art (int)
+	zeitTf (string)
+	wichtig (bool)
+	benoetigeTf (int)		-> Bis Version <1.6 bool als Typ 
+	benoetigeZf (bool)
+	benoetigeZub (bool)
+	benoetigeService (bool)
 
-		# Daten aus Reservierungsmanager
-		wagenreihung (string)		-> Die Wagenreihung, Wagen getrennt durch ', '
-		checkAll (bool)			-> bei einer Verteilung der Sitzplätze werden alle Möglichkeiten berechnet und nicht nur das erst beste
-		reservierungen (array)		-> Die Liste mit den Reservierungen jeweils als (object)
-			name (string)
-			telefon (string)
-			mail (string)
-			anzahl (int)		-> die Anzahl der Sitzplätze
-			klasse (int)		-> 0 bedeutet 2./3. Klasse und 1 = 1.Klasse
-			zuege (array)		-> die Züge, auf denen man aus/ein steigt
-				(string)
-			hps (array)		-> die Haltepunkte, auf denen man aus/ein steigt
-				(string)
-			sitzplaetze (string)	-> kodiert die Sitzplätze in dem Format, in dem sie auch eingegeben werden sollen
-			fahrrad (bool)
-			sonstiges (string)
+	# Daten aus Reservierungsmanager
+	wagenreihung (string)		-> Die Wagenreihung, Wagen getrennt durch ', '
+	checkAll (bool)			-> bei einer Verteilung der Sitzplätze werden alle Möglichkeiten berechnet und nicht nur das erst beste
+	reservierungen (array)		-> Die Liste mit den Reservierungen jeweils als (object)
+		name (string)
+		telefon (string)
+		mail (string)
+		anzahl (int)		-> die Anzahl der Sitzplätze
+		klasse (int)		-> 0 bedeutet 2./3. Klasse und 1 = 1.Klasse
+		zuege (array)		-> die Züge, auf denen man aus/ein steigt
+			(string)
+		hps (array)		-> die Haltepunkte, auf denen man aus/ein steigt
+			(string)
+		sitzplaetze (string)	-> kodiert die Sitzplätze in dem Format, in dem sie auch eingegeben werden sollen
+		fahrrad (bool)
+		sonstiges (string)
 
 
 
@@ -96,7 +94,8 @@ view/ (object)			-> Die Daten der Ansicht, war Personalansicht sichtbar, wo ware
 	yPersonal(int)		-> y-Position des Personalfensters
 	widthPersonal(int)	-> Breite des Personalfensters
 	heightPersonal(int)	-> Höhe des Personalfenster
-	showPersonal(bool)	-> Personalfenster wird angezeigt (currently not used)
+	currentDate (string)	-> Das Datum, das der DateSelektor gerade anzeigt, somit auch der Monat (Kodiert als 'yyyy-mm-dd') Bis Version <1.6 unter /calendar/currentDate
+
 
 settings/			-> Speichert alle Einstellungen zur Datei
 	online/ (object)	-> Speichert Daten, die verwendet werden, um die Datei auf einen Webserver hochzuladen

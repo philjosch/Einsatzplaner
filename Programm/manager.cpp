@@ -9,42 +9,21 @@ Manager::Manager()
     personal = new ManagerPersonal();
 }
 
-QJsonObject Manager::toJson()
+QJsonArray Manager::toJson()
 {
-    QJsonObject data;
     QJsonArray array;
     // Fahrtage und Arbeitseinsätze speichern
     for (int i = 0; i < activities.length(); i++) {
         AActivity *a = activities.at(i);
         array.append(a->toJson());
     }
-    data.insert("activites", array);
-
-    // Personen speichern
-    QJsonObject personalJSON = personal->toJson();
-    data.insert("personal", personalJSON);
-    return data;
+    return array;
 }
 
-QJsonObject Manager::personalToJson()
+void Manager::fromJson(QJsonArray array)
 {
-    QJsonObject data;
-    QJsonArray array;
-    data.insert("activites", array);
-
-    // Personen speichern
-    QJsonObject personalJSON = personal->personalToJson();
-    data.insert("personal", personalJSON);
-    return data;
-}
-
-void Manager::fromJson(QJsonObject c, QJsonObject p)
-{
-    personal->fromJson(p);
-
     // Laden der Daten aus dem JSON Object
     activities = QList<AActivity*>();
-    QJsonArray array = c.value("activites").toArray();
     for(int i = 0; i < array.size(); i++) {
         QJsonObject aO = array.at(i).toObject();
         AActivity *akt;

@@ -11,9 +11,8 @@ class Manager
 {
 public:
     Manager();
-    QJsonObject toJson();
-    QJsonObject personalToJson();
-    void fromJson(QJsonObject c, QJsonObject p);
+    QJsonArray toJson();
+    void fromJson(QJsonArray array);
 
     ManagerPersonal *getPersonal() const;
 

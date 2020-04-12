@@ -44,12 +44,7 @@ bool CoreApplication::event(QEvent *event)
     if (event->type() == QEvent::FileOpen) {
         isFirst = false;
         QFileOpenEvent *openEvent = static_cast<QFileOpenEvent *>(event);
-        MainWindow *mw = new MainWindow();
-        if (mw->openFile(openEvent->file())) {
-            mw->show();
-        } else {
-            delete mw;
-        }
+        MainWindow::open(openEvent->file());
     }
     return QApplication::event(event);
 }
