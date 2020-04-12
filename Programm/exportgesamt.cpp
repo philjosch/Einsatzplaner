@@ -1,6 +1,5 @@
 #include "exportgesamt.h"
 #include "ui_exportgesamt.h"
-#include "mainwindow.h"
 #include "export.h"
 
 #include <QMessageBox>
@@ -50,14 +49,12 @@ void ExportGesamt::reload()
 
 void ExportGesamt::hardReload()
 {
-    QListIterator<AActivity*> iter = manager->getActivities();
     liste = QList<AActivity*>();
     actToList = QMap<AActivity*, QListWidgetItem*>();
     listToAct = QMap<QListWidgetItem*, AActivity*>();
-    ui->listAnzeige->clear();
 
-    while(iter.hasNext()) {
-        AActivity *a = iter.next();
+    ui->listAnzeige->clear();
+    foreach(AActivity *a, manager->getActivities()) {
         QString farbe = getFarbe(a);
         QListWidgetItem *item = new QListWidgetItem(a->getListString());
         item->setBackground(QBrush(QColor(farbe)));
@@ -225,9 +222,4 @@ bool ExportGesamt::testShow(AActivity *a)
         return ui->checkActivity->isChecked();
         // es ist kein fahrtag
     }
-}
-
-void ExportGesamt::on_pushButton_clicked()
-{
-    hardReload();
 }

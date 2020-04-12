@@ -16,7 +16,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,1,0">
+  <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,1,0">
    <property name="leftMargin">
     <number>9</number>
    </property>
@@ -33,263 +33,232 @@
     <number>6</number>
    </property>
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,1" columnminimumwidth="65,0,0">
-     <property name="leftMargin">
-      <number>0</number>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Von:</string>
      </property>
-     <property name="topMargin">
-      <number>0</number>
+     <property name="buddy">
+      <cstring>comboVon</cstring>
      </property>
-     <property name="rightMargin">
-      <number>0</number>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="comboVon">
+     <property name="currentIndex">
+      <number>1</number>
      </property>
-     <property name="bottomMargin">
-      <number>0</number>
+     <item>
+      <property name="text">
+       <string>Datum</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Heute</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Anfang des Jahres</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Alle vergangenen Termine</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QDateEdit" name="dateVon">
+     <property name="enabled">
+      <bool>false</bool>
      </property>
-     <property name="spacing">
-      <number>6</number>
+     <property name="maximumDate">
+      <date>
+       <year>2099</year>
+       <month>12</month>
+       <day>31</day>
+      </date>
      </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Von:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="comboVon">
-       <property name="currentIndex">
-        <number>1</number>
-       </property>
-       <item>
-        <property name="text">
-         <string>Datum</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Heute</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Anfang des Jahres</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Alle vergangenen Termine</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QDateEdit" name="dateVon">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="maximumDate">
-        <date>
-         <year>2099</year>
-         <month>12</month>
-         <day>31</day>
-        </date>
-       </property>
-       <property name="minimumDate">
-        <date>
-         <year>2000</year>
-         <month>1</month>
-         <day>1</day>
-        </date>
-       </property>
-       <property name="displayFormat">
-        <string>dd.MM.yyyy</string>
-       </property>
-       <property name="calendarPopup">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Bis:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="comboBis">
-       <property name="currentIndex">
-        <number>3</number>
-       </property>
-       <item>
-        <property name="text">
-         <string>Datum</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Heute</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Ende des Jahres</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Alle zukünfigen Termine</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QDateEdit" name="dateBis">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="maximumDate">
-        <date>
-         <year>2099</year>
-         <month>12</month>
-         <day>31</day>
-        </date>
-       </property>
-       <property name="minimumDate">
-        <date>
-         <year>2000</year>
-         <month>1</month>
-         <day>1</day>
-        </date>
-       </property>
-       <property name="displayFormat">
-        <string>dd.MM.yyyy</string>
-       </property>
-       <property name="calendarPopup">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     <property name="minimumDate">
+      <date>
+       <year>2000</year>
+       <month>1</month>
+       <day>1</day>
+      </date>
+     </property>
+     <property name="displayFormat">
+      <string>dd.MM.yyyy</string>
+     </property>
+     <property name="calendarPopup">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>123</width>
+       <height>27</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item row="1" column="0">
-    <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,1,0" columnstretch="0,1,0" columnminimumwidth="65,0,130">
-     <property name="leftMargin">
-      <number>0</number>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Bis:</string>
      </property>
-     <property name="topMargin">
-      <number>0</number>
+     <property name="buddy">
+      <cstring>comboBis</cstring>
      </property>
-     <property name="rightMargin">
-      <number>0</number>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QComboBox" name="comboBis">
+     <property name="currentIndex">
+      <number>3</number>
      </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <item row="2" column="0" colspan="3">
-      <widget class="QListWidget" name="listAnzeige">
-       <property name="selectionMode">
-        <enum>QAbstractItemView::MultiSelection</enum>
-       </property>
-      </widget>
+     <item>
+      <property name="text">
+       <string>Datum</string>
+      </property>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Züge</string>
-       </property>
-      </widget>
+     <item>
+      <property name="text">
+       <string>Heute</string>
+      </property>
      </item>
-     <item row="0" column="1" colspan="2">
-      <widget class="QComboBox" name="comboFahrtag">
-       <property name="currentIndex">
-        <number>8</number>
-       </property>
-       <item>
-        <property name="text">
-         <string>Museumszug</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Sonderzug</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Gesellschaftssonderzug</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Nikolausfahrt</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Museumszug mit ELF Schnupperkurs</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>ELF Schnupperkurs</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Bahnhofsfest</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Sonstiges</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Alle anzeigen</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Nichts anzeigen</string>
-        </property>
-       </item>
-      </widget>
+     <item>
+      <property name="text">
+       <string>Ende des Jahres</string>
+      </property>
      </item>
-     <item row="1" column="1" colspan="2">
-      <widget class="QCheckBox" name="checkActivity">
-       <property name="text">
-        <string>Arbeitseinsätze</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
+     <item>
+      <property name="text">
+       <string>Alle zukünfigen Termine</string>
+      </property>
      </item>
-    </layout>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QDateEdit" name="dateBis">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="maximumDate">
+      <date>
+       <year>2099</year>
+       <month>12</month>
+       <day>31</day>
+      </date>
+     </property>
+     <property name="minimumDate">
+      <date>
+       <year>2000</year>
+       <month>1</month>
+       <day>1</day>
+      </date>
+     </property>
+     <property name="displayFormat">
+      <string>dd.MM.yyyy</string>
+     </property>
+     <property name="calendarPopup">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="2" column="0">
-    <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,1,1">
-     <property name="leftMargin">
-      <number>0</number>
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Züge</string>
      </property>
-     <property name="topMargin">
-      <number>0</number>
+     <property name="buddy">
+      <cstring>comboFahrtag</cstring>
      </property>
-     <property name="rightMargin">
-      <number>0</number>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QComboBox" name="comboFahrtag">
+     <property name="currentIndex">
+      <number>8</number>
      </property>
-     <property name="bottomMargin">
-      <number>0</number>
+     <item>
+      <property name="text">
+       <string>Museumszug</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Sonderzug</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Gesellschaftssonderzug</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Nikolausfahrt</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Museumszug mit ELF Schnupperkurs</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>ELF Schnupperkurs</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Bahnhofsfest</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Sonstiges</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Alle anzeigen</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Nichts anzeigen</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QCheckBox" name="checkActivity">
+     <property name="text">
+      <string>Arbeitseinsätze</string>
      </property>
-     <property name="spacing">
-      <number>6</number>
+     <property name="checked">
+      <bool>true</bool>
      </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="4">
+    <widget class="QListWidget" name="listAnzeige">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::MultiSelection</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="3">
+    <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
       <widget class="QCheckBox" name="checkEinzel">
        <property name="text">
@@ -307,75 +276,48 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0" colspan="3">
-      <widget class="Line" name="line">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="checkUpload">
+       <property name="text">
+        <string>Upload (nur Liste)</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="1" column="1">
       <widget class="QCheckBox" name="checkPDF">
        <property name="text">
         <string>PDF-Datei</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QCheckBox" name="checkAusdruck">
+       <property name="text">
+        <string>Ausdruck</string>
        </property>
        <property name="checked">
         <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QCheckBox" name="checkAusdruck">
-       <property name="text">
-        <string>Ausdruck</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="3">
+     <item row="2" column="0" colspan="3">
       <widget class="Line" name="line_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="3" column="0">
       <widget class="QPushButton" name="pushAbbruch">
        <property name="text">
         <string>Schließen</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="4" column="2">
+     <item row="3" column="2">
       <widget class="QPushButton" name="pushDrucken">
        <property name="text">
         <string>Exportieren</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>Aktualisieren</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QCheckBox" name="checkUpload">
-       <property name="text">
-        <string>Upload (nur Liste)</string>
        </property>
       </widget>
      </item>
@@ -393,6 +335,7 @@
   <tabstop>listAnzeige</tabstop>
   <tabstop>checkEinzel</tabstop>
   <tabstop>checkListe</tabstop>
+  <tabstop>checkUpload</tabstop>
   <tabstop>checkPDF</tabstop>
   <tabstop>checkAusdruck</tabstop>
   <tabstop>pushAbbruch</tabstop>
