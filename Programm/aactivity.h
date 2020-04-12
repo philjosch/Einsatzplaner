@@ -11,8 +11,9 @@ class Person;
 
 #include "managerpersonal.h"
 
-class AActivity
+class AActivity: public QObject
 {
+    Q_OBJECT
 
 public:
 
@@ -71,9 +72,6 @@ public:
     virtual QString getHtmlForSingleView() = 0;
     virtual QString getHtmlForTableView() = 0;
 
-    virtual void emitter() = 0;
-    virtual void deletter() = 0;
-
     static QComboBox *generateNewCategoryComboBox();
     static QTimeEdit *generateNewTimeEdit();
 
@@ -84,6 +82,10 @@ public:
     static bool isExtern(QString bemerkung);
 
     static void sort(QList<AActivity *> *list);
+
+signals:
+    void changed(AActivity *, QDate = QDate());
+    void del(AActivity *);
 
 protected:
     QDate datum;

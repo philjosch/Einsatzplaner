@@ -4,7 +4,7 @@
 #include "person.h"
 #include "aactivity.h"
 
-class Activity: public QObject, public AActivity
+class Activity: public AActivity
 {
     Q_OBJECT
 
@@ -23,12 +23,5 @@ public:
 
     QString getHtmlForSingleView();
     QString getHtmlForTableView();
-
-    void emitter(QDate oldDate = QDate());
-    void deletter();
-
-signals:
-    void changed(AActivity *);
-    void del(AActivity *);
 };
 #endif // ACTIVITY_H

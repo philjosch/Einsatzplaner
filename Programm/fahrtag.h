@@ -4,7 +4,7 @@
 #include "aactivity.h"
 #include "managerreservierungen.h"
 
-class Fahrtag : public QObject, public AActivity, public ManagerReservierungen
+class Fahrtag : public AActivity, public ManagerReservierungen
 {
     Q_OBJECT
 
@@ -47,16 +47,7 @@ public:
     QString getHtmlForSingleView();
     QString getHtmlForTableView();
 
-    void emitter();
-    void deletter();
-
     QString getHtmlFuerReservierungsuebersicht();
-
-
-
-signals:
-    void changed(AActivity *);
-    void del(AActivity *);
 
 protected:
     Art art;

@@ -116,7 +116,7 @@ void AActivity::setDatum(QDate value)
 {
     QDate oldDate = datum;
     datum = value;
-    emitter(oldDate);
+    emit changed(this, oldDate);
 }
 
 QString AActivity::getOrt() const
@@ -127,7 +127,7 @@ QString AActivity::getOrt() const
 void AActivity::setOrt(const QString &value)
 {
     ort = value;
-    emitter();
+    emit changed(this);
 }
 
 QTime AActivity::getZeitAnfang()
@@ -138,7 +138,7 @@ QTime AActivity::getZeitAnfang()
 void AActivity::setZeitAnfang(QTime value)
 {
     zeitAnfang = value;
-    emitter();
+    emit changed(this);
 }
 
 QTime AActivity::getZeitEnde()
@@ -149,7 +149,7 @@ QTime AActivity::getZeitEnde()
 void AActivity::setZeitEnde(QTime value)
 {
     zeitEnde = value;
-    emitter();
+    emit changed(this);
 }
 
 QString AActivity::getAnlass() const
@@ -160,7 +160,7 @@ QString AActivity::getAnlass() const
 void AActivity::setAnlass(const QString &value)
 {
     anlass = value;
-    emitter();
+    emit changed(this);
 }
 
 QString AActivity::getBemerkungen() const
@@ -171,7 +171,7 @@ QString AActivity::getBemerkungen() const
 void AActivity::setBemerkungen(const QString &value)
 {
     bemerkungen = value;
-    emitter();
+    emit changed(this);
 }
 
 bool AActivity::getPersonalBenoetigt() const
@@ -182,7 +182,7 @@ bool AActivity::getPersonalBenoetigt() const
 void AActivity::setPersonalBenoetigt(bool value)
 {
     personalBenoetigt = value;
-    emitter();
+    emit changed(this);
 }
 
 QMap<Person *, Infos> AActivity::getPersonen()
@@ -193,7 +193,7 @@ QMap<Person *, Infos> AActivity::getPersonen()
 bool AActivity::removePerson(Person *p)
 {
     personen.remove(p);
-    emitter();
+    emit changed(this);
     return p->removeActivity(this);
 }
 
@@ -201,7 +201,7 @@ bool AActivity::removePerson(QString p)
 {
     Person *pers = personal->getPerson(p);
     if (pers != nullptr) {
-        emitter();
+        emit changed(this);
         return removePerson(pers);
     }
     Person *gefunden = nullptr;
@@ -213,7 +213,7 @@ bool AActivity::removePerson(QString p)
     }
     if (gefunden != nullptr) {
         personen.remove(gefunden);
-        emitter();
+        emit changed(this);
         return true;
     }
     return false;
@@ -243,7 +243,7 @@ Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime en
 
     personen.insert(p, info);
 
-    emitter();
+    emit changed(this);
     return Mistake::OK;
 }
 
@@ -382,7 +382,7 @@ bool AActivity::getZeitenUnbekannt() const
 void AActivity::setZeitenUnbekannt(bool value)
 {
     zeitenUnbekannt = value;
-    emitter();
+    emit changed(this);
 }
 
 QComboBox *AActivity::generateNewCategoryComboBox()

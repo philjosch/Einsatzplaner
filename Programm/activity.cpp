@@ -252,13 +252,3 @@ QString Activity::getHtmlForTableView()
     html += "</td></tr>";
     return html;
 }
-
-void Activity::emitter(QDate oldDate)
-{
-    emit changed(this);
-}
-
-void Activity::deletter()
-{
-    emit del(this);
-}

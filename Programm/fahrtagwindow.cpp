@@ -603,7 +603,7 @@ void FahrtagWindow::on_buttonRemove_clicked()
 void FahrtagWindow::on_actionDelete_triggered()
 {
     if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie diesen Fahrtag wirklich unwiderruflich löschen?")) == QMessageBox::Yes) {
-        fahrtag->deletter();
+        emit fahrtag->del(fahrtag);
         this->close();
         deleteLater();
     }
@@ -730,7 +730,7 @@ void FahrtagWindow::saveResFahrt()
     }
     aktuelleRes->setZuege(z);
     aktuelleRes->setHps(h);
-    fahrtag->emitter();
+    emit fahrtag->changed(fahrtag);
 }
 
 void FahrtagWindow::setEnabledFieldsForReservierung(bool enabled)
@@ -765,7 +765,7 @@ void FahrtagWindow::on_buttonAdd_clicked()
     itemToRes.insert(i, r);
     ui->buttonDelete->setEnabled(true);
     loadReservierung(r);
-    fahrtag->emitter();
+    emit fahrtag->changed(fahrtag);
 }
 
 void FahrtagWindow::on_buttonDelete_clicked()
@@ -785,7 +785,7 @@ void FahrtagWindow::on_buttonDelete_clicked()
             setEnabledFieldsForReservierung(false);
         }
         update();
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -826,7 +826,7 @@ void FahrtagWindow::on_buttonVerteile_clicked()
         if (CoreApplication::isDeveloperVersion()) {
             QMessageBox::information(this, tr("Fertig"), "mSek: "+QString::number(start.msecsTo(ende)));
         }
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
         update();
     }
 }
@@ -836,7 +836,7 @@ void FahrtagWindow::on_lineName_textChanged(const QString &arg1)
     if (nehmeRes) {
         aktuelleRes->setName(arg1);
         resToItem.value(aktuelleRes)->setText(aktuelleRes->getName());
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
         ui->listRes->sortItems();
     }
 }
@@ -845,7 +845,7 @@ void FahrtagWindow::on_lineMail_textChanged(const QString &arg1)
 {
     if (nehmeRes) {
         aktuelleRes->setMail(arg1);
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -853,7 +853,7 @@ void FahrtagWindow::on_lineTelefon_textChanged(const QString &arg1)
 {
     if (nehmeRes) {
         aktuelleRes->setTelefon(arg1);
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -862,7 +862,7 @@ void FahrtagWindow::on_spinAnzahl_valueChanged(int arg1)
     if (nehmeRes) {
         aktuelleRes->setAnzahl(arg1);
         update();
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -870,7 +870,7 @@ void FahrtagWindow::on_comboKlasse_currentIndexChanged(int index)
 {
     if (nehmeRes) {
         aktuelleRes->setKlasse(index);
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -952,7 +952,7 @@ void FahrtagWindow::on_lineSitze_textChanged(const QString &arg1)
             ui->lineSitze->setStyleSheet("background-color: #cb555d");
         }
         ui->lineSitze->repaint();
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -972,7 +972,7 @@ void FahrtagWindow::on_lineSitze_returnPressed()
             QMessageBox::information(this, tr("Sitzplätze fehlerhaft"), tr("Die eingegebenen Sitzplätze sind möglicherweise belegt! Bitte überprüfen Sie ihre Eingabe."));
         }
         ui->lineSitze->repaint();
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -980,7 +980,7 @@ void FahrtagWindow::on_checkFahrrad_clicked(bool checked)
 {
     if (nehmeRes) {
         aktuelleRes->setFahrrad(checked);
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -988,7 +988,7 @@ void FahrtagWindow::on_plainSonstiges_textChanged()
 {
     if (nehmeRes) {
         aktuelleRes->setSonstiges(ui->plainSonstiges->toPlainText());
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -1032,7 +1032,7 @@ void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)
 {
     if (nehme) {
         fahrtag->setPersonalBenoetigt(checked);
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -1041,7 +1041,7 @@ void FahrtagWindow::on_checkBoxAll_clicked(bool checked)
     if (nehme){
         if (checked) QMessageBox::information(this, tr("Hinweis"), tr("Es kann unter Umständen sehr lange dauern, bis die 'perfekte' Verteilung berechnet wird.\nIhr Computer reagiert in dieser Zeit vielleicht nicht!\nDiese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutzen."));
         fahrtag->setCheckAll(checked);
-        fahrtag->emitter();
+        emit fahrtag->changed(fahrtag);
     }
 }
 

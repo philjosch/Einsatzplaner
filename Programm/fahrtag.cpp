@@ -352,16 +352,6 @@ QString Fahrtag::getHtmlForTableView()
     return html;
 }
 
-void Fahrtag::emitter(QDate oldDate)
-{
-    emit changed(this, oldDate);
-}
-
-void Fahrtag::deletter()
-{
-    emit del(this);
-}
-
 QString Fahrtag::getHtmlFuerReservierungsuebersicht()
 {
     QString a = "<h3>";

@@ -212,7 +212,7 @@ void ActivityWindow::on_actionPdf_triggered()
 void ActivityWindow::on_buttonDelete_clicked()
 {
     if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie diesen Arbeitseinsatz wirklich unwiderruflich löschen?")) == QMessageBox::Yes) {
-        activity->deletter();
+        emit activity->del(activity);
         this->close();
         deleteLater();
     }
