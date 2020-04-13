@@ -122,6 +122,9 @@
         <property name="text">
          <string>Anzeigen</string>
         </property>
+        <property name="buddy">
+         <cstring>comboAnzeige</cstring>
+        </property>
        </widget>
       </item>
      </layout>
@@ -561,7 +564,7 @@
        <attribute name="title">
         <string>Einzelansicht</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_15" columnstretch="1,2">
+       <layout class="QGridLayout" name="gridLayout_8" columnstretch="1,2">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -577,6 +580,113 @@
         <property name="spacing">
          <number>6</number>
         </property>
+        <item row="0" column="0" rowspan="3">
+         <layout class="QGridLayout" name="gridLayout_14">
+          <item row="1" column="0">
+           <widget class="QListWidget" name="listWidget">
+            <property name="sortingEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pushAdd">
+            <property name="text">
+             <string>Neue Person anlegen</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="1">
+         <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,1,0,0">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Vorname</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineVorname</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineVorname">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="placeholderText">
+             <string>Vorname</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>ID</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineID</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="lineID">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>75</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>Nachname</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineNachname</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineNachname">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Nachname</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2" colspan="2">
+           <widget class="QPushButton" name="pushAutoID">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>autom.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
         <item row="1" column="1">
          <widget class="QTabWidget" name="tabWidgetEinzel">
           <property name="minimumSize">
@@ -621,8 +731,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>277</width>
-                 <height>133</height>
+                 <width>435</width>
+                 <height>164</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -728,7 +838,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>15</day>
+                    <day>14</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -812,6 +922,9 @@
                   <property name="text">
                    <string>Status</string>
                   </property>
+                  <property name="buddy">
+                   <cstring>checkAktiv</cstring>
+                  </property>
                  </widget>
                 </item>
                 <item row="1" column="3">
@@ -834,8 +947,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>181</width>
-                 <height>146</height>
+                 <width>435</width>
+                 <height>168</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -983,8 +1096,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>280</width>
-                 <height>97</height>
+                 <width>435</width>
+                 <height>168</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -1074,7 +1187,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>14</day>
+                    <day>13</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1132,8 +1245,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>384</width>
-                 <height>163</height>
+                 <width>435</width>
+                 <height>168</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -1198,7 +1311,7 @@
                    <date>
                     <year>1998</year>
                     <month>12</month>
-                    <day>29</day>
+                    <day>28</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1366,19 +1479,6 @@
                <set>Qt::AlignCenter</set>
               </property>
              </widget>
-            </item>
-            <item row="15" column="0" colspan="5">
-             <spacer name="verticalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>395</width>
-                <height>154</height>
-               </size>
-              </property>
-             </spacer>
             </item>
             <item row="8" column="3">
              <widget class="QLabel" name="labelMinBuero">
@@ -1597,12 +1697,6 @@
              <spacer name="horizontalSpacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>54</width>
-                <height>17</height>
-               </size>
               </property>
              </spacer>
             </item>
@@ -2032,169 +2126,66 @@
               </property>
              </widget>
             </item>
+            <item row="15" column="0" colspan="5">
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </spacer>
+            </item>
            </layout>
           </widget>
          </widget>
         </item>
         <item row="2" column="1">
-         <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,1">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="1" column="1">
-           <widget class="QPushButton" name="pushPrintEinzel">
-            <property name="text">
-             <string>Einzelübersichten drucken …</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="pushPDFEinzel">
-            <property name="text">
-             <string>Einzelübersichten als PDF speichern …</string>
-            </property>
-           </widget>
-          </item>
+         <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0,0">
           <item row="0" column="0">
-           <layout class="QGridLayout" name="gridLayout_8" columnstretch="0,0,0">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <item row="0" column="1">
-             <widget class="QLabel" name="labelGesamt">
-              <property name="text">
-               <string>0 h</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <spacer name="horizontalSpacer_5">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="labelGesamt_2">
-              <property name="text">
-               <string>Gesamt</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-        <item row="0" column="0" rowspan="4">
-         <layout class="QGridLayout" name="gridLayout_14">
-          <item row="1" column="0">
-           <widget class="QListWidget" name="listWidget">
-            <property name="sortingEnabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QPushButton" name="pushAdd">
+           <widget class="QLabel" name="labelGesamt_2">
             <property name="text">
-             <string>Neue Person anlegen</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="0" column="1">
-         <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,1,0,0">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Vorname</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineVorname</cstring>
+             <string>Gesamt:</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="lineVorname">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="placeholderText">
-             <string>Vorname</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_26">
+           <widget class="QLabel" name="labelGesamt">
             <property name="text">
-             <string>ID</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineID</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLineEdit" name="lineID">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>75</width>
-              <height>16777215</height>
-             </size>
+             <string>0 h</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_27">
+           <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Nachname</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineNachname</cstring>
+             <string>Einzelübersichten:</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="lineNachname">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="placeholderText">
-             <string>Nachname</string>
+           <widget class="QPushButton" name="pushPDFEinzel">
+            <property name="text">
+             <string>Als PDF speichern …</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="2" colspan="2">
-           <widget class="QPushButton" name="pushAutoID">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
+          <item row="1" column="2">
+           <widget class="QPushButton" name="pushPrintEinzel">
             <property name="text">
-             <string>autom.</string>
+             <string>Drucken …</string>
             </property>
            </widget>
+          </item>
+          <item row="0" column="4">
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>
@@ -2342,9 +2333,9 @@
   </action>
  </widget>
  <tabstops>
-  <tabstop>tabWidgetMain</tabstop>
   <tabstop>comboAnzeige</tabstop>
   <tabstop>pushEmail</tabstop>
+  <tabstop>tabWidgetMain</tabstop>
   <tabstop>tabelleGesamt</tabstop>
   <tabstop>checkShowGesamt</tabstop>
   <tabstop>checkShowAnzahl</tabstop>
@@ -2357,9 +2348,12 @@
   <tabstop>checkShowWerkstatt</tabstop>
   <tabstop>checkShowBuero</tabstop>
   <tabstop>checkShowAusbildung</tabstop>
+  <tabstop>checkShowInfrastruktur</tabstop>
+  <tabstop>checkShowSonstiges</tabstop>
   <tabstop>pushAktualisieren</tabstop>
   <tabstop>pushPDF</tabstop>
   <tabstop>pushPrint</tabstop>
+  <tabstop>pushAdd</tabstop>
   <tabstop>listWidget</tabstop>
   <tabstop>lineVorname</tabstop>
   <tabstop>lineNachname</tabstop>
@@ -2367,7 +2361,10 @@
   <tabstop>pushAutoID</tabstop>
   <tabstop>tabWidgetEinzel</tabstop>
   <tabstop>dateGeburtstag</tabstop>
+  <tabstop>checkGeburtstag</tabstop>
   <tabstop>dateEintritt</tabstop>
+  <tabstop>checkEintritt</tabstop>
+  <tabstop>checkAktiv</tabstop>
   <tabstop>spinKm</tabstop>
   <tabstop>lineJob</tabstop>
   <tabstop>lineStrasse</tabstop>
@@ -2381,7 +2378,9 @@
   <tabstop>checkZf</tabstop>
   <tabstop>checkRangierer</tabstop>
   <tabstop>dateDienst</tabstop>
+  <tabstop>checkDienst</tabstop>
   <tabstop>plainBemerkung</tabstop>
+  <tabstop>checkAustritt</tabstop>
   <tabstop>dateAustritt</tabstop>
   <tabstop>pushDelete</tabstop>
   <tabstop>tabelle</tabstop>

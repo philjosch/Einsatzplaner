@@ -10,9 +10,6 @@
 #include <cmath>
 #include <QDesktopServices>
 
-const QString PersonalWindow::nichtGenugStunden = "#ff9999";
-const QString PersonalWindow::genugStunden = "#99ff99";
-
 PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
 {
     ui->setupUi(this);
@@ -24,7 +21,6 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     manager = m;
     setWindowTitle(tr("Personalverwaltung"));
 
-    itemToPerson = QHash<QListWidgetItem*, Person*>();
     personToItem = QHash<Person*, QListWidgetItem*>();
     enabled = false;
 
@@ -102,23 +98,21 @@ void PersonalWindow::refresh()
 }
 void PersonalWindow::refreshGesamt()
 {
+    // Alte Spalte der Sortierung bestimen
+    Qt::SortOrder sortOrder = ui->tabelleGesamt->horizontalHeader()->sortIndicatorOrder();
     int origSort = ui->tabelleGesamt->horizontalHeader()->sortIndicatorSection();
     int newSort = 0;
-    Qt::SortOrder sortOrder = ui->tabelleGesamt->horizontalHeader()->sortIndicatorOrder();
     QString origSortName = "";
     QTableWidgetItem *view = (ui->tabelleGesamt->horizontalHeaderItem(origSort));
     if (view != nullptr)
         origSortName = view->text();
-    while(ui->tabelleGesamt->rowCount() > 0) {
-        ui->tabelleGesamt->removeRow(0);
-    }
+
+    // Tabelle leeren
+    ui->tabelleGesamt->setRowCount(0);
+    ui->tabelleGesamt->setColumnCount(2);
     ui->tabelleGesamt->setSortingEnabled(false);
 
-    // Alte Spalten entfernen und neue einfuegen
-    while (ui->tabelleGesamt->columnCount() > 2) {
-        ui->tabelleGesamt->removeColumn(2);
-    }
-
+    // Neue Spalten einfuegen
     for(int i = ANZEIGEREIHENFOLGEGESAMT.length()-1; i >= 0; --i) {
         Category curr = ANZEIGEREIHENFOLGEGESAMT.at(i);
         if (! anzeige.contains(curr)) continue;
@@ -133,43 +127,17 @@ void PersonalWindow::refreshGesamt()
     // Zeile für "Gesamt" einfuegen
     manager->berechne();
 
-    ui->tabelleGesamt->insertRow(0);
-    QTableWidgetItem *ii = new QTableWidgetItem();
-    ui->tabelleGesamt->setItem(0, 0, ii);
-
-    ii = new QTableWidgetItem(" Gesamt");
-    ui->tabelleGesamt->setItem(0, 1, ii);
-
-    int pos = 2;
-    foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
-        if (! anzeige.contains(cat)) continue;
-        ii = new QTableWidgetItem();
-        ii->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
-        switch(cat) {
-        case Anzahl:
-        case Kilometer:
-            ii->setData(Qt::EditRole, manager->getTime(cat));
-            break;
-        default:
-            ii->setData(Qt::EditRole, round(manager->getTime(cat)*100.f/60.f)/100);
-        }
-        ui->tabelleGesamt->setItem(0, pos++, ii);
-    }
 
 
-    // Einzelne Personen einfuegen
+    // Einzelne Personen einfuegen und Summe berechnen
+    int pos;
+    QMap<Category, int> sum;
     foreach (Person *p, current) {
-        QString defaultFarbe = "#ffffff";
-        QString farbe = defaultFarbe;
+        QString farbe = Person::FARBE_STANDARD;
         switch (manager->pruefeStunden(p)) {
-        case 0:
-            farbe = nichtGenugStunden;
-            break;
-        case -1:
-            farbe = genugStunden;
-            break;
-        default:
-            farbe = "#ffffff";
+        case 0:  farbe = Person::FARBE_FEHLENDE_STUNDEN; break;
+        case -1: farbe = Person::FARBE_GENUG_STUNDEN; break;
+        default: farbe = Person::FARBE_STANDARD;
         }
         ui->tabelleGesamt->insertRow(0);
         QTableWidgetItem *i = new QTableWidgetItem(p->getVorname());
@@ -183,6 +151,7 @@ void PersonalWindow::refreshGesamt()
         pos = 2;
         foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
             if (! anzeige.contains(cat)) continue;
+            sum.insert(cat, sum.value(cat,0)+p->get(cat));
             i = new QTableWidgetItem();
             i->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
             switch (cat) {
@@ -193,38 +162,61 @@ void PersonalWindow::refreshGesamt()
             default:
                 i->setData(Qt::EditRole, round(p->get(cat)*100.f/60.f)/100);
             }
-            if (p->getAktiv())
-                i->setBackground(QBrush(QColor(manager->checkHours(p, cat) ? defaultFarbe : nichtGenugStunden)));
-            else
-                i->setBackground(QBrush(QColor(defaultFarbe)));
+
+            switch (manager->checkHours(p, cat)) {
+            case 0:  i->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN))); break;
+            case -1: i->setBackground(QBrush(QColor(Person::FARBE_GENUG_STUNDEN))); break;
+            default: i->setBackground(QBrush(QColor(Person::FARBE_STANDARD)));
+            }
             ui->tabelleGesamt->setItem(0, pos++, i);
         }
     }
+
+    // Zeile Gesamt einfuegen
+    ui->tabelleGesamt->insertRow(0);
+    ui->tabelleGesamt->setItem(0, 0, new QTableWidgetItem());
+    ui->tabelleGesamt->setItem(0, 1, new QTableWidgetItem(tr(" Gesamt")));
+    pos = 2;
+    QTableWidgetItem *ii;
+    foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+        if (! anzeige.contains(cat)) continue;
+        ii = new QTableWidgetItem();
+        ii->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
+        switch(cat) {
+        case Anzahl:
+        case Kilometer:
+            ii->setData(Qt::EditRole, sum.value(cat));
+            break;
+        default:
+            ii->setData(Qt::EditRole, round(sum.value(cat)*100.f/60.f)/100);
+        }
+        ui->tabelleGesamt->setItem(0, pos++, ii);
+    }
+
     if (origSort < 2) {
         newSort = origSort;
     }
+
     ui->tabelleGesamt->sortByColumn(newSort, sortOrder);
     ui->tabelleGesamt->setSortingEnabled(true);
 }
 void PersonalWindow::refreshEinzel()
 {
     ui->listWidget->clear();
-    itemToPerson.clear();
     personToItem.clear();
     foreach (Person *p, current) {
         QListWidgetItem *item = new QListWidgetItem(p->getName());
         switch (manager->pruefeStunden(p)) {
         case 0:
-            item->setBackground(QBrush(QColor(nichtGenugStunden)));
+            item->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN)));
             break;
         case -1:
-            item->setBackground(QBrush(QColor(genugStunden)));
+            item->setBackground(QBrush(QColor(Person::FARBE_GENUG_STUNDEN)));
             break;
         default:
-            item->setBackground(QBrush(QColor("#ffffff")));
+            item->setBackground(QBrush(QColor(Person::FARBE_STANDARD)));
         }
         ui->listWidget->insertItem(0, item);
-        itemToPerson.insert(item, p);
         personToItem.insert(p, item);
     }
     ui->listWidget->sortItems();
@@ -290,6 +282,7 @@ void PersonalWindow::on_pushPrintEinzel_clicked()
 
 void PersonalWindow::on_pushEmail_clicked()
 {
+    if (current.isEmpty()) return;
     QString s = "mailto:?bcc=";
     QStringList mails;
     QList<Person*> keineMail;
@@ -420,17 +413,15 @@ void PersonalWindow::on_pushAdd_clicked()
     aktuellePerson = p;
     QListWidgetItem *item = new QListWidgetItem(aktuellePerson->getName());
     ui->listWidget->insertItem(0, item);
-    itemToPerson.insert(item, aktuellePerson);
     personToItem.insert(aktuellePerson, item);
     showPerson(aktuellePerson);
-    ui->pushDelete->setEnabled(true);
     emit changed();
     refresh();
 }
 
 void PersonalWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
-    showPerson(itemToPerson.value(item));
+    showPerson(personToItem.key(item));
 }
 
 void PersonalWindow::on_lineVorname_textChanged(const QString &arg1)
@@ -697,22 +688,14 @@ void PersonalWindow::on_pushDelete_clicked()
         QListWidgetItem *i = personToItem.value(aktuellePerson);
         ui->listWidget->takeItem(ui->listWidget->row(i));
 
-        itemToPerson.remove(i);
         personToItem.remove(aktuellePerson);
 
         manager->removePerson(aktuellePerson);
 
         delete aktuellePerson;
 
-        if (ui->listWidget->count() == 0) {
-            aktuellePerson = nullptr;
-            toggleFields(false);
-            ui->pushDelete->setEnabled(false);
-        } else {
-            aktuellePerson = itemToPerson.value(ui->listWidget->item(0));
-            showPerson(aktuellePerson);
-            enabled = true;
-        }
+        aktuellePerson = nullptr;
+        toggleFields(false);
         emit changed();
     }
 }

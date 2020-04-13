@@ -7,6 +7,9 @@
 #include <algorithm>
 #include <cmath>
 
+const QString Person::FARBE_FEHLENDE_STUNDEN = "#ff9999";
+const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";
+const QString Person::FARBE_STANDARD = "#ffffff";
 
 Person::Person(QString name, ManagerPersonal *manager) : QObject()
 {
@@ -388,6 +391,25 @@ void Person::setStrasse(const QString &value)
     strasse = value;
 }
 
+bool Person::isTauglich(Category cat, QDate datum)
+{
+    switch(cat) {
+    case Tf:
+        if (! ausbildungTf) return false;
+        break;
+    case Tb:
+        if (! ausbildungTf && !ausbildungZf) return false;
+        break;
+    case Zf:
+        if (! ausbildungZf) return false;
+        break;
+    default:
+        return true;
+    }
+    if (tauglichkeit.isNull()) return true;
+    return (tauglichkeit >= datum);
+}
+
 void Person::berechne()
 {
     zeiten.clear();
@@ -491,20 +513,21 @@ QString Person::getHtmlForTableView(QSet<Category> liste)
 {
     QString html = "<tr><td style='background-color:";
     switch (manager->pruefeStunden(this)) {
-    case 0:
-        html += PersonalWindow::nichtGenugStunden;
-        break;
-    case -1:
-        html += PersonalWindow::genugStunden;
-        break;
-    default:
-        html += "#ffffff";
+    case 0:  html += FARBE_FEHLENDE_STUNDEN; break;
+    case -1: html += FARBE_GENUG_STUNDEN; break;
+    default: html += FARBE_STANDARD;
     }
     html += "'>"+getName()+"</td>";
 
     foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
         if (!liste.contains(cat)) continue;
-        html += "<td align='right' style='background-color:"+(manager->checkHours(this, cat) ? " " : PersonalWindow::nichtGenugStunden)+"'>"+(get(cat) > 0? getStringShort(cat): "")+"</td>";
+        html += "<td align='right' style='background-color: ";
+        switch (manager->checkHours(this, cat)) {
+        case 0:  html += Person::FARBE_FEHLENDE_STUNDEN; break;
+        case -1: html += Person::FARBE_GENUG_STUNDEN; break;
+        default: html += Person::FARBE_STANDARD;
+        }
+        html += "'>"+(get(cat) > 0? getStringShort(cat): "")+"</td>";
     }
     html += "</tr>";
     return html;

@@ -19,9 +19,6 @@ public:
     explicit PersonalWindow(QWidget *parent, ManagerPersonal *m);
     ~PersonalWindow();
 
-    static const QString nichtGenugStunden;
-    static const QString genugStunden;
-
 signals:
     void changed();
 
@@ -146,7 +143,6 @@ private:
 
     QList<Person*> current;
 
-    QHash<QListWidgetItem*, Person*> itemToPerson;
     QHash<Person*, QListWidgetItem*> personToItem;
 
     QSet<Category> anzeige;

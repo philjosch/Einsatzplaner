@@ -163,12 +163,10 @@ bool ManagerPersonal::removePerson(Person *p)
 
 int ManagerPersonal::pruefeStunden(Person *p)
 {
-    bool ok = checkHours(p, Tf) && checkHours(p, Tb) &&
-            checkHours(p, Zf) && checkHours(p, Zub) &&
-            checkHours(p, Service) && checkHours(p, ZugVorbereiten) &&
-            checkHours(p, Werkstatt) && checkHours(p, Buero) &&
-            checkHours(p, Ausbildung) && checkHours(p, Infrastruktur) &&
-            checkHours(p, Sonstiges) && checkHours(p, Gesamt);
+    bool ok = true;
+    foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+        ok = ok && checkHours(p, cat);
+    }
     if (p->getAktiv() && (! ok))
         return 0;
     else if ((!p->getAktiv()) && ok)
@@ -177,35 +175,20 @@ int ManagerPersonal::pruefeStunden(Person *p)
         return 1;
 }
 
-bool ManagerPersonal::checkHours(Person *p, Category kat)
+int ManagerPersonal::checkHours(Person *p, Category cat)
 {
-    switch (kat) {
-    case Tf:
-        return !(p->get(Tf) < getMinimumHours(Tf, p));
-    case Tb:
-        return true;
-    case Zf:
-        return !(p->get(Zf) < getMinimumHours(Zf, p));
-    case Service:
-        return !(p->get(Service) < getMinimumHours(Service, p));
-    case Zub:
-        return !(p->get(Zub) < getMinimumHours(Zub, p));
-    case Buero:
-        return !(p->get(Buero) < getMinimumHours(Buero, p));
-    case Werkstatt:
-        return !(p->get(Werkstatt) < getMinimumHours(Werkstatt, p));
-    case ZugVorbereiten:
-        return !(p->get(ZugVorbereiten) < getMinimumHours(ZugVorbereiten, p));
-    case Ausbildung:
-        return !(p->get(Ausbildung) < getMinimumHours(Ausbildung, p));
-    case Infrastruktur:
-        return !(p->get(Infrastruktur) < getMinimumHours(Infrastruktur, p));
-    case Sonstiges:
-        return !(p->get(Sonstiges) < getMinimumHours(Sonstiges, p));
-    case Gesamt:
-        return !(p->get(Gesamt) < getMinimumHours(Gesamt, p));
-    default:
-        return true;
+    if (p->getAktiv()) {
+        if (p->get(cat) >= getMinimumHours(cat, p)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    } else {
+        if (p->get(cat) >= getMinimumHours(cat, p) && p->get(cat)>0) {
+            return -1;
+        } else {
+            return 1;
+        }
     }
 }
 
@@ -221,15 +204,16 @@ int ManagerPersonal::getMinimumHours(Category cat)
 
 int ManagerPersonal::getMinimumHours(Category cat, Person *p)
 {
+    if (p->isAusgetreten()) return 0;
     switch (cat) {
     case Tf:
-        if (! p->getAusbildungTf()) return 0;
+        if (! p->isTauglich(Tf) ) return 0;
         return minimumHours.value(cat, 0);
     case Zf:
-        if (! p->getAusbildungZf()) return 0;
+        if (! p->isTauglich(Zf)) return 0;
         return minimumHours.value(cat, 0);
     case Ausbildung:
-        if (! p->getAusbildungTf() && ! p->getAusbildungZf() && ! p->getAusbildungRangierer()) return 0;
+        if ((! p->getAusbildungTf() && ! p->getAusbildungZf() && ! p->getAusbildungRangierer()) || p->isTauglich()) return 0;
         return minimumHours.value(cat, 0);
     default:
         return minimumHours.value(cat, 0);
@@ -352,7 +336,7 @@ bool ManagerPersonal::checkNummer(int neu)
 
 QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> personen, QSet<Category> spalten)
 {
-    QString a = "<h3>Personalübersicht</h3>"
+    QString a = "<h3>Einsatzzeiten Personal</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
     foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
         if (! spalten.contains(cat)) continue;

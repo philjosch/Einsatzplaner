@@ -11,6 +11,10 @@ public:
     Person(QString name, ManagerPersonal *manager);
     Person(QJsonObject o, ManagerPersonal *man); // Laden aus einem JSON-Objekt
 
+    static const QString FARBE_FEHLENDE_STUNDEN;
+    static const QString FARBE_GENUG_STUNDEN;
+    static const QString FARBE_STANDARD;
+
     QJsonObject toJson();
     QJsonObject personalToJson();
 
@@ -107,6 +111,8 @@ public:
 
     QString getStrasse() const;
     void setStrasse(const QString &value);
+
+    bool isTauglich(Category cat=Tf, QDate datum=QDate::currentDate());
 
 protected:
     // Stammdaten
