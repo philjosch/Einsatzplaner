@@ -1,22 +1,103 @@
 #include "fahrtag.h"
-#include "mainwindow.h"
-#include "managerreservierungen.h"
+#include "wagen.h"
+#include "verteiler.h"
+#include "basics.h"
 
-Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p), ManagerReservierungen()
+#include <QJsonObject>
+#include <QJsonArray>
+
+
+QString Fahrtag::getStringFromPlaetze(QMap<int, QList<int> > liste)
+{
+    QString s = "";
+    for(int i: liste.keys()) {
+        s += QString::number(i)+": ";
+        int old = -1;
+        bool strich = false;
+        for (int j : liste.value(i)) {
+            if (old+1 == j) {
+                if ((strich && (j == liste.value(i).last()))) {
+                    s += QString::number(j);
+                } else if (! strich) {
+                    s += "-";
+                    strich = true;
+                    if (j == liste.value(i).last()) {
+                        s += QString::number(j);
+                    }
+                }
+            } else {
+                if (strich)
+                    s += QString::number(old);
+                if (j != liste.value(i).first()) s += ", ";
+                s += QString::number(j);
+                strich = false;
+            }
+            old = j;
+
+        }
+        s += "; ";
+    }
+    if (s != "") {
+        s = s.left(s.size()-2);
+    }
+    return s;
+}
+
+QMap<int, QList<int> > Fahrtag::getPlaetzeFromString(QString plaetze)
+{
+    QMap<int, QList<int>> map = QMap<int, QList<int>>();
+    if (plaetze == "") {
+        return map;
+    }
+    QStringList l1;
+    l1 = plaetze.split(QRegExp("\\s*;\\s*"));
+    for (QString s1: l1) {
+        QStringList l2a = s1.split(QRegExp("\\s*:\\s*"));
+        int wagen = l2a.at(0).toInt();
+        if (l2a.length() > 1) {
+            QStringList l2 = l2a.at(1).split(QRegExp("\\s*,\\s*"));
+            QList<int> l = *new QList<int>();
+            for (QString s2: l2) {
+                if (s2.contains(QRegExp("\\s*-\\s*"))) {
+                    QStringList l3 = s2.split(QRegExp("\\s*-\\s*"));
+                    for (int i = l3.at(0).toInt(); i <= l3.at(1).toInt(); i++) {
+                        l.append(i);
+                    }
+                } else {
+                    l.append(s2.toInt());
+                }
+            }
+            map.insert(wagen, l);
+        } else {
+            map.insert(wagen, QList<int>());
+        }
+    }
+    return map;
+}
+
+
+Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p)
 {
     art = Museumszug;
     wichtig = false;
     zeitTf = QTime(8, 15);
     zeitAnfang = QTime(8, 45);
     zeitEnde = QTime(18, 45);
-    benoetigeTf = true;
+    benoetigeTf = 1;
     benoetigeZf = true;
     benoetigeZub = true;
     benoetigeService = true;
     personalBenoetigt = false;
+    wagenreihung = "221, 217, 208, 309";
+    reservierungen = QSet<Reservierung*>();
+    checkAll = false;
+
+    wagen = QList<Wagen *>();
+    nummerToWagen = QMap<int, Wagen*>();
+    createWagen();
 }
 
-Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p), ManagerReservierungen(o)
+Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p)
 {
     // Daten für Fahrtag extrahieren
     art = static_cast<Art>(o.value("art").toInt());
@@ -34,17 +115,45 @@ Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p), ManagerRe
     benoetigeZf = o.value("benoetigeZf").toBool(true);
     benoetigeZub = o.value("benoetigeZub").toBool(true);
     benoetigeService = o.value("benoetigeService").toBool(true);
+
+    wagenreihung = o.value("wagenreihung").toString();
+    reservierungen = QSet<Reservierung*>();
+    checkAll = o.value("checkAll").toBool(false);
+
+    wagen = QList<Wagen*>();
+    nummerToWagen = QMap<int, Wagen*>();
+    createWagen();
+
+    QJsonArray array = o.value("reservierungen").toArray();
+    for(int i = 0; i < array.size(); i++) {
+        Reservierung *r = new Reservierung(array.at(i).toObject(), &nummerToWagen);
+        reservierungen.insert(r);
+        connect(r, &Reservierung::changed, this, [=]() { emit changed(this); });
+    }
 }
 
 Fahrtag::~Fahrtag()
 {
     AActivity::~AActivity();
+    foreach(Reservierung *r, reservierungen) {
+        delete r;
+    }
+    foreach(Wagen *w, wagen) {
+        delete w;
+    }
 }
 
 QJsonObject Fahrtag::toJson()
 {
     QJsonObject o = AActivity::toJson();
-    o = ManagerReservierungen::toJson(o);
+    o.insert("wagenreihung", wagenreihung);
+    o.insert("checkAll", checkAll);
+    QJsonArray array;
+    for(Reservierung *r: reservierungen.values()) {
+        array.append(r->toJson());
+    }
+    o.insert("reservierungen", array);
+
     o.insert("isFahrtag", true);
     o.insert("art", art);
     o.insert("zeitTf", zeitTf.toString("hh:mm"));
@@ -484,4 +593,269 @@ void Fahrtag::setArt(const Art &value)
 {
     art = value;
     emit changed(this);
+}
+
+QString Fahrtag::getWagenreihung() const
+{
+    return wagenreihung;
+}
+
+
+bool Fahrtag::setWagenreihung(const QString &value)
+{
+    QString old = wagenreihung;
+    wagenreihung = value;
+    if (createWagen()) {
+        return true;
+    }
+    wagenreihung = old;
+    return false;
+}
+
+int Fahrtag::getBelegtGesamt()
+{
+    int summe = 0;
+    for(Reservierung *r: reservierungen) {
+        summe += r->getAnzahl();
+    }
+    return summe;
+}
+int Fahrtag::getCapacityGesamt()
+{
+    int summe = 0;
+    for(Wagen *w: wagen) {
+        summe += w->getKapazitaet();
+    }
+    return summe;
+}
+
+
+int Fahrtag::getBelegtErste()
+{
+    int summe = 0;
+    for(Wagen *w: wagen) {
+        if (w->klasse() == 1) {
+            summe += w->getAnzahlBelegt();
+        }
+    }
+    return summe;
+}
+int Fahrtag::getCapacityErste()
+{
+    int summe = 0;
+    for(Wagen *w: wagen) {
+        if (w->klasse() == 1)
+            summe += w->getKapazitaet();
+    }
+    return summe;
+}
+
+int Fahrtag::getBelegtZweite()
+{
+    int summe = 0;
+    for(Wagen *w: wagen) {
+        if (w->klasse() == 2) {
+            summe += w->getAnzahlBelegt();
+        }
+    }
+    return summe;
+}
+int Fahrtag::getCapacityZweite()
+{
+    int summe = 0;
+    for(Wagen *w: wagen) {
+        if (w->klasse() == 2)
+            summe += w->getKapazitaet();
+    }
+    return summe;
+}
+
+int Fahrtag::getBelegtDritte()
+{
+    int summe = 0;
+    for(Wagen *w: wagen) {
+        if (w->klasse() == 3) {
+            summe += w->getAnzahlBelegt();
+        }
+    }
+    return summe;
+}
+int Fahrtag::getCapacityDritte()
+{
+    int summe = 0;
+    for(Wagen *w: wagen) {
+        if (w->klasse() == 3)
+            summe += w->getKapazitaet();
+    }
+    return summe;
+}
+
+int Fahrtag::getAnzahl()
+{
+    return reservierungen.size();
+}
+
+QSet<Reservierung *> Fahrtag::getReservierungen()
+{
+    return reservierungen;
+}
+
+QList<Mistake> Fahrtag::verteileSitzplaetze()
+{
+    // aufteilen der Wagen auf die beiden Gruppen
+    QList<Wagen*> ersteKlasse = QList<Wagen*>();
+    QList<Wagen*> andereKlasse = QList<Wagen*>();
+    QStringList wagenR = wagenreihung.split(QRegExp("\\s*,\\s*"));
+    for(QString s: wagenR) {
+        int nummer = s.toInt();
+        switch (Wagen::klasse(nummer)) {
+        case 1: ersteKlasse.append(new Wagen(nummer)); break;
+        case 2:
+        case 3: andereKlasse.append(new Wagen(nummer)); break;
+        default: break;
+        }
+    }
+    // Aufteilen der Resevierungen auf die beiden gruppen
+    QSet<Reservierung*> resErste = QSet<Reservierung*>();
+    QSet<Reservierung*> resAndere = QSet<Reservierung*>();
+    for(Reservierung *r: reservierungen) {
+        if (r->getKlasse() == 1)
+            resErste.insert(r);
+        else
+            resAndere.insert(r);
+    }
+
+    // Verteilen der Sitzplätze
+
+    // Erste klasse verteilen
+    Mistake okErste = Mistake::OK;
+    if (resErste.size() > 0 && ersteKlasse.length() > 0) {
+        Verteiler erste = Verteiler(ersteKlasse, resErste);
+        erste.setCheckAll(checkAll);
+        okErste = erste.verteile();
+    } else if (resErste.size() > 0 && ersteKlasse.length() == 0) {
+        okErste = Mistake::KapazitaetUeberlauf;
+    }
+
+    // 2./3. Klasse verteilen
+    Mistake okAndere = Mistake::OK;
+    if (resAndere.size() > 0 && andereKlasse.length() > 0) {
+        Verteiler andere = Verteiler(andereKlasse, resAndere);
+        andere.setCheckAll(checkAll);
+        okAndere = andere.verteile();
+    } else if (resAndere.size() > 0 && andereKlasse.length() == 0) {
+        okAndere = Mistake::KapazitaetUeberlauf;
+    }
+
+    // Die Sitzplätze zuweisen, sodass sie in den Wagen erscheinen.
+    for(Reservierung *r: reservierungen.values()) {
+        r->setSitzplatz(r->getSitzplatz());
+    }
+
+    return {okAndere, okErste};
+}
+
+bool Fahrtag::checkPlaetze(QMap<int, QList<int>> p, Reservierung *r)
+{
+    // Überprüft, ob die eingegebenen Sitzplätze frei sind, oder ob sie schon belegt wurden
+    int summe = 0;
+    for(int w: p.keys()) {
+        if (! nummerToWagen.contains(w)) return false;
+        if (r->getKlasse() == 1 && nummerToWagen.value(w)->klasse() != 1) return false;
+        if (r->getKlasse() == 0 && (nummerToWagen.value(w)->klasse() != 2 &&
+                                    nummerToWagen.value(w)->klasse() != 3)) return false;
+        summe += p.value(w).length();
+        // für jeden Wagen prüfen, ob die Plätze belegt sind
+        if (! nummerToWagen.value(w)->testPlaetze(p.value(w), r)) return false;
+    }
+    if (summe != r->getAnzahl()) return false;
+    return true;
+}
+
+Reservierung *Fahrtag::createReservierung()
+{
+    Reservierung *r = new Reservierung(&nummerToWagen);
+    reservierungen.insert(r);
+    connect(r, &Reservierung::changed, this, [=]() { emit changed(this); });
+    return r;
+}
+
+bool Fahrtag::removeReservierung(Reservierung *res)
+{
+    res->removePlaetze();
+    return reservierungen.remove(res);
+}
+
+bool Fahrtag::createWagen()
+{
+    QHash<int,Wagen*> wagenNummer;
+    for(Wagen *w: wagen) {
+        wagenNummer.insert(w->getNummer(), w);
+    }
+
+    QList<Wagen*> wagenNeu = QList<Wagen*>();
+    QStringList wagenSplit = wagenreihung.split(QRegExp("\\s*,\\s*"));
+    for(QString s: wagenSplit) {
+        int nummer = s.toInt();
+        Wagen *w;
+        if (wagenNummer.contains(nummer)) {
+            w = wagenNummer.value(nummer);
+            wagenNummer.remove(nummer);
+        } else {
+            if (Wagen::klasse(nummer) == 0) continue;
+            w = new Wagen(nummer);
+        }
+        wagenNeu.append(w);
+    }
+    if (! wagenNummer.isEmpty()) {
+        // Prüfe ob die nicht gelöschten Wagen leer sind
+        for(int nummer: wagenNummer.keys()) {
+            if (! wagenNummer.value(nummer)->isEmpty())
+                return false;
+        }
+        // Wenn test für alle Wagen überstanden ist, können sie gelöscht werden
+    }
+    wagen = wagenNeu;
+    nummerToWagen.clear();
+    for(Wagen *w: wagen) {
+        nummerToWagen.insert(w->getNummer(), w);
+    }
+    return true;
+}
+
+bool Fahrtag::getCheckAll() const
+{
+    return checkAll;
+}
+
+void Fahrtag::setCheckAll(bool value)
+{
+    checkAll = value;
+}
+
+bool Fahrtag::checkPlausibilitaet(QList<int> zuege, QList<int> haltepunkte)
+{
+    if (zuege.length() != haltepunkte.length()) return false;
+    if (zuege.length() > 4) return false;
+
+    int z1 = zuege.at(0);
+    int z2 = zuege.at(1);
+    int z3 = zuege.at(2);
+    int z4 = zuege.at(3);
+
+    int h1 = haltepunkte.at(0);
+    int h2 = haltepunkte.at(1);
+    int h3 = haltepunkte.at(2);
+    int h4 = haltepunkte.at(3);
+
+    bool z_ok = ( z1 <= z2 || z1 == 6 || z2 == 6) && (z2 < z3 || z2 == 6 || z3 == 6) && (z3 <= z4 || z3 == 6 || z4 == 6);
+    bool h_ok1 = (h1 != h2 || h1 == 11 || h2 == 11 || z1 < z2)
+            && (z1 != z2 || z1 == 6 || z2 == 6 || h1 == 11 || h2 == 11 || ((z1 %2 != 0 || h1 < h2) && (z1%2 != 1 || h1 > h2)))
+            && (h1 == 11 || z1 == 6 || ((z1%2 != 0 || h1 != 10) && (z1%2 != 1 || h1 !=  0)))
+            && (h2 == 11 || z2 == 6 || ((z2%2 != 0 || h2 !=  0) && (z2%2 != 1 || h2 != 10)));
+    bool h_ok2 = (h3 != h4 || h3 == 11 || h4 == 11 || z3 < z4)
+            && (z3 != z4 || z3 == 6 || z4 == 6 || h3 == 11 || h4 == 11 || ((z3 %2 != 0 || h3 < h4) && (z3%2 != 1 || h3 > h4)))
+            && (h3 == 11 || z3 == 6 || ((z3%2 != 0 || h3 != 10) && (z3%2 != 1 || h3 !=  0)))
+            && (h4 == 11 || z4 == 6 || ((z4%2 != 0 || h4 !=  0) && (z4%2 != 1 || h4 != 10)));
+    return (z_ok && h_ok1 && h_ok2);
 }

@@ -1,10 +1,12 @@
 #ifndef FAHRTAG_H
 #define FAHRTAG_H
 
+#include "reservierung.h"
+#include "wagen.h"
+#include "basics.h"
 #include "aactivity.h"
-#include "managerreservierungen.h"
 
-class Fahrtag : public AActivity, public ManagerReservierungen
+class Fahrtag : public AActivity
 {
     Q_OBJECT
 
@@ -20,6 +22,12 @@ public:
     QString getKurzbeschreibung();
     QString getListString();
     QString getListStringShort();
+
+    QString getHtmlForSingleView();
+    QString getHtmlForTableView();
+
+    QString getHtmlFuerReservierungsuebersicht();
+
 
     void setArt(const Art &value);
     Art getArt() const;
@@ -42,12 +50,43 @@ public:
     bool getBenoetigeService() const;
     void setBenoetigeService(bool value);
 
+    QString getWagenreihung() const;
+    bool setWagenreihung(const QString &value);
+
+    int getBelegtGesamt();
+    int getCapacityGesamt();
+
+    int getBelegtErste();
+    int getCapacityErste();
+
+    int getBelegtZweite();
+    int getCapacityZweite();
+
+    int getBelegtDritte();
+    int getCapacityDritte();
+
+    int getAnzahl();
+
+    QSet<Reservierung *> getReservierungen();
+
+    bool getCheckAll() const;
+    void setCheckAll(bool value);
+
+    bool checkPlausibilitaet(QList<int> zuege, QList<int> haltepunkte);
+
     Infos getIndividual(Person *person);
 
-    QString getHtmlForSingleView();
-    QString getHtmlForTableView();
+    static QString getStringFromPlaetze(QMap<int, QList<int> > liste);
+    static QMap<int, QList<int> > getPlaetzeFromString(QString plaetze);
 
-    QString getHtmlFuerReservierungsuebersicht();
+
+public slots:
+    QList<Mistake> verteileSitzplaetze();
+    bool checkPlaetze(QMap<int, QList<int> > p, Reservierung *r);
+
+    Reservierung *createReservierung();
+    bool removeReservierung(Reservierung *res);
+
 
 protected:
     Art art;
@@ -57,6 +96,15 @@ protected:
     bool benoetigeZf;
     bool benoetigeZub;
     bool benoetigeService;
+    QString wagenreihung;
+    QSet<Reservierung *> reservierungen;
+    bool checkAll;
+
+    QList<Wagen *> wagen;
+    QMap<int, Wagen *> nummerToWagen;
+
+    bool createWagen();
+
 };
 
 #endif // FAHRTAG_H

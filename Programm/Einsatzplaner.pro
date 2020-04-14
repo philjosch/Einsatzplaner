@@ -19,7 +19,6 @@ SOURCES += main.cpp\
     activity.cpp \
     reservierung.cpp \
     manager.cpp \
-    managerreservierungen.cpp \
     fahrtagwindow.cpp \
     activitywindow.cpp \
     personalwindow.cpp \
@@ -44,7 +43,6 @@ HEADERS  += mainwindow.h \
     activity.h \
     reservierung.h \
     manager.h \
-    managerreservierungen.h \
     fahrtagwindow.h \
     activitywindow.h \
     personalwindow.h \

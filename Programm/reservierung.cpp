@@ -1,6 +1,6 @@
 #include "reservierung.h"
-#include "managerreservierungen.h"
 #include "wagen.h"
+#include "fahrtag.h"
 
 #include <QJsonObject>
 #include <QJsonArray>
@@ -43,7 +43,7 @@ Reservierung::Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen)
     }
     this->wagen = wagen;
     sitzplatz = QMap<int, QList<int>>();
-    setSitzplatz(ManagerReservierungen::getPlaetzeFromString(o.value("sitzplaetze").toString()));
+    setSitzplatz(Fahrtag::getPlaetzeFromString(o.value("sitzplaetze").toString()));
     fahrrad = o.value("fahrrad").toBool();
     sonstiges = o.value("sonstiges").toString().replace("<br/>", "\n");
 }
@@ -66,7 +66,7 @@ QJsonObject Reservierung::toJson()
         hpsA.append(s);
     }
     o.insert("hps", hpsA);
-    o.insert("sitzplaetze", ManagerReservierungen::getStringFromPlaetze(sitzplatz));
+    o.insert("sitzplaetze", Fahrtag::getStringFromPlaetze(sitzplatz));
     o.insert("fahrrad", fahrrad);
     o.insert("sonstiges", sonstiges);
     return o;
@@ -158,7 +158,7 @@ QString Reservierung::getTableRow()
     QString html = "<tr><td>"+name+"<br/>"+telefon+"<br/>"+mail+"</td>";
     html += "<td>"+QString::number(anzahl)+" Plätze in ";
     html += (klasse==1 ? "1. Klasse" :  "2./3.Klasse");
-    html += "<br/>"+ManagerReservierungen::getStringFromPlaetze(sitzplatz)+"</td>";
+    html += "<br/>"+Fahrtag::getStringFromPlaetze(sitzplatz)+"</td>";
     html += "<td>";
     for(int i = 0; i < zuege.length(); i=i+2) {
         html +=  (zuege.at(i  ) == "-" ? "" : zuege.at(i  ))+" "+(hps.at(i  ) == "-" ? "" : hps.at(i  ))
@@ -190,7 +190,7 @@ QString Reservierung::getHtmlForDetailTable()
         html += "<br/>"+mail;
     html += "</td>";
     html += "<td>"+QString::number(anzahl)+" Plätze</td>";
-    html += "<td>"+ManagerReservierungen::getStringFromPlaetze(sitzplatz)+"</td>";
+    html += "<td>"+Fahrtag::getStringFromPlaetze(sitzplatz)+"</td>";
     html += (fahrrad ? "<td>Fahrrad!<br/>" : "<td>");
     if (hps.at(0) != "-")
         html += QObject::tr("Einstieg in ")+hps.at(0)+"<br/>";

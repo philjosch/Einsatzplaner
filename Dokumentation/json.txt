@@ -1,4 +1,5 @@
-# (date) steht für einen Datumstring im Format yyyy-mm-dd
+# (date) steht für einen Datumstring im Format yyyy-MM-dd
+# (time) steht für einen Zeitstring im Format hh:mm
 personal/ (object)	-> hier werden die Personen gesichert
 	minimumKeys (array)	-> Liste mit den Kategorien für Mindeststunden
 		(int)		-> Zugehörige Integer der Kategorie AActivity::Category
@@ -41,8 +42,8 @@ activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten. Bis V
 	# Für Arbeitseinsatz
 	datum (date)
 	ort (string)
-	zeitAnfang (string)
-	zeitEnde (string)
+	zeitAnfang (time)
+	zeitEnde (time)
 	zeitenUnbekannt (bool)		-> True <-> Zeiten sind noch unbekannt und werden noch bekanntgegeben
 	anlass (string)
 	bemerkungen (string)
@@ -59,16 +60,13 @@ activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten. Bis V
 
 	# Für Fahrtag kommt folgendes hinzu
 	art (int)
-	zeitTf (string)
+	zeitTf (time)
 	wichtig (bool)
 	benoetigeTf (int)		-> Bis Version <1.6 bool als Typ 
 	benoetigeZf (bool)
 	benoetigeZub (bool)
 	benoetigeService (bool)
-
-	# Daten aus Reservierungsmanager
 	wagenreihung (string)		-> Die Wagenreihung, Wagen getrennt durch ', '
-	checkAll (bool)			-> bei einer Verteilung der Sitzplätze werden alle Möglichkeiten berechnet und nicht nur das erst beste
 	reservierungen (array)		-> Die Liste mit den Reservierungen jeweils als (object)
 		name (string)
 		telefon (string)
@@ -82,6 +80,7 @@ activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten. Bis V
 		sitzplaetze (string)	-> kodiert die Sitzplätze in dem Format, in dem sie auch eingegeben werden sollen
 		fahrrad (bool)
 		sonstiges (string)
+	checkAll (bool)			-> bei einer Verteilung der Sitzplätze werden alle Möglichkeiten berechnet und nicht nur das erst beste
 
 
 
