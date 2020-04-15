@@ -730,7 +730,6 @@ void FahrtagWindow::saveResFahrt()
     }
     aktuelleRes->setZuege(z);
     aktuelleRes->setHps(h);
-    emit fahrtag->changed(fahrtag);
 }
 
 void FahrtagWindow::setEnabledFieldsForReservierung(bool enabled)
@@ -765,7 +764,6 @@ void FahrtagWindow::on_buttonAdd_clicked()
     itemToRes.insert(i, r);
     ui->buttonDelete->setEnabled(true);
     loadReservierung(r);
-    emit fahrtag->changed(fahrtag);
 }
 
 void FahrtagWindow::on_buttonDelete_clicked()
@@ -785,7 +783,6 @@ void FahrtagWindow::on_buttonDelete_clicked()
             setEnabledFieldsForReservierung(false);
         }
         update();
-        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -826,7 +823,6 @@ void FahrtagWindow::on_buttonVerteile_clicked()
         if (CoreApplication::isDeveloperVersion()) {
             QMessageBox::information(this, tr("Fertig"), "mSek: "+QString::number(start.msecsTo(ende)));
         }
-        emit fahrtag->changed(fahrtag);
         update();
     }
 }
@@ -836,7 +832,6 @@ void FahrtagWindow::on_lineName_textChanged(const QString &arg1)
     if (nehmeRes) {
         aktuelleRes->setName(arg1);
         resToItem.value(aktuelleRes)->setText(aktuelleRes->getName());
-        emit fahrtag->changed(fahrtag);
         ui->listRes->sortItems();
     }
 }
@@ -845,7 +840,6 @@ void FahrtagWindow::on_lineMail_textChanged(const QString &arg1)
 {
     if (nehmeRes) {
         aktuelleRes->setMail(arg1);
-        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -853,7 +847,6 @@ void FahrtagWindow::on_lineTelefon_textChanged(const QString &arg1)
 {
     if (nehmeRes) {
         aktuelleRes->setTelefon(arg1);
-        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -862,7 +855,6 @@ void FahrtagWindow::on_spinAnzahl_valueChanged(int arg1)
     if (nehmeRes) {
         aktuelleRes->setAnzahl(arg1);
         update();
-        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -870,7 +862,6 @@ void FahrtagWindow::on_comboKlasse_currentIndexChanged(int index)
 {
     if (nehmeRes) {
         aktuelleRes->setKlasse(index);
-        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -952,7 +943,6 @@ void FahrtagWindow::on_lineSitze_textChanged(const QString &arg1)
             ui->lineSitze->setStyleSheet("background-color: #cb555d");
         }
         ui->lineSitze->repaint();
-        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -972,7 +962,6 @@ void FahrtagWindow::on_lineSitze_returnPressed()
             QMessageBox::information(this, tr("Sitzplätze fehlerhaft"), tr("Die eingegebenen Sitzplätze sind möglicherweise belegt! Bitte überprüfen Sie ihre Eingabe."));
         }
         ui->lineSitze->repaint();
-        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -980,7 +969,6 @@ void FahrtagWindow::on_checkFahrrad_clicked(bool checked)
 {
     if (nehmeRes) {
         aktuelleRes->setFahrrad(checked);
-        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -988,7 +976,6 @@ void FahrtagWindow::on_plainSonstiges_textChanged()
 {
     if (nehmeRes) {
         aktuelleRes->setSonstiges(ui->plainSonstiges->toPlainText());
-        emit fahrtag->changed(fahrtag);
     }
 }
 
@@ -1032,7 +1019,6 @@ void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)
 {
     if (nehme) {
         fahrtag->setPersonalBenoetigt(checked);
-        emit fahrtag->changed(fahrtag);
     }
 }
 

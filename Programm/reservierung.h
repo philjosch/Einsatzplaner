@@ -6,8 +6,10 @@
 
 class Wagen;
 
-class Reservierung
+class Reservierung: public QObject
 {
+    Q_OBJECT
+
 public:
     Reservierung(QMap<int, Wagen *> *wagen);
     Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen);
@@ -37,6 +39,7 @@ public:
 
     QMap<int, QList<int> > getSitzplatz() const;
     void setSitzplatz(QMap<int, QList<int> > value);
+    void setSitzplatz(QString value);
 
     bool getFahrrad() const;
     void setFahrrad(bool value);
@@ -48,6 +51,13 @@ public:
     void removePlaetze();
 
     QString getHtmlForDetailTable();
+
+    static QString getStringFromPlaetze(QMap<int, QList<int> > liste);
+    static QMap<int, QList<int> > getPlaetzeFromString(QString plaetze);
+
+
+signals:
+    void changed();
 
 private:
     QString name;
