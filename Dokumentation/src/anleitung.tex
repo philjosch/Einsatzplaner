@@ -1,0 +1,51 @@
+\documentclass[a4paper,ngerman,oneside]{scrbook}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{xspace}
+\usepackage{hyperref}
+
+\usepackage{scrhack}
+
+\usepackage{graphicx,tabularx}
+\usepackage{textcomp}
+
+\newcommand{\nach}{\xspace\textrightarrow\xspace}
+\newcommand{\cmnd}[1]{\xspace\texttt{#1}\xspace}
+
+\graphicspath{{./img/}}
+
+\title{Anleitung Einsatzplaner -- Version 1.6}
+\subject{Version 1.6}
+\author{Philipp Schepper}
+\date{Stand: 15. April 2020 –- Entwurf}
+
+\begin{document}
+\maketitle
+
+\frontmatter
+\tableofcontents
+\include{aenderungen}
+
+\mainmatter
+\part{Grundlagen}
+\include{allgemein}
+\include{kalender}
+\include{fahrtage}
+\include{arbeitseinsaetze}
+\include{personal}
+\part{Export}
+\include{export}
+\include{upload}
+\part{Verschiedenes}
+\include{einstellungen}
+\include{sonstiges}
+
+\appendix
+\include{versionshistorie}
+
+\backmatter
+\include{abkuerzungen}
+\include{glossar}
+
+\end{document}

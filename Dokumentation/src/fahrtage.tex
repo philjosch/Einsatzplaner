@@ -1,0 +1,102 @@
+\chapter{Fahrtage}
+\section{Allgemeines und Personal}
+Im oberen Bereich des Fensters können die grundlegenden Daten für einen Fahrtag eingegeben werden.
+Eine Markierung als \emph{wichtig} wird im Export des Fahrtages durch ein rotes Kästchen in der Tabelle gekennzeichnet.
+
+Die Wagenreihung wirkt sich auf die Anzeige der Reservierungen aus.
+Es stehen einige häufige Kombinationen der Wagen bereits zur Verfügung, sie können aber auch von Hand geändert werden.
+Dabei müssen die Wagen durch Kommata voneinander getrennt werden.
+Sind die Zeiten für den Fahrtag noch unbekannt, können Sie das mit dem entsprechenden Häkchen kenntlich machen.
+Dies wird dann auch entsprechend ausgegeben.
+
+Der Anlass eines Fahrtages wird in der Kalenderansicht angezeigt.
+Sodass bei einem Sonderzug schnell der Grund erkennbar ist.
+
+In den vier Listen können Tf, Zf, Zub und Begl.o.b.A.\ und Service-Personal eingetragen werden.
+Es können nur Personen eingetragen werden, die die entsprechende Funktion haben (Tf, Tb und Zf).
+Eine Ausnahme hiervon ist unter anderem für Ausbildungszwecke möglich.
+Dazu muss einer der folgenden Begriffe in der Bemerkung gefunden werden:
+\begin{itemize}
+	\item Azubi
+	\item Ausbildung
+	\item Tf-Ausbildung
+	\item Zf-Ausbildung
+	\item Tf-Unterricht
+	\item Zf-Unterricht
+	\item Weiterbildung
+\end{itemize}
+Ein Zugbegleiter ohne Ausbildung wird automatisch als Begl.o.b.A.\ geführt, sodass hier keine Unterscheidung vorgenommen werden muss.
+Die Namen müssen wie folgt eingeben werden: \texttt{Name; Bemerkung}.
+
+Es können nur Personen eingetragen werden, die im System bereits registriert wurden
+(näheres im Kapitel über die Personalverwaltung).
+Es sind aber Ausnahmen möglich, wenn einer der folgenden Begriffe in der Bemerkung vorkommt:
+\begin{itemize}
+	\item Extern
+	\item Führerstand
+	\item FS
+	\item Schnupperkurs
+	\item ELF
+	\item Ehrenlokführer
+	\item ELF-Kurs
+\end{itemize}
+Darüber hinaus können weitere Bemerkungen eingegeben werden, die auch durch Strichpunkte voneinander getrennt sein dürfen.
+
+
+\section{Reservierungen}
+Im unteren Teil besteht die Möglichkeit die Reservierungen zu verwalten.
+
+Es wird angezeigt, zu welchen Grad die einzelnen Klassen jeweils belegt sind. Hier wird mit den Reservierungen gerechnet, denen ein fester Sitzplatz zugeordnet wurde.
+
+Wenn Sie zu einer Reservierung noch keinen Sitzplatz angegeben haben, wird diese Reservierung nicht zur Berechnung der Belegung herangezogen.
+Allerdings wird die Reservierung in die Gesamtzahl mit einbezogen.
+Es kann also folgendes vorkommen:
+\begin{verbatim}
+	Belegung 1. Klasse  10/40 (25\%)
+	Belegung 2. Klasse          --
+	Belegung 3. Klasse  30/60 (50\%)
+	Belegung Gesamt    60/100 (60\%)
+\end{verbatim}
+
+Eine Reservierung können Sie bearbeiten, indem Sie doppelt auf den Eintrag in der Liste klicken.
+Sie wird dann in das Formular geladen. Dort können Sie die zugehörigen Information ändern.
+Die Sitzplätze müssen in folgendem Format angegeben werden: Zuerst der Wagen und dann die Sitzplätze durch Kommata getrennt.
+Aufeinanderfolgende Sitzplatznummern können Sie durch das Format Von-Bis schreiben (Beispiel: \texttt{208: 60-12}).
+Wenn Sie Plätze in mehreren Wagen angeben möchten, müssen Sie die Plätze durch einen Strickpunkt voneinander trennen
+(Beispiel: \texttt{204: 1-40; 217: 1-30}).
+
+Für die Reservierung können bis zu zwei Teilstrecken angegeben werden, für welche die Reservierung dann gilt.
+
+\paragraph{Automatische Sitzplatzverteilung}
+Wenn Sie bei der Art des Fahrtags eine Nikolausfahrt ausgewählt haben, haben Sie die Möglichkeit die Sitzplätze automatisch durch einen Druck auf den Knopf ``Sitzplätze verteilen'' zu verteilen.
+Der Vorgang dauert in der Regel wenige Sekunden.
+Es kann aber auch unter Umständen mehrere Minuten dauern.
+Warten sie diese Zeit bitte ab!
+Wir arbeiten ständig an einer Verbesserung des Algorithmus zur Verteilung der Sitzplätze.
+
+HINWEIS: Aktivieren Sie das Feld ``Alle Kombinationen berechnen'' nur, wenn Sie wenige Reservierungen angegeben haben (maximal 5-7),
+denn durch diese Auswahl wird der Rechenaufwand erheblich vergrößert!
+Eine grafische Ansicht der Sitzplatzverteilung ist im Moment leider noch nicht möglich.
+
+\paragraph{Reservierungen exportieren}
+Da bei Nikolausfahrten sehr viele Reservierungen vorliegen, werden Sie nicht bei der Einzelansicht von Fahrtagen angegeben.
+Stattdessen können Sie, wie bei allen anderen Fahrtagen auch,
+die Funktion ``Reservierungen drucken \dots'' und ``Reservierungen als PDF sichern \dots'' im Menü Fahrtag nutzen.
+Bei dieser Funktion werden dann die Reservierungen nach Wagen geordnet ausgegeben.
+Auch die Information über einen anderen als den Standard-Zustieg wird ausgegeben.
+
+
+\section{Weiteres Personal}
+In der Tabelle erhalten Sie eine Übersicht über alle Personen, die für diesen Fahrtag eingetragen wurden.
+Zu jeder Person wird die Aufgabe angezeigt, die sie durchführt.
+Die Arbeitszeit wird dann auf das entsprechende Konto angerechnet.
+Es stehen die standardmäßigen Aufgaben zum Einstellen zur Verfügung.
+
+Personen die betriebliche und regelmäßige Aufgaben haben und somit bereits im Reiter Personal in eine Liste eingetragen wurden, werden hier auch angezeigt.
+Allerdings können nur die Einsatzzeiten dieser Personen verändert werden und auch nicht gelöscht werden.
+Diese Personen müssen in den entsprechenden Listen gelöscht werden.
+
+
+Die Spalten ``Beginn'' und ``Ende'' dienen dazu, dass man Uhrzeiten eingeben kann, wenn Personen nicht die angegebene Zeit geholfen haben.
+So kann man eine frühere Endzeit eingeben, wenn zum Beispiel eine Person nur am Vormittag half.
+Die Zeit für die Lokführer wird automatisch anhand des Dienstbeginns für Tf berechnet, sodass hier kein manueller Eintrag vorgenommen werden muss.

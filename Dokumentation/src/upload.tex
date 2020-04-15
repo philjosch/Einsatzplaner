@@ -1,0 +1,42 @@
+\chapter{Upload-Tool}
+\section{Einsatzplaner}
+Dieses Tool gibt ihnen die Möglichkeit die Listenansicht des Einsatzplan als PDF-Datei auf einen Webserver hochzuladen.
+Dies kann manuell oder automatisch bei jedem Speichern geschehen.
+Zur Konfiguration befindet sich im Menü ``Datei'' ein Punkt ``Eigenschaften''.
+In dem sich öffnenden Menü finden Sie folgenden Abschnitt:
+
+\begin{itemize}
+  \item
+  Mit dem ersten Haken wird das Tool aktiviert.
+  \item
+  Der zweite dient dazu einzustellen, ob die Datei automatisch hochgeladen wird, wenn die lokale Datei gespeichert wird.
+  Diese Funktion ist nur verfügbar, wenn sie im Einstellung Menü des Programms aktiviert wurde.
+  \item
+  Unter Server, Pfad und ID geben Sie die Daten an, die Ihnen von ihrem Webmaster mitgeteilt wurden (http und https sind als Protokolle möglich).
+  \item
+  Mit dem Knopf wird getestet, ob ihre Eingaben korrekt sind, dafür wird eine Verbindung zum Webserver aufgebaut.
+\end{itemize}
+
+Die drei letzten Einstellungen sind nur relevant, wenn die Datei automatisch hochgeladen werden soll.
+Damit keine Rückfragen beim Speichern auftreten, können Sie hier einstellen, in welchem Zeitraum die Aktivitäten liegen müssen, damit Sie eingeschlossen werden.
+Ebenso können Sie auswählen, ob Arbeitseinsätze auch ausgegeben werden.
+
+Wichtig:
+Diese Einstellungen werden nicht verwendet, wenn Sie die Export-Funktion verwenden!
+Weitere Informationen im entsprechenden Kapitel.
+
+
+
+\section{Server-Tool}
+Zur Installation des Tools auf einem Server benötigen Sie eine nicht veraltete Version von PHP.
+
+Die benötigten Dateien werden unter macOS mit dem Programm ausgeliefert.
+Alternativ können Sie auf der Webseite heruntergeladen werden.
+Weitere Informationen im Kapitel ``Weitere Informationen''.
+
+Das Tool besteht aus der Konfigurationsdatei \texttt{config.php} und dem eigentlichen Tool \texttt{load.php}.
+Der Name der Datei \texttt{load.php} kann an die eigenen Bedürfnisse angepasst werden.
+Der Name der Konfigurationsdatei darf nicht verändert werden.
+Ebenso müssen beide Dateien im gleichen Ordner liegen.
+
+Die Konfiguration des Tools ist in der Datei \texttt{config.php} beschrieben.
