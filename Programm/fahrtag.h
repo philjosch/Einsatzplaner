@@ -76,19 +76,17 @@ public:
 
     Infos getIndividual(Person *person);
 
-    static QString getStringFromPlaetze(QMap<int, QList<int> > liste);
-    static QMap<int, QList<int> > getPlaetzeFromString(QString plaetze);
-
-
 public slots:
     QList<Mistake> verteileSitzplaetze();
-    bool checkPlaetze(QMap<int, QList<int> > p, Reservierung *r);
+    bool checkPlaetze(QString p, Reservierung *r);
 
     Reservierung *createReservierung();
     bool removeReservierung(Reservierung *res);
 
 
 protected:
+    bool checkPlaetze(QMap<int, QList<int> > p, Reservierung *r);
+
     Art art;
     QTime zeitTf;
     bool wichtig;

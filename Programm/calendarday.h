@@ -4,6 +4,8 @@
 #include "aactivity.h"
 #include "fahrtag.h"
 
+#include <QListWidgetItem>
+
 namespace Ui {
 class CalendarDay;
 }

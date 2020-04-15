@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QTableWidgetItem>
 #include <QPushButton>
+#include <QListWidgetItem>
 
 namespace Ui {
 class FahrtagWindow;
@@ -24,7 +25,7 @@ private slots:
     void on_dateDate_dateChanged(const QDate &date);
     void on_comboArt_currentIndexChanged(int index);
     void on_textAnlass_textChanged();
-    void on_checkWichtig_stateChanged(int arg1);
+    void on_checkWichtig_clicked(bool checked);
     void on_comboWagenreihung_currentTextChanged(const QString &arg1);
     void on_comboTimeTfH_currentTextChanged(const QString &arg1);
     void on_comboTimeTfM_currentTextChanged(const QString &arg1);
@@ -58,8 +59,9 @@ private slots:
     void on_textBemerkungen_textChanged();
 
     // Reservierungen
-    void on_listRes_itemDoubleClicked(QListWidgetItem *item);
-    void on_buttonShow_clicked();
+    void on_buttonAddReservierung_clicked();
+    void on_buttonDeleteReservierung_clicked();
+
     void on_buttonVerteile_clicked();
 
     void on_lineName_textChanged(const QString &arg1);
@@ -84,14 +86,14 @@ private slots:
     void on_plainSonstiges_textChanged();
     void on_listRes_itemClicked(QListWidgetItem *item);
 
-    void update(); // Aktualisiert die Anzeige, wieviele Sitzplätze belegt sind
+    void updateAuswertungReservierungen(); // Aktualisiert die Anzeige, wieviele Sitzplätze belegt sind
 
     // Einsatzzeiten
     void on_checkBoxBenoetigt_clicked(bool checked);
     void on_tablePersonen_cellChanged(int row, int column);
 
-    void on_buttonInsert_clicked();
-    void on_buttonRemove_clicked();
+    void on_buttonAddPerson_clicked();
+    void on_buttonRemovePerson_clicked();
 
     // Menue
     void on_actionDelete_triggered();
@@ -101,12 +103,9 @@ private slots:
     void on_actionResPrint_triggered();
 
     // Hilfe
-    void on_buttonAdd_clicked();
-    void on_buttonDelete_clicked();
 
     void on_checkBoxAll_clicked(bool checked);
 
-    void complexWidgetInTableChanged();
 
 private:
     // Allgemeines
@@ -114,7 +113,6 @@ private:
     Fahrtag *fahrtag;
     bool nehme;
 
-    void loadData();
 
     // Personal Verwaltung
     QMap<QListWidgetItem *, QString> listeMitNamen; // Liste mit den Namen, die in den Listen verwaltet werden
@@ -123,21 +121,20 @@ private:
 
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);
-    void itemChanged(QListWidgetItem *item, Category kat);
+    void itemInListChanged(QListWidgetItem *item, Category kat);
 
     // Reservierungen
     void plausibilityCheck();
-    QMap<Reservierung*, QListWidgetItem*> resToItem;
     QMap<QListWidgetItem*, Reservierung*> itemToRes;
 
     Reservierung *aktuelleRes;
     bool nehmeRes;
 
-    void loadReservierung(Reservierung *r);
+    void showReservierung(Reservierung *r);
     void saveResFahrt();
-    void setEnabledFieldsForReservierung(bool enabled);
+    void toggleFelderReservierung(bool enabled);
 
-    QMap<QWidget*, QTableWidgetItem*> widgetInTableToTableWidget;
+    void updateWindowTitle();
 };
 
 #endif // FAHRTAGWINDOW_H

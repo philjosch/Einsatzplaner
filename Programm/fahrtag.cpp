@@ -6,76 +6,6 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-
-QString Fahrtag::getStringFromPlaetze(QMap<int, QList<int> > liste)
-{
-    QString s = "";
-    for(int i: liste.keys()) {
-        s += QString::number(i)+": ";
-        int old = -1;
-        bool strich = false;
-        for (int j : liste.value(i)) {
-            if (old+1 == j) {
-                if ((strich && (j == liste.value(i).last()))) {
-                    s += QString::number(j);
-                } else if (! strich) {
-                    s += "-";
-                    strich = true;
-                    if (j == liste.value(i).last()) {
-                        s += QString::number(j);
-                    }
-                }
-            } else {
-                if (strich)
-                    s += QString::number(old);
-                if (j != liste.value(i).first()) s += ", ";
-                s += QString::number(j);
-                strich = false;
-            }
-            old = j;
-
-        }
-        s += "; ";
-    }
-    if (s != "") {
-        s = s.left(s.size()-2);
-    }
-    return s;
-}
-
-QMap<int, QList<int> > Fahrtag::getPlaetzeFromString(QString plaetze)
-{
-    QMap<int, QList<int>> map = QMap<int, QList<int>>();
-    if (plaetze == "") {
-        return map;
-    }
-    QStringList l1;
-    l1 = plaetze.split(QRegExp("\\s*;\\s*"));
-    for (QString s1: l1) {
-        QStringList l2a = s1.split(QRegExp("\\s*:\\s*"));
-        int wagen = l2a.at(0).toInt();
-        if (l2a.length() > 1) {
-            QStringList l2 = l2a.at(1).split(QRegExp("\\s*,\\s*"));
-            QList<int> l = *new QList<int>();
-            for (QString s2: l2) {
-                if (s2.contains(QRegExp("\\s*-\\s*"))) {
-                    QStringList l3 = s2.split(QRegExp("\\s*-\\s*"));
-                    for (int i = l3.at(0).toInt(); i <= l3.at(1).toInt(); i++) {
-                        l.append(i);
-                    }
-                } else {
-                    l.append(s2.toInt());
-                }
-            }
-            map.insert(wagen, l);
-        } else {
-            map.insert(wagen, QList<int>());
-        }
-    }
-    return map;
-}
-
-
 Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p)
 {
     art = Museumszug;
@@ -770,6 +700,11 @@ bool Fahrtag::checkPlaetze(QMap<int, QList<int>> p, Reservierung *r)
     }
     if (summe != r->getAnzahl()) return false;
     return true;
+}
+
+bool Fahrtag::checkPlaetze(QString p, Reservierung *r)
+{
+    return checkPlaetze(Reservierung::getPlaetzeFromString(p), r);
 }
 
 Reservierung *Fahrtag::createReservierung()

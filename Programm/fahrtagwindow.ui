@@ -760,7 +760,7 @@
            </widget>
           </item>
           <item row="0" column="0" colspan="2">
-           <widget class="QPushButton" name="buttonAdd">
+           <widget class="QPushButton" name="buttonAddReservierung">
             <property name="text">
              <string>Neue Reservierung</string>
             </property>
@@ -774,7 +774,7 @@
            </widget>
           </item>
           <item row="1" column="0" colspan="2">
-           <widget class="QPushButton" name="buttonDelete">
+           <widget class="QPushButton" name="buttonDeleteReservierung">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -1534,7 +1534,7 @@
          <number>6</number>
         </property>
         <item row="0" column="0">
-         <widget class="QPushButton" name="buttonInsert">
+         <widget class="QPushButton" name="buttonAddPerson">
           <property name="maximumSize">
            <size>
             <width>150</width>
@@ -1547,7 +1547,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QPushButton" name="buttonRemove">
+         <widget class="QPushButton" name="buttonRemovePerson">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -2531,7 +2531,7 @@ unbekannt</string>
   <tabstop>buttonServiceDelete</tabstop>
   <tabstop>checkService</tabstop>
   <tabstop>textBemerkungen</tabstop>
-  <tabstop>buttonAdd</tabstop>
+  <tabstop>buttonAddReservierung</tabstop>
   <tabstop>listRes</tabstop>
   <tabstop>lineName</tabstop>
   <tabstop>lineMail</tabstop>
@@ -2549,12 +2549,12 @@ unbekannt</string>
   <tabstop>comboEnde2Zug</tabstop>
   <tabstop>comboEnde2Hp</tabstop>
   <tabstop>plainSonstiges</tabstop>
-  <tabstop>buttonDelete</tabstop>
+  <tabstop>buttonDeleteReservierung</tabstop>
   <tabstop>checkBoxAll</tabstop>
   <tabstop>buttonVerteile</tabstop>
-  <tabstop>buttonInsert</tabstop>
+  <tabstop>buttonAddPerson</tabstop>
   <tabstop>tablePersonen</tabstop>
-  <tabstop>buttonRemove</tabstop>
+  <tabstop>buttonRemovePerson</tabstop>
   <tabstop>checkBoxBenoetigt</tabstop>
   <tabstop>checkZeiten</tabstop>
  </tabstops>

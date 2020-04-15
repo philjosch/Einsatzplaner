@@ -5,6 +5,7 @@
 #include "managerfilesettings.h"
 
 #include <QDialog>
+#include <QListWidgetItem>
 
 namespace Ui {
 class ExportGesamt;
@@ -15,7 +16,7 @@ class ExportGesamt : public QDialog
     Q_OBJECT
 
 public:
-    explicit ExportGesamt(Manager *m, ManagerFileSettings *settings, QWidget *parent = nullptr);
+    explicit ExportGesamt(Manager *m, ManagerFileSettings *settings, QWidget *parent);
     ~ExportGesamt();
 
     void reload();

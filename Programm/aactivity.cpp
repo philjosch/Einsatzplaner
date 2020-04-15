@@ -11,7 +11,7 @@ QStringList AActivity::QUALIFICATION_LIST = QStringList() << "Azubi" << "Ausbild
 QString AActivity::COLOR_REQUIRED = "#ff3333";
 
 
-AActivity::AActivity(QDate date, ManagerPersonal *p)
+AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
 {
     datum = date;
     ort = "";
@@ -24,7 +24,7 @@ AActivity::AActivity(QDate date, ManagerPersonal *p)
     personal = p;
 }
 
-AActivity::AActivity(QJsonObject o, ManagerPersonal *p)
+AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
 {
     personal = p;
     personen = QMap<Person*, Infos>();
