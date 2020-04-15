@@ -66,3 +66,18 @@ int minutesFromStringForDurationEditor(QString s)
     }
     return s.toInt();
 }
+
+QString getStringFromArt(Art art)
+{
+    switch (art) {
+    case Museumszug: return QObject::tr("Museumszug");
+    case Sonderzug: return QObject::tr("Sonderzug");
+    case Gesellschaftssonderzug: return QObject::tr("Gesellschaftssonderzug");
+    case Nikolauszug: return QObject::tr("Nikolauszug");
+    case ELFundMuseumszug: return QObject::tr("Museumszug mit Schnupperkurs");
+    case Schnupperkurs: return QObject::tr("Ehrenlokführer Schnupperkurs");
+    case Bahnhofsfest: return QObject::tr("Bahnhofsfest");
+    case SonstigerFahrtag: return QObject::tr("Sonstiges");
+    case Arbeitseinsatz: return QObject::tr("Arbeitseinsatz");
+    }
+}

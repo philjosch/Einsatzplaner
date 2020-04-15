@@ -23,7 +23,7 @@ public:
 
     bool remove();
 
-    virtual QJsonObject toJson();
+    QJsonObject toJson();
 
     QDate getDatum();
     void setDatum(QDate value);
@@ -50,7 +50,7 @@ public:
     void setPersonalBenoetigt(bool value);
 
     QMap<Person *, Infos> getPersonen();
-    virtual Infos getIndividual(Person *person) = 0;
+    Infos getIndividual(Person *person);
     Mistake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
     Mistake addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
     void updatePersonBemerkung(Person *p, QString bemerkung);
@@ -63,14 +63,14 @@ public:
     friend bool operator<=(const AActivity &lhs, const AActivity &rhs) { return !(lhs > rhs);}
     friend bool operator>=(const AActivity &lhs, const AActivity &rhs) { return !(lhs < rhs);}
 
-    virtual QString getKurzbeschreibung() = 0;
-    virtual QString getListString() = 0;
-    virtual QString getListStringShort() = 0;
+    QString getKurzbeschreibung();
+    QString getListString();
+    QString getListStringShort();
 
     ManagerPersonal *getPersonal() const;
 
-    virtual QString getHtmlForSingleView() = 0;
-    virtual QString getHtmlForTableView() = 0;
+    QString getHtmlForSingleView();
+    QString getHtmlForTableView();
 
     static QComboBox *generateNewCategoryComboBox();
     static QTimeEdit *generateNewTimeEdit();

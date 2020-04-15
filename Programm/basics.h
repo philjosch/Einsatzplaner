@@ -79,4 +79,6 @@ int minutesFromStringForDurationEditor(QString s);
 Category getCategoryFromLocalizedString(QString s);
 QString getLocalizedStringFromCategory(Category c);
 
+QString getStringFromArt(Art art);
+
 #endif // BASICS_H

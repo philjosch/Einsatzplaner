@@ -662,7 +662,7 @@ void FahrtagWindow::toggleFelderReservierung(bool enabled)
 
 void FahrtagWindow::updateWindowTitle()
 {
-    setWindowTitle(Fahrtag::getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum().toString("dddd, dd.MM.yyyy"));
+    setWindowTitle(getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum().toString("dddd, dd.MM.yyyy"));
 }
 
 void FahrtagWindow::on_buttonAddReservierung_clicked()
@@ -922,7 +922,7 @@ void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)
 void FahrtagWindow::on_checkBoxAll_clicked(bool checked)
 {
     if (nehme){
-        if (checked) QMessageBox::information(this, tr("Hinweis"), tr("Es kann unter Umständen sehr lange dauern, bis die 'perfekte' Verteilung berechnet wird.\nIhr Computer reagiert in dieser Zeit vielleicht nicht!\nDiese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutzen."));
+        if (checked) QMessageBox::information(this, tr("Hinweis"), tr("Es kann unter Umständen sehr lange dauern, bis die 'optimale' Verteilung berechnet wird.\nIhr Computer reagiert in dieser Zeit vielleicht nicht!\nDiese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutzen."));
         fahrtag->setCheckAll(checked);
     }
 }

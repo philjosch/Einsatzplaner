@@ -95,19 +95,6 @@ QJsonObject Fahrtag::toJson()
     return o;
 }
 
-QString Fahrtag::getStringFromArt(Art art)
-{
-    switch (art) {
-    case Museumszug: return "Museumszug";
-    case Sonderzug: return "Sonderzug";
-    case Gesellschaftssonderzug: return "Gesellschaftssonderzug";
-    case Nikolauszug: return "Nikolauszug";
-    case Schnupperkurs: return "Ehrenlokführer Schnupperkurs";
-    case Bahnhofsfest: return "Bahnhofsfest";
-    case ELFundMuseumszug: return "Museumszug mit Schnupperkurs";
-    default: return "Sonstiges";
-    }
-}
 
 QString Fahrtag::getKurzbeschreibung()
 {
@@ -160,11 +147,10 @@ Infos Fahrtag::getIndividual(Person *person)
 
 QString Fahrtag::getHtmlForSingleView()
 {
-    QString required1 = "<font color='"+COLOR_REQUIRED+"'>";
-    QString required2 = "</font>";
+    QString required = "<font color='"+COLOR_REQUIRED+"'>%1</font>";
     QString html = "";
     // Überschrift
-    html += "<h2 class='pb'>" +Fahrtag::getStringFromArt(art) + " am " + datum.toString("dddd dd.MM.yyyy")+(wichtig?required1+" WICHTIG!"+required2:"")+"</h2>";
+    html += "<h2 class='pb'>" +getStringFromArt(art) + " am " + datum.toString("dddd dd.MM.yyyy")+(wichtig?required.arg(" WICHTIG!"):"")+"</h2>";
     // Anlass
     if (anlass != "") {
         html += "<p><b>Anlass:</b><br/>"+anlass+"</p>";
@@ -194,12 +180,12 @@ QString Fahrtag::getHtmlForSingleView()
     // Aufsplitten der Personen auf die Einzelnen Listen
     for(Person *p: personen.keys()) {
         switch (personen.value(p).kategorie) {
-        case Category::Tf:
-        case Category::Tb: tf.insert(p, personen.value(p)); break;
-        case Category::Zf: zf.insert(p, personen.value(p)); break;
-        case Category::Zub: zub.insert(p, personen.value(p)); break;
-        case Category::Begleiter: begl.insert(p, personen.value(p)); break;
-        case Category::Service: service.insert(p, personen.value(p)); break;
+        case Tf:
+        case Tb: tf.insert(p, personen.value(p)); break;
+        case Zf: zf.insert(p, personen.value(p)); break;
+        case Zub: zub.insert(p, personen.value(p)); break;
+        case Begleiter: begl.insert(p, personen.value(p)); break;
+        case Service: service.insert(p, personen.value(p)); break;
         default: sonstige.insert(p, personen.value(p)); break;
         }
     }
@@ -207,9 +193,9 @@ QString Fahrtag::getHtmlForSingleView()
     if (benoetigeTf || tf.size() > 0) {
         html += "<p><b>";
         if (benoetigeTf) {
-            html += required1+QString::number(benoetigeTf)+required2
+            html += required.arg(benoetigeTf)
                     +" Triebfahrzeugführer (Tf) "
-                    +required1+"benötigt"+required2;
+                    +required.arg("benötigt");
         } else {
             html += "Triebfahrzeugführer (Tf)";
         }
@@ -218,13 +204,13 @@ QString Fahrtag::getHtmlForSingleView()
     // *Zf
     if ((benoetigeZf && (art != Schnupperkurs)) || zf.size() > 0) {
         html += "<p><b>Zugführer";
-        html += (benoetigeZf && (art != Schnupperkurs) ? required1+" wird benötigt"+required2:"");
+        html += (benoetigeZf && (art != Schnupperkurs) ? required.arg(" wird benötigt"):"");
         html += ":</b><br/>"+listToString(zf, " | ")+"</p>";
     }
     // *Zub, Begl.o.b.A
     if ((benoetigeZub && (art != Schnupperkurs)) || (zub.size() > 0 || begl.size() > 0)) {
         html += "<p><b>Zugbegleiter und <i>Begleiter ohne betriebliche Ausbildung</i>";
-        html += (benoetigeZub && (art != Schnupperkurs) ? required1+" werden benötigt"+required2:"");
+        html += (benoetigeZub && (art != Schnupperkurs) ? required.arg(" werden benötigt"):"");
         html += ":</b><br/>";
         html += listToString(zub, " | ");
         // Begl. o.b.A
@@ -235,13 +221,13 @@ QString Fahrtag::getHtmlForSingleView()
     // *Service
     if ((benoetigeService && (art != Schnupperkurs)) || service.size() > 0) {
         html += "<p><b>Service-Personal";
-        html += (benoetigeService && (art != Schnupperkurs) ? required1+" wird benötigt"+required2:"");
+        html += (benoetigeService && (art != Schnupperkurs) ? required.arg(" wird benötigt"):"");
         html += ":</b><br/>"+listToString(service, " | ") +"</p>";
     }
     // *Sonstiges personal
     if (sonstige.size() > 0) {
         html += "<p><b>Sonstiges Personal";
-        html += (personalBenoetigt ? required1+" wird benötigt"+required2:"");
+        html += (personalBenoetigt ? required.arg(" wird benötigt"):"");
         html += ":</b><br/>"+listToString(sonstige, " | ", true) +"</p>";
     }
     if (bemerkungen != "") {
@@ -252,9 +238,7 @@ QString Fahrtag::getHtmlForSingleView()
     if (getAnzahl() > 0) {
         html += "<p><b>Reservierungen:</b>";
         if (art != Schnupperkurs && art != Gesellschaftssonderzug) {
-            html += "<br/>Bereits "+QString::number(getBelegtGesamt());
-            html += (getBelegtGesamt() == 1 ? " Platz " :  " Plätze ");
-            html += "belegt. Noch "+QString::number(getCapacityGesamt() - getBelegtGesamt())+" frei.</p>";
+            html += QString("<br/>Bereits %1 %2 belegt. Noch %3 frei.</p>").arg(getBelegtGesamt()).arg((getBelegtGesamt() == 1 ? "Platz" :  "Plätze")).arg(getCapacityGesamt() - getBelegtGesamt());
         } else {
             html += "</p>";
         }
@@ -278,7 +262,7 @@ QString Fahrtag::getHtmlForTableView()
     } else {
         html += "<td>";
     }
-    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>("+Fahrtag::getStringFromArt(art)+")";
+    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>("+getStringFromArt(art)+")";
     // Wagenreihung
     if (wagenreihung != "") {
         html += "<br/>"+ wagenreihung;
@@ -298,12 +282,12 @@ QString Fahrtag::getHtmlForTableView()
     // Aufsplitten der Personen auf die Einzelnen Listen
     for(Person *p: personen.keys()) {
         switch (personen.value(p).kategorie) {
-        case Category::Tf:
-        case Category::Tb: tf.insert(p, personen.value(p)); break;
-        case Category::Zf: zf.insert(p, personen.value(p)); break;
-        case Category::Zub: zub.insert(p, personen.value(p)); break;
-        case Category::Begleiter: begl.insert(p, personen.value(p)); break;
-        case Category::Service: service.insert(p, personen.value(p)); break;
+        case Tf:
+        case Tb: tf.insert(p, personen.value(p)); break;
+        case Zf: zf.insert(p, personen.value(p)); break;
+        case Zub: zub.insert(p, personen.value(p)); break;
+        case Begleiter: begl.insert(p, personen.value(p)); break;
+        case Service: service.insert(p, personen.value(p)); break;
         default: sonstige.insert(p, personen.value(p)); break;
         }
     }
@@ -452,7 +436,6 @@ bool Fahrtag::getBenoetigeService() const
 {
     return benoetigeService;
 }
-
 void Fahrtag::setBenoetigeService(bool value)
 {
     benoetigeService = value;
@@ -463,7 +446,6 @@ bool Fahrtag::getBenoetigeZub() const
 {
     return benoetigeZub;
 }
-
 void Fahrtag::setBenoetigeZub(bool value)
 {
     benoetigeZub = value;
@@ -474,7 +456,6 @@ bool Fahrtag::getBenoetigeZf() const
 {
     return benoetigeZf;
 }
-
 void Fahrtag::setBenoetigeZf(bool value)
 {
     benoetigeZf = value;
@@ -485,7 +466,6 @@ int Fahrtag::getBenoetigeTf() const
 {
     return benoetigeTf;
 }
-
 void Fahrtag::setBenoetigeTf(int value)
 {
     benoetigeTf = value;
@@ -496,7 +476,6 @@ bool Fahrtag::getWichtig() const
 {
     return wichtig;
 }
-
 void Fahrtag::setWichtig(bool value)
 {
     wichtig = value;
@@ -507,7 +486,6 @@ QTime Fahrtag::getZeitTf()
 {
     return zeitTf;
 }
-
 void Fahrtag::setZeitTf(QTime value)
 {
     zeitTf = value;
@@ -518,7 +496,6 @@ Art Fahrtag::getArt() const
 {
     return art;
 }
-
 void Fahrtag::setArt(const Art &value)
 {
     art = value;
@@ -529,13 +506,12 @@ QString Fahrtag::getWagenreihung() const
 {
     return wagenreihung;
 }
-
-
 bool Fahrtag::setWagenreihung(const QString &value)
 {
     QString old = wagenreihung;
     wagenreihung = value;
     if (createWagen()) {
+        emit changed(this);
         return true;
     }
     wagenreihung = old;
@@ -558,7 +534,6 @@ int Fahrtag::getCapacityGesamt()
     }
     return summe;
 }
-
 
 int Fahrtag::getBelegtErste()
 {
@@ -660,8 +635,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     // Erste klasse verteilen
     Mistake okErste = Mistake::OK;
     if (resErste.size() > 0 && ersteKlasse.length() > 0) {
-        Verteiler erste = Verteiler(ersteKlasse, resErste);
-        erste.setCheckAll(checkAll);
+        Verteiler erste = Verteiler(ersteKlasse, resErste, checkAll);
         okErste = erste.verteile();
     } else if (resErste.size() > 0 && ersteKlasse.length() == 0) {
         okErste = Mistake::KapazitaetUeberlauf;
@@ -670,8 +644,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     // 2./3. Klasse verteilen
     Mistake okAndere = Mistake::OK;
     if (resAndere.size() > 0 && andereKlasse.length() > 0) {
-        Verteiler andere = Verteiler(andereKlasse, resAndere);
-        andere.setCheckAll(checkAll);
+        Verteiler andere = Verteiler(andereKlasse, resAndere, checkAll);
         okAndere = andere.verteile();
     } else if (resAndere.size() > 0 && andereKlasse.length() == 0) {
         okAndere = Mistake::KapazitaetUeberlauf;
@@ -712,12 +685,14 @@ Reservierung *Fahrtag::createReservierung()
     Reservierung *r = new Reservierung(&nummerToWagen);
     reservierungen.insert(r);
     connect(r, &Reservierung::changed, this, [=]() { emit changed(this); });
+    emit changed(this);
     return r;
 }
 
 bool Fahrtag::removeReservierung(Reservierung *res)
 {
     res->removePlaetze();
+    emit changed(this);
     return reservierungen.remove(res);
 }
 
@@ -762,10 +737,10 @@ bool Fahrtag::getCheckAll() const
 {
     return checkAll;
 }
-
 void Fahrtag::setCheckAll(bool value)
 {
     checkAll = value;
+    emit changed(this);
 }
 
 bool Fahrtag::checkPlausibilitaet(QList<int> zuege, QList<int> haltepunkte)

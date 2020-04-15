@@ -17,8 +17,6 @@ public:
 
     QJsonObject toJson();
 
-    static QString getStringFromArt(Art art);
-
     QString getKurzbeschreibung();
     QString getListString();
     QString getListStringShort();
