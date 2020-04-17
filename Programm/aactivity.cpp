@@ -237,7 +237,7 @@ Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime en
     if (kat == Zub && !hasQualification(p, kat, bemerkung)) kat = Begleiter;
     if (kat == Tf && bemerkung.contains(QObject::tr("Tb"),Qt::CaseInsensitive)) kat = Tb;
 
-    if (! hasQualification(p, kat, bemerkung)) return Mistake::FalscheQualifikation;
+    if (! hasQualification(p, kat, bemerkung, datum)) return Mistake::FalscheQualifikation;
 
     // jetzt ist alles richtig und die person kann registiert werden.
     p->addActivity(this, kat);
@@ -344,24 +344,9 @@ QString AActivity::listToString(QMap<Person *, Infos> liste, QString seperator, 
     return a;
 }
 
-bool AActivity::hasQualification(Person *p, Category kat, QString bemerkung)
+bool AActivity::hasQualification(Person *p, Category kat, QString bemerkung, QDate datum)
 {
-    switch (kat) {
-    case Tf:
-        if (p->getAusbildungTf()) return true;
-        break;
-    case Tb:
-        if (p->getAusbildungZf()) return true;
-        break;
-    case Zf:
-        if (p->getAusbildungZf()) return true;
-        break;
-    case Zub:
-        if (p->getAusbildungRangierer()) return true;
-        break;
-    default:
-        return true;
-    }
+    if (p->isTauglich(kat, datum)) return true;
 
     for(QString s: QUALIFICATION_LIST) {
         if (bemerkung.contains(s, Qt::CaseInsensitive)) {

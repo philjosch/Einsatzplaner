@@ -36,8 +36,8 @@ private slots:
     void on_pushPDF_clicked();
     void on_pushPrint_clicked();
 
-    void on_actionSinglePrint_triggered();
-    void on_actionSinglePDF_triggered();
+    void on_actionEinzelPrint_triggered();
+    void on_actionEinzelPDF_triggered();
 
     void on_actionMitgliederDrucken_triggered();
     void on_actionMitgliederPDF_triggered();

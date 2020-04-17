@@ -241,15 +241,15 @@ void PersonalWindow::on_pushPrint_clicked()
     print(paper);
 }
 
-void PersonalWindow::on_actionSinglePrint_triggered()
+void PersonalWindow::on_actionEinzelPrint_triggered()
 {
     QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
-    Export::printPerson(aktuellePerson, paper);
+    Export::printPerson(manager, paper);
 }
-void PersonalWindow::on_actionSinglePDF_triggered()
+void PersonalWindow::on_actionEinzelPDF_triggered()
 {
     QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf", QPrinter::Orientation::Portrait);
-    Export::printPerson(aktuellePerson, pdf);
+    Export::printPerson(manager, pdf);
 }
 
 void PersonalWindow::on_actionMitgliederDrucken_triggered()
@@ -272,12 +272,12 @@ void PersonalWindow::on_actionMitgliederCSV_triggered()
 void PersonalWindow::on_pushPDFEinzel_clicked()
 {
     QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf", QPrinter::Orientation::Portrait);
-    Export::printPerson(manager, pdf);
+    Export::printPerson(aktuellePerson, pdf);
 }
 void PersonalWindow::on_pushPrintEinzel_clicked()
 {
     QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
-    Export::printPerson(manager, paper);
+    Export::printPerson(aktuellePerson, paper);
 }
 
 void PersonalWindow::on_pushEmail_clicked()
@@ -856,7 +856,7 @@ void PersonalWindow::showPerson(Person *p)
     ui->labelSonstigesSum->setText(p->getString(Sonstiges));
     ui->labelAnzahlSum->setText(p->getString(Anzahl));
     ui->labelKilometerSum->setText(p->getString(Kilometer));
-    ui->labelGesamt->setText(p->getString(Gesamt));
+    ui->labelGesamt->setText(p->getString(Gesamt)+" ("+manager->getMinimumHoursString(Gesamt)+")");
 
     ui->lineTf->setText(stringForDurationEditorFromMinutes(p->getAdditional(Tf)));
     ui->lineZf->setText(stringForDurationEditorFromMinutes(p->getAdditional(Zf)));
@@ -995,6 +995,6 @@ void PersonalWindow::updateZeiten()
     ui->labelAnzahlSum->repaint();
     ui->labelKilometerSum->setText(aktuellePerson->getString(Kilometer));
     ui->labelKilometerSum->repaint();
-    ui->labelGesamt->setText(aktuellePerson->getString(Gesamt));
+    ui->labelGesamt->setText(aktuellePerson->getString(Gesamt)+" ("+manager->getMinimumHoursString(Gesamt)+")");
     ui->labelGesamt->repaint();
 }

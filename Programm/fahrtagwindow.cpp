@@ -241,7 +241,7 @@ void FahrtagWindow::addItemTolist(QListWidget *l, QPushButton *b)
 {
     if (nehme) {
         nehme = false;
-        l->addItem("(Name eingeben)");
+        l->addItem(tr("(Name eingeben)"));
         l->item(l->count()-1)->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
         b->setEnabled(true);
         nehme = true;
@@ -338,7 +338,7 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
         break;
 
     case Mistake::FalscheQualifikation:
-        QMessageBox::warning(this, tr("Fehlende Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt."));
+        QMessageBox::warning(this, tr("Fehlende Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung und gültige Tauglichkeitsuntersuchung voraussetzt."));
         break;
     case Mistake::PersonNichtGefunden:
         QMessageBox::information(this, tr("Person nicht gefunden"), tr("Die eingegebene Person konnte nicht gefunden werden!"));

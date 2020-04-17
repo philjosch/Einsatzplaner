@@ -78,7 +78,7 @@ public:
     static QStringList EXTERNAL_LIST;
     static QStringList QUALIFICATION_LIST;
 
-    static bool hasQualification(Person *p, Category kat, QString bemerkung);
+    static bool hasQualification(Person *p, Category kat, QString bemerkung, QDate datum = QDate());
     static bool isExtern(QString bemerkung);
 
     static void sort(QList<AActivity *> *list);

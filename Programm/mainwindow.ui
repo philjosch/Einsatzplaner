@@ -817,7 +817,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Exportieren</string>
+         <string>Exportieren …</string>
         </property>
        </widget>
       </item>
@@ -995,7 +995,7 @@
   </action>
   <action name="actionPrint">
    <property name="text">
-    <string>Drucken …</string>
+    <string>Exportieren …</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>

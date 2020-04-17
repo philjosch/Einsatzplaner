@@ -169,7 +169,7 @@ int ManagerPersonal::pruefeStunden(Person *p)
     }
     if (p->getAktiv() && (! ok))
         return 0;
-    else if ((!p->getAktiv()) && ok)
+    else if ((!p->getAktiv()) && ok && p->get(Gesamt) >0)
         return -1;
     else
         return 1;
@@ -184,7 +184,7 @@ int ManagerPersonal::checkHours(Person *p, Category cat)
             return 0;
         }
     } else {
-        if (p->get(cat) >= getMinimumHours(cat, p) && p->get(cat)>0) {
+        if (p->get(cat)>0) {
             return -1;
         } else {
             return 1;

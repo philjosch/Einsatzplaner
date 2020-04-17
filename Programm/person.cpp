@@ -403,6 +403,9 @@ bool Person::isTauglich(Category cat, QDate datum)
     case Zf:
         if (! ausbildungZf) return false;
         break;
+    case Zub:
+        if (! ausbildungRangierer) return false;
+        break;
     default:
         return true;
     }
@@ -538,8 +541,8 @@ QString Person::getHtmlForDetailPage()
     berechne();
     QString html = "<h2>"+vorname+" "+nachname+"</h2>";
     if (ausbildungRangierer || ausbildungTf || ausbildungZf)
-        html = html + "<p>Ausbildung zum: " + (ausbildungTf? "Triebfahrzeugführer, ":" ") + (ausbildungZf? "Zugführer, ":" ")
-                + (ausbildungRangierer? "Rangierer":" ") + "<br/>";
+        html = html + "<p>Ausbildung und Tauglichkeit als: " + (isTauglich(Tf)? "Triebfahrzeugführer, ":"") + (isTauglich(Zf)? "Zugführer, ":"")
+                + (isTauglich(Zub)? "Rangierer":" ") + "<br/>";
     html += "Entfernung zum Bahnhof: "+QString::number(strecke) + "km</p>";
     html += "<h3>Geleistete Stunden</h3>";
     html += "<ul>";

@@ -2149,7 +2149,7 @@
           <item row="0" column="1">
            <widget class="QLabel" name="labelGesamt">
             <property name="text">
-             <string>0 h</string>
+             <string>0 h (0 h)</string>
             </property>
            </widget>
           </item>
