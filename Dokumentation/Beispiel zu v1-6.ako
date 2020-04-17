@@ -1,0 +1,567 @@
+{
+    "activities": [
+        {
+            "anlass": "Vorbereiten Museumszug",
+            "bemerkungen": "Vorbereiten des Zuges für die Fahrt nach Lummerland",
+            "datum": "2020-04-04",
+            "isFahrtag": false,
+            "ort": "",
+            "personalBenoetigt": true,
+            "personen": [
+                {
+                    "beginn": "00:00",
+                    "bemerkung": "",
+                    "ende": "15:00",
+                    "id": "15870588098565953",
+                    "kat": 8
+                },
+                {
+                    "beginn": "00:00",
+                    "bemerkung": "",
+                    "ende": "00:00",
+                    "id": "15870588095415280",
+                    "kat": 5
+                }
+            ],
+            "zeitAnfang": "10:00",
+            "zeitEnde": "16:00",
+            "zeitenUnbekannt": false
+        },
+        {
+            "anlass": "Fahrt nach Lummerland",
+            "art": 0,
+            "bemerkungen": "Hier könnte ihre Bemerkung stehen!",
+            "benoetigeService": true,
+            "benoetigeTf": 1,
+            "benoetigeZf": true,
+            "benoetigeZub": true,
+            "checkAll": false,
+            "datum": "2020-04-05",
+            "isFahrtag": true,
+            "ort": "",
+            "personalBenoetigt": false,
+            "personen": [
+                {
+                    "beginn": "00:00",
+                    "bemerkung": "",
+                    "ende": "00:00",
+                    "id": "15870588091254282",
+                    "kat": 7
+                },
+                {
+                    "beginn": "00:00",
+                    "bemerkung": "",
+                    "ende": "13:00",
+                    "id": "15870588098565953",
+                    "kat": 5
+                },
+                {
+                    "beginn": "00:00",
+                    "bemerkung": "",
+                    "ende": "00:00",
+                    "id": "15870588094292522",
+                    "kat": 2
+                },
+                {
+                    "beginn": "09:00",
+                    "bemerkung": "",
+                    "ende": "18:00",
+                    "id": "15870588098102777",
+                    "kat": 3
+                },
+                {
+                    "beginn": "00:00",
+                    "bemerkung": "",
+                    "ende": "00:00",
+                    "id": "15870588095415280",
+                    "kat": 0
+                }
+            ],
+            "reservierungen": [
+                {
+                    "anzahl": 7,
+                    "fahrrad": false,
+                    "hps": [
+                        "Werschweiler",
+                        "Ottweiler",
+                        "Ottweiler",
+                        "Werschweiler"
+                    ],
+                    "klasse": 1,
+                    "mail": "",
+                    "name": "Frau Mahlzahn",
+                    "sitzplaetze": "204: 1-7",
+                    "sonstiges": "",
+                    "telefon": "",
+                    "zuege": [
+                        "2201 SSWN-SOTW",
+                        "2201 SSWN-SOTW",
+                        "2204 SOTW-SSWN",
+                        "2206 SOTW-SSWN"
+                    ]
+                }
+            ],
+            "wagenreihung": "309, 221, 204, 208",
+            "wichtig": true,
+            "zeitAnfang": "08:45",
+            "zeitEnde": "18:45",
+            "zeitTf": "08:15",
+            "zeitenUnbekannt": false
+        },
+        {
+            "anlass": "Sonderzug",
+            "art": 1,
+            "bemerkungen": "",
+            "benoetigeService": true,
+            "benoetigeTf": 1,
+            "benoetigeZf": true,
+            "benoetigeZub": true,
+            "checkAll": false,
+            "datum": "2020-04-07",
+            "isFahrtag": true,
+            "ort": "",
+            "personalBenoetigt": false,
+            "personen": [
+            ],
+            "reservierungen": [
+            ],
+            "wagenreihung": "309, 221, 204, 208",
+            "wichtig": false,
+            "zeitAnfang": "08:45",
+            "zeitEnde": "18:45",
+            "zeitTf": "08:15",
+            "zeitenUnbekannt": false
+        },
+        {
+            "anlass": "Schnupperkurs",
+            "art": 5,
+            "bemerkungen": "",
+            "benoetigeService": true,
+            "benoetigeTf": 1,
+            "benoetigeZf": true,
+            "benoetigeZub": true,
+            "checkAll": false,
+            "datum": "2020-04-11",
+            "isFahrtag": true,
+            "ort": "",
+            "personalBenoetigt": false,
+            "personen": [
+            ],
+            "reservierungen": [
+            ],
+            "wagenreihung": "309, 221, 204, 208",
+            "wichtig": false,
+            "zeitAnfang": "08:45",
+            "zeitEnde": "18:45",
+            "zeitTf": "08:15",
+            "zeitenUnbekannt": false
+        },
+        {
+            "anlass": "Museumszug mit ELF",
+            "art": 4,
+            "bemerkungen": "",
+            "benoetigeService": true,
+            "benoetigeTf": 1,
+            "benoetigeZf": true,
+            "benoetigeZub": true,
+            "checkAll": false,
+            "datum": "2020-04-12",
+            "isFahrtag": true,
+            "ort": "",
+            "personalBenoetigt": false,
+            "personen": [
+                {
+                    "beginn": "00:00",
+                    "bemerkung": "ELF",
+                    "ende": "00:00",
+                    "kat": 0,
+                    "name": "Monika Mustermann"
+                },
+                {
+                    "beginn": "00:00",
+                    "bemerkung": "Kursteilnehmer Extern",
+                    "ende": "00:00",
+                    "kat": 0,
+                    "name": "Max Musterfrau"
+                }
+            ],
+            "reservierungen": [
+            ],
+            "wagenreihung": "309, 221, 204, 208",
+            "wichtig": false,
+            "zeitAnfang": "08:45",
+            "zeitEnde": "18:45",
+            "zeitTf": "08:15",
+            "zeitenUnbekannt": false
+        },
+        {
+            "anlass": "Geburtstag von König Alfons",
+            "art": 2,
+            "bemerkungen": "",
+            "benoetigeService": true,
+            "benoetigeTf": 1,
+            "benoetigeZf": true,
+            "benoetigeZub": true,
+            "checkAll": false,
+            "datum": "2020-04-15",
+            "isFahrtag": true,
+            "ort": "",
+            "personalBenoetigt": false,
+            "personen": [
+            ],
+            "reservierungen": [
+            ],
+            "wagenreihung": "309, 221, 204, 208",
+            "wichtig": false,
+            "zeitAnfang": "08:45",
+            "zeitEnde": "18:45",
+            "zeitTf": "08:15",
+            "zeitenUnbekannt": false
+        },
+        {
+            "anlass": "Bahnhofsfest",
+            "art": 6,
+            "bemerkungen": "",
+            "benoetigeService": true,
+            "benoetigeTf": 2,
+            "benoetigeZf": true,
+            "benoetigeZub": true,
+            "checkAll": false,
+            "datum": "2020-04-19",
+            "isFahrtag": true,
+            "ort": "",
+            "personalBenoetigt": false,
+            "personen": [
+                {
+                    "beginn": "00:00",
+                    "bemerkung": "",
+                    "ende": "00:00",
+                    "id": "15870588098102777",
+                    "kat": 3
+                }
+            ],
+            "reservierungen": [
+            ],
+            "wagenreihung": "309, 221, 204, 208",
+            "wichtig": false,
+            "zeitAnfang": "08:45",
+            "zeitEnde": "18:45",
+            "zeitTf": "08:15",
+            "zeitenUnbekannt": false
+        },
+        {
+            "anlass": "Prüfungsfahrt Jim Knopf",
+            "art": 7,
+            "bemerkungen": "",
+            "benoetigeService": true,
+            "benoetigeTf": 2,
+            "benoetigeZf": true,
+            "benoetigeZub": true,
+            "checkAll": false,
+            "datum": "2020-04-23",
+            "isFahrtag": true,
+            "ort": "",
+            "personalBenoetigt": false,
+            "personen": [
+                {
+                    "beginn": "00:00",
+                    "bemerkung": "Ausbildung",
+                    "ende": "00:00",
+                    "id": "15870588094292522",
+                    "kat": 0
+                }
+            ],
+            "reservierungen": [
+            ],
+            "wagenreihung": "309, 221, 204, 208",
+            "wichtig": false,
+            "zeitAnfang": "08:45",
+            "zeitEnde": "18:45",
+            "zeitTf": "08:15",
+            "zeitenUnbekannt": false
+        },
+        {
+            "anlass": "Nikolaustag",
+            "art": 3,
+            "bemerkungen": "",
+            "benoetigeService": true,
+            "benoetigeTf": 1,
+            "benoetigeZf": true,
+            "benoetigeZub": true,
+            "checkAll": false,
+            "datum": "2020-12-06",
+            "isFahrtag": true,
+            "ort": "",
+            "personalBenoetigt": false,
+            "personen": [
+                {
+                    "beginn": "17:00",
+                    "bemerkung": "Extern",
+                    "ende": "19:00",
+                    "kat": 100,
+                    "name": "Knecht Ruprecht"
+                }
+            ],
+            "reservierungen": [
+                {
+                    "anzahl": 10,
+                    "fahrrad": false,
+                    "hps": [
+                        "Ottweiler",
+                        "Ottweiler"
+                    ],
+                    "klasse": 1,
+                    "mail": "",
+                    "name": "Uschaurischuum",
+                    "sitzplaetze": "204: 1, 3-4, 9-11, 13-16",
+                    "sonstiges": "",
+                    "telefon": "",
+                    "zuege": [
+                        "2202 SOTW-SSWN",
+                        "2203 SSWN-SOTW"
+                    ]
+                },
+                {
+                    "anzahl": 13,
+                    "fahrrad": false,
+                    "hps": [
+                        "Ottweiler",
+                        "Ottweiler"
+                    ],
+                    "klasse": 1,
+                    "mail": "",
+                    "name": "Die Wilde 13",
+                    "sitzplaetze": "204: 17-21, 23-26, 29-32",
+                    "sonstiges": "",
+                    "telefon": "",
+                    "zuege": [
+                        "2202 SOTW-SSWN",
+                        "2203 SSWN-SOTW"
+                    ]
+                }
+            ],
+            "wagenreihung": "309, 221, 204, 208",
+            "wichtig": false,
+            "zeitAnfang": "10:30",
+            "zeitEnde": "20:00",
+            "zeitTf": "10:00",
+            "zeitenUnbekannt": false
+        }
+    ],
+    "general": {
+        "version": "1.6"
+    },
+    "personal": {
+        "minimumKeys": [
+            0,
+            120
+        ],
+        "minimumValues": [
+            6000,
+            600
+        ],
+        "personen": [
+            {
+                "additionalKeys": [
+                ],
+                "additionalValues": [
+                ],
+                "aktiv": true,
+                "ausRang": false,
+                "ausTf": false,
+                "ausZf": false,
+                "austritt": "",
+                "bemerkung": "",
+                "beruf": "Schreiner",
+                "eintritt": "",
+                "geburtstag": "",
+                "id": "15870588098565953",
+                "mail": "",
+                "mailOK": true,
+                "nachname": "Nepomuk",
+                "nummer": 3,
+                "ort": "Lummerland",
+                "plz": "",
+                "strasse": "Unter dem ersten Berg 1",
+                "strecke": 1,
+                "tauglichkeit": "",
+                "tel": "",
+                "telOK": true,
+                "vorname": ""
+            },
+            {
+                "additionalKeys": [
+                ],
+                "additionalValues": [
+                ],
+                "aktiv": false,
+                "ausRang": true,
+                "ausTf": false,
+                "ausZf": false,
+                "austritt": "",
+                "bemerkung": "",
+                "beruf": "König",
+                "eintritt": "",
+                "geburtstag": "",
+                "id": "15870588096948302",
+                "mail": "",
+                "mailOK": false,
+                "nachname": "Viertel-Vor-Zwölfte",
+                "nummer": 1,
+                "ort": "Lummerland",
+                "plz": "",
+                "strasse": "Königsallee",
+                "strecke": 5,
+                "tauglichkeit": "",
+                "tel": "",
+                "telOK": false,
+                "vorname": "König Alfons der"
+            },
+            {
+                "additionalKeys": [
+                    7,
+                    122
+                ],
+                "additionalValues": [
+                    300,
+                    1
+                ],
+                "aktiv": true,
+                "ausRang": false,
+                "ausTf": false,
+                "ausZf": false,
+                "austritt": "",
+                "bemerkung": "",
+                "beruf": "",
+                "eintritt": "",
+                "geburtstag": "",
+                "id": "15870588091254282",
+                "mail": "",
+                "mailOK": false,
+                "nachname": "Emma",
+                "nummer": 2,
+                "ort": "Lummerland",
+                "plz": "",
+                "strasse": "Bahnhofsstraße 5",
+                "strecke": 12,
+                "tauglichkeit": "",
+                "tel": "",
+                "telOK": false,
+                "vorname": ""
+            },
+            {
+                "additionalKeys": [
+                ],
+                "additionalValues": [
+                ],
+                "aktiv": true,
+                "ausRang": false,
+                "ausTf": false,
+                "ausZf": true,
+                "austritt": "",
+                "bemerkung": "",
+                "beruf": "Lokschlosser",
+                "eintritt": "",
+                "geburtstag": "",
+                "id": "15870588094292522",
+                "mail": "",
+                "mailOK": true,
+                "nachname": "Knopf",
+                "nummer": 4,
+                "ort": "Lummerland",
+                "plz": "",
+                "strasse": "Unter dem zweiten Berg 3",
+                "strecke": 2,
+                "tauglichkeit": "",
+                "tel": "",
+                "telOK": true,
+                "vorname": "Jim"
+            },
+            {
+                "additionalKeys": [
+                    6,
+                    122
+                ],
+                "additionalValues": [
+                    120,
+                    2
+                ],
+                "aktiv": true,
+                "ausRang": false,
+                "ausTf": true,
+                "ausZf": false,
+                "austritt": "",
+                "bemerkung": "",
+                "beruf": "",
+                "eintritt": "",
+                "geburtstag": "",
+                "id": "15870588095415280",
+                "mail": "",
+                "mailOK": true,
+                "nachname": "Lokomotivführer",
+                "nummer": 6,
+                "ort": "",
+                "plz": "",
+                "strasse": "",
+                "strecke": 4,
+                "tauglichkeit": "",
+                "tel": "",
+                "telOK": true,
+                "vorname": "Lukas"
+            },
+            {
+                "additionalKeys": [
+                    100
+                ],
+                "additionalValues": [
+                    120
+                ],
+                "aktiv": true,
+                "ausRang": false,
+                "ausTf": false,
+                "ausZf": false,
+                "austritt": "",
+                "bemerkung": "",
+                "beruf": "Drache",
+                "eintritt": "",
+                "geburtstag": "",
+                "id": "15870588098102777",
+                "mail": "",
+                "mailOK": true,
+                "nachname": "Plu",
+                "nummer": 5,
+                "ort": "",
+                "plz": "",
+                "strasse": "",
+                "strecke": 20,
+                "tauglichkeit": "",
+                "tel": "",
+                "telOK": true,
+                "vorname": "Schu Fu Lu Pi"
+            }
+        ]
+    },
+    "settings": {
+        "online": {
+            "activities": true,
+            "auto": true,
+            "enabled": true,
+            "enddate": "p1w",
+            "id": "Lummerland-GeheimeID42",
+            "path": "upload/load.php",
+            "server": "example.com",
+            "startdate": "tdy"
+        }
+    },
+    "view": {
+        "currentDate": "2020-04-16",
+        "heightMain": 819,
+        "heightPersonal": 651,
+        "widthMain": 1162,
+        "widthPersonal": 984,
+        "xMain": 1186,
+        "xPersonal": 358,
+        "yMain": 97,
+        "yPersonal": 359
+    }
+}
