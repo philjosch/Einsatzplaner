@@ -11,14 +11,15 @@
 \usepackage{textcomp}
 
 \newcommand{\nach}{\xspace\textrightarrow\xspace}
-\newcommand{\cmnd}[1]{\xspace\texttt{#1}\xspace}
+\newcommand{\cmnd}[1]{\texttt{#1}\xspace}
+\newcommand{\hinweis}[1]{\emph{\textbf{Hinweis:} #1}}
 
 \graphicspath{{./img/}}
 
-\title{Anleitung Einsatzplaner -- Version 1.6}
+\title{Anleitung Einsatzplaner}
 \subject{Version 1.6}
 \author{Philipp Schepper}
-\date{Stand: 15. April 2020 –- Entwurf}
+\date{Stand: \today –- Entwurf}
 
 \begin{document}
 \maketitle
@@ -29,23 +30,23 @@
 
 \mainmatter
 \part{Grundlagen}
-\include{allgemein}
-\include{kalender}
-\include{fahrtage}
-\include{arbeitseinsaetze}
-\include{personal}
+\include{allgemein/allgemein}
+\include{allgemein/kalender}
+\include{allgemein/fahrtage}
+\include{allgemein/arbeitseinsaetze}
+\include{allgemein/personal}
 \part{Export}
-\include{export}
-\include{upload}
+\include{export/export}
+\include{export/upload}
 \part{Verschiedenes}
-\include{einstellungen}
-\include{sonstiges}
+\include{verschiedenes/einstellungen}
+\include{verschiedenes/sonstiges}
 
 \appendix
-\include{versionshistorie}
+\include{vorne_u_hinten/abkuerzungen}
+\include{vorne_u_hinten/glossar}
 
 \backmatter
-\include{abkuerzungen}
-\include{glossar}
+\include{version/versionshistorie}
 
 \end{document}
