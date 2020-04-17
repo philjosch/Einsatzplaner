@@ -1,5 +1,24 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 22. März 2020
+Stand: 17. April 2020
+
+## Version 1.6 – 2020-0X-YY
+### Neu
+- Die Personalverwaltung wurde verbessert, indem jetzt alle Vereinsmitglieder aufgenommen und verwaltet werden können. Ebenso können verschiedene persönliche Daten und Kontaktdaten eingegeben und auch entsprechend exportiert weden.
+- Beim Export von Daten können im Druckerdialog jetzt auch Seitenformat und Ausrichtung bestimmt werden.
+- Komplett überarbeitete Dokumentation.
+
+### Verbessert
+- Es gibt jetzt eine neue Kategorie "Infrastruktur". Diese kann z.B. für Streckenarbeiten und Vegetationskontrollen genutzt werden.
+- Die Anzahl der benötigten Lokführer kann zwischen 0,1 und 2 festgelegt werden, falls mit mehr als einem Triebfahrzeug gefahren wird.
+- Die zusätzlichen Stunden und Mindeststunden können jetzt minutengenau eingegeben werden.
+- Die Summe der Spalten in der Tabelle der Gesamtübersicht bezieht sich immer auf die aktuell angezeigten Personen.
+- Sämtliche Exportfunktionen wurden verbessert.
+- Unzählige Verbesserungen und Optimierungen "unter der Haube", um die Geschwindigkeit und den Speicherverbrauch zu optimieren.
+
+### Fehlerbehebungen
+- Verschiedene kleinere Fehler behoben.
+
+---
 
 ## Version 1.5.2 – 2020-03-22
 ### Neu
