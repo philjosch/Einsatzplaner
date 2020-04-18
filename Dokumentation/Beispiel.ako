@@ -2,9 +2,9 @@
     "activities": [
         {
             "anlass": "Vorbereiten Museumszug",
+            "art": 100,
             "bemerkungen": "Vorbereiten des Zuges für die Fahrt nach Lummerland",
             "datum": "2020-04-04",
-            "isFahrtag": false,
             "ort": "",
             "personalBenoetigt": true,
             "personen": [
@@ -32,12 +32,11 @@
             "art": 0,
             "bemerkungen": "Hier könnte ihre Bemerkung stehen!",
             "benoetigeService": true,
-            "benoetigeTf": 1,
-            "benoetigeZf": true,
+            "benoetigeTf": 0,
+            "benoetigeZf": false,
             "benoetigeZub": true,
             "checkAll": false,
             "datum": "2020-04-05",
-            "isFahrtag": true,
             "ort": "",
             "personalBenoetigt": false,
             "personen": [
@@ -56,13 +55,6 @@
                     "kat": 5
                 },
                 {
-                    "beginn": "00:00",
-                    "bemerkung": "",
-                    "ende": "00:00",
-                    "id": "15870588094292522",
-                    "kat": 2
-                },
-                {
                     "beginn": "09:00",
                     "bemerkung": "",
                     "ende": "18:00",
@@ -75,6 +67,13 @@
                     "ende": "00:00",
                     "id": "15870588095415280",
                     "kat": 0
+                },
+                {
+                    "beginn": "00:00",
+                    "bemerkung": "",
+                    "ende": "00:00",
+                    "id": "15870588094292522",
+                    "kat": 2
                 }
             ],
             "reservierungen": [
@@ -94,10 +93,10 @@
                     "sonstiges": "",
                     "telefon": "",
                     "zuege": [
-                        "2201 SSWN-SOTW",
-                        "2201 SSWN-SOTW",
-                        "2204 SOTW-SSWN",
-                        "2206 SOTW-SSWN"
+                        2201,
+                        2201,
+                        2204,
+                        2206
                     ]
                 }
             ],
@@ -118,7 +117,6 @@
             "benoetigeZub": true,
             "checkAll": false,
             "datum": "2020-04-07",
-            "isFahrtag": true,
             "ort": "",
             "personalBenoetigt": false,
             "personen": [
@@ -142,7 +140,6 @@
             "benoetigeZub": true,
             "checkAll": false,
             "datum": "2020-04-11",
-            "isFahrtag": true,
             "ort": "",
             "personalBenoetigt": false,
             "personen": [
@@ -166,7 +163,6 @@
             "benoetigeZub": true,
             "checkAll": false,
             "datum": "2020-04-12",
-            "isFahrtag": true,
             "ort": "",
             "personalBenoetigt": false,
             "personen": [
@@ -204,7 +200,6 @@
             "benoetigeZub": true,
             "checkAll": false,
             "datum": "2020-04-15",
-            "isFahrtag": true,
             "ort": "",
             "personalBenoetigt": false,
             "personen": [
@@ -228,7 +223,6 @@
             "benoetigeZub": true,
             "checkAll": false,
             "datum": "2020-04-19",
-            "isFahrtag": true,
             "ort": "",
             "personalBenoetigt": false,
             "personen": [
@@ -259,7 +253,6 @@
             "benoetigeZub": true,
             "checkAll": false,
             "datum": "2020-04-23",
-            "isFahrtag": true,
             "ort": "",
             "personalBenoetigt": false,
             "personen": [
@@ -290,7 +283,6 @@
             "benoetigeZub": true,
             "checkAll": false,
             "datum": "2020-12-06",
-            "isFahrtag": true,
             "ort": "",
             "personalBenoetigt": false,
             "personen": [
@@ -303,24 +295,6 @@
                 }
             ],
             "reservierungen": [
-                {
-                    "anzahl": 10,
-                    "fahrrad": false,
-                    "hps": [
-                        "Ottweiler",
-                        "Ottweiler"
-                    ],
-                    "klasse": 1,
-                    "mail": "",
-                    "name": "Uschaurischuum",
-                    "sitzplaetze": "204: 1, 3-4, 9-11, 13-16",
-                    "sonstiges": "",
-                    "telefon": "",
-                    "zuege": [
-                        "2202 SOTW-SSWN",
-                        "2203 SSWN-SOTW"
-                    ]
-                },
                 {
                     "anzahl": 13,
                     "fahrrad": false,
@@ -335,8 +309,26 @@
                     "sonstiges": "",
                     "telefon": "",
                     "zuege": [
-                        "2202 SOTW-SSWN",
-                        "2203 SSWN-SOTW"
+                        2202,
+                        2203
+                    ]
+                },
+                {
+                    "anzahl": 10,
+                    "fahrrad": false,
+                    "hps": [
+                        "Ottweiler",
+                        "Ottweiler"
+                    ],
+                    "klasse": 1,
+                    "mail": "",
+                    "name": "Uschaurischuum",
+                    "sitzplaetze": "204: 1, 3-4, 9-11, 13-16",
+                    "sonstiges": "",
+                    "telefon": "",
+                    "zuege": [
+                        2202,
+                        2203
                     ]
                 }
             ],
@@ -361,34 +353,6 @@
             600
         ],
         "personen": [
-            {
-                "additionalKeys": [
-                ],
-                "additionalValues": [
-                ],
-                "aktiv": true,
-                "ausRang": false,
-                "ausTf": false,
-                "ausZf": false,
-                "austritt": "",
-                "bemerkung": "",
-                "beruf": "Schreiner",
-                "eintritt": "",
-                "geburtstag": "",
-                "id": "15870588098565953",
-                "mail": "",
-                "mailOK": true,
-                "nachname": "Nepomuk",
-                "nummer": 3,
-                "ort": "Lummerland",
-                "plz": "",
-                "strasse": "Unter dem ersten Berg 1",
-                "strecke": 1,
-                "tauglichkeit": "",
-                "tel": "",
-                "telOK": true,
-                "vorname": ""
-            },
             {
                 "additionalKeys": [
                 ],
@@ -457,6 +421,34 @@
                 "aktiv": true,
                 "ausRang": false,
                 "ausTf": false,
+                "ausZf": false,
+                "austritt": "",
+                "bemerkung": "",
+                "beruf": "Schreiner",
+                "eintritt": "",
+                "geburtstag": "",
+                "id": "15870588098565953",
+                "mail": "",
+                "mailOK": true,
+                "nachname": "Nepomuk",
+                "nummer": 3,
+                "ort": "Lummerland",
+                "plz": "",
+                "strasse": "Unter dem ersten Berg 1",
+                "strecke": 1,
+                "tauglichkeit": "",
+                "tel": "",
+                "telOK": true,
+                "vorname": ""
+            },
+            {
+                "additionalKeys": [
+                ],
+                "additionalValues": [
+                ],
+                "aktiv": true,
+                "ausRang": false,
+                "ausTf": false,
                 "ausZf": true,
                 "austritt": "",
                 "bemerkung": "",
@@ -476,6 +468,36 @@
                 "tel": "",
                 "telOK": true,
                 "vorname": "Jim"
+            },
+            {
+                "additionalKeys": [
+                    100
+                ],
+                "additionalValues": [
+                    120
+                ],
+                "aktiv": true,
+                "ausRang": false,
+                "ausTf": false,
+                "ausZf": false,
+                "austritt": "",
+                "bemerkung": "",
+                "beruf": "Drache",
+                "eintritt": "",
+                "geburtstag": "",
+                "id": "15870588098102777",
+                "mail": "",
+                "mailOK": true,
+                "nachname": "Plu",
+                "nummer": 5,
+                "ort": "",
+                "plz": "",
+                "strasse": "",
+                "strecke": 20,
+                "tauglichkeit": "",
+                "tel": "",
+                "telOK": true,
+                "vorname": "Schu Fu Lu Pi"
             },
             {
                 "additionalKeys": [
@@ -508,36 +530,6 @@
                 "tel": "",
                 "telOK": true,
                 "vorname": "Lukas"
-            },
-            {
-                "additionalKeys": [
-                    100
-                ],
-                "additionalValues": [
-                    120
-                ],
-                "aktiv": true,
-                "ausRang": false,
-                "ausTf": false,
-                "ausZf": false,
-                "austritt": "",
-                "bemerkung": "",
-                "beruf": "Drache",
-                "eintritt": "",
-                "geburtstag": "",
-                "id": "15870588098102777",
-                "mail": "",
-                "mailOK": true,
-                "nachname": "Plu",
-                "nummer": 5,
-                "ort": "",
-                "plz": "",
-                "strasse": "",
-                "strecke": 20,
-                "tauglichkeit": "",
-                "tel": "",
-                "telOK": true,
-                "vorname": "Schu Fu Lu Pi"
             }
         ]
     },
@@ -556,12 +548,12 @@
     "view": {
         "currentDate": "2020-04-16",
         "heightMain": 819,
-        "heightPersonal": 651,
+        "heightPersonal": 607,
         "widthMain": 1162,
-        "widthPersonal": 984,
-        "xMain": 1186,
+        "widthPersonal": 685,
+        "xMain": 987,
         "xPersonal": 358,
-        "yMain": 97,
-        "yPersonal": 359
+        "yMain": 255,
+        "yPersonal": 293
     }
 }
