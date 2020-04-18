@@ -74,7 +74,7 @@ activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten. Bis V
 		anzahl (int)		-> die Anzahl der Sitzplätze
 		klasse (int)		-> 0 bedeutet 2./3. Klasse und 1 = 1.Klasse
 		zuege (array)		-> die Züge, auf denen man aus/ein steigt
-			(string)
+			(int)
 		hps (array)		-> die Haltepunkte, auf denen man aus/ein steigt
 			(string)
 		sitzplaetze (string)	-> kodiert die Sitzplätze in dem Format, in dem sie auch eingegeben werden sollen

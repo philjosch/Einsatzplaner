@@ -135,6 +135,9 @@ private:
     void toggleFelderReservierung(bool enabled);
 
     void updateWindowTitle();
+
+    int getIndexVonZug(int zug);
+    int getZugVonIndex(int index);
 };
 
 #endif // FAHRTAGWINDOW_H

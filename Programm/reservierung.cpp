@@ -80,9 +80,9 @@ Reservierung::Reservierung(QMap<int, Wagen *> *wagen)
     telefon = "";
     anzahl = 1;
     klasse = 0;
-    zuege = QList<QString>();
-    zuege.append("-");
-    zuege.append("-");
+    zuege = QList<int>();
+    zuege.append(0);
+    zuege.append(0);
     hps = QList<QString>();
     hps.append("-");
     hps.append("-");
@@ -99,10 +99,19 @@ Reservierung::Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen)
     telefon = o.value("telefon").toString();
     anzahl = o.value("anzahl").toInt();
     klasse = o.value("klasse").toInt();
-    zuege = QList<QString>();
+    zuege = QList<int>();
     QJsonArray zuegeA = o.value("zuege").toArray();
     for(QJsonValue val: zuegeA) {
-        zuege.append(val.toString());
+        if (! val.isString()) {
+            zuege.append(val.toInt());
+        } else {
+            if (val.toString() == "-") {
+                zuege.append(0);
+            } else {
+                QStringList zL = val.toString().split(" ");
+                zuege.append(zL.at(0).toInt());
+            }
+        }
     }
     hps = QList<QString>();
     QJsonArray hpsA = o.value("hps").toArray();
@@ -125,7 +134,7 @@ QJsonObject Reservierung::toJson()
     o.insert("anzahl", anzahl);
     o.insert("klasse", klasse);
     QJsonArray zuegeA;
-    for(QString s: zuege) {
+    for(int s: zuege) {
         zuegeA.append(s);
     }
     o.insert("zuege", zuegeA);
@@ -200,11 +209,11 @@ void Reservierung::setHps(QList<QString> value)
     emit changed();
 }
 
-QList<QString> Reservierung::getZuege() const
+QList<int> Reservierung::getZuege() const
 {
     return zuege;
 }
-void Reservierung::setZuege(QList<QString> value)
+void Reservierung::setZuege(QList<int> value)
 {
     zuege = value;
     emit changed();
@@ -238,9 +247,9 @@ QString Reservierung::getTableRow()
     html += "<br/>"+getStringFromPlaetze(sitzplatz)+"</td>";
     html += "<td>";
     for(int i = 0; i < zuege.length(); i=i+2) {
-        html +=  (zuege.at(i  ) == "-" ? "" : zuege.at(i  ))+" "+(hps.at(i  ) == "-" ? "" : hps.at(i  ))
+        html +=  (zuege.at(i  ) == 0 ? "" : QString::number(zuege.at(i  )))+" "+(hps.at(i  ) == "-" ? "" : hps.at(i  ))
                 +"->"
-                +(zuege.at(i+1) == "-" ? "" : zuege.at(i+1))+" "+(hps.at(i+1) == "-" ? "" : hps.at(i+1));
+                +(zuege.at(i+1) == 0 ? "" : QString::number(zuege.at(i+1)))+" "+(hps.at(i+1) == "-" ? "" : hps.at(i+1));
         if (i+2 < zuege.length()) html += " und <br/>";
     }
     html += "</td>";

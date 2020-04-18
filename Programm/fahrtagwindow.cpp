@@ -351,10 +351,10 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
 
 void FahrtagWindow::plausibilityCheck()
 {
-    int z1 = ui->comboStart1Zug->currentIndex();
-    int z2 = ui->comboEnde1Zug->currentIndex();
-    int z3 = ui->comboStart2Zug->currentIndex();
-    int z4 = ui->comboEnde2Zug->currentIndex();
+    int z1 = getZugVonIndex(ui->comboStart1Zug->currentIndex());
+    int z2 = getZugVonIndex(ui->comboEnde1Zug->currentIndex());
+    int z3 = getZugVonIndex(ui->comboStart2Zug->currentIndex());
+    int z4 = getZugVonIndex(ui->comboEnde2Zug->currentIndex());
 
     int h1 = ui->comboStart1Hp->currentIndex();
     int h2 = ui->comboEnde1Hp->currentIndex();
@@ -586,7 +586,7 @@ void FahrtagWindow::showReservierung(Reservierung *r)
     ui->lineTelefon->setText(r->getTelefon());
     ui->spinAnzahl->setValue(r->getAnzahl());
     ui->comboKlasse->setCurrentIndex(r->getKlasse());
-    QList<QString> z = r->getZuege();
+    QList<int> z = r->getZuege();
     QList<QString> h = r->getHps();
 
 
@@ -600,15 +600,15 @@ void FahrtagWindow::showReservierung(Reservierung *r)
     ui->comboEnde2Zug->setCurrentText("-");
     ui->comboEnde2Hp->setCurrentText("-");
     if (z.length() >= 2) {
-        ui->comboStart1Zug->setCurrentText(z.at(0));
+        ui->comboStart1Zug->setCurrentIndex(getIndexVonZug(z.at(0)));
         ui->comboStart1Hp->setCurrentText(h.at(0));
-        ui->comboEnde1Zug->setCurrentText(z.at(1));
+        ui->comboEnde1Zug->setCurrentIndex(getIndexVonZug(z.at(1)));
         ui->comboEnde1Hp->setCurrentText(h.at(1));
     }
     if (z.length() >= 4) {
-        ui->comboStart2Zug->setCurrentText(z.at(2));
+        ui->comboStart2Zug->setCurrentIndex(getIndexVonZug(z.at(2)));
         ui->comboStart2Hp->setCurrentText(h.at(2));
-        ui->comboEnde2Zug->setCurrentText(z.at(3));
+        ui->comboEnde2Zug->setCurrentIndex(getIndexVonZug(z.at(3)));
         ui->comboEnde2Hp->setCurrentText(h.at(3));
     }
     ui->lineSitze->setText(Reservierung::getStringFromPlaetze(r->getSitzplatz()));
@@ -621,16 +621,16 @@ void FahrtagWindow::showReservierung(Reservierung *r)
 
 void FahrtagWindow::saveResFahrt()
 {
-    QList<QString> z = QList<QString>();
+    QList<int> z = QList<int>();
     QList<QString> h = QList<QString>();
 
-    z.append(ui->comboStart1Zug->currentText());
+    z.append(getZugVonIndex(ui->comboStart1Zug->currentIndex()));
     h.append(ui->comboStart1Hp->currentText());
-    z.append(ui->comboEnde1Zug->currentText());
+    z.append(getZugVonIndex(ui->comboEnde1Zug->currentIndex()));
     h.append(ui->comboEnde1Hp->currentText());
-    z.append(ui->comboStart2Zug->currentText());
+    z.append(getZugVonIndex(ui->comboStart2Zug->currentIndex()));
     h.append(ui->comboStart2Hp->currentText());
-    z.append(ui->comboEnde2Zug->currentText());
+    z.append(getZugVonIndex(ui->comboEnde2Zug->currentIndex()));
     h.append(ui->comboEnde2Hp->currentText());
 
     aktuelleRes->setZuege(z);
@@ -663,6 +663,32 @@ void FahrtagWindow::toggleFelderReservierung(bool enabled)
 void FahrtagWindow::updateWindowTitle()
 {
     setWindowTitle(getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum().toString("dddd, dd.MM.yyyy"));
+}
+
+int FahrtagWindow::getIndexVonZug(int zug)
+{
+    switch (zug) {
+    case 2201: return 0;
+    case 2202: return 1;
+    case 2203: return 2;
+    case 2204: return 3;
+    case 2205: return 4;
+    case 2206: return 5;
+    default: return 6;
+    }
+}
+
+int FahrtagWindow::getZugVonIndex(int index)
+{
+    switch (index) {
+    case 0: return 2201;
+    case 1: return 2202;
+    case 2: return 2203;
+    case 3: return 2204;
+    case 4: return 2205;
+    case 5: return 2206;
+    default: return 0;
+    }
 }
 
 void FahrtagWindow::on_buttonAddReservierung_clicked()
