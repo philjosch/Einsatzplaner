@@ -699,7 +699,7 @@
          <number>6</number>
         </property>
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridNavigator" rowstretch="0,0,1,0,0,0,0,0,0,0,0" columnstretch="1,0">
+         <layout class="QGridLayout" name="gridNavigator" rowstretch="0,1,0,0,0,0">
           <property name="leftMargin">
            <number>0</number>
           </property>
@@ -715,41 +715,7 @@
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="3" column="1">
-           <widget class="QLabel" name="labelBelegtErste">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="label_14">
-            <property name="text">
-             <string>Belegung Gesamt</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QLabel" name="labelBelegtGesamt">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>Belegung 3. Klasse</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2">
+          <item row="1" column="0">
            <widget class="QListWidget" name="listRes">
             <property name="minimumSize">
              <size>
@@ -759,21 +725,14 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0" colspan="2">
+          <item row="0" column="0">
            <widget class="QPushButton" name="buttonAddReservierung">
             <property name="text">
              <string>Neue Reservierung</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Belegung 1. Klasse</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2">
+          <item row="2" column="0">
            <widget class="QPushButton" name="buttonDeleteReservierung">
             <property name="enabled">
              <bool>false</bool>
@@ -783,27 +742,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QLabel" name="labelBelegtZweite">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QLabel" name="labelBelegtDritte">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="0" colspan="2">
+          <item row="5" column="0">
            <widget class="QPushButton" name="buttonVerteile">
             <property name="enabled">
              <bool>false</bool>
@@ -813,7 +752,7 @@
             </property>
            </widget>
           </item>
-          <item row="9" column="0" colspan="2">
+          <item row="4" column="0">
            <widget class="QCheckBox" name="checkBoxAll">
             <property name="enabled">
              <bool>false</bool>
@@ -823,33 +762,10 @@
             </property>
            </widget>
           </item>
-          <item row="8" column="0" colspan="2">
+          <item row="3" column="0">
            <widget class="Line" name="line_2">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0" colspan="2">
-           <widget class="Line" name="line_3">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="lineWidth">
-             <number>1</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Belegung 2. Klasse</string>
             </property>
            </widget>
           </item>
@@ -1506,6 +1422,321 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <layout class="QGridLayout" name="gridResBelegung">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item row="0" column="1">
+           <widget class="QLabel" name="labelKap">
+            <property name="text">
+             <string>Kapazität</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label2201">
+            <property name="text">
+             <string>2201</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label2202">
+            <property name="text">
+             <string>2202</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLabel" name="label2203">
+            <property name="text">
+             <string>2203</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5">
+           <widget class="QLabel" name="label2204">
+            <property name="text">
+             <string>2204</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
+           <widget class="QLabel" name="label2205">
+            <property name="text">
+             <string>2205</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="7">
+           <widget class="QLabel" name="label2206">
+            <property name="text">
+             <string>2206</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="8">
+           <widget class="QLabel" name="labelUn">
+            <property name="text">
+             <string>Unbekannt</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="9">
+           <widget class="QLabel" name="labelGesamt">
+            <property name="text">
+             <string>Gesamt</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="10">
+           <widget class="QLabel" name="labelAus">
+            <property name="text">
+             <string>Auslastung</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelErste">
+            <property name="text">
+             <string>1. Klasse</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="labelKapErste">
+            <property name="text">
+             <string>40</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label2201Erste">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLabel" name="label2202Erste">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLabel" name="label2203Erste">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="5">
+           <widget class="QLabel" name="label2204Erste">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QLabel" name="label2205Erste">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="7">
+           <widget class="QLabel" name="label2206Erste">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="8">
+           <widget class="QLabel" name="labelUnErste">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="9">
+           <widget class="QLabel" name="labelGesamtErste">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="10">
+           <widget class="QLabel" name="labelAusErste">
+            <property name="text">
+             <string>0%</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelSonst">
+            <property name="text">
+             <string>2./3.Klasse</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="labelKapSonst">
+            <property name="text">
+             <string>60</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label2201Sonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLabel" name="label2202Sonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QLabel" name="label2203Sonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="5">
+           <widget class="QLabel" name="label2204Sonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="6">
+           <widget class="QLabel" name="label2205Sonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="7">
+           <widget class="QLabel" name="label2206Sonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="8">
+           <widget class="QLabel" name="labelUnSonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="9">
+           <widget class="QLabel" name="labelGesamtSonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="10">
+           <widget class="QLabel" name="labelAusSonst">
+            <property name="text">
+             <string>0%</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="11">
+           <widget class="Line" name="line_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="labelSum">
+            <property name="text">
+             <string>Summe</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="labelKapSum">
+            <property name="text">
+             <string>100</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLabel" name="label2201Sum">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="QLabel" name="label2202Sum">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="4">
+           <widget class="QLabel" name="label2203Sum">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="5">
+           <widget class="QLabel" name="label2204Sum">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="6">
+           <widget class="QLabel" name="label2205Sum">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="7">
+           <widget class="QLabel" name="label2206Sum">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="8">
+           <widget class="QLabel" name="labelUnSum">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="9">
+           <widget class="QLabel" name="labelGesamtSum">
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="10">
+           <widget class="QLabel" name="labelAusSum">
+            <property name="text">
+             <string>0%</string>
             </property>
            </widget>
           </item>
