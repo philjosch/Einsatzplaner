@@ -149,7 +149,7 @@ QString Fahrtag::getHtmlForSingleView()
     QString required = "<font color='"+COLOR_REQUIRED+"'>%1</font>";
     QString html = "";
     // Überschrift
-    html += "<h2 class='pb'>" +getStringFromArt(art) + " am " + datum.toString("dddd dd.MM.yyyy")+(wichtig?required.arg(" WICHTIG!"):"")+"</h2>";
+    html += "<h2 class='pb'>" +getStringFromArt(art) + " am " + datum.toString("dddd, dd.MM.yyyy")+(wichtig?required.arg(" WICHTIG!"):"")+"</h2>";
     // Anlass
     if (anlass != "") {
         html += "<p><b>Anlass:</b><br/>"+anlass+"</p>";
@@ -192,7 +192,7 @@ QString Fahrtag::getHtmlForSingleView()
     if (benoetigeTf || tf.size() > 0) {
         html += "<p><b>";
         if (benoetigeTf) {
-            html += required.arg(benoetigeTf)
+            html += required.arg("Noch "+QString::number(benoetigeTf))
                     +" Triebfahrzeugführer (Tf) "
                     +required.arg("benötigt");
         } else {

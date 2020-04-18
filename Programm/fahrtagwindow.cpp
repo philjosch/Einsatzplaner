@@ -384,7 +384,8 @@ void FahrtagWindow::on_buttonTfDelete_clicked()
 }
 void FahrtagWindow::on_buttonGroupTf_buttonClicked(int button)
 {
-    fahrtag->setBenoetigeTf(button);
+    if (nehme)
+        fahrtag->setBenoetigeTf(button);
 }
 
 void FahrtagWindow::on_listZf_itemChanged(QListWidgetItem *item)
@@ -405,7 +406,8 @@ void FahrtagWindow::on_buttonZfDelete_clicked()
 }
 void FahrtagWindow::on_checkZf_clicked(bool checked)
 {
-    fahrtag->setBenoetigeZf(checked);
+    if (nehme)
+        fahrtag->setBenoetigeZf(checked);
 }
 
 void FahrtagWindow::on_listZub_itemChanged(QListWidgetItem *item)
@@ -426,7 +428,8 @@ void FahrtagWindow::on_buttonZubDelete_clicked()
 }
 void FahrtagWindow::on_checkZub_clicked(bool checked)
 {
-    fahrtag->setBenoetigeZub(checked);
+    if (nehme)
+        fahrtag->setBenoetigeZub(checked);
 }
 
 void FahrtagWindow::on_listService_itemChanged(QListWidgetItem *item)
@@ -447,7 +450,8 @@ void FahrtagWindow::on_buttonServiceDelete_clicked()
 }
 void FahrtagWindow::on_checkService_clicked(bool checked)
 {
-    fahrtag->setBenoetigeService(checked);
+    if (nehme)
+        fahrtag->setBenoetigeService(checked);
 }
 
 void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)

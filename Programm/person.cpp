@@ -244,112 +244,111 @@ bool Person::getAusbildungTf() const
 {
     return ausbildungTf;
 }
-
 void Person::setAusbildungTf(bool value)
 {
     ausbildungTf = value;
+    emit changed();
 }
 
 bool Person::getAusbildungZf() const
 {
     return ausbildungZf;
 }
-
 void Person::setAusbildungZf(bool value)
 {
     ausbildungZf = value;
+    emit changed();
 }
 
 bool Person::getAusbildungRangierer() const
 {
     return ausbildungRangierer;
 }
-
 void Person::setAusbildungRangierer(bool value)
 {
     ausbildungRangierer = value;
+    emit changed();
 }
 
 int Person::getStrecke() const
 {
     return strecke;
 }
-
 void Person::setStrecke(int value)
 {
     strecke = value;
     valuesInvalid = true;
+    emit changed();
 }
 
 QString Person::getMail() const
 {
     return mail;
 }
-
 void Person::setMail(const QString &value)
 {
     mail = value;
+    emit changed();
 }
 
 bool Person::getMailOK() const
 {
     return mailOK;
 }
-
 void Person::setMailOK(bool value)
 {
     mailOK = value;
+    emit changed();
 }
 
 QString Person::getTelefon() const
 {
     return telefon;
 }
-
 void Person::setTelefon(const QString &value)
 {
     telefon = value;
+    emit changed();
 }
 
 bool Person::getTelefonOK() const
 {
     return telefonOK;
 }
-
 void Person::setTelefonOK(bool value)
 {
     telefonOK = value;
+    emit changed();
 }
 
 QString Person::getBeruf() const
 {
     return beruf;
 }
-
 void Person::setBeruf(const QString &value)
 {
     beruf = value;
+    emit changed();
 }
 
 QString Person::getBemerkungen() const
 {
     return bemerkungen;
 }
-
 void Person::setBemerkungen(const QString &value)
 {
     bemerkungen = value;
+    emit changed();
 }
-
 int Person::getNummer() const
 {
     return nummer;
 }
-
 bool Person::setNummer(int value)
 {
     if (manager->checkNummer(value)) {
         nummer = value;
+        emit changed();
         return true;
     }
     return false;
@@ -365,30 +364,30 @@ QString Person::getPLZ() const
 {
     return plz;
 }
-
 void Person::setPLZ(const QString &value)
 {
     plz = value;
+    emit changed();
 }
 
 QString Person::getOrt() const
 {
     return ort;
 }
-
 void Person::setOrt(const QString &value)
 {
     ort = value;
+    emit changed();
 }
 
 QString Person::getStrasse() const
 {
     return strasse;
 }
-
 void Person::setStrasse(const QString &value)
 {
     strasse = value;
+    emit changed();
 }
 
 bool Person::isTauglich(Category cat, QDate datum)
@@ -499,6 +498,7 @@ void Person::setVorname(const QString &value)
     QString old = getName();
     vorname = value;
     emit nameChanged(this, old);
+    emit changed();
 }
 
 QString Person::getNachname() const
@@ -510,6 +510,7 @@ void Person::setNachname(const QString &value)
     QString old = getName();
     nachname = value;
     emit nameChanged(this, old);
+    emit changed();
 }
 
 QString Person::getHtmlForTableView(QSet<Category> liste)
@@ -699,10 +700,10 @@ int Person::getAdditional(Category cat)
 {
     return additional.value(cat, 0);
 }
-
 void Person::setAdditional(Category cat, int value)
 {
     additional.insert(cat, value);
+    emit changed();
 }
 
 QString Person::getId() const
@@ -714,50 +715,50 @@ QDate Person::getGeburtstag() const
 {
     return geburtstag;
 }
-
 void Person::setGeburtstag(const QDate &value)
 {
     geburtstag = value;
+    emit changed();
 }
 
 QDate Person::getEintritt() const
 {
     return eintritt;
 }
-
 void Person::setEintritt(const QDate &value)
 {
     eintritt = value;
+    emit changed();
 }
 
 bool Person::getAktiv() const
 {
     return aktiv;
 }
-
 void Person::setAktiv(bool value)
 {
     aktiv = value;
+    emit changed();
 }
 
 QDate Person::getAustritt() const
 {
     return austritt;
 }
-
 void Person::setAustritt(const QDate &value)
 {
     austritt = value;
+    emit changed();
 }
 
 QDate Person::getTauglichkeit() const
 {
     return tauglichkeit;
 }
-
 void Person::setTauglichkeit(const QDate &value)
 {
     tauglichkeit = value;
+    emit changed();
 }
 
 int Person::getAnzahl()

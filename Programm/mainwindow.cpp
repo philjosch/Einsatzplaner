@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setWindowModified(false);
     setWindowIcon(QApplication::windowIcon());
 
-    connect(personalfenster, SIGNAL(changed()), this, SLOT(unsave()));
+    connect(manager->getPersonal(), SIGNAL(changed()), this, SLOT(unsave()));
     connect(ui->buttonAddActivity, SIGNAL(clicked(bool)), this, SLOT(newActivity()));
     connect(ui->buttonAddFahrtag, SIGNAL(clicked(bool)), this, SLOT(newFahrtag()));
     connect(ui->dateSelector, SIGNAL(dateChanged(QDate)), this, SLOT(showDate(QDate)));

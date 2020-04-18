@@ -68,6 +68,9 @@ public slots:
     void personChangedName(Person *p, QString alt);
     void reloadSettings();
 
+signals:
+    void changed();
+
 private:
     QSet<Person *> personen;
     QMap<QString, Person*> personenSorted;

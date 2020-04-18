@@ -19,9 +19,6 @@ public:
     explicit PersonalWindow(QWidget *parent, ManagerPersonal *m);
     ~PersonalWindow();
 
-signals:
-    void changed();
-
 public slots:
     void refresh();
 

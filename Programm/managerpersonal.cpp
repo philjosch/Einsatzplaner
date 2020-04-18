@@ -27,7 +27,7 @@ QJsonObject ManagerPersonal::toJson()
 {
     // Personen
     QJsonArray array;
-    for(Person *p: personen.values()) {
+    for(Person *p: getPersonenSortiertNachNummer()) {
         array.append(p->toJson());
     }
     // Mindesstunden
@@ -80,6 +80,7 @@ void ManagerPersonal::fromJson(QJsonObject o)
         personenSorted.insert(neu->getName(), neu);
         idToPerson.insert(neu->getId(), neu);
         connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
+        connect(neu, &Person::changed, this, [=]() { emit changed();});
     }
     if (o.contains("minimumKeys") && o.contains("minimumValues")) {
         minimumHours.clear();
@@ -138,6 +139,8 @@ Person *ManagerPersonal::newPerson()
     personenSorted.insert(name, neu);
     idToPerson.insert(neu->getId(), neu);
     connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
+    connect(neu, &Person::changed, this, [=]() { emit changed();});
+    emit changed();
     return neu;
 }
 
@@ -156,6 +159,7 @@ bool ManagerPersonal::removePerson(Person *p)
         personen.remove(p);
         personenSorted.remove(p->getName());
         idToPerson.remove(p->getId());
+        emit changed();
         return true;
     }
     return false;
@@ -195,6 +199,7 @@ int ManagerPersonal::checkHours(Person *p, Category cat)
 void ManagerPersonal::setMinimumHours(Category cat, int amount)
 {
     minimumHours.insert(cat, amount);
+    emit changed();
 }
 
 int ManagerPersonal::getMinimumHours(Category cat)

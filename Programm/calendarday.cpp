@@ -50,6 +50,7 @@ void CalendarDay::insert(AActivity *a)
 void CalendarDay::handler(QListWidgetItem *item)
 {
     item->setSelected(false);
+    ui->listWidget->repaint();
     emit clickedItem(actToItem.key(item));
 }
 

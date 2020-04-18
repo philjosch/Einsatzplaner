@@ -509,7 +509,7 @@ QString AActivity::getHtmlForSingleView()
     QString required2 = "</font>";
     QString html = "";
     // Überschrift
-    html += "<h2 class='pb'>"+(anlass != "" ? anlass : "Arbeitseinsatz")+" am " + datum.toString("dddd dd.MM.yyyy")+"</h2>";
+    html += "<h2 class='pb'>"+(anlass != "" ? anlass : "Arbeitseinsatz")+" am " + datum.toString("dddd, dd.MM.yyyy")+"</h2>";
     // Ort
     if (ort != "")
         html += "<p><b>Ort:</b> "+ort+"</p>";

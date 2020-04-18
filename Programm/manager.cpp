@@ -13,8 +13,7 @@ QJsonArray Manager::toJson()
 {
     QJsonArray array;
     // Fahrtage und Arbeitseinsätze speichern
-    for (int i = 0; i < activities.length(); i++) {
-        AActivity *a = activities.at(i);
+    for(AActivity *a: activities) {
         array.append(a->toJson());
     }
     return array;

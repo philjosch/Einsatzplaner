@@ -16,14 +16,13 @@ class AActivity: public QObject
     Q_OBJECT
 
 public:
-
     AActivity(QDate date, ManagerPersonal *p);
     AActivity(QJsonObject o, ManagerPersonal *p);
     ~AActivity();
 
     bool remove();
 
-    QJsonObject toJson();
+    virtual QJsonObject toJson();
 
     QDate getDatum();
     void setDatum(QDate value);
@@ -63,14 +62,14 @@ public:
     friend bool operator<=(const AActivity &lhs, const AActivity &rhs) { return !(lhs > rhs);}
     friend bool operator>=(const AActivity &lhs, const AActivity &rhs) { return !(lhs < rhs);}
 
-    QString getKurzbeschreibung();
-    QString getListString();
-    QString getListStringShort();
+    virtual QString getKurzbeschreibung();
+    virtual QString getListString();
+    virtual QString getListStringShort();
 
     ManagerPersonal *getPersonal() const;
 
-    QString getHtmlForSingleView();
-    QString getHtmlForTableView();
+    virtual QString getHtmlForSingleView();
+    virtual QString getHtmlForTableView();
 
     static QComboBox *generateNewCategoryComboBox();
     static QTimeEdit *generateNewTimeEdit();

@@ -226,7 +226,6 @@ void PersonalWindow::editMinimumHours()
 {
    if (MinimumHoursEditorDialog(manager, this).exec() == QDialog::Accepted) {
        refresh();
-       changed();
    }
 }
 
@@ -415,7 +414,6 @@ void PersonalWindow::on_pushAdd_clicked()
     ui->listWidget->insertItem(0, item);
     personToItem.insert(aktuellePerson, item);
     showPerson(aktuellePerson);
-    emit changed();
     refresh();
 }
 
@@ -437,7 +435,6 @@ void PersonalWindow::on_lineVorname_textChanged(const QString &arg1)
                 ui->listWidget->sortItems();
             }
         }
-        emit changed();
     }
 }
 void PersonalWindow::on_lineNachname_textChanged(const QString &arg1)
@@ -453,7 +450,6 @@ void PersonalWindow::on_lineNachname_textChanged(const QString &arg1)
                 ui->listWidget->sortItems();
             }
         }
-        emit changed();
     }
 }
 
@@ -461,9 +457,7 @@ void PersonalWindow::on_lineID_textChanged(const QString &arg1)
 {
     if (enabled) {
         if (arg1.toInt() > 0) {
-            if (aktuellePerson->setNummer(arg1.toInt())) {
-                emit changed();
-            } else {
+            if (! aktuellePerson->setNummer(arg1.toInt())) {
                 QMessageBox::information(this, tr("Fehler"), tr("Die Mitgliedsnummer konnte nicht geändert werden, da sie bereits vergeben ist. Bitte wählen Sie eine andere Nummer!"));
             }
         }
@@ -483,7 +477,6 @@ void PersonalWindow::on_dateGeburtstag_dateChanged(const QDate &date)
 {
     if (enabled) {
         aktuellePerson->setGeburtstag(date);
-        emit changed();
     }
 }
 void PersonalWindow::on_checkGeburtstag_clicked(bool checked)
@@ -496,7 +489,6 @@ void PersonalWindow::on_checkGeburtstag_clicked(bool checked)
             ui->dateGeburtstag->setDate(QDate::currentDate());
             aktuellePerson->setGeburtstag(QDate::currentDate());
         }
-        emit changed();
         refresh();
     }
 }
@@ -505,7 +497,6 @@ void PersonalWindow::on_dateEintritt_dateChanged(const QDate &date)
 {
     if (enabled) {
         aktuellePerson->setEintritt(date);
-        emit changed();
     }
 }
 void PersonalWindow::on_checkEintritt_clicked(bool checked)
@@ -518,7 +509,6 @@ void PersonalWindow::on_checkEintritt_clicked(bool checked)
             ui->dateEintritt->setDate(QDate::currentDate());
             aktuellePerson->setEintritt(QDate::currentDate());
         }
-        emit changed();
     }
 }
 
@@ -527,7 +517,6 @@ void PersonalWindow::on_checkAktiv_clicked(bool checked)
     if (enabled) {
         aktuellePerson->setAktiv(checked);
         refresh();
-        emit changed();
     }
 }
 
@@ -536,7 +525,6 @@ void PersonalWindow::on_spinKm_valueChanged(int arg1)
     if (enabled) {
         aktuellePerson->setStrecke(arg1);
         ui->labelKilometerSum->setText(QString::number(aktuellePerson->get(Kilometer)));
-        emit changed();
     }
 }
 
@@ -544,7 +532,6 @@ void PersonalWindow::on_lineJob_textChanged(const QString &arg1)
 {
     if (enabled) {
         aktuellePerson->setBeruf(arg1);
-        emit changed();
     }
 }
 
@@ -552,21 +539,18 @@ void PersonalWindow::on_lineStrasse_textChanged(const QString &arg1)
 {
     if (enabled) {
         aktuellePerson->setStrasse(arg1);
-        emit changed();
     }
 }
 void PersonalWindow::on_linePLZ_textChanged(const QString &arg1)
 {
     if (enabled) {
         aktuellePerson->setPLZ(arg1);
-        emit changed();
     }
 }
 void PersonalWindow::on_lineOrt_textChanged(const QString &arg1)
 {
     if (enabled) {
         aktuellePerson->setOrt(arg1);
-        emit changed();
     }
 }
 
@@ -574,14 +558,12 @@ void PersonalWindow::on_linePhone_textChanged(const QString &arg1)
 {
     if (enabled) {
         aktuellePerson->setTelefon(arg1);
-        emit changed();
     }
 }
 void PersonalWindow::on_checkPhone_clicked(bool checked)
 {
     if (enabled) {
         aktuellePerson->setTelefonOK(checked);
-        emit changed();
     }
 }
 
@@ -589,14 +571,12 @@ void PersonalWindow::on_lineMail_textChanged(const QString &arg1)
 {
     if (enabled) {
         aktuellePerson->setMail(arg1);
-        emit changed();
     }
 }
 void PersonalWindow::on_checkMail_clicked(bool checked)
 {
     if (enabled) {
         aktuellePerson->setMailOK(checked);
-        emit changed();
     }
 }
 
@@ -605,7 +585,6 @@ void PersonalWindow::on_checkTf_clicked(bool checked)
     if (enabled) {
         aktuellePerson->setAusbildungTf(checked);
         refresh();
-        emit changed();
     }
 }
 void PersonalWindow::on_checkZf_clicked(bool checked)
@@ -613,7 +592,6 @@ void PersonalWindow::on_checkZf_clicked(bool checked)
     if (enabled) {
         aktuellePerson->setAusbildungZf(checked);
         refresh();
-        emit changed();
     }
 }
 void PersonalWindow::on_checkRangierer_clicked(bool checked)
@@ -621,7 +599,6 @@ void PersonalWindow::on_checkRangierer_clicked(bool checked)
     if (enabled) {
         aktuellePerson->setAusbildungRangierer(checked);
         refresh();
-        emit changed();
     }
 }
 
@@ -629,7 +606,6 @@ void PersonalWindow::on_dateDienst_dateChanged(const QDate &date)
 {
     if (enabled) {
         aktuellePerson->setTauglichkeit(date);
-        emit changed();
     }
 }
 void PersonalWindow::on_checkDienst_clicked(bool checked)
@@ -642,7 +618,6 @@ void PersonalWindow::on_checkDienst_clicked(bool checked)
             ui->dateDienst->setDate(QDate::currentDate());
             aktuellePerson->setTauglichkeit(QDate::currentDate());
         }
-        emit changed();
     }
 }
 
@@ -650,7 +625,6 @@ void PersonalWindow::on_plainBemerkung_textChanged()
 {
     if (enabled) {
         aktuellePerson->setBemerkungen(ui->plainBemerkung->toPlainText());
-        emit changed();
     }
 }
 
@@ -659,7 +633,6 @@ void PersonalWindow::on_dateAustritt_dateChanged(const QDate &date)
     if (enabled) {
         aktuellePerson->setAustritt(date);
         refresh();
-        emit changed();
     }
 }
 void PersonalWindow::on_checkAustritt_clicked(bool checked)
@@ -672,7 +645,6 @@ void PersonalWindow::on_checkAustritt_clicked(bool checked)
         } else {
             aktuellePerson->setAustritt(QDate());
         }
-        emit changed();
     }
 }
 
@@ -696,7 +668,6 @@ void PersonalWindow::on_pushDelete_clicked()
 
         aktuellePerson = nullptr;
         toggleFields(false);
-        emit changed();
     }
 }
 
@@ -746,7 +717,6 @@ void PersonalWindow::on_doubleAnzahl_valueChanged(double arg1)
     if (enabled) {
         aktuellePerson->setAdditional(Anzahl, int(arg1));
         updateZeiten();
-        emit changed();
     }
 }
 void PersonalWindow::on_doubleKilometer_valueChanged(double arg1)
@@ -754,7 +724,6 @@ void PersonalWindow::on_doubleKilometer_valueChanged(double arg1)
     if (enabled) {
         aktuellePerson->setAdditional(Kilometer, int(arg1));
         updateZeiten();
-        emit changed();
     }
 }
 
@@ -964,7 +933,6 @@ void PersonalWindow::setZeitenNachVeraenderung(Category cat, QString arg)
     if (enabled) {
         aktuellePerson->setAdditional(cat, minutesFromStringForDurationEditor(arg));
         updateZeiten();
-        emit changed();
     }
 }
 

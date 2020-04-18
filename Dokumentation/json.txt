@@ -50,7 +50,7 @@ activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten. Bis V
 	anlass (string)
 	bemerkungen (string)
 	personen (array)		-> Daten für die Zuordnung, welche Aufgaben eine Person hat
-		id (string)		-> Ist leer (='') bzw. ungesetzt genau dann, wenn eine Person extern ist und somit nur der Name angegeben ist
+		id (string)		-> Ist leer (='') bzw. nicht gesetzt genau dann, wenn eine Person extern ist und somit nur der Name angegeben ist
 		name (string)
 		beginn (string
 		ende (string)
