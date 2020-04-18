@@ -639,6 +639,8 @@ void FahrtagWindow::saveResFahrt()
 
     aktuelleRes->setZuege(z);
     aktuelleRes->setHps(h);
+
+    updateAuswertungReservierungen();
 }
 
 void FahrtagWindow::toggleFelderReservierung(bool enabled)
@@ -693,6 +695,14 @@ int FahrtagWindow::getZugVonIndex(int index)
     case 5: return 2206;
     default: return 0;
     }
+}
+
+QString FahrtagWindow::getBelegungVonKlasseUndZug(Fahrtag *f, int zug, int klasse)
+{
+    QString d = "%1 (%2%)";
+    d = d.arg(fahrtag->getBelegung(klasse, zug));
+    d = d.arg(100./f->getKapazitaet(klasse)*f->getBelegung(klasse, zug),0,'g',3);
+    return d;
 }
 
 void FahrtagWindow::on_buttonAddReservierung_clicked()
@@ -789,6 +799,7 @@ void FahrtagWindow::on_comboKlasse_currentIndexChanged(int index)
 {
     if (nehmeRes) {
         aktuelleRes->setKlasse(index);
+        updateAuswertungReservierungen();
     }
 }
 
@@ -912,34 +923,32 @@ void FahrtagWindow::on_listRes_itemClicked(QListWidgetItem *item)
 
 void FahrtagWindow::updateAuswertungReservierungen()
 {
-    int belegtErste  = fahrtag->getBelegtErste();
-    int belegtZweite = fahrtag->getBelegtZweite();
-    int belegtDritte = fahrtag->getBelegtDritte();
-    int belegtGesamt = fahrtag->getBelegtGesamt();
+    ui->labelKapErste->setNum(fahrtag->getKapazitaet(1));
+    ui->label2201Erste->setText(getBelegungVonKlasseUndZug(fahrtag, 2201, 1));
+    ui->label2202Erste->setText(getBelegungVonKlasseUndZug(fahrtag, 2202, 1));
+    ui->label2203Erste->setText(getBelegungVonKlasseUndZug(fahrtag, 2203, 1));
+    ui->label2204Erste->setText(getBelegungVonKlasseUndZug(fahrtag, 2204, 1));
+    ui->label2205Erste->setText(getBelegungVonKlasseUndZug(fahrtag, 2205, 1));
+    ui->label2206Erste->setText(getBelegungVonKlasseUndZug(fahrtag, 2206, 1));
+    ui->labelGesamtErste->setNum(fahrtag->getBelegung(1));
 
-    int kapErste  = fahrtag->getCapacityErste();
-    int kapZweite = fahrtag->getCapacityZweite();
-    int kapDritte = fahrtag->getCapacityDritte();
-    int kapGesamt = fahrtag->getCapacityGesamt();
+    ui->labelKapSonst->setNum(fahrtag->getKapazitaet(0));
+    ui->label2201Sonst->setText(getBelegungVonKlasseUndZug(fahrtag, 2201, 0));
+    ui->label2202Sonst->setText(getBelegungVonKlasseUndZug(fahrtag, 2202, 0));
+    ui->label2203Sonst->setText(getBelegungVonKlasseUndZug(fahrtag, 2203, 0));
+    ui->label2204Sonst->setText(getBelegungVonKlasseUndZug(fahrtag, 2204, 0));
+    ui->label2205Sonst->setText(getBelegungVonKlasseUndZug(fahrtag, 2205, 0));
+    ui->label2206Sonst->setText(getBelegungVonKlasseUndZug(fahrtag, 2206, 0));
+    ui->labelGesamtSonst->setNum(fahrtag->getBelegung(0));
 
-    QString darstellung = "%1/%2 (%3 %)";
-    QString erste  = darstellung.arg(belegtErste ).arg(kapErste ).arg(belegtErste *100.0/(kapErste ), 0, 'g', 3);
-    QString zweite = darstellung.arg(belegtZweite).arg(kapZweite).arg(belegtZweite*100.0/(kapZweite), 0, 'g', 3);
-    QString dritte = darstellung.arg(belegtDritte).arg(kapDritte).arg(belegtDritte*100.0/(kapDritte), 0, 'g', 3);
-    QString gesamt = darstellung.arg(belegtGesamt).arg(kapGesamt).arg(belegtGesamt*100.0/(kapGesamt), 0, 'g', 3);
-    if (kapErste  == 0) erste  = "-";
-    if (kapZweite == 0) zweite = "-";
-    if (kapDritte == 0) dritte = "-";
-    if (kapGesamt == 0) gesamt = "-";
-    ui->labelBelegtErste ->setText(erste );
-    ui->labelBelegtZweite->setText(zweite);
-    ui->labelBelegtDritte->setText(dritte);
-    ui->labelBelegtGesamt->setText(gesamt);
-
-    ui->labelBelegtErste->repaint();
-    ui->labelBelegtZweite->repaint();
-    ui->labelBelegtDritte->repaint();
-    ui->labelBelegtGesamt->repaint();
+    ui->labelKapSum->setNum(fahrtag->getKapazitaet(-1));
+    ui->label2201Sum->setText(getBelegungVonKlasseUndZug(fahrtag, 2201, -1));
+    ui->label2202Sum->setText(getBelegungVonKlasseUndZug(fahrtag, 2202, -1));
+    ui->label2203Sum->setText(getBelegungVonKlasseUndZug(fahrtag, 2203, -1));
+    ui->label2204Sum->setText(getBelegungVonKlasseUndZug(fahrtag, 2204, -1));
+    ui->label2205Sum->setText(getBelegungVonKlasseUndZug(fahrtag, 2205, -1));
+    ui->label2206Sum->setText(getBelegungVonKlasseUndZug(fahrtag, 2206, -1));
+    ui->labelGesamtSum->setNum(fahrtag->getBelegung(-1));
 }
 
 void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)

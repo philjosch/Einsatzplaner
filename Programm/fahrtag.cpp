@@ -236,17 +236,31 @@ QString Fahrtag::getHtmlForSingleView()
     // Reservierungen
     if (getAnzahl() > 0) {
         html += "<p><b>Reservierungen:</b>";
-        if (art != Schnupperkurs && art != Gesellschaftssonderzug) {
-            html += QString("<br/>Bereits %1 %2 belegt. Noch %3 frei.</p>").arg(getBelegtGesamt()).arg((getBelegtGesamt() == 1 ? "Platz" :  "Plätze")).arg(getCapacityGesamt() - getBelegtGesamt());
-        } else {
-            html += "</p>";
-        }
         if (art != Nikolauszug) {
+            QString helperRes = "<br/>Zug %1: %2 Plätze in 1.Klasse, %3 Plätze in 2./3.Klasse";
+            if (getBelegung(-1, 2201) > 0)
+                html += helperRes.arg(2201).arg(getBelegung(1, 2201)).arg(getBelegung(0, 2201));
+            if (getBelegung(-1, 2202) > 0)
+                html += helperRes.arg(2202).arg(getBelegung(1, 2202)).arg(getBelegung(0, 2202));
+            if (getBelegung(-1, 2203) > 0)
+                html += helperRes.arg(2203).arg(getBelegung(1, 2203)).arg(getBelegung(0, 2203));
+            if (getBelegung(-1, 2204) > 0)
+                html += helperRes.arg(2204).arg(getBelegung(1, 2204)).arg(getBelegung(0, 2204));
+            if (getBelegung(-1, 2205) > 0)
+                html += helperRes.arg(2205).arg(getBelegung(1, 2205)).arg(getBelegung(0, 2205));
+            if (getBelegung(-1, 2206) > 0)
+                html += helperRes.arg(2206).arg(getBelegung(1, 2206)).arg(getBelegung(0, 2206));
+            if (getBelegung(-1, 0) > 0)
+                html += QString("<br/>Gesamt: %1 Plätze 1.Klasse, %2 Plätze 2./3.Klasse <br/>").arg(getBelegung(1)).arg(getBelegung(0));
+            html += "</p>";
+
             html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
             for(Reservierung *r: reservierungen) {
                 html += r->getTableRow();
             }
             html += "</tbody></table>";
+        } else {
+            html += "</p>";
         }
     }
     return html;
@@ -357,9 +371,9 @@ QString Fahrtag::getHtmlForTableView()
         html += "</li></ul>";
     }
     // Sneek-Peek Reservierungen
-    if (art != Schnupperkurs && art != Gesellschaftssonderzug && getBelegtGesamt() > 0) {
-        html += QString::number(getBelegtGesamt());
-        html += (getBelegtGesamt() == 1 ? " reservierter Sitzplatz": " reservierte Sitzplätze");
+    if (art != Schnupperkurs && art != Gesellschaftssonderzug && getBelegung(-1) > 0) {
+        html += QString::number(getBelegung(-1));
+        html += (getBelegung(-1) == 1 ? " reservierter Sitzplatz": " reservierte Sitzplätze");
         html += " bei " + QString::number(getAnzahl()) + (getAnzahl() == 1 ? " Reservierung" : " Reservierungen");
         html += "<br/>";
     }
@@ -517,78 +531,24 @@ bool Fahrtag::setWagenreihung(const QString &value)
     return false;
 }
 
-int Fahrtag::getBelegtGesamt()
+int Fahrtag::getBelegung(int klasse, int zug)
 {
     int summe = 0;
     for(Reservierung *r: reservierungen) {
-        summe += r->getAnzahl();
-    }
-    return summe;
-}
-int Fahrtag::getCapacityGesamt()
-{
-    int summe = 0;
-    for(Wagen *w: wagen) {
-        summe += w->getKapazitaet();
-    }
-    return summe;
-}
-
-int Fahrtag::getBelegtErste()
-{
-    int summe = 0;
-    for(Wagen *w: wagen) {
-        if (w->klasse() == 1) {
-            summe += w->getAnzahlBelegt();
+        if (klasse == -1 || (r->getKlasse() == klasse)) {
+            if (zug == 0 || r->inZug(zug)) {
+                summe += r->getAnzahl();
+            }
         }
     }
     return summe;
 }
-int Fahrtag::getCapacityErste()
-{
-    int summe = 0;
-    for(Wagen *w: wagen) {
-        if (w->klasse() == 1)
-            summe += w->getKapazitaet();
-    }
-    return summe;
-}
 
-int Fahrtag::getBelegtZweite()
+int Fahrtag::getKapazitaet(int klasse)
 {
     int summe = 0;
     for(Wagen *w: wagen) {
-        if (w->klasse() == 2) {
-            summe += w->getAnzahlBelegt();
-        }
-    }
-    return summe;
-}
-int Fahrtag::getCapacityZweite()
-{
-    int summe = 0;
-    for(Wagen *w: wagen) {
-        if (w->klasse() == 2)
-            summe += w->getKapazitaet();
-    }
-    return summe;
-}
-
-int Fahrtag::getBelegtDritte()
-{
-    int summe = 0;
-    for(Wagen *w: wagen) {
-        if (w->klasse() == 3) {
-            summe += w->getAnzahlBelegt();
-        }
-    }
-    return summe;
-}
-int Fahrtag::getCapacityDritte()
-{
-    int summe = 0;
-    for(Wagen *w: wagen) {
-        if (w->klasse() == 3)
+        if ((klasse == -1) || (w->klasse() == klasse) || (klasse == 0 && (w->klasse() == 2 || w->klasse() == 3)))
             summe += w->getKapazitaet();
     }
     return summe;

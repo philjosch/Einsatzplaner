@@ -138,6 +138,8 @@ private:
 
     int getIndexVonZug(int zug);
     int getZugVonIndex(int index);
+
+    QString getBelegungVonKlasseUndZug(Fahrtag *f, int zug, int klasse);
 };
 
 #endif // FAHRTAGWINDOW_H

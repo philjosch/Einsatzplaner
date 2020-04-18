@@ -51,17 +51,8 @@ public:
     QString getWagenreihung() const;
     bool setWagenreihung(const QString &value);
 
-    int getBelegtGesamt();
-    int getCapacityGesamt();
-
-    int getBelegtErste();
-    int getCapacityErste();
-
-    int getBelegtZweite();
-    int getCapacityZweite();
-
-    int getBelegtDritte();
-    int getCapacityDritte();
+    int getBelegung(int klasse, int zug = 0); // zug == 0: Gesamt
+    int getKapazitaet(int klasse); //klasse == -1: Gesamt ; klasse == 0: 2.u 3.Klasse
 
     int getAnzahl();
 

@@ -73,6 +73,22 @@ QMap<int, QList<int> > Reservierung::getPlaetzeFromString(QString plaetze)
     return map;
 }
 
+bool Reservierung::inZug(int zug)
+{
+    if (zuege.isEmpty()) return false;
+    if (zuege.contains(zug)) return true;
+
+    if (zuege.at(0) > zug) return false;
+    if (zuege.length() < 2) return false;
+    if (zuege.at(1) < zug) {
+        if (zuege.length() < 3) return false;
+        if (zuege.at(2) > zug) return false;
+        if (zuege.length() < 4) return false;
+        if (zuege.at(3) < zug) return false;
+    }
+    return true;
+}
+
 Reservierung::Reservierung(QMap<int, Wagen *> *wagen)
 {
     name = "(Name eingeben)";

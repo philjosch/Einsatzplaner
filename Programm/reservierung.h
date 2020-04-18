@@ -55,6 +55,7 @@ public:
     static QString getStringFromPlaetze(QMap<int, QList<int> > liste);
     static QMap<int, QList<int> > getPlaetzeFromString(QString plaetze);
 
+    bool inZug(int zug);
 
 signals:
     void changed();

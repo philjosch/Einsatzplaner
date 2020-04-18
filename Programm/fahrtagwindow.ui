@@ -1432,24 +1432,13 @@
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="0" column="1">
-           <widget class="QLabel" name="labelKap">
+          <item row="0" column="5">
+           <widget class="QLabel" name="label2204">
             <property name="text">
-             <string>Kapazität</string>
+             <string>2204</string>
             </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label2201">
-            <property name="text">
-             <string>2201</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label2202">
-            <property name="text">
-             <string>2202</string>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -1458,82 +1447,18 @@
             <property name="text">
              <string>2203</string>
             </property>
-           </widget>
-          </item>
-          <item row="0" column="5">
-           <widget class="QLabel" name="label2204">
-            <property name="text">
-             <string>2204</string>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
-          <item row="0" column="6">
-           <widget class="QLabel" name="label2205">
-            <property name="text">
-             <string>2205</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="7">
-           <widget class="QLabel" name="label2206">
-            <property name="text">
-             <string>2206</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="8">
-           <widget class="QLabel" name="labelUn">
-            <property name="text">
-             <string>Unbekannt</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="9">
-           <widget class="QLabel" name="labelGesamt">
-            <property name="text">
-             <string>Gesamt</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="10">
-           <widget class="QLabel" name="labelAus">
-            <property name="text">
-             <string>Auslastung</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="labelErste">
-            <property name="text">
-             <string>1. Klasse</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="labelKapErste">
-            <property name="text">
-             <string>40</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="label2201Erste">
+          <item row="4" column="6">
+           <widget class="QLabel" name="label2205Sum">
             <property name="text">
              <string>0</string>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLabel" name="label2202Erste">
-            <property name="text">
-             <string>0</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4">
-           <widget class="QLabel" name="label2203Erste">
-            <property name="text">
-             <string>0</string>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1542,54 +1467,18 @@
             <property name="text">
              <string>0</string>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="6">
-           <widget class="QLabel" name="label2205Erste">
-            <property name="text">
-             <string>0</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="7">
-           <widget class="QLabel" name="label2206Erste">
-            <property name="text">
-             <string>0</string>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
           <item row="1" column="8">
-           <widget class="QLabel" name="labelUnErste">
-            <property name="text">
-             <string>0</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="9">
            <widget class="QLabel" name="labelGesamtErste">
             <property name="text">
              <string>0</string>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="10">
-           <widget class="QLabel" name="labelAusErste">
-            <property name="text">
-             <string>0%</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="labelSonst">
-            <property name="text">
-             <string>2./3.Klasse</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="labelKapSonst">
-            <property name="text">
-             <string>60</string>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1598,19 +1487,8 @@
             <property name="text">
              <string>0</string>
             </property>
-           </widget>
-          </item>
-          <item row="2" column="3">
-           <widget class="QLabel" name="label2202Sonst">
-            <property name="text">
-             <string>0</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="4">
-           <widget class="QLabel" name="label2203Sonst">
-            <property name="text">
-             <string>0</string>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1619,12 +1497,28 @@
             <property name="text">
              <string>0</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
            </widget>
           </item>
-          <item row="2" column="6">
-           <widget class="QLabel" name="label2205Sonst">
+          <item row="0" column="3">
+           <widget class="QLabel" name="label2202">
+            <property name="text">
+             <string>2202</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label2201Erste">
             <property name="text">
              <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1633,33 +1527,28 @@
             <property name="text">
              <string>0</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
            </widget>
           </item>
-          <item row="2" column="8">
-           <widget class="QLabel" name="labelUnSonst">
+          <item row="1" column="7">
+           <widget class="QLabel" name="label2206Erste">
             <property name="text">
              <string>0</string>
             </property>
-           </widget>
-          </item>
-          <item row="2" column="9">
-           <widget class="QLabel" name="labelGesamtSonst">
-            <property name="text">
-             <string>0</string>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
-          <item row="2" column="10">
-           <widget class="QLabel" name="labelAusSonst">
+          <item row="0" column="1">
+           <widget class="QLabel" name="labelKap">
             <property name="text">
-             <string>0%</string>
+             <string>Kapazität</string>
             </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="11">
-           <widget class="Line" name="line_4">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1670,17 +1559,57 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QLabel" name="labelKapSum">
+          <item row="2" column="1">
+           <widget class="QLabel" name="labelKapSonst">
             <property name="text">
-             <string>100</string>
+             <string>60</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
-          <item row="4" column="2">
-           <widget class="QLabel" name="label2201Sum">
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelSonst">
+            <property name="text">
+             <string>2./3.Klasse</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLabel" name="label2203Erste">
             <property name="text">
              <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="labelKapErste">
+            <property name="text">
+             <string>40</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="7">
+           <widget class="QLabel" name="label2206">
+            <property name="text">
+             <string>2206</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelErste">
+            <property name="text">
+             <string>1. Klasse</string>
             </property>
            </widget>
           </item>
@@ -1689,6 +1618,9 @@
             <property name="text">
              <string>0</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
            </widget>
           </item>
           <item row="4" column="4">
@@ -1696,19 +1628,111 @@
             <property name="text">
              <string>0</string>
             </property>
-           </widget>
-          </item>
-          <item row="4" column="5">
-           <widget class="QLabel" name="label2204Sum">
-            <property name="text">
-             <string>0</string>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
-          <item row="4" column="6">
-           <widget class="QLabel" name="label2205Sum">
+          <item row="1" column="3">
+           <widget class="QLabel" name="label2202Erste">
             <property name="text">
              <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="8">
+           <widget class="QLabel" name="labelGesamtSum">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="9">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLabel" name="label2201Sum">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QLabel" name="label2205Erste">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLabel" name="label2202Sonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="8">
+           <widget class="QLabel" name="labelGesamt">
+            <property name="text">
+             <string>Gesamt</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label2201">
+            <property name="text">
+             <string>2201</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="8">
+           <widget class="QLabel" name="labelGesamtSonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QLabel" name="label2203Sonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1717,26 +1741,55 @@
             <property name="text">
              <string>0</string>
             </property>
-           </widget>
-          </item>
-          <item row="4" column="8">
-           <widget class="QLabel" name="labelUnSum">
-            <property name="text">
-             <string>0</string>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
-          <item row="4" column="9">
-           <widget class="QLabel" name="labelGesamtSum">
+          <item row="2" column="6">
+           <widget class="QLabel" name="label2205Sonst">
             <property name="text">
              <string>0</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
            </widget>
           </item>
-          <item row="4" column="10">
-           <widget class="QLabel" name="labelAusSum">
+          <item row="3" column="0" colspan="9">
+           <widget class="Line" name="line_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="labelKapSum">
             <property name="text">
-             <string>0%</string>
+             <string>100</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="5">
+           <widget class="QLabel" name="label2204Sum">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
+           <widget class="QLabel" name="label2205">
+            <property name="text">
+             <string>2205</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
