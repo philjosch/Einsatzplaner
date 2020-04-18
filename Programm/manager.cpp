@@ -27,10 +27,19 @@ void Manager::fromJson(QJsonArray array)
     for(int i = 0; i < array.size(); i++) {
         QJsonObject aO = array.at(i).toObject();
         AActivity *akt;
-        if (aO.value("isFahrtag").toBool()) {
-            akt = new Fahrtag(aO, personal);
+        if (! aO.contains("isFahrtag")) {
+            if (Art::Arbeitseinsatz == static_cast<Art>(aO.value("art").toInt())) {
+                akt = new Activity(aO, personal);
+            } else {
+                akt = new Fahrtag(aO, personal);
+            }
         } else {
-            akt = new Activity(aO, personal);
+            // Fallback für Version < 1.6
+            if (aO.value("isFahrtag").toBool()) {
+                akt = new Fahrtag(aO, personal);
+            } else {
+                akt = new Activity(aO, personal);
+            }
         }
         activities.append(akt);
         update(activities.length()-1);

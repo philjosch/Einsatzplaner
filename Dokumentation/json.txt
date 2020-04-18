@@ -39,6 +39,8 @@ personal/ (object)	-> hier werden die Personen gesichert
 
 
 activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten. Bis Version <1.6 unter /calendar/activites [sic] zu finden.
+	art (int)			-> Gibt an, ob es sich um einen Arbeitseinsatz =100 oder Fahrtag <100 handelt. Für letzteren ist dies auch seine Art.
+					   Bis Version <1.6 wurde diese Unterscheidung über isFahrtag (bool) vorgenommen.
 	# Für Arbeitseinsatz
 	datum (date)
 	ort (string)
@@ -56,10 +58,8 @@ activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten. Bis V
 		aufgabe (string)
 		bemerkung (string)
 	personalBenoetigt (bool)
-	isFahrtag (bool) 		-> Gibt an, ob es sich bei dem Datensatz um einen Fahrtag handelt, um die Erstellung eines neuen Dokumentes zu vereinfachen
 
 	# Für Fahrtag kommt folgendes hinzu
-	art (int)
 	zeitTf (time)
 	wichtig (bool)
 	benoetigeTf (int)		-> Bis Version <1.6 bool als Typ 

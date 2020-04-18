@@ -76,6 +76,7 @@ Fahrtag::~Fahrtag()
 QJsonObject Fahrtag::toJson()
 {
     QJsonObject o = AActivity::toJson();
+    o.remove("art");
     o.insert("wagenreihung", wagenreihung);
     o.insert("checkAll", checkAll);
     QJsonArray array;
@@ -83,8 +84,6 @@ QJsonObject Fahrtag::toJson()
         array.append(r->toJson());
     }
     o.insert("reservierungen", array);
-
-    o.insert("isFahrtag", true);
     o.insert("art", art);
     o.insert("zeitTf", zeitTf.toString("hh:mm"));
     o.insert("wichtig", wichtig);

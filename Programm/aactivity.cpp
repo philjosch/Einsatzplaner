@@ -87,6 +87,7 @@ bool AActivity::remove()
 QJsonObject AActivity::toJson()
 {
     QJsonObject data;
+    data.insert("art", static_cast<int>(Art::Arbeitseinsatz));
     data.insert("datum", datum.toString("yyyy-MM-dd"));
     data.insert("ort", ort);
     data.insert("zeitAnfang", zeitAnfang.toString("hh:mm"));
@@ -110,7 +111,6 @@ QJsonObject AActivity::toJson()
     }
     data.insert("personen", personenJSON);
     data.insert("personalBenoetigt", personalBenoetigt);
-    data.insert("isFahrtag", false);
     return data;
 }
 
