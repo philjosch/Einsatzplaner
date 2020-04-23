@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>720</width>
-    <height>575</height>
+    <width>675</width>
+    <height>625</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>720</width>
-    <height>575</height>
+    <width>675</width>
+    <height>625</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -63,7 +63,7 @@
        <attribute name="title">
         <string>Personal</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,2,0,2">
+       <layout class="QGridLayout" name="gridLayout_4">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -79,154 +79,74 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridTf" rowstretch="0,0,1" columnstretch="0,0,0,0,1">
-          <item row="2" column="0" colspan="5">
-           <widget class="QListWidget" name="listTf">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>75</height>
-             </size>
-            </property>
-            <property name="verticalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
-            </property>
-            <property name="horizontalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
+        <item row="2" column="0" colspan="2">
+         <layout class="QGridLayout" name="gridBemerkungen">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item row="1" column="0">
-           <widget class="QPushButton" name="buttonTfAdd">
+           <widget class="QPlainTextEdit" name="textBemerkungen">
             <property name="enabled">
              <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>90</width>
-              <height>16777215</height>
-             </size>
             </property>
             <property name="toolTip">
-             <string>Name hinzufügen</string>
+             <string notr="true"/>
             </property>
             <property name="statusTip">
-             <string>Name hinzufügen</string>
+             <string notr="true"/>
             </property>
             <property name="whatsThis">
-             <string>Name hinzufügen</string>
+             <string notr="true"/>
+            </property>
+            <property name="accessibleName">
+             <string notr="true"/>
             </property>
             <property name="accessibleDescription">
-             <string>Name hinzufügen</string>
+             <string notr="true"/>
             </property>
-            <property name="text">
-             <string>+</string>
+            <property name="plainText">
+             <string/>
             </property>
            </widget>
           </item>
-          <item row="0" column="0" colspan="5">
-           <widget class="QLabel" name="labelTf">
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelBemerkungen">
             <property name="toolTip">
-             <string>Triebfahrzeugführer, Triebfahrzeugbegleiter</string>
+             <string notr="true"/>
+            </property>
+            <property name="statusTip">
+             <string notr="true"/>
             </property>
             <property name="whatsThis">
-             <string>Wahts This</string>
+             <string notr="true"/>
+            </property>
+            <property name="accessibleName">
+             <string notr="true"/>
+            </property>
+            <property name="accessibleDescription">
+             <string notr="true"/>
             </property>
             <property name="text">
-             <string>Triebfahrzeugführer (Tf), -begleiter (Tb)</string>
+             <string>Bemerkungen:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="buddy">
-             <cstring>listTf</cstring>
+             <cstring>textBemerkungen</cstring>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QPushButton" name="buttonTfDelete">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>90</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Ausgewählten Namen löschen</string>
-            </property>
-            <property name="statusTip">
-             <string>Ausgewählten Namen löschen</string>
-            </property>
-            <property name="whatsThis">
-             <string>Ausgewählten Namen löschen</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Ausgewählten Namen löschen</string>
-            </property>
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QRadioButton" name="radioButtonTf0">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroupTf</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QRadioButton" name="radioButtonTf1">
-            <property name="text">
-             <string>1</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroupTf</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="1" column="4">
-           <widget class="QRadioButton" name="radioButtonTf2">
-            <property name="text">
-             <string>2 Tf benötigt</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroupTf</string>
-            </attribute>
            </widget>
           </item>
          </layout>
@@ -365,7 +285,7 @@
              <string/>
             </property>
             <property name="text">
-             <string>Zub, Zs, Begl. o.b.A.</string>
+             <string>Zub, Zs, Begl.o.b.A.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -594,81 +514,154 @@
           </item>
          </layout>
         </item>
-        <item row="2" column="0" colspan="2">
-         <widget class="Line" name="line">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0" colspan="2">
-         <layout class="QGridLayout" name="gridBemerkungen">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="1" column="0">
-           <widget class="QPlainTextEdit" name="textBemerkungen">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridTf" rowstretch="0,0,1" columnstretch="0,0,0,0,1">
+          <item row="2" column="0" colspan="5">
+           <widget class="QListWidget" name="listTf">
             <property name="enabled">
              <bool>true</bool>
             </property>
-            <property name="toolTip">
-             <string notr="true"/>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>75</height>
+             </size>
             </property>
-            <property name="statusTip">
-             <string notr="true"/>
+            <property name="verticalScrollMode">
+             <enum>QAbstractItemView::ScrollPerPixel</enum>
             </property>
-            <property name="whatsThis">
-             <string notr="true"/>
+            <property name="horizontalScrollMode">
+             <enum>QAbstractItemView::ScrollPerPixel</enum>
             </property>
-            <property name="accessibleName">
-             <string notr="true"/>
-            </property>
-            <property name="accessibleDescription">
-             <string notr="true"/>
-            </property>
-            <property name="plainText">
-             <string/>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="labelBemerkungen">
+          <item row="1" column="0">
+           <widget class="QPushButton" name="buttonTfAdd">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="toolTip">
-             <string notr="true"/>
+             <string>Name hinzufügen</string>
             </property>
             <property name="statusTip">
-             <string notr="true"/>
+             <string>Name hinzufügen</string>
             </property>
             <property name="whatsThis">
-             <string notr="true"/>
-            </property>
-            <property name="accessibleName">
-             <string notr="true"/>
+             <string>Name hinzufügen</string>
             </property>
             <property name="accessibleDescription">
-             <string notr="true"/>
+             <string>Name hinzufügen</string>
             </property>
             <property name="text">
-             <string>Bemerkungen:</string>
+             <string>+</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="5">
+           <widget class="QLabel" name="labelTf">
+            <property name="toolTip">
+             <string>Triebfahrzeugführer, Triebfahrzeugbegleiter</string>
+            </property>
+            <property name="whatsThis">
+             <string>Wahts This</string>
+            </property>
+            <property name="text">
+             <string>Triebfahrzeugführer (Tf), -begleiter (Tb)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
             <property name="buddy">
-             <cstring>textBemerkungen</cstring>
+             <cstring>listTf</cstring>
             </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="buttonTfDelete">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="statusTip">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="whatsThis">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Ausgewählten Namen löschen</string>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QRadioButton" name="radioButtonTf0">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroupTf</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QRadioButton" name="radioButtonTf1">
+            <property name="text">
+             <string>1</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroupTf</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QRadioButton" name="radioButtonTf2">
+            <property name="text">
+             <string>2 Tf benötigt</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">buttonGroupTf</string>
+            </attribute>
            </widget>
           </item>
          </layout>
@@ -682,7 +675,7 @@
        <attribute name="title">
         <string>Reservierungen</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
+       <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,1,0" columnstretch="1,0,0,1">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -698,110 +691,567 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridNavigator" rowstretch="0,1,0,0,0,0">
-          <property name="leftMargin">
-           <number>0</number>
+        <item row="0" column="3" rowspan="3">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <property name="topMargin">
-           <number>0</number>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>13</width>
+            <height>366</height>
+           </size>
           </property>
+         </spacer>
+        </item>
+        <item row="1" column="2">
+         <layout class="QGridLayout" name="gridResFahrt" columnstretch="0,0,1,1">
           <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
+           <number>6</number>
           </property>
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="1" column="0">
-           <widget class="QListWidget" name="listRes">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QPushButton" name="buttonAddReservierung">
-            <property name="text">
-             <string>Neue Reservierung</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QPushButton" name="buttonDeleteReservierung">
+          <item row="3" column="3">
+           <widget class="QComboBox" name="comboEnde2Hp">
             <property name="enabled">
              <bool>false</bool>
             </property>
-            <property name="text">
-             <string>Reservierung löschen</string>
+            <property name="currentIndex">
+             <number>11</number>
             </property>
+            <item>
+             <property name="text">
+              <string>Ottweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler-Wingertsweiher</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Fürth (Ostertal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Dörrenbach</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Werschweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Niederkirchen</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Marth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Osterbrücken</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Haupersweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Oberkirchen (Süd)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Schwarzerden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
            </widget>
           </item>
-          <item row="5" column="0">
-           <widget class="QPushButton" name="buttonVerteile">
+          <item row="0" column="3">
+           <widget class="QComboBox" name="comboStart1Hp">
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="currentIndex">
+             <number>11</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Ottweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler-Wingertsweiher</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Fürth (Ostertal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Dörrenbach</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Werschweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Niederkirchen</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Marth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Osterbrücken</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Haupersweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Oberkirchen (Süd)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Schwarzerden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="labelF1Bis">
             <property name="text">
-             <string>Sitzplätze verteilen</string>
+             <string>nach</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="labelF2Von">
+            <property name="text">
+             <string>von</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QComboBox" name="comboEnde1Zug">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2201</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2202</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2203</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2204</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2205</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2206</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="labelF1Von">
+            <property name="text">
+             <string>von</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QComboBox" name="comboStart2Zug">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2201</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2202</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2203</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2204</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2205</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2206</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QComboBox" name="comboEnde1Hp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>11</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Ottweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler-Wingertsweiher</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Fürth (Ostertal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Dörrenbach</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Werschweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Niederkirchen</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Marth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Osterbrücken</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Haupersweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Oberkirchen (Süd)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Schwarzerden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="0" rowspan="2">
+           <widget class="QLabel" name="labelF2">
+            <property name="text">
+             <string>Fahrt 2
+(optional)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="labelF2Bis">
+            <property name="text">
+             <string>bis</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QComboBox" name="comboStart1Zug">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2201</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2202</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2203</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2204</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2205</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2206</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QComboBox" name="comboStart2Hp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>11</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Ottweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ottweiler-Wingertsweiher</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Fürth (Ostertal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Dörrenbach</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Werschweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Niederkirchen</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Marth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Osterbrücken</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Haupersweiler</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Oberkirchen (Süd)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Schwarzerden</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QComboBox" name="comboEnde2Zug">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>-</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2201</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2202</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2203</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2204</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2205</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2206</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="0" rowspan="2">
+           <widget class="QLabel" name="labelF1">
+            <property name="text">
+             <string>Fahrt 1</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
           <item row="4" column="0">
-           <widget class="QCheckBox" name="checkBoxAll">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
+           <widget class="QLabel" name="labelResSonst">
             <property name="text">
-             <string>Alle Kombinationen berechnen</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="Line" name="line_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="0" column="1">
-         <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0,1" columnstretch="0,2,1,1,2">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_21">
-            <property name="text">
-             <string>Name</string>
+             <string>Sonstiges:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
             </property>
             <property name="buddy">
-             <cstring>lineName</cstring>
+             <cstring>plainSonstiges</cstring>
             </property>
            </widget>
           </item>
-          <item row="0" column="1" colspan="4">
+          <item row="4" column="1" colspan="3">
+           <widget class="QPlainTextEdit" name="plainSonstiges">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="2">
+         <layout class="QGridLayout" name="gridResAllgemein" columnstretch="1,0,0,1">
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item row="0" column="0" colspan="4">
            <widget class="QLineEdit" name="lineName">
             <property name="enabled">
              <bool>false</bool>
@@ -817,20 +1267,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_18">
-            <property name="text">
-             <string>Kontakt</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-            <property name="buddy">
-             <cstring>lineMail</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" colspan="2">
+          <item row="1" column="0" colspan="2">
            <widget class="QLineEdit" name="lineMail">
             <property name="enabled">
              <bool>false</bool>
@@ -843,7 +1280,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="3" colspan="2">
+          <item row="1" column="2" colspan="2">
            <widget class="QLineEdit" name="lineTelefon">
             <property name="enabled">
              <bool>false</bool>
@@ -855,11 +1292,11 @@
              <enum>QLineEdit::Normal</enum>
             </property>
             <property name="placeholderText">
-             <string>Telefon Nummer</string>
+             <string>Telefonnummer</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="2" column="0">
            <widget class="QSpinBox" name="spinAnzahl">
             <property name="enabled">
              <bool>false</bool>
@@ -870,12 +1307,25 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
            </widget>
           </item>
-          <item row="2" column="2" colspan="2">
+          <item row="2" column="1" colspan="2">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Plätze in der</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
            <widget class="QComboBox" name="comboKlasse">
             <property name="enabled">
              <bool>false</bool>
@@ -895,7 +1345,20 @@
             </item>
            </widget>
           </item>
-          <item row="2" column="4">
+          <item row="3" column="0" colspan="3">
+           <widget class="QLineEdit" name="lineSitze">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="statusTip">
+             <string>Sitzplätze in einem gültigen Format eingeben, z.B. 204: 1-4, 6; 208: 7-9</string>
+            </property>
+            <property name="placeholderText">
+             <string>Zugewiesene Sitzplätze</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
            <widget class="QCheckBox" name="checkFahrrad">
             <property name="enabled">
              <bool>false</bool>
@@ -905,24 +1368,30 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1" colspan="4">
-           <widget class="QLineEdit" name="lineSitze">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="statusTip">
-             <string>Sitzplätze in einem gültigen Format eingeben, z.B. 204: 1-4, 6; 208: 7-9</string>
+         </layout>
+        </item>
+        <item row="0" column="1" rowspan="3">
+         <layout class="QGridLayout" name="gridNavigator" rowstretch="0,1,0,0" columnstretch="0,1,0">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="buttonAddReservierung">
+            <property name="text">
+             <string>+</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1" colspan="2">
-           <widget class="QComboBox" name="comboStart1Zug">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboAuswahlRes">
             <property name="currentIndex">
-             <number>6</number>
+             <number>0</number>
             </property>
+            <item>
+             <property name="text">
+              <string>Alle</string>
+             </property>
+            </item>
             <item>
              <property name="text">
               <string>2201</string>
@@ -953,489 +1422,75 @@
               <string>2206</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>-</string>
-             </property>
-            </item>
            </widget>
           </item>
-          <item row="4" column="3" colspan="2">
-           <widget class="QComboBox" name="comboStart1Hp">
+          <item row="0" column="2">
+           <widget class="QPushButton" name="buttonDeleteReservierung">
             <property name="enabled">
              <bool>false</bool>
             </property>
-            <property name="currentIndex">
-             <number>11</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>Schwarzerden</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Oberkirchen (Süd)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Haupersweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Osterbrücken</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Marth</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Niederkirchen</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Werschweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dörrenbach</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Fürth (Ostertal)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler-Wingertsweiher</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>-</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="5" column="1" colspan="2">
-           <widget class="QComboBox" name="comboEnde1Zug">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="currentIndex">
-             <number>6</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>2201</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2202</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2203</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2204</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2205</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2206</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>-</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="5" column="3" colspan="2">
-           <widget class="QComboBox" name="comboEnde1Hp">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="currentIndex">
-             <number>11</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>Schwarzerden</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Oberkirchen (Süd)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Haupersweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Osterbrücken</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Marth</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Niederkirchen</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Werschweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dörrenbach</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Fürth (Ostertal)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler-Wingertsweiher</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>-</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="6" column="1" colspan="2">
-           <widget class="QComboBox" name="comboStart2Zug">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="currentIndex">
-             <number>6</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>2201</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2202</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2203</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2204</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2205</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2206</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>-</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="6" column="3" colspan="2">
-           <widget class="QComboBox" name="comboStart2Hp">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="currentIndex">
-             <number>11</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>Schwarzerden</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Oberkirchen (Süd)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Haupersweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Osterbrücken</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Marth</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Niederkirchen</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Werschweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dörrenbach</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Fürth (Ostertal)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler-Wingertsweiher</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>-</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="7" column="1" colspan="2">
-           <widget class="QComboBox" name="comboEnde2Zug">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="currentIndex">
-             <number>6</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>2201</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2202</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2203</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2204</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2205</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2206</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>-</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="7" column="3" colspan="2">
-           <widget class="QComboBox" name="comboEnde2Hp">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="currentIndex">
-             <number>11</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>Schwarzerden</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Oberkirchen (Süd)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Haupersweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Osterbrücken</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Marth</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Niederkirchen</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Werschweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dörrenbach</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Fürth (Ostertal)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler-Wingertsweiher</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Ottweiler</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>-</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="label_19">
             <property name="text">
-             <string>Sonstiges:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-            <property name="buddy">
-             <cstring>plainSonstiges</cstring>
+             <string>-</string>
             </property>
            </widget>
           </item>
-          <item row="8" column="1" colspan="4">
-           <widget class="QPlainTextEdit" name="plainSonstiges">
+          <item row="1" column="0" colspan="3">
+           <widget class="QListWidget" name="listRes"/>
+          </item>
+          <item row="2" column="0" colspan="3">
+           <widget class="QCheckBox" name="checkBoxAll">
             <property name="enabled">
              <bool>false</bool>
             </property>
-           </widget>
-          </item>
-          <item row="4" column="0" rowspan="2">
-           <widget class="QLabel" name="label_20">
             <property name="text">
-             <string>Strecke 1</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <string>Alle Kombinationen berechnen</string>
             </property>
            </widget>
           </item>
-          <item row="6" column="0" rowspan="2">
-           <widget class="QLabel" name="label_8">
+          <item row="3" column="0" colspan="3">
+           <widget class="QPushButton" name="buttonVerteile">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
-             <string>Strecke 2</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" rowspan="2">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Sitzplätze</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <string>Sitzplätze verteilen</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
-        <item row="1" column="0" colspan="2">
-         <layout class="QGridLayout" name="gridResBelegung">
+        <item row="2" column="2">
+         <layout class="QGridLayout" name="gridResAuswertung">
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="0" column="5">
-           <widget class="QLabel" name="label2204">
+          <item row="0" column="1">
+           <widget class="QLabel" name="labelKap">
             <property name="text">
-             <string>2204</string>
+             <string>Kapazität</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label2201">
+            <property name="text">
+             <string>2201</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label2202">
+            <property name="text">
+             <string>2202</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -1452,8 +1507,85 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="6">
-           <widget class="QLabel" name="label2205Sum">
+          <item row="0" column="5">
+           <widget class="QLabel" name="label2204">
+            <property name="text">
+             <string>2204</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
+           <widget class="QLabel" name="label2205">
+            <property name="text">
+             <string>2205</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="7">
+           <widget class="QLabel" name="label2206">
+            <property name="text">
+             <string>2206</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="8">
+           <widget class="QLabel" name="labelGesamt">
+            <property name="text">
+             <string>Gesamt</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelErste">
+            <property name="text">
+             <string>1. Klasse</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="labelKapErste">
+            <property name="text">
+             <string>40</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label2201Erste">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLabel" name="label2202Erste">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLabel" name="label2203Erste">
             <property name="text">
              <string>0</string>
             </property>
@@ -1472,58 +1604,8 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="8">
-           <widget class="QLabel" name="labelGesamtErste">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="label2201Sonst">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="5">
-           <widget class="QLabel" name="label2204Sonst">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label2202">
-            <property name="text">
-             <string>2202</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="label2201Erste">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="7">
-           <widget class="QLabel" name="label2206Sonst">
+          <item row="1" column="6">
+           <widget class="QLabel" name="label2205Erste">
             <property name="text">
              <string>0</string>
             </property>
@@ -1542,27 +1624,10 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="labelKap">
+          <item row="1" column="8">
+           <widget class="QLabel" name="labelGesamtErste">
             <property name="text">
-             <string>Kapazität</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="labelSum">
-            <property name="text">
-             <string>Summe</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="labelKapSonst">
-            <property name="text">
-             <string>60</string>
+             <string>0</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1576,8 +1641,18 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="4">
-           <widget class="QLabel" name="label2203Erste">
+          <item row="2" column="1">
+           <widget class="QLabel" name="labelKapSonst">
+            <property name="text">
+             <string>60</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label2201Sonst">
             <property name="text">
              <string>0</string>
             </property>
@@ -1586,30 +1661,97 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="labelKapErste">
+          <item row="2" column="3">
+           <widget class="QLabel" name="label2202Sonst">
             <property name="text">
-             <string>40</string>
+             <string>0</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
-          <item row="0" column="7">
-           <widget class="QLabel" name="label2206">
+          <item row="2" column="4">
+           <widget class="QLabel" name="label2203Sonst">
             <property name="text">
-             <string>2206</string>
+             <string>0</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="labelErste">
+          <item row="2" column="5">
+           <widget class="QLabel" name="label2204Sonst">
             <property name="text">
-             <string>1. Klasse</string>
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="6">
+           <widget class="QLabel" name="label2205Sonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="7">
+           <widget class="QLabel" name="label2206Sonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="8">
+           <widget class="QLabel" name="labelGesamtSonst">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="9">
+           <widget class="Line" name="line_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="labelSum">
+            <property name="text">
+             <string>Summe</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="labelKapSum">
+            <property name="text">
+             <string>100</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLabel" name="label2201Sum">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1633,8 +1775,8 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="3">
-           <widget class="QLabel" name="label2202Erste">
+          <item row="4" column="5">
+           <widget class="QLabel" name="label2204Sum">
             <property name="text">
              <string>0</string>
             </property>
@@ -1643,91 +1785,8 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="8">
-           <widget class="QLabel" name="labelGesamtSum">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="9">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="4" column="2">
-           <widget class="QLabel" name="label2201Sum">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="6">
-           <widget class="QLabel" name="label2205Erste">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3">
-           <widget class="QLabel" name="label2202Sonst">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="8">
-           <widget class="QLabel" name="labelGesamt">
-            <property name="text">
-             <string>Gesamt</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label2201">
-            <property name="text">
-             <string>2201</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="8">
-           <widget class="QLabel" name="labelGesamtSonst">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="4">
-           <widget class="QLabel" name="label2203Sonst">
+          <item row="4" column="6">
+           <widget class="QLabel" name="label2205Sum">
             <property name="text">
              <string>0</string>
             </property>
@@ -1746,54 +1805,30 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="6">
-           <widget class="QLabel" name="label2205Sonst">
+          <item row="4" column="8">
+           <widget class="QLabel" name="labelGesamtSum">
             <property name="text">
              <string>0</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="9">
-           <widget class="Line" name="line_4">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QLabel" name="labelKapSum">
-            <property name="text">
-             <string>100</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="5">
-           <widget class="QLabel" name="label2204Sum">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="6">
-           <widget class="QLabel" name="label2205">
-            <property name="text">
-             <string>2205</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
          </layout>
+        </item>
+        <item row="0" column="0">
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
@@ -1906,81 +1941,40 @@
      </widget>
     </item>
     <item row="0" column="0" colspan="2">
-     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0,0,0,0">
+     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0,0,0,0,0,0">
       <property name="horizontalSpacing">
        <number>6</number>
       </property>
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="1" column="3" colspan="4">
-       <widget class="QComboBox" name="comboWagenreihung">
-        <property name="enabled">
-         <bool>true</bool>
+      <item row="2" column="0">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="editable">
-         <bool>true</bool>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
         </property>
-        <property name="currentIndex">
-         <number>4</number>
-        </property>
-        <property name="insertPolicy">
-         <enum>QComboBox::InsertAlphabetically</enum>
-        </property>
-        <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToContents</enum>
-        </property>
-        <item>
-         <property name="text">
-          <string>221, 217, 208, 309</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>221, 217, 208, 202, 309</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>221, 217, 204, 208, 202, 309</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>221, 217, 208, 202, 201, 309</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>221, 217, 204, 208, 202, 201, 309</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>221, 217, 204, 309</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>221, 217, 309</string>
-         </property>
-        </item>
-       </widget>
+       </spacer>
       </item>
-      <item row="2" column="2">
-       <widget class="QLabel" name="label_2">
+      <item row="2" column="1">
+       <widget class="QLabel" name="labelAnlass">
         <property name="text">
-         <string>Dienstbeginn Tf</string>
+         <string>Anlass</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
         </property>
         <property name="buddy">
-         <cstring>comboTimeTfH</cstring>
+         <cstring>textAnlass</cstring>
         </property>
        </widget>
       </item>
-      <item row="3" column="5">
+      <item row="3" column="6">
        <widget class="QComboBox" name="comboTimeZM">
         <property name="enabled">
          <bool>true</bool>
@@ -2019,160 +2013,20 @@
         </item>
        </widget>
       </item>
-      <item row="4" column="2">
-       <widget class="QLabel" name="label_7">
-        <property name="statusTip">
-         <string>Ende der allgemeinen Dienstzeit</string>
-        </property>
-        <property name="whatsThis">
-         <string notr="true"/>
-        </property>
-        <property name="accessibleName">
-         <string notr="true"/>
-        </property>
-        <property name="accessibleDescription">
-         <string notr="true"/>
-        </property>
+      <item row="1" column="3">
+       <widget class="QLabel" name="labelWagenreihung">
         <property name="text">
-         <string>Ende allgemein</string>
+         <string>Wagenreihung</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>comboTimeEndeH</cstring>
+         <cstring>comboWagenreihung</cstring>
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Datum</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>dateDate</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="comboArt">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <item>
-         <property name="text">
-          <string notr="true">Museumszug</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">Sonderzug</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Gesellschaftssonderzug</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">Nikolausfahrt</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Museumszug mit ELF Schnupperkurs</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">ELF Schnupperkurs</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Bahnhofsfest</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">Sonstiges</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="QLabel" name="labelTimeZ">
-        <property name="toolTip">
-         <string notr="true"/>
-        </property>
-        <property name="statusTip">
-         <string notr="true">Der Dienstbeginn für Zf, Zub, Service und weiteres Personal</string>
-        </property>
-        <property name="whatsThis">
-         <string notr="true"/>
-        </property>
-        <property name="accessibleName">
-         <string notr="true"/>
-        </property>
-        <property name="accessibleDescription">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>Dienstbeginn sonst</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>comboTimeZH</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Anlass</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-        </property>
-        <property name="buddy">
-         <cstring>textAnlass</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="5">
-       <widget class="QComboBox" name="comboTimeEndeM">
-        <item>
-         <property name="text">
-          <string>00</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>15</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>30</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>45</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="3" column="3">
+      <item row="3" column="4">
        <widget class="QComboBox" name="comboTimeZH">
         <property name="enabled">
          <bool>true</bool>
@@ -2285,7 +2139,206 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="3">
+      <item row="0" column="1">
+       <widget class="QLabel" name="labelDatum">
+        <property name="text">
+         <string>Datum</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>dateDate</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" rowspan="3">
+       <widget class="QPlainTextEdit" name="textAnlass">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="toolTip">
+         <string notr="true"/>
+        </property>
+        <property name="statusTip">
+         <string notr="true"/>
+        </property>
+        <property name="whatsThis">
+         <string notr="true"/>
+        </property>
+        <property name="accessibleName">
+         <string notr="true"/>
+        </property>
+        <property name="accessibleDescription">
+         <string notr="true"/>
+        </property>
+        <property name="plainText">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="5">
+       <widget class="QLabel" name="labelDienstTfTrenner">
+        <property name="maximumSize">
+         <size>
+          <width>15</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>comboTimeTfM</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="QLabel" name="labelEnde">
+        <property name="statusTip">
+         <string>Ende der allgemeinen Dienstzeit</string>
+        </property>
+        <property name="whatsThis">
+         <string notr="true"/>
+        </property>
+        <property name="accessibleName">
+         <string notr="true"/>
+        </property>
+        <property name="accessibleDescription">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>Ende allgemein</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>comboTimeEndeH</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4" colspan="4">
+       <widget class="QCheckBox" name="checkWichtig">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #900;</string>
+        </property>
+        <property name="text">
+         <string>Wichtig</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QComboBox" name="comboArt">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <item>
+         <property name="text">
+          <string notr="true">Museumszug</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Sonderzug</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Gesellschaftssonderzug</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Nikolausfahrt</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Museumszug mit ELF Schnupperkurs</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">ELF Schnupperkurs</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Bahnhofsfest</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Sonstiges</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="4" colspan="4">
+       <widget class="QComboBox" name="comboWagenreihung">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="currentIndex">
+         <number>4</number>
+        </property>
+        <property name="insertPolicy">
+         <enum>QComboBox::InsertAlphabetically</enum>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToContents</enum>
+        </property>
+        <item>
+         <property name="text">
+          <string>221, 217, 208, 309</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>221, 217, 208, 202, 309</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>221, 217, 204, 208, 202, 309</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>221, 217, 208, 202, 201, 309</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>221, 217, 204, 208, 202, 201, 309</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>221, 217, 204, 309</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>221, 217, 309</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="4">
        <widget class="QComboBox" name="comboTimeTfH">
         <property name="enabled">
          <bool>true</bool>
@@ -2395,38 +2448,32 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_4">
+      <item row="4" column="5">
+       <widget class="QLabel" name="labelEndeTrenner">
+        <property name="maximumSize">
+         <size>
+          <width>15</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="text">
-         <string>Art</string>
+         <string>:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignCenter</set>
         </property>
         <property name="buddy">
-         <cstring>comboArt</cstring>
+         <cstring>comboTimeEndeM</cstring>
         </property>
        </widget>
       </item>
-      <item row="2" column="6" rowspan="3">
-       <widget class="QCheckBox" name="checkZeiten">
-        <property name="text">
-         <string>Zeiten
-noch
-unbekannt</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" rowspan="3">
-       <widget class="QPlainTextEdit" name="textAnlass">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
+      <item row="3" column="3">
+       <widget class="QLabel" name="labelDienst">
         <property name="toolTip">
          <string notr="true"/>
         </property>
         <property name="statusTip">
-         <string notr="true"/>
+         <string notr="true">Der Dienstbeginn für Zf, Zub, Service und weiteres Personal</string>
         </property>
         <property name="whatsThis">
          <string notr="true"/>
@@ -2437,12 +2484,31 @@ unbekannt</string>
         <property name="accessibleDescription">
          <string notr="true"/>
         </property>
-        <property name="plainText">
-         <string/>
+        <property name="text">
+         <string>Dienstbeginn sonst</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>comboTimeZH</cstring>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="2" column="3">
+       <widget class="QLabel" name="labelDienstTf">
+        <property name="text">
+         <string>Dienstbeginn Tf</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>comboTimeTfH</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
        <widget class="QDateEdit" name="dateDate">
         <property name="enabled">
          <bool>true</bool>
@@ -2479,20 +2545,16 @@ unbekannt</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="3" colspan="4">
-       <widget class="QCheckBox" name="checkWichtig">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: #900;</string>
-        </property>
+      <item row="2" column="7" rowspan="3">
+       <widget class="QCheckBox" name="checkZeiten">
         <property name="text">
-         <string>Wichtig</string>
+         <string>Zeiten
+noch
+unbekannt</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="3">
+      <item row="4" column="4">
        <widget class="QComboBox" name="comboTimeEndeH">
         <item>
          <property name="text">
@@ -2596,8 +2658,21 @@ unbekannt</string>
         </item>
        </widget>
       </item>
-      <item row="3" column="4">
-       <widget class="QLabel" name="label_5">
+      <item row="1" column="1">
+       <widget class="QLabel" name="labelArt">
+        <property name="text">
+         <string>Art</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>comboArt</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="5">
+       <widget class="QLabel" name="labelDienstTrenner">
         <property name="maximumSize">
          <size>
           <width>15</width>
@@ -2615,45 +2690,31 @@ unbekannt</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="4">
-       <widget class="QLabel" name="label_6">
-        <property name="maximumSize">
-         <size>
-          <width>15</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>comboTimeTfM</cstring>
-        </property>
+      <item row="4" column="6">
+       <widget class="QComboBox" name="comboTimeEndeM">
+        <item>
+         <property name="text">
+          <string>00</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>15</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>30</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>45</string>
+         </property>
+        </item>
        </widget>
       </item>
-      <item row="4" column="4">
-       <widget class="QLabel" name="label_15">
-        <property name="maximumSize">
-         <size>
-          <width>15</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>comboTimeEndeM</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="5">
+      <item row="2" column="6">
        <widget class="QComboBox" name="comboTimeTfM">
         <property name="enabled">
          <bool>true</bool>
@@ -2692,18 +2753,18 @@ unbekannt</string>
         </item>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="labelWagenreihung">
-        <property name="text">
-         <string>Wagenreihung</string>
+      <item row="0" column="8">
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
         </property>
-        <property name="buddy">
-         <cstring>comboWagenreihung</cstring>
-        </property>
-       </widget>
+       </spacer>
       </item>
      </layout>
     </item>
@@ -2714,7 +2775,7 @@ unbekannt</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>720</width>
+     <width>675</width>
      <height>22</height>
     </rect>
    </property>
@@ -2816,14 +2877,15 @@ unbekannt</string>
   <tabstop>checkService</tabstop>
   <tabstop>textBemerkungen</tabstop>
   <tabstop>buttonAddReservierung</tabstop>
+  <tabstop>comboAuswahlRes</tabstop>
   <tabstop>listRes</tabstop>
   <tabstop>lineName</tabstop>
   <tabstop>lineMail</tabstop>
   <tabstop>lineTelefon</tabstop>
   <tabstop>spinAnzahl</tabstop>
   <tabstop>comboKlasse</tabstop>
-  <tabstop>checkFahrrad</tabstop>
   <tabstop>lineSitze</tabstop>
+  <tabstop>checkFahrrad</tabstop>
   <tabstop>comboStart1Zug</tabstop>
   <tabstop>comboStart1Hp</tabstop>
   <tabstop>comboEnde1Zug</tabstop>

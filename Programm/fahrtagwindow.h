@@ -62,6 +62,9 @@ private slots:
     void on_buttonAddReservierung_clicked();
     void on_buttonDeleteReservierung_clicked();
 
+    void on_comboAuswahlRes_currentIndexChanged(int index);
+
+    void on_checkBoxAll_clicked(bool checked);
     void on_buttonVerteile_clicked();
 
     void on_lineName_textChanged(const QString &arg1);
@@ -74,14 +77,7 @@ private slots:
     void on_lineSitze_returnPressed();
     void on_checkFahrrad_clicked(bool checked);
 
-    void on_comboStart1Zug_currentIndexChanged();
-    void on_comboStart1Hp_currentIndexChanged();
-    void on_comboEnde1Zug_currentIndexChanged();
-    void on_comboEnde1Hp_currentIndexChanged();
-    void on_comboStart2Zug_currentIndexChanged();
-    void on_comboStart2Hp_currentIndexChanged();
-    void on_comboEnde2Zug_currentIndexChanged();
-    void on_comboEnde2Hp_currentIndexChanged();
+    void handlerFahrtChanged();
 
     void on_plainSonstiges_textChanged();
     void on_listRes_itemClicked(QListWidgetItem *item);
@@ -103,10 +99,6 @@ private slots:
     void on_actionResPrint_triggered();
 
     // Hilfe
-
-    void on_checkBoxAll_clicked(bool checked);
-
-
 private:
     // Allgemeines
     Ui::FahrtagWindow *ui;
@@ -138,6 +130,7 @@ private:
 
     int getIndexVonZug(int zug);
     int getZugVonIndex(int index);
+    int getHpVonIndex(int index);
 
     QString getBelegungVonKlasseUndZug(Fahrtag *f, int zug, int klasse);
 };

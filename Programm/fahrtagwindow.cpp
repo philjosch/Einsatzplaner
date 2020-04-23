@@ -13,6 +13,15 @@ FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent),
     ui->buttonGroupTf->setId(ui->radioButtonTf1, 1);
     ui->buttonGroupTf->setId(ui->radioButtonTf2, 2);
 
+    connect(ui->comboStart1Zug, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
+    connect(ui->comboStart1Hp, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
+    connect(ui->comboEnde1Zug, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
+    connect(ui->comboEnde1Hp, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
+    connect(ui->comboStart2Zug, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
+    connect(ui->comboStart2Hp, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
+    connect(ui->comboEnde2Zug, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
+    connect(ui->comboEnde2Hp, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
+
     fahrtag = f;
 
     updateWindowTitle();
@@ -356,10 +365,10 @@ void FahrtagWindow::plausibilityCheck()
     int z3 = getZugVonIndex(ui->comboStart2Zug->currentIndex());
     int z4 = getZugVonIndex(ui->comboEnde2Zug->currentIndex());
 
-    int h1 = ui->comboStart1Hp->currentIndex();
-    int h2 = ui->comboEnde1Hp->currentIndex();
-    int h3 = ui->comboStart2Hp->currentIndex();
-    int h4 = ui->comboEnde2Hp->currentIndex();
+    int h1 = getHpVonIndex(ui->comboStart1Hp->currentIndex());
+    int h2 = getHpVonIndex(ui->comboEnde1Hp->currentIndex());
+    int h3 = getHpVonIndex(ui->comboStart2Hp->currentIndex());
+    int h4 = getHpVonIndex(ui->comboEnde2Hp->currentIndex());
 
     if (! fahrtag->checkPlausibilitaet({z1, z2, z3, z4}, {h1, h2, h3, h4})) {
         QMessageBox::warning(this, tr("Plausibilitätsprüfung"), tr("Bitte überprüfen Sie ihre Eingaben bezüglich der Fahrstrecken, da das System eine mögliche Unstimmigkeit festgestllt hat. Ihre Daten werden dennoch gespeichert!"));
@@ -673,35 +682,33 @@ void FahrtagWindow::updateWindowTitle()
 
 int FahrtagWindow::getIndexVonZug(int zug)
 {
-    switch (zug) {
-    case 2201: return 0;
-    case 2202: return 1;
-    case 2203: return 2;
-    case 2204: return 3;
-    case 2205: return 4;
-    case 2206: return 5;
-    default: return 6;
-    }
+    if (zug == 0)
+        return 0;
+    return zug - 2200;
 }
 
 int FahrtagWindow::getZugVonIndex(int index)
 {
-    switch (index) {
-    case 0: return 2201;
-    case 1: return 2202;
-    case 2: return 2203;
-    case 3: return 2204;
-    case 4: return 2205;
-    case 5: return 2206;
-    default: return 0;
+    if (index == 0)
+        return 0;
+    return index + 2200;
+}
+
+int FahrtagWindow::getHpVonIndex(int index)
+{
+    if (index == 11) {
+        return -1;
+    } else {
+        return index;
     }
 }
 
 QString FahrtagWindow::getBelegungVonKlasseUndZug(Fahrtag *f, int zug, int klasse)
 {
     QString d = "%1 (%2%)";
-    d = d.arg(fahrtag->getBelegung(klasse, zug));
-    d = d.arg(100./f->getKapazitaet(klasse)*f->getBelegung(klasse, zug),0,'g',3);
+    d = "%1";
+    d = d.arg(f->getBelegung(klasse, zug));
+//    d = d.arg(100./f->getKapazitaet(klasse)*f->getBelegung(klasse, zug),0,'g',3);
     return d;
 }
 
@@ -803,70 +810,6 @@ void FahrtagWindow::on_comboKlasse_currentIndexChanged(int index)
     }
 }
 
-void FahrtagWindow::on_comboStart1Zug_currentIndexChanged()
-{
-    if (nehmeRes) {
-        plausibilityCheck();
-        saveResFahrt();
-    }
-}
-
-void FahrtagWindow::on_comboStart1Hp_currentIndexChanged()
-{
-    if (nehmeRes) {
-        plausibilityCheck();
-        saveResFahrt();
-    }
-}
-
-void FahrtagWindow::on_comboEnde1Zug_currentIndexChanged()
-{
-    if (nehmeRes) {
-        plausibilityCheck();
-        saveResFahrt();
-    }
-}
-
-void FahrtagWindow::on_comboEnde1Hp_currentIndexChanged()
-{
-    if (nehmeRes) {
-        plausibilityCheck();
-        saveResFahrt();
-    }
-}
-
-void FahrtagWindow::on_comboStart2Zug_currentIndexChanged()
-{
-    if (nehmeRes) {
-        plausibilityCheck();
-        saveResFahrt();
-    }
-}
-
-void FahrtagWindow::on_comboStart2Hp_currentIndexChanged()
-{
-    if (nehmeRes) {
-        plausibilityCheck();
-        saveResFahrt();
-    }
-}
-
-void FahrtagWindow::on_comboEnde2Zug_currentIndexChanged()
-{
-    if (nehmeRes) {
-        plausibilityCheck();
-        saveResFahrt();
-    }
-}
-
-void FahrtagWindow::on_comboEnde2Hp_currentIndexChanged()
-{
-    if (nehmeRes) {
-        plausibilityCheck();
-        saveResFahrt();
-    }
-}
-
 void FahrtagWindow::on_lineSitze_textChanged(const QString &arg1)
 {
     if (nehmeRes) {
@@ -906,6 +849,14 @@ void FahrtagWindow::on_checkFahrrad_clicked(bool checked)
 {
     if (nehmeRes) {
         aktuelleRes->setFahrrad(checked);
+    }
+}
+
+void FahrtagWindow::handlerFahrtChanged()
+{
+    if (nehmeRes) {
+        plausibilityCheck();
+        saveResFahrt();
     }
 }
 
@@ -949,6 +900,8 @@ void FahrtagWindow::updateAuswertungReservierungen()
     ui->label2205Sum->setText(getBelegungVonKlasseUndZug(fahrtag, 2205, -1));
     ui->label2206Sum->setText(getBelegungVonKlasseUndZug(fahrtag, 2206, -1));
     ui->labelGesamtSum->setNum(fahrtag->getBelegung(-1));
+
+    on_comboAuswahlRes_currentIndexChanged(ui->comboAuswahlRes->currentIndex());
 }
 
 void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)
@@ -964,4 +917,18 @@ void FahrtagWindow::on_checkBoxAll_clicked(bool checked)
         if (checked) QMessageBox::information(this, tr("Hinweis"), tr("Es kann unter Umständen sehr lange dauern, bis die 'optimale' Verteilung berechnet wird.\nIhr Computer reagiert in dieser Zeit vielleicht nicht!\nDiese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutzen."));
         fahrtag->setCheckAll(checked);
     }
+}
+
+void FahrtagWindow::on_comboAuswahlRes_currentIndexChanged(int index)
+{
+    QListWidgetItem *item;
+    for(int i = 0; i < ui->listRes->count(); ++i) {
+        item = ui->listRes->item(i);
+        if (index == 0) {
+            item->setHidden(false);
+        } else {
+            item->setHidden(! itemToRes.value(item)->inZug(index+2200));
+        }
+    }
+    ui->listRes->repaint();
 }
