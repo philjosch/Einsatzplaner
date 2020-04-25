@@ -94,7 +94,7 @@ protected:
     bool zeitenUnbekannt;
     QString anlass;
     QString bemerkungen;
-    QMap<Person *, Infos> personen; // Für Infos siehe oben
+    QMap<Person *, Infos> personen;
     bool personalBenoetigt;
 
     ManagerPersonal *personal;

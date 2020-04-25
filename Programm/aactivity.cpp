@@ -24,6 +24,7 @@ AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
     ort = "";
     zeitAnfang = QTime(10, 0);
     zeitEnde = QTime(16, 0);
+    zeitenUnbekannt = false;
     anlass = "";
     bemerkungen = "";
     personen = QMap<Person *, Infos>();

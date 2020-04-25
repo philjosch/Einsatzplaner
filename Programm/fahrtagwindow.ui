@@ -1224,7 +1224,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="labelResSonst">
             <property name="text">
-             <string>Sonstiges:</string>
+             <string>Sonstiges</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
