@@ -50,16 +50,18 @@ const QMap<Art, QString> FARBE_FAHRTAGE = {{Museumszug, "#ffffff"},
 
 enum Mistake {
     // General errors
-    OK, // Everything went right and the process was successfully done
-    SonstigerFehler, // Some other misstake during the process
+    OK, // Operation wurde erfolgreich durchgefuehrt
+    SonstigerFehler, // Unbestimmter Fehler
 
-    // Errors regarding the management of persons
-    PersonNichtGefunden, // If the person has not been found and there is no reason to interpret it as an external
-    FalscheQualifikation, // registerd person was found but is not qualified to do the job
-    ExternOk, // The person was not found in the system, but there is a reason to interpret it as an external
+    // Fehler bei der Personalverwaltung
+    ExternOk, // Die Person ist nicht im System bekannt, wurde aber als externe Person akzeptiert
+    PassivOk, // Die Person wurde eingetragen, ist allerdings als passives Mitglied gefuehrt
 
-    // Errors regarding the distribution of seats
-    KapazitaetUeberlauf // Thrown if there are not enough seats for the reservations
+    PersonNichtGefunden, // Die Person wurde nicht gefunden
+    FalscheQualifikation, // Die Person hat nicht die noetigen Qualifikationen
+
+    // Fehler bei der Verteilung der Sitzplaetze
+    KapazitaetUeberlauf // Es gibt nicht genuegend Sitzplaetze fuer die Reservierungen
 };
 
 

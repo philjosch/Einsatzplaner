@@ -282,7 +282,6 @@ void PersonalWindow::on_pushPrintEinzel_clicked()
 void PersonalWindow::on_pushEmail_clicked()
 {
     if (current.isEmpty()) return;
-    QString s = "mailto:?bcc=";
     QStringList mails;
     QList<Person*> keineMail;
     foreach (Person *p, current) {
@@ -292,12 +291,15 @@ void PersonalWindow::on_pushEmail_clicked()
             keineMail.append(p);
         }
     }
-    s += mails.join(",");
-    QDesktopServices::openUrl(QUrl(s));
+    if (! mails.isEmpty()) {
+        QString s = "mailto:?bcc=";
+        s += mails.join(",");
+        QDesktopServices::openUrl(QUrl(s));
+    }
     if (keineMail.isEmpty()) return;
 
     if (QMessageBox::question(this, tr("Personen ohne E-Mail gefunden"), tr("Für %1 Personen ist keine E-Mail-Adresse hinterlegt.\nMöchten Sie die Liste der Personen speichern?").arg(keineMail.size())) == QMessageBox::Yes) {
-        s = "Name;Straße;PLZ;Ort\n";
+        QString s = "Name;Straße;PLZ;Ort\n";
         foreach(Person *p, keineMail) {
             s += p->getName() + ";"+p->getStrasse()+";"+p->getPLZ()+";"+p->getOrt()+"\n";
         }

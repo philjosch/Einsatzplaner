@@ -107,9 +107,8 @@ private:
 
 
     // Personal Verwaltung
-    QMap<QListWidgetItem *, QString> listeMitNamen; // Liste mit den Namen, die in den Listen verwaltet werden
     QMap<QListWidgetItem*, QTableWidgetItem*> listToTable; // Mapt von den Listen auf den Tabelleneintrag der Person
-    QSet<QString> namen;
+    QMap<QTableWidgetItem*, QString> tabelleNachName;
 
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);

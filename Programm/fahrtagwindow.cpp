@@ -5,6 +5,7 @@
 #include "coreapplication.h"
 
 #include <QMessageBox>
+#include <QTableWidgetItem>
 
 FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent), ui(new Ui::FahrtagWindow)
 {
@@ -73,9 +74,8 @@ FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent),
     QMap<Person*, Infos> service;
     QMap<Person*, Infos> sonstige;
 
-    listeMitNamen = QMap<QListWidgetItem*, QString>();
     listToTable = QMap<QListWidgetItem*, QTableWidgetItem*>();
-    namen = QSet<QString>();
+    tabelleNachName = QMap<QTableWidgetItem*,QString>();
 
     for(Person *p: fahrtag->getPersonen().keys()) {
         Infos info = fahrtag->getPersonen().value(p);
@@ -83,7 +83,6 @@ FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent),
         // Fügt die Personene in die einzelnen Listen ein, sodass es direkt geändert werden kann
         QListWidgetItem *item = new QListWidgetItem(p->getName() + (info.bemerkung == "" ? "" : "; "+info.bemerkung));
         item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        listeMitNamen.insert(item, p->getName());
         bool block = true;
         switch (fahrtag->getPersonen().value(p).kategorie) {
         case Category::Tf:
@@ -115,10 +114,11 @@ FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent),
             break;
         }
 
-        namen.insert(p->getName());
         on_buttonAddPerson_clicked();
 
+
         ui->tablePersonen->item(0, 0)->setText(p->getName());
+        tabelleNachName.insert(ui->tablePersonen->item(0,0), p->getName());
         if (block) ui->tablePersonen->item(0, 0)->setFlags(Qt::NoItemFlags);
         Category kat = info.kategorie;
         if (kat == Category::Begleiter) kat = Category::Zub;
@@ -265,7 +265,6 @@ void FahrtagWindow::deleteItemFromList(QListWidget *l, QPushButton *b)
 
     fahrtag->removePerson(name);
 
-    listeMitNamen.remove(item);
     if (listToTable.contains(item)) {
         ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable.value(item)));
         listToTable.remove(item);
@@ -291,8 +290,8 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
         liste.removeFirst();
     }
 
-    if (listeMitNamen.contains(item)) {
-        QString nameAlt = listeMitNamen.value(item);
+    if (listToTable.contains(item)) {
+        QString nameAlt = tabelleNachName.value(listToTable.value(item));
         if (name == nameAlt) {
             // Bemerkung aktualisieren und speichern
             int row = ui->tablePersonen->row((listToTable.value(item)));
@@ -310,8 +309,8 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
         } else {
             // Eintrag der alten person löschen
             fahrtag->removePerson(nameAlt);
-            namen.remove(nameAlt);
-            listeMitNamen.remove(item);
+
+            tabelleNachName.remove(listToTable.value(item));
             ui->tablePersonen->removeRow(ui->tablePersonen->row(listToTable.value(item)));
             listToTable.remove(item);
         }
@@ -324,11 +323,10 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
     case Mistake::ExternOk:
         break;
         // Verfahren, ähnlich wie bei einer normalen person, außer dass die Person nicht in die Tabelle eingefügt wird
+    case Mistake::PassivOk:
+        QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
+        [[clang::fallthrough]];
     case Mistake::OK:
-        // Neue Person in Ordnung:
-        namen.insert(name);
-        listeMitNamen.insert(item, name);
-
         // Zeile für die Person in die Tabelle einfügen
         on_buttonAddPerson_clicked();
         // Name
@@ -341,13 +339,14 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
         ui->tablePersonen->item(0, 4)->setText(bem);
         ui->tablePersonen->item(0, 4)->setFlags(Qt::NoItemFlags);
 
+        tabelleNachName.insert(ui->tablePersonen->item(0,0), name);
         listToTable.insert(item, ui->tablePersonen->item(0, 0));
         ui->tablePersonen->sortItems(0);
         ui->tablePersonen->setSortingEnabled(false);
         break;
 
     case Mistake::FalscheQualifikation:
-        QMessageBox::warning(this, tr("Fehlende Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung und gültige Tauglichkeitsuntersuchung voraussetzt."));
+        QMessageBox::warning(this, tr("Fehlende Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da ein betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
         break;
     case Mistake::PersonNichtGefunden:
         QMessageBox::information(this, tr("Person nicht gefunden"), tr("Die eingegebene Person konnte nicht gefunden werden!"));
@@ -468,20 +467,14 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
     ui->tablePersonen->resizeColumnsToContents();
     if (nehme) {
         nehme = false;
-        // column 0: Name, 1: Aufgabe, 2: Beginn, 3: Ende, 4: Bemerkung
-        // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
+        // column 0: Name | 1: Aufgabe | 2: Beginn | 3: Ende | 4: Bemerkung
+        // Wenn der Name geändert wurde, muss die Verknuepfung mit der alten Person aufgeloest werden
         if (column == 0) {
-            QSet<QString> neu = QSet<QString>();
-            for( int i = 0; i < ui->tablePersonen->rowCount(); i++) {
-                QString n = (ui->tablePersonen->item(i, 0) == nullptr) ? "" : ui->tablePersonen->item(i, 0)->text();
-                neu.insert(n);
-                if (namen.contains(n)) {
-                    namen.remove(n);
-                }
+            QTableWidgetItem *item = ui->tablePersonen->item(row, 0);
+            if (tabelleNachName.contains(item)) {
+                fahrtag->removePerson(tabelleNachName.value(item));
             }
-
-            if (namen.size() == 1) fahrtag->removePerson(namen.values().at(0));
-            namen = neu;
+            tabelleNachName.insert(item, item->text());
         }
 
         QString name = (ui->tablePersonen->item(row,0) == nullptr) ? "" : ui->tablePersonen->item(row,0)->text();
@@ -492,6 +485,9 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
         if (fahrtag->isExtern(bemerkung)) fahrtag->removePerson(name);
 
         switch (fahrtag->addPerson(name, bemerkung, beginn, ende, kat)) {
+        case Mistake::PassivOk:
+            QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
+            [[clang::fallthrough]];
         case Mistake::OK:
         case Mistake::ExternOk:
             ui->tablePersonen->sortItems(0);
@@ -501,7 +497,7 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
             QMessageBox::warning(this, tr("Fehler"), tr("Die eingegebene Person konnte im System nicht gefunden werden."));
             break;
         case Mistake::FalscheQualifikation:
-            QMessageBox::warning(this, tr("Fehlene Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt."));
+            QMessageBox::warning(this, tr("Fehlene Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da ein betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
             break;
         default:
             QMessageBox::warning(this, tr("Sonstiger Fehler"), tr("Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!"));
@@ -545,16 +541,14 @@ void FahrtagWindow::on_buttonRemovePerson_clicked()
     int i = ui->tablePersonen->currentRow();
     if (i < 0) return;
     QString n = "";
-    if (ui->tablePersonen->item(i, 0) != nullptr) {
-        if (ui->tablePersonen->item(i, 0)->flags() == Qt::NoItemFlags) {
-            QMessageBox::information(this, tr("Nicht löschbar"), tr("Diese Person müssen Sie in der ensprechenden Liste löschen!"));
-            return;
-        }
-        n = ui->tablePersonen->item(i, 0)->text();
+    if (ui->tablePersonen->item(i, 0)->flags() == Qt::NoItemFlags) {
+        QMessageBox::information(this, tr("Nicht löschbar"), tr("Diese Person müssen Sie in der ensprechenden Liste löschen!"));
+        return;
     }
-    if (fahrtag->removePerson(n)) {
-        namen.remove(n);
-    }
+    n = ui->tablePersonen->item(i, 0)->text();
+    fahrtag->removePerson(n);
+
+    tabelleNachName.remove(ui->tablePersonen->item(i,0));
     ui->tablePersonen->removeRow(i);
     ui->buttonRemovePerson->setEnabled(ui->tablePersonen->rowCount() > 0);
 }
