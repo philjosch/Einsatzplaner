@@ -63,8 +63,9 @@ Activity *Manager::newActivity(QDate datum)
 
 bool Manager::removeActivity(AActivity *a)
 {
-    a->remove();
-    return activities.removeOne(a);
+    bool ret = activities.removeOne(a);
+    delete a;
+    return ret;
 }
 
 void Manager::activityChanged(AActivity *a)

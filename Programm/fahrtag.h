@@ -63,7 +63,7 @@ public:
 
     bool checkPlausibilitaet(QList<int> zuege, QList<int> haltepunkte);
 
-    Infos getIndividual(Person *person);
+    Infos getIndividual(Person *person, Category kat);
 
 public slots:
     QList<Mistake> verteileSitzplaetze();

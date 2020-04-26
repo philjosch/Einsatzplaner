@@ -107,8 +107,9 @@ private:
 
 
     // Personal Verwaltung
-    QMap<QListWidgetItem*, QTableWidgetItem*> listToTable; // Mapt von den Listen auf den Tabelleneintrag der Person
-    QMap<QTableWidgetItem*, QString> tabelleNachName;
+//    QMap<QListWidgetItem*, QTableWidgetItem*> listToTable; // Mapt von den Listen auf den Tabelleneintrag der Person
+    QMap<QListWidgetItem*, QTableWidgetItem*> listeZuTabelle;
+    QMap<QTableWidgetItem*, AActivity::Einsatz> tabelleZuEinsatz;
 
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);
@@ -132,6 +133,8 @@ private:
     int getHpVonIndex(int index);
 
     QString getBelegungVonKlasseUndZug(Fahrtag *f, int zug, int klasse);
+
+    int fuegeZeileInTabelleEin(QString name="", Category kat=Sonstiges, QString bemerkung="", bool block=false, QTime beginn=QTime(0,0), QTime ende=QTime(0,0));
 };
 
 #endif // FAHRTAGWINDOW_H

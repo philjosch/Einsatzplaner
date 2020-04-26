@@ -13,6 +13,7 @@ TARGET = Einsatzplaner
 TEMPLATE = app
 
 SOURCES += main.cpp\
+    guihelper.cpp \
     mainwindow.cpp \
     person.cpp \
     managerpersonal.cpp \
@@ -38,6 +39,7 @@ SOURCES += main.cpp\
     managerfilesettings.cpp
 
 HEADERS  += mainwindow.h \
+    guihelper.h \
     person.h \
     managerpersonal.h \
     activity.h \

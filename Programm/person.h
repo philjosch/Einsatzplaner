@@ -26,10 +26,10 @@ public:
 
     void berechne();
 
-    bool addActivity(AActivity *a, Category category);
-    bool removeActivity(AActivity *a);
+    bool addActivity(AActivity *a, Category kat);
+    bool removeActivity(AActivity *a, Category kat);
 
-    QListIterator<AActivity *> *getActivities();
+    QMap<AActivity*,Category> getActivities();
 
 
     QString getHtmlForTableView(QSet<Category> liste);

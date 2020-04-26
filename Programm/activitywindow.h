@@ -48,7 +48,7 @@ private:
 
     Category predefinedValueForTable;
 
-    QMap<QTableWidgetItem*, QString> tabelleNachName;
+    QMap<QTableWidgetItem*, AActivity::Einsatz> tabelleZuEinsatz;
 
     void setPredefinedValue(QString anlass);
 

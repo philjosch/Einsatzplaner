@@ -205,13 +205,10 @@ int Person::get(Category cat)
 {
     if (valuesInvalid) berechne();
     switch (cat) {
-    case Category::Tb:
-        return zeiten.value(Tf);
     case Category::Begleiter:
         return zeiten.value(Zub, 0);
     default:
         return zeiten.value(cat, 0);
-
     }
 }
 
@@ -340,6 +337,7 @@ void Person::setBemerkungen(const QString &value)
     bemerkungen = value;
     emit changed();
 }
+
 int Person::getNummer() const
 {
     return nummer;
@@ -417,20 +415,16 @@ void Person::berechne()
     zeiten.clear();
     zeiten.insert(Anzahl, activities.size());
     
-    QDate today = QDate::currentDate();
-    for(AActivity *a: activities.keys()) {
-        if (a->getDatum() <= today) {
-            Category cat = activities.value(a);
-            Infos info = a->getIndividual(this);
+    for(AActivity *a: activities.uniqueKeys()) {
+        if (a->getDatum() > QDate::currentDate()) continue;
+        for(Category cat: activities.values(a)) {
+            Infos info = a->getIndividual(this, cat);
 
             // Einsatzstunden
             QTime start = info.beginn;
             QTime ende = info.ende;
             int duration = (start.msecsTo(ende) / 60000); // in Minuten
             switch (cat) {
-            case Tb:
-                zeiten.insert(Tf, zeiten.value(Tf)+duration);
-                break;
             case Begleiter:
                 zeiten.insert(Zub, zeiten.value(Zub)+duration);
                 break;
@@ -459,26 +453,35 @@ void Person::berechne()
     valuesInvalid = false;
 }
 
-bool Person::addActivity(AActivity *a, Category category)
+bool Person::addActivity(AActivity *a, Category kat)
 {
-    activities.insert(a, category);
-    valuesInvalid = true;
-    return true;
+    if (!activities.values(a).contains(kat)) {
+        activities.insertMulti(a, kat);
+
+        valuesInvalid = true;
+        return true;
+    } else {
+        return false;
+    }
 }
 
-bool Person::removeActivity(AActivity *a)
+bool Person::removeActivity(AActivity *a, Category kat)
 {
-    if (activities.remove(a) != 0) {
+    QList<Category> category = activities.values(a);
+    activities.remove(a);
+    if (category.removeAll(kat)) {
+        for(Category c: category) {
+            activities.insertMulti(a, c);
+        }
         valuesInvalid = true;
         return true;
     }
     return false;
 }
 
-QListIterator<AActivity *> *Person::getActivities()
+QMap<AActivity *, Category> Person::getActivities()
 {
-    QListIterator<AActivity*> *i = new QListIterator<AActivity*>(activities.keys());
-    return i;
+    return activities;
 }
 
 QString Person::getName() const
@@ -575,18 +578,20 @@ QString Person::getHtmlForDetailPage()
     if (activities.size() > 0) {
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
-        QList<AActivity*> list = activities.keys();
+        QList<AActivity*> list = activities.uniqueKeys();
         AActivity::sort(&list);
         for(int i=0; i<list.length(); i++) {
             AActivity *a = list.at(i);
-            Infos info = a->getIndividual(this);
-            html += "<tr><td>"+a->getDatum().toString("dd.MM.yyyy")+"<br/>"+a->getKurzbeschreibung();
-            if (a->getAnlass() != a->getKurzbeschreibung() && a->getAnlass() != "")
-                html += "<br/>"+a->getAnlass();
-            html +="</td><td>"
-                 + info.beginn.toString("HH:mm")+"-"+info.ende.toString("HH:mm")+"</td><td>"
-                 + getLocalizedStringFromCategory(info.kategorie) + "</td><td>"
-                 + info.bemerkung + "</td></tr>";
+            for(Category cat: activities.values(a)) {
+                Infos info = a->getIndividual(this, cat);
+                html += "<tr><td>"+a->getDatum().toString("dd.MM.yyyy")+"<br/>"+a->getKurzbeschreibung();
+                if (a->getAnlass() != a->getKurzbeschreibung() && a->getAnlass() != "")
+                    html += "<br/>"+a->getAnlass();
+                html +="</td><td>"
+                     + info.beginn.toString("HH:mm")+"-"+info.ende.toString("HH:mm")+"</td><td>"
+                     + getLocalizedStringFromCategory(info.kategorie) + "</td><td>"
+                     + info.bemerkung + "</td></tr>";
+            }
         }
         html += "</tbody></table>";
     } else {

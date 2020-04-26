@@ -1,6 +1,7 @@
 #include "activitywindow.h"
 #include "ui_activitywindow.h"
 #include "export.h"
+#include "guihelper.h"
 
 #include <QMessageBox>
 
@@ -10,7 +11,7 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(paren
     ui->tablePersonen->resizeColumnsToContents();
     activity = a;
 
-    tabelleNachName = QMap<QTableWidgetItem*,QString>();
+    tabelleZuEinsatz = QMap<QTableWidgetItem*,AActivity::Einsatz>();
 
     nehme = false;
     // Allgemeine Daten von AActivity
@@ -25,15 +26,15 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(paren
     on_checkZeiten_clicked(activity->getZeitenUnbekannt());
     ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
 
+    QMap<AActivity::Einsatz, Infos> personen = activity->getPersonen();
     // Tabelle laden und alles einfügen
-    for(Person *p: activity->getPersonen().keys()) {
+    for(AActivity::Einsatz e: personen.keys()) {
         on_buttonInsert_clicked();
 
-        Infos info = activity->getPersonen().value(p);
+        Infos info = personen.value(e);
 
-        QTableWidgetItem *item = new QTableWidgetItem(p->getName());
-        ui->tablePersonen->setItem(0, 0, item);
-        tabelleNachName.insert(item, p->getName());
+        ui->tablePersonen->item(0, 0)->setText((e.person)->getName());
+        tabelleZuEinsatz.insert(ui->tablePersonen->item(0, 0), e);
 
         Category kat = info.kategorie;
         if (kat == Category::Begleiter)
@@ -115,14 +116,14 @@ void ActivityWindow::on_buttonInsert_clicked()
     QTableWidgetItem *item = new QTableWidgetItem("");
     ui->tablePersonen->setItem(0, 0, item);
 
-    QComboBox *box = activity->generateNewCategoryComboBox();
+    QComboBox *box = generateNewCategoryComboBox();
     box->setCurrentText(getLocalizedStringFromCategory(predefinedValueForTable));
     ui->tablePersonen->setCellWidget(0, 1, box);
 
-    QTimeEdit *beginn = activity->generateNewTimeEdit();
+    QTimeEdit *beginn = generateNewTimeEdit();
     ui->tablePersonen->setCellWidget(0, 2, beginn);
 
-    QTimeEdit *ende = activity->generateNewTimeEdit();
+    QTimeEdit *ende = generateNewTimeEdit();
     ui->tablePersonen->setCellWidget(0, 3, ende);
 
     ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(""));
@@ -130,6 +131,8 @@ void ActivityWindow::on_buttonInsert_clicked()
     connect(box, &QComboBox::currentTextChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 1); });
     connect(beginn, &QTimeEdit::timeChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 2); });
     connect(ende, &QTimeEdit::timeChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 3); });
+
+    tabelleZuEinsatz.insert(item, AActivity::Einsatz{nullptr, Sonstiges});
 
     ui->buttonRemove->setEnabled(true);
     ui->tablePersonen->repaint();
@@ -141,10 +144,11 @@ void ActivityWindow::on_buttonInsert_clicked()
 void ActivityWindow::on_buttonRemove_clicked()
 {
     int i = ui->tablePersonen->currentRow();
-    if (i == -1) return;
+    if (i < 0) return;
 
-    activity->removePerson(ui->tablePersonen->item(i, 0)->text());
-    tabelleNachName.remove(ui->tablePersonen->item(i, 0));
+    AActivity::Einsatz e = tabelleZuEinsatz.value(ui->tablePersonen->item(i, 0));
+    activity->removePerson(e.person, e.cat);
+    tabelleZuEinsatz.remove(ui->tablePersonen->item(i, 0));
     ui->tablePersonen->removeRow(i);
 
     ui->buttonRemove->setEnabled(ui->tablePersonen->rowCount() > 0);
@@ -152,44 +156,60 @@ void ActivityWindow::on_buttonRemove_clicked()
 
 void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
 {
+    // column 0: Name | 1: Aufgabe | 2: Beginn | 3: Ende | 4: Bemerkung
+    // Wenn der Name geändert wurde, muss die Verknuepfung mit der alten Person aufgeloest werden
     ui->tablePersonen->resizeColumnsToContents();
     if (nehme) {
         nehme = false;
-        // column 0: Name | 1: Aufgabe | 2: Beginn | 3: Ende | 4: Bemerkung
-        // Wenn der Name geändert wurde, muss die Verknuepfung mit der alten Person aufgeloest werden
-        if (column == 0) {
-            QTableWidgetItem *item = ui->tablePersonen->item(row, 0);
-            if (tabelleNachName.contains(item)) {
-                activity->removePerson(tabelleNachName.value(item));
-            }
-            tabelleNachName.insert(item, item->text());
-        }
 
-        QString name = ui->tablePersonen->item(row, 0)->text();
+        QTableWidgetItem *item = ui->tablePersonen->item(row, 0);
+        QString name = item->text();
         Category kat = getCategoryFromLocalizedString(static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->currentText());
         QTime beginn = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->time();
         QTime ende = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
-        if (activity->isExtern(bemerkung)) activity->removePerson(name);
 
-        switch (activity->addPerson(name, bemerkung, beginn, ende, kat)) {
-        case Mistake::PassivOk:
-            QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
-            [[clang::fallthrough]];
-        case Mistake::OK:
-        case Mistake::ExternOk:
-            break;
-        case Mistake::PersonNichtGefunden:
-            QMessageBox::warning(this, tr("Fehler"), tr("Die eingegebene Person konnte im System nicht gefunden werden."));
-            break;
-        case Mistake::FalscheQualifikation:
-            QMessageBox::warning(this, tr("Fehlene Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da ein betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
-            break;
-        default:
-            QMessageBox::warning(this, tr("Sonstiger Fehler"), tr("Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!"));
-            break;
+        AActivity::Einsatz e = tabelleZuEinsatz.value(item);
+        Infos neu = Infos{beginn, ende, kat, bemerkung};
+        bool neuHinzufuegen = false;
+
+        if (column == 0) {
+            neuHinzufuegen = true;
+        } else if (column == 1) {
+            neuHinzufuegen = true;
+        } else if (column == 2) {
+            activity->updatePersonInfos(e.person, e.cat, neu);
+        } else if (column == 3) {
+            activity->updatePersonInfos(e.person, e.cat, neu);
+        } else if (column == 4) {
+            activity->updatePersonBemerkung(e.person, e.cat, bemerkung);
         }
+        if (neuHinzufuegen) {
+            if (e.person != nullptr)
+                activity->removePerson(e.person, e.cat);
 
+            if (kat == Zub && !AActivity::hasQualification(activity->getPersonal()->getPerson(name), kat, bemerkung))
+                kat = Begleiter;
+
+            switch (activity->addPerson(name, bemerkung, beginn, ende, kat)) {
+            case Mistake::PassivOk:
+                QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
+                [[clang::fallthrough]];
+            case Mistake::OK:
+            case Mistake::ExternOk:
+                break;
+            case Mistake::PersonNichtGefunden:
+                QMessageBox::warning(this, tr("Fehler"), tr("Die eingegebene Person konnte im System nicht gefunden werden."));
+                break;
+            case Mistake::FalscheQualifikation:
+                QMessageBox::warning(this, tr("Fehlene Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da ein betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
+                break;
+            default:
+                QMessageBox::warning(this, tr("Sonstiger Fehler"), tr("Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!"));
+                break;
+            }
+            tabelleZuEinsatz.insert(item, AActivity::Einsatz{activity->getPerson(name), kat});
+        }
         nehme = true;
     }
 }

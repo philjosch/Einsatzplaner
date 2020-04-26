@@ -4,6 +4,7 @@
 #include "export.h"
 #include "minimumhourseditordialog.h"
 #include "fileio.h"
+#include "guihelper.h"
 
 #include <QMessageBox>
 #include <math.h>
@@ -781,35 +782,36 @@ void PersonalWindow::showPerson(Person *p)
 
     // ** Aktivitaeten
     while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
-    QListIterator<AActivity*> *i = p->getActivities();
+    QMap<AActivity*,Category> liste = p->getActivities();
     bool sortingSaved = ui->tabelle->isSortingEnabled();
     ui->tabelle->setSortingEnabled(false);
-    while(i->hasNext()) {
-        AActivity *a = i->next();
-        // Datum
-        ui->tabelle->insertRow(0);
-        QTableWidgetItem *i0 = new QTableWidgetItem();
-        i0->setData(Qt::EditRole, a->getDatum());
-        ui->tabelle->setItem(0, 0, i0);
+    for(AActivity *a: liste.uniqueKeys()) {
+        for(Category cat: liste.values(a)) {
+            // Datum
+            ui->tabelle->insertRow(0);
+            QTableWidgetItem *i0 = new QTableWidgetItem();
+            i0->setData(Qt::EditRole, a->getDatum());
+            ui->tabelle->setItem(0, 0, i0);
 
-        Infos infos = a->getIndividual(p);
+            Infos infos = a->getIndividual(p, cat);
 
-        // Aufgabe
-        QTableWidgetItem *i1 = new QTableWidgetItem(getLocalizedStringFromCategory(infos.kategorie));
-        ui->tabelle->setItem(0, 1, i1);
+            // Aufgabe
+            QTableWidgetItem *i1 = new QTableWidgetItem(getLocalizedStringFromCategory(infos.kategorie));
+            ui->tabelle->setItem(0, 1, i1);
 
-        // Einsatzstunden
-        QTime start = infos.beginn;
-        QTime ende = infos.ende;
+            // Einsatzstunden
+            QTime start = infos.beginn;
+            QTime ende = infos.ende;
 
-        QTime duration = QTime::fromMSecsSinceStartOfDay(start.msecsTo(ende));
+            QTime duration = QTime::fromMSecsSinceStartOfDay(start.msecsTo(ende));
 
-        QTableWidgetItem *i2 = new QTableWidgetItem(duration.toString("hh:mm"));
-        ui->tabelle->setItem(0, 2, i2);
+            QTableWidgetItem *i2 = new QTableWidgetItem(duration.toString("hh:mm"));
+            ui->tabelle->setItem(0, 2, i2);
 
-        // Beschreibung
-        QTableWidgetItem *i3 = new QTableWidgetItem(a->getAnlass());
-        ui->tabelle->setItem(0, 3, i3);
+            // Beschreibung
+            QTableWidgetItem *i3 = new QTableWidgetItem(a->getAnlass());
+            ui->tabelle->setItem(0, 3, i3);
+        }
     }
     ui->tabelle->setSortingEnabled(sortingSaved);
     ui->tabelle->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);

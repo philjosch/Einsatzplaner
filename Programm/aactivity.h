@@ -16,11 +16,16 @@ class AActivity: public QObject
     Q_OBJECT
 
 public:
+    struct Einsatz {
+        Person *person;
+        Category cat;
+        bool operator<(const Einsatz &o)  const {
+            return (person < o.person || (person == o.person && cat<o.cat));
+        }
+    };
     AActivity(QDate date, ManagerPersonal *p);
     AActivity(QJsonObject o, ManagerPersonal *p);
     ~AActivity();
-
-    bool remove();
 
     virtual QJsonObject toJson();
 
@@ -48,13 +53,15 @@ public:
     bool getPersonalBenoetigt() const;
     void setPersonalBenoetigt(bool value);
 
-    QMap<Person *, Infos> getPersonen();
-    Infos getIndividual(Person *person);
+    Person *getPerson(QString name);
+    QMap<Einsatz, Infos> getPersonen() const;
+    virtual Infos getIndividual(Person *person, Category kat);
     Mistake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
     Mistake addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
-    void updatePersonBemerkung(Person *p, QString bemerkung);
-    bool removePerson(Person *p);
-    bool removePerson(QString p);
+    void updatePersonInfos(Person *p, Category kat, Infos neu);
+    void updatePersonBemerkung(Person *p, Category kat, QString bemerkung);
+    bool removePerson(Person *p, Category kat);
+    bool removePerson(QString p, Category kat);
 
     friend bool operator<(const AActivity &lhs, const AActivity &rhs) { return lhs.lesser(rhs);}
     friend bool operator>(const AActivity &lhs, const AActivity &rhs) { return rhs < lhs; }
@@ -71,9 +78,6 @@ public:
     virtual QString getHtmlForSingleView();
     virtual QString getHtmlForTableView();
 
-    static QComboBox *generateNewCategoryComboBox();
-    static QTimeEdit *generateNewTimeEdit();
-
     static QStringList EXTERNAL_LIST;
     static QStringList QUALIFICATION_LIST;
 
@@ -81,6 +85,7 @@ public:
     static bool isExtern(QString bemerkung);
 
     static void sort(QList<AActivity *> *list);
+
 
 signals:
     void changed(AActivity *, QDate = QDate());
@@ -94,7 +99,7 @@ protected:
     bool zeitenUnbekannt;
     QString anlass;
     QString bemerkungen;
-    QMap<Person *, Infos> personen;
+    QMap<Einsatz, Infos> personen;
     bool personalBenoetigt;
 
     ManagerPersonal *personal;
