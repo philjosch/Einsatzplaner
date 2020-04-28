@@ -1,4 +1,46 @@
 \chapter{Sonstiges}\label{sonstiges}
+\section{Informationen zum Update von Version 1.5 auf 1.6}
+\label{sonstiges:1.5-1.6}
+In Version 1.6 wurden verschiedene Neuerungen eingeführt, die eine gesonderte Btrachtung erfordern.
+Diese Neuerungen werden im folgenden bschrieben.
+
+
+\paragraph{Personaldaten}
+In der Personalverwaltung (siehe Kapitel~\ref{personal}) gibt es neben den verschiedenen persönlichen Daten auch ein Feld für die \emph{Betriebsdiensttauglichkeit}.
+Dieses ist dafür vorgesehen sicherzustellen, dass nur Personal eingesetzt wird, dessen medizinische Tauglichkeit noch gültig ist.
+Es ist nicht möglich Personal mit abgelaufener Tauglichkeit für eine betriebliche Aufgabe einzutragen.
+Ist der Zeitpunkt für die Untersuchung unbekannt, wird das Personal aus medizinischer Sicht als tauglich angesehen.
+Es liegt dann vollständig beim Bediener dies zu überwachen.
+
+Ebenso kann für eine Person ein \emph{Austrittsdatum} angegeben werden.
+Während dies im Allgemeinen nicht benötigt wird, kann diese Funktion dennoch bei (angehenden) ehemaligen Mitgliedern verwendet werden.
+Somit kann die Person weiterhin im System registriert sein und muss nicht aus allen Aktivitäten entfernt werden.
+Für diese Personen werden nach dem Austritt selbstverständlich keine Mindeststunden mehr berechnet.
+Ebenso können sie nach dem Austritt auch nicht mehr für Arbeitseinsätze oder Fahrtage eingetragen werden.
+
+Eine weitere Neuerung ist die \emph{Mitgliedsnummer}.
+Beim erstmaligen Öffnen einer Datei, die mit einer führeren Programmversion erstellt wurde, wird jeder registrierten Person eine fortlaufende Nummer zugewiesen.
+Diese Nummer kann nachträglich geändert werden, um sie an die eigene Bedürfnisse anzupassen.
+Da naturgemäß jede Nummer nur einmal vergeben werden kann,
+kann es beim Ändern der Nummer zu Kollisionen kommen.
+Deshalb sollte bei der größten zuzuweisenden Nummer mit dem Ändern begonnen werden.
+Dadurch wird die Nummer wieder für andere Personen freigegeben.
+Wird eine Person neu angelegt,
+so wird ihr automatisch die nächste Nummer größer als die aktuell größte vergebene Nummer zugewiesen.
+
+
+\paragraph{Personaleintrag bei Aktivitäten}
+Bei früheren Programmversionen war es nicht möglich eine Person mehrfach in einer Aktivität (Fahrtag oder Arbeitseinsatz) einzutragen.
+Dies ist ab sofort möglich.
+Allerdings muss hierzu die entsprechende Aufgabe der person verschieden sein.
+So kann zum Beispiel eine Person als Tf und als Zf eingetragen werden.
+Allerdings sollte dann die Zeiten für die enstprechenden Tätigkeiten angepasst werden,
+da sonst die Zeiten der Person mehrfach angerechnet werden (jeweils für jede Tätigkeit).
+
+
+
+
+\section{Über das Dokument}
 Die Bilder in dieser Dokumentation stammen von Bildern der Entwicklerversionen des Programms für Version 1.6.0 und aus früheren Versionen.
 Dadurch können Programmobjekte und Funktionen leicht von denen in der veröffentlichten Version abweichen.
 

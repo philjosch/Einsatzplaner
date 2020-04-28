@@ -7,6 +7,9 @@
 
 \usepackage{scrhack}
 
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=0pt}
+
 \usepackage{graphicx,tabularx}
 \usepackage{textcomp}
 
@@ -16,17 +19,21 @@
 
 \graphicspath{{./img/}}
 
+\titlehead{}
+
+\subject{\centering\includegraphics{../../Icon/keks.png}}
 \title{Anleitung Einsatzplaner}
-\subject{Version 1.6}
+\subtitle{Version 1.6}
 \author{Philipp Schepper}
-\date{Stand: \today –- Entwurf}
+\date{Stand: \today}
+\publishers{\Huge{\textsf{Arbeitsdatei}}}
 
 \begin{document}
 \maketitle
 
 \frontmatter
 \tableofcontents
-\include{aenderungen}
+\include{vorne_u_hinten/aenderungen}
 
 \mainmatter
 \part{Grundlagen}
@@ -43,10 +50,10 @@
 \include{verschiedenes/sonstiges}
 
 \appendix
-\include{vorne_u_hinten/abkuerzungen}
-\include{vorne_u_hinten/glossar}
+\part{Anhang}
+\include{vorne_u_hinten/begriffe}
 
-\backmatter
+%\backmatter
 \include{version/versionshistorie}
 
 \end{document}

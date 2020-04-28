@@ -18,7 +18,7 @@ Stand: 28. April 2020
 - Unzählige Verbesserungen und Optimierungen "unter der Haube", um die Geschwindigkeit und den Speicherverbrauch zu optimieren.
 
 ### Fehlerbehebungen
-- Fehler bei der Akzeptanz bestimmter Fahrstrecken einer Reservierung behoben
+- Fehler bei der Akzeptanz bestimmter Fahrstrecken einer Reservierung behoben.
 - Die Einträge der Aktivitäten im Kalender bleiben nicht mehr markiert.
 - Verschiedene kleinere Fehler behoben.
 
