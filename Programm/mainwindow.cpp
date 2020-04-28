@@ -320,7 +320,7 @@ void MainWindow::on_actionAboutQt_triggered()
 }
 void MainWindow::on_actionAboutApp_triggered()
 {
-    QMessageBox::about(this, tr("Über Einsatzplaner"), "<h1>Einsatzplaner</h1>"+QCoreApplication::applicationVersion()+(CoreApplication::isDeveloperVersion()?" (dev) ":"")+ "<br/>2016-2020 Philipp Schepper");
+    QMessageBox::about(this, tr("Über Einsatzplaner"),tr("<h1>Einsatzplaner</h1>%1 %2<br/>2016-2020 Philipp Schepper").arg(QCoreApplication::applicationVersion()).arg(CoreApplication::DEVELOPER_MODE ? "(dev)" : ""));
 }
 void MainWindow::on_actionQuit_triggered()
 {
@@ -349,7 +349,7 @@ void MainWindow::open(QString path)
     QJsonObject generalJSON = object.value("general").toObject();
 
     CoreApplication::Version version = CoreApplication::Version::stringToVersion(generalJSON.value("version").toString());
-    if (version > (CoreApplication::getAktuelleVersion()) || CoreApplication::Version{-1,-1,-1} == version) {
+    if (version > (CoreApplication::VERSION) || CoreApplication::Version{-1,-1,-1} == version) {
         QMessageBox::warning(nullptr, tr("Nicht kompatibel"),
                              tr("Die Datei kann nicht mit dieser Version geöffnet werden.\n"
                                 "Das Dokument benötigt mindestens Version %1.\n"
@@ -373,15 +373,10 @@ void MainWindow::on_menuRecentlyused_aboutToShow()
         ui->actionClear->setEnabled(true);
         foreach (QString entry, list) {
             QAction *a = new QAction(entry, this);
-            connect(a, SIGNAL(triggered(bool)), this, SLOT(openMostRecentlyUsedItem()));
+            connect(a, &QAction::triggered, this, [=]() { open(entry); });
             ui->menuRecentlyused->insertAction(nullptr, a);
         }
     }
-}
-void MainWindow::openMostRecentlyUsedItem()
-{
-    QAction *action = qobject_cast<QAction *>(sender());
-    if (action) open(action->text());
 }
 void MainWindow::on_actionClear_triggered()
 {
@@ -464,7 +459,7 @@ bool MainWindow::saveToPath(QString path, bool showInMenu)
     viewJSON.insert("currentDate", ui->dateSelector->date().toString("yyyy-MM-dd"));
 
     QJsonObject generalJSON;
-    generalJSON.insert("version", CoreApplication::getAktuelleVersion().toStringShort());
+    generalJSON.insert("version", CoreApplication::VERSION.toStringShort());
 
     QJsonObject json;
     json.insert("activities", activitiesJSON);
@@ -495,7 +490,7 @@ void MainWindow::on_actionSavePersonal_triggered()
     viewJSON.insert("currentDate", ui->dateSelector->date().toString("yyyy-MM-dd"));
 
     QJsonObject generalJSON;
-    generalJSON.insert("version", CoreApplication::getAktuelleVersion().toStringShort());
+    generalJSON.insert("version", CoreApplication::VERSION.toStringShort());
 
     QJsonObject object;
     object.insert("personal", personalJSON);

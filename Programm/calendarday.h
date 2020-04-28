@@ -25,7 +25,6 @@ signals:
     void addActivity(QDate);
 private slots:
     void handler(QListWidgetItem *item);
-    void on_buttonAdd_clicked();
 private:
     Ui::CalendarDay *ui;
     QDate date;

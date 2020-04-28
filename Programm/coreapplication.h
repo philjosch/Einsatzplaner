@@ -74,25 +74,21 @@ public:
     void startAutoSave(int delay); // Delay in Seconds!
     void stopAutoSave();
 
-    static bool isDeveloperVersion();
-    static Version getAktuelleVersion();
     static Version loadVersion();
 
     static QString loadNotes(Version v);
 
-    static QUrl getUrlDownload();
+    static QUrl URL_DOWNLOAD;
+    static bool DEVELOPER_MODE;
+    static Version VERSION;
 
 public slots:
     static void closeAllWindows();
     static void autoSaveWindows();
 
 protected:
-    static Version aktuelleVersion;
-    static bool developerMode;
-
-    static QUrl urlVersion;
-    static QUrl urlDownload;
-    static QString urlNotes;
+    static QUrl URL_VERSION;
+    static QString URL_NOTES;
 
     QTimer *autoSaveTimer;
     bool isFirst;

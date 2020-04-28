@@ -210,28 +210,6 @@ bool AActivity::removePerson(Person *p, Category kat)
     return p->removeActivity(this, kat);
 }
 
-bool AActivity::removePerson(QString p, Category kat)
-{
-    Person *pers = personal->getPerson(p);
-    if (pers != nullptr) {
-        emit changed(this);
-        return removePerson(pers, kat);
-    }
-    Person *gefunden = nullptr;
-    for(Einsatz e: personen.keys()) {
-        if ((e.person)->getName() == p) {
-            gefunden = e.person;
-            break;
-        }
-    }
-    if (gefunden != nullptr) {
-        personen.remove(Einsatz{gefunden, kat});
-        emit changed(this);
-        return true;
-    }
-    return false;
-}
-
 Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat)
 {
    /*
@@ -279,8 +257,7 @@ Mistake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime en
 
 void AActivity::updatePersonInfos(Person *p, Category kat, Infos neu)
 {
-    Einsatz e = Einsatz{p, kat};
-    personen.insert(e, neu);
+    personen.insert(Einsatz{p, kat}, neu);
     emit changed(this);
 }
 

@@ -13,6 +13,11 @@ ExportGesamt::ExportGesamt(Manager *m, ManagerFileSettings *settings, QWidget *p
     ui->dateBis->setDate(QDate::currentDate().addDays(60)); // Anzeige für zwei Monate in der Zukunft
     manager = m;
 
+    connect(ui->dateVon, &QDateEdit::dateChanged, this, &ExportGesamt::show);
+    connect(ui->dateBis, &QDateEdit::dateChanged, this, &ExportGesamt::show);
+    connect(ui->comboFahrtag, &QComboBox::currentTextChanged, this, &ExportGesamt::show);
+    connect(ui->checkActivity, &QCheckBox::clicked, this, &ExportGesamt::show);
+
     hardReload();
 }
 
@@ -21,37 +26,9 @@ ExportGesamt::~ExportGesamt()
     delete ui;
 }
 
-void ExportGesamt::reload()
-{
-    QListIterator<AActivity*> iter = manager->getActivities();
-    int i = 0;
-    while(iter.hasNext()) {
-        AActivity *a = iter.next();
-        if (actToList.contains(a)) {
-            QString farbe = getFarbe(a);
-            actToList.value(a)->setBackground(QBrush(QColor(farbe)));
-            actToList.value(a)->setToolTip(a->getAnlass());
-            i++;
-            continue;
-        }
-        QString farbe = getFarbe(a);
-        QListWidgetItem *item = new QListWidgetItem(a->getListString());
-        item->setBackground(QBrush(QColor(farbe)));
-        item->setToolTip(a->getAnlass());
-        ui->listAnzeige->insertItem(i, item);
-        liste.insert(i, a);
-        actToList.insert(a, item);
-        listToAct.insert(item, a);
-        i++;
-    }
-    show();
-}
-
 void ExportGesamt::hardReload()
 {
-    liste = QList<AActivity*>();
     actToList = QMap<AActivity*, QListWidgetItem*>();
-    listToAct = QMap<QListWidgetItem*, AActivity*>();
 
     ui->listAnzeige->clear();
     foreach(AActivity *a, manager->getActivities()) {
@@ -60,9 +37,7 @@ void ExportGesamt::hardReload()
         item->setBackground(QBrush(QColor(farbe)));
         item->setToolTip(a->getAnlass());
         ui->listAnzeige->insertItem(ui->listAnzeige->count(), item);
-        liste.append(a);
         actToList.insert(a, item);
-        listToAct.insert(item, a);
     }
     show();
 }
@@ -73,7 +48,7 @@ void ExportGesamt::on_pushDrucken_clicked()
     QList<AActivity*> listeEinzel = QList<AActivity*>();
     // Erstelle eine Liste für die Listenansicht
     QList<AActivity*> listeListe = QList<AActivity*>();
-    for (AActivity *a: liste) {
+    foreach(AActivity *a, manager->getActivities()) {
         if(! actToList.value(a)->isHidden()) {
             listeListe.append(a);
             if (actToList.value(a)->isSelected()) {
@@ -121,11 +96,6 @@ void ExportGesamt::on_comboVon_currentIndexChanged(int index)
     show();
 }
 
-void ExportGesamt::on_dateVon_dateChanged()
-{
-    show();
-}
-
 void ExportGesamt::on_comboBis_currentIndexChanged(int index)
 {
     switch (index) {
@@ -143,24 +113,9 @@ void ExportGesamt::on_comboBis_currentIndexChanged(int index)
     show();
 }
 
-void ExportGesamt::on_dateBis_dateChanged()
-{
-    show();
-}
-
-void ExportGesamt::on_comboFahrtag_currentIndexChanged()
-{
-    show();
-}
-
-void ExportGesamt::on_checkActivity_clicked()
-{
-    show();
-}
-
 void ExportGesamt::show()
 {
-    for(AActivity *a: liste) {
+    foreach(AActivity *a, manager->getActivities()) {
         actToList.value(a)->setHidden(!testShow(a));
     }
 }

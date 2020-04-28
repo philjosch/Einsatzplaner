@@ -19,7 +19,6 @@ public:
     explicit ExportGesamt(Manager *m, ManagerFileSettings *settings, QWidget *parent);
     ~ExportGesamt();
 
-    void reload();
     void hardReload();
 
 private slots:
@@ -27,26 +26,17 @@ private slots:
 
     void on_comboVon_currentIndexChanged(int index);
 
-    void on_dateVon_dateChanged();
-
     void on_comboBis_currentIndexChanged(int index);
 
-    void on_dateBis_dateChanged();
-
-    void on_comboFahrtag_currentIndexChanged();
-
-    void on_checkActivity_clicked();
+    void show();
 
 private:
     Ui::ExportGesamt *ui;
     QWidget *p;
     Manager *manager;
 
-    void show();
-
     QList<AActivity*> liste;
     QMap<AActivity*, QListWidgetItem*> actToList;
-    QMap<QListWidgetItem*, AActivity*> listToAct;
     ManagerFileSettings *settings;
 
     bool testShow(AActivity *a);

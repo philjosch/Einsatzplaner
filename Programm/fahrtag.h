@@ -24,8 +24,9 @@ public:
     QString getHtmlForSingleView();
     QString getHtmlForTableView();
 
-    QString getHtmlFuerReservierungsuebersicht();
+    Infos getIndividual(Person *person, Category kat);
 
+    QString getHtmlFuerReservierungsuebersicht();
 
     void setArt(const Art &value);
     Art getArt() const;
@@ -54,7 +55,7 @@ public:
     int getBelegung(int klasse, int zug = 0); // zug == 0: Gesamt
     int getKapazitaet(int klasse); //klasse == -1: Gesamt ; klasse == 0: 2.u 3.Klasse
 
-    int getAnzahl();
+    int getAnzahlReservierungen();
 
     QSet<Reservierung *> getReservierungen();
 
@@ -62,8 +63,6 @@ public:
     void setCheckAll(bool value);
 
     bool checkPlausibilitaet(QList<int> zuege, QList<int> haltepunkte);
-
-    Infos getIndividual(Person *person, Category kat);
 
 public slots:
     QList<Mistake> verteileSitzplaetze();

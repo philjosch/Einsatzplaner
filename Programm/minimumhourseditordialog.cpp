@@ -1,6 +1,7 @@
 #include "minimumhourseditordialog.h"
 #include "ui_minimumhourseditordialog.h"
 
+#include "guihelper.h"
 #include "aactivity.h"
 
 MinimumHoursEditorDialog::MinimumHoursEditorDialog(ManagerPersonal *manager, QWidget *parent) :
@@ -32,27 +33,17 @@ MinimumHoursEditorDialog::~MinimumHoursEditorDialog()
 void MinimumHoursEditorDialog::setDefault()
 {
     ui->lineTf->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Tf)));
-    ui->lineTf->repaint();
     ui->lineZf->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Zf)));
-    ui->lineZf->repaint();
     ui->lineService->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Service)));
-    ui->lineService->repaint();
     ui->lineZub->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Zub)));
-    ui->lineZub->repaint();
     ui->lineBuero->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Buero)));
-    ui->lineBuero->repaint();
     ui->lineWerkstatt->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Werkstatt)));
-    ui->lineWerkstatt->repaint();
     ui->lineZugVorbereiten->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::ZugVorbereiten)));
-    ui->lineZugVorbereiten->repaint();
     ui->lineAusbildung->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Ausbildung)));
-    ui->lineAusbildung->repaint();
     ui->lineInfrastruktur->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Infrastruktur)));
-    ui->lineInfrastruktur->repaint();
     ui->lineSonstiges->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Category::Sonstiges)));
-    ui->lineSonstiges->repaint();
     ui->lineGesamt->setText(stringForDurationEditorFromMinutes(manager->getMinimumHoursDefault(Gesamt)));
-    ui->lineGesamt->repaint();
+    update();
 }
 
 void MinimumHoursEditorDialog::on_buttonBox_clicked(QAbstractButton *button)
@@ -64,7 +55,6 @@ void MinimumHoursEditorDialog::on_buttonBox_clicked(QAbstractButton *button)
     } else if (ui->buttonBox->buttonRole(button) == QDialogButtonBox::ButtonRole::RejectRole) {
         QDialog::close();
     }
-
 }
 
 void MinimumHoursEditorDialog::save()

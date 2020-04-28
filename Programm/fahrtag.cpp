@@ -223,7 +223,7 @@ QString Fahrtag::getHtmlForSingleView()
     }
 
     // Reservierungen
-    if (getAnzahl() > 0) {
+    if (getAnzahlReservierungen() > 0) {
         html += "<p><b>Reservierungen:</b>";
         if (art != Nikolauszug) {
             QString helperRes = "<br/>Zug %1: %2 Plätze in 1.Klasse, %3 Plätze in 2./3.Klasse";
@@ -245,7 +245,7 @@ QString Fahrtag::getHtmlForSingleView()
 
             html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
             for(Reservierung *r: reservierungen) {
-                html += r->getTableRow();
+                html += r->getHtmlForTable();
             }
             html += "</tbody></table>";
         } else {
@@ -363,7 +363,7 @@ QString Fahrtag::getHtmlForTableView()
     if (art != Schnupperkurs && art != Gesellschaftssonderzug && getBelegung(-1) > 0) {
         html += QString::number(getBelegung(-1));
         html += (getBelegung(-1) == 1 ? " reservierter Sitzplatz": " reservierte Sitzplätze");
-        html += " bei " + QString::number(getAnzahl()) + (getAnzahl() == 1 ? " Reservierung" : " Reservierungen");
+        html += " bei " + QString::number(getAnzahlReservierungen()) + (getAnzahlReservierungen() == 1 ? " Reservierung" : " Reservierungen");
         html += "<br/>";
     }
 
@@ -543,7 +543,7 @@ int Fahrtag::getKapazitaet(int klasse)
     return summe;
 }
 
-int Fahrtag::getAnzahl()
+int Fahrtag::getAnzahlReservierungen()
 {
     return reservierungen.size();
 }
@@ -639,9 +639,10 @@ Reservierung *Fahrtag::createReservierung()
 
 bool Fahrtag::removeReservierung(Reservierung *res)
 {
-    res->removePlaetze();
+    bool ok = reservierungen.remove(res);
+    delete res;
     emit changed(this);
-    return reservierungen.remove(res);
+    return ok;
 }
 
 bool Fahrtag::createWagen()

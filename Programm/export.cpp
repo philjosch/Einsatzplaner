@@ -41,7 +41,7 @@ bool Export::printList(QList<AActivity *> liste, QPrinter *printer)
 
 bool Export::printReservierung(Fahrtag *f, QPrinter *printer)
 {
-    if (f->getAnzahl() == 0 || printer == nullptr) return false;
+    if (f->getAnzahlReservierungen() == 0 || printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
     QString a = f->getHtmlFuerReservierungsuebersicht();
     a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";

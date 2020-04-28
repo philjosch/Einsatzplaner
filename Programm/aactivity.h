@@ -61,7 +61,6 @@ public:
     void updatePersonInfos(Person *p, Category kat, Infos neu);
     void updatePersonBemerkung(Person *p, Category kat, QString bemerkung);
     bool removePerson(Person *p, Category kat);
-    bool removePerson(QString p, Category kat);
 
     friend bool operator<(const AActivity &lhs, const AActivity &rhs) { return lhs.lesser(rhs);}
     friend bool operator>(const AActivity &lhs, const AActivity &rhs) { return rhs < lhs; }

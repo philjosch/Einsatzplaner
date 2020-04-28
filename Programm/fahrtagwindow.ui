@@ -155,12 +155,6 @@
          <layout class="QGridLayout" name="gridZf" rowstretch="0,0,1">
           <item row="0" column="0" colspan="3">
            <widget class="QLabel" name="labelZf">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="statusTip">
-             <string>Zugbegleiter, Begleiter ohne betriebliche Aufgaben</string>
-            </property>
             <property name="text">
              <string>Zugführer (Zf)</string>
             </property>
@@ -282,7 +276,7 @@
           <item row="0" column="0" colspan="3">
            <widget class="QLabel" name="labelZub">
             <property name="toolTip">
-             <string/>
+             <string>Zugbegleiter, Begleiter ohne betriebliche Aufgaben</string>
             </property>
             <property name="text">
              <string>Zub, Zs, Begl.o.b.A.</string>
@@ -401,9 +395,6 @@
          <layout class="QGridLayout" name="gridService" rowstretch="0,0,1">
           <item row="0" column="0" colspan="3">
            <widget class="QLabel" name="labelService">
-            <property name="toolTip">
-             <string/>
-            </property>
             <property name="text">
              <string>Service</string>
             </property>
@@ -576,9 +567,6 @@
            <widget class="QLabel" name="labelTf">
             <property name="toolTip">
              <string>Triebfahrzeugführer, Triebfahrzeugbegleiter</string>
-            </property>
-            <property name="whatsThis">
-             <string>Wahts This</string>
             </property>
             <property name="text">
              <string>Triebfahrzeugführer (Tf), -begleiter (Tb)</string>
@@ -1047,7 +1035,7 @@
           <item row="3" column="1">
            <widget class="QLabel" name="labelF2Bis">
             <property name="text">
-             <string>bis</string>
+             <string>nach</string>
             </property>
            </widget>
           </item>
@@ -1557,7 +1545,7 @@
           <item row="1" column="1">
            <widget class="QLabel" name="labelKapErste">
             <property name="text">
-             <string>40</string>
+             <string>0</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1637,14 +1625,14 @@
           <item row="2" column="0">
            <widget class="QLabel" name="labelSonst">
             <property name="text">
-             <string>2./3.Klasse</string>
+             <string>2./3. Klasse</string>
             </property>
            </widget>
           </item>
           <item row="2" column="1">
            <widget class="QLabel" name="labelKapSonst">
             <property name="text">
-             <string>60</string>
+             <string>0</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1738,7 +1726,7 @@
           <item row="4" column="1">
            <widget class="QLabel" name="labelKapSum">
             <property name="text">
-             <string>100</string>
+             <string>0</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

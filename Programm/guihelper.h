@@ -9,5 +9,8 @@
 QComboBox *generateNewCategoryComboBox();
 QTimeEdit *generateNewTimeEdit();
 
+QString stringForDurationEditorFromMinutes(int m);
+int minutesFromStringForDurationEditor(QString s);
+
 
 #endif // GUIHELPER_H

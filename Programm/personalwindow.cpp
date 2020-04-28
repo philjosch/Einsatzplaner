@@ -795,22 +795,10 @@ void PersonalWindow::showPerson(Person *p)
 
             Infos infos = a->getIndividual(p, cat);
 
-            // Aufgabe
-            QTableWidgetItem *i1 = new QTableWidgetItem(getLocalizedStringFromCategory(infos.kategorie));
-            ui->tabelle->setItem(0, 1, i1);
-
-            // Einsatzstunden
-            QTime start = infos.beginn;
-            QTime ende = infos.ende;
-
-            QTime duration = QTime::fromMSecsSinceStartOfDay(start.msecsTo(ende));
-
-            QTableWidgetItem *i2 = new QTableWidgetItem(duration.toString("hh:mm"));
-            ui->tabelle->setItem(0, 2, i2);
-
-            // Beschreibung
-            QTableWidgetItem *i3 = new QTableWidgetItem(a->getAnlass());
-            ui->tabelle->setItem(0, 3, i3);
+            ui->tabelle->setItem(0, 1, new QTableWidgetItem(getLocalizedStringFromCategory(infos.kategorie)));
+            QTime duration = QTime::fromMSecsSinceStartOfDay(infos.beginn.msecsTo(infos.ende));
+            ui->tabelle->setItem(0, 2, new QTableWidgetItem(duration.toString("hh:mm")));
+            ui->tabelle->setItem(0, 3, new QTableWidgetItem(a->getListStringShort()+(infos.bemerkung!= "" ? "<br/>"+infos.bemerkung : "")));
         }
     }
     ui->tabelle->setSortingEnabled(sortingSaved);

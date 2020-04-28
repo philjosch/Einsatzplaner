@@ -13,6 +13,7 @@ class Reservierung: public QObject
 public:
     Reservierung(QMap<int, Wagen *> *wagen);
     Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen);
+    ~Reservierung();
 
     QJsonObject toJson();
 
@@ -47,9 +48,8 @@ public:
     QString getSonstiges() const;
     void setSonstiges(const QString &value);
 
-    QString getTableRow();
-    void removePlaetze();
 
+    QString getHtmlForTable();
     QString getHtmlForDetailTable();
 
     static QString getStringFromPlaetze(QMap<int, QList<int> > liste);
@@ -60,7 +60,7 @@ public:
 signals:
     void changed();
 
-private:
+protected:
     QString name;
     QString mail;
     QString telefon;
@@ -72,6 +72,9 @@ private:
     bool fahrrad;
     QString sonstiges;
     QMap<int, Wagen *> *wagen;
+
+    void removePlaetze();
+
 };
 
 #endif // RESERVIERUNG_H

@@ -42,7 +42,6 @@ public:
     void setAdditional(Category cat, int value);
 
 
-
     QString getId() const;
 
     int getNummer() const;
@@ -138,7 +137,7 @@ protected:
     QString telefon;
     bool telefonOK;
     // Sonstiges
-    int strecke; // Entfernung vom Wohnort nach Schwarzerden, wird benötigt, um die Kilometer zu berechnen.
+    int strecke;
     QString beruf;
     QString bemerkungen;
     // Zusätzliche Stunden

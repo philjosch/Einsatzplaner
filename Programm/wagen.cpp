@@ -273,11 +273,6 @@ int Wagen::getAnzahlFrei()
     return size-(verteilung.size());
 }
 
-int Wagen::getAnzahlBelegt()
-{
-    return verteilung.size();
-}
-
 int Wagen::getKapazitaet()
 {
     return size;
@@ -306,17 +301,6 @@ void Wagen::weisePlaetzeZu()
         plaetze.insert(nummer, intToExt(intern.value(r)));
         r->setSitzplatz(plaetze);
     }
-}
-
-int Wagen::getAktuellePosition() const
-{
-    return aktuellePosition;
-}
-
-void Wagen::clear()
-{
-    aktuellePosition = 0;
-    verteilung.clear();
 }
 
 bool Wagen::test(QList<int> liste, Reservierung *r)

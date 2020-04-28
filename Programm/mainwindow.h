@@ -44,7 +44,6 @@ protected slots:
     void on_actionNew_triggered();
     void on_actionOpen_triggered();
     void on_menuRecentlyused_aboutToShow();
-    void openMostRecentlyUsedItem();
     void on_actionClear_triggered();
     void on_actionSave_triggered();
     void on_actionSaveas_triggered();

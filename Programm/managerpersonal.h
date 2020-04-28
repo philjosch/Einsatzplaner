@@ -25,14 +25,12 @@ public:
     QJsonObject personalToJson();
     void fromJson(QJsonObject o);
 
-
     Person *getPersonFromID(QString id);
     Person *getPerson(QString name);
     bool personExists(QString name); // Prüft, ob die Person im System registriert ist
     bool personExists(QString vorname, QString nachname); // Prüft, ob die Person im System registriert ist
 
     Person *newPerson(); // Erstellt eine neue Person und gibt sie zurück
-    bool removePerson(QString name);
     bool removePerson(Person *p);
 
     int pruefeStunden(Person *p); // Gibt true zurueck, genau dann wenn die Person fuer **alle** Kategorien die notwendigen Stunden erbracht hat!
@@ -66,7 +64,6 @@ public:
 
 public slots:
     void personChangedName(Person *p, QString alt);
-    void reloadSettings();
 
 signals:
     void changed();
@@ -78,7 +75,7 @@ private:
 
     QMap<Category, int> minimumHours;
 
-    static QMap<Category, int> minimumHoursDefault;
+    static QMap<Category, int> MINIMUM_HOURS_DEFAULT;
 
     QMap<Category, int> time;
 };

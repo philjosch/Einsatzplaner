@@ -312,7 +312,7 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
         break;
 
     case Mistake::FalscheQualifikation:
-        QMessageBox::warning(this, tr("Fehlende Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da ein betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
+        QMessageBox::warning(this, tr("Fehlende Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da eine betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
         break;
     case Mistake::PersonNichtGefunden:
         QMessageBox::information(this, tr("Person nicht gefunden"), tr("Die eingegebene Person konnte nicht gefunden werden!"));
@@ -467,10 +467,10 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
             case Mistake::ExternOk:
                 break;
             case Mistake::PersonNichtGefunden:
-                QMessageBox::warning(this, tr("Fehler"), tr("Die eingegebene Person konnte im System nicht gefunden werden."));
+                QMessageBox::warning(this, tr("Person nicht gefunden"), tr("Die eingegebene Person konnte nicht gefunden werden!"));
                 break;
             case Mistake::FalscheQualifikation:
-                QMessageBox::warning(this, tr("Fehlene Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da ein betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
+                QMessageBox::warning(this, tr("Fehlene Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da eine betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
                 break;
             default:
                 QMessageBox::warning(this, tr("Sonstiger Fehler"), tr("Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!"));
@@ -749,7 +749,7 @@ void FahrtagWindow::on_buttonVerteile_clicked()
         if (ok.count(Mistake::OK) == ok.length()) {
             QMessageBox::information(this, tr("Fertig"), tr("Die Reservierungen in allen Klassen wurden erfolgreich verteilt."));
         }
-        if (CoreApplication::isDeveloperVersion()) {
+        if (CoreApplication::DEVELOPER_MODE) {
             QMessageBox::information(this, tr("Fertig"), "mSek: "+QString::number(start.msecsTo(ende)));
         }
         updateAuswertungReservierungen();

@@ -105,9 +105,7 @@ private:
     Fahrtag *fahrtag;
     bool nehme;
 
-
     // Personal Verwaltung
-//    QMap<QListWidgetItem*, QTableWidgetItem*> listToTable; // Mapt von den Listen auf den Tabelleneintrag der Person
     QMap<QListWidgetItem*, QTableWidgetItem*> listeZuTabelle;
     QMap<QTableWidgetItem*, AActivity::Einsatz> tabelleZuEinsatz;
 

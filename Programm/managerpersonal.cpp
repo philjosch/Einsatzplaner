@@ -3,7 +3,7 @@
 
 #include <QJsonArray>
 
-QMap<Category, int> ManagerPersonal::minimumHoursDefault {{Category::Tf, 100*60}, {Gesamt, 10*60}};
+QMap<Category, int> ManagerPersonal::MINIMUM_HOURS_DEFAULT {{Category::Tf, 100*60}, {Gesamt, 10*60}};
 
 
 ManagerPersonal::ManagerPersonal()
@@ -11,10 +11,7 @@ ManagerPersonal::ManagerPersonal()
     personen = QSet<Person*>();
     personenSorted = QMap<QString, Person*>();
     idToPerson = QMap<QString, Person*>();
-    minimumHours = QMap<Category, int>();
-    foreach (Category cat, minimumHoursDefault.keys()) {
-       minimumHours.insert(cat, minimumHoursDefault.value(cat));
-    }
+    minimumHours = MINIMUM_HOURS_DEFAULT;
     time = QMap<Category,int>();
 }
 
@@ -144,15 +141,6 @@ Person *ManagerPersonal::newPerson()
     return neu;
 }
 
-bool ManagerPersonal::removePerson(QString name)
-{
-    name = getGoodName(name);
-    if (personExists(name)) {
-        return removePerson(personenSorted.value(name));
-    }
-    return false;
-}
-
 bool ManagerPersonal::removePerson(Person *p)
 {
     if (personen.contains(p)) {
@@ -233,21 +221,13 @@ QString ManagerPersonal::getMinimumHoursString(Category cat)
 
 int ManagerPersonal::getMinimumHoursDefault(Category cat)
 {
-    return minimumHoursDefault.value(cat, 0);
+    return MINIMUM_HOURS_DEFAULT.value(cat, 0);
 }
 
 void ManagerPersonal::personChangedName(Person *p, QString alt)
 {
     personenSorted.remove(alt);
     personenSorted.insert(p->getName(), p);
-}
-
-void ManagerPersonal::reloadSettings()
-{
-    // Einstellungen neu laden, betrifft besonders die Zeiten, ab wann man nicht genug stunden hat
-/*    mindestStunden = 10;
-    mindestStundenTf = 0;
-    mindestStundenZf = 0;*/
 }
 
 QListIterator<Person *> ManagerPersonal::getPersonen() const

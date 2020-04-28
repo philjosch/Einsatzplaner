@@ -173,13 +173,9 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         Infos neu = Infos{beginn, ende, kat, bemerkung};
         bool neuHinzufuegen = false;
 
-        if (column == 0) {
+        if (column == 0 || column == 1) {
             neuHinzufuegen = true;
-        } else if (column == 1) {
-            neuHinzufuegen = true;
-        } else if (column == 2) {
-            activity->updatePersonInfos(e.person, e.cat, neu);
-        } else if (column == 3) {
+        } else if (column == 2 || column == 3) {
             activity->updatePersonInfos(e.person, e.cat, neu);
         } else if (column == 4) {
             activity->updatePersonBemerkung(e.person, e.cat, bemerkung);
@@ -199,10 +195,10 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
             case Mistake::ExternOk:
                 break;
             case Mistake::PersonNichtGefunden:
-                QMessageBox::warning(this, tr("Fehler"), tr("Die eingegebene Person konnte im System nicht gefunden werden."));
+                QMessageBox::warning(this, tr("Person nicht gefunden"), tr("Die eingegebene Person konnte nicht gefunden werden!"));
                 break;
             case Mistake::FalscheQualifikation:
-                QMessageBox::warning(this, tr("Fehlene Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da ein betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
+                QMessageBox::warning(this, tr("Fehlende Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da eine betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
                 break;
             default:
                 QMessageBox::warning(this, tr("Sonstiger Fehler"), tr("Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!"));

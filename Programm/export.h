@@ -14,7 +14,7 @@
 
 /*
  * Die Datei mit der Logik für den Export von Daten
- * Die Daten werden über Fenster an die  methoden übergeben
+ * Die Daten werden über Fenster an die Methoden übergeben
  * Es werden statische Methoden benutzt, sodass die Klasse nicht instanziiert werden muss
  * */
 
