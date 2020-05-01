@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-    CoreApplication a(argc, argv, {1, 6, 0}, true);
+    CoreApplication a(argc, argv, {1, 5, 0}, true);
 
     QTranslator qtTranslator;
     qtTranslator.load(":/translations/qt_" + QLocale::system().name());
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
         a.checkVersion();
 
     if (int delay = settings.value("io/autoSave", 0).toInt())
-        a.startAutoSave(delay*60); // Funktion nimmt Wert in Sekunden!
+        a.startAutoSave(delay);
 
     if (a.getIsFirst() == true) {
         MainWindow *w = new MainWindow();
@@ -32,4 +32,3 @@ int main(int argc, char *argv[])
     a.stopAutoSave();
     return code;
 }
-

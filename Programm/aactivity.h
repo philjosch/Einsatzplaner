@@ -103,7 +103,7 @@ protected:
 
     ManagerPersonal *personal;
 
-    QString listToString(QMap<Person *, Infos> liste, QString seperator, bool aufgabe=false);
+    QString listToString(QString sep, QMap<Person *, Infos> liste, QString prefix="", QString suffix="", bool aufgabe=false);
 
     static QString COLOR_REQUIRED;
     bool lesser(const AActivity &second) const;

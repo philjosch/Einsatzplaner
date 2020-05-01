@@ -42,7 +42,7 @@ void PreferencesDialog::on_pushSearch_clicked()
     if (old) {
         s = tr("Sie verwenden Version %1. Es ist Version %2 verfügbar.").arg(aktuell.toString(), online.toString());
     } else {
-        s = tr("Sie verwenden bereits die neuste Version: %1.").arg(aktuell.toString());
+        s = tr("Sie verwenden bereits die neuste Version %1.").arg(aktuell.toString());
     }
     ui->labelVersion->setText(s);
     ui->pushDownload->setEnabled(old);
@@ -76,5 +76,8 @@ void PreferencesDialog::saveSettings()
 
 void PreferencesDialog::on_pushNotes_clicked()
 {
-    QMessageBox::information(nullptr, tr("Über Version ")+online.toString(), CoreApplication::loadNotes(online), QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::information(nullptr,
+                             tr("Über Version %1").arg(online.toString()),
+                             CoreApplication::loadNotes(online),
+                             QMessageBox::Ok, QMessageBox::Ok);
 }

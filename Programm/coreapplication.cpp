@@ -30,7 +30,7 @@ CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool d
 
 CoreApplication::~CoreApplication()
 {
-    QApplication::~QApplication();
+
 }
 
 bool CoreApplication::getIsFirst() const
@@ -69,7 +69,7 @@ void CoreApplication::startAutoSave(int delay)
     autoSaveTimer = new QTimer();
     connect(autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveWindows()));
     if (delay <= 0) return;
-    autoSaveTimer->start(delay*1000);
+    autoSaveTimer->start(delay*60000);
 }
 void CoreApplication::autoSaveWindows()
 {

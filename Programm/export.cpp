@@ -4,6 +4,7 @@
 
 #include <QTemporaryFile>
 #include <QSettings>
+#include <QPrintDialog>
 
 const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td, p { font-size: 10px; font-weight: normal !important;}"
                             "table { border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
@@ -18,6 +19,7 @@ const QFont Export::DEFAULT_FONT = QFont("Arial", 11, QFont::Normal);
 bool Export::printEinzelansichten(QList<AActivity *> liste, QPrinter *printer)
 {
     if (printer == nullptr) return false;
+    if (liste.isEmpty()) return true;
     QTextDocument *d = newDefaultDocument();
     QString html = Manager::getHtmlFuerEinzelansichten(liste);
     d->setHtml(html);
@@ -28,9 +30,10 @@ bool Export::printEinzelansichten(QList<AActivity *> liste, QPrinter *printer)
 bool Export::printList(QList<AActivity *> liste, QPrinter *printer)
 {
     if (printer == nullptr) return false;
+    if (liste.isEmpty()) return true;
     QTextDocument *d = newDefaultDocument();
     QString a = Manager::getHtmlFuerListenansicht(liste);
-    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
+    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     d->setHtml(a);
     d->print(printer);
     return true;
@@ -41,7 +44,7 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *printer)
     if (f->getAnzahlReservierungen() == 0 || printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
     QString a = f->getHtmlFuerReservierungsuebersicht();
-    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
+    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     d->setHtml(a);
     d->print(printer);
     return true;
@@ -62,7 +65,7 @@ bool Export::printPerson(Person *p, QPrinter *printer)
     if (p == nullptr || printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
     QString a = p->getHtmlForDetailPage();
-    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     d->setHtml(a);
     d->print(printer);
     return true;
@@ -71,9 +74,10 @@ bool Export::printPerson(Person *p, QPrinter *printer)
 bool Export::printPersonenGesamtuebersicht(QList<Person *> personen, QSet<Category> data, QPrinter *printer)
 {
     if (printer == nullptr) return false;
+    if (personen.isEmpty()) return true;
     QTextDocument *d = newDefaultDocument();
     QString a = ManagerPersonal::getHtmlFuerGesamtuebersicht(personen, data);
-    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     d->setHtml(a);
     d->print(printer);
     return true;
@@ -84,7 +88,7 @@ bool Export::printMitglieder(ManagerPersonal *m, QPrinter *printer)
     if (printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
     QString a = m->getHtmlFuerMitgliederliste();
-    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     d->setHtml(a);
     d->print(printer);
     return true;

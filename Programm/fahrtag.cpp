@@ -76,14 +76,6 @@ Fahrtag::~Fahrtag()
 QJsonObject Fahrtag::toJson()
 {
     QJsonObject o = AActivity::toJson();
-    o.remove("art");
-    o.insert("wagenreihung", wagenreihung);
-    o.insert("checkAll", checkAll);
-    QJsonArray array;
-    for(Reservierung *r: reservierungen.values()) {
-        array.append(r->toJson());
-    }
-    o.insert("reservierungen", array);
     o.insert("art", art);
     o.insert("zeitTf", zeitTf.toString("hh:mm"));
     o.insert("wichtig", wichtig);
@@ -91,6 +83,13 @@ QJsonObject Fahrtag::toJson()
     o.insert("benoetigeZf", benoetigeZf);
     o.insert("benoetigeZub", benoetigeZub);
     o.insert("benoetigeService", benoetigeService);
+    o.insert("wagenreihung", wagenreihung);
+    QJsonArray array;
+    for(Reservierung *r: reservierungen.values()) {
+        array.append(r->toJson());
+    }
+    o.insert("reservierungen", array);
+    o.insert("checkAll", checkAll);
     return o;
 }
 
@@ -187,36 +186,36 @@ QString Fahrtag::getHtmlForSingleView()
         } else {
             html += "Triebfahrzeugführer (Tf)";
         }
-        html += ":</b><br/>"+listToString(tf, " | ")+"</p>";
+        html += ":</b><br/>"+listToString("| ", tf)+"</p>";
     }
     // *Zf
     if ((benoetigeZf && (art != Schnupperkurs)) || zf.size() > 0) {
         html += "<p><b>Zugführer";
         html += (benoetigeZf && (art != Schnupperkurs) ? required.arg(" wird benötigt"):"");
-        html += ":</b><br/>"+listToString(zf, " | ")+"</p>";
+        html += ":</b><br/>"+listToString(" | ", zf)+"</p>";
     }
     // *Zub, Begl.o.b.A
     if ((benoetigeZub && (art != Schnupperkurs)) || (zub.size() > 0 || begl.size() > 0)) {
         html += "<p><b>Zugbegleiter und <i>Begleiter ohne betriebliche Ausbildung</i>";
         html += (benoetigeZub && (art != Schnupperkurs) ? required.arg(" werden benötigt"):"");
         html += ":</b><br/>";
-        html += listToString(zub, " | ");
+        html += listToString(" | ", zub);
         // Begl. o.b.A
         if (! zub.isEmpty() && ! begl.isEmpty())
             html += " | ";
-        html += "<i>"+listToString(begl, "</i> | <i>") + "</i></p>";
+        html += "<i>" + listToString("|", begl) + "</i></p>";
     }
     // *Service
     if ((benoetigeService && (art != Schnupperkurs)) || service.size() > 0) {
         html += "<p><b>Service-Personal";
         html += (benoetigeService && (art != Schnupperkurs) ? required.arg(" wird benötigt"):"");
-        html += ":</b><br/>"+listToString(service, " | ") +"</p>";
+        html += ":</b><br/>"+listToString(" | ", service) +"</p>";
     }
     // *Sonstiges personal
     if (sonstige.size() > 0) {
         html += "<p><b>Sonstiges Personal";
         html += (personalBenoetigt ? required.arg(" wird benötigt"):"");
-        html += ":</b><br/>"+listToString(sonstige, " | ", true) +"</p>";
+        html += ":</b><br/>"+listToString(" | ", sonstige, "", "", true) +"</p>";
     }
     if (bemerkungen != "") {
         html += "<p><b>Bemerkungen:</b><br/>"+bemerkungen.replace("\n", "<br/>")+"</p>";
@@ -300,7 +299,7 @@ QString Fahrtag::getHtmlForTableView()
         html += "<b>"+QString::number(benoetigeTf)+" Lokführer benötigt!</b>";
     }
     if (tf.size() > 0) {
-        html += "<ul><li>" + listToString(tf, "</li><li>") + "</li></ul>";
+        html += "<ul>" + listToString("", tf, "<li>", "</li>") + "</ul>";
     }
     html += "</td>";
 
@@ -314,13 +313,13 @@ QString Fahrtag::getHtmlForTableView()
     }
     html += "<ul>";
     if (zf.size() > 0) {
-        html += "<li><u>" + listToString(zf, "</u></li><li><u>") + "</u></li>";
+        html += listToString("", zf, "<li><u>", "</u></li>");
     }
     if (zub.size() > 0) {
-        html += "<li>" + listToString(zub, "</li><li>") + "</li>";
+        html += listToString("", zub, "<li>", "</li>");
     }
     if (begl.size() > 0) {
-        html += "<li><i>" + listToString(begl, "</i></li><li><i>") + "</i></li>";
+        html += listToString("", begl, "<li><i>", "</i></li>");
     }
     html += "</ul></td>";
 
@@ -330,7 +329,7 @@ QString Fahrtag::getHtmlForTableView()
         html += "<b>Service-Personal wird benötigt!</b>";
     }
     if (service.size() > 0) {
-        html += "<ul><li>" + listToString(service, "</li><li>") + "</li></ul>";
+        html += "<ul>" + listToString("", service, "<li>", "</li>") + "</ul>";
     }
     html += "</td>";
 
@@ -355,15 +354,15 @@ QString Fahrtag::getHtmlForTableView()
         html += "<b>Sonstiges Personal wird benötigt!</b><br/>";
     }
     if (sonstige.size() > 0) {
-        html += "<ul><li>";
-        html += listToString(sonstige, "</li><li>", true);
-        html += "</li></ul>";
+        html += "<ul>";
+        html += listToString("", sonstige, "<li>", "</li>", true);
+        html += "</ul>";
     }
     // Sneek-Peek Reservierungen
     if (art != Schnupperkurs && art != Gesellschaftssonderzug && getBelegung(-1) > 0) {
         html += QString::number(getBelegung(-1));
         html += (getBelegung(-1) == 1 ? " reservierter Sitzplatz": " reservierte Sitzplätze");
-        html += " bei " + QString::number(getAnzahlReservierungen()) + (getAnzahlReservierungen() == 1 ? " Reservierung" : " Reservierungen");
+        html += tr(" bei %1 %2").arg(QString::number(getAnzahlReservierungen())).arg(getAnzahlReservierungen() == 1 ? " Reservierung" : " Reservierungen");
         html += "<br/>";
     }
 

@@ -22,7 +22,7 @@ QString Networking::ladeDatenVonURL(QString url)
     QString s = "";
     if (reply->error() == QNetworkReply::NoError) {
         //success
-        QString s = QString(reply->readAll());
+        s = QString(reply->readAll());
     }
     delete reply;
     return s;

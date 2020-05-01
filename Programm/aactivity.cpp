@@ -89,8 +89,8 @@ QJsonObject AActivity::toJson()
     data.insert("zeitAnfang", zeitAnfang.toString("hh:mm"));
     data.insert("zeitEnde", zeitEnde.toString("hh:mm"));
     data.insert("zeitenUnbekannt", zeitenUnbekannt);
-    data.insert("anlass", anlass);
-    data.insert("bemerkungen", bemerkungen);
+    data.insert("anlass", anlass.replace("\n", "<br/>"));
+    data.insert("bemerkungen", bemerkungen.replace("\n", "<br/>"));
     QJsonArray personenJSON;
     for(Einsatz e: personen.keys()) {
         QJsonObject persJson;
@@ -126,7 +126,6 @@ QString AActivity::getOrt() const
 {
     return ort;
 }
-
 void AActivity::setOrt(const QString &value)
 {
     ort = value;
@@ -137,7 +136,6 @@ QTime AActivity::getZeitAnfang()
 {
     return zeitAnfang;
 }
-
 void AActivity::setZeitAnfang(QTime value)
 {
     zeitAnfang = value;
@@ -148,7 +146,6 @@ QTime AActivity::getZeitEnde()
 {
     return zeitEnde;
 }
-
 void AActivity::setZeitEnde(QTime value)
 {
     zeitEnde = value;
@@ -159,7 +156,6 @@ QString AActivity::getAnlass() const
 {
     return anlass;
 }
-
 void AActivity::setAnlass(const QString &value)
 {
     anlass = value;
@@ -170,7 +166,6 @@ QString AActivity::getBemerkungen() const
 {
     return bemerkungen;
 }
-
 void AActivity::setBemerkungen(const QString &value)
 {
     bemerkungen = value;
@@ -181,7 +176,6 @@ bool AActivity::getPersonalBenoetigt() const
 {
     return personalBenoetigt;
 }
-
 void AActivity::setPersonalBenoetigt(bool value)
 {
     personalBenoetigt = value;
@@ -235,7 +229,6 @@ Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime en
     emit changed(this);
     return Mistake::OK;
 }
-
 Mistake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat)
 {
     Person *pers = personal->getPerson(p);
@@ -306,30 +299,23 @@ ManagerPersonal *AActivity::getPersonal() const
     return personal;
 }
 
-QString AActivity::listToString(QMap<Person *, Infos> liste, QString seperator, bool aufgabe)
+QString AActivity::listToString(QString sep, QMap<Person *, Infos> liste, QString prefix, QString suffix, bool aufgabe)
 {
-    QString a = "";
+    QStringList l;
+    QStringList l2;
     for(Person *p: liste.keys()) {
-        a+= p->getName();
-        bool strichPunkt = false;
-        if (liste.value(p).bemerkung!= "") {
-            a += "; "+liste.value(p).bemerkung;
-            strichPunkt = true;
+        l2.append(p->getName());
+
+        if (liste.value(p).bemerkung != "") {
+            l2.append(bemerkungen);
         }
         if (aufgabe && (liste.value(p).kategorie != Category::Sonstiges)) {
-            if (strichPunkt) {
-                a += ", ";
-            } else {
-                a += "; ";
-                strichPunkt = true;
-            }
-            a += getLocalizedStringFromCategory(liste.value(p).kategorie);
+            l2.append(getLocalizedStringFromCategory(liste.value(p).kategorie));
         }
-        if (p != liste.keys().last()) {
-            a += seperator;
-        }
+        l.append(prefix+l2.join("; ")+suffix);
+        l2.clear();
     }
-    return a;
+    return l.join(sep);
 }
 
 bool AActivity::hasQualification(Person *p, Category kat, QString bemerkung, QDate datum)
@@ -359,7 +345,6 @@ bool AActivity::getZeitenUnbekannt() const
 {
     return zeitenUnbekannt;
 }
-
 void AActivity::setZeitenUnbekannt(bool value)
 {
     zeitenUnbekannt = value;
@@ -411,8 +396,7 @@ void AActivity::merge(QList<AActivity*> *arr, int l, int m, int r)
 /* l is for left index and r is right index of the sub-array of arr to be sorted */
 void AActivity::mergeSort(QList<AActivity*> *arr, int l, int r)
 {
-    if (l < r)
-    {
+    if (l < r) {
         // Same as (l+r)/2, but avoids overflow for
         // large l and h
         int m = l+(r-l)/2;
@@ -432,7 +416,8 @@ QString AActivity::getKurzbeschreibung()
     return "Arbeitseinsatz";
 }
 
-QString AActivity::getListStringShort() {
+QString AActivity::getListStringShort()
+{
     if (anlass != "")
         return anlass;
     if (bemerkungen != "")
@@ -463,10 +448,10 @@ Infos AActivity::getIndividual(Person *person, Category kat)
         neu.ende = QTime(0,0);
     } else {
         if (alt.beginn == QTime(0,0)) {
-            neu.beginn = QTime(zeitAnfang.hour(), zeitAnfang.minute());
+            neu.beginn = zeitAnfang;
         }
         if (alt.ende == QTime(0,0)) {
-            neu.ende = QTime(zeitEnde.hour(), zeitEnde.minute());
+            neu.ende = zeitEnde;
         }
     }
     return neu;
@@ -570,27 +555,27 @@ QString AActivity::getHtmlForTableView()
     // Tf, Tb
     html += "<td>";
     if (tf.size() > 0) {
-        html += "<ul><li>" + listToString(tf, "</li><li>") + "</li></ul>";
+        html += "<ul>" + listToString("", tf, "<li>", "</li>") + "</ul>";
     }
     html += "</td>";
 
     // Zf, Zub, Begl.o.b.A.
     html += "<td><ul>";
     if (zf.size() > 0) {
-        html += "<li><u>" + listToString(zf, "</u></li><li><u>") + "</u></li>";
+        html += listToString("", zf, "<li><u>", "</u></li>");
     }
     if (zub.size() > 0) {
-        html += "<li>" + listToString(zub, "</li><li>") + "</li>";
+        html += listToString("", zub, "<li>", "</li>");
     }
     if (begl.size() > 0) {
-        html += "<li><i>" + listToString(begl, "</i></li><li><i>") + "</i></li>";
+        html += listToString("", begl, "<li><i>", "</i></li>");
     }
     html += "</ul></td>";
 
     // Service
     html += "<td>";
     if (service.size() > 0) {
-        html += "<ul><li>" + listToString(service, "</li><li>") + "</li></ul>";
+        html += "<ul>" + listToString("", service, "<li>", "</li>") + "</ul>";
     }
     html += "</td>";
 
@@ -612,37 +597,37 @@ QString AActivity::getHtmlForTableView()
         html += "<b>Helfer werden benötigt!</b>";
     }
     if (werkstatt.size() > 2) {
-        html += "<b>Werkstatt:</b><ul style='margin-top: 0px; margin-bottom: 0px'><li>";
-        html += listToString(werkstatt, "</li><li>");
-        html += "</li></ul>";
+        html += "<b>Werkstatt:</b><ul style='margin-top: 0px; margin-bottom: 0px'>";
+        html += listToString("", werkstatt, "<li>", "</li>");
+        html += "</ul>";
     } else {
         for(Person *p: werkstatt.keys()) sonstige.insert(p, werkstatt.value(p));
         werkstatt.clear();
     }
     if (ausbildung.size() > 2) {
-        html += "<b>Ausbildung:</b><ul style='margin-top: 0px; margin-bottom: 0px'><li>";
-        html += listToString(ausbildung, "</li><li>");
-        html += "</li></ul>";
+        html += "<b>Ausbildung:</b><ul style='margin-top: 0px; margin-bottom: 0px'>";
+        html += listToString("", ausbildung, "<li>", "</li>");
+        html += "</ul>";
     } else {
         for(Person *p: ausbildung.keys()) sonstige.insert(p, ausbildung.value(p));
         ausbildung.clear();
     }
     if (zugvorbereitung.size() > 2) {
-        html += "<b>Zugvorbereitung:</b><ul style='margin-top: 0px; margin-bottom: 0px'><li>";
-        html += listToString(zugvorbereitung, "</li><li>");
-        html += "</li></ul>";
+        html += "<b>Zugvorbereitung:</b><ul style='margin-top: 0px; margin-bottom: 0px'>";
+        html += listToString("", zugvorbereitung, "<li>", "</li>");
+        html += "</ul>";
     } else {
         for(Person *p: zugvorbereitung.keys()) sonstige.insert(p, zugvorbereitung.value(p));
         zugvorbereitung.clear();
     }
     if (sonstige.size() > 0) {
         if (werkstatt.size() + ausbildung.size() + zugvorbereitung.size() > 0) {
-            html += "<b>Sonstige:</b><ul style='margin-top: 0px'><li>";
+            html += "<b>Sonstige:</b><ul style='margin-top: 0px'>";
         } else {
-            html += "<ul><li>";
+            html += "<ul>";
         }
-        html += listToString(sonstige, "</li><li>", true);
-        html += "</li></ul>";
+        html += listToString("", sonstige, "<li>", "</li>", true);
+        html += "</ul>";
     } else if (werkstatt.size() + ausbildung.size() + zugvorbereitung.size() == 0) {
         html += "<br/>";
     }
