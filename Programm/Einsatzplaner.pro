@@ -73,11 +73,9 @@ FORMS    += mainwindow.ui \
     minimumhourseditordialog.ui \
     filesettings.ui
 
-TRANSLATIONS += einsatzplaner_de.ts
-
 CONFIG -= console
 
-OTHER_FILES += qt_de.qm einsatzplaner_de.qm
+OTHER_FILES += qt_de.qm
 
 win32 {
     RC_ICONS = ../Icon/keks.ico

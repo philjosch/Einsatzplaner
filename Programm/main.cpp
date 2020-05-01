@@ -16,10 +16,6 @@ int main(int argc, char *argv[])
     qtTranslator.load(":/translations/qt_" + QLocale::system().name());
     a.installTranslator(&qtTranslator);
 
-    QTranslator myappTranslator;
-    myappTranslator.load(":/translations/einsatzplaner_" + QLocale::system().name());
-    a.installTranslator(&myappTranslator);
-
     // Laden der Einstellungen
     FileIO::loadSettings();
 

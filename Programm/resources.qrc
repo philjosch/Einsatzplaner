@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/translations">
-        <file>einsatzplaner_de.qm</file>
         <file>qt_de.qm</file>
     </qresource>
     <qresource prefix="/icons">
