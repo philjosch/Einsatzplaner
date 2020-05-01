@@ -7,10 +7,15 @@
 
 !versionAtLeast(QT_VERSION, 5.13.0):error("Qt version 5.13 is required for this project")
 
+win32: LCONVERT=$$[QT_INSTALL_BINS]\lconvert.exe
+else:  LCONVERT=$$[QT_INSTALL_BINS]/lconvert
+system(\"$$LCONVERT\" -o \"$$_PRO_FILE_PWD_/qt_de.qm\" \"$$[QT_INSTALL_TRANSLATIONS]/qtbase_de.qm\")
+
 QT       += core gui printsupport network widgets
 
 TARGET = Einsatzplaner
 TEMPLATE = app
+
 
 SOURCES += main.cpp\
     guihelper.cpp \
@@ -75,7 +80,7 @@ FORMS    += mainwindow.ui \
 
 CONFIG -= console
 
-OTHER_FILES += qt_de.qm
+#OTHER_FILES += qt_de.qm
 
 win32 {
     RC_ICONS = ../Icon/keks.ico
