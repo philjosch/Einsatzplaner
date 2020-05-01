@@ -1,20 +1,19 @@
 #include "coreapplication.h"
 #include "mainwindow.h"
+#include "networking.h"
 
 #include <QDesktopServices>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
 #include <QMessageBox>
 #include <QWindow>
 #include <QTimer>
 
-CoreApplication::Version CoreApplication::VERSION = {-1, -1, -1};
+Version CoreApplication::VERSION = {-1, -1, -1};
 bool CoreApplication::DEVELOPER_MODE = false;
-QUrl CoreApplication::URL_DOWNLOAD = QUrl("http://epl.philipp-schepper.de/#downloads");
-QUrl CoreApplication::URL_VERSION = QUrl("http://epl.philipp-schepper.de/version.txt");
-QString CoreApplication::URL_NOTES = "http://epl.philipp-schepper.de/version/";
+QString CoreApplication::URL_DOWNLOAD = "http://epl.philipp-schepper.de/#downloads";
+QString CoreApplication::URL_VERSION = "http://epl.philipp-schepper.de/version.txt";
+QString CoreApplication::URL_NOTES = "http://epl.philipp-schepper.de/version/v%1-%2/notes-v%1-%2-%3.txt";
 
-CoreApplication::CoreApplication(int &argc, char **argv, CoreApplication::Version version, bool devVersion) : QApplication(argc, argv)
+CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool devVersion) : QApplication(argc, argv)
 {
     VERSION = version;
     DEVELOPER_MODE = devVersion;
@@ -31,7 +30,7 @@ CoreApplication::CoreApplication(int &argc, char **argv, CoreApplication::Versio
 
 CoreApplication::~CoreApplication()
 {
-
+    QApplication::~QApplication();
 }
 
 bool CoreApplication::getIsFirst() const
@@ -88,59 +87,19 @@ void CoreApplication::stopAutoSave()
     }
 }
 
-CoreApplication::Version CoreApplication::loadVersion()
+Version CoreApplication::loadVersion()
 {
-    // create custom temporary event loop on stack
-    QEventLoop eventLoop;
-
-    // "quit()" the event-loop, when the network request "finished()"
-    QNetworkAccessManager mgr;
-    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-    // the HTTP request
-    QNetworkRequest req( URL_VERSION );
-    QNetworkReply *reply = mgr.get(req);
-    eventLoop.exec(); // blocks stack until "finished()" has been called
-
-    if (reply->error() == QNetworkReply::NoError) {
-        //success
-        QString s = QString(reply->readAll());
-        delete reply;
-        return Version::stringToVersion(s);
-    } else {
-        //failure
-        delete reply;
+    QString s = Networking::ladeDatenVonURL(URL_VERSION);
+    if (s == "") {
         return Version {-1, -1, -1};
+    } else {
+        return Version::stringToVersion(s);
     }
 }
 
 QString CoreApplication::loadNotes(Version v)
 {
-
-    QUrl url = QUrl(URL_NOTES + QString("v%1-%2/notes-v%1-%2-%3.txt").arg(v.major).arg(v.minor).arg(v.patch));
-
-    // create custom temporary event loop on stack
-    QEventLoop eventLoop;
-
-    // "quit()" the event-loop, when the network request "finished()"
-    QNetworkAccessManager mgr;
-    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-    // the HTTP request
-    QNetworkRequest req( url );
-    QNetworkReply *reply = mgr.get(req);
-    eventLoop.exec(); // blocks stack until "finished()" has been called
-
-    if (reply->error() == QNetworkReply::NoError) {
-        //success
-        QString s = QString(reply->readAll());
-        delete reply;
-        return s;
-    } else {
-        //failure
-        delete reply;
-        return "";
-    }
+    return Networking::ladeDatenVonURL(URL_NOTES.arg(v.major).arg(v.minor).arg(v.patch));
 }
 
 void CoreApplication::closeAllWindows()

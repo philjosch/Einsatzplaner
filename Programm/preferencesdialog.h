@@ -28,7 +28,7 @@ private:
     void saveSettings();
 
     Ui::PreferencesDialog *ui;
-    CoreApplication::Version online;
+    Version online;
 };
 
 #endif // PREFERENCESDIALOG_H

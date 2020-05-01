@@ -20,6 +20,7 @@ TEMPLATE = app
 SOURCES += main.cpp\
     guihelper.cpp \
     mainwindow.cpp \
+    networking.cpp \
     person.cpp \
     managerpersonal.cpp \
     activity.cpp \
@@ -45,6 +46,7 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     guihelper.h \
+    networking.h \
     person.h \
     managerpersonal.h \
     activity.h \

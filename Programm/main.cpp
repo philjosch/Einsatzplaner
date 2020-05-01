@@ -5,12 +5,9 @@
 #include <QSettings>
 #include <QTranslator>
 
-const CoreApplication::Version AKTUELLE_VERSION = {1, 6, 0};
-const bool IS_DEVELOPER_VERSION = true;
-
 int main(int argc, char *argv[])
 {
-    CoreApplication a(argc, argv, AKTUELLE_VERSION, IS_DEVELOPER_VERSION);
+    CoreApplication a(argc, argv, {1, 6, 0}, true);
 
     QTranslator qtTranslator;
     qtTranslator.load(":/translations/qt_" + QLocale::system().name());

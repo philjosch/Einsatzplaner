@@ -1,10 +1,7 @@
 #include "export.h"
 #include "fileio.h"
+#include "networking.h"
 
-#include <QEventLoop>
-#include <QNetworkReply>
-#include <QPrintDialog>
-#include <QNetworkAccessManager>
 #include <QTemporaryFile>
 #include <QSettings>
 
@@ -121,28 +118,8 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPrinter::Orienta
 
 bool Export::testServerConnection(ManagerFileSettings *settings)
 {
-    QString server = settings->getServer();
-    QString path = settings->getPath();
-    QString id = settings->getId();
-    // create custom temporary event loop on stack
-    QEventLoop eventLoop;
-
-    // "quit()" the event-loop, when the network request "finished()"
-    QNetworkAccessManager mgr;
-    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-    // the HTTP request
-    QString request = server+"/"+path+"?id="+id;
-    QNetworkRequest req(request);
-    QNetworkReply *reply = mgr.get(req);
-    eventLoop.exec(); // blocks stack until "finished()" has been called
-
-    QString s = "";
-    if (reply->error() == QNetworkReply::NoError) {
-        s = QString(reply->readAll());
-    }
-    delete reply;
-    return (s == "OK");
+    QString request = settings->getFullServer()+"?id="+settings->getId();
+    return (Networking::ladeDatenVonURL(request) == "OK");
 }
 
 bool Export::uploadToServer(ManagerFileSettings *settings, QList<AActivity *> liste)
@@ -159,38 +136,7 @@ bool Export::uploadToServer(ManagerFileSettings *settings, QList<AActivity *> li
 
     printList(liste, p);
 
-    /* HOCHLADEN DER DATEI AUF DEN SERVER */
-    QString server = settings->getFullServer();
-    QString id = settings->getId();
-
-    QEventLoop eventLoop;
-
-    QNetworkAccessManager am;
-    QObject::connect(&am, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-    QNetworkRequest request(server);
-
-    QByteArray data;
-    data.append("--margin\r\n");
-    data.append("Content-Disposition: form-data; name='id'\r\n\r\n"+id+"\r\n");
-    data.append("--margin\r\n");
-    data.append("Content-Disposition: form-data; name='uploaded'; filename='"+id+".pdf'\r\n"); //name of the input is "uploaded" in my form, next one is a file name.
-    data.append("Content-Type: application/pdf\r\n\r\n");
-    data.append(tempFile.readAll());
-    data.append("\r\n");
-    data.append("--margin--\r\n"); //closing boundary according to rfc 1867
-    request.setRawHeader(QString("Content-Type").toUtf8(), QString("multipart/form-data; boundary=margin").toUtf8());
-    request.setRawHeader(QString("Content-Length").toUtf8(), QString::number(data.length()).toUtf8());
-
-    QNetworkReply *reply = am.post(request,data);
-    eventLoop.exec();
-
-    QString s = "";
-    if (reply->error() == QNetworkReply::NoError) {
-        s = QString(reply->readAll());
-    }
-    delete reply;
-    return (s == "OK");
+    return Networking::ladeDateiHoch(settings->getFullServer(), &tempFile, settings->getId());
 }
 
 int Export::autoUploadToServer(ManagerFileSettings *settings, Manager *mgr)

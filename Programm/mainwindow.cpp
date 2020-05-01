@@ -348,8 +348,8 @@ void MainWindow::open(QString path)
     // Prüfen, ob Version kompatibel ist
     QJsonObject generalJSON = object.value("general").toObject();
 
-    CoreApplication::Version version = CoreApplication::Version::stringToVersion(generalJSON.value("version").toString());
-    if (version > (CoreApplication::VERSION) || CoreApplication::Version{-1,-1,-1} == version) {
+    Version version = Version::stringToVersion(generalJSON.value("version").toString());
+    if (version > (CoreApplication::VERSION) || Version{-1,-1,-1} == version) {
         QMessageBox::warning(nullptr, tr("Nicht kompatibel"),
                              tr("Die Datei kann nicht mit dieser Version geöffnet werden.\n"
                                 "Das Dokument benötigt mindestens Version %1.\n"

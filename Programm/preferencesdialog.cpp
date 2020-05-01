@@ -35,7 +35,7 @@ PreferencesDialog::~PreferencesDialog()
 
 void PreferencesDialog::on_pushSearch_clicked()
 {
-    CoreApplication::Version aktuell = CoreApplication::VERSION;
+    Version aktuell = CoreApplication::VERSION;
     online = CoreApplication::loadVersion();
     bool old = online>aktuell;
     QString s;
