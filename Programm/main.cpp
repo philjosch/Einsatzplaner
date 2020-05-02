@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-    CoreApplication a(argc, argv, {1, 5, 0}, true);
+    CoreApplication a(argc, argv, {1, 6, 0}, true);
 
     QTranslator qtTranslator;
     qtTranslator.load(":/translations/qt_" + QLocale::system().name());
