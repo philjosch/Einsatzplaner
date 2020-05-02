@@ -1,7 +1,7 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 28. April 2020
+Stand: 02. Mai 2020
 
-## Version 1.6 – 2020-0X-YY
+## Version 1.6 – 2020-05-02
 ### Neu
 - Die Personalverwaltung wurde verbessert, indem jetzt alle Vereinsmitglieder aufgenommen und verwaltet werden können. Ebenso können verschiedene persönliche Daten und Kontaktdaten eingegeben und auch entsprechend exportiert weden.
 - Eine Person kann jetzt mehrfach bei einem Arbeitseinsatz oder Fahrtag eingetragen werden, vorausgesetzt die Aufgabe ist jeweils verschieden.
