@@ -1,6 +1,7 @@
 #include "activitywindow.h"
 #include "ui_activitywindow.h"
 #include "export.h"
+#include "guihelper.h"
 
 #include <QMessageBox>
 
@@ -10,11 +11,42 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(paren
     ui->tablePersonen->resizeColumnsToContents();
     activity = a;
 
-    namen = QSet<QString>();
-    predefinedValueForTable = Category::Sonstiges;
+    tabelleZuEinsatz = QMap<QTableWidgetItem*,AActivity::Einsatz>();
 
-    loadData();
-    setWindowTitle(tr("%1 am %2").arg(activity->getKurzbeschreibung()).arg(activity->getDatum().toString("dddd dd.MM. yyyy")));
+    nehme = false;
+    // Allgemeine Daten von AActivity
+    ui->dateDatum->setDate(activity->getDatum());
+    ui->lineOrt->setText(activity->getOrt());
+    ui->lineAnlass->setText(activity->getAnlass());
+    setPredefinedValue(activity->getAnlass());
+    ui->plainBeschreibung->setPlainText(activity->getBemerkungen());
+    ui->timeBeginn->setTime(activity->getZeitAnfang());
+    ui->timeEnde->setTime(activity->getZeitEnde());
+    ui->checkZeiten->setChecked(activity->getZeitenUnbekannt());
+    on_checkZeiten_clicked(activity->getZeitenUnbekannt());
+    ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
+
+    QMap<AActivity::Einsatz, Infos> personen = activity->getPersonen();
+    // Tabelle laden und alles einfügen
+    for(AActivity::Einsatz e: personen.keys()) {
+        on_buttonInsert_clicked();
+
+        Infos info = personen.value(e);
+
+        ui->tablePersonen->item(0, 0)->setText((e.person)->getName());
+        tabelleZuEinsatz.insert(ui->tablePersonen->item(0, 0), e);
+
+        Category kat = info.kategorie;
+        if (kat == Category::Begleiter)
+            kat = Category::Zub;
+        static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(getLocalizedStringFromCategory(kat));
+        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(info.beginn);
+        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(info.ende);
+        ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(info.bemerkung));
+    }
+
+    updateWindowTitle();
+    nehme = true;
 }
 
 ActivityWindow::~ActivityWindow()
@@ -27,7 +59,7 @@ void ActivityWindow::on_dateDatum_dateChanged(const QDate &date)
     if (nehme) {
         activity->setDatum(date);
     }
-    setWindowTitle(tr("%1 am %2").arg(activity->getKurzbeschreibung()).arg(activity->getDatum().toString("dddd dd.MM. yyyy")));
+    updateWindowTitle();
 }
 
 void ActivityWindow::on_lineOrt_textChanged(const QString &arg1)
@@ -41,7 +73,7 @@ void ActivityWindow::on_lineAnlass_textChanged(const QString &arg1)
     if (nehme)
         activity->setAnlass(arg1);
     setPredefinedValue(arg1);
-    setWindowTitle(tr("%1 am %2").arg(activity->getKurzbeschreibung()).arg(activity->getDatum().toString("dddd dd.MM. yyyy")));
+    updateWindowTitle();
 }
 
 void ActivityWindow::on_plainBeschreibung_textChanged()
@@ -76,197 +108,148 @@ void ActivityWindow::on_checkBoxBenoetigt_toggled(bool checked)
 
 void ActivityWindow::on_buttonInsert_clicked()
 {
+    bool nehmeOld = nehme;
+    nehme = false;
+    ui->tablePersonen->setSortingEnabled(false);
     ui->tablePersonen->insertRow(0);
 
-    QComboBox *box = activity->generateNewCategoryComboBox();
-    box->setCurrentText(AActivity::getStringFromCategory(predefinedValueForTable));
-    connect(box, SIGNAL(currentTextChanged(QString)), this, SLOT(comboInTableChanged()));
+    QTableWidgetItem *item = new QTableWidgetItem("");
+    ui->tablePersonen->setItem(0, 0, item);
+
+    QComboBox *box = generateNewCategoryComboBox();
+    box->setCurrentText(getLocalizedStringFromCategory(predefinedValueForTable));
     ui->tablePersonen->setCellWidget(0, 1, box);
 
-    QTimeEdit *beginn = activity->generateNewTimeEdit();
-    connect(beginn, SIGNAL(timeChanged(QTime)), this, SLOT(timeEditInTableChanged()));
+    QTimeEdit *beginn = generateNewTimeEdit();
     ui->tablePersonen->setCellWidget(0, 2, beginn);
 
-    QTimeEdit *ende = activity->generateNewTimeEdit();
-    connect(ende, SIGNAL(timeChanged(QTime)), this, SLOT(timeEditInTableChanged()));
+    QTimeEdit *ende = generateNewTimeEdit();
     ui->tablePersonen->setCellWidget(0, 3, ende);
 
+    ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(""));
+
+    connect(box, &QComboBox::currentTextChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 1); });
+    connect(beginn, &QTimeEdit::timeChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 2); });
+    connect(ende, &QTimeEdit::timeChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 3); });
+
+    tabelleZuEinsatz.insert(item, AActivity::Einsatz{nullptr, Sonstiges});
+
     ui->buttonRemove->setEnabled(true);
+    ui->tablePersonen->repaint();
+
+    ui->tablePersonen->setSortingEnabled(true);
+    nehme = nehmeOld;
 }
 
 void ActivityWindow::on_buttonRemove_clicked()
 {
     int i = ui->tablePersonen->currentRow();
-    if (i == -1) return;
-    QString n = (ui->tablePersonen->item(i, 0) == nullptr) ? "" : ui->tablePersonen->item(i, 0)->text();
-    if (activity->removePerson(n)) {
-        namen.remove(n);
-    }
+    if (i < 0) return;
+
+    AActivity::Einsatz e = tabelleZuEinsatz.value(ui->tablePersonen->item(i, 0));
+    activity->removePerson(e.person, e.cat);
+    tabelleZuEinsatz.remove(ui->tablePersonen->item(i, 0));
     ui->tablePersonen->removeRow(i);
+
     ui->buttonRemove->setEnabled(ui->tablePersonen->rowCount() > 0);
 }
 
 void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
 {
+    // column 0: Name | 1: Aufgabe | 2: Beginn | 3: Ende | 4: Bemerkung
+    // Wenn der Name geändert wurde, muss die Verknuepfung mit der alten Person aufgeloest werden
     ui->tablePersonen->resizeColumnsToContents();
     if (nehme) {
         nehme = false;
-        // column 0: Name, 1: Aufgabe, 2: Beginn, 3: Ende, 4: Bemerkung
-        // wenn name geändert wurde, muss der Index über die namen neu aufgebaut werden, da es sonst probleme gibt
-        if (column == 0) {
-            QSet<QString> neu = QSet<QString>();
-            for( int i = 0; i < ui->tablePersonen->rowCount(); i++) {
-                QString n = (ui->tablePersonen->item(i, 0) == nullptr) ? "" : ui->tablePersonen->item(i, 0)->text();
-                neu.insert(n);
-                if (namen.contains(n)) {
-                    namen.remove(n);
-                }
-            }
 
-            if (namen.size() == 1) activity->removePerson(namen.values().at(0));
-            namen = neu;
-        }
-
-        QString name = (ui->tablePersonen->item(row,0) == nullptr) ? "" : ui->tablePersonen->item(row,0)->text();
-        Category kat = AActivity::getCategoryFromString(static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->currentText());
-        QTime beginnZ = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->time();
-        QTime endeZ = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
+        QTableWidgetItem *item = ui->tablePersonen->item(row, 0);
+        QString name = item->text();
+        Category kat = getCategoryFromLocalizedString(static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->currentText());
+        QTime beginn = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->time();
+        QTime ende = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
-        if (activity->isExtern(bemerkung)) activity->removePerson(name);
 
-        switch (activity->addPerson(name, bemerkung, beginnZ, endeZ, kat)) {
-        case Mistake::OK:
-        case Mistake::ExternOk:
-            ui->tablePersonen->sortItems(0);
-            ui->tablePersonen->setSortingEnabled(false);
-            break;
-        case Mistake::PersonNichtGefunden:
-            QMessageBox::warning(this, tr("Fehler"), tr("Die eingegebene Person konnte im System nicht gefunden werden."));
-            break;
-        case Mistake::FalscheQualifikation:
-            QMessageBox::warning(this, tr("Fehlene Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da dies eine Aufgabe ist, welche eine Ausbildung voraussetzt."));
-            break;
-        default:
-            QMessageBox::warning(this, tr("Sonstiger Fehler"), tr("Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!"));
-            break;
+        AActivity::Einsatz e = tabelleZuEinsatz.value(item);
+        Infos neu = Infos{beginn, ende, kat, bemerkung};
+        bool neuHinzufuegen = false;
+
+        if (column == 0 || column == 1) {
+            neuHinzufuegen = true;
+        } else if (column == 2 || column == 3) {
+            activity->updatePersonInfos(e.person, e.cat, neu);
+        } else if (column == 4) {
+            activity->updatePersonBemerkung(e.person, e.cat, bemerkung);
         }
+        if (neuHinzufuegen) {
+            if (e.person != nullptr)
+                activity->removePerson(e.person, e.cat);
 
+            if (kat == Zub && !AActivity::hasQualification(activity->getPersonal()->getPerson(name), kat, bemerkung))
+                kat = Begleiter;
+
+            switch (activity->addPerson(name, bemerkung, beginn, ende, kat)) {
+            case Mistake::PassivOk:
+                QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
+                [[clang::fallthrough]];
+            case Mistake::OK:
+            case Mistake::ExternOk:
+                break;
+            case Mistake::PersonNichtGefunden:
+                QMessageBox::warning(this, tr("Person nicht gefunden"), tr("Die eingegebene Person konnte nicht gefunden werden!"));
+                break;
+            case Mistake::FalscheQualifikation:
+                QMessageBox::warning(this, tr("Fehlende Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da eine betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
+                break;
+            default:
+                QMessageBox::warning(this, tr("Sonstiger Fehler"), tr("Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!"));
+                break;
+            }
+            tabelleZuEinsatz.insert(item, AActivity::Einsatz{activity->getPerson(name), kat});
+        }
         nehme = true;
     }
-}
-void ActivityWindow::comboInTableChanged()
-{
-    QComboBox* combo = qobject_cast<QComboBox*>(sender());
-    if (combo) {
-        int row = -1;
-        for(int i = 0; i < ui->tablePersonen->rowCount(); i++) {
-            if (ui->tablePersonen->cellWidget(i, 1) == combo) {
-                row = i;
-                break;
-            }
-        }
-        if (row >= 0)
-            on_tablePersonen_cellChanged(row, 1);
-    }
-}
-void ActivityWindow::timeEditInTableChanged()
-{
-    QTimeEdit *time = qobject_cast<QTimeEdit*>(sender());
-    if (time) {
-        int row = -1;
-        int column = -1;
-        for(int i = 0; i < ui->tablePersonen->rowCount(); i++) {
-            if (ui->tablePersonen->cellWidget(i, 2) == time) {
-                row = i;
-                column = 2;
-                break;
-            }
-            if (ui->tablePersonen->cellWidget(i, 3) == time) {
-                row = i;
-                column = 3;
-                break;
-            }
-        }
-        if (row >= 0 && column >= 0)
-            on_tablePersonen_cellChanged(row, column);
-    }
-}
-
-void ActivityWindow::on_actionDelete_triggered()
-{
-    on_buttonDelete_clicked();
 }
 
 void ActivityWindow::on_actionPrint_triggered()
 {
-    QPrinter *p = Export::getPrinterPaper(this);
-    Export::printActivity(activity, nullptr, p);
+    QPrinter *p = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
+    Export::printEinzelansichten({activity}, p);
 }
-
 void ActivityWindow::on_actionPdf_triggered()
 {
-    QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf");
-    Export::printActivity(activity, p);
+    QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf", QPrinter::Orientation::Portrait);
+    Export::printEinzelansichten({activity}, p);
 }
 
 void ActivityWindow::on_buttonDelete_clicked()
 {
     if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie diesen Arbeitseinsatz wirklich unwiderruflich löschen?")) == QMessageBox::Yes) {
-        activity->deletter();
+        emit activity->del(activity);
         this->close();
         deleteLater();
     }
 }
 
-void ActivityWindow::loadData()
-{
-    nehme = false;
-    // Allgemeine Daten von AActivity
-    ui->dateDatum->setDate(activity->getDatum());
-    ui->lineOrt->setText(activity->getOrt());
-    ui->lineAnlass->setText(activity->getAnlass());
-    setPredefinedValue(activity->getAnlass());
-    ui->plainBeschreibung->setPlainText(activity->getBemerkungen());
-    ui->timeBeginn->setTime(activity->getZeitAnfang());
-    ui->timeEnde->setTime(activity->getZeitEnde());
-    ui->checkZeiten->setChecked(activity->getZeitenUnbekannt());
-    on_checkZeiten_clicked(activity->getZeitenUnbekannt());
-    ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
-
-    // Tabelle laden und alles einfügen
-    namen = QSet<QString>();
-
-    for(Person *p: activity->getPersonen().keys()) {
-        on_buttonInsert_clicked();
-
-        namen.insert(p->getName());
-
-        AActivity::Infos info = *(activity->getPersonen().value(p));
-
-        ui->tablePersonen->setItem(0, 0, new QTableWidgetItem(p->getName()));
-        Category kat = info.kategorie;
-        if (kat == Category::Begleiter)
-            kat = Category::Zub;
-        static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(AActivity::getStringFromCategory(kat));
-        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(info.beginn);
-        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(info.ende);
-        ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(info.bemerkung));
-    }
-    nehme = true;
-}
-
 void ActivityWindow::setPredefinedValue(QString anlass)
 {
-    anlass = anlass.replace(" ", "").toLower();
-    if (anlass.contains(tr("Vorbereiten").toLower()) || anlass.contains(tr("Vorbereitung").toLower())) {
+    if (anlass.contains(tr("Vorbereiten"), Qt::CaseInsensitive)
+            || anlass.contains(tr("Vorbereitung"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::ZugVorbereiten;
-    } else if (anlass.contains(tr("Werkstatt").toLower())) {
+    } else if (anlass.contains(tr("Werkstatt"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Werkstatt;
-    } else if (anlass.contains(tr("Ausbildung").toLower())) {
+    } else if (anlass.contains(tr("Ausbildung"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Ausbildung;
-    } else if (anlass.contains(tr("Büro").toLower())) {
+    } else if (anlass.contains(tr("Büro"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Buero;
+    } else if (anlass.contains(tr("Vegetationsarbeiten"), Qt::CaseInsensitive)
+               || anlass.contains(tr("Kontrollfahrt"), Qt::CaseInsensitive)) {
+        predefinedValueForTable = Category::Infrastruktur;
     } else {
         predefinedValueForTable = Category::Sonstiges;
     }
+}
+
+void ActivityWindow::updateWindowTitle()
+{
+    setWindowTitle(tr("%1 am %2").arg(activity->getKurzbeschreibung()).arg(activity->getDatum().toString("dddd dd.MM. yyyy")));
 }

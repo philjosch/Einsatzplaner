@@ -7,24 +7,29 @@
 
 !versionAtLeast(QT_VERSION, 5.13.0):error("Qt version 5.13 is required for this project")
 
+win32: LCONVERT=$$[QT_INSTALL_BINS]\lconvert.exe
+else:  LCONVERT=$$[QT_INSTALL_BINS]/lconvert
+system(\"$$LCONVERT\" -o \"$$_PRO_FILE_PWD_/qt_de.qm\" \"$$[QT_INSTALL_TRANSLATIONS]/qtbase_de.qm\")
+
 QT       += core gui printsupport network widgets
 
 TARGET = Einsatzplaner
 TEMPLATE = app
 
+
 SOURCES += main.cpp\
+    guihelper.cpp \
     mainwindow.cpp \
+    networking.cpp \
     person.cpp \
     managerpersonal.cpp \
     activity.cpp \
     reservierung.cpp \
     manager.cpp \
-    managerreservierungen.cpp \
     fahrtagwindow.cpp \
     activitywindow.cpp \
     personalwindow.cpp \
     fahrtag.cpp \
-    calendar.cpp \
     calendarday.cpp \
     aactivity.cpp \
     export.cpp \
@@ -35,21 +40,22 @@ SOURCES += main.cpp\
     verteiler.cpp \
     preferencesdialog.cpp \
     minimumhourseditordialog.cpp \
+    basics.cpp \
     filesettings.cpp \
     managerfilesettings.cpp
 
 HEADERS  += mainwindow.h \
+    guihelper.h \
+    networking.h \
     person.h \
     managerpersonal.h \
     activity.h \
     reservierung.h \
     manager.h \
-    managerreservierungen.h \
     fahrtagwindow.h \
     activitywindow.h \
     personalwindow.h \
     fahrtag.h \
-    calendar.h \
     calendarday.h \
     aactivity.h \
     export.h \
@@ -60,7 +66,7 @@ HEADERS  += mainwindow.h \
     verteiler.h \
     preferencesdialog.h \
     minimumhourseditordialog.h \
-    enums.h \
+    basics.h \
     filesettings.h \
     managerfilesettings.h
 
@@ -68,18 +74,15 @@ FORMS    += mainwindow.ui \
     fahrtagwindow.ui \
     activitywindow.ui \
     personalwindow.ui \
-    calendar.ui \
     calendarday.ui \
     exportgesamt.ui \
     preferencesdialog.ui \
     minimumhourseditordialog.ui \
     filesettings.ui
 
-TRANSLATIONS += einsatzplaner_de.ts
-
 CONFIG -= console
 
-OTHER_FILES += qt_de.qm einsatzplaner_de.qm
+#OTHER_FILES += qt_de.qm
 
 win32 {
     RC_ICONS = ../Icon/keks.ico
@@ -87,11 +90,11 @@ win32 {
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
     QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2020
     QMAKE_TARGET_PRODUCT = Einsatzplaner
-    VERSION = 1.5.2.1
+    VERSION = 1.6.0.1
 }
 
 macx {
-    VERSION = 1.5.2
+    VERSION = 1.6.0
     OTHER_FILES += Info.plist ../Icon/keks.icns
     QMAKE_INFO_PLIST = Info.plist
     DISTFILES += Info.plist

@@ -1,371 +1,132 @@
 #include "export.h"
 #include "fileio.h"
+#include "networking.h"
 
-#include <QEventLoop>
-#include <QNetworkReply>
-#include <QPrintDialog>
-#include <QNetworkAccessManager>
 #include <QTemporaryFile>
 #include <QSettings>
+#include <QPrintDialog>
 
-bool Export::printFahrtag(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
-{
-    QList<AActivity*> *liste = new QList<AActivity*>();
-    liste->append(f);
-    return printSingle(liste, pdf, paper);
-}
-
-bool Export::printActivity(Activity *a, QPrinter *pdf, QPrinter *paper)
-{
-    QList<AActivity*> *liste = new QList<AActivity*>();
-    liste->append(a);
-    return printSingle(liste, pdf, paper);
-}
-
-bool Export::printSingle(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper)
-{
-    // Für jedes Objekt in der liste eine Einzelansicht erstellen mit der Methode generateSingle(...)
-
-    // Vorbereiten des Druckers für den Ausdruck
-    preparePrinterPortrait(pdf);
-    preparePrinterPortrait(paper);
-
-
-    QTextDocument *d = new QTextDocument();
-    d->setDefaultStyleSheet("body{float: none} body,td,th,p { font-size: 80%;}"
-                            "table {border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
-                            "p.last { page-break-after: always; }"
-                            " table th, table td { border-width: 1px; border-collapse: collapse; padding: 1px; border-style: solid; border-color: black; }");
-    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
-    d->setDocumentMargin(0);
-
-    //header zum Dokument hinzufügen
-    QString html = "";
-
-    for(AActivity *aa: *liste) {
-        html += aa->getHtmlForSingleView();
-        if(liste->last() != aa)
-            html += "<p class='last'><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
-        else
-            html += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
-    }
-
-    d->setHtml(html);
-    return print(pdf, paper, d);
-}
-
-bool Export::printList(QList<AActivity *> *liste, QPrinter *pdf, QPrinter *paper)
-{
-    // Vorbereiten des Druckers für den Ausdruck
-    preparePrinterLandscape(pdf);
-    preparePrinterLandscape(paper);
-    QTextDocument *d = new QTextDocument();
-    d->setDefaultStyleSheet("body, td, p { font-size: 10px; font-weight: normal !important;}"
-                            "table { border-width: 1px; border-style: solid; border-color: black; } "
-                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black;}"
+const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td, p { font-size: 10px; font-weight: normal !important;}"
+                            "table { border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
+                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
                             "table tr, table td { page-break-inside: avoid; }"
+                            "table tfoot tr, table tfoot td { border-width: 1px; }"
                             "ul { -qt-list-indent: 0; margin-top: 0px !important; margin-bottom: 0px !important }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
-    d->setDefaultFont(QFont("Arial", 10, QFont::Normal));
-    d->setDocumentMargin(0);
+                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }"
+                            "p.last { page-break-after: always; }";
+const QFont Export::DEFAULT_FONT = QFont("Arial", 11, QFont::Normal);
 
-    QString a = "<h3>Übersicht über die Aktivitäten</h3>"
-                "<table cellspacing='0' width='100%'><thead><tr>"
-                "<th>Datum, Anlass</th> <th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th>"
-                "<th>Service</th> <th>Dienstzeiten</th> <th>Sonstiges</th></tr></thead><tbody>";
-    for(AActivity *akt: *liste) {
-        a += akt->getHtmlForTableView();
-    }
-    a += "</tbody></table>"
-         "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
-    d->setHtml(a);
-    return print(pdf, paper, d);
+bool Export::printEinzelansichten(QList<AActivity *> liste, QPrinter *printer)
+{
+    if (printer == nullptr) return false;
+    if (liste.isEmpty()) return true;
+    QTextDocument *d = newDefaultDocument();
+    QString html = Manager::getHtmlFuerEinzelansichten(liste);
+    d->setHtml(html);
+    d->print(printer);
+    return true;
 }
 
-bool Export::printReservierung(Fahrtag *f, QPrinter *pdf, QPrinter *paper)
+bool Export::printList(QList<AActivity *> liste, QPrinter *printer)
 {
-    if (f->getAnzahl() == 0) return false;
-    // Vorbereiten des Druckers für den Ausdruck
-    preparePrinterLandscape(pdf);
-    preparePrinterLandscape(paper);
-    QTextDocument *d = new QTextDocument();
-    d->setDefaultStyleSheet("body, tr, td, p { font-size: 11px; }"
-                            "table { border-width: 1px; border-style: solid; border-color: black; }"
-                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
-                            "table tr, table td { page-break-inside: avoid; }"
-                            "ul { -qt-list-indent: 0; }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
-    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
-    d->setDocumentMargin(0);
-
-    QString a = "<h3>";
-    a += Fahrtag::getStringFromArt(f->getArt())+" am "+f->getDatum().toString("dddd dd. MM. yyyy");
-    a += " - Die Reservierungen</h3>";
-    a += "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th> <th>Anzahl</th> <th>Sitzplätze</th> <th>Sonstiges</th></tr></thead><tbody>";
-    // Sortieren der Daten nach Wagenreihung
-    QStringList wagen = f->getWagenreihung().split(QRegExp("\\s*,\\s*"));
-    QList<int> wagenNummern;
-    for(QString s: wagen) wagenNummern.append(s.toInt());
-
-    // Sortieren der Reservierungen
-    QHash<int, QList<Reservierung*>*> wagenZuRes;
-    QSetIterator<Reservierung*> it = f->getReservierungen();
-    while(it.hasNext()) {
-        Reservierung *r = it.next();
-        for(int i: r->getSitzplatz().keys()) {
-            if (!wagenZuRes.contains(i))
-                wagenZuRes.insert(i, new QList<Reservierung*>());
-            int pos = 0;
-            QList<Reservierung*> *list= wagenZuRes.value(i);
-            list->insert(0, r);
-            while (pos+1 < list->length() && list->at(pos)->getName() > list->at(pos+1)->getName()) {
-                list->swapItemsAt(pos, pos+1);
-                pos++;
-            }
-        }
-        if (r->getSitzplatz().isEmpty()) {
-            if (! wagenZuRes.contains(999))
-                wagenZuRes.insert(999, new QList<Reservierung*>());
-            int pos = 0;
-            QList<Reservierung*> *list= wagenZuRes.value(999);
-            list->insert(0, r);
-            while (pos+1 < list->length() && list->at(pos)->getName() > list->at(pos+1)->getName()) {
-                list->swapItemsAt(pos, pos+1);
-                pos++;
-            }
-        }
-    }
-
-    for(int wagenNr: wagenNummern) {
-        if (wagenZuRes.contains(wagenNr)) {
-            a += "<tr><td columnspan='4'><b>Wagen "+QString::number(wagenNr)+":</b></td></tr>";
-            for(Reservierung *r: *wagenZuRes.value(wagenNr)) {
-                a += r->getHtmlForDetailTable();
-            }
-        }
-    }
-    if (wagenZuRes.contains(999)) {
-        a += "<tr><td columnspan='4'><b>Reservierungen ohne Sitzplätze:</b></td></tr>";
-        for(Reservierung *r: *wagenZuRes.value(999)) {
-            a += r->getHtmlForDetailTable();
-        }
-    }
-
-    a += "</tbody></table>";
-    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
+    if (printer == nullptr) return false;
+    if (liste.isEmpty()) return true;
+    QTextDocument *d = newDefaultDocument();
+    QString a = Manager::getHtmlFuerListenansicht(liste);
+    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     d->setHtml(a);
-    return print(pdf, paper, d);
+    d->print(printer);
+    return true;
+}
+
+bool Export::printReservierung(Fahrtag *f, QPrinter *printer)
+{
+    if (f->getAnzahlReservierungen() == 0 || printer == nullptr) return false;
+    QTextDocument *d = newDefaultDocument();
+    QString a = f->getHtmlFuerReservierungsuebersicht();
+    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
+    d->setHtml(a);
+    d->print(printer);
+    return true;
 }
 
 bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
 {
-    preparePrinterPortrait(printer);
-    QTextDocument *d = new QTextDocument();
-    // Append a style sheet
-    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
-                            "table { border-width: 1px; border-style: solid; border-color: black; }"
-                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
-                            "table tr, table td { page-break-inside: avoid; }"
-                            "table tfoot tr, table tfoot td { border-width: 2px; }"
-                            "ul { -qt-list-indent: 0; }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
-    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
-    d->setDocumentMargin(0);
-
-    // Add the title page
-    m->berechne();
-    QString help = "<li>%1: %2</li>";
-    QString a = "<h1>Personalübersicht - Gesamt</h1>"
-                "<h2>Geleistete Stunden</h2><ul>";
-    if (m->getTime(Tf) > 0) a += help.arg("Tf", Person::getStringFromHours(m->getTime(Tf)));
-    if (m->getTime(Zf) > 0) a += help.arg("Zf", Person::getStringFromHours(m->getTime(Zf)));
-    if (m->getTime(Zub) > 0) a += help.arg("Zub", Person::getStringFromHours(m->getTime(Zub)));
-    if (m->getTime(Service) > 0) a += help.arg("Service", Person::getStringFromHours(m->getTime(Service)));
-    if (m->getTime(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten", Person::getStringFromHours(m->getTime(ZugVorbereiten)));
-    if (m->getTime(Werkstatt) > 0) a += help.arg("Werkstatt", Person::getStringFromHours(m->getTime(Werkstatt)));
-    if (m->getTime(Buero) > 0) a += help.arg("Büro", Person::getStringFromHours(m->getTime(Buero)));
-    if (m->getTime(Ausbildung) > 0) a += help.arg("Ausbildung", Person::getStringFromHours(m->getTime(Ausbildung)));
-    if (m->getTime(Sonstiges) > 0) a += help.arg("Sonstiges", Person::getStringFromHours(m->getTime(Sonstiges)));
-    a += "</ul>";
-
-    a += "<ul><li>Stunden gesamt: "+QString::number(m->getTimeSum())+"h</li>";
-    a += "<li>Gefahrene Kilometer gesamt: "+QString::number(m->getSumKilometer())+" km</li></ul>";
-
-    a += "<h2>Mindeststunden</h2><ul>";
-    if (m->getMinimumHours() > 0) a += help.arg("Insgesamt", Person::getStringFromHours(m->getMinimumHours()));
-    if (m->getMinimumHours(Tf) > 0) a += help.arg("Tf", Person::getStringFromHours(m->getMinimumHours(Tf)));
-    if (m->getMinimumHours(Tb) > 0) a += help.arg("Tb", Person::getStringFromHours(m->getMinimumHours(Tb)));
-    if (m->getMinimumHours(Zf) > 0) a += help.arg("Zf", Person::getStringFromHours(m->getMinimumHours(Zf)));
-    if (m->getMinimumHours(Zub) > 0) a += help.arg("Zub", Person::getStringFromHours(m->getMinimumHours(Zub)));
-    if (m->getMinimumHours(Service) > 0) a += help.arg("Service", Person::getStringFromHours(m->getMinimumHours(Service)));
-    if (m->getMinimumHours(ZugVorbereiten) > 0) a += help.arg("Zug Vorbereiten", Person::getStringFromHours(m->getMinimumHours(ZugVorbereiten)));
-    if (m->getMinimumHours(Werkstatt) > 0) a += help.arg("Werkstatt", Person::getStringFromHours(m->getMinimumHours(Werkstatt)));
-    if (m->getMinimumHours(Buero) > 0) a += help.arg("Büro", Person::getStringFromHours(m->getMinimumHours(Buero)));
-    if (m->getMinimumHours(Ausbildung) > 0) a += help.arg("Ausbildung", Person::getStringFromHours(m->getMinimumHours(Ausbildung)));
-    if (m->getMinimumHours(Sonstiges) > 0) a += help.arg("Sonstiges", Person::getStringFromHours(m->getMinimumHours(Sonstiges)));
-    a += "</ul>";
-
-    a += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
-
-    // Add a papge for each person
-    QListIterator<Person*> iter = m->getPersonen();
-    while(iter.hasNext()) {
-        Person *akt = iter.next();
-        a += akt->getHtmlForDetailPage(m);
-        if (iter.hasNext()) {
-            a += "<div style='page-break-after:always'>";
-            a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
-        } else {
-            a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
-        }
-    }
+    if (printer == nullptr) return false;
+    QTextDocument *d = newDefaultDocument();
+    QString a = m->getHtmlFuerEinzelansicht();
     d->setHtml(a);
-    return print(nullptr, printer, d);
+    d->print(printer);
+    return true;
 }
 
-bool Export::printPerson(ManagerPersonal *m, Person *p, QPrinter *printer)
+bool Export::printPerson(Person *p, QPrinter *printer)
 {
-    if (p == nullptr) return false;
-    preparePrinterPortrait(printer);
-    QTextDocument *d = new QTextDocument();
-    // Append a style sheet
-    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
-                            "table { border-width: 1px; border-style: solid; border-color: black; }"
-                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
-                            "table tr, table td { page-break-inside: avoid; }"
-                            "table tfoot tr, table tfoot td { border-width: 2px; }"
-                            "ul { -qt-list-indent: 0; }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
-    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
-    d->setDocumentMargin(0);
-
-    // Add the title page
-    m->berechne();
-    QString a = p->getHtmlForDetailPage(m);
-    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+    if (p == nullptr || printer == nullptr) return false;
+    QTextDocument *d = newDefaultDocument();
+    QString a = p->getHtmlForDetailPage();
+    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     d->setHtml(a);
-    return print(nullptr, printer, d);
+    d->print(printer);
+    return true;
 }
 
-bool Export::printPersonen(QList<Person *> *personen, QMap<Category, double> gesamt, QList<Category> data, QPrinter *pdf, QPrinter *paper)
+bool Export::printPersonenGesamtuebersicht(QList<Person *> personen, QSet<Category> data, QPrinter *printer)
 {
-    preparePrinterLandscape(pdf);
-    preparePrinterLandscape(paper);
-    QTextDocument *d = new QTextDocument();
-    d->setDefaultStyleSheet("body, tr, td, p { font-size: 12px; }"
-                            "table { border-width: 1px; border-style: solid; border-color: black; }"
-                            "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; }"
-                            "table tr, table td { page-break-inside: avoid; }"
-                            "table tfoot tr, table tfoot td { border-width: 2px; }"
-                            "ul { -qt-list-indent: 0; }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }");
-    d->setDefaultFont(QFont("Arial", 11, QFont::Normal));
-    d->setDocumentMargin(0);
-
-
-    //  0: gesamtstunden
-    //  1: anzahl
-    //  2: tf/tb
-    //  3: zf
-    //  4: zub/begl.o.b.a.
-    //  5: service
-    //  6: zug vorbereiten
-    //  7: werkstatt
-    //  8: büro
-    //  9: ausbildung
-    // 10: sonstiges
-    // 11: kilometer
-    QString a = "<h3>Personalübersicht</h3>"
-                "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
-    if (data.contains(Category::Gesamt))
-        a += "<th>Stunden</th>";
-    if (data.contains(Category::Anzahl))
-        a += "<th>Anzahl</th>";
-    if (data.contains(Tf))
-        a += "<th>Tf/Tb</th>";
-    if (data.contains(Category::Zf))
-        a += "<th>Zf</th>";
-    if (data.contains(Category::Zub))
-        a += "<th>Zub/Begl.o.b.A.</th>";
-    if (data.contains(Category::Service))
-        a += "<th>Service</th>";
-    if (data.contains(Category::ZugVorbereiten))
-        a += "<th>Zug Vorbereiten</th>";
-    if (data.contains(Category::Werkstatt))
-        a += "<th>Werkstatt</th>";
-    if (data.contains(Category::Buero))
-        a += "<th>Büro</th>";
-    if (data.contains(Category::Ausbildung))
-        a += "<th>Ausbildung</th>";
-    if (data.contains(Category::Sonstiges))
-        a += "<th>Sonstiges</th>";
-    if (data.contains(Category::Kilometer))
-        a += "<th>Kilometer</th>";
-    a += "</thead><tbody>";
-    for(Person *p: *personen) {
-        a += p->getHtmlForTableView(data);
-    }
-    a += "</tbody><tfoot><tr>";
-    a += "<td>Summe:</td>";
-    foreach (Category cat, data) {
-        switch (cat) {
-        case Category::Anzahl:
-        case Category::Kilometer:
-            a += "<td align='right'>"+QString::number(gesamt.value(cat))+"</td>";
-            break;
-        default:
-            a += "<td align='right'>"+Person::getStringFromHours(gesamt.value(cat)).chopped(2)+"</td>";
-        }
-    }
-    a += "</tr></tfoot></table>";
-    a += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+    if (printer == nullptr) return false;
+    if (personen.isEmpty()) return true;
+    QTextDocument *d = newDefaultDocument();
+    QString a = ManagerPersonal::getHtmlFuerGesamtuebersicht(personen, data);
+    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     d->setHtml(a);
-
-    return print(pdf, paper, d);
+    d->print(printer);
+    return true;
 }
 
-QPrinter *Export::getPrinterPaper(QWidget *parent)
+bool Export::printMitglieder(ManagerPersonal *m, QPrinter *printer)
+{
+    if (printer == nullptr) return false;
+    QTextDocument *d = newDefaultDocument();
+    QString a = m->getHtmlFuerMitgliederliste();
+    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
+    d->setHtml(a);
+    d->print(printer);
+    return true;
+}
+
+QPrinter *Export::getPrinterPaper(QWidget *parent, QPrinter::Orientation orientation)
 {
     QPrinter *p = new QPrinter();
+    if (orientation == QPrinter::Orientation::Portrait)
+        preparePrinterPortrait(p);
+    else
+        preparePrinterLandscape(p);
     if (QPrintDialog(p, parent).exec() == QDialog::Accepted)
         return p;
     return nullptr;
 }
 
-QPrinter *Export::getPrinterPDF(QWidget *parent, QString path)
+QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPrinter::Orientation orientation)
 {
     QString filePath = FileIO::getFilePathSave(parent, path, QObject::tr("PDF-Dateien (*.pdf)"));
     if (filePath == "") return nullptr;
     QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
     p->setOutputFormat(QPrinter::PdfFormat);
     p->setOutputFileName(filePath);
+    if (orientation == QPrinter::Orientation::Portrait)
+        preparePrinterPortrait(p);
+    else
+        preparePrinterLandscape(p);
     return p;
 }
 
-bool Export::testServerConnection(QString server, QString path, QString id)
+bool Export::testServerConnection(ManagerFileSettings *settings)
 {
-    // create custom temporary event loop on stack
-    QEventLoop eventLoop;
-
-    // "quit()" the event-loop, when the network request "finished()"
-    QNetworkAccessManager mgr;
-    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-    // the HTTP request
-    QString request = server+"/"+path+"?id="+id;
-    QNetworkRequest req(request);
-    QNetworkReply *reply = mgr.get(req);
-    eventLoop.exec(); // blocks stack until "finished()" has been called
-
-    QString s = "";
-    if (reply->error() == QNetworkReply::NoError) {
-        s = QString(reply->readAll());
-    }
-    delete reply;
-    return (s == "OK");
+    QString request = settings->getFullServer()+"?id="+settings->getId();
+    return (Networking::ladeDatenVonURL(request) == "OK");
 }
 
-bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *settings)
+bool Export::uploadToServer(ManagerFileSettings *settings, QList<AActivity *> liste)
 {
     if (! settings->getEnabled()) return true;
 
@@ -377,45 +138,12 @@ bool Export::uploadToServer(QList<AActivity *> *liste, ManagerFileSettings *sett
     p->setOutputFormat(QPrinter::PdfFormat);
     p->setOutputFileName(localFile);
 
-    printList(liste, p, nullptr);
+    printList(liste, p);
 
-    /* HOCHLADEN DER DATEI AUF DEN SERVER */
-    QString server = settings->getFullServer();
-    QString id = settings->getId();
-
-    QEventLoop eventLoop;
-
-    QNetworkAccessManager am;
-    QObject::connect(&am, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-    QNetworkRequest request(server);
-
-    QByteArray data;
-    data.append("--margin\r\n");
-    data.append("Content-Disposition: form-data; name='id'\r\n\r\n"+id+"\r\n");
-    data.append("--margin\r\n");
-//    data.append("Content-Disposition: form-data; name='action'\r\n\r\n");
-//    data.append("--margin\r\n");
-    data.append("Content-Disposition: form-data; name='uploaded'; filename='"+id+".pdf'\r\n"); //name of the input is "uploaded" in my form, next one is a file name.
-    data.append("Content-Type: application/pdf\r\n\r\n");
-    data.append(tempFile.readAll());
-    data.append("\r\n");
-    data.append("--margin--\r\n"); //closing boundary according to rfc 1867
-    request.setRawHeader(QString("Content-Type").toUtf8(), QString("multipart/form-data; boundary=margin").toUtf8());
-    request.setRawHeader(QString("Content-Length").toUtf8(), QString::number(data.length()).toUtf8());
-
-    QNetworkReply *reply = am.post(request,data);
-    eventLoop.exec();
-
-    QString s = "";
-    if (reply->error() == QNetworkReply::NoError) {
-        s = QString(reply->readAll());
-    }
-    delete reply;
-    return (s == "OK");
+    return Networking::ladeDateiHoch(settings->getFullServer(), &tempFile, settings->getId());
 }
 
-int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
+int Export::autoUploadToServer(ManagerFileSettings *settings, Manager *mgr)
 {
     /* EINSTELLUNGEN LESEN */
     QSettings s;
@@ -423,7 +151,7 @@ int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
     if (!settings->getAutom()) return -1;
 
     /* LISTE MIT DEN AKTIVITAETEN ERSTELLEN */
-    QList<AActivity *> *liste = new QList<AActivity*>();
+    QList<AActivity *> liste = QList<AActivity*>();
     QListIterator<AActivity*> iter = mgr->getActivities();
     while(iter.hasNext()) {
         AActivity *a = iter.next();
@@ -466,27 +194,16 @@ int Export::autoUploadToServer(Manager *mgr, ManagerFileSettings *settings)
                 continue;
             }
         }
-        liste->append(a);
+        liste.append(a);
     }
 
     /* UPLOADFUNKTION NUTZEN; UM DATEIEN HOCHZULADEN */
-    if (liste->length() == 0)
+    if (liste.length() == 0)
         return -1;
-    if (uploadToServer(liste, settings))
+    if (uploadToServer(settings, liste))
         return 1;
     else
         return 0;
-}
-
-bool Export::print(QPrinter *pdf, QPrinter *paper, QTextDocument *d)
-{
-    if (pdf != nullptr) {
-        d->print(pdf);
-    }
-    if(paper != nullptr) {
-        d->print(paper);
-    }
-    return true;
 }
 
 void Export::preparePrinterPortrait(QPrinter *p)
@@ -503,5 +220,14 @@ void Export::preparePrinterLandscape(QPrinter *p)
     p->setFullPage(true);
     p->setPageMargins(15, 20, 15, 15, QPrinter::Millimeter);
     p->setPageOrientation(QPageLayout::Landscape);
+}
+
+QTextDocument *Export::newDefaultDocument()
+{
+    QTextDocument *d = new QTextDocument();
+    d->setDefaultStyleSheet(DEFAULT_STYLESHEET);
+    d->setDefaultFont(DEFAULT_FONT);
+    d->setDocumentMargin(0);
+    return d;
 }
 

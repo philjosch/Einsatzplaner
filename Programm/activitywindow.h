@@ -2,9 +2,9 @@
 #define ACTIVITYWINDOW_H
 
 #include "activity.h"
-#include "person.h"
 
 #include <QMainWindow>
+#include <QTableWidgetItem>
 
 namespace Ui {
 class ActivityWindow;
@@ -34,15 +34,11 @@ private slots:
     void on_checkBoxBenoetigt_toggled(bool checked);
 
     void on_tablePersonen_cellChanged(int row, int column);
-    void comboInTableChanged();
-    void timeEditInTableChanged();
 
-    void on_actionDelete_triggered();
     void on_actionPrint_triggered();
     void on_actionPdf_triggered();
 
     void on_buttonDelete_clicked();
-
 
 private:
     Ui::ActivityWindow *ui;
@@ -50,12 +46,13 @@ private:
 
     bool nehme;
 
-    void loadData();
-
-    QSet<QString> namen;
     Category predefinedValueForTable;
 
+    QMap<QTableWidgetItem*, AActivity::Einsatz> tabelleZuEinsatz;
+
     void setPredefinedValue(QString anlass);
+
+    void updateWindowTitle();
 };
 
 #endif // ACTIVITYWINDOW_H

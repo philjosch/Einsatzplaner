@@ -1,28 +1,27 @@
 #include "coreapplication.h"
 #include "mainwindow.h"
+#include "networking.h"
 
 #include <QDesktopServices>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
 #include <QMessageBox>
 #include <QWindow>
 #include <QTimer>
 
-CoreApplication::Version CoreApplication::aktuelleVersion = {-1, -1, -1};
-bool CoreApplication::developerMode = false;
-QUrl CoreApplication::urlDownload = QUrl("http://epl.philipp-schepper.de/#downloads");
-QUrl CoreApplication::urlVersion = QUrl("http://epl.philipp-schepper.de/version.txt");
-QString CoreApplication::urlNotes = "http://epl.philipp-schepper.de/version/";
+Version CoreApplication::VERSION = {-1, -1, -1};
+bool CoreApplication::DEVELOPER_MODE = false;
+QString CoreApplication::URL_DOWNLOAD = "http://epl.philipp-schepper.de/#downloads";
+QString CoreApplication::URL_VERSION = "http://epl.philipp-schepper.de/version.txt";
+QString CoreApplication::URL_NOTES = "http://epl.philipp-schepper.de/version/v%1-%2/notes-v%1-%2-%3.txt";
 
-CoreApplication::CoreApplication(int &argc, char **argv, CoreApplication::Version version, bool devVersion) : QApplication(argc, argv)
+CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool devVersion) : QApplication(argc, argv)
 {
-    aktuelleVersion = version;
-    developerMode = devVersion;
+    VERSION = version;
+    DEVELOPER_MODE = devVersion;
 
     QCoreApplication::setOrganizationName("Philipp Schepper");
     QCoreApplication::setOrganizationDomain("philipp-schepper.de");
     QCoreApplication::setApplicationName("Einsatzplaner");
-    QCoreApplication::setApplicationVersion(aktuelleVersion.toString());
+    QCoreApplication::setApplicationVersion(VERSION.toString());
     QIcon icon(":/icons/square.png");
     setWindowIcon(icon);
     isFirst = true;
@@ -44,12 +43,7 @@ bool CoreApplication::event(QEvent *event)
     if (event->type() == QEvent::FileOpen) {
         isFirst = false;
         QFileOpenEvent *openEvent = static_cast<QFileOpenEvent *>(event);
-        MainWindow *mw = new MainWindow();
-        if (mw->openFile(openEvent->file())) {
-            mw->show();
-        } else {
-            delete mw;
-        }
+        MainWindow::open(openEvent->file());
     }
     return QApplication::event(event);
 }
@@ -57,14 +51,14 @@ bool CoreApplication::event(QEvent *event)
 void CoreApplication::checkVersion()
 {
     Version v = loadVersion();
-    if (v>aktuelleVersion) {
-        QString message = tr("Es ist Version %1 des Programms verfügbar.\nSie benutzen Version %2.\n\n").arg(v.toString()).arg(aktuelleVersion.toString());
+    if (v>VERSION) {
+        QString message = tr("Es ist Version %1 des Programms verfügbar.\nSie benutzen Version %2.\n\n").arg(v.toString()).arg(VERSION.toString());
         QMessageBox::StandardButton answ = QMessageBox::information(nullptr, tr("Neue Version"), message, QMessageBox::Ignore|QMessageBox::Help|QMessageBox::Open, QMessageBox::Open);
         if (answ == QMessageBox::Open) {
-            QDesktopServices::openUrl(urlDownload);
+            QDesktopServices::openUrl(URL_DOWNLOAD);
         } else if (answ == QMessageBox::Help) {
             if (QMessageBox::information(nullptr, tr("Über die neue Version"), loadNotes(v), QMessageBox::Close|QMessageBox::Open, QMessageBox::Open) == QMessageBox::Open) {
-                QDesktopServices::openUrl(urlDownload);
+                QDesktopServices::openUrl(URL_DOWNLOAD);
             }
         }
     }
@@ -75,7 +69,7 @@ void CoreApplication::startAutoSave(int delay)
     autoSaveTimer = new QTimer();
     connect(autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveWindows()));
     if (delay <= 0) return;
-    autoSaveTimer->start(delay*1000);
+    autoSaveTimer->start(delay*60000);
 }
 void CoreApplication::autoSaveWindows()
 {
@@ -93,72 +87,19 @@ void CoreApplication::stopAutoSave()
     }
 }
 
-bool CoreApplication::isDeveloperVersion()
+Version CoreApplication::loadVersion()
 {
-    return developerMode;
-}
-CoreApplication::Version CoreApplication::getAktuelleVersion()
-{
-    return aktuelleVersion;
-}
-CoreApplication::Version CoreApplication::loadVersion()
-{
-    // create custom temporary event loop on stack
-    QEventLoop eventLoop;
-
-    // "quit()" the event-loop, when the network request "finished()"
-    QNetworkAccessManager mgr;
-    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-    // the HTTP request
-    QNetworkRequest req( urlVersion );
-    QNetworkReply *reply = mgr.get(req);
-    eventLoop.exec(); // blocks stack until "finished()" has been called
-
-    if (reply->error() == QNetworkReply::NoError) {
-        //success
-        QString s = QString(reply->readAll());
-        delete reply;
-        return Version::stringToVersion(s);
-    } else {
-        //failure
-        delete reply;
+    QString s = Networking::ladeDatenVonURL(URL_VERSION);
+    if (s == "") {
         return Version {-1, -1, -1};
+    } else {
+        return Version::stringToVersion(s);
     }
 }
 
 QString CoreApplication::loadNotes(Version v)
 {
-
-    QUrl url = QUrl(urlNotes + QString("v%1-%2/notes-v%1-%2-%3.txt").arg(v.major).arg(v.minor).arg(v.patch));
-
-    // create custom temporary event loop on stack
-    QEventLoop eventLoop;
-
-    // "quit()" the event-loop, when the network request "finished()"
-    QNetworkAccessManager mgr;
-    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-    // the HTTP request
-    QNetworkRequest req( url );
-    QNetworkReply *reply = mgr.get(req);
-    eventLoop.exec(); // blocks stack until "finished()" has been called
-
-    if (reply->error() == QNetworkReply::NoError) {
-        //success
-        QString s = QString(reply->readAll());
-        delete reply;
-        return s;
-    } else {
-        //failure
-        delete reply;
-        return "";
-    }
-}
-
-QUrl CoreApplication::getUrlDownload()
-{
-    return urlDownload;
+    return Networking::ladeDatenVonURL(URL_NOTES.arg(v.major).arg(v.minor).arg(v.patch));
 }
 
 void CoreApplication::closeAllWindows()

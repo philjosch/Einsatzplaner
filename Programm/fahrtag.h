@@ -1,10 +1,12 @@
 #ifndef FAHRTAG_H
 #define FAHRTAG_H
 
+#include "reservierung.h"
+#include "wagen.h"
+#include "basics.h"
 #include "aactivity.h"
-#include "managerreservierungen.h"
 
-class Fahrtag : public QObject, public AActivity, public ManagerReservierungen
+class Fahrtag : public AActivity
 {
     Q_OBJECT
 
@@ -15,15 +17,19 @@ public:
 
     QJsonObject toJson();
 
-    enum Art { Museumszug, Sonderzug, Gesellschaftssonderzug, Nikolauszug, ELFundMuseumszug, Schnupperkurs, Bahnhofsfest, Sonstiges };
-    static QString getStringFromArt(Fahrtag::Art art);
-
     QString getKurzbeschreibung();
     QString getListString();
     QString getListStringShort();
 
-    void setArt(const Fahrtag::Art &value);
-    Fahrtag::Art getArt() const;
+    QString getHtmlForSingleView();
+    QString getHtmlForTableView();
+
+    Infos getIndividual(Person *person, Category kat);
+
+    QString getHtmlFuerReservierungsuebersicht();
+
+    void setArt(const Art &value);
+    Art getArt() const;
 
     QTime getZeitTf();
     void setZeitTf(QTime value);
@@ -31,8 +37,8 @@ public:
     bool getWichtig() const;
     void setWichtig(bool value);
 
-    bool getBenoetigeTf() const;
-    void setBenoetigeTf(bool value);
+    int getBenoetigeTf() const;
+    void setBenoetigeTf(int value);
 
     bool getBenoetigeZf() const;
     void setBenoetigeZf(bool value);
@@ -43,26 +49,48 @@ public:
     bool getBenoetigeService() const;
     void setBenoetigeService(bool value);
 
-    AActivity::Infos getIndividual(Person *person);
+    QString getWagenreihung() const;
+    bool setWagenreihung(const QString &value);
 
-    QString getHtmlForSingleView();
-    QString getHtmlForTableView();
+    int getBelegung(int klasse, int zug = 0); // zug == 0: Gesamt
+    int getKapazitaet(int klasse); //klasse == -1: Gesamt ; klasse == 0: 2.u 3.Klasse
 
-    void emitter();
-    void deletter();
+    int getAnzahlReservierungen();
 
-signals:
-    void changed(AActivity *);
-    void del(AActivity *);
+    QSet<Reservierung *> getReservierungen();
+
+    bool getCheckAll() const;
+    void setCheckAll(bool value);
+
+    bool checkPlausibilitaet(QList<int> zuege, QList<int> haltepunkte);
+
+public slots:
+    QList<Mistake> verteileSitzplaetze();
+    bool checkPlaetze(QString p, Reservierung *r);
+
+    Reservierung *createReservierung();
+    bool removeReservierung(Reservierung *res);
+
 
 protected:
-    Fahrtag::Art art;
+    bool checkPlaetze(QMap<int, QList<int> > p, Reservierung *r);
+
+    Art art;
     QTime zeitTf;
     bool wichtig;
-    bool benoetigeTf;
+    int benoetigeTf;
     bool benoetigeZf;
     bool benoetigeZub;
     bool benoetigeService;
+    QString wagenreihung;
+    QSet<Reservierung *> reservierungen;
+    bool checkAll;
+
+    QList<Wagen *> wagen;
+    QMap<int, Wagen *> nummerToWagen;
+
+    bool createWagen();
+
 };
 
 #endif // FAHRTAG_H

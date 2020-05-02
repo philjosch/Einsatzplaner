@@ -11,27 +11,23 @@ class Person;
 
 #include "managerpersonal.h"
 
-class AActivity
+class AActivity: public QObject
 {
+    Q_OBJECT
 
 public:
-    struct Infos {
-        QTime beginn;
-        QTime ende;
-        Category kategorie;
-        QString bemerkung;
+    struct Einsatz {
+        Person *person;
+        Category cat;
+        bool operator<(const Einsatz &o)  const {
+            return (person < o.person || (person == o.person && cat<o.cat));
+        }
     };
-
     AActivity(QDate date, ManagerPersonal *p);
     AActivity(QJsonObject o, ManagerPersonal *p);
     ~AActivity();
 
-    bool remove();
-
     virtual QJsonObject toJson();
-
-    static Category getCategoryFromString(QString s);
-    static QString getStringFromCategory(Category c);
 
     QDate getDatum();
     void setDatum(QDate value);
@@ -57,13 +53,14 @@ public:
     bool getPersonalBenoetigt() const;
     void setPersonalBenoetigt(bool value);
 
-    QMap<Person*,  Infos*> getPersonen();
-    virtual Infos getIndividual(Person *person) = 0;
+    Person *getPerson(QString name);
+    QMap<Einsatz, Infos> getPersonen() const;
+    virtual Infos getIndividual(Person *person, Category kat);
     Mistake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
     Mistake addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
-    void updatePersonBemerkung(Person *p, QString bemerkung);
-    bool removePerson(Person *p);
-    bool removePerson(QString p);
+    void updatePersonInfos(Person *p, Category kat, Infos neu);
+    void updatePersonBemerkung(Person *p, Category kat, QString bemerkung);
+    bool removePerson(Person *p, Category kat);
 
     friend bool operator<(const AActivity &lhs, const AActivity &rhs) { return lhs.lesser(rhs);}
     friend bool operator>(const AActivity &lhs, const AActivity &rhs) { return rhs < lhs; }
@@ -71,28 +68,27 @@ public:
     friend bool operator<=(const AActivity &lhs, const AActivity &rhs) { return !(lhs > rhs);}
     friend bool operator>=(const AActivity &lhs, const AActivity &rhs) { return !(lhs < rhs);}
 
-    virtual QString getKurzbeschreibung() = 0;
-    virtual QString getListString() = 0;
-    virtual QString getListStringShort() = 0;
+    virtual QString getKurzbeschreibung();
+    virtual QString getListString();
+    virtual QString getListStringShort();
 
     ManagerPersonal *getPersonal() const;
 
-    virtual QString getHtmlForSingleView() = 0;
-    virtual QString getHtmlForTableView() = 0;
-
-    virtual void emitter() = 0;
-    virtual void deletter() = 0;
-
-    static QComboBox *generateNewCategoryComboBox();
-    static QTimeEdit *generateNewTimeEdit();
+    virtual QString getHtmlForSingleView();
+    virtual QString getHtmlForTableView();
 
     static QStringList EXTERNAL_LIST;
     static QStringList QUALIFICATION_LIST;
 
-    static bool hasQualification(Person *p, Category kat, QString bemerkung);
+    static bool hasQualification(Person *p, Category kat, QString bemerkung, QDate datum = QDate());
     static bool isExtern(QString bemerkung);
 
     static void sort(QList<AActivity *> *list);
+
+
+signals:
+    void changed(AActivity *, QDate = QDate());
+    void del(AActivity *);
 
 protected:
     QDate datum;
@@ -102,12 +98,12 @@ protected:
     bool zeitenUnbekannt;
     QString anlass;
     QString bemerkungen;
-    QMap<Person *, Infos*> personen; // Für Infos siehe oben
+    QMap<Einsatz, Infos> personen;
     bool personalBenoetigt;
 
     ManagerPersonal *personal;
 
-    QString listToString(QMap<Person*, Infos*> *liste, QString seperator, bool aufgabe=false);
+    QString listToString(QString sep, QMap<Person *, Infos> liste, QString prefix="", QString suffix="", bool aufgabe=false);
 
     static QString COLOR_REQUIRED;
     bool lesser(const AActivity &second) const;
@@ -117,5 +113,6 @@ private:
     static void merge(QList<AActivity *> *arr, int l, int m, int r);
 };
 
+const QString getFarbe(AActivity *a);
 
 #endif // AACTIVITY_H

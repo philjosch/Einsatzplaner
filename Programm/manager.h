@@ -11,27 +11,28 @@ class Manager
 {
 public:
     Manager();
-    QJsonObject toJson();
-    QJsonObject personalToJson();
-    void fromJson(QJsonObject o);
+    QJsonArray toJson();
+    void fromJson(QJsonArray array);
 
-    void setPersonal(ManagerPersonal *value);
     ManagerPersonal *getPersonal() const;
 
-    QListIterator<AActivity *> getActivities() const;
+    QList<AActivity *> getActivities();
+
+    static QString getHtmlFuerListenansicht(QList<AActivity *> liste);
+    static QString getHtmlFuerEinzelansichten(QList<AActivity *> liste);
 
 public slots:
     Fahrtag *newFahrtag(QDate datum);
     Activity *newActivity(QDate datum);
 
     bool removeActivity(AActivity *a);
-    void addActivity(AActivity *a);
 
     void activityChanged(AActivity *a);
 
 protected:
-    QList<AActivity *> activities;
     void update(int pos);
+
+    QList<AActivity *> activities;
     ManagerPersonal *personal;
 
 };

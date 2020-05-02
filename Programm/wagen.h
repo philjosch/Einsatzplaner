@@ -27,16 +27,11 @@ public:
     bool testPlaetze(QList<int> liste, Reservierung *r); // Testet ob die Plätze frei sind, externe Darstellung
 
     int getAnzahlFrei();
-    int getAnzahlBelegt();
     int getKapazitaet();
 
     bool isEmpty();
 
     void weisePlaetzeZu();
-
-    int getAktuellePosition() const;
-
-    void clear();
 
 protected:
     static double GEWICHT_STRAFE_TEIL_1;

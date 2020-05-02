@@ -4,6 +4,8 @@
 #include "aactivity.h"
 #include "fahrtag.h"
 
+#include <QListWidgetItem>
+
 namespace Ui {
 class CalendarDay;
 }
@@ -15,24 +17,18 @@ class CalendarDay : public QFrame
 public:
     explicit CalendarDay(QWidget *parent = nullptr);
     ~CalendarDay();
-    void show(QDate datum);
-    void setGray(bool gray);
-
-    QListWidgetItem *get(AActivity *a);
-    bool remove(AActivity *a);
-
-    QListWidgetItem *insert(AActivity *a);
+    void show(QDate datum, bool gray);
+    void remove(AActivity *a);
+    void insert(AActivity *a);
 signals:
     void clickedItem(AActivity *);
     void addActivity(QDate);
 private slots:
     void handler(QListWidgetItem *item);
-    void on_buttonAdd_clicked();
 private:
     Ui::CalendarDay *ui;
     QDate date;
     QMap<AActivity*, QListWidgetItem*> actToItem;
-    QMap<QListWidgetItem*, AActivity*> itemToAct;
 };
 
 #endif // CALENDARDAY_H

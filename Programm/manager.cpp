@@ -6,52 +6,39 @@
 Manager::Manager()
 {
     activities = QList<AActivity*>();
+    personal = new ManagerPersonal();
 }
 
-QJsonObject Manager::toJson()
+QJsonArray Manager::toJson()
 {
-    QJsonObject data;
     QJsonArray array;
     // Fahrtage und Arbeitseinsätze speichern
-    for (int i = 0; i < activities.length(); i++) {
-        AActivity *a = activities.at(i);
+    for(AActivity *a: activities) {
         array.append(a->toJson());
     }
-    data.insert("activites", array);
-
-    // Personen speichern
-    QJsonObject personalJSON = personal->toJson();
-    data.insert("personal", personalJSON);
-    return data;
+    return array;
 }
 
-QJsonObject Manager::personalToJson()
+void Manager::fromJson(QJsonArray array)
 {
-    QJsonObject data;
-    QJsonArray array;
-    data.insert("activites", array);
-
-    // Personen speichern
-    QJsonObject personalJSON = personal->personalToJson();
-    data.insert("personal", personalJSON);
-    return data;
-}
-
-void Manager::fromJson(QJsonObject o)
-{
-    QJsonObject personalJSON = o.value("personal").toObject();
-    personal->fromJson(personalJSON);
-
     // Laden der Daten aus dem JSON Object
     activities = QList<AActivity*>();
-    QJsonArray array = o.value("activites").toArray();
     for(int i = 0; i < array.size(); i++) {
         QJsonObject aO = array.at(i).toObject();
         AActivity *akt;
-        if (aO.value("isFahrtag").toBool()) {
-            akt = new Fahrtag(aO, personal);
+        if (! aO.contains("isFahrtag")) {
+            if (Art::Arbeitseinsatz == static_cast<Art>(aO.value("art").toInt())) {
+                akt = new Activity(aO, personal);
+            } else {
+                akt = new Fahrtag(aO, personal);
+            }
         } else {
-            akt = new Activity(aO, personal);
+            // Fallback für Version < 1.6
+            if (aO.value("isFahrtag").toBool()) {
+                akt = new Fahrtag(aO, personal);
+            } else {
+                akt = new Activity(aO, personal);
+            }
         }
         activities.append(akt);
         update(activities.length()-1);
@@ -76,14 +63,9 @@ Activity *Manager::newActivity(QDate datum)
 
 bool Manager::removeActivity(AActivity *a)
 {
-    a->remove();
-    return activities.removeOne(a);
-}
-
-void Manager::addActivity(AActivity *a)
-{
-    activities.append(a);
-    update(activities.length()-1);
+    bool ret = activities.removeOne(a);
+    delete a;
+    return ret;
 }
 
 void Manager::activityChanged(AActivity *a)
@@ -93,10 +75,35 @@ void Manager::activityChanged(AActivity *a)
         update(pos);
 }
 
-QListIterator<AActivity *> Manager::getActivities() const
+QList<AActivity *> Manager::getActivities()
 {
-    QListIterator<AActivity*> i(activities);
-    return i;
+    return activities;
+}
+
+QString Manager::getHtmlFuerListenansicht(QList<AActivity *> liste)
+{
+    QString a = "<h3>Übersicht über die Aktivitäten</h3>"
+                "<table cellspacing='0' width='100%'><thead><tr>"
+                "<th>Datum, Anlass</th> <th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th>"
+                "<th>Service</th> <th>Dienstzeiten</th> <th>Sonstiges</th></tr></thead><tbody>";
+    for(AActivity *akt: liste) {
+        a += akt->getHtmlForTableView();
+    }
+    a += "</tbody></table>";
+    return a;
+}
+
+QString Manager::getHtmlFuerEinzelansichten(QList<AActivity *> liste)
+{
+    QString html = "";
+    for(AActivity *a: liste) {
+        html += a->getHtmlForSingleView();
+        if(liste.last() != a)
+            html += "<p class='last'><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
+        else
+            html += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
+    }
+    return html;
 }
 
 void Manager::update(int pos)
@@ -105,7 +112,6 @@ void Manager::update(int pos)
     int i = pos;
     while (i < activities.length()-1) {
         if (*activities.at(i) > *activities.at(i+1)) {
-//        if (activities->at(i)->getDatum() >  activities->at(i+1)->getDatum()) {
             activities.swapItemsAt(i, i+1);
             i++;
         } else {
@@ -125,9 +131,4 @@ void Manager::update(int pos)
 ManagerPersonal *Manager::getPersonal() const
 {
     return personal;
-}
-
-void Manager::setPersonal(ManagerPersonal *value)
-{
-    personal = value;
 }

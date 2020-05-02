@@ -8,28 +8,64 @@ class Person : public QObject
     Q_OBJECT
 
 public:
-    Person(QString vorname, QString nachname, ManagerPersonal *manager);
     Person(QString name, ManagerPersonal *manager);
+    Person(QJsonObject o, ManagerPersonal *man); // Laden aus einem JSON-Objekt
+
+    static const QString FARBE_FEHLENDE_STUNDEN;
+    static const QString FARBE_GENUG_STUNDEN;
+    static const QString FARBE_STANDARD;
 
     QJsonObject toJson();
     QJsonObject personalToJson();
-    static Person *fromJson(QJsonObject o, ManagerPersonal *manager);
 
-    double getTime(Category cat);
-    double getTimeTf();
-    double getTimeZf();
-    double getTimeZub();
-    double getTimeService();
-    double getTimeBuero();
-    double getTimeWerkstatt();
-    double getTimeVorbereiten();
-    double getTimeAusbildung();
-    double getTimeSonstiges();
-    double getTimeSum();
+    int get(Category cat);
+    QString getString(Category cat);
+    QString getStringShort(Category cat);
 
     int getAnzahl();
-    int getSumAnzahl();
-    double getSumKilometer();
+
+    void berechne();
+
+    bool addActivity(AActivity *a, Category kat);
+    bool removeActivity(AActivity *a, Category kat);
+
+    QMap<AActivity*,Category> getActivities();
+
+
+    QString getHtmlForTableView(QSet<Category> liste);
+    QString getHtmlForDetailPage();
+    QString getHtmlForMitgliederListe();
+
+    QString getCSV();
+
+    int getAdditional(Category cat);
+    void setAdditional(Category cat, int value);
+
+
+    QString getId() const;
+
+    int getNummer() const;
+    bool setNummer(int value);
+
+    QString getName() const;
+
+    QString getVorname() const;
+    void setVorname(const QString &value);
+
+    QString getNachname() const;
+    void setNachname(const QString &value);
+
+    QDate getGeburtstag() const;
+    void setGeburtstag(const QDate &value);
+
+    QDate getEintritt() const;
+    void setEintritt(const QDate &value);
+
+    bool getAktiv() const;
+    void setAktiv(bool value);
+
+    QDate getAustritt() const;
+    void setAustritt(const QDate &value);
 
     bool getAusbildungTf() const;
     void setAusbildungTf(bool value);
@@ -40,102 +76,89 @@ public:
     bool getAusbildungRangierer() const;
     void setAusbildungRangierer(bool value);
 
+    QDate getTauglichkeit() const;
+    void setTauglichkeit(const QDate &value);
+
+    QString getMail() const;
+    void setMail(const QString &value);
+
+    bool getMailOK() const;
+    void setMailOK(bool value);
+
+    QString getTelefon() const;
+    void setTelefon(const QString &value);
+
+    bool getTelefonOK() const;
+    void setTelefonOK(bool value);
+
     int getStrecke() const;
     void setStrecke(int value);
 
-    void berechne();
+    QString getBeruf() const;
+    void setBeruf(const QString &value);
 
-    bool addActivity(AActivity *a, Category category);
-    bool removeActivity(AActivity *a);
+    QString getBemerkungen() const;
+    void setBemerkungen(const QString &value);
 
-    QListIterator<AActivity *> *getActivities();
+    bool isAusgetreten();
 
+    QString getPLZ() const;
+    void setPLZ(const QString &value);
 
-    QString getName() const;
-    QString getVorname() const;
-    void setVorname(const QString &value);
-    QString getNachname() const;
-    void setNachname(const QString &value);
+    QString getOrt() const;
+    void setOrt(const QString &value);
 
-    QString getHtmlForTableView(QList<Category> liste);
-    QString getHtmlForDetailPage(ManagerPersonal *m);
+    QString getStrasse() const;
+    void setStrasse(const QString &value);
 
-    double getAdditionalTimeTf() const;
-    void setAdditionalTimeTf(double value);
-    double getAdditionalTimeZf() const;
-    void setAdditionalTimeZf(double value);
-    double getAdditionalTimeZub() const;
-    void setAdditionalTimeZub(double value);
-    double getAdditionalTimeService() const;
-    void setAdditionalTimeService(double value);
-    double getAdditionalTimeBuero() const;
-    void setAdditionalTimeBuero(double value);
-    double getAdditionalTimeWerkstatt() const;
-    void setAdditionalTimeWerkstatt(double value);
-    double getAdditionalTimeVorbereiten() const;
-    void setAdditionalTimeVorbereiten(double value);
-    double getAdditionalTimeAusbildung() const;
-    void setAdditionalTimeAusbildung(double value);
-    double getAdditionalTimeSonstiges() const;
-    void setAdditionalTimeSonstiges(double value);
-
-    int getAdditionalAnzahl() const;
-    void setAdditionalAnzahl(int value);
-    double getAdditionalKilometer() const;
-    void setAdditionalKilometer(double value);
-
-
-    static QString getStringFromHours(double duration);
-
+    bool isTauglich(Category cat=Tf, QDate datum=QDate::currentDate());
 
 protected:
+    // Stammdaten
+    QString id;
+    int nummer;
     QString vorname;
     QString nachname;
+    QDate geburtstag;
+    QDate eintritt;
+    bool aktiv;
+    QDate austritt;
+    // Betriebsdienst
     bool ausbildungTf;
     bool ausbildungZf;
     bool ausbildungRangierer;
-    int strecke; // Entfernung vom Wohnort nach Schwarzerden, wird benötigt, um die Kilometer zu berechnen.
+    QDate tauglichkeit;
+    // Kontakt
+    QString plz;
+    QString ort;
+    QString strasse;
+    QString mail;
+    bool mailOK;
+    QString telefon;
+    bool telefonOK;
+    // Sonstiges
+    int strecke;
+    QString beruf;
+    QString bemerkungen;
+    // Zusätzliche Stunden
+    QMap<Category, int> additional;
+
+    QMap<Category, int> zeiten;
     QMap<AActivity*, Category> activities;
 
 private:
-    void personConstructor(QString vorname, QString nachname, ManagerPersonal *manager);
-
-    double timeTf;
-    double timeZf;
-    double timeZub;
-    double timeService;
-    double timeBuero;
-    double timeWerkstatt;
-    double timeVorbereiten;
-    double timeAusbildung;
-    double timeSonstiges;
-    double timeSum;
-
-    int sumAnzahl;
-    double sumKilometer;
+    void personConstructor(QString vn, QString nn, ManagerPersonal *man, QString ID="");
 
     bool valuesInvalid;
     /* Gibt an, ob die Werte verändert wurden und ob es bemerkt wurde,
      * kann auch sein, dass dies an der Person vorbei passiert ist,
-     * in dem eine Veranstlltung verändert wurde,
+     * in dem eine Veranstalltung verändert wurde,
      * dann muss manuell neuberechnet werden */
-
-    double additionalTimeTf;
-    double additionalTimeZf;
-    double additionalTimeZub;
-    double additionalTimeService;
-    double additionalTimeBuero;
-    double additionalTimeWerkstatt;
-    double additionalTimeVorbereiten;
-    double additionalTimeAusbildung;
-    double additionalTimeSonstiges;
-
-    int additionalAnzahl;
-    double additionalKilometer;
 
     ManagerPersonal *manager;
 
 signals:
+    void changed();
     void nameChanged(Person*, QString);// Person ist die Person und QString gibt den !ALTEN! Namen an
 };
 

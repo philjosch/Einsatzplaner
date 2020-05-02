@@ -1,11 +1,12 @@
 general/
-	autosearchupdate 	-> automatisch nach updates beim start suchen
+	autosearchupdate (bool) 	-> Automatisch nach Updates beim Start suchen
 io/
-	lastpath		-> letzter erfolgreich benutzter pfad von FileIO
-	lastused		-> Array mit den 5 zuletzt genutzten .ako Dokumenten
-	autoSave		-> Positive Zahl zwischen zwei Vorgängen zum automatischen Sichern in Minuten, 0=ausgeschaltet
+	lastpath (string)		-> Letzter erfolgreich benutzter Pfad von FileIO
+	lastused (array)
+		(string)		-> Array mit den 5 zuletzt genutzten .ako Dokumenten
+	autoSave (int)			-> Positive Zahl zwischen zwei Vorgängen zum automatischen Sichern in Minuten, 0=ausgeschaltet
 
-online/				-> Dient der Kompatibilität mit dem Upload-Tool für die PDF-Dateien
-	useautoupload		-> aktiviert oder deaktiviert das automatische(!) hochladen
+online/					-> Dient der Kompatibilität mit dem Upload-Tool für die PDF-Dateien
+	useautoupload (bool)		-> aktiviert oder deaktiviert das automatische Hochladen
 	
-test/				-> Verzeichnis für tests
+test/					-> Verzeichnis für Tests

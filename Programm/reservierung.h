@@ -6,11 +6,14 @@
 
 class Wagen;
 
-class Reservierung
+class Reservierung: public QObject
 {
+    Q_OBJECT
+
 public:
     Reservierung(QMap<int, Wagen *> *wagen);
     Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen);
+    ~Reservierung();
 
     QJsonObject toJson();
 
@@ -32,11 +35,12 @@ public:
     QList<QString> getHps() const;
     void setHps(QList<QString> value);
 
-    QList<QString> getZuege() const;
-    void setZuege(QList<QString> value);
+    QList<int> getZuege() const;
+    void setZuege(QList<int> value);
 
     QMap<int, QList<int> > getSitzplatz() const;
     void setSitzplatz(QMap<int, QList<int> > value);
+    void setSitzplatz(QString value);
 
     bool getFahrrad() const;
     void setFahrrad(bool value);
@@ -44,23 +48,33 @@ public:
     QString getSonstiges() const;
     void setSonstiges(const QString &value);
 
-    QString getTableRow();
-    void removePlaetze();
 
+    QString getHtmlForTable();
     QString getHtmlForDetailTable();
 
-private:
+    static QString getStringFromPlaetze(QMap<int, QList<int> > liste);
+    static QMap<int, QList<int> > getPlaetzeFromString(QString plaetze);
+
+    bool inZug(int zug);
+
+signals:
+    void changed();
+
+protected:
     QString name;
     QString mail;
     QString telefon;
     int anzahl;
     int klasse; // 1 = 1. Klasse | 0 = 2./3. Klasse
-    QList<QString> zuege;
+    QList<int> zuege;
     QList<QString> hps;
     QMap<int, QList<int>> sitzplatz;
     bool fahrrad;
     QString sonstiges;
     QMap<int, Wagen *> *wagen;
+
+    void removePlaetze();
+
 };
 
 #endif // RESERVIERUNG_H

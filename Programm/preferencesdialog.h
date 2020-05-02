@@ -19,7 +19,6 @@ public:
 
 private slots:
     void on_pushSearch_clicked();
-    void on_pushDownload_clicked();
 
     void closeDialogOk();
 
@@ -29,7 +28,7 @@ private:
     void saveSettings();
 
     Ui::PreferencesDialog *ui;
-    CoreApplication::Version online;
+    Version online;
 };
 
 #endif // PREFERENCESDIALOG_H

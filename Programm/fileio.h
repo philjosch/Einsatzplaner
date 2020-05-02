@@ -19,6 +19,8 @@ public:
     static QStringList getLastUsed();
     static void clearLastUsed();
 
+    static bool saveToFile(QString path, QString content);
+
 private:
     static QString currentPath;
     static QStringList lastUsed;

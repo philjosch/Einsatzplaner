@@ -3,14 +3,13 @@
 
 #include "reservierung.h"
 #include "wagen.h"
-#include "enums.h"
+#include "basics.h"
 
 class Verteiler
 {
 public:
-    Verteiler(QList<Wagen*> wagen, QSet<Reservierung*> reservierungen);
+    Verteiler(QList<Wagen*> wagen, QSet<Reservierung*> reservierungen, bool all = false);
     Mistake verteile();
-    void setCheckAll(bool value);
 
     struct Configuration {
         double bewertung;
@@ -29,11 +28,7 @@ private:
         Reservierung *extra;
     };
 
-    void dePlatziere(Reservierung *res);
-    bool platziere(Reservierung *res);
 
-    double gradeYes(Reservierung *res);
-    double gradeNo(Reservierung *res);
 
     void weisePlaetzeZu();
 
@@ -48,7 +43,6 @@ private:
     int aktWg;
     int count;
     bool checkAll;
-    double mindestbewertung;
 };
 
 #endif // VERTEILER_H

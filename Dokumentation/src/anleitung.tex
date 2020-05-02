@@ -1,0 +1,59 @@
+\documentclass[a4paper,ngerman,oneside]{scrbook}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{xspace}
+\usepackage{hyperref}
+
+\usepackage{scrhack}
+
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=0pt}
+
+\usepackage{graphicx,tabularx}
+\usepackage{textcomp}
+
+\newcommand{\nach}{\xspace\textrightarrow\xspace}
+\newcommand{\cmnd}[1]{\texttt{#1}\xspace}
+\newcommand{\hinweis}[1]{\emph{\textbf{Hinweis:} #1}}
+
+\graphicspath{{./img/}}
+
+\titlehead{}
+
+\subject{\centering\includegraphics{../../Icon/keks.png}}
+\title{Anleitung Einsatzplaner}
+\subtitle{Version 1.6}
+\author{Philipp Schepper}
+\date{Stand: \today}
+%\publishers{\Huge{\textsf{Arbeitsdatei}}}
+
+\begin{document}
+\maketitle
+
+\frontmatter
+\tableofcontents
+\include{vorne_u_hinten/aenderungen}
+
+\mainmatter
+\part{Grundlagen}
+\include{allgemein/allgemein}
+\include{allgemein/kalender}
+\include{allgemein/fahrtage}
+\include{allgemein/arbeitseinsaetze}
+\include{allgemein/personal}
+\part{Export}
+\include{export/export}
+\include{export/upload}
+\part{Verschiedenes}
+\include{verschiedenes/einstellungen}
+\include{verschiedenes/sonstiges}
+
+\appendix
+\part{Anhang}
+\include{vorne_u_hinten/begriffe}
+
+%\backmatter
+\include{version/versionshistorie}
+
+\end{document}

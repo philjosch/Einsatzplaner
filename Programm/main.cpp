@@ -5,20 +5,13 @@
 #include <QSettings>
 #include <QTranslator>
 
-const CoreApplication::Version AKTUELLE_VERSION = {1, 5, 2};
-const bool IS_DEVELOPER_VERSION = false;
-
 int main(int argc, char *argv[])
 {
-    CoreApplication a(argc, argv, AKTUELLE_VERSION, IS_DEVELOPER_VERSION);
+    CoreApplication a(argc, argv, {1, 6, 0}, false);
 
     QTranslator qtTranslator;
     qtTranslator.load(":/translations/qt_" + QLocale::system().name());
     a.installTranslator(&qtTranslator);
-
-    QTranslator myappTranslator;
-    myappTranslator.load(":/translations/einsatzplaner_" + QLocale::system().name());
-    a.installTranslator(&myappTranslator);
 
     // Laden der Einstellungen
     FileIO::loadSettings();
@@ -29,7 +22,7 @@ int main(int argc, char *argv[])
         a.checkVersion();
 
     if (int delay = settings.value("io/autoSave", 0).toInt())
-        a.startAutoSave(delay*60); // Funktion nimmt Wert in Sekunden!
+        a.startAutoSave(delay);
 
     if (a.getIsFirst() == true) {
         MainWindow *w = new MainWindow();
@@ -39,4 +32,3 @@ int main(int argc, char *argv[])
     a.stopAutoSave();
     return code;
 }
-

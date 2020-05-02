@@ -11,6 +11,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new 
 {
     ui->setupUi(this);
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(closeDialogOk()));
+    connect(ui->pushDownload, &QPushButton::clicked, this, [=]() { QDesktopServices::openUrl(CoreApplication::URL_DOWNLOAD); });
     QSettings settings;
     ui->checkSearchAtStart->setChecked(settings.value("general/autosearchupdate", true).toBool());
     ui->checkAutoUpload->setChecked(settings.value("online/useautoupload", true).toBool());
@@ -34,23 +35,18 @@ PreferencesDialog::~PreferencesDialog()
 
 void PreferencesDialog::on_pushSearch_clicked()
 {
-    CoreApplication::Version aktuell = CoreApplication::getAktuelleVersion();
+    Version aktuell = CoreApplication::VERSION;
     online = CoreApplication::loadVersion();
     bool old = online>aktuell;
     QString s;
     if (old) {
         s = tr("Sie verwenden Version %1. Es ist Version %2 verfügbar.").arg(aktuell.toString(), online.toString());
     } else {
-        s =  tr("Sie verwenden bereits die neuste Version: %1.").arg(aktuell.toString());
+        s = tr("Sie verwenden bereits die neuste Version %1.").arg(aktuell.toString());
     }
     ui->labelVersion->setText(s);
     ui->pushDownload->setEnabled(old);
     ui->pushNotes->setEnabled(old);
-}
-
-void PreferencesDialog::on_pushDownload_clicked()
-{
-    QDesktopServices::openUrl(CoreApplication::getUrlDownload());
 }
 
 void PreferencesDialog::closeDialogOk()
@@ -80,5 +76,8 @@ void PreferencesDialog::saveSettings()
 
 void PreferencesDialog::on_pushNotes_clicked()
 {
-    QMessageBox::information(nullptr, tr("Über Version ")+online.toString(), CoreApplication::loadNotes(online), QMessageBox::Ok, QMessageBox::Ok);
+    QMessageBox::information(nullptr,
+                             tr("Über Version %1").arg(online.toString()),
+                             CoreApplication::loadNotes(online),
+                             QMessageBox::Ok, QMessageBox::Ok);
 }

@@ -2,9 +2,10 @@
 #define MANAGERPERSONAL_H
 
 #include <QJsonObject>
+#include <QObject>
 #include <QSet>
 
-#include "enums.h"
+#include "basics.h"
 
 class ManagerPersonal;
 
@@ -24,74 +25,59 @@ public:
     QJsonObject personalToJson();
     void fromJson(QJsonObject o);
 
-
+    Person *getPersonFromID(QString id);
     Person *getPerson(QString name);
     bool personExists(QString name); // Prüft, ob die Person im System registriert ist
     bool personExists(QString vorname, QString nachname); // Prüft, ob die Person im System registriert ist
 
-    Person *registerPerson(QString vorname, QString nachname); // Fügt die Person in das System ein
-    Person *registerPerson(QString name); // Fügt die Person in das System ein
-    bool removePerson(QString name);
+    Person *newPerson(); // Erstellt eine neue Person und gibt sie zurück
     bool removePerson(Person *p);
 
-    bool pruefeStunden(Person *p); // Gibt true zurueck, genau dann wenn die Person fuer **alle** Kategorien die notwendigen Stunden erbracht hat!
-    bool checkHours(Person *p, Category kat); // Gibt true zurueck, genau dann wenn die Person die notwendigen Stunden fuer die Kategorie erbracht hat!
-    bool checkHours(Person *p); // Gibt true zurueck, genau dann wenn die Person die allgemeinen Mindeststunden erbracht hat!
+    int pruefeStunden(Person *p); // Gibt true zurueck, genau dann wenn die Person fuer **alle** Kategorien die notwendigen Stunden erbracht hat!
+    int checkHours(Person *p, Category cat); // Gibt true zurueck, genau dann wenn die Person die notwendigen Stunden fuer die Kategorie erbracht hat!
 
-    void setMinimumHours(Category cat, double amount);
-    void setMinimumHours(double amount);
+    void setMinimumHours(Category cat, int amount);
 
-    double getMinimumHours(Category cat);
-    double getMinimumHours();
+    int getMinimumHours(Category cat);
+    int getMinimumHours(Category cat, Person *p);
+    QString getMinimumHoursString(Category cat);
 
-    static double getMinimumHoursDefault(Category kat);
-    static double getMinimumHoursDefault();
+    static int getMinimumHoursDefault(Category kat);
 
     QListIterator<Person *> getPersonen() const;
+    QList<Person *> getPersonenSortiertNachName();
+    QList<Person *> getPersonenSortiertNachNummer();
 
     void berechne();
 
-    double getTime(Category kat);
-    double getTimeTf() const;
-    double getTimeZf() const;
-    double getTimeZub() const;
-    double getTimeService() const;
-    double getTimeBuero() const;
-    double getTimeWerkstatt() const;
-    double getTimeVorbereiten() const;
-    double getTimeAusbildung() const;
-    double getTimeSonstiges() const;
-    double getTimeSum() const;
-    double getSumKilometer() const;
+    int getTime(Category kat);
 
     static QString getGoodName(QString name); // Wandlet einen Namen in das Format Vorname Nachname um
 
+    int getNextNummer();
+    bool checkNummer(int neu);
+
+    QString getHtmlFuerEinzelansicht();
+    static QString getHtmlFuerGesamtuebersicht(QList<Person *> personen, QSet<Category> spalten);
+    QString getCSVnachNummer();
+    QString getHtmlFuerMitgliederliste();
+
 public slots:
     void personChangedName(Person *p, QString alt);
-    void reloadSettings();
+
+signals:
+    void changed();
 
 private:
     QSet<Person *> personen;
     QMap<QString, Person*> personenSorted;
+    QMap<QString, Person*> idToPerson;
 
-    QHash<Category, double> minimumHours;
-    double minimumTotal;
+    QMap<Category, int> minimumHours;
 
-    static QHash<Category, double> minimumHoursDefault;
-    static double minimumTotalDefault;
+    static QMap<Category, int> MINIMUM_HOURS_DEFAULT;
 
-    double timeTf;
-    double timeZf;
-    double timeZub;
-    double timeService;
-    double timeBuero;
-    double timeWerkstatt;
-    double timeVorbereiten;
-    double timeAusbildung;
-    double timeSonstiges;
-    double timeSum;
-    double sumKilometer;
-
+    QMap<Category, int> time;
 };
 
 #endif // MANAGERPERSONAL_H

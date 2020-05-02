@@ -1,6 +1,5 @@
 #include "exportgesamt.h"
 #include "ui_exportgesamt.h"
-#include "mainwindow.h"
 #include "export.h"
 
 #include <QMessageBox>
@@ -14,6 +13,11 @@ ExportGesamt::ExportGesamt(Manager *m, ManagerFileSettings *settings, QWidget *p
     ui->dateBis->setDate(QDate::currentDate().addDays(60)); // Anzeige für zwei Monate in der Zukunft
     manager = m;
 
+    connect(ui->dateVon, &QDateEdit::dateChanged, this, &ExportGesamt::show);
+    connect(ui->dateBis, &QDateEdit::dateChanged, this, &ExportGesamt::show);
+    connect(ui->comboFahrtag, &QComboBox::currentTextChanged, this, &ExportGesamt::show);
+    connect(ui->checkActivity, &QCheckBox::clicked, this, &ExportGesamt::show);
+
     hardReload();
 }
 
@@ -22,50 +26,18 @@ ExportGesamt::~ExportGesamt()
     delete ui;
 }
 
-void ExportGesamt::reload()
-{
-    QListIterator<AActivity*> iter = manager->getActivities();
-    int i = 0;
-    while(iter.hasNext()) {
-        AActivity *a = iter.next();
-        if (actToList.contains(a)) {
-            QString farbe = MainWindow::getFarbe(a);
-            actToList.value(a)->setBackground(QBrush(QColor(farbe)));
-            actToList.value(a)->setToolTip(a->getAnlass());
-            i++;
-            continue;
-        }
-        QString farbe = MainWindow::getFarbe(a);
-        QListWidgetItem *item = new QListWidgetItem(a->getListString());
-        item->setBackground(QBrush(QColor(farbe)));
-        item->setToolTip(a->getAnlass());
-        ui->listAnzeige->insertItem(i, item);
-        liste.insert(i, a);
-        actToList.insert(a, item);
-        listToAct.insert(item, a);
-        i++;
-    }
-    show();
-}
-
 void ExportGesamt::hardReload()
 {
-    QListIterator<AActivity*> iter = manager->getActivities();
-    liste = QList<AActivity*>();
     actToList = QMap<AActivity*, QListWidgetItem*>();
-    listToAct = QMap<QListWidgetItem*, AActivity*>();
-    ui->listAnzeige->clear();
 
-    while(iter.hasNext()) {
-        AActivity *a = iter.next();
-        QString farbe = MainWindow::getFarbe(a);
+    ui->listAnzeige->clear();
+    foreach(AActivity *a, manager->getActivities()) {
+        QString farbe = getFarbe(a);
         QListWidgetItem *item = new QListWidgetItem(a->getListString());
         item->setBackground(QBrush(QColor(farbe)));
         item->setToolTip(a->getAnlass());
         ui->listAnzeige->insertItem(ui->listAnzeige->count(), item);
-        liste.append(a);
         actToList.insert(a, item);
-        listToAct.insert(item, a);
     }
     show();
 }
@@ -73,26 +45,27 @@ void ExportGesamt::hardReload()
 void ExportGesamt::on_pushDrucken_clicked()
 {
     // Erstelle eine liste mit den Objekten für die Einzelansicht
-    QList<AActivity*> *listeEinzel = new QList<AActivity*>();
+    QList<AActivity*> listeEinzel = QList<AActivity*>();
     // Erstelle eine Liste für die Listenansicht
-    QList<AActivity*> *listeListe = new QList<AActivity*>();
-    for (AActivity *a: liste) {
+    QList<AActivity*> listeListe = QList<AActivity*>();
+    foreach(AActivity *a, manager->getActivities()) {
         if(! actToList.value(a)->isHidden()) {
-            listeListe->append(a);
+            listeListe.append(a);
             if (actToList.value(a)->isSelected()) {
-                listeEinzel->append(a);
+                listeEinzel.append(a);
             }
         }
     }
 
-    // Lasse einene Drucker auswählen
-    QPrinter *paperListe = nullptr;
-    QPrinter *paperEinzel = nullptr;
-    QPrinter *pdfListe = nullptr;
-    QPrinter *pdfEinzel = nullptr;
-    if (ui->checkListe->isChecked() && listeListe->length() > 0) {
+    if (ui->checkEinzel->isChecked() && listeEinzel.length() > 0) {
+        if (ui->checkPDF->isChecked())
+            Export::printEinzelansichten(listeEinzel, Export::getPrinterPDF(p, "Einzelansicht.pdf", QPrinter::Orientation::Portrait));
+        if (ui->checkAusdruck->isChecked())
+            Export::printEinzelansichten(listeEinzel, Export::getPrinterPaper(p, QPrinter::Orientation::Portrait));
+    }
+    if (ui->checkListe->isChecked() && listeListe.length() > 0) {
         if (ui->checkUpload->isChecked()) {
-            if (Export::uploadToServer(listeListe, settings)) {
+            if (Export::uploadToServer(settings, listeListe)) {
                 QMessageBox::information(nullptr, tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
             } else {
                 QMessageBox::information(nullptr, tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden! :("));
@@ -100,17 +73,9 @@ void ExportGesamt::on_pushDrucken_clicked()
         }
 
         if (ui->checkPDF->isChecked())
-            pdfListe = Export::getPrinterPDF(p, "Listenansicht.pdf");
+            Export::printList(listeListe, Export::getPrinterPDF(p, "Listenansicht.pdf", QPrinter::Orientation::Landscape));
         if (ui->checkAusdruck->isChecked())
-            paperListe = Export::getPrinterPaper(p);
-        Export::printList(listeListe, pdfListe, paperListe);
-    }
-    if (ui->checkEinzel->isChecked() && listeEinzel->length() > 0) {
-        if (ui->checkPDF->isChecked())
-            pdfEinzel = Export::getPrinterPDF(p, "Einzelansicht.pdf");
-        if (ui->checkAusdruck->isChecked())
-            paperEinzel = Export::getPrinterPaper(p);
-        Export::printSingle(listeEinzel, pdfEinzel, paperEinzel);
+            Export::printList(listeListe, Export::getPrinterPaper(p, QPrinter::Orientation::Landscape));
     }
 }
 
@@ -131,11 +96,6 @@ void ExportGesamt::on_comboVon_currentIndexChanged(int index)
     show();
 }
 
-void ExportGesamt::on_dateVon_dateChanged(const QDate &date)
-{
-    show();
-}
-
 void ExportGesamt::on_comboBis_currentIndexChanged(int index)
 {
     switch (index) {
@@ -153,24 +113,9 @@ void ExportGesamt::on_comboBis_currentIndexChanged(int index)
     show();
 }
 
-void ExportGesamt::on_dateBis_dateChanged(const QDate &date)
-{
-    show();
-}
-
-void ExportGesamt::on_comboFahrtag_currentIndexChanged(int index)
-{
-    show();
-}
-
-void ExportGesamt::on_checkActivity_clicked(bool checked)
-{
-    show();
-}
-
 void ExportGesamt::show()
 {
-    for(AActivity *a: liste) {
+    foreach(AActivity *a, manager->getActivities()) {
         actToList.value(a)->setHidden(!testShow(a));
     }
 }
@@ -231,9 +176,4 @@ bool ExportGesamt::testShow(AActivity *a)
         return ui->checkActivity->isChecked();
         // es ist kein fahrtag
     }
-}
-
-void ExportGesamt::on_pushButton_clicked()
-{
-    hardReload();
 }

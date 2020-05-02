@@ -20,14 +20,12 @@ public:
 
 private slots:
     void setDefault();
-    void abstractButtonClickedSlot(QAbstractButton * button);
+    void on_buttonBox_clicked(QAbstractButton *button);
     void save();
-
 
 private:
     Ui::MinimumHoursEditorDialog *ui;
     ManagerPersonal *manager;
-
 };
 
 #endif // MINIMUMHOURSEDITORDIALOG_H

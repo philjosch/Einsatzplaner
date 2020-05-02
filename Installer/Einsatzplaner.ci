@@ -3,14 +3,14 @@
    <autoclose >0</>
    <compname >Philipp Schepper</>
    <produrl >http://epl.philipp-schepper.de</>
-   <ver >Version 1.5.2</>
+   <ver >Version 1.6.0</>
    <supurl ></>
    <updurl ></>
    <dlgfont >verdana</>
    <headlogo >default - 1</>
    <dlgfontsize >s8</>
-   <output >C:\Users\Virtual\Desktop</>
-   <exename >einsatzplaner-setup-v1-5-2.exe</>
+   <output >C:\Users\Administrator\Desktop</>
+   <exename >einsatzplaner-setup-v1-6-0.exe</>
    <beffile ></>
    <aftfile ></>
    <uninclude >1</>
@@ -81,7 +81,7 @@
                   <desc ></>
                   <buttons >auto</>
                   <design >left</>
-                  <headlogo >C:\Users\Virtual\Desktop\Einsatzplaner\Icon\keks.ico</>
+                  <headlogo >C:\Users\Administrator\Desktop\Einsatzplaner\Icon\keks.ico</>
                   <varlist >
                      <rows ></>
                   </>
@@ -143,21 +143,21 @@
                         <srclist >
                            <rows rel = unpack >
                               <_ >
-                                 <filename >C:\Users\Virtual\Desktop\build\*</>
+                                 <filename >C:\Users\Administrator\Desktop\build\*</>
                                  <recurse >1</>
                                  <justfile >0</>
                                  <emptydir >0</>
                                  <exclude ></>
                               </>
                               <_ >
-                                 <filename >C:\Users\Virtual\Desktop\Einsatzplaner\Icon\keks.ico</>
+                                 <filename >C:\Users\Administrator\Desktop\Einsatzplaner\Icon\keks.ico</>
                                  <recurse >1</>
                                  <justfile >0</>
                                  <emptydir >0</>
                                  <exclude ></>
                               </>
                               <_ >
-                                 <filename >C:\Users\Virtual\Desktop\DLLS\*</>
+                                 <filename >C:\Users\Administrator\Desktop\DLLS\*</>
                                  <recurse >1</>
                                  <justfile >0</>
                                  <emptydir >0</>
@@ -266,7 +266,7 @@
                   <if ></>
                </>
             </>
-            <icofile >C:\Users\Virtual\Desktop\Einsatzplaner\Icon\keks.ico</>
+            <icofile >C:\Users\Administrator\Desktop\Einsatzplaner\Icon\keks.ico</>
             <resfile ></>
             <leftimg >disk-install</>
             <caption ></>

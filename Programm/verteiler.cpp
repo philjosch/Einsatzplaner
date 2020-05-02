@@ -2,7 +2,7 @@
 
 #include <QStack>
 
-Verteiler::Verteiler(QList<Wagen *> wagen, QSet<Reservierung *> reservierungen)
+Verteiler::Verteiler(QList<Wagen *> wagen, QSet<Reservierung *> reservierungen, bool all)
 {
     this->wagen = wagen;
     this->reservierungen = reservierungen;
@@ -10,7 +10,7 @@ Verteiler::Verteiler(QList<Wagen *> wagen, QSet<Reservierung *> reservierungen)
     besteBewertung = 1215752192;
     aktWg = 0;
     count = 0;
-    checkAll = false;
+    checkAll = all;
 }
 
 Mistake Verteiler::verteile()
@@ -97,11 +97,6 @@ void Verteiler::weisePlaetzeZu()
     for(Wagen *w: wagen) {
         w->weisePlaetzeZu();
     }
-}
-
-void Verteiler::setCheckAll(bool value)
-{
-    checkAll = value;
 }
 
 double Verteiler::getMinBewertung(QSet<Reservierung *> liste)
