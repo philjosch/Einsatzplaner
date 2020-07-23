@@ -135,6 +135,7 @@ bool Export::uploadToServer(ManagerFileSettings *settings, QList<AActivity *> li
     tempFile.open();
     QString localFile = tempFile.fileName();
     QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
+    p->setOrientation(QPrinter::Orientation::Landscape);
     p->setOutputFormat(QPrinter::PdfFormat);
     p->setOutputFileName(localFile);
 
