@@ -399,16 +399,17 @@ QString ManagerPersonal::getHtmlFuerEinzelansicht()
     return a;
 }
 
-QString ManagerPersonal::getCSVnachNummer()
+QString ManagerPersonal::getCSVnachNummer(QList<Person *> liste)
 {
     QString t = "Nummer;Nachname;Vorname;Geburtsdatum;Eintritt;Status;Austritt;Tf;Zf;Rangierer;Tauglichkeit;Straße;PLZ;Ort;Mail;Zustimmung Mail;Telefon;Zustimmung Telefon;Strecke;Beruf;Bemerkung\n";
     foreach(Person *akt, getPersonenSortiertNachNummer()) {
-        t += akt->getCSV();
+        if (liste.contains(akt))
+            t += akt->getCSV();
     }
     return t;
 }
 
-QString ManagerPersonal::getHtmlFuerMitgliederliste()
+QString ManagerPersonal::getHtmlFuerMitgliederliste(QList<Person*> liste)
 {
     QString a = "<h3>Mitgliederliste – Stand "+QDateTime::currentDateTime().toString("d.M.yyyy")+"</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr>"
@@ -420,7 +421,8 @@ QString ManagerPersonal::getHtmlFuerMitgliederliste()
                 "<th>Sonstiges</th>"
                 "</thead><tbody>";
     foreach(Person *akt, getPersonenSortiertNachNummer()) {
-        a += akt->getHtmlForMitgliederListe();
+        if (liste.contains(akt))
+            a += akt->getHtmlForMitgliederListe();
     }
     a += "</tbody></table>";
     return a;

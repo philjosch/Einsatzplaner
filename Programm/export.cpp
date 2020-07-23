@@ -83,11 +83,11 @@ bool Export::printPersonenGesamtuebersicht(QList<Person *> personen, QSet<Catego
     return true;
 }
 
-bool Export::printMitglieder(ManagerPersonal *m, QPrinter *printer)
+bool Export::printMitglieder(ManagerPersonal *m, QList<Person*> liste, QPrinter *printer)
 {
     if (printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
-    QString a = m->getHtmlFuerMitgliederliste();
+    QString a = m->getHtmlFuerMitgliederliste(liste);
     a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     d->setHtml(a);
     d->print(printer);

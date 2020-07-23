@@ -59,8 +59,8 @@ public:
 
     QString getHtmlFuerEinzelansicht();
     static QString getHtmlFuerGesamtuebersicht(QList<Person *> personen, QSet<Category> spalten);
-    QString getCSVnachNummer();
-    QString getHtmlFuerMitgliederliste();
+    QString getCSVnachNummer(QList<Person *> liste);
+    QString getHtmlFuerMitgliederliste(QList<Person *> liste);
 
 public slots:
     void personChangedName(Person *p, QString alt);

@@ -255,18 +255,18 @@ void PersonalWindow::on_actionEinzelPDF_triggered()
 void PersonalWindow::on_actionMitgliederDrucken_triggered()
 {
     QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Landscape);
-    Export::printMitglieder(manager, paper);
+    Export::printMitglieder(manager, current, paper);
 }
 void PersonalWindow::on_actionMitgliederPDF_triggered()
 {
     QPrinter *pdf = Export::getPrinterPDF(this, "Mitgliederliste.pdf", QPrinter::Orientation::Portrait);
-    Export::printMitglieder(manager, pdf);
+    Export::printMitglieder(manager, current, pdf);
 }
 
 void PersonalWindow::on_actionMitgliederCSV_triggered()
 {
     QString path = FileIO::getFilePathSave(this, "Mitglieder.csv", tr("CSV-Datei (*.csv)"));
-    FileIO::saveToFile(path, manager->getCSVnachNummer());
+    FileIO::saveToFile(path, manager->getCSVnachNummer(current));
 }
 
 void PersonalWindow::on_pushPDFEinzel_clicked()

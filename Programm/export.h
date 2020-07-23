@@ -34,7 +34,7 @@ public:
     static bool printPersonenGesamtuebersicht(QList<Person *> personen, QSet<Category> data, QPrinter *printer);
 
     // Mitgliederlisten
-    static bool printMitglieder(ManagerPersonal *m, QPrinter *printer);
+    static bool printMitglieder(ManagerPersonal *m, QList<Person *> liste, QPrinter *printer);
 
     // Allgemeines
     static QPrinter *getPrinterPaper(QWidget *parent, QPrinter::Orientation orientation);
