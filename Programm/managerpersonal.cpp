@@ -121,6 +121,8 @@ bool ManagerPersonal::personExists(QString name)
 
 bool ManagerPersonal::personExists(QString vorname, QString nachname)
 {
+    while (vorname.at(vorname.length()-1) == " ") vorname = vorname.remove(vorname.length()-1);
+    while (nachname.at(nachname.length()-1) == " ") nachname = nachname.remove(nachname.length()-1);
     QString nameKomplett;
     if (vorname != "") nameKomplett = vorname + " " + nachname;
     else nameKomplett = nachname;
@@ -216,6 +218,12 @@ int ManagerPersonal::getMinimumHours(Category cat, Person *p)
 QString ManagerPersonal::getMinimumHoursString(Category cat)
 {
     int value = getMinimumHours(cat);
+    return QString("%1:%2 h").arg(int(value/60)).arg(value % 60, 2, 10,QLatin1Char('0'));
+}
+
+QString ManagerPersonal::getMinimumHoursString(Category cat, Person *p)
+{
+    int value = getMinimumHours(cat, p);
     return QString("%1:%2 h").arg(int(value/60)).arg(value % 60, 2, 10,QLatin1Char('0'));
 }
 

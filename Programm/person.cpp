@@ -524,6 +524,8 @@ void Person::setVorname(const QString &value)
 {
     QString old = getName();
     vorname = value;
+    while (vorname.endsWith(" ")) vorname.chop(1);
+    while (vorname.startsWith(" ")) vorname = vorname.remove(0, 1);
     emit nameChanged(this, old);
     emit changed();
 }
@@ -536,6 +538,8 @@ void Person::setNachname(const QString &value)
 {
     QString old = getName();
     nachname = value;
+    while (nachname.endsWith(" ")) nachname.chop(1);
+    while (nachname.startsWith(" ")) nachname = nachname.remove(0, 1);
     emit nameChanged(this, old);
     emit changed();
 }

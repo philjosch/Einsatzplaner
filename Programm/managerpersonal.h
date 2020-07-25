@@ -41,6 +41,7 @@ public:
     int getMinimumHours(Category cat);
     int getMinimumHours(Category cat, Person *p);
     QString getMinimumHoursString(Category cat);
+    QString getMinimumHoursString(Category cat, Person *p);
 
     static int getMinimumHoursDefault(Category kat);
 

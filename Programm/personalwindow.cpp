@@ -768,6 +768,9 @@ void PersonalWindow::on_pushDelete_clicked()
             QMessageBox::information(this, tr("Warnung"), tr("Die ausgewählte Person kann nicht gelöscht werden, da Sie noch bei Aktivitäten eingetragen ist.\nBitte lösen Sie diese Verbindung bevor Sie die Person löschen!"));
             return;
         }
+        if (QMessageBox::question(this, tr("Wirklich löschen"), tr("Möchten Sie die Person wirklich unwiderruflich löschen und aus dem System entfernen.\nFür ausgetretene Mitgleider können Sie auch ein Austrittsdatum angeben!")) != QMessageBox::Yes) {
+            return;
+        }
         enabled = false;
 
         QListWidgetItem *i = personToItem.value(aktuellePerson);
@@ -830,6 +833,7 @@ void PersonalWindow::on_doubleAnzahl_valueChanged(double arg1)
     if (enabled) {
         aktuellePerson->setAdditional(Anzahl, int(arg1));
         updateZeiten();
+        refresh();
     }
 }
 void PersonalWindow::on_doubleKilometer_valueChanged(double arg1)
@@ -837,6 +841,7 @@ void PersonalWindow::on_doubleKilometer_valueChanged(double arg1)
     if (enabled) {
         aktuellePerson->setAdditional(Kilometer, int(arg1));
         updateZeiten();
+        refresh();
     }
 }
 
@@ -915,19 +920,7 @@ void PersonalWindow::showPerson(Person *p)
     ui->tabelle->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     // ** Konto
-    ui->labelTfSum->setText(p->getString(Tf));
-    ui->labelZfSum->setText(p->getString(Zf));
-    ui->labelZubSum->setText((p->getString(Zub)));
-    ui->labelServiceSum->setText((p->getString(Service)));
-    ui->labelZugVorbereitenSum->setText((p->getString(ZugVorbereiten)));
-    ui->labelWerkstattSum->setText((p->getString(Werkstatt)));
-    ui->labelBueroSum->setText(p->getString(Buero));
-    ui->labelAusbildungSum->setText(p->getString(Ausbildung));
-    ui->labelInfrastrukturSum->setText(p->getString(Infrastruktur));
-    ui->labelSonstigesSum->setText(p->getString(Sonstiges));
-    ui->labelAnzahlSum->setText(p->getString(Anzahl));
-    ui->labelKilometerSum->setText(p->getString(Kilometer));
-    ui->labelGesamt->setText(p->getString(Gesamt)+" ("+manager->getMinimumHoursString(Gesamt)+")");
+    updateZeiten();
 
     ui->lineTf->setText(stringForDurationEditorFromMinutes(p->getAdditional(Tf)));
     ui->lineZf->setText(stringForDurationEditorFromMinutes(p->getAdditional(Zf)));
@@ -942,26 +935,16 @@ void PersonalWindow::showPerson(Person *p)
     ui->doubleAnzahl->setValue(p->getAdditional(Anzahl));
     ui->doubleKilometer->setValue(p->getAdditional(Kilometer));
 
-    if (manager->getMinimumHours(Tf, p) > 0)
-        ui->labelMinTf->setText(manager->getMinimumHoursString(Tf));
-    if (manager->getMinimumHours(Zf, p) > 0)
-        ui->labelMinZf->setText(manager->getMinimumHoursString(Zf));
-    if (manager->getMinimumHours(Zub, p) > 0)
-        ui->labelMinZub->setText(manager->getMinimumHoursString(Zub));
-    if (manager->getMinimumHours(Service, p) > 0)
-        ui->labelMinService->setText(manager->getMinimumHoursString(Service));
-    if (manager->getMinimumHours(ZugVorbereiten, p) > 0)
-        ui->labelMinZugVorbereiten->setText(manager->getMinimumHoursString(ZugVorbereiten));
-    if (manager->getMinimumHours(Werkstatt, p) > 0)
-        ui->labelMinWerkstatt->setText(manager->getMinimumHoursString(Werkstatt));
-    if (manager->getMinimumHours(Buero, p) > 0)
-        ui->labelMinBuero->setText(manager->getMinimumHoursString(Buero));
-    if (manager->getMinimumHours(Ausbildung, p) > 0)
-        ui->labelMinAusbildung->setText(manager->getMinimumHoursString(Ausbildung));
-    if (manager->getMinimumHours(Infrastruktur, p) > 0)
-        ui->labelMinInfrastruktur->setText(manager->getMinimumHoursString(Infrastruktur));
-    if (manager->getMinimumHours(Sonstiges, p) > 0)
-        ui->labelMinSonstiges->setText(manager->getMinimumHoursString(Sonstiges));
+    ui->labelMinTf->setText(manager->getMinimumHoursString(Tf, p));
+    ui->labelMinZf->setText(manager->getMinimumHoursString(Zf, p));
+    ui->labelMinZub->setText(manager->getMinimumHoursString(Zub, p));
+    ui->labelMinService->setText(manager->getMinimumHoursString(Service, p));
+    ui->labelMinZugVorbereiten->setText(manager->getMinimumHoursString(ZugVorbereiten, p));
+    ui->labelMinWerkstatt->setText(manager->getMinimumHoursString(Werkstatt, p));
+    ui->labelMinBuero->setText(manager->getMinimumHoursString(Buero, p));
+    ui->labelMinAusbildung->setText(manager->getMinimumHoursString(Ausbildung, p));
+    ui->labelMinInfrastruktur->setText(manager->getMinimumHoursString(Infrastruktur, p));
+    ui->labelMinSonstiges->setText(manager->getMinimumHoursString(Sonstiges, p));
 
     enabled = true;
 }
@@ -1035,12 +1018,12 @@ void PersonalWindow::setZeitenNachVeraenderung(Category cat, QString arg)
     if (enabled) {
         aktuellePerson->setAdditional(cat, minutesFromStringForDurationEditor(arg));
         updateZeiten();
+        refresh();
     }
 }
 
 void PersonalWindow::updateZeiten()
 {
-    refresh();
     ui->labelTfSum->setText(aktuellePerson->getString(Tf));
     ui->labelTfSum->repaint();
     ui->labelZfSum->setText(aktuellePerson->getString(Zf));
