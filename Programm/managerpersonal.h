@@ -62,6 +62,9 @@ public:
     QString getCSVnachNummer(QList<Person *> liste);
     QString getHtmlFuerMitgliederliste(QList<Person *> liste);
 
+    int getAnzahlMitglieder(Mitglied filter);
+    QList<Person *> getPersonen(Mitglied filter);
+
 public slots:
     void personChangedName(Person *p, QString alt);
 

@@ -113,6 +113,8 @@ public:
 
     bool isTauglich(Category cat=Tf, QDate datum=QDate::currentDate());
 
+    bool pruefeFilter(Mitglied filter);
+
 protected:
     // Stammdaten
     QString id;

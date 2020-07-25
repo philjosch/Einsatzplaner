@@ -37,6 +37,18 @@ enum Art {
     Arbeitseinsatz = 100
 };
 
+enum Mitglied {
+    AlleMitglieder,
+    Aktiv,
+    AktivMit,
+    AktivOhne,
+    Passiv,
+    PassivMit,
+    PassivOhne,
+    Ausgetreten = 99,
+    Registriert = 100
+};
+
 const QMap<Art, QString> FARBE_FAHRTAGE = {{Museumszug, "#ffffff"},
                                           {Sonderzug, "#ffcccc"},
                                           {Gesellschaftssonderzug, "#ffcc66"},

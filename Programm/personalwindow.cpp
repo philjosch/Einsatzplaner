@@ -62,42 +62,41 @@ void PersonalWindow::refresh()
      * 7 Alle
      * */
     int index = ui->comboAnzeige->currentIndex();
-    current.clear();
-    QListIterator<Person*> i = manager->getPersonen();
-    while(i.hasNext()) {
-        Person *p = i.next();
-        switch (index) {
-        case 0:
-            if (! p->isAusgetreten()) current.append(p);
-            break;
-        case 1:
-            if ((! p->isAusgetreten()) && p->getAktiv()) current.append(p);
-            break;
-        case 2:
-            if ((! p->isAusgetreten()) && (! p->getAktiv())) current.append(p);
-            break;
-        case 3:
-            if ((! p->isAusgetreten()) && (p->getAktiv()) && (manager->pruefeStunden(p) == 1)) current.append(p);
-            break;
-        case 4:
-            if ((! p->isAusgetreten()) && (p->getAktiv()) && (manager->pruefeStunden(p) == 0)) current.append(p);
-            break;
-        case 5:
-            if ((! p->isAusgetreten()) && (!p->getAktiv()) && (manager->pruefeStunden(p) == -1)) current.append(p);
-            break;
-        case 6:
-            if (p->isAusgetreten()) current.append(p);
-            break;
-        default:
-            current.append(p);
-            break;
-        }
+    Mitglied filter;
+    switch (index) {
+    case 0:
+        filter = AlleMitglieder;
+        break;
+    case 1:
+        filter = Aktiv;
+        break;
+    case 2:
+        filter = Passiv;
+        break;
+    case 3:
+        filter = AktivMit;
+        break;
+    case 4:
+        filter = AktivOhne;
+        break;
+    case 5:
+        filter = PassivMit;
+        break;
+    case 6:
+        filter = Ausgetreten;
+        break;
+    default:
+        filter = Registriert;
+        break;
     }
+    current = manager->getPersonen(filter);
+    ui->labelAktuell->setText(QString("%1 Personen").arg(current.length()));
     // Aktualisiere die Ansichten
-    refreshGesamt();
+    refreshEinsatzzeiten();
     refreshEinzel();
+    refreshMitglieder();
 }
-void PersonalWindow::refreshGesamt()
+void PersonalWindow::refreshEinsatzzeiten()
 {
     // Alte Spalte der Sortierung bestimen
     Qt::SortOrder sortOrder = ui->tabelleGesamt->horizontalHeader()->sortIndicatorOrder();
@@ -223,6 +222,108 @@ void PersonalWindow::refreshEinzel()
     ui->listWidget->sortItems();
 }
 
+void PersonalWindow::refreshMitglieder()
+{
+    // Tabelle leeren
+    ui->tabelleMitglieder->setRowCount(0);
+    ui->tabelleMitglieder->setSortingEnabled(false);
+
+    int clmn;
+    QTableWidgetItem *i;
+    foreach (Person *p, current) {
+        clmn = 0;
+        ui->tabelleMitglieder->insertRow(0);
+
+
+        i = new QTableWidgetItem();
+        i->setData(0, p->getNummer());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        i = new QTableWidgetItem(p->getVorname());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        i = new QTableWidgetItem(p->getNachname());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        i = new QTableWidgetItem(
+                    QString("%1%2")
+                    .arg(p->isAusgetreten() ? "Ehemals ": "")
+                    .arg(p->getAktiv() ? "Aktiv" : "Passiv"));
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        i = new QTableWidgetItem();
+        i->setData(0, p->getGeburtstag());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        i = new QTableWidgetItem();
+        i->setData(0, p->getEintritt());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        if (p->isAusgetreten()) {
+            i = new QTableWidgetItem();
+            i->setData(0, p->getGeburtstag());
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
+        } else {
+            clmn++;
+        }
+
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getBeruf()));
+
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getStrasse()));
+        i = new QTableWidgetItem();
+        i->setData(0, p->getPLZ());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getOrt()));
+        i = new QTableWidgetItem();
+        i->setData(0, p->getStrecke());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getMail()));
+        if (p->getMailOK())
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
+        else
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Nein"));
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getTelefon()));
+        if (p->getTelefonOK())
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
+        else
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Nein"));
+
+        if (p->getAusbildungTf())
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
+        else
+            clmn++;
+        if (p->getAusbildungZf())
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
+        else
+            clmn++;
+        if (p->getAusbildungRangierer())
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
+        else
+            clmn++;
+
+        if (p->getTauglichkeit() != QDate()) {
+            i = new QTableWidgetItem();
+            i->setData(0, p->getGeburtstag());
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
+        } else
+            clmn++;
+
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getBemerkungen()));
+    }
+
+    ui->tabelleMitglieder->setSortingEnabled(true);
+    ui->tabelleMitglieder->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    ui->labelMitgliederAnzMitglieder->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::AlleMitglieder)));
+    ui->labelMitgliederAnzAktiv->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::Aktiv)));
+    ui->labelMitgliederAnzAktivMit->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::AktivMit)));
+    ui->labelMitgliederAnzAktivOhne->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::AktivOhne)));
+    ui->labelMitgliederAnzPassiv->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::Passiv)));
+    ui->labelMitgliederAnzAusgetreten->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::Ausgetreten)));
+    ui->labelMitgliederAnzErfasst->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::Registriert)));
+}
+
 void PersonalWindow::editMinimumHours()
 {
    if (MinimumHoursEditorDialog(manager, this).exec() == QDialog::Accepted) {
@@ -314,7 +415,7 @@ void PersonalWindow::on_tabWidgetMain_tabBarClicked(int index)
     if (index == 1)
         refreshEinzel();
     if (index == 0)
-        refreshGesamt();
+        refreshEinsatzzeiten();
 }
 
 void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, int column)
@@ -331,79 +432,79 @@ void PersonalWindow::on_checkShowGesamt_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Gesamt);
     else anzeige.remove(Category::Gesamt);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowAnzahl_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Anzahl);
     else anzeige.remove(Category::Anzahl);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowTf_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Tf);
     else anzeige.remove(Category::Tf);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowZf_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Zf);
     else anzeige.remove(Category::Zf);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowZub_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Zub);
     else anzeige.remove(Category::Zub);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowService_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Service);
     else anzeige.remove(Category::Service);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowVorbereiten_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::ZugVorbereiten);
     else anzeige.remove(Category::ZugVorbereiten);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowWerkstatt_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Werkstatt);
     else anzeige.remove(Category::Werkstatt);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowBuero_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Buero);
     else anzeige.remove(Category::Buero);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowAusbildung_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Ausbildung);
     else anzeige.remove(Category::Ausbildung);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowInfrastruktur_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Infrastruktur);
     else anzeige.remove(Category::Infrastruktur);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowSonstiges_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Sonstiges);
     else anzeige.remove(Category::Sonstiges);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowKilometer_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Kilometer);
     else anzeige.remove(Category::Kilometer);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 
 void PersonalWindow::on_pushAdd_clicked()

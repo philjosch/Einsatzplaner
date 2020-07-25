@@ -410,6 +410,30 @@ bool Person::isTauglich(Category cat, QDate datum)
     return (tauglichkeit >= datum);
 }
 
+bool Person::pruefeFilter(Mitglied filter)
+{
+    switch (filter) {
+    case AlleMitglieder:
+        return (! isAusgetreten());
+    case Aktiv:
+        return ((! isAusgetreten()) && getAktiv());
+    case Passiv:
+        return ((! isAusgetreten()) && (! getAktiv()));
+    case AktivMit:
+        return ((! isAusgetreten()) && (getAktiv()) && (manager->pruefeStunden(this) == 1));
+    case AktivOhne:
+        return ((! isAusgetreten()) && (getAktiv()) && (manager->pruefeStunden(this) == 0));
+    case PassivMit:
+        return ((! isAusgetreten()) && (!getAktiv()) && (manager->pruefeStunden(this) == -1));
+    case PassivOhne:
+        return ((! isAusgetreten()) && (!getAktiv()) && (manager->pruefeStunden(this) != -1));
+    case Ausgetreten:
+        return (isAusgetreten());
+    case Registriert:
+        return true;
+    }
+}
+
 void Person::berechne()
 {
     zeiten.clear();

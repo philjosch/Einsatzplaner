@@ -23,8 +23,9 @@ public slots:
     void refresh();
 
 private slots:
-    void refreshGesamt();
+    void refreshEinsatzzeiten();
     void refreshEinzel();
+    void refreshMitglieder();
 
     void editMinimumHours();
 

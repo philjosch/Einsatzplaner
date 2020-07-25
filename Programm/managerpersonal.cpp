@@ -427,3 +427,23 @@ QString ManagerPersonal::getHtmlFuerMitgliederliste(QList<Person*> liste)
     a += "</tbody></table>";
     return a;
 }
+
+int ManagerPersonal::getAnzahlMitglieder(Mitglied filter)
+{
+    int i = 0;
+    foreach(Person *akt, personen) {
+        if (akt->pruefeFilter(filter))
+            ++i;
+    }
+    return i;
+}
+
+QList<Person *> ManagerPersonal::getPersonen(Mitglied filter)
+{
+    QList<Person *> current = QList<Person*>();
+    foreach(Person *p, getPersonenSortiertNachNummer()) {
+        if (p->pruefeFilter(filter))
+            current.append(p);
+    }
+    return current;
+}

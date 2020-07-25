@@ -39,96 +39,6 @@
     <property name="spacing">
      <number>6</number>
     </property>
-    <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout_3">
-      <property name="spacing">
-       <number>6</number>
-      </property>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="comboAnzeige">
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <item>
-         <property name="text">
-          <string>Alle Mitglieder</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Aktiv</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Passiv</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Aktiv mit Stunden</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Aktiv ohne Stunden</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Passiv mit Stunden</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Ausgetreten</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Alle</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <spacer name="horizontalSpacer_6">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="3">
-       <widget class="QPushButton" name="pushEmail">
-        <property name="text">
-         <string>E-Mail an diese Personen</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_25">
-        <property name="text">
-         <string>Anzeigen</string>
-        </property>
-        <property name="buddy">
-         <cstring>comboAnzeige</cstring>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidgetMain">
       <property name="enabled">
@@ -139,7 +49,7 @@
       </property>
       <widget class="QWidget" name="gesamt">
        <attribute name="title">
-        <string>Gesamtübersicht</string>
+        <string>Einsatzzeiten</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_5">
         <property name="leftMargin">
@@ -696,7 +606,7 @@
            </size>
           </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <property name="tabsClosable">
            <bool>false</bool>
@@ -732,7 +642,7 @@
                  <x>0</x>
                  <y>0</y>
                  <width>435</width>
-                 <height>164</height>
+                 <height>168</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -838,7 +748,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>14</day>
+                    <day>13</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -947,8 +857,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>435</width>
-                 <height>168</height>
+                 <width>181</width>
+                 <height>146</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -1096,8 +1006,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>435</width>
-                 <height>168</height>
+                 <width>280</width>
+                 <height>97</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -1187,7 +1097,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>13</day>
+                    <day>12</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1245,8 +1155,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>435</width>
-                 <height>168</height>
+                 <width>384</width>
+                 <height>163</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -1311,7 +1221,7 @@
                    <date>
                     <year>1998</year>
                     <month>12</month>
-                    <day>28</day>
+                    <day>27</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1697,6 +1607,12 @@
              <spacer name="horizontalSpacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
               </property>
              </spacer>
             </item>
@@ -2131,6 +2047,12 @@
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
              </spacer>
             </item>
            </layout>
@@ -2191,7 +2113,423 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="mitglieder">
+       <attribute name="title">
+        <string>Mitgliederliste</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_17" rowstretch="1,0,0" columnstretch="1,0,0,1">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item row="1" column="0">
+         <spacer name="horizontalSpacer_9">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="3">
+         <spacer name="horizontalSpacer_8">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="0" colspan="4">
+         <widget class="QTableWidget" name="tabelleMitglieder">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::ExtendedSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>97</number>
+          </attribute>
+          <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+           <bool>true</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Nr.</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Vorname</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Nachname</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Status</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Geburtsdatum</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Eintritt</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Austritt</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Beruf</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Straße</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>PLZ</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Ort</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Strecke</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>E-Mail</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>E-Mail veröffentlichen</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Telefon</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Telefon veröffentlichen</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Tf-Ausbildung</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Zf-Ausbildung</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Rangierer</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Tauglichkeit</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Bemerkung</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="2">
+         <layout class="QGridLayout" name="gridLayout_15">
+          <item row="4" column="1">
+           <widget class="QLabel" name="labelMitgliederAnzAusgetreten">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="labelMitgliederAktiveMit">
+            <property name="text">
+             <string>mit Stunden</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="labelMitgliederAusgetreten">
+            <property name="text">
+             <string>Ausgetreten</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="5">
+           <widget class="QLabel" name="labelMitgliederAnzPassiv">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelMitgliederAktiv">
+            <property name="text">
+             <string>Aktiv</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelMitglieder">
+            <property name="text">
+             <string>Mitglieder</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLabel" name="labelMitgliederPassive">
+            <property name="text">
+             <string>Passive</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="labelMitgliederAnzMitglieder">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLabel" name="labelMitgliederAnzAktivOhne">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="labelMitgliederAnzAktiv">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="labelMitgliederAktiveOhne">
+            <property name="text">
+             <string>ohne Stunden</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLabel" name="labelMitgliederAnzAktivMit">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="labelMitgliederErfasst">
+            <property name="text">
+             <string>Erfasst</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="6">
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="labelMitgliederAnzErfasst">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QPushButton" name="pushMitgliederPDF">
+          <property name="text">
+           <string>Daten als PDF speichern …</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2" colspan="2">
+         <widget class="QPushButton" name="pushMitgliederPrint">
+          <property name="text">
+           <string>Daten drucken …</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
+    </item>
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout_3">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <item row="0" column="3">
+       <spacer name="horizontalSpacer_6">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_25">
+        <property name="text">
+         <string>Anzeigen</string>
+        </property>
+        <property name="buddy">
+         <cstring>comboAnzeige</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="comboAnzeige">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>Alle Mitglieder</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Aktiv</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Passiv</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Aktiv mit Stunden</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Aktiv ohne Stunden</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Passiv mit Stunden</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Ausgetreten</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Alle</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QPushButton" name="pushEmail">
+        <property name="text">
+         <string>E-Mail an diese Personen</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="labelAktuell">
+        <property name="text">
+         <string>0 Personen</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -2430,22 +2768,6 @@
     <hint type="destinationlabel">
      <x>127</x>
      <y>80</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionAktualisieren</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>pushAktualisieren</receiver>
-   <slot>click()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>51</x>
-     <y>743</y>
     </hint>
    </hints>
   </connection>
