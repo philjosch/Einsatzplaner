@@ -133,6 +133,8 @@ private slots:
 
     void showPerson(Person *p);
 
+    void on_tabelleMitglieder_cellDoubleClicked(int row, int column);
+
 private:
     Ui::PersonalWindow *ui;
     ManagerPersonal *manager;

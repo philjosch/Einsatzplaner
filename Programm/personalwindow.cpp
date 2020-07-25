@@ -16,7 +16,7 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     ui->setupUi(this);
     connect(ui->actionMindeststunden, SIGNAL(triggered()), this, SLOT(editMinimumHours()));
     connect(ui->comboAnzeige, SIGNAL(currentIndexChanged(int)), this, SLOT(refresh()));
-    connect(ui->pushAktualisieren, SIGNAL(clicked()), this, SLOT(refresh()));
+    connect(ui->actionAktualisieren, SIGNAL(triggered()), this, SLOT(refresh()));
 
     // Initalisieren der Statischen variablen
     manager = m;
@@ -90,7 +90,6 @@ void PersonalWindow::refresh()
         break;
     }
     current = manager->getPersonen(filter);
-    ui->labelAktuell->setText(QString("%1 Personen").arg(current.length()));
     // Aktualisiere die Ansichten
     refreshEinsatzzeiten();
     refreshEinzel();
@@ -421,6 +420,16 @@ void PersonalWindow::on_tabWidgetMain_tabBarClicked(int index)
 void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, int column)
 {
     QString name = ui->tabelleGesamt->item(row, 0)->text() + " " + ui->tabelleGesamt->item(row, 1)->text();
+    Person * p = manager->getPerson(name);
+    if (p != nullptr) {
+        showPerson(p);
+        ui->tabWidgetMain->setCurrentIndex(1);
+    }
+}
+
+void PersonalWindow::on_tabelleMitglieder_cellDoubleClicked(int row, int column)
+{
+    QString name = ui->tabelleMitglieder->item(row, 1)->text() + " " + ui->tabelleMitglieder->item(row, 2)->text();
     Person * p = manager->getPerson(name);
     if (p != nullptr) {
         showPerson(p);
