@@ -145,10 +145,11 @@ void ActivityWindow::on_buttonRemove_clicked()
 {
     int i = ui->tablePersonen->currentRow();
     if (i < 0) return;
-    if (! tabelleZuEinsatz.contains(ui->tablePersonen->item(i, 0))) return;
+    if (tabelleZuEinsatz.contains(ui->tablePersonen->item(i, 0))) {
+        AActivity::Einsatz e = tabelleZuEinsatz.value(ui->tablePersonen->item(i, 0));
+        activity->removePerson(e.person, e.cat);
+    }
 
-    AActivity::Einsatz e = tabelleZuEinsatz.value(ui->tablePersonen->item(i, 0));
-    activity->removePerson(e.person, e.cat);
     tabelleZuEinsatz.remove(ui->tablePersonen->item(i, 0));
     ui->tablePersonen->removeRow(i);
 
