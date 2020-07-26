@@ -45,9 +45,11 @@ enum Mitglied {
     Passiv,
     PassivMit,
     PassivOhne,
-    Ausgetreten = 99,
-    Registriert = 100
+    Ausgetreten,
+    Registriert
 };
+
+QString getStringVonFilter(Mitglied filter);
 
 const QMap<Art, QString> FARBE_FAHRTAGE = {{Museumszug, "#ffffff"},
                                           {Sonderzug, "#ffcccc"},

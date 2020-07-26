@@ -442,14 +442,14 @@
          </layout>
         </item>
         <item row="2" column="2">
-         <widget class="QPushButton" name="pushPrint">
+         <widget class="QPushButton" name="pushZeitenDrucken">
           <property name="text">
            <string>Tabelle drucken …</string>
           </property>
          </widget>
         </item>
         <item row="2" column="0" colspan="2">
-         <widget class="QPushButton" name="pushPDF">
+         <widget class="QPushButton" name="pushZeitenPDF">
           <property name="text">
            <string>Tabelle als PDF speichern …</string>
           </property>
@@ -735,7 +735,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>12</day>
+                    <day>10</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -844,8 +844,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>435</width>
-                 <height>164</height>
+                 <width>181</width>
+                 <height>146</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -993,8 +993,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>435</width>
-                 <height>164</height>
+                 <width>280</width>
+                 <height>97</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -1084,7 +1084,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>11</day>
+                    <day>9</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1142,8 +1142,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>435</width>
-                 <height>164</height>
+                 <width>384</width>
+                 <height>163</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -1208,7 +1208,7 @@
                    <date>
                     <year>1998</year>
                     <month>12</month>
-                    <day>26</day>
+                    <day>24</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -2065,19 +2065,25 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Einzelübersichten:</string>
+             <string>Einzelübersicht:</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QPushButton" name="pushPDFEinzel">
+           <widget class="QPushButton" name="pushEinzelPDF">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Als PDF speichern …</string>
             </property>
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QPushButton" name="pushPrintEinzel">
+           <widget class="QPushButton" name="pushEinzelDrucken">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Drucken …</string>
             </property>
@@ -2275,7 +2281,7 @@
           <item row="1" column="5">
            <widget class="QLabel" name="labelMitgliederPassive">
             <property name="text">
-             <string>Passive</string>
+             <string>Passiv</string>
             </property>
            </widget>
           </item>
@@ -2341,7 +2347,7 @@
            </widget>
           </item>
           <item row="3" column="5" colspan="5">
-           <widget class="QPushButton" name="pushMitgliederPrint">
+           <widget class="QPushButton" name="pushMitgliederDrucken">
             <property name="text">
              <string>Daten drucken …</string>
             </property>
@@ -2578,16 +2584,16 @@
      <property name="title">
       <string>Einzelansichten</string>
      </property>
-     <addaction name="actionSinglePrint"/>
-     <addaction name="actionSinglePDF"/>
+     <addaction name="actionEinzelEinzelDrucken"/>
+     <addaction name="actionEinzelEinzelPDF"/>
      <addaction name="separator"/>
-     <addaction name="actionEinzelPrint"/>
-     <addaction name="actionEinzelPDF"/>
+     <addaction name="actionEinzelListeDrucken"/>
+     <addaction name="actionEinzelListePDF"/>
     </widget>
     <addaction name="menuEinzelansichten"/>
     <addaction name="separator"/>
-    <addaction name="actionGesamtDrucken"/>
-    <addaction name="actionGesamtPDF"/>
+    <addaction name="actionZeitenDrucken"/>
+    <addaction name="actionZeitenPDF"/>
     <addaction name="separator"/>
     <addaction name="actionMitgliederDrucken"/>
     <addaction name="actionMitgliederPDF"/>
@@ -2626,12 +2632,12 @@
     <string>Mindeststunden ...</string>
    </property>
   </action>
-  <action name="actionGesamtPDF">
+  <action name="actionZeitenPDF">
    <property name="text">
     <string>Gesamtansicht als PDF speichern …</string>
    </property>
   </action>
-  <action name="actionGesamtDrucken">
+  <action name="actionZeitenDrucken">
    <property name="text">
     <string>Gesamtansicht drucken …</string>
    </property>
@@ -2639,7 +2645,7 @@
     <string>Ctrl+P</string>
    </property>
   </action>
-  <action name="actionSinglePrint">
+  <action name="actionEinzelEinzelDrucken">
    <property name="text">
     <string>Für aktuelle Person drucken ...</string>
    </property>
@@ -2647,17 +2653,17 @@
     <string>Ctrl+Shift+P</string>
    </property>
   </action>
-  <action name="actionSinglePDF">
+  <action name="actionEinzelEinzelPDF">
    <property name="text">
     <string>Für aktuelle Person als PDF speichern ...</string>
    </property>
   </action>
-  <action name="actionEinzelPrint">
+  <action name="actionEinzelListeDrucken">
    <property name="text">
     <string>Für alle drucken ...</string>
    </property>
   </action>
-  <action name="actionEinzelPDF">
+  <action name="actionEinzelListePDF">
    <property name="text">
     <string>Für alle als PDF speichern ...</string>
    </property>
@@ -2696,8 +2702,8 @@
   <tabstop>checkShowAusbildung</tabstop>
   <tabstop>checkShowInfrastruktur</tabstop>
   <tabstop>checkShowSonstiges</tabstop>
-  <tabstop>pushPDF</tabstop>
-  <tabstop>pushPrint</tabstop>
+  <tabstop>pushZeitenPDF</tabstop>
+  <tabstop>pushZeitenDrucken</tabstop>
   <tabstop>pushAdd</tabstop>
   <tabstop>listWidget</tabstop>
   <tabstop>lineVorname</tabstop>
@@ -2741,8 +2747,8 @@
   <tabstop>lineSonstiges</tabstop>
   <tabstop>doubleAnzahl</tabstop>
   <tabstop>doubleKilometer</tabstop>
-  <tabstop>pushPDFEinzel</tabstop>
-  <tabstop>pushPrintEinzel</tabstop>
+  <tabstop>pushEinzelPDF</tabstop>
+  <tabstop>pushEinzelDrucken</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -2779,98 +2785,98 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionGesamtDrucken</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>pushPrint</receiver>
-   <slot>click()</slot>
+   <sender>pushZeitenDrucken</sender>
+   <signal>clicked()</signal>
+   <receiver>actionZeitenDrucken</receiver>
+   <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
+     <x>507</x>
+     <y>554</y>
     </hint>
     <hint type="destinationlabel">
-     <x>510</x>
-     <y>504</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>actionGesamtPDF</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>pushPDF</receiver>
-   <slot>click()</slot>
+   <sender>pushZeitenPDF</sender>
+   <signal>clicked()</signal>
+   <receiver>actionZeitenPDF</receiver>
+   <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
+     <x>177</x>
+     <y>554</y>
     </hint>
     <hint type="destinationlabel">
-     <x>174</x>
-     <y>504</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>actionEinzelPDF</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>pushPDFEinzel</receiver>
-   <slot>click()</slot>
+   <sender>pushEinzelPDF</sender>
+   <signal>clicked()</signal>
+   <receiver>actionEinzelEinzelPDF</receiver>
+   <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
+     <x>435</x>
+     <y>554</y>
     </hint>
     <hint type="destinationlabel">
-     <x>175</x>
-     <y>503</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>actionEinzelPrint</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>pushPrintEinzel</receiver>
-   <slot>click()</slot>
+   <sender>pushEinzelDrucken</sender>
+   <signal>clicked()</signal>
+   <receiver>actionEinzelEinzelDrucken</receiver>
+   <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
+     <x>572</x>
+     <y>554</y>
     </hint>
     <hint type="destinationlabel">
-     <x>509</x>
-     <y>503</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>actionMitgliederDrucken</sender>
-   <signal>triggered()</signal>
-   <receiver>pushMitgliederPrint</receiver>
-   <slot>click()</slot>
+   <sender>pushMitgliederDrucken</sender>
+   <signal>clicked()</signal>
+   <receiver>actionMitgliederDrucken</receiver>
+   <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
      <x>452</x>
      <y>554</y>
     </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionMitgliederPDF</sender>
-   <signal>triggered()</signal>
-   <receiver>pushMitgliederPDF</receiver>
-   <slot>click()</slot>
-   <hints>
-    <hint type="sourcelabel">
+    <hint type="destinationlabel">
      <x>-1</x>
      <y>-1</y>
     </hint>
-    <hint type="destinationlabel">
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushMitgliederPDF</sender>
+   <signal>clicked()</signal>
+   <receiver>actionMitgliederPDF</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
      <x>244</x>
      <y>554</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>

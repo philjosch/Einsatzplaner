@@ -31,19 +31,18 @@ private slots:
 
 
     // Export
-    void on_pushPDF_clicked();
-    void on_pushPrint_clicked();
+    void on_actionEinzelEinzelPDF_triggered();
+    void on_actionEinzelEinzelDrucken_triggered();
 
-    void on_actionEinzelPrint_triggered();
-    void on_actionEinzelPDF_triggered();
+    void on_actionEinzelListePDF_triggered();
+    void on_actionEinzelListeDrucken_triggered();
 
-    void on_pushMitgliederPrint_clicked();
-    void on_pushMitgliederPDF_clicked();
+    void on_actionZeitenPDF_triggered();
+    void on_actionZeitenDrucken_triggered();
 
+    void on_actionMitgliederPDF_triggered();
+    void on_actionMitgliederDrucken_triggered();
     void on_actionMitgliederCSV_triggered();
-
-    void on_pushPDFEinzel_clicked();
-    void on_pushPrintEinzel_clicked();
 
 
     // Fenster - Gesamt
@@ -141,6 +140,7 @@ private:
     Person *aktuellePerson;
 
     QList<Person*> current;
+    Mitglied filter;
 
     QHash<Person*, QListWidgetItem*> personToItem;
 
@@ -148,7 +148,7 @@ private:
 
     bool enabled; // Gibt an, ob das Formular aktiviert ist oder nicht, und ob Änderungen übernommen werden
 
-    void print(QPrinter *p);
+    QList<Person*> getSortierteListe();
 
     void toggleFields(bool state);
 

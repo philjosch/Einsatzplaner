@@ -50,11 +50,11 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *printer)
     return true;
 }
 
-bool Export::printPerson(ManagerPersonal *m, QPrinter *printer)
+bool Export::printPerson(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
 {
     if (printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
-    QString a = m->getHtmlFuerEinzelansicht();
+    QString a = m->getHtmlFuerEinzelansicht(liste, filter);
     d->setHtml(a);
     d->print(printer);
     return true;
@@ -71,27 +71,30 @@ bool Export::printPerson(Person *p, QPrinter *printer)
     return true;
 }
 
-bool Export::printPersonenGesamtuebersicht(QList<Person *> personen, QSet<Category> data, QPrinter *printer)
+bool Export::printPersonenGesamtuebersicht(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer)
 {
     if (printer == nullptr) return false;
     if (personen.isEmpty()) return true;
     QTextDocument *d = newDefaultDocument();
-    QString a = ManagerPersonal::getHtmlFuerGesamtuebersicht(personen, data);
-    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
+    QString a = ManagerPersonal::getHtmlFuerGesamtuebersicht(personen, data, filter);
     d->setHtml(a);
     d->print(printer);
     return true;
 }
 
-bool Export::printMitglieder(ManagerPersonal *m, QList<Person*> liste, QPrinter *printer)
+bool Export::printMitglieder(ManagerPersonal *m, QList<Person*> liste, Mitglied filter, QPrinter *printer)
 {
     if (printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
-    QString a = m->getHtmlFuerMitgliederliste(liste);
-    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
+    QString a = m->getMitgliederlisteAlsHtml(liste, filter);
     d->setHtml(a);
     d->print(printer);
     return true;
+}
+
+bool Export::exportMitgliederAlsCSV(ManagerPersonal *m, QList<Person *> liste, QString pfad)
+{
+    return FileIO::saveToFile(pfad, m->getMitgliederlisteAlsCSV(liste));
 }
 
 QPrinter *Export::getPrinterPaper(QWidget *parent, QPrinter::Orientation orientation)

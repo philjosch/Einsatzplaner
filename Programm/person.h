@@ -18,11 +18,12 @@ public:
     QJsonObject toJson();
     QJsonObject personalToJson();
 
-    int get(Category cat);
-    QString getString(Category cat);
-    QString getStringShort(Category cat);
+    int getZeiten(Category cat);
+    Mitglied pruefeStunden();
+    Mitglied pruefeStunden(Category cat);
 
-    int getAnzahl();
+    int getMinimumStunden(Category cat);
+
 
     void berechne();
 
