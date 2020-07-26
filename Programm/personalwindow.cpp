@@ -381,18 +381,18 @@ void PersonalWindow::on_pushPrintEinzel_clicked()
 void PersonalWindow::on_pushEmail_clicked()
 {
     if (current.isEmpty()) return;
-    QStringList mails;
+    QSet<QString> mails;
     QList<Person*> keineMail;
     foreach (Person *p, current) {
         if (p->getMail() != "") {
-            mails.append(p->getMail());
+            mails.insert(p->getMail());
         } else {
             keineMail.append(p);
         }
     }
     if (! mails.isEmpty()) {
         QString s = "mailto:?bcc=";
-        s += mails.join(",");
+        s += mails.values().join(",");
         QDesktopServices::openUrl(QUrl(s));
     }
     if (keineMail.isEmpty()) return;
