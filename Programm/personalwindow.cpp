@@ -230,7 +230,7 @@ void PersonalWindow::refreshMitglieder()
 
         if (p->isAusgetreten()) {
             i = new QTableWidgetItem();
-            i->setData(0, p->getGeburtstag());
+            i->setData(0, p->getAustritt());
             ui->tabelleMitglieder->setItem(0, clmn++, i);
         } else {
             clmn++;
