@@ -121,8 +121,10 @@ bool ManagerPersonal::personExists(QString name)
 
 bool ManagerPersonal::personExists(QString vorname, QString nachname)
 {
-    while (vorname.at(vorname.length()-1) == " ") vorname = vorname.remove(vorname.length()-1);
-    while (nachname.at(nachname.length()-1) == " ") nachname = nachname.remove(nachname.length()-1);
+    while (vorname.endsWith(" ")) vorname.chop(1);
+    while (vorname.startsWith(" ")) vorname = vorname.remove(0, 1);
+    while (nachname.endsWith(" ")) nachname.chop(1);
+    while (nachname.startsWith(" ")) nachname = nachname.remove(0, 1);
     QString nameKomplett;
     if (vorname != "") nameKomplett = vorname + " " + nachname;
     else nameKomplett = nachname;
