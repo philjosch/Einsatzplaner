@@ -37,8 +37,8 @@ private slots:
     void on_actionEinzelPrint_triggered();
     void on_actionEinzelPDF_triggered();
 
-    void on_actionMitgliederDrucken_triggered();
-    void on_actionMitgliederPDF_triggered();
+    void on_pushMitgliederPrint_clicked();
+    void on_pushMitgliederPDF_clicked();
 
     void on_actionMitgliederCSV_triggered();
 
@@ -48,8 +48,6 @@ private slots:
 
     // Fenster - Gesamt
     void on_pushEmail_clicked();
-
-    void on_tabWidgetMain_tabBarClicked(int index);
 
     void on_tabelleGesamt_cellDoubleClicked(int row, int column);
 
@@ -133,6 +131,7 @@ private slots:
 
     void showPerson(Person *p);
 
+    // Mitglieder
     void on_tabelleMitglieder_cellDoubleClicked(int row, int column);
 
 private:

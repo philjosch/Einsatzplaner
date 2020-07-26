@@ -352,12 +352,12 @@ void PersonalWindow::on_actionEinzelPDF_triggered()
     Export::printPerson(manager, pdf);
 }
 
-void PersonalWindow::on_actionMitgliederDrucken_triggered()
+void PersonalWindow::on_pushMitgliederPrint_clicked()
 {
     QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Landscape);
     Export::printMitglieder(manager, current, paper);
 }
-void PersonalWindow::on_actionMitgliederPDF_triggered()
+void PersonalWindow::on_pushMitgliederPDF_clicked()
 {
     QPrinter *pdf = Export::getPrinterPDF(this, "Mitgliederliste.pdf", QPrinter::Orientation::Portrait);
     Export::printMitglieder(manager, current, pdf);
@@ -407,14 +407,6 @@ void PersonalWindow::on_pushEmail_clicked()
         QString path = FileIO::getFilePathSave(this, "Adressen.csv", tr("CSV-Datei (*.csv)"));
         FileIO::saveToFile(path, s);
     }
-}
-
-void PersonalWindow::on_tabWidgetMain_tabBarClicked(int index)
-{
-    if (index == 1)
-        refreshEinzel();
-    if (index == 0)
-        refreshEinsatzzeiten();
 }
 
 void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, int column)

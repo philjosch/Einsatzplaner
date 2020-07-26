@@ -844,8 +844,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>181</width>
-                 <height>146</height>
+                 <width>435</width>
+                 <height>164</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -993,8 +993,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>280</width>
-                 <height>97</height>
+                 <width>435</width>
+                 <height>164</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -1142,8 +1142,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>384</width>
-                 <height>163</height>
+                 <width>435</width>
+                 <height>164</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -2839,6 +2839,38 @@
     <hint type="destinationlabel">
      <x>509</x>
      <y>503</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMitgliederDrucken</sender>
+   <signal>triggered()</signal>
+   <receiver>pushMitgliederPrint</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>452</x>
+     <y>554</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMitgliederPDF</sender>
+   <signal>triggered()</signal>
+   <receiver>pushMitgliederPDF</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>244</x>
+     <y>554</y>
     </hint>
    </hints>
   </connection>
