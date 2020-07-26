@@ -199,6 +199,7 @@ Person *AActivity::getPerson(QString name)
 
 bool AActivity::removePerson(Person *p, Category kat)
 {
+    if (p == nullptr) return true;
     personen.remove(Einsatz{p,kat});
     emit changed(this);
     return p->removeActivity(this, kat);

@@ -246,6 +246,8 @@ void FahrtagWindow::deleteItemFromList(QListWidget *l, QPushButton *b)
 {
     QListWidgetItem *item = l->currentItem();
     if (item == nullptr) return;
+    if (! listeZuTabelle.contains(item)) return;
+    if (! tabelleZuEinsatz.contains(listeZuTabelle.value(item))) return;
     AActivity::Einsatz e = tabelleZuEinsatz.value(listeZuTabelle.value(item));
 
     fahrtag->removePerson(e.person, e.cat);
@@ -497,6 +499,7 @@ void FahrtagWindow::on_buttonRemovePerson_clicked()
         return;
     }
     QTableWidgetItem *item = ui->tablePersonen->item(i, 0);
+    if (! tabelleZuEinsatz.contains(item)) return;
     AActivity::Einsatz e = tabelleZuEinsatz.value(item);
     fahrtag->removePerson(e.person, e.cat);
 
