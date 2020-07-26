@@ -735,7 +735,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>10</day>
+                    <day>27</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -751,7 +751,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>26</day>
+                    <day>27</day>
                    </date>
                   </property>
                  </widget>
@@ -1084,7 +1084,7 @@
                    <date>
                     <year>1999</year>
                     <month>11</month>
-                    <day>9</day>
+                    <day>26</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -1206,9 +1206,9 @@
                   </property>
                   <property name="minimumDate">
                    <date>
-                    <year>1998</year>
-                    <month>12</month>
-                    <day>24</day>
+                    <year>1999</year>
+                    <month>11</month>
+                    <day>26</day>
                    </date>
                   </property>
                   <property name="displayFormat">
@@ -2216,7 +2216,7 @@
           </column>
           <column>
            <property name="text">
-            <string>E-Mail veröffentlichen</string>
+            <string>E-Mail veröff.</string>
            </property>
           </column>
           <column>
@@ -2226,7 +2226,7 @@
           </column>
           <column>
            <property name="text">
-            <string>Telefon veröffentlichen</string>
+            <string>Telefon veröff.</string>
            </property>
           </column>
           <column>
