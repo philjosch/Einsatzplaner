@@ -420,13 +420,13 @@ bool Person::pruefeFilter(Mitglied filter)
     case Passiv:
         return ((! isAusgetreten()) && (! getAktiv()));
     case AktivMit:
-        return ((! isAusgetreten()) && (getAktiv()) && (manager->pruefeStunden(this) == 1));
+        return ((! isAusgetreten()) && (getAktiv()) && (manager->pruefeStunden(this) == AktivMit));
     case AktivOhne:
-        return ((! isAusgetreten()) && (getAktiv()) && (manager->pruefeStunden(this) == 0));
+        return ((! isAusgetreten()) && (getAktiv()) && (manager->pruefeStunden(this) == AktivOhne));
     case PassivMit:
-        return ((! isAusgetreten()) && (!getAktiv()) && (manager->pruefeStunden(this) == -1));
+        return ((! isAusgetreten()) && (!getAktiv()) && (manager->pruefeStunden(this) == PassivMit));
     case PassivOhne:
-        return ((! isAusgetreten()) && (!getAktiv()) && (manager->pruefeStunden(this) != -1));
+        return ((! isAusgetreten()) && (!getAktiv()) && (manager->pruefeStunden(this) != PassivMit));
     case Ausgetreten:
         return (isAusgetreten());
     case Registriert:
@@ -548,8 +548,8 @@ QString Person::getHtmlForTableView(QSet<Category> liste)
 {
     QString html = "<tr><td style='background-color:";
     switch (manager->pruefeStunden(this)) {
-    case 0:  html += FARBE_FEHLENDE_STUNDEN; break;
-    case -1: html += FARBE_GENUG_STUNDEN; break;
+    case AktivOhne:  html += FARBE_FEHLENDE_STUNDEN; break;
+    case PassivMit: html += FARBE_GENUG_STUNDEN; break;
     default: html += FARBE_STANDARD;
     }
     html += "'>"+getName()+"</td>";
@@ -558,8 +558,8 @@ QString Person::getHtmlForTableView(QSet<Category> liste)
         if (!liste.contains(cat)) continue;
         html += "<td align='right' style='background-color: ";
         switch (manager->checkHours(this, cat)) {
-        case 0:  html += Person::FARBE_FEHLENDE_STUNDEN; break;
-        case -1: html += Person::FARBE_GENUG_STUNDEN; break;
+        case AktivOhne:  html += Person::FARBE_FEHLENDE_STUNDEN; break;
+        case PassivMit: html += Person::FARBE_GENUG_STUNDEN; break;
         default: html += Person::FARBE_STANDARD;
         }
         html += "'>"+(get(cat) > 0? getStringShort(cat): "")+"</td>";

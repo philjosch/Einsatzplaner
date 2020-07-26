@@ -155,33 +155,44 @@ bool ManagerPersonal::removePerson(Person *p)
     return false;
 }
 
-int ManagerPersonal::pruefeStunden(Person *p)
+Mitglied ManagerPersonal::pruefeStunden(Person *p)
 {
+    if (p->isAusgetreten()) return Mitglied::Ausgetreten;
     bool ok = true;
     foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
-        ok = ok && checkHours(p, cat);
+        switch (checkHours(p, cat)) {
+        case AktivMit:
+        case PassivMit:
+        case Passiv:
+            ok = ok && true;
+            break;
+        default:
+            ok = false;
+        }
     }
-    if (p->getAktiv() && (! ok))
-        return 0;
-    else if ((!p->getAktiv()) && ok && p->get(Gesamt) >0)
-        return -1;
-    else
-        return 1;
+    if (p->getAktiv()) {
+        if (ok) return Mitglied::AktivMit;
+        else return Mitglied::AktivOhne;
+    } else {
+        if (ok && p->get(Gesamt) > 0)
+            return Mitglied::PassivMit;
+        else return Mitglied::Passiv;
+    }
 }
 
-int ManagerPersonal::checkHours(Person *p, Category cat)
+Mitglied ManagerPersonal::checkHours(Person *p, Category cat)
 {
     if (p->getAktiv()) {
         if (p->get(cat) >= getMinimumHours(cat, p)) {
-            return 1;
+            return Mitglied::AktivMit;
         } else {
-            return 0;
+            return Mitglied::AktivOhne;
         }
     } else {
         if (p->get(cat)>0) {
-            return -1;
+            return Mitglied::PassivMit;
         } else {
-            return 1;
+            return Mitglied::Passiv;
         }
     }
 }

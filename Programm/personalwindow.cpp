@@ -134,8 +134,8 @@ void PersonalWindow::refreshEinsatzzeiten()
     foreach (Person *p, current) {
         QString farbe = Person::FARBE_STANDARD;
         switch (manager->pruefeStunden(p)) {
-        case 0:  farbe = Person::FARBE_FEHLENDE_STUNDEN; break;
-        case -1: farbe = Person::FARBE_GENUG_STUNDEN; break;
+        case AktivOhne:  farbe = Person::FARBE_FEHLENDE_STUNDEN; break;
+        case PassivMit: farbe = Person::FARBE_GENUG_STUNDEN; break;
         default: farbe = Person::FARBE_STANDARD;
         }
         ui->tabelleGesamt->insertRow(0);
@@ -163,8 +163,8 @@ void PersonalWindow::refreshEinsatzzeiten()
             }
 
             switch (manager->checkHours(p, cat)) {
-            case 0:  i->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN))); break;
-            case -1: i->setBackground(QBrush(QColor(Person::FARBE_GENUG_STUNDEN))); break;
+            case AktivOhne:  i->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN))); break;
+            case PassivMit: i->setBackground(QBrush(QColor(Person::FARBE_GENUG_STUNDEN))); break;
             default: i->setBackground(QBrush(QColor(Person::FARBE_STANDARD)));
             }
             ui->tabelleGesamt->setItem(0, pos++, i);
@@ -206,10 +206,10 @@ void PersonalWindow::refreshEinzel()
     foreach (Person *p, current) {
         QListWidgetItem *item = new QListWidgetItem(p->getName());
         switch (manager->pruefeStunden(p)) {
-        case 0:
+        case AktivOhne:
             item->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN)));
             break;
-        case -1:
+        case PassivMit:
             item->setBackground(QBrush(QColor(Person::FARBE_GENUG_STUNDEN)));
             break;
         default:
@@ -332,52 +332,50 @@ void PersonalWindow::editMinimumHours()
 
 void PersonalWindow::on_pushPDF_clicked()
 {
-    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Gesamt.pdf", QPrinter::Orientation::Landscape);
-    print(pdf);
+    print(Export::getPrinterPDF(this, "Personal-Gesamt.pdf", QPrinter::Orientation::Landscape));
 }
 void PersonalWindow::on_pushPrint_clicked()
 {
-    QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Landscape);
-    print(paper);
+    print(Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
 }
 
 void PersonalWindow::on_actionEinzelPrint_triggered()
 {
-    QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
-    Export::printPerson(manager, paper);
+    Export::printPerson(manager,
+                        Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 void PersonalWindow::on_actionEinzelPDF_triggered()
 {
-    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf", QPrinter::Orientation::Portrait);
-    Export::printPerson(manager, pdf);
+    Export::printPerson(manager,
+                        Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf", QPrinter::Orientation::Portrait));
 }
 
 void PersonalWindow::on_pushMitgliederPrint_clicked()
 {
-    QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Landscape);
-    Export::printMitglieder(manager, current, paper);
+    Export::printMitglieder(manager, current,
+                            Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
 }
 void PersonalWindow::on_pushMitgliederPDF_clicked()
 {
-    QPrinter *pdf = Export::getPrinterPDF(this, "Mitgliederliste.pdf", QPrinter::Orientation::Portrait);
-    Export::printMitglieder(manager, current, pdf);
+    Export::printMitglieder(manager, current,
+                            Export::getPrinterPDF(this, "Mitgliederliste.pdf", QPrinter::Orientation::Portrait));
 }
 
 void PersonalWindow::on_actionMitgliederCSV_triggered()
 {
-    QString path = FileIO::getFilePathSave(this, "Mitglieder.csv", tr("CSV-Datei (*.csv)"));
-    FileIO::saveToFile(path, manager->getCSVnachNummer(current));
+    FileIO::saveToFile(FileIO::getFilePathSave(this, "Mitglieder.csv", tr("CSV-Datei (*.csv)")),
+                       manager->getCSVnachNummer(current));
 }
 
 void PersonalWindow::on_pushPDFEinzel_clicked()
 {
-    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf", QPrinter::Orientation::Portrait);
-    Export::printPerson(aktuellePerson, pdf);
+    Export::printPerson(aktuellePerson,
+                        Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf", QPrinter::Orientation::Portrait));
 }
 void PersonalWindow::on_pushPrintEinzel_clicked()
 {
-    QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
-    Export::printPerson(aktuellePerson, paper);
+    Export::printPerson(aktuellePerson,
+                        Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 
 void PersonalWindow::on_pushEmail_clicked()

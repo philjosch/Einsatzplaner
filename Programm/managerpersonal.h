@@ -33,8 +33,8 @@ public:
     Person *newPerson(); // Erstellt eine neue Person und gibt sie zurück
     bool removePerson(Person *p);
 
-    int pruefeStunden(Person *p); // Gibt true zurueck, genau dann wenn die Person fuer **alle** Kategorien die notwendigen Stunden erbracht hat!
-    int checkHours(Person *p, Category cat); // Gibt true zurueck, genau dann wenn die Person die notwendigen Stunden fuer die Kategorie erbracht hat!
+    Mitglied pruefeStunden(Person *p);
+    Mitglied checkHours(Person *p, Category cat);
 
     void setMinimumHours(Category cat, int amount);
 
