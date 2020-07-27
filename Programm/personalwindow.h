@@ -133,6 +133,8 @@ private slots:
     // Mitglieder
     void on_tabelleMitglieder_cellDoubleClicked(int row, int column);
 
+    void on_pushMailEinzel_clicked();
+
 private:
     Ui::PersonalWindow *ui;
     ManagerPersonal *manager;

@@ -2102,6 +2102,16 @@
             </property>
            </spacer>
           </item>
+          <item row="0" column="2">
+           <widget class="QPushButton" name="pushMailEinzel">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Mail an diese Person</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -2873,6 +2883,22 @@
     <hint type="sourcelabel">
      <x>244</x>
      <y>554</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushAktualisieren</sender>
+   <signal>clicked()</signal>
+   <receiver>actionAktualisieren</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>376</x>
+     <y>46</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>

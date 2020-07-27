@@ -949,6 +949,8 @@ void PersonalWindow::toggleFields(bool state)
     ui->linePhone->setEnabled(state);
     ui->checkPhone->setEnabled(state);
 
+    ui->pushMailEinzel->setEnabled(state);
+
     ui->spinKm->setEnabled(state);
     ui->lineJob->setEnabled(state);
     ui->plainBemerkung->setEnabled(state);
@@ -1014,4 +1016,11 @@ void PersonalWindow::updateZeiten()
                              .arg(minutesToHourString(aktuellePerson->getZeiten(Gesamt)))
                              .arg(minutesToHourString(aktuellePerson->getMinimumStunden(Gesamt))));
     ui->labelGesamt->repaint();
+}
+
+void PersonalWindow::on_pushMailEinzel_clicked()
+{
+    if (aktuellePerson->getMail() != "") {
+        QDesktopServices::openUrl(QUrl("mailto:"+aktuellePerson->getMail()));
+    }
 }
