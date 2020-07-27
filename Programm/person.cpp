@@ -395,13 +395,13 @@ bool Person::pruefeFilter(Mitglied filter)
     case Passiv:
         return ((! isAusgetreten()) && (! getAktiv()));
     case AktivMit:
-        return ((! isAusgetreten()) && getAktiv() && (pruefeStunden() == AktivMit));
+        return ((! isAusgetreten()) && getAktiv() && (pruefeStunden(Gesamt) == AktivMit));
     case AktivOhne:
-        return ((! isAusgetreten()) && getAktiv() && (pruefeStunden() == AktivOhne));
+        return ((! isAusgetreten()) && getAktiv() && (pruefeStunden(Gesamt) == AktivOhne));
     case PassivMit:
-        return ((! isAusgetreten()) && (!getAktiv()) && (pruefeStunden() == PassivMit));
+        return ((! isAusgetreten()) && (!getAktiv()) && (pruefeStunden(Gesamt) == PassivMit));
     case PassivOhne:
-        return ((! isAusgetreten()) && (!getAktiv()) && (pruefeStunden() != PassivMit));
+        return ((! isAusgetreten()) && (!getAktiv()) && (pruefeStunden(Gesamt) != PassivMit));
     case Ausgetreten:
         return (isAusgetreten());
     case Registriert:

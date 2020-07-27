@@ -718,6 +718,7 @@ void PersonalWindow::on_checkAustritt_clicked(bool checked)
         } else {
             aktuellePerson->setAustritt(QDate());
         }
+        refresh();
     }
 }
 
@@ -744,6 +745,7 @@ void PersonalWindow::on_pushDelete_clicked()
 
         aktuellePerson = nullptr;
         toggleFields(false);
+        refresh();
     }
 }
 

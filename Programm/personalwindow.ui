@@ -2696,6 +2696,7 @@
  </widget>
  <tabstops>
   <tabstop>comboAnzeige</tabstop>
+  <tabstop>pushAktualisieren</tabstop>
   <tabstop>pushEmail</tabstop>
   <tabstop>tabWidgetMain</tabstop>
   <tabstop>tabelleGesamt</tabstop>
@@ -2743,6 +2744,7 @@
   <tabstop>plainBemerkung</tabstop>
   <tabstop>checkAustritt</tabstop>
   <tabstop>dateAustritt</tabstop>
+  <tabstop>checkAustrittUnbekannt</tabstop>
   <tabstop>pushDelete</tabstop>
   <tabstop>tabelle</tabstop>
   <tabstop>lineTf</tabstop>
@@ -2757,8 +2759,12 @@
   <tabstop>lineSonstiges</tabstop>
   <tabstop>doubleAnzahl</tabstop>
   <tabstop>doubleKilometer</tabstop>
+  <tabstop>pushMailEinzel</tabstop>
   <tabstop>pushEinzelPDF</tabstop>
   <tabstop>pushEinzelDrucken</tabstop>
+  <tabstop>tabelleMitglieder</tabstop>
+  <tabstop>pushMitgliederDrucken</tabstop>
+  <tabstop>pushMitgliederPDF</tabstop>
  </tabstops>
  <resources/>
  <connections>
