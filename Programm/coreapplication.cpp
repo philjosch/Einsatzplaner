@@ -8,15 +8,17 @@
 #include <QTimer>
 
 Version CoreApplication::VERSION = {-1, -1, -1};
+QString CoreApplication::BUILD = "";
 bool CoreApplication::DEVELOPER_MODE = false;
 QString CoreApplication::URL_DOWNLOAD = "http://epl.philipp-schepper.de/#downloads";
 QString CoreApplication::URL_VERSION = "http://epl.philipp-schepper.de/version.txt";
 QString CoreApplication::URL_NOTES = "http://epl.philipp-schepper.de/version/v%1-%2/notes-v%1-%2-%3.txt";
 
-CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool devVersion) : QApplication(argc, argv)
+CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool devVersion, QString build) : QApplication(argc, argv)
 {
     VERSION = version;
     DEVELOPER_MODE = devVersion;
+    BUILD = build;
 
     QCoreApplication::setOrganizationName("Philipp Schepper");
     QCoreApplication::setOrganizationDomain("philipp-schepper.de");

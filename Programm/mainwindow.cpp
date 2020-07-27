@@ -320,7 +320,11 @@ void MainWindow::on_actionAboutQt_triggered()
 }
 void MainWindow::on_actionAboutApp_triggered()
 {
-    QMessageBox::about(this, tr("Über Einsatzplaner"),tr("<h1>Einsatzplaner</h1>%1 %2<br/>2016-2020 Philipp Schepper").arg(QCoreApplication::applicationVersion()).arg(CoreApplication::DEVELOPER_MODE ? "(dev)" : ""));
+    QMessageBox::about(this,
+                       tr("Über Einsatzplaner"),
+                       tr("<h1>Einsatzplaner</h1><p>Version %1%2<br/>2016-2020 Philipp Schepper</p>")
+                       .arg(QCoreApplication::applicationVersion())
+                       .arg(CoreApplication::DEVELOPER_MODE ? QString(" (%1)").arg(CoreApplication::BUILD) : ""));
 }
 void MainWindow::on_actionQuit_triggered()
 {

@@ -84,6 +84,7 @@ CONFIG -= console
 
 #OTHER_FILES += qt_de.qm
 
+VERSION = 1.6.1
 win32 {
     RC_ICONS = ../Icon/keks.ico
     QMAKE_TARGET_COMPANY = Philipp Schepper
@@ -94,7 +95,6 @@ win32 {
 }
 
 macx {
-    VERSION = 1.6.1
     OTHER_FILES += Info.plist ../Icon/keks.icns
     QMAKE_INFO_PLIST = Info.plist
     DISTFILES += Info.plist
@@ -104,3 +104,6 @@ macx {
 
 RESOURCES += \
     resources.qrc
+
+COMMIT_HASH = $$system(git -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)
+DEFINES += GIT_CURRENT_SHA1="\"\\\"$${COMMIT_HASH}\\\"\""

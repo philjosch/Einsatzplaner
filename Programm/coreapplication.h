@@ -11,7 +11,7 @@ class CoreApplication : public QApplication
     Q_OBJECT
 
 public:
-    CoreApplication(int &argc, char **argv, Version version, bool devVersion);
+    CoreApplication(int &argc, char **argv, Version version, bool devVersion, QString build);
     ~CoreApplication();
 
     bool getIsFirst() const;
@@ -32,6 +32,7 @@ public:
 
     static bool DEVELOPER_MODE;
     static Version VERSION;
+    static QString BUILD;
 
 public slots:
     static void closeAllWindows();
