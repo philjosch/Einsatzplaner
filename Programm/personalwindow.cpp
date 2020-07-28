@@ -5,6 +5,7 @@
 #include "minimumhourseditordialog.h"
 #include "fileio.h"
 #include "guihelper.h"
+#include "einstellungen.h"
 
 #include <QMessageBox>
 #include <math.h>
@@ -175,6 +176,10 @@ void PersonalWindow::refreshEinzel()
     personToItem.clear();
     foreach (Person *p, current) {
         QListWidgetItem *item = new QListWidgetItem(p->getName());
+        if (! Einstellungen::getReihenfolgeVorNach()) {
+            item->setText(
+                        p->getNachname() + ", " + p->getVorname());
+        }
         switch (p->pruefeStunden()) {
         case AktivOhne:
             item->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN)));
@@ -504,7 +509,12 @@ void PersonalWindow::on_lineVorname_textChanged(const QString &arg1)
         } else {
             aktuellePerson->setVorname(arg1);
             if (personToItem.contains(aktuellePerson)) {
-                personToItem.value(aktuellePerson)->setText(aktuellePerson->getName());
+                if (Einstellungen::getReihenfolgeVorNach()) {
+                    personToItem.value(aktuellePerson)->setText(aktuellePerson->getName());
+                } else {
+                    personToItem.value(aktuellePerson)->setText(
+                                aktuellePerson->getNachname() + ", " + aktuellePerson->getVorname());
+                }
                 ui->listWidget->sortItems();
             }
         }
@@ -519,7 +529,12 @@ void PersonalWindow::on_lineNachname_textChanged(const QString &arg1)
         } else {
             aktuellePerson->setNachname(arg1);
             if (personToItem.contains(aktuellePerson)) {
-                personToItem.value(aktuellePerson)->setText(aktuellePerson->getName());
+                if (Einstellungen::getReihenfolgeVorNach()) {
+                    personToItem.value(aktuellePerson)->setText(aktuellePerson->getName());
+                } else {
+                    personToItem.value(aktuellePerson)->setText(
+                                aktuellePerson->getNachname() + ", " + aktuellePerson->getVorname());
+                }
                 ui->listWidget->sortItems();
             }
         }

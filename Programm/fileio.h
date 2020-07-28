@@ -8,7 +8,6 @@ class FileIO
 {
 public:
     static void saveSettings();
-    static void loadSettings();
 
     static QString getFilePathOpen(QWidget *parent, QString filter);
     static QString getFilePathSave(QWidget *parent, QString filename, QString filter);

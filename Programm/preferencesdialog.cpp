@@ -1,21 +1,22 @@
 #include "preferencesdialog.h"
 #include "ui_preferencesdialog.h"
 #include "coreapplication.h"
+#include "einstellungen.h"
 
 #include <QDesktopServices>
-#include <QSettings>
 #include <QUrl>
 #include <QMessageBox>
 
 PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new Ui::PreferencesDialog)
 {
     ui->setupUi(this);
+    ui->buttonGroupSortierung->setId(ui->radioVorNach, 1);
+    ui->buttonGroupSortierung->setId(ui->radioNachVor, 0);
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(closeDialogOk()));
     connect(ui->pushDownload, &QPushButton::clicked, this, [=]() { QDesktopServices::openUrl(CoreApplication::URL_DOWNLOAD); });
-    QSettings settings;
-    ui->checkSearchAtStart->setChecked(settings.value("general/autosearchupdate", true).toBool());
-    ui->checkAutoUpload->setChecked(settings.value("online/useautoupload", true).toBool());
-    int index = settings.value("io/autoSave", 4).toInt();
+    ui->checkSearchAtStart->setChecked(Einstellungen::getAutoSearchUpdate());
+    ui->checkAutoUpload->setChecked(Einstellungen::getUseAutoUpload());
+    int index = Einstellungen::getAutoSave();
     if (index == 5) {
         ui->comboAutoSave->setCurrentIndex(0);
     } else if (index == 10) {
@@ -25,6 +26,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new 
     } else if (index == 30) {
         ui->comboAutoSave->setCurrentIndex(3);
     }
+    ui->buttonGroupSortierung->button(Einstellungen::getReihenfolgeVorNach() ? 1 : 0)->click();
     setWindowFilePath("");
 }
 
@@ -57,8 +59,7 @@ void PreferencesDialog::closeDialogOk()
 
 void PreferencesDialog::saveSettings()
 {
-    QSettings settings;
-    settings.setValue("general/autosearchupdate", ui->checkSearchAtStart->isChecked());
+    Einstellungen::setAutoSearchUpdate(ui->checkSearchAtStart->isChecked());
     int value = 0;
     int index = ui->comboAutoSave->currentIndex();
     if (index == 0) {
@@ -70,8 +71,9 @@ void PreferencesDialog::saveSettings()
     } else if (index == 3) {
         value = 30;
     }
-    settings.setValue("io/autoSave", value);
-    settings.setValue("online/useautoupload", ui->checkAutoUpload->isChecked());
+    Einstellungen::setAutoSave(value);
+    Einstellungen::setUseAutoUpload(ui->checkAutoUpload->isChecked());
+    Einstellungen::setReihenfolgeVorNach(ui->buttonGroupSortierung->checkedId() == 1);
 }
 
 void PreferencesDialog::on_pushNotes_clicked()

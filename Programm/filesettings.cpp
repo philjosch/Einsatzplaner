@@ -1,9 +1,9 @@
 #include "filesettings.h"
 #include "export.h"
 #include "ui_filesettings.h"
+#include "einstellungen.h"
 
 #include <QMessageBox>
-#include <QSettings>
 
 FileSettings::FileSettings(QWidget *parent, ManagerFileSettings *manager) : QDialog(parent), ui(new Ui::FileSettings)
 {
@@ -42,8 +42,7 @@ void FileSettings::getSettings(ManagerFileSettings *mgr)
 
 void FileSettings::on_checkEnable_clicked(bool checked)
 {
-    QSettings settings;
-    if (settings.value("online/useautoupload").toBool() && checked)
+    if (Einstellungen::getUseAutoUpload() && checked)
         ui->checkAuto->setEnabled(true);
     else
         ui->checkAuto->setEnabled(false);

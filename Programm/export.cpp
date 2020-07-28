@@ -1,9 +1,9 @@
+#include "einstellungen.h"
 #include "export.h"
 #include "fileio.h"
 #include "networking.h"
 
 #include <QTemporaryFile>
-#include <QSettings>
 #include <QPrintDialog>
 
 const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td, p { font-size: 10px; font-weight: normal !important;}"
@@ -150,8 +150,7 @@ bool Export::uploadToServer(ManagerFileSettings *settings, QList<AActivity *> li
 int Export::autoUploadToServer(ManagerFileSettings *settings, Manager *mgr)
 {
     /* EINSTELLUNGEN LESEN */
-    QSettings s;
-    if (!s.value("online/useautoupload").toBool()) return -1;
+    if (!Einstellungen::getUseAutoUpload()) return -1;
     if (!settings->getAutom()) return -1;
 
     /* LISTE MIT DEN AKTIVITAETEN ERSTELLEN */

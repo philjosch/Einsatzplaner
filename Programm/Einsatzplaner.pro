@@ -18,6 +18,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
+    einstellungen.cpp \
     guihelper.cpp \
     mainwindow.cpp \
     networking.cpp \
@@ -45,6 +46,7 @@ SOURCES += main.cpp\
     managerfilesettings.cpp
 
 HEADERS  += mainwindow.h \
+    einstellungen.h \
     guihelper.h \
     networking.h \
     person.h \
