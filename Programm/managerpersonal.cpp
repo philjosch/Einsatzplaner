@@ -251,12 +251,11 @@ QString ManagerPersonal::getHtmlFuerEinzelansicht(QList<Person *> liste, Mitglie
     QMap<Category, int> sum;
     foreach(Person *p, liste) {
         a += p->getHtmlForDetailPage();
+        QString help = "<p><small>Stand: %1</small></p>";
         if (p != liste.last()) {
-            a += "<div style='page-break-after:always'>";
-            a += "<p><small>Stand: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
-        } else {
-            a += "<p><small>Stand: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+            help = "<div style='page-break-after:always'>" + help + "</div>";
         }
+        a += help.arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
         foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
@@ -330,7 +329,7 @@ QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> personen, Q
 
 QString ManagerPersonal::getMitgliederlisteAlsHtml(QList<Person*> liste, Mitglied filter)
 {
-    QString a = "<h3>%1 – Stand "+QDateTime::currentDateTime().toString("d.M.yyyy")+"</h3>"
+    QString a = tr("<h3>%1 – Stand %2</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr>"
                 "<th>Name<br/>Mitgliedsnummer<br/>Status</th>"
                 "<th>Geburtsdatum<br/>Eintritt<br/>Beruf</th>"
@@ -338,8 +337,9 @@ QString ManagerPersonal::getMitgliederlisteAlsHtml(QList<Person*> liste, Mitglie
                 "<th>E-Mail<br/>Telefon</th>"
                 "<th>Betriebsdienst</th>"
                 "<th>Sonstiges</th>"
-                "</thead><tbody>";
-    a = a.arg(getStringVonFilter(filter));
+                "</thead><tbody>");
+    a = a.arg(getStringVonFilter(filter),
+              QDateTime::currentDateTime().toString("d.M.yyyy"));
     foreach(Person *akt, liste) {
         a += akt->getHtmlForMitgliederListe();
     }

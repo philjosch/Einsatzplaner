@@ -51,7 +51,7 @@ public:
 
     QString getHtmlFuerEinzelansicht(QList<Person*> liste, Mitglied filter);
     static QString getHtmlFuerGesamtuebersicht(QList<Person *> personen, QSet<Category> spalten, Mitglied filter);
-    QString getMitgliederlisteAlsHtml(QList<Person *> liste, Mitglied filter);
+    static QString getMitgliederlisteAlsHtml(QList<Person *> liste, Mitglied filter);
     QString getMitgliederlisteAlsCSV(QList<Person *> liste);
 
     int getAnzahlMitglieder(Mitglied filter);

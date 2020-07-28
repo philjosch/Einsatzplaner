@@ -16,7 +16,7 @@ const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td
                             "p.last { page-break-after: always; }";
 const QFont Export::DEFAULT_FONT = QFont("Arial", 11, QFont::Normal);
 
-bool Export::printEinzelansichten(QList<AActivity *> liste, QPrinter *printer)
+bool Export::printAktivitaetenEinzel(QList<AActivity *> liste, QPrinter *printer)
 {
     if (printer == nullptr) return false;
     if (liste.isEmpty()) return true;
@@ -27,7 +27,7 @@ bool Export::printEinzelansichten(QList<AActivity *> liste, QPrinter *printer)
     return true;
 }
 
-bool Export::printList(QList<AActivity *> liste, QPrinter *printer)
+bool Export::printAktivitaetenListe(QList<AActivity *> liste, QPrinter *printer)
 {
     if (printer == nullptr) return false;
     if (liste.isEmpty()) return true;
@@ -50,7 +50,7 @@ bool Export::printReservierung(Fahrtag *f, QPrinter *printer)
     return true;
 }
 
-bool Export::printPerson(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
+bool Export::printPersonenEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
 {
     if (printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
@@ -60,7 +60,7 @@ bool Export::printPerson(QList<Person *> liste, ManagerPersonal *m, Mitglied fil
     return true;
 }
 
-bool Export::printPerson(Person *p, QPrinter *printer)
+bool Export::printPersonenEinzelEinzel(Person *p, QPrinter *printer)
 {
     if (p == nullptr || printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
@@ -71,7 +71,7 @@ bool Export::printPerson(Person *p, QPrinter *printer)
     return true;
 }
 
-bool Export::printPersonenGesamtuebersicht(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer)
+bool Export::printPersonenZeiten(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer)
 {
     if (printer == nullptr) return false;
     if (personen.isEmpty()) return true;
@@ -82,11 +82,11 @@ bool Export::printPersonenGesamtuebersicht(QList<Person *> personen, QSet<Catego
     return true;
 }
 
-bool Export::printMitglieder(ManagerPersonal *m, QList<Person*> liste, Mitglied filter, QPrinter *printer)
+bool Export::printMitglieder(QList<Person*> liste, Mitglied filter, QPrinter *printer)
 {
     if (printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
-    QString a = m->getMitgliederlisteAlsHtml(liste, filter);
+    QString a = ManagerPersonal::getMitgliederlisteAlsHtml(liste, filter);
     d->setHtml(a);
     d->print(printer);
     return true;
@@ -142,7 +142,7 @@ bool Export::uploadToServer(ManagerFileSettings *settings, QList<AActivity *> li
     p->setOutputFormat(QPrinter::PdfFormat);
     p->setOutputFileName(localFile);
 
-    printList(liste, p);
+    printAktivitaetenListe(liste, p);
 
     return Networking::ladeDateiHoch(settings->getFullServer(), &tempFile, settings->getId());
 }

@@ -22,19 +22,19 @@ class Export
 {
 public:
     // Drucken von Fahrtagen und Aktivitäten
-    static bool printEinzelansichten(QList<AActivity*> liste, QPrinter *printer);
-    static bool printList(QList<AActivity *> liste, QPrinter *printer);
+    static bool printAktivitaetenEinzel(QList<AActivity*> liste, QPrinter *printer);
+    static bool printAktivitaetenListe(QList<AActivity *> liste, QPrinter *printer);
 
     // Reservierungen
     static bool printReservierung(Fahrtag *f, QPrinter *printer); // Gibt nur die Reservierungen aus sortiert nach Wagen und dann nach Name
 
     // Drucken von Personen
-    static bool printPerson(QList<Person*> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer);
-    static bool printPerson(Person *p, QPrinter *printer);
-    static bool printPersonenGesamtuebersicht(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer);
+    static bool printPersonenEinzelListe(QList<Person*> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer);
+    static bool printPersonenEinzelEinzel(Person *p, QPrinter *printer);
+    static bool printPersonenZeiten(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer);
 
     // Mitgliederlisten
-    static bool printMitglieder(ManagerPersonal *m, QList<Person *> liste, Mitglied filter, QPrinter *printer);
+    static bool printMitglieder(QList<Person *> liste, Mitglied filter, QPrinter *printer);
     static bool exportMitgliederAlsCSV(ManagerPersonal *m, QList<Person *> liste, QString pfad);
 
     // Allgemeines

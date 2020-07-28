@@ -88,8 +88,8 @@ private slots:
     void on_checkBoxBenoetigt_clicked(bool checked);
     void on_tablePersonen_cellChanged(int row, int column);
 
-    void on_buttonAddPerson_clicked();
     void on_buttonRemovePerson_clicked();
+    int fuegeZeileInTabelleEin(QString name="", Category kat=Sonstiges, QString bemerkung="", bool block=false, QTime beginn=QTime(0,0), QTime ende=QTime(0,0));
 
     // Menue
     void on_actionDelete_triggered();
@@ -132,7 +132,6 @@ private:
 
     QString getBelegungVonKlasseUndZug(Fahrtag *f, int zug, int klasse);
 
-    int fuegeZeileInTabelleEin(QString name="", Category kat=Sonstiges, QString bemerkung="", bool block=false, QTime beginn=QTime(0,0), QTime ende=QTime(0,0));
 };
 
 #endif // FAHRTAGWINDOW_H

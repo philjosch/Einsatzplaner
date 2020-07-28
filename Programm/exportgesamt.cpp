@@ -59,9 +59,9 @@ void ExportGesamt::on_pushDrucken_clicked()
 
     if (ui->checkEinzel->isChecked() && listeEinzel.length() > 0) {
         if (ui->checkPDF->isChecked())
-            Export::printEinzelansichten(listeEinzel, Export::getPrinterPDF(p, "Einzelansicht.pdf", QPrinter::Orientation::Portrait));
+            Export::printAktivitaetenEinzel(listeEinzel, Export::getPrinterPDF(p, "Einzelansicht.pdf", QPrinter::Orientation::Portrait));
         if (ui->checkAusdruck->isChecked())
-            Export::printEinzelansichten(listeEinzel, Export::getPrinterPaper(p, QPrinter::Orientation::Portrait));
+            Export::printAktivitaetenEinzel(listeEinzel, Export::getPrinterPaper(p, QPrinter::Orientation::Portrait));
     }
     if (ui->checkListe->isChecked() && listeListe.length() > 0) {
         if (ui->checkUpload->isChecked()) {
@@ -73,9 +73,9 @@ void ExportGesamt::on_pushDrucken_clicked()
         }
 
         if (ui->checkPDF->isChecked())
-            Export::printList(listeListe, Export::getPrinterPDF(p, "Listenansicht.pdf", QPrinter::Orientation::Landscape));
+            Export::printAktivitaetenListe(listeListe, Export::getPrinterPDF(p, "Listenansicht.pdf", QPrinter::Orientation::Landscape));
         if (ui->checkAusdruck->isChecked())
-            Export::printList(listeListe, Export::getPrinterPaper(p, QPrinter::Orientation::Landscape));
+            Export::printAktivitaetenListe(listeListe, Export::getPrinterPaper(p, QPrinter::Orientation::Landscape));
     }
 }
 

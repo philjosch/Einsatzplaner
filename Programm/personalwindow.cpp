@@ -299,47 +299,47 @@ void PersonalWindow::editMinimumHours()
 
 void PersonalWindow::on_actionEinzelEinzelPDF_triggered()
 {
-    Export::printPerson(aktuellePerson,
+    Export::printPersonenEinzelEinzel(aktuellePerson,
                         Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf", QPrinter::Orientation::Portrait));
 }
 void PersonalWindow::on_actionEinzelEinzelDrucken_triggered()
 {
-    Export::printPerson(aktuellePerson,
+    Export::printPersonenEinzelEinzel(aktuellePerson,
                         Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 
 void PersonalWindow::on_actionEinzelListePDF_triggered()
 {
-    Export::printPerson(getSortierteListe(), manager, filter,
+    Export::printPersonenEinzelListe(getSortierteListe(), manager, filter,
                         Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf", QPrinter::Orientation::Portrait));
 }
 void PersonalWindow::on_actionEinzelListeDrucken_triggered()
 {
-    Export::printPerson(getSortierteListe(), manager, filter,
+    Export::printPersonenEinzelListe(getSortierteListe(), manager, filter,
                         Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 
 void PersonalWindow::on_actionZeitenPDF_triggered()
 {
-    Export::printPersonenGesamtuebersicht(
+    Export::printPersonenZeiten(
                 getSortierteListe(), anzeige, filter,
                 Export::getPrinterPDF(this, "Personal-Gesamt.pdf", QPrinter::Orientation::Landscape));
 }
 void PersonalWindow::on_actionZeitenDrucken_triggered()
 {
-    Export::printPersonenGesamtuebersicht(
+    Export::printPersonenZeiten(
                 getSortierteListe(), anzeige, filter,
                 Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
 }
 
 void PersonalWindow::on_actionMitgliederPDF_triggered()
 {
-    Export::printMitglieder(manager, getSortierteListe(), filter,
+    Export::printMitglieder(getSortierteListe(), filter,
                             Export::getPrinterPDF(this, "Mitgliederliste.pdf", QPrinter::Orientation::Portrait));
 }
 void PersonalWindow::on_actionMitgliederDrucken_triggered()
 {
-    Export::printMitglieder(manager, getSortierteListe(), filter,
+    Export::printMitglieder(getSortierteListe(), filter,
                             Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
 }
 void PersonalWindow::on_actionMitgliederCSV_triggered()
@@ -913,16 +913,16 @@ void PersonalWindow::showPerson(Person *p)
 
 QList<Person*> PersonalWindow::getSortierteListe()
 {
-    QList<Person*> aktuelleSortierung = QList<Person*>();
+    QList<Person*> liste = QList<Person*>();
     for(int i = 0; i < ui->tabelleGesamt->rowCount(); i++) {
         QString name = ui->tabelleGesamt->item(i, 0)->text();
         if (name != "") name += " ";
         name += ui->tabelleGesamt->item(i, 1)->text();
         Person *pers = manager->getPerson(name);
         if (pers != nullptr)
-            aktuelleSortierung.append(pers);
+            liste.append(pers);
     }
-    return aktuelleSortierung;
+    return liste;
 }
 
 void PersonalWindow::toggleFields(bool state)

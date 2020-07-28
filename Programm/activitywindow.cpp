@@ -214,13 +214,13 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
 
 void ActivityWindow::on_actionPrint_triggered()
 {
-    QPrinter *p = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
-    Export::printEinzelansichten({activity}, p);
+    Export::printAktivitaetenEinzel({activity},
+                                    Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 void ActivityWindow::on_actionPdf_triggered()
 {
-    QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf", QPrinter::Orientation::Portrait);
-    Export::printEinzelansichten({activity}, p);
+    Export::printAktivitaetenEinzel({activity},
+                                    Export::getPrinterPDF(this, windowTitle()+".pdf", QPrinter::Orientation::Portrait));
 }
 
 void ActivityWindow::on_buttonDelete_clicked()
@@ -235,7 +235,8 @@ void ActivityWindow::on_buttonDelete_clicked()
 void ActivityWindow::setPredefinedValue(QString anlass)
 {
     if (anlass.contains(tr("Vorbereiten"), Qt::CaseInsensitive)
-            || anlass.contains(tr("Vorbereitung"), Qt::CaseInsensitive)) {
+            || anlass.contains(tr("Vorbereitung"), Qt::CaseInsensitive)
+            || anlass.contains(tr("Reinig"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::ZugVorbereiten;
     } else if (anlass.contains(tr("Werkstatt"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Werkstatt;
@@ -243,7 +244,7 @@ void ActivityWindow::setPredefinedValue(QString anlass)
         predefinedValueForTable = Category::Ausbildung;
     } else if (anlass.contains(tr("Büro"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Buero;
-    } else if (anlass.contains(tr("Vegetationsarbeiten"), Qt::CaseInsensitive)
+    } else if (anlass.contains(tr("Vegetation"), Qt::CaseInsensitive)
                || anlass.contains(tr("Kontrollfahrt"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Infrastruktur;
     } else {
