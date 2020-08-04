@@ -26,21 +26,26 @@ public:
     static Version loadVersion();
 
     static QString loadNotes(Version v);
-    static QString URL_DOWNLOAD;
-    static QString URL_VERSION;
-    static QString URL_NOTES;
 
     static bool DEVELOPER_MODE;
     static Version VERSION;
     static QString BUILD;
 
+    static bool isUpdateVerfuegbar();
+
 public slots:
     static void closeAllWindows();
     static void autoSaveWindows();
 
+    static void oeffneDownloadSeite();
+
 protected:
     QTimer *autoSaveTimer;
     bool isFirst;
+
+    static QString URL_DOWNLOAD;
+    static QString URL_VERSION;
+    static QString URL_NOTES;
 };
 
 #endif // COREAPPLICATION_H

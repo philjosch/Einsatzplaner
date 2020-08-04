@@ -4,7 +4,6 @@
 #include "einstellungen.h"
 
 #include <QDesktopServices>
-#include <QUrl>
 #include <QMessageBox>
 
 PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new Ui::PreferencesDialog)
@@ -13,7 +12,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new 
     ui->buttonGroupSortierung->setId(ui->radioVorNach, 1);
     ui->buttonGroupSortierung->setId(ui->radioNachVor, 0);
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(closeDialogOk()));
-    connect(ui->pushDownload, &QPushButton::clicked, this, [=]() { QDesktopServices::openUrl(CoreApplication::URL_DOWNLOAD); });
+    connect(ui->pushDownload, &QPushButton::clicked, this, [=]() { CoreApplication::oeffneDownloadSeite(); });
     ui->checkSearchAtStart->setChecked(Einstellungen::getAutoSearchUpdate());
     ui->checkAutoUpload->setChecked(Einstellungen::getUseAutoUpload());
     int index = Einstellungen::getAutoSave();
@@ -37,18 +36,20 @@ PreferencesDialog::~PreferencesDialog()
 
 void PreferencesDialog::on_pushSearch_clicked()
 {
-    Version aktuell = CoreApplication::VERSION;
-    online = CoreApplication::loadVersion();
-    bool old = online>aktuell;
-    QString s;
-    if (old) {
-        s = tr("Sie verwenden Version %1. Es ist Version %2 verfügbar.").arg(aktuell.toString(), online.toString());
+    if (CoreApplication::isUpdateVerfuegbar()) {
+        online = CoreApplication::loadVersion();
+        ui->labelVersion->setText(
+                    tr("Sie verwenden Version %1. Es ist Version %2 verfügbar.")
+                    .arg(QCoreApplication::applicationVersion(), online.toString()));
+        ui->pushDownload->setEnabled(true);
+        ui->pushNotes->setEnabled(true);
     } else {
-        s = tr("Sie verwenden bereits die neuste Version %1.").arg(aktuell.toString());
+        ui->labelVersion->setText(
+                    tr("Sie verwenden bereits die neuste Version %1.")
+                    .arg(QCoreApplication::applicationVersion()));
+        ui->pushDownload->setEnabled(false);
+        ui->pushNotes->setEnabled(false);
     }
-    ui->labelVersion->setText(s);
-    ui->pushDownload->setEnabled(old);
-    ui->pushNotes->setEnabled(old);
 }
 
 void PreferencesDialog::closeDialogOk()

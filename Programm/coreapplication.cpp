@@ -23,7 +23,11 @@ CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool d
     QCoreApplication::setOrganizationName("Philipp Schepper");
     QCoreApplication::setOrganizationDomain("philipp-schepper.de");
     QCoreApplication::setApplicationName("Einsatzplaner");
-    QCoreApplication::setApplicationVersion(VERSION.toString());
+    if (devVersion) {
+        QCoreApplication::setApplicationVersion(QString("%1 (%2)").arg(VERSION.toString()).arg(CoreApplication::BUILD));
+    } else {
+        QCoreApplication::setApplicationVersion(VERSION.toString());
+    }
     QIcon icon(":/icons/square.png");
     setWindowIcon(icon);
     isFirst = true;
@@ -52,15 +56,16 @@ bool CoreApplication::event(QEvent *event)
 
 void CoreApplication::checkVersion()
 {
-    Version v = loadVersion();
-    if (v>VERSION) {
-        QString message = tr("Es ist Version %1 des Programms verfügbar.\nSie benutzen Version %2.\n\n").arg(v.toString()).arg(VERSION.toString());
+    if (isUpdateVerfuegbar()) {
+        Version v = loadVersion();
+        QString message = tr("Es ist Version %1 des Programms verfügbar.\nSie benutzen Version %2.")
+                .arg(v.toString()).arg(QCoreApplication::applicationVersion());
         QMessageBox::StandardButton answ = QMessageBox::information(nullptr, tr("Neue Version"), message, QMessageBox::Ignore|QMessageBox::Help|QMessageBox::Open, QMessageBox::Open);
         if (answ == QMessageBox::Open) {
-            QDesktopServices::openUrl(URL_DOWNLOAD);
+            oeffneDownloadSeite();
         } else if (answ == QMessageBox::Help) {
             if (QMessageBox::information(nullptr, tr("Über die neue Version"), loadNotes(v), QMessageBox::Close|QMessageBox::Open, QMessageBox::Open) == QMessageBox::Open) {
-                QDesktopServices::openUrl(URL_DOWNLOAD);
+                oeffneDownloadSeite();
             }
         }
     }
@@ -81,6 +86,12 @@ void CoreApplication::autoSaveWindows()
         }
     }
 }
+
+void CoreApplication::oeffneDownloadSeite()
+{
+    QDesktopServices::openUrl(URL_DOWNLOAD);
+}
+
 void CoreApplication::stopAutoSave()
 {
     // Auto-Save Thread beenden, falls er gestartet wurde
@@ -102,6 +113,12 @@ Version CoreApplication::loadVersion()
 QString CoreApplication::loadNotes(Version v)
 {
     return Networking::ladeDatenVonURL(URL_NOTES.arg(v.major).arg(v.minor).arg(v.patch));
+}
+
+bool CoreApplication::isUpdateVerfuegbar()
+{
+    Version v = loadVersion();
+    return (v>VERSION) || ((v == VERSION) && DEVELOPER_MODE);
 }
 
 void CoreApplication::closeAllWindows()

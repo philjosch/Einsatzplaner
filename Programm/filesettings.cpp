@@ -70,7 +70,7 @@ void FileSettings::on_pushCheck_clicked()
     m2.setServer(ui->lineServer->text());
     m2.setPath(ui->linePath->text());
     m2.setId(ui->lineID->text());
-    if(Export::testServerConnection(mngr)) {
+    if(Export::testServerConnection(&m2)) {
         ui->labelStatus->setText(tr("Verbindung erfolgreich getestet!"));
     } else {
         ui->labelStatus->setText(tr("Verbindung zum Server fehlgeschlagen!"));

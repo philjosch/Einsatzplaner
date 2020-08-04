@@ -3,8 +3,6 @@
 
 #include <QSettings>
 
-
-
 class Einstellungen
 {
 public:
@@ -27,7 +25,7 @@ public:
     static void setLastUsed(QStringList value);
 
 private:
-    static QSettings settings;
+    static QSettings SETTINGS;
 };
 
 #endif // EINSTELLUNGEN_H
