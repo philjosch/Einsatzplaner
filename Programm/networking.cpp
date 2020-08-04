@@ -27,7 +27,6 @@ QString Networking::ladeDatenVonURL(QString url)
         //success
         s = QString(reply->readAll());
     }
-    qDebug() << s;
     delete reply;
     return s;
 }
