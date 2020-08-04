@@ -33,11 +33,13 @@ public:
     QMap<AActivity*,Category> getActivities();
 
 
-    QString getHtmlForTableView(QSet<Category> liste);
-    QString getHtmlForDetailPage();
-    QString getHtmlForMitgliederListe();
+    QString getZeitenFuerListeAlsHTML(QSet<Category> liste);
+    QString getZeitenFuerEinzelAlsHTML();
 
-    QString getCSV();
+    QString getPersonaldatenFuerListeAlsHTML();
+    QString getPersonaldatenFuerListeAlsCSV();
+    QString getPersonaldatenFuerEinzelAlsHTML();
+
 
     int getAdditional(Category cat);
     void setAdditional(Category cat, int value);

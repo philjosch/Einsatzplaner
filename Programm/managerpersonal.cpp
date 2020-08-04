@@ -243,14 +243,14 @@ bool ManagerPersonal::checkNummer(int neu)
     return true;
 }
 
-QString ManagerPersonal::getHtmlFuerEinzelansicht(QList<Person *> liste, Mitglied filter)
+QString ManagerPersonal::getZeitenFuerEinzelListeAlsHTML(QList<Person *> liste, Mitglied filter)
 {
     berechne();
     QString a = "";
     // Seite fuer jede Person einfuegen
     QMap<Category, int> sum;
     foreach(Person *p, liste) {
-        a += p->getHtmlForDetailPage();
+        a += p->getZeitenFuerEinzelAlsHTML();
         QString help = "<p><small>Stand: %1</small></p>";
         if (p != liste.last()) {
             help = "<div style='page-break-after:always'>" + help + "</div>";
@@ -282,7 +282,7 @@ QString ManagerPersonal::getHtmlFuerEinzelansicht(QList<Person *> liste, Mitglie
     return titelSeite+a;
 }
 
-QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> personen, QSet<Category> spalten, Mitglied filter)
+QString ManagerPersonal::getZeitenFuerListeAlsHTML(QList<Person *> personen, QSet<Category> spalten, Mitglied filter)
 {
     QString a = "<h3>Einsatzzeiten: %1</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
@@ -304,7 +304,7 @@ QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> personen, Q
 
     QMap<Category, int> sum;
     for(Person *p: personen) {
-        a += p->getHtmlForTableView(spalten);
+        a += p->getZeitenFuerListeAlsHTML(spalten);
         foreach (Category cat, spalten) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
@@ -327,7 +327,65 @@ QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> personen, Q
     return a;
 }
 
-QString ManagerPersonal::getMitgliederlisteAlsHtml(QList<Person*> liste, Mitglied filter)
+QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> liste, Mitglied filter)
+{
+    QString a = "";
+    // Seite fuer jede Person einfuegen
+    QMap<Category, int> sum;
+    foreach(Person *p, liste) {
+        a += p->getPersonaldatenFuerEinzelAlsHTML();
+        QString help = "<p><small>Stand: %1</small></p>";
+        if (p != liste.last()) {
+            help = "<div style='page-break-after:always'>" + help + "</div>";
+        }
+        a += help.arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
+        foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+            sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
+        }
+    }
+
+    QString help = "<li>%1: %2</li>";
+    QString titelSeite = QString("<h1>Mitgliederübersicht: %1</h1><ul>").arg(getStringVonFilter(filter));
+    switch (filter) {
+    case Registriert:
+        titelSeite += help.arg(getStringVonFilter(Registriert)).arg(getAnzahlMitglieder(Registriert));
+        [[clang::fallthrough]];
+    case AlleMitglieder:
+        titelSeite += help.arg(getStringVonFilter(AlleMitglieder)).arg(getAnzahlMitglieder(AlleMitglieder));
+        [[clang::fallthrough]];
+    case Ausgetreten:
+        titelSeite += help.arg(getStringVonFilter(Ausgetreten)).arg(getAnzahlMitglieder(Ausgetreten));
+        if (filter == Ausgetreten) break;
+        titelSeite += "</ul><ul>";
+        [[clang::fallthrough]];
+    case Aktiv:
+        titelSeite += help.arg(getStringVonFilter(Aktiv)).arg(getAnzahlMitglieder(Aktiv));
+        [[clang::fallthrough]];
+    case AktivMit:
+        titelSeite += help.arg(getStringVonFilter(AktivMit)).arg(getAnzahlMitglieder(AktivMit));
+        if (filter == AktivMit) break;
+        [[clang::fallthrough]];
+    case AktivOhne:
+        titelSeite += help.arg(getStringVonFilter(AktivOhne)).arg(getAnzahlMitglieder(AktivOhne));
+        if (filter == AktivOhne) break;
+        if (filter == Aktiv) break;
+        [[clang::fallthrough]];
+    case Passiv:
+        titelSeite += help.arg(getStringVonFilter(Passiv)).arg(getAnzahlMitglieder(Passiv));
+        [[clang::fallthrough]];
+    case PassivMit:
+        titelSeite += help.arg(getStringVonFilter(PassivMit)).arg(getAnzahlMitglieder(PassivMit));
+        if (filter == PassivMit) break;
+        [[clang::fallthrough]];
+    case PassivOhne:
+        break;
+    }
+    titelSeite += "</ul><div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+
+    return titelSeite+a;
+}
+
+QString ManagerPersonal::getMitgliederFuerListeAlsHtml(QList<Person*> liste, Mitglied filter)
 {
     QString a = tr("<h3>%1 – Stand %2</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr>"
@@ -341,18 +399,18 @@ QString ManagerPersonal::getMitgliederlisteAlsHtml(QList<Person*> liste, Mitglie
     a = a.arg(getStringVonFilter(filter),
               QDateTime::currentDateTime().toString("d.M.yyyy"));
     foreach(Person *akt, liste) {
-        a += akt->getHtmlForMitgliederListe();
+        a += akt->getPersonaldatenFuerListeAlsHTML();
     }
     a += "</tbody></table>";
     a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     return a;
 }
 
-QString ManagerPersonal::getMitgliederlisteAlsCSV(QList<Person *> liste)
+QString ManagerPersonal::getMitgliederFuerListeAlsCSV(QList<Person *> liste, Mitglied filter)
 {
     QString t = "Nummer;Nachname;Vorname;Geburtsdatum;Eintritt;Status;Austritt;Tf;Zf;Rangierer;Tauglichkeit;Straße;PLZ;Ort;Mail;Zustimmung Mail;Telefon;Zustimmung Telefon;Strecke;Beruf;Bemerkung\n";
     foreach(Person *akt, liste) {
-        t += akt->getCSV();
+        t += akt->getPersonaldatenFuerListeAlsCSV();
     }
     return t;
 }

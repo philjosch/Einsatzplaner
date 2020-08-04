@@ -29,13 +29,15 @@ public:
     static bool printReservierung(Fahrtag *f, QPrinter *printer); // Gibt nur die Reservierungen aus sortiert nach Wagen und dann nach Name
 
     // Drucken von Personen
-    static bool printPersonenEinzelListe(QList<Person*> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer);
-    static bool printPersonenEinzelEinzel(Person *p, QPrinter *printer);
-    static bool printPersonenZeiten(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer);
+    static bool printZeitenEinzelEinzel(Person *p, QPrinter *printer);
+    static bool printZeitenEinzelListe(QList<Person*> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer);
+    static bool printZeitenListe(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer);
 
     // Mitgliederlisten
-    static bool printMitglieder(QList<Person *> liste, Mitglied filter, QPrinter *printer);
-    static bool exportMitgliederAlsCSV(ManagerPersonal *m, QList<Person *> liste, QString pfad);
+    static bool printMitgliederEinzelEinzel(Person *p, QPrinter *printer);
+    static bool printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer);
+    static bool printMitgliederListe(QList<Person *> liste, Mitglied filter, QPrinter *printer);
+    static bool exportMitgliederAlsCSV(QList<Person *> liste, Mitglied filter, QString pfad);
 
     // Allgemeines
     static QPrinter *getPrinterPaper(QWidget *parent, QPrinter::Orientation orientation);

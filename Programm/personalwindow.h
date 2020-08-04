@@ -31,18 +31,25 @@ private slots:
 
 
     // Export
-    void on_actionEinzelEinzelPDF_triggered();
-    void on_actionEinzelEinzelDrucken_triggered();
+    void on_actionZeitenEinzelEinzelPDF_triggered();
+    void on_actionZeitenEinzelEinzelDrucken_triggered();
 
-    void on_actionEinzelListePDF_triggered();
-    void on_actionEinzelListeDrucken_triggered();
+    void on_actionZeitenEinzelListePDF_triggered();
+    void on_actionZeitenEinzelListeDrucken_triggered();
 
-    void on_actionZeitenPDF_triggered();
-    void on_actionZeitenDrucken_triggered();
+    void on_actionZeitenListePDF_triggered();
+    void on_actionZeitenListeDrucken_triggered();
 
-    void on_actionMitgliederPDF_triggered();
-    void on_actionMitgliederDrucken_triggered();
-    void on_actionMitgliederCSV_triggered();
+
+    void on_actionMitgliederEinzelEinzelPDF_triggered();
+    void on_actionMitgliederEinzelEinzelDrucken_triggered();
+
+    void on_actionMitgliederEinzelListePDF_triggered();
+    void on_actionMitgliederEinzelListeDrucken_triggered();
+
+    void on_actionMitgliederListePDF_triggered();
+    void on_actionMitgliederListeDrucken_triggered();
+    void on_actionMitgliederListeCSV_triggered();
 
 
     // Fenster - Gesamt

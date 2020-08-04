@@ -567,7 +567,7 @@ void Person::setNachname(const QString &value)
     emit changed();
 }
 
-QString Person::getHtmlForTableView(QSet<Category> liste)
+QString Person::getZeitenFuerListeAlsHTML(QSet<Category> liste)
 {
     QString html = "<tr><td style='background-color:";
     switch (pruefeStunden()) {
@@ -599,7 +599,7 @@ QString Person::getHtmlForTableView(QSet<Category> liste)
     return html;
 }
 
-QString Person::getHtmlForDetailPage()
+QString Person::getZeitenFuerEinzelAlsHTML()
 {
     berechne();
     QString html = "<h2>"+vorname+" "+nachname+"</h2>";
@@ -668,7 +668,7 @@ QString Person::getHtmlForDetailPage()
     return html;
 }
 
-QString Person::getHtmlForMitgliederListe()
+QString Person::getPersonaldatenFuerListeAlsHTML()
 {
     QString h = "<tr>";
     h += "<td>"+getName()+"<br/>"
@@ -727,7 +727,62 @@ QString Person::getHtmlForMitgliederListe()
     return h;
 }
 
-QString Person::getCSV()
+QString Person::getPersonaldatenFuerEinzelAlsHTML()
+{
+    QString h = "<h2>"+vorname+" "+nachname+"</h2>";
+
+    QString help = "%1:\t\t %2<br/>";
+    h += "<h3>Stammdaten</h3><p>";
+    h += help.arg("Mitgliedsnummer").arg(nummer);
+    h += help.arg("Status").arg( isAusgetreten() ? "Ehemals %1" : "%1")
+            .arg(aktiv ? "Aktiv":"Passiv");
+
+    // Daten
+    h += help.arg("Geburtstag").arg(geburtstag.toString("dd.MM.yyyy"));
+    h += help.arg("Eintritt").arg(eintritt.toString("dd.MM.yyyy"));
+    if (isAusgetreten()) {
+        h += help.arg("Austritt").arg(austritt.toString("dd.MM.yyyy"));
+    } else {
+        if (austritt.isValid())
+            h += "<br/>Austritt zum: "+austritt.toString("dd.MM.yyyy");
+    }
+    h += help.arg("Beruf").arg(beruf);
+
+    h += "</p><h3>Anschrift</h3><p>";
+
+    // Anschrift
+    h += help.arg("Straße").arg(strasse);
+    h += help.arg("PLZ").arg(plz);
+    h += help.arg("Ort").arg(ort);
+    h += help.arg("Strecke").arg("%1km").arg(strecke);
+
+    h += "</p><h3>Kontaktdaten</h3><p>";
+
+    // Kontakt
+    h += help.arg("Mail (darf %3weitergegeben werden)").arg(mail).arg(mailOK ? "" : "nicht");
+    h += help.arg("Telefon (darf %3weitergegeben werden)").arg(telefon).arg(telefonOK ? "" : "nicht");
+    h += "</p>";
+
+    if (ausbildungRangierer || ausbildungTf || ausbildungZf || tauglichkeit.isValid()) {
+        h += "<h3>Betriebsdienst</h3><p>";
+        h += help.arg("Tauglichkeit bis").arg(tauglichkeit.toString("dd.MM.yyyy"));
+        h += help.arg("Ausbildung zum").arg("") + "</p><ul>";
+        h += (ausbildungTf? "<li>Triebfahrzeugführer</li>": "");
+        h += (ausbildungZf? "<li>Zugführer</li>":"");
+        h += (ausbildungRangierer? "<li>Rangierer</li>":"");
+        h += "</ul>";
+    }
+
+    // Sonstiges
+    if (bemerkungen != "") {
+        h += "<h3>Sonstiges</h3><p>";
+        h += help.arg("Bemerkung").arg(bemerkungen);
+        h += "</p>";
+    }
+    return h;
+}
+
+QString Person::getPersonaldatenFuerListeAlsCSV()
 {
     return QString::number(nummer)
             +";"+nachname

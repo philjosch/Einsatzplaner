@@ -2594,20 +2594,38 @@
      <property name="title">
       <string>Einzelansichten</string>
      </property>
-     <addaction name="actionEinzelEinzelDrucken"/>
-     <addaction name="actionEinzelEinzelPDF"/>
+     <addaction name="actionZeitenEinzelEinzelDrucken"/>
+     <addaction name="actionZeitenEinzelEinzelPDF"/>
      <addaction name="separator"/>
-     <addaction name="actionEinzelListeDrucken"/>
-     <addaction name="actionEinzelListePDF"/>
+     <addaction name="actionZeitenEinzelListeDrucken"/>
+     <addaction name="actionZeitenEinzelListePDF"/>
     </widget>
+    <widget class="QMenu" name="menuMitgliederEinzel">
+     <property name="title">
+      <string>Personalblatt</string>
+     </property>
+     <addaction name="actionMitgliederEinzelEinzelDrucken"/>
+     <addaction name="actionMitgliederEinzelEinzelPDF"/>
+     <addaction name="separator"/>
+     <addaction name="actionMitgliederEinzelListeDrucken"/>
+     <addaction name="actionMitgliederEinzelListePDF"/>
+    </widget>
+    <widget class="QMenu" name="menuMitgliederListe">
+     <property name="title">
+      <string>Mitgliederliste</string>
+     </property>
+     <addaction name="actionMitgliederListeDrucken"/>
+     <addaction name="actionMitgliederListePDF"/>
+     <addaction name="actionMitgliederListeCSV"/>
+    </widget>
+    <action name=""/>
     <addaction name="menuEinzelansichten"/>
     <addaction name="separator"/>
-    <addaction name="actionZeitenDrucken"/>
-    <addaction name="actionZeitenPDF"/>
+    <addaction name="actionZeitenListeDrucken"/>
+    <addaction name="actionZeitenListePDF"/>
     <addaction name="separator"/>
-    <addaction name="actionMitgliederDrucken"/>
-    <addaction name="actionMitgliederPDF"/>
-    <addaction name="actionMitgliederCSV"/>
+    <addaction name="menuMitgliederEinzel"/>
+    <addaction name="menuMitgliederListe"/>
    </widget>
    <addaction name="menuPersonalmanagement"/>
    <addaction name="menuDrucken"/>
@@ -2642,20 +2660,20 @@
     <string>Mindeststunden ...</string>
    </property>
   </action>
-  <action name="actionZeitenPDF">
+  <action name="actionZeitenListePDF">
    <property name="text">
-    <string>Gesamtansicht als PDF speichern …</string>
+    <string>Übersicht Einsatzzeiten als PDF speichern …</string>
    </property>
   </action>
-  <action name="actionZeitenDrucken">
+  <action name="actionZeitenListeDrucken">
    <property name="text">
-    <string>Gesamtansicht drucken …</string>
+    <string>Übersicht Einsatzzeiten drucken …</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
    </property>
   </action>
-  <action name="actionEinzelEinzelDrucken">
+  <action name="actionZeitenEinzelEinzelDrucken">
    <property name="text">
     <string>Für aktuelle Person drucken ...</string>
    </property>
@@ -2663,17 +2681,17 @@
     <string>Ctrl+Shift+P</string>
    </property>
   </action>
-  <action name="actionEinzelEinzelPDF">
+  <action name="actionZeitenEinzelEinzelPDF">
    <property name="text">
     <string>Für aktuelle Person als PDF speichern ...</string>
    </property>
   </action>
-  <action name="actionEinzelListeDrucken">
+  <action name="actionZeitenEinzelListeDrucken">
    <property name="text">
     <string>Für alle drucken ...</string>
    </property>
   </action>
-  <action name="actionEinzelListePDF">
+  <action name="actionZeitenEinzelListePDF">
    <property name="text">
     <string>Für alle als PDF speichern ...</string>
    </property>
@@ -2691,6 +2709,41 @@
   <action name="actionMitgliederCSV">
    <property name="text">
     <string>Mitgliederliste als CSV-Datei speichern …</string>
+   </property>
+  </action>
+  <action name="actionMitgliederEinzelEinzelDrucken">
+   <property name="text">
+    <string>Für aktuelle Person drucken …</string>
+   </property>
+  </action>
+  <action name="actionMitgliederEinzelEinzelPDF">
+   <property name="text">
+    <string>Für aktuelle Person als PDF speichern …</string>
+   </property>
+  </action>
+  <action name="actionMitgliederEinzelListeDrucken">
+   <property name="text">
+    <string>Für alle drucken …</string>
+   </property>
+  </action>
+  <action name="actionMitgliederEinzelListePDF">
+   <property name="text">
+    <string>Für alle als PDF speichern …</string>
+   </property>
+  </action>
+  <action name="actionMitgliederListeDrucken">
+   <property name="text">
+    <string>Drucken …</string>
+   </property>
+  </action>
+  <action name="actionMitgliederListePDF">
+   <property name="text">
+    <string>Als PDF speichern …</string>
+   </property>
+  </action>
+  <action name="actionMitgliederListeCSV">
+   <property name="text">
+    <string>Als CSV-Datei speichern …</string>
    </property>
   </action>
  </widget>
@@ -2744,7 +2797,6 @@
   <tabstop>plainBemerkung</tabstop>
   <tabstop>checkAustritt</tabstop>
   <tabstop>dateAustritt</tabstop>
-  <tabstop>checkAustrittUnbekannt</tabstop>
   <tabstop>pushDelete</tabstop>
   <tabstop>tabelle</tabstop>
   <tabstop>lineTf</tabstop>
@@ -2803,7 +2855,7 @@
   <connection>
    <sender>pushZeitenDrucken</sender>
    <signal>clicked()</signal>
-   <receiver>actionZeitenDrucken</receiver>
+   <receiver>actionZeitenListeDrucken</receiver>
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -2819,7 +2871,7 @@
   <connection>
    <sender>pushZeitenPDF</sender>
    <signal>clicked()</signal>
-   <receiver>actionZeitenPDF</receiver>
+   <receiver>actionZeitenListePDF</receiver>
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -2835,7 +2887,7 @@
   <connection>
    <sender>pushEinzelPDF</sender>
    <signal>clicked()</signal>
-   <receiver>actionEinzelEinzelPDF</receiver>
+   <receiver>actionZeitenEinzelEinzelPDF</receiver>
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -2851,7 +2903,7 @@
   <connection>
    <sender>pushEinzelDrucken</sender>
    <signal>clicked()</signal>
-   <receiver>actionEinzelEinzelDrucken</receiver>
+   <receiver>actionZeitenEinzelEinzelDrucken</receiver>
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -2867,7 +2919,7 @@
   <connection>
    <sender>pushMitgliederDrucken</sender>
    <signal>clicked()</signal>
-   <receiver>actionMitgliederDrucken</receiver>
+   <receiver>actionMitgliederListeDrucken</receiver>
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -2883,7 +2935,7 @@
   <connection>
    <sender>pushMitgliederPDF</sender>
    <signal>clicked()</signal>
-   <receiver>actionMitgliederPDF</receiver>
+   <receiver>actionMitgliederListePDF</receiver>
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
