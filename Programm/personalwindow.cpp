@@ -21,7 +21,7 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
 
     // Initalisieren der Statischen variablen
     manager = m;
-    setWindowTitle(tr("Personalverwaltung"));
+    setWindowTitle(tr("Mitgliederverwaltung"));
 
     personToItem = QHash<Person*, QListWidgetItem*>();
     enabled = false;

@@ -1,20 +1,23 @@
-\chapter{Personal}\label{personal}
+\chapter{\neu{Mitglieder}}\label{personal}
 Im Kopf des Fensters kann eingestellt werden welche Personen angezeigt werden sollen.
 Ebenso kann durch einen Knopfdruck eine E-Mail an alle angezeigten Personen erstellt werden.
-Werden bei dieser Aktion Personen gefunden, für die kein Mailadresse angegeben ist,
+Werden bei dieser Aktion Personen gefunden, für die keine Mailadresse angegeben ist,
 so können die angegebenen Postadressen in einer CSV-Datei gespeichert werden.
 Diese Daten können dann z.B.\ für Serienbriefe genutzt werden.
 
-\section{Gesamtübersicht}\label{personal:gesamtansicht}
+\section{\neu{Einsatzzeiten}}\label{personal:zeiten}
 \begin{figure}[!h]
 	\includegraphics[width=\textwidth]{img/personal_gesamt}
-	\caption{Die Personalverwaltung in der Gesamtübersicht.}
-	\label{fig:personal:gesamt}
+	\caption{\neu{Die Mitgliederverwaltung mit den Einsatzzeiten.}}
+	\label{fig:personal:zeiten}
 \end{figure}
-In der Tabelle von Abbildung~\ref{fig:personal:gesamt} wird eine Übersicht über alle in der Kopfzeile ausgewählten Personen gegeben.
+In der Tabelle von Abbildung~\ref{fig:personal:zeiten} wird eine Übersicht über alle in der Kopfzeile ausgewählten Personen gegeben.
 Die Einfärbung erfolgt anhand der mindestens zu erbringenden Stunden.
-Rot bedeuted hierbei, dass die Person ihre Stunden noch nicht erbracht hat.
-Eine weiße Markierung bestätigt, dass die Mindesstunden erbracht wurden, oder keine solchen gefordert sind (z.B.\ bei passiven Mitglieder).
+Rot bedeutet hierbei, dass die Person ihre Stunden noch nicht erbracht hat.
+Eine weiße Markierung bestätigt, dass die Mindeststunden erbracht wurden, oder keine solchen gefordert sind (z.B.\ bei passiven Mitglieder).
+\neu{Für aktive Mitglieder gilt, dass sie in die Kategorie "`Aktiv mit Stunden"' fallen, sobald die Mindeststunden für "`Gesamt"' erreicht wurden.
+Die persönlichen Mindeststunden für Lokführer werden hierbei nicht berücksichtigt.
+Dennoch werden diese Personen auch rot markiert.}
 Passive Mitglieder, die Stunden geleistet haben, werden grün markiert.
 Durch einen Doppelklick auf den Eintrag einer Person in der Tabelle wird die entsprechende Einzelansicht geöffnet.
 
@@ -25,7 +28,7 @@ Diese Zeile ist in der Ausgabe ebenso enthalten.
 
 
 Mit den Knöpfen "`Tabelle als PDF speichern \dots"' und "`Tabelle drucken \dots"' kann man die Daten der Tabelle exportieren.
-Diese Funktionen sind auch im Menü "`Eportieren"' verfügbar.
+Diese Funktionen sind auch im Menü "`Exportieren"' verfügbar.
 
 
 \paragraph{Mindeststunden}
@@ -59,7 +62,7 @@ In der Liste sind alle Personen gelistet, die nach der Kopfzeile des Fenster ang
 Die farbliche hervorhebung erfolgt analog zur Gesamtübersicht.
 Im oberen Teil können der Name und die Mitgliedsnummer der Person verändert werden.
 Alternativ zu manuellen Eingabe der Nummer, kann auch eine solche automatisch zugewiesen werden.
-Dabei wird die die nächst größere Zahl der aktuell höchsten Mitgliedsnummer verwendet.
+Dabei wird die nächst größere Zahl der aktuell höchsten Mitgliedsnummer verwendet.
 Naturgemäß kann eine Nummer nicht doppelt vergeben werden.
 
 Mit den Knöpfen "`Als PDF speichern \dots"' und "`Drucken\dots"' kann eine Übersicht der aktuellen Person ausgegeben werden.
@@ -115,3 +118,20 @@ Ebenso kann man sehen, in welchen Gebieten die Person ihre Pflichtstunden erfül
 
 \hinweis{Für alle Darstellungen und Berechnungen werden nur die Zeiten angerechnet, die bisher auch wirklich abgeleistet wurden,
 also deren Datum in der Vergangenheit lag.}
+
+
+\section{\neu{Mitgliederliste}}\label{personal:mitglieder}
+\begin{figure}[!h]
+	\includegraphics[width=\textwidth]{img/mitgliederliste}
+	\caption{\neu{Die Mitgliederliste mit allen ausgewählten Mitgliedern.}}
+	\label{fig:personal:mitglieder}
+\end{figure}
+\neu{In der Tabelle aus Abbildung~\ref{fig:personal:mitglieder} werden alle gespeicherten Daten der ausgewählten Mitglieder angezeigt.
+Diese Tabelle kann über das Menü "`Exportieren"' unter dem Punkt "`Mitgliederliste"' ausgegeben werden.
+Die Ausgabe ist auch als CSV-Datei möglich, sodass die Daten in anderen Programmen verarbeitet werden können.
+
+Ebenso besteht die Möglichkeit über den Eintrag "`Personalblatt"' die Daten eines Mitglieds bzw.\ aller angezeigten Personen auszugeben.
+Hierbei wird für jede Person eine Seite erzeugt und kann somit auch für jede Person getrennt gespeichert werden.
+
+Darüber hinaus wird im unteren Bereich des Fensters eine Statistik der aktuellen und ausgetretenen Mitglieder angezeigt.
+}
