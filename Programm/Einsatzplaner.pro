@@ -18,6 +18,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
+    einstellungen.cpp \
     guihelper.cpp \
     mainwindow.cpp \
     networking.cpp \
@@ -45,6 +46,7 @@ SOURCES += main.cpp\
     managerfilesettings.cpp
 
 HEADERS  += mainwindow.h \
+    einstellungen.h \
     guihelper.h \
     networking.h \
     person.h \
@@ -84,17 +86,17 @@ CONFIG -= console
 
 #OTHER_FILES += qt_de.qm
 
+VERSION = 1.6.1
 win32 {
     RC_ICONS = ../Icon/keks.ico
     QMAKE_TARGET_COMPANY = Philipp Schepper
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
     QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2020
     QMAKE_TARGET_PRODUCT = Einsatzplaner
-    VERSION = 1.6.0.1
+    VERSION = 1.6.1.1
 }
 
 macx {
-    VERSION = 1.6.0
     OTHER_FILES += Info.plist ../Icon/keks.icns
     QMAKE_INFO_PLIST = Info.plist
     DISTFILES += Info.plist
@@ -104,3 +106,7 @@ macx {
 
 RESOURCES += \
     resources.qrc
+
+win32: COMMIT_HASH = $$system(git.exe -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)
+else:  COMMIT_HASH = $$system(git -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)
+DEFINES += GIT_CURRENT_SHA1="\"\\\"$${COMMIT_HASH}\\\"\""

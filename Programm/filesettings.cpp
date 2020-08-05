@@ -1,9 +1,9 @@
 #include "filesettings.h"
 #include "export.h"
 #include "ui_filesettings.h"
+#include "einstellungen.h"
 
 #include <QMessageBox>
-#include <QSettings>
 
 FileSettings::FileSettings(QWidget *parent, ManagerFileSettings *manager) : QDialog(parent), ui(new Ui::FileSettings)
 {
@@ -42,8 +42,7 @@ void FileSettings::getSettings(ManagerFileSettings *mgr)
 
 void FileSettings::on_checkEnable_clicked(bool checked)
 {
-    QSettings settings;
-    if (settings.value("online/useautoupload").toBool() && checked)
+    if (Einstellungen::getUseAutoUpload() && checked)
         ui->checkAuto->setEnabled(true);
     else
         ui->checkAuto->setEnabled(false);
@@ -71,7 +70,7 @@ void FileSettings::on_pushCheck_clicked()
     m2.setServer(ui->lineServer->text());
     m2.setPath(ui->linePath->text());
     m2.setId(ui->lineID->text());
-    if(Export::testServerConnection(mngr)) {
+    if(Export::testServerConnection(&m2)) {
         ui->labelStatus->setText(tr("Verbindung erfolgreich getestet!"));
     } else {
         ui->labelStatus->setText(tr("Verbindung zum Server fehlgeschlagen!"));

@@ -1,32 +1,17 @@
+#include "einstellungen.h"
 #include "fileio.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDir>
-#include <QSettings>
 
-QString FileIO::currentPath = QDir::homePath();
-QStringList FileIO::lastUsed = QStringList();
+QString FileIO::currentPath = Einstellungen::getLastPath();
+QStringList FileIO::lastUsed = Einstellungen::getLastUsed();
 
 void FileIO::saveSettings()
 {
-    QSettings settings;
-    settings.setValue("io/lastpath", currentPath);
-    settings.setValue("io/lastused", lastUsed);
-}
-
-void FileIO::loadSettings()
-{
-    QSettings settings;
-    if (settings.contains("io/lastpath")) {
-        currentPath = settings.value("io/lastpath").toString();
-    } else {
-        currentPath = QDir::homePath();
-    }
-    if (settings.contains("io/lastused"))
-        lastUsed = settings.value("io/lastused").toStringList();
-    else
-        lastUsed = QStringList();
+    Einstellungen::setLastPath(currentPath);
+    Einstellungen::setLastUsed(lastUsed);
 }
 
 QString FileIO::getFilePathOpen(QWidget *parent, QString filter)
@@ -77,8 +62,7 @@ bool FileIO::saveJsonToFile(QString filepath, QJsonObject object, bool showInMen
 
 QStringList FileIO::getLastUsed()
 {
-    loadSettings();
-    return lastUsed;
+    return Einstellungen::getLastUsed();
 }
 
 void FileIO::clearLastUsed()

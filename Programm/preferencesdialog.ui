@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>225</height>
+    <height>255</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,13 +22,13 @@
   <property name="minimumSize">
    <size>
     <width>600</width>
-    <height>225</height>
+    <height>255</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>600</width>
-    <height>225</height>
+    <height>255</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -50,6 +50,72 @@
    <property name="spacing">
     <number>6</number>
    </property>
+   <item row="1" column="3">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>233</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="pushDownload">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Herunterladen</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" colspan="2">
+    <widget class="QCheckBox" name="checkAutoUpload">
+     <property name="text">
+      <string>Automatische Uploads beim Speichern aktivieren</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1">
+    <widget class="QRadioButton" name="radioNachVor">
+     <property name="text">
+      <string>Nachname, Vorname</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">buttonGroupSortierung</string>
+     </attribute>
+    </widget>
+   </item>
+   <item row="11" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>27</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="8" column="0" colspan="4">
+    <widget class="Line" name="line_3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="2">
     <widget class="QLabel" name="labelVersion">
      <property name="minimumSize">
@@ -66,10 +132,50 @@
      </property>
     </widget>
    </item>
+   <item row="2" column="3">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>143</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Updates</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Änderung wird erst nach einem Neustart wirksam!</string>
+     </property>
+    </widget>
+   </item>
    <item row="3" column="0" colspan="4">
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QPushButton" name="pushNotes">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Infos zur neuen Version</string>
      </property>
     </widget>
    </item>
@@ -80,13 +186,10 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Updates</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   <item row="5" column="0" colspan="4">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -106,36 +209,6 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="2">
-    <widget class="QPushButton" name="pushNotes">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>Infos zur neuen Version</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QPushButton" name="pushSearch">
-     <property name="text">
-      <string>Jetzt suchen</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0" colspan="4">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-     <property name="centerButtons">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
    <item row="6" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
@@ -146,76 +219,30 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QPushButton" name="pushDownload">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>Herunterladen</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="3">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>143</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="0" colspan="4">
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>233</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="8" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>27</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="1" colspan="2">
-    <widget class="QCheckBox" name="checkAutoUpload">
-     <property name="text">
-      <string>Automatische Uploads beim Speichern aktivieren</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="7" column="1" colspan="2">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Sie können Dateien jederzeit manuell hochladen!</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="pushSearch">
+     <property name="text">
+      <string>Jetzt suchen</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0" colspan="4">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+     <property name="centerButtons">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -251,10 +278,31 @@
      </item>
     </widget>
    </item>
-   <item row="4" column="2">
-    <widget class="QLabel" name="label_5">
+   <item row="9" column="1">
+    <widget class="QRadioButton" name="radioVorNach">
      <property name="text">
-      <string>Änderung wird erst nach einem Neustart wirksam!</string>
+      <string>Vorname Nachname</string>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">buttonGroupSortierung</string>
+     </attribute>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Sortierung</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="2" rowspan="2">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Namen können immer in beiden
+Formaten angegeben werden!</string>
      </property>
     </widget>
    </item>
@@ -275,7 +323,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>224</x>
-     <y>178</y>
+     <y>252</y>
     </hint>
     <hint type="destinationlabel">
      <x>224</x>
@@ -284,4 +332,7 @@
    </hints>
   </connection>
  </connections>
+ <buttongroups>
+  <buttongroup name="buttonGroupSortierung"/>
+ </buttongroups>
 </ui>

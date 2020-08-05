@@ -23,6 +23,7 @@ FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent),
     connect(ui->comboStart2Hp, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
     connect(ui->comboEnde2Zug, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
     connect(ui->comboEnde2Hp, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
+    connect(ui->buttonAddPerson, SIGNAL(clicked()), this, SLOT(fuegeZeileInTabelleEin()));
 
     fahrtag = f;
 
@@ -246,11 +247,11 @@ void FahrtagWindow::deleteItemFromList(QListWidget *l, QPushButton *b)
 {
     QListWidgetItem *item = l->currentItem();
     if (item == nullptr) return;
-    AActivity::Einsatz e = tabelleZuEinsatz.value(listeZuTabelle.value(item));
-
-    fahrtag->removePerson(e.person, e.cat);
-
     if (listeZuTabelle.contains(item)) {
+        if (tabelleZuEinsatz.contains(listeZuTabelle.value(item))) {
+            AActivity::Einsatz e = tabelleZuEinsatz.value(listeZuTabelle.value(item));
+            fahrtag->removePerson(e.person, e.cat);
+        }
         ui->tablePersonen->removeRow(ui->tablePersonen->row(listeZuTabelle.value(item)));
         tabelleZuEinsatz.remove(listeZuTabelle.value(item));
         listeZuTabelle.remove(item);
@@ -482,10 +483,6 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
     }
 }
 
-void FahrtagWindow::on_buttonAddPerson_clicked()
-{
-    fuegeZeileInTabelleEin();
-}
 
 void FahrtagWindow::on_buttonRemovePerson_clicked()
 {
@@ -497,8 +494,10 @@ void FahrtagWindow::on_buttonRemovePerson_clicked()
         return;
     }
     QTableWidgetItem *item = ui->tablePersonen->item(i, 0);
-    AActivity::Einsatz e = tabelleZuEinsatz.value(item);
-    fahrtag->removePerson(e.person, e.cat);
+    if (tabelleZuEinsatz.contains(item)) {
+        AActivity::Einsatz e = tabelleZuEinsatz.value(item);
+        fahrtag->removePerson(e.person, e.cat);
+    }
 
     tabelleZuEinsatz.remove(item);
     ui->tablePersonen->removeRow(i);
@@ -516,24 +515,24 @@ void FahrtagWindow::on_actionDelete_triggered()
 
 void FahrtagWindow::on_actionPrint_triggered()
 {
-    QPrinter *p = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
-    Export::printEinzelansichten({fahrtag}, p);
+    Export::printAktivitaetenEinzel({fahrtag},
+                                    Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 void FahrtagWindow::on_actionPdf_triggered()
 {
-    QPrinter *p = Export::getPrinterPDF(this, windowTitle()+".pdf", QPrinter::Orientation::Portrait);
-    Export::printEinzelansichten({fahrtag}, p);
+    Export::printAktivitaetenEinzel({fahrtag},
+                                    Export::getPrinterPDF(this, windowTitle()+".pdf", QPrinter::Orientation::Portrait));
 }
 
 void FahrtagWindow::on_actionResPrint_triggered()
 {
-    QPrinter *p = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
-    Export::printReservierung(fahrtag, p);
+    Export::printReservierung(fahrtag,
+                              Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 void FahrtagWindow::on_actionResPdf_triggered()
 {
-    QPrinter *p = Export::getPrinterPDF(this, windowTitle()+"-Reservierungen.pdf", QPrinter::Orientation::Portrait);
-    Export::printReservierung(fahrtag, p);
+    Export::printReservierung(fahrtag,
+                              Export::getPrinterPDF(this, windowTitle()+"-Reservierungen.pdf", QPrinter::Orientation::Portrait));
 }
 
 void FahrtagWindow::showReservierung(Reservierung *r)

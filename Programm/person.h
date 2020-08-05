@@ -18,11 +18,12 @@ public:
     QJsonObject toJson();
     QJsonObject personalToJson();
 
-    int get(Category cat);
-    QString getString(Category cat);
-    QString getStringShort(Category cat);
+    int getZeiten(Category cat);
+    Mitglied pruefeStunden();
+    Mitglied pruefeStunden(Category cat);
 
-    int getAnzahl();
+    int getMinimumStunden(Category cat);
+
 
     void berechne();
 
@@ -32,11 +33,13 @@ public:
     QMap<AActivity*,Category> getActivities();
 
 
-    QString getHtmlForTableView(QSet<Category> liste);
-    QString getHtmlForDetailPage();
-    QString getHtmlForMitgliederListe();
+    QString getZeitenFuerListeAlsHTML(QSet<Category> liste);
+    QString getZeitenFuerEinzelAlsHTML();
 
-    QString getCSV();
+    QString getPersonaldatenFuerListeAlsHTML();
+    QString getPersonaldatenFuerListeAlsCSV();
+    QString getPersonaldatenFuerEinzelAlsHTML();
+
 
     int getAdditional(Category cat);
     void setAdditional(Category cat, int value);
@@ -112,6 +115,8 @@ public:
     void setStrasse(const QString &value);
 
     bool isTauglich(Category cat=Tf, QDate datum=QDate::currentDate());
+
+    bool pruefeFilter(Mitglied filter);
 
 protected:
     // Stammdaten

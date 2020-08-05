@@ -1,5 +1,28 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 02. Mai 2020
+Stand: 06. August 2020
+
+## Version 1.6.1 – 2020-08-06
+### Neu
+- Beim Export der Mitglieder werden nur noch die Mitglieder ausgegeben, die aktuell auch angezeigt werden.
+- Die Personaldaten werden im Personalfenster in einer Übersicht angezeigt.
+- Eine Statistik zeigt unter anderem an, wie viele Mitglieder aktiv oder passiv sind.
+- Aktive werden nur noch anhand der geleisteten Gesamtstunden bewertet. Die Markierung der nicht erbrachten Mindeststunden für andere Kategorien bleibt aber bestehen.
+- Die Sortierung der Namen in der Personalübersicht kann zwischen ``Vorname Nachname``und ``Nachname, Vorname`` eingestellt werden.
+- Die Personaldaten können auch als Detailansicht ausgegeben werden, ohne die Liste für alle Mitglieder ausgeben zu müssen.
+
+
+### Verbessert
+- Beim Löschen von Personen wurde eine Sicherheitsabfrage eingefügt, um versehentliches Löschen von Personen zu vermeiden.
+- Mail-Adressen, die mehreren Mitgliedern zugeordnet sind, führen nicht mehr dazu, dass evtl. mehrere Mails an diese Adresse gesendet werden.
+- Bei der Eingabe von Namen werden führende und abschließende Leerzeichen ignoriert.
+- Per Knopfdruck kann jetzt auch eine Mail an eine einzelne Person geschrieben werden.
+
+### Fehlerbehebungen
+- Die hochgeladene Datei wird wieder im Querformat dargestellt.
+- Personal, dass der Tätigkeit ``Infrastruktur`` zugeordnet ist, wird wieder in der Listenansicht ausgegeben.
+- Behebt einen Fehler, bei dem das Programm abstürzt, wenn bestimmte Personen von Aktivitäten gelöscht werden.
+- Behebt einen Fehler, durch den die eingegebenen Verbindungsdaten zum EPL-Server nicht überprüft wurden.
+
 
 ## Version 1.6 – 2020-05-02
 ### Neu

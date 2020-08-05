@@ -199,6 +199,7 @@ Person *AActivity::getPerson(QString name)
 
 bool AActivity::removePerson(Person *p, Category kat)
 {
+    if (p == nullptr) return true;
     personen.remove(Einsatz{p,kat});
     emit changed(this);
     return p->removeActivity(this, kat);
@@ -620,15 +621,23 @@ QString AActivity::getHtmlForTableView()
         for(Person *p: zugvorbereitung.keys()) sonstige.insert(p, zugvorbereitung.value(p));
         zugvorbereitung.clear();
     }
+    if (infrastruktur.size() > 2) {
+        html += "<b>Infrastruktur:</b><ul style='margin-top: 0px; margin-bottom: 0px'>";
+        html += listToString("", infrastruktur, "<li>", "</li>");
+        html += "</ul>";
+    } else {
+        for(Person *p: infrastruktur.keys()) sonstige.insert(p, infrastruktur.value(p));
+        infrastruktur.clear();
+    }
     if (sonstige.size() > 0) {
-        if (werkstatt.size() + ausbildung.size() + zugvorbereitung.size() > 0) {
+        if (werkstatt.size() + ausbildung.size() + zugvorbereitung.size() + infrastruktur.size() > 0) {
             html += "<b>Sonstige:</b><ul style='margin-top: 0px'>";
         } else {
             html += "<ul>";
         }
         html += listToString("", sonstige, "<li>", "</li>", true);
         html += "</ul>";
-    } else if (werkstatt.size() + ausbildung.size() + zugvorbereitung.size() == 0) {
+    } else if (werkstatt.size() + ausbildung.size() + zugvorbereitung.size() + infrastruktur.size() == 0) {
         html += "<br/>";
     }
 

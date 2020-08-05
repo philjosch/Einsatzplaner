@@ -22,19 +22,22 @@ class Export
 {
 public:
     // Drucken von Fahrtagen und Aktivitäten
-    static bool printEinzelansichten(QList<AActivity*> liste, QPrinter *printer);
-    static bool printList(QList<AActivity *> liste, QPrinter *printer);
+    static bool printAktivitaetenEinzel(QList<AActivity*> liste, QPrinter *printer);
+    static bool printAktivitaetenListe(QList<AActivity *> liste, QPrinter *printer);
 
     // Reservierungen
     static bool printReservierung(Fahrtag *f, QPrinter *printer); // Gibt nur die Reservierungen aus sortiert nach Wagen und dann nach Name
 
     // Drucken von Personen
-    static bool printPerson(ManagerPersonal *m, QPrinter *printer);
-    static bool printPerson(Person *p, QPrinter *printer);
-    static bool printPersonenGesamtuebersicht(QList<Person *> personen, QSet<Category> data, QPrinter *printer);
+    static bool printZeitenEinzelEinzel(Person *p, QPrinter *printer);
+    static bool printZeitenEinzelListe(QList<Person*> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer);
+    static bool printZeitenListe(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer);
 
     // Mitgliederlisten
-    static bool printMitglieder(ManagerPersonal *m, QPrinter *printer);
+    static bool printMitgliederEinzelEinzel(Person *p, QPrinter *printer);
+    static bool printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer);
+    static bool printMitgliederListe(QList<Person *> liste, Mitglied filter, QPrinter *printer);
+    static bool exportMitgliederAlsCSV(QList<Person *> liste, Mitglied filter, QString pfad);
 
     // Allgemeines
     static QPrinter *getPrinterPaper(QWidget *parent, QPrinter::Orientation orientation);

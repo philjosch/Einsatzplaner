@@ -121,6 +121,10 @@ bool ManagerPersonal::personExists(QString name)
 
 bool ManagerPersonal::personExists(QString vorname, QString nachname)
 {
+    while (vorname.endsWith(" ")) vorname.chop(1);
+    while (vorname.startsWith(" ")) vorname = vorname.remove(0, 1);
+    while (nachname.endsWith(" ")) nachname.chop(1);
+    while (nachname.startsWith(" ")) nachname = nachname.remove(0, 1);
     QString nameKomplett;
     if (vorname != "") nameKomplett = vorname + " " + nachname;
     else nameKomplett = nachname;
@@ -153,70 +157,14 @@ bool ManagerPersonal::removePerson(Person *p)
     return false;
 }
 
-int ManagerPersonal::pruefeStunden(Person *p)
-{
-    bool ok = true;
-    foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
-        ok = ok && checkHours(p, cat);
-    }
-    if (p->getAktiv() && (! ok))
-        return 0;
-    else if ((!p->getAktiv()) && ok && p->get(Gesamt) >0)
-        return -1;
-    else
-        return 1;
-}
-
-int ManagerPersonal::checkHours(Person *p, Category cat)
-{
-    if (p->getAktiv()) {
-        if (p->get(cat) >= getMinimumHours(cat, p)) {
-            return 1;
-        } else {
-            return 0;
-        }
-    } else {
-        if (p->get(cat)>0) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
-}
-
 void ManagerPersonal::setMinimumHours(Category cat, int amount)
 {
     minimumHours.insert(cat, amount);
     emit changed();
 }
-
 int ManagerPersonal::getMinimumHours(Category cat)
 {
     return minimumHours.value(cat, 0);
-}
-
-int ManagerPersonal::getMinimumHours(Category cat, Person *p)
-{
-    if (p->isAusgetreten()) return 0;
-    switch (cat) {
-    case Tf:
-        if (! p->isTauglich(Tf) ) return 0;
-        return minimumHours.value(cat, 0);
-    case Zf:
-        if (! p->isTauglich(Zf)) return 0;
-        return minimumHours.value(cat, 0);
-    case Ausbildung:
-        if ((! p->getAusbildungTf() && ! p->getAusbildungZf() && ! p->getAusbildungRangierer()) || p->isTauglich()) return 0;
-        return minimumHours.value(cat, 0);
-    default:
-        return minimumHours.value(cat, 0);
-    }
-}
-
-QString ManagerPersonal::getMinimumHoursString(Category cat)
-{
-    int value = getMinimumHours(cat);
-    return QString("%1:%2 h").arg(int(value/60)).arg(value % 60, 2, 10,QLatin1Char('0'));
 }
 
 int ManagerPersonal::getMinimumHoursDefault(Category cat)
@@ -234,21 +182,6 @@ QListIterator<Person *> ManagerPersonal::getPersonen() const
 {
     QListIterator<Person*> i(personenSorted.values());
     return i;
-}
-
-QList<Person *> ManagerPersonal::getPersonenSortiertNachName()
-{
-    QList<Person *> l;
-    int i = 0;
-    foreach (Person *p, personen) {
-        l.append(p);
-        i = l.size()-1;
-        while(i > 0 && l.at(i-1)->getName() > l.at(i)->getName()) {
-            l.swapItemsAt(i, i-1);
-            i--;
-        }
-    }
-    return l;
 }
 
 QList<Person *> ManagerPersonal::getPersonenSortiertNachNummer()
@@ -271,23 +204,14 @@ void ManagerPersonal::berechne()
     time.clear();
     foreach (Person *p, personenSorted.values()) {
         p->berechne();
-        time.insert(Tf, time.value(Tf)+p->get(Tf));
-        time.insert(Zf, time.value(Zf)+p->get(Zf));
-        time.insert(Zub, time.value(Zub)+p->get(Zub));
-        time.insert(Service, time.value(Service)+p->get(Service));
-        time.insert(Buero, time.value(Buero)+p->get(Buero));
-        time.insert(Werkstatt, time.value(Werkstatt)+p->get(Werkstatt));
-        time.insert(ZugVorbereiten, time.value(ZugVorbereiten)+p->get(ZugVorbereiten));
-        time.insert(Ausbildung, time.value(Ausbildung)+p->get(Ausbildung));
-        time.insert(Infrastruktur, time.value(Infrastruktur)+p->get(Infrastruktur));
-        time.insert(Sonstiges, time.value(Sonstiges)+p->get(Sonstiges));
-        time.insert(Gesamt, time.value(Gesamt)+p->get(Gesamt));
-        time.insert(Kilometer, time.value(Kilometer)+p->get(Kilometer));
+        foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+            time.insert(cat, time.value(cat)+p->getZeiten(cat));
+        }
     }
     time.insert(Anzahl, 0);
 }
 
-int ManagerPersonal::getTime(Category kat)
+int ManagerPersonal::getZeiten(Category kat)
 {
     return time.value(kat, 0);
 }
@@ -319,10 +243,50 @@ bool ManagerPersonal::checkNummer(int neu)
     return true;
 }
 
-QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> personen, QSet<Category> spalten)
+QString ManagerPersonal::getZeitenFuerEinzelListeAlsHTML(QList<Person *> liste, Mitglied filter)
 {
-    QString a = "<h3>Einsatzzeiten Personal</h3>"
+    berechne();
+    QString a = "";
+    // Seite fuer jede Person einfuegen
+    QMap<Category, int> sum;
+    foreach(Person *p, liste) {
+        a += p->getZeitenFuerEinzelAlsHTML();
+        QString help = "<p><small>Stand: %1</small></p>";
+        if (p != liste.last()) {
+            help = "<div style='page-break-after:always'>" + help + "</div>";
+        }
+        a += help.arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
+        foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+            sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
+        }
+    }
+
+    QString help = "<li>%1: %2</li>";
+    QString titelSeite = QString("<h1>Einsatzzeiten: %1</h1><h2>Geleistete Stunden</h2><ul>").arg(getStringVonFilter(filter));
+    foreach(Category cat, ANZEIGEREIHENFOLGE) {
+        if (sum.value(cat) > 0) titelSeite += help.arg(getLocalizedStringFromCategory(cat), minutesToHourString(sum.value(cat)));
+    }
+    titelSeite += "</ul><ul>";
+    titelSeite += help.arg(getLocalizedStringFromCategory(Gesamt), minutesToHourString(sum.value(Gesamt)));
+    titelSeite += help.arg(getLocalizedStringFromCategory(Kilometer), QString("%1 km").arg(sum.value(Kilometer)));
+
+    titelSeite += "</ul><h2>Mindeststunden</h2><ul>";
+    if (getMinimumHours(Gesamt) > 0) titelSeite += help.arg("Insgesamt", minutesToHourString(getMinimumHours(Gesamt)));
+    foreach (Category cat, ANZEIGEREIHENFOLGE) {
+        if (getMinimumHours(cat) > 0) titelSeite += help.arg(getLocalizedStringFromCategory(cat), minutesToHourString(getMinimumHours(cat)));
+    }
+    titelSeite += "</ul>";
+
+    titelSeite += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+
+    return titelSeite+a;
+}
+
+QString ManagerPersonal::getZeitenFuerListeAlsHTML(QList<Person *> personen, QSet<Category> spalten, Mitglied filter)
+{
+    QString a = "<h3>Einsatzzeiten: %1</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
+    a = a.arg(getStringVonFilter(filter));
     foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
         if (! spalten.contains(cat)) continue;
         switch (cat) {
@@ -340,9 +304,9 @@ QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> personen, Q
 
     QMap<Category, int> sum;
     for(Person *p: personen) {
-        a += p->getHtmlForTableView(spalten);
+        a += p->getZeitenFuerListeAlsHTML(spalten);
         foreach (Category cat, spalten) {
-            sum.insert(cat, sum.value(cat,0)+p->get(cat));
+            sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
     }
     a += "</tbody><tfoot><tr>";
@@ -359,58 +323,71 @@ QString ManagerPersonal::getHtmlFuerGesamtuebersicht(QList<Person *> personen, Q
         }
     }
     a += "</tr></tfoot></table>";
+    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     return a;
 }
 
-QString ManagerPersonal::getHtmlFuerEinzelansicht()
+QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> liste, Mitglied filter)
 {
-    berechne();
-    QString help = "<li>%1: %2</li>";
-    QString a = "<h1>Personalübersicht - Gesamt</h1>"
-                "<h2>Geleistete Stunden</h2><ul>";
-    foreach(Category cat, ANZEIGEREIHENFOLGE) {
-        if (getTime(cat) > 0) a += help.arg(getLocalizedStringFromCategory(cat), minutesToHourString(getTime(cat)));
-    }
-    a += "</ul>";
-
-    a += "<ul><li>Stunden gesamt: "+QString::number(getTime(Gesamt))+"h</li>";
-    a += "<li>Gefahrene Kilometer gesamt: "+QString::number(getTime(Kilometer))+" km</li></ul>";
-
-    a += "<h2>Mindeststunden</h2><ul>";
-    if (getMinimumHours(Gesamt) > 0) a += help.arg("Insgesamt", minutesToHourString(getMinimumHours(Gesamt)));
-    foreach (Category cat, ANZEIGEREIHENFOLGE) {
-        if (getMinimumHours(cat) > 0) a += help.arg(getLocalizedStringFromCategory(cat), minutesToHourString(getMinimumHours(cat)));
-    }
-    a += "</ul>";
-
-    a += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
-
-    // Add a papge for each person
-    QList<Person *> personenSortiertNachName = getPersonenSortiertNachName();
-    foreach(Person *akt, personenSortiertNachName) {
-        a += akt->getHtmlForDetailPage();
-        if (akt != personenSortiertNachName.last()) {
-            a += "<div style='page-break-after:always'>";
-            a += "<p><small>Stand: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
-        } else {
-            a += "<p><small>Stand: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p>";
+    QString a = "";
+    // Seite fuer jede Person einfuegen
+    QMap<Category, int> sum;
+    foreach(Person *p, liste) {
+        a += p->getPersonaldatenFuerEinzelAlsHTML();
+        QString help = "<p><small>Stand: %1</small></p>";
+        if (p != liste.last()) {
+            help = "<div style='page-break-after:always'>" + help + "</div>";
+        }
+        a += help.arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
+        foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+            sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
     }
-    return a;
-}
 
-QString ManagerPersonal::getCSVnachNummer()
-{
-    QString t = "Nummer;Nachname;Vorname;Geburtsdatum;Eintritt;Status;Austritt;Tf;Zf;Rangierer;Tauglichkeit;Straße;PLZ;Ort;Mail;Zustimmung Mail;Telefon;Zustimmung Telefon;Strecke;Beruf;Bemerkung\n";
-    foreach(Person *akt, getPersonenSortiertNachNummer()) {
-        t += akt->getCSV();
+    QString help = "<li>%1: %2</li>";
+    QString titelSeite = QString("<h1>Mitgliederübersicht: %1</h1><ul>").arg(getStringVonFilter(filter));
+    switch (filter) {
+    case Registriert:
+        titelSeite += help.arg(getStringVonFilter(Registriert)).arg(getAnzahlMitglieder(Registriert));
+        [[clang::fallthrough]];
+    case AlleMitglieder:
+        titelSeite += help.arg(getStringVonFilter(AlleMitglieder)).arg(getAnzahlMitglieder(AlleMitglieder));
+        [[clang::fallthrough]];
+    case Ausgetreten:
+        titelSeite += help.arg(getStringVonFilter(Ausgetreten)).arg(getAnzahlMitglieder(Ausgetreten));
+        if (filter == Ausgetreten) break;
+        titelSeite += "</ul><ul>";
+        [[clang::fallthrough]];
+    case Aktiv:
+        titelSeite += help.arg(getStringVonFilter(Aktiv)).arg(getAnzahlMitglieder(Aktiv));
+        [[clang::fallthrough]];
+    case AktivMit:
+        titelSeite += help.arg(getStringVonFilter(AktivMit)).arg(getAnzahlMitglieder(AktivMit));
+        if (filter == AktivMit) break;
+        [[clang::fallthrough]];
+    case AktivOhne:
+        titelSeite += help.arg(getStringVonFilter(AktivOhne)).arg(getAnzahlMitglieder(AktivOhne));
+        if (filter == AktivOhne) break;
+        if (filter == Aktiv) break;
+        [[clang::fallthrough]];
+    case Passiv:
+        titelSeite += help.arg(getStringVonFilter(Passiv)).arg(getAnzahlMitglieder(Passiv));
+        [[clang::fallthrough]];
+    case PassivMit:
+        titelSeite += help.arg(getStringVonFilter(PassivMit)).arg(getAnzahlMitglieder(PassivMit));
+        if (filter == PassivMit) break;
+        [[clang::fallthrough]];
+    case PassivOhne:
+        break;
     }
-    return t;
+    titelSeite += "</ul><div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+
+    return titelSeite+a;
 }
 
-QString ManagerPersonal::getHtmlFuerMitgliederliste()
+QString ManagerPersonal::getMitgliederFuerListeAlsHtml(QList<Person*> liste, Mitglied filter)
 {
-    QString a = "<h3>Mitgliederliste – Stand "+QDateTime::currentDateTime().toString("d.M.yyyy")+"</h3>"
+    QString a = tr("<h3>%1 – Stand %2</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr>"
                 "<th>Name<br/>Mitgliedsnummer<br/>Status</th>"
                 "<th>Geburtsdatum<br/>Eintritt<br/>Beruf</th>"
@@ -418,10 +395,42 @@ QString ManagerPersonal::getHtmlFuerMitgliederliste()
                 "<th>E-Mail<br/>Telefon</th>"
                 "<th>Betriebsdienst</th>"
                 "<th>Sonstiges</th>"
-                "</thead><tbody>";
-    foreach(Person *akt, getPersonenSortiertNachNummer()) {
-        a += akt->getHtmlForMitgliederListe();
+                "</thead><tbody>");
+    a = a.arg(getStringVonFilter(filter),
+              QDateTime::currentDateTime().toString("d.M.yyyy"));
+    foreach(Person *akt, liste) {
+        a += akt->getPersonaldatenFuerListeAlsHTML();
     }
     a += "</tbody></table>";
+    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     return a;
+}
+
+QString ManagerPersonal::getMitgliederFuerListeAlsCSV(QList<Person *> liste, Mitglied filter)
+{
+    QString t = "Nummer;Nachname;Vorname;Geburtsdatum;Eintritt;Status;Austritt;Tf;Zf;Rangierer;Tauglichkeit;Straße;PLZ;Ort;Mail;Zustimmung Mail;Telefon;Zustimmung Telefon;Strecke;Beruf;Bemerkung\n";
+    foreach(Person *akt, liste) {
+        t += akt->getPersonaldatenFuerListeAlsCSV();
+    }
+    return t;
+}
+
+int ManagerPersonal::getAnzahlMitglieder(Mitglied filter)
+{
+    int i = 0;
+    foreach(Person *akt, personen) {
+        if (akt->pruefeFilter(filter))
+            ++i;
+    }
+    return i;
+}
+
+QList<Person *> ManagerPersonal::getPersonen(Mitglied filter)
+{
+    QList<Person *> current = QList<Person*>();
+    foreach(Person *p, getPersonenSortiertNachNummer()) {
+        if (p->pruefeFilter(filter))
+            current.append(p);
+    }
+    return current;
 }

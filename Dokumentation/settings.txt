@@ -1,5 +1,6 @@
 general/
 	autosearchupdate (bool) 	-> Automatisch nach Updates beim Start suchen
+	nameOrder (bool) 		-> WAHR wenn der Vorname vor dem Nachnamen angezeigt werden soll. Für getauscht ist es FALSCH 
 io/
 	lastpath (string)		-> Letzter erfolgreich benutzter Pfad von FileIO
 	lastused (array)

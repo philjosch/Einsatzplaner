@@ -7,6 +7,9 @@
 
 QString Networking::ladeDatenVonURL(QString url)
 {
+    if (!url.startsWith("http")) {
+        url = "https://"+url;
+    }
     // create custom temporary event loop on stack
     QEventLoop eventLoop;
 
@@ -30,6 +33,9 @@ QString Networking::ladeDatenVonURL(QString url)
 
 bool Networking::ladeDateiHoch(QString url, QFile *datei, QString name)
 {
+    if (!url.startsWith("http")) {
+        url = "https://"+url;
+    }
     QEventLoop eventLoop;
 
     QNetworkAccessManager am;

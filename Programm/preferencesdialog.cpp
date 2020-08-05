@@ -1,21 +1,21 @@
 #include "preferencesdialog.h"
 #include "ui_preferencesdialog.h"
 #include "coreapplication.h"
+#include "einstellungen.h"
 
 #include <QDesktopServices>
-#include <QSettings>
-#include <QUrl>
 #include <QMessageBox>
 
 PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new Ui::PreferencesDialog)
 {
     ui->setupUi(this);
+    ui->buttonGroupSortierung->setId(ui->radioVorNach, 1);
+    ui->buttonGroupSortierung->setId(ui->radioNachVor, 0);
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(closeDialogOk()));
-    connect(ui->pushDownload, &QPushButton::clicked, this, [=]() { QDesktopServices::openUrl(CoreApplication::URL_DOWNLOAD); });
-    QSettings settings;
-    ui->checkSearchAtStart->setChecked(settings.value("general/autosearchupdate", true).toBool());
-    ui->checkAutoUpload->setChecked(settings.value("online/useautoupload", true).toBool());
-    int index = settings.value("io/autoSave", 4).toInt();
+    connect(ui->pushDownload, &QPushButton::clicked, this, [=]() { CoreApplication::oeffneDownloadSeite(); });
+    ui->checkSearchAtStart->setChecked(Einstellungen::getAutoSearchUpdate());
+    ui->checkAutoUpload->setChecked(Einstellungen::getUseAutoUpload());
+    int index = Einstellungen::getAutoSave();
     if (index == 5) {
         ui->comboAutoSave->setCurrentIndex(0);
     } else if (index == 10) {
@@ -25,6 +25,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new 
     } else if (index == 30) {
         ui->comboAutoSave->setCurrentIndex(3);
     }
+    ui->buttonGroupSortierung->button(Einstellungen::getReihenfolgeVorNach() ? 1 : 0)->click();
     setWindowFilePath("");
 }
 
@@ -35,18 +36,20 @@ PreferencesDialog::~PreferencesDialog()
 
 void PreferencesDialog::on_pushSearch_clicked()
 {
-    Version aktuell = CoreApplication::VERSION;
-    online = CoreApplication::loadVersion();
-    bool old = online>aktuell;
-    QString s;
-    if (old) {
-        s = tr("Sie verwenden Version %1. Es ist Version %2 verfügbar.").arg(aktuell.toString(), online.toString());
+    if (CoreApplication::isUpdateVerfuegbar()) {
+        online = CoreApplication::loadVersion();
+        ui->labelVersion->setText(
+                    tr("Sie verwenden Version %1. Es ist Version %2 verfügbar.")
+                    .arg(QCoreApplication::applicationVersion(), online.toString()));
+        ui->pushDownload->setEnabled(true);
+        ui->pushNotes->setEnabled(true);
     } else {
-        s = tr("Sie verwenden bereits die neuste Version %1.").arg(aktuell.toString());
+        ui->labelVersion->setText(
+                    tr("Sie verwenden bereits die neuste Version %1.")
+                    .arg(QCoreApplication::applicationVersion()));
+        ui->pushDownload->setEnabled(false);
+        ui->pushNotes->setEnabled(false);
     }
-    ui->labelVersion->setText(s);
-    ui->pushDownload->setEnabled(old);
-    ui->pushNotes->setEnabled(old);
 }
 
 void PreferencesDialog::closeDialogOk()
@@ -57,8 +60,7 @@ void PreferencesDialog::closeDialogOk()
 
 void PreferencesDialog::saveSettings()
 {
-    QSettings settings;
-    settings.setValue("general/autosearchupdate", ui->checkSearchAtStart->isChecked());
+    Einstellungen::setAutoSearchUpdate(ui->checkSearchAtStart->isChecked());
     int value = 0;
     int index = ui->comboAutoSave->currentIndex();
     if (index == 0) {
@@ -70,8 +72,9 @@ void PreferencesDialog::saveSettings()
     } else if (index == 3) {
         value = 30;
     }
-    settings.setValue("io/autoSave", value);
-    settings.setValue("online/useautoupload", ui->checkAutoUpload->isChecked());
+    Einstellungen::setAutoSave(value);
+    Einstellungen::setUseAutoUpload(ui->checkAutoUpload->isChecked());
+    Einstellungen::setReihenfolgeVorNach(ui->buttonGroupSortierung->checkedId() == 1);
 }
 
 void PreferencesDialog::on_pushNotes_clicked()

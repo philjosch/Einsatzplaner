@@ -33,34 +33,31 @@ public:
     Person *newPerson(); // Erstellt eine neue Person und gibt sie zurück
     bool removePerson(Person *p);
 
-    int pruefeStunden(Person *p); // Gibt true zurueck, genau dann wenn die Person fuer **alle** Kategorien die notwendigen Stunden erbracht hat!
-    int checkHours(Person *p, Category cat); // Gibt true zurueck, genau dann wenn die Person die notwendigen Stunden fuer die Kategorie erbracht hat!
-
     void setMinimumHours(Category cat, int amount);
-
     int getMinimumHours(Category cat);
-    int getMinimumHours(Category cat, Person *p);
-    QString getMinimumHoursString(Category cat);
-
     static int getMinimumHoursDefault(Category kat);
 
     QListIterator<Person *> getPersonen() const;
-    QList<Person *> getPersonenSortiertNachName();
     QList<Person *> getPersonenSortiertNachNummer();
 
     void berechne();
 
-    int getTime(Category kat);
+    int getZeiten(Category kat);
 
     static QString getGoodName(QString name); // Wandlet einen Namen in das Format Vorname Nachname um
 
     int getNextNummer();
     bool checkNummer(int neu);
 
-    QString getHtmlFuerEinzelansicht();
-    static QString getHtmlFuerGesamtuebersicht(QList<Person *> personen, QSet<Category> spalten);
-    QString getCSVnachNummer();
-    QString getHtmlFuerMitgliederliste();
+    QString getZeitenFuerEinzelListeAlsHTML(QList<Person*> liste, Mitglied filter);
+    static QString getZeitenFuerListeAlsHTML(QList<Person *> personen, QSet<Category> spalten, Mitglied filter);
+
+    QString getMitgliederFuerEinzelListeAlsHTML(QList<Person*> liste, Mitglied filter);
+    static QString getMitgliederFuerListeAlsHtml(QList<Person *> liste, Mitglied filter);
+    static QString getMitgliederFuerListeAlsCSV(QList<Person *> liste, Mitglied filter);
+
+    int getAnzahlMitglieder(Mitglied filter);
+    QList<Person *> getPersonen(Mitglied filter);
 
 public slots:
     void personChangedName(Person *p, QString alt);

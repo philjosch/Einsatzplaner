@@ -37,6 +37,20 @@ enum Art {
     Arbeitseinsatz = 100
 };
 
+enum Mitglied {
+    AlleMitglieder,
+    Aktiv,
+    AktivMit,
+    AktivOhne,
+    Passiv,
+    PassivMit,
+    PassivOhne,
+    Ausgetreten,
+    Registriert
+};
+
+QString getStringVonFilter(Mitglied filter);
+
 const QMap<Art, QString> FARBE_FAHRTAGE = {{Museumszug, "#ffffff"},
                                           {Sonderzug, "#ffcccc"},
                                           {Gesellschaftssonderzug, "#ffcc66"},
@@ -86,10 +100,10 @@ struct Version {
     int patch;
 
     QString toString() {
-        return QString::number(major)+"."+QString::number(minor)+"."+QString::number(patch);
+        return QString("%1.%2.%3").arg(major).arg(minor).arg(patch);
     }
     QString toStringShort() {
-        return QString::number(major)+"."+QString::number(minor);
+        return QString("%1.%2").arg(major).arg(minor);
     }
     static Version stringToVersion (QString s) {
         if (! s.contains(".")) return Version {-1, -1, -1};
@@ -98,7 +112,7 @@ struct Version {
         Version v;
         v.major = vers.at(0).toInt();
         v.minor = vers.at(1).toInt();
-        if (vers.length() == 3) // Dritte Stelle nur nehmen, wenn sie vorhanden ist
+        if (vers.length() >= 3) // Dritte Stelle nur nehmen, wenn sie vorhanden ist
             v.patch = vers.at(2).toInt();
         else
             v.patch = -1;

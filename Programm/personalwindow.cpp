@@ -5,6 +5,7 @@
 #include "minimumhourseditordialog.h"
 #include "fileio.h"
 #include "guihelper.h"
+#include "einstellungen.h"
 
 #include <QMessageBox>
 #include <math.h>
@@ -16,20 +17,17 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     ui->setupUi(this);
     connect(ui->actionMindeststunden, SIGNAL(triggered()), this, SLOT(editMinimumHours()));
     connect(ui->comboAnzeige, SIGNAL(currentIndexChanged(int)), this, SLOT(refresh()));
-    connect(ui->pushAktualisieren, SIGNAL(clicked()), this, SLOT(refresh()));
+    connect(ui->actionAktualisieren, SIGNAL(triggered()), this, SLOT(refresh()));
 
     // Initalisieren der Statischen variablen
     manager = m;
-    setWindowTitle(tr("Personalverwaltung"));
+    setWindowTitle(tr("Mitgliederverwaltung"));
 
     personToItem = QHash<Person*, QListWidgetItem*>();
     enabled = false;
 
     current = QList<Person*>();
-    QListIterator<Person*> i = manager->getPersonen();
-    while(i.hasNext()) {
-        current.append(i.next());
-    }
+    filter = Mitglied::Aktiv;
 
     anzeige = QSet<Category>();
     ui->checkShowGesamt->setChecked(true);
@@ -52,52 +50,23 @@ PersonalWindow::~PersonalWindow()
 
 void PersonalWindow::refresh()
 {
-    /* 0 Alle Mitglieder
-     * 1 Aktiv
-     * 2 Passiv
-     * 3 Aktiv mit Stunden
-     * 4 Aktiv ohne Stunden
-     * 5 Passiv mit Stunden
-     * 6 Ausgetreten
-     * 7 Alle
-     * */
-    int index = ui->comboAnzeige->currentIndex();
-    current.clear();
-    QListIterator<Person*> i = manager->getPersonen();
-    while(i.hasNext()) {
-        Person *p = i.next();
-        switch (index) {
-        case 0:
-            if (! p->isAusgetreten()) current.append(p);
-            break;
-        case 1:
-            if ((! p->isAusgetreten()) && p->getAktiv()) current.append(p);
-            break;
-        case 2:
-            if ((! p->isAusgetreten()) && (! p->getAktiv())) current.append(p);
-            break;
-        case 3:
-            if ((! p->isAusgetreten()) && (p->getAktiv()) && (manager->pruefeStunden(p) == 1)) current.append(p);
-            break;
-        case 4:
-            if ((! p->isAusgetreten()) && (p->getAktiv()) && (manager->pruefeStunden(p) == 0)) current.append(p);
-            break;
-        case 5:
-            if ((! p->isAusgetreten()) && (!p->getAktiv()) && (manager->pruefeStunden(p) == -1)) current.append(p);
-            break;
-        case 6:
-            if (p->isAusgetreten()) current.append(p);
-            break;
-        default:
-            current.append(p);
-            break;
-        }
+    switch (ui->comboAnzeige->currentIndex()) {
+    case 0: filter = AlleMitglieder; break;
+    case 1: filter = Aktiv; break;
+    case 2: filter = Passiv; break;
+    case 3: filter = AktivMit; break;
+    case 4: filter = AktivOhne; break;
+    case 5: filter = PassivMit; break;
+    case 6: filter = Ausgetreten; break;
+    default: filter = Registriert; break;
     }
+    current = manager->getPersonen(filter);
     // Aktualisiere die Ansichten
-    refreshGesamt();
+    refreshEinsatzzeiten();
     refreshEinzel();
+    refreshMitglieder();
 }
-void PersonalWindow::refreshGesamt()
+void PersonalWindow::refreshEinsatzzeiten()
 {
     // Alte Spalte der Sortierung bestimen
     Qt::SortOrder sortOrder = ui->tabelleGesamt->horizontalHeader()->sortIndicatorOrder();
@@ -135,9 +104,9 @@ void PersonalWindow::refreshGesamt()
     QMap<Category, int> sum;
     foreach (Person *p, current) {
         QString farbe = Person::FARBE_STANDARD;
-        switch (manager->pruefeStunden(p)) {
-        case 0:  farbe = Person::FARBE_FEHLENDE_STUNDEN; break;
-        case -1: farbe = Person::FARBE_GENUG_STUNDEN; break;
+        switch (p->pruefeStunden()) {
+        case AktivOhne:  farbe = Person::FARBE_FEHLENDE_STUNDEN; break;
+        case PassivMit: farbe = Person::FARBE_GENUG_STUNDEN; break;
         default: farbe = Person::FARBE_STANDARD;
         }
         ui->tabelleGesamt->insertRow(0);
@@ -152,21 +121,21 @@ void PersonalWindow::refreshGesamt()
         pos = 2;
         foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
             if (! anzeige.contains(cat)) continue;
-            sum.insert(cat, sum.value(cat,0)+p->get(cat));
+            sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
             i = new QTableWidgetItem();
             i->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
             switch (cat) {
             case Anzahl:
             case Kilometer:
-                i->setData(Qt::EditRole, p->get(cat));
+                i->setData(Qt::EditRole, p->getZeiten(cat));
                 break;
             default:
-                i->setData(Qt::EditRole, round(p->get(cat)*100.f/60.f)/100);
+                i->setData(Qt::EditRole, round(p->getZeiten(cat)*100.f/60.f)/100);
             }
 
-            switch (manager->checkHours(p, cat)) {
-            case 0:  i->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN))); break;
-            case -1: i->setBackground(QBrush(QColor(Person::FARBE_GENUG_STUNDEN))); break;
+            switch (p->pruefeStunden(cat)) {
+            case AktivOhne:  i->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN))); break;
+            case PassivMit: i->setBackground(QBrush(QColor(Person::FARBE_GENUG_STUNDEN))); break;
             default: i->setBackground(QBrush(QColor(Person::FARBE_STANDARD)));
             }
             ui->tabelleGesamt->setItem(0, pos++, i);
@@ -207,11 +176,15 @@ void PersonalWindow::refreshEinzel()
     personToItem.clear();
     foreach (Person *p, current) {
         QListWidgetItem *item = new QListWidgetItem(p->getName());
-        switch (manager->pruefeStunden(p)) {
-        case 0:
+        if (! Einstellungen::getReihenfolgeVorNach()) {
+            item->setText(
+                        p->getNachname() + ", " + p->getVorname());
+        }
+        switch (p->pruefeStunden()) {
+        case AktivOhne:
             item->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN)));
             break;
-        case -1:
+        case PassivMit:
             item->setBackground(QBrush(QColor(Person::FARBE_GENUG_STUNDEN)));
             break;
         default:
@@ -223,6 +196,105 @@ void PersonalWindow::refreshEinzel()
     ui->listWidget->sortItems();
 }
 
+void PersonalWindow::refreshMitglieder()
+{
+    // Tabelle leeren
+    ui->tabelleMitglieder->setRowCount(0);
+    ui->tabelleMitglieder->setSortingEnabled(false);
+
+    int clmn;
+    QTableWidgetItem *i;
+    foreach (Person *p, current) {
+        clmn = 0;
+        ui->tabelleMitglieder->insertRow(0);
+
+
+        i = new QTableWidgetItem();
+        i->setData(0, p->getNummer());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        i = new QTableWidgetItem(p->getVorname());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        i = new QTableWidgetItem(p->getNachname());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        i = new QTableWidgetItem(
+                    QString("%1%2")
+                    .arg(p->isAusgetreten() ? "Ehemals ": "")
+                    .arg(p->getAktiv() ? "Aktiv" : "Passiv"));
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        i = new QTableWidgetItem();
+        i->setData(0, p->getGeburtstag());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        i = new QTableWidgetItem();
+        i->setData(0, p->getEintritt());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        if (p->isAusgetreten() || p->getAustritt().isValid()) {
+            i = new QTableWidgetItem();
+            i->setData(0, p->getAustritt());
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
+        } else {
+            clmn++;
+        }
+
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getBeruf()));
+
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getStrasse()));
+        i = new QTableWidgetItem();
+        i->setData(0, p->getPLZ());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getOrt()));
+        i = new QTableWidgetItem();
+        i->setData(0, p->getStrecke());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getMail()));
+        if (p->getMailOK())
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
+        else
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Nein"));
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getTelefon()));
+        if (p->getTelefonOK())
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
+        else
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Nein"));
+
+        if (p->getAusbildungTf())
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
+        else
+            clmn++;
+        if (p->getAusbildungZf())
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
+        else
+            clmn++;
+        if (p->getAusbildungRangierer())
+            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
+        else
+            clmn++;
+
+        i = new QTableWidgetItem();
+        i->setData(0, p->getTauglichkeit());
+        ui->tabelleMitglieder->setItem(0, clmn++, i);
+
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getBemerkungen()));
+    }
+
+    ui->tabelleMitglieder->setSortingEnabled(true);
+    ui->tabelleMitglieder->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    ui->labelMitgliederAnzMitglieder->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::AlleMitglieder)));
+    ui->labelMitgliederAnzAktiv->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::Aktiv)));
+    ui->labelMitgliederAnzAktivMit->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::AktivMit)));
+    ui->labelMitgliederAnzAktivOhne->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::AktivOhne)));
+    ui->labelMitgliederAnzPassiv->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::Passiv)));
+    ui->labelMitgliederAnzAusgetreten->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::Ausgetreten)));
+    ui->labelMitgliederAnzErfasst->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::Registriert)));
+}
+
 void PersonalWindow::editMinimumHours()
 {
    if (MinimumHoursEditorDialog(manager, this).exec() == QDialog::Accepted) {
@@ -230,71 +302,94 @@ void PersonalWindow::editMinimumHours()
    }
 }
 
-void PersonalWindow::on_pushPDF_clicked()
+void PersonalWindow::on_actionZeitenEinzelEinzelPDF_triggered()
 {
-    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Gesamt.pdf", QPrinter::Orientation::Landscape);
-    print(pdf);
+    Export::printZeitenEinzelEinzel(aktuellePerson,
+                        Export::getPrinterPDF(this, "Einsatzzeiten-Einzelansicht.pdf", QPrinter::Orientation::Portrait));
 }
-void PersonalWindow::on_pushPrint_clicked()
+void PersonalWindow::on_actionZeitenEinzelEinzelDrucken_triggered()
 {
-    QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Landscape);
-    print(paper);
-}
-
-void PersonalWindow::on_actionEinzelPrint_triggered()
-{
-    QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
-    Export::printPerson(manager, paper);
-}
-void PersonalWindow::on_actionEinzelPDF_triggered()
-{
-    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf", QPrinter::Orientation::Portrait);
-    Export::printPerson(manager, pdf);
+    Export::printZeitenEinzelEinzel(aktuellePerson,
+                        Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 
-void PersonalWindow::on_actionMitgliederDrucken_triggered()
+void PersonalWindow::on_actionZeitenEinzelListePDF_triggered()
 {
-    QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Landscape);
-    Export::printMitglieder(manager, paper);
+    Export::printZeitenEinzelListe(getSortierteListe(), manager, filter,
+                        Export::getPrinterPDF(this, "Einsatzzeiten-Einzelansichten.pdf", QPrinter::Orientation::Portrait));
 }
-void PersonalWindow::on_actionMitgliederPDF_triggered()
+void PersonalWindow::on_actionZeitenEinzelListeDrucken_triggered()
 {
-    QPrinter *pdf = Export::getPrinterPDF(this, "Mitgliederliste.pdf", QPrinter::Orientation::Portrait);
-    Export::printMitglieder(manager, pdf);
-}
-
-void PersonalWindow::on_actionMitgliederCSV_triggered()
-{
-    QString path = FileIO::getFilePathSave(this, "Mitglieder.csv", tr("CSV-Datei (*.csv)"));
-    FileIO::saveToFile(path, manager->getCSVnachNummer());
+    Export::printZeitenEinzelListe(getSortierteListe(), manager, filter,
+                        Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 
-void PersonalWindow::on_pushPDFEinzel_clicked()
+void PersonalWindow::on_actionZeitenListePDF_triggered()
 {
-    QPrinter *pdf = Export::getPrinterPDF(this, "Personal-Einzelansicht.pdf", QPrinter::Orientation::Portrait);
-    Export::printPerson(aktuellePerson, pdf);
+    Export::printZeitenListe(
+                getSortierteListe(), anzeige, filter,
+                Export::getPrinterPDF(this, "Einsatzzeiten-Gesamt.pdf", QPrinter::Orientation::Landscape));
 }
-void PersonalWindow::on_pushPrintEinzel_clicked()
+void PersonalWindow::on_actionZeitenListeDrucken_triggered()
 {
-    QPrinter *paper = Export::getPrinterPaper(this, QPrinter::Orientation::Portrait);
-    Export::printPerson(aktuellePerson, paper);
+    Export::printZeitenListe(
+                getSortierteListe(), anzeige, filter,
+                Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
+}
+
+void PersonalWindow::on_actionMitgliederEinzelEinzelPDF_triggered()
+{
+    Export::printMitgliederEinzelEinzel(aktuellePerson,
+                        Export::getPrinterPDF(this, "Stammdatenblatt.pdf", QPrinter::Orientation::Portrait));
+}
+void PersonalWindow::on_actionMitgliederEinzelEinzelDrucken_triggered()
+{
+    Export::printMitgliederEinzelEinzel(aktuellePerson,
+                        Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+}
+
+void PersonalWindow::on_actionMitgliederEinzelListePDF_triggered()
+{
+    Export::printMitgliederEinzelListe(getSortierteListe(), manager, filter,
+                        Export::getPrinterPDF(this, "Stammdatenblaetter.pdf", QPrinter::Orientation::Portrait));
+}
+void PersonalWindow::on_actionMitgliederEinzelListeDrucken_triggered()
+{
+    Export::printMitgliederEinzelListe(getSortierteListe(), manager, filter,
+                        Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+}
+
+void PersonalWindow::on_actionMitgliederListePDF_triggered()
+{
+    Export::printMitgliederListe(getSortierteListe(), filter,
+                            Export::getPrinterPDF(this, "Mitgliederliste.pdf", QPrinter::Orientation::Portrait));
+}
+void PersonalWindow::on_actionMitgliederListeDrucken_triggered()
+{
+    Export::printMitgliederListe(getSortierteListe(), filter,
+                            Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
+}
+void PersonalWindow::on_actionMitgliederListeCSV_triggered()
+{
+    Export::exportMitgliederAlsCSV(current, filter,
+                                  FileIO::getFilePathSave(this, "Mitglieder.csv", tr("CSV-Datei (*.csv)")));
 }
 
 void PersonalWindow::on_pushEmail_clicked()
 {
     if (current.isEmpty()) return;
-    QStringList mails;
+    QSet<QString> mails;
     QList<Person*> keineMail;
     foreach (Person *p, current) {
         if (p->getMail() != "") {
-            mails.append(p->getMail());
+            mails.insert(p->getMail());
         } else {
             keineMail.append(p);
         }
     }
     if (! mails.isEmpty()) {
         QString s = "mailto:?bcc=";
-        s += mails.join(",");
+        s += mails.values().join(",");
         QDesktopServices::openUrl(QUrl(s));
     }
     if (keineMail.isEmpty()) return;
@@ -309,17 +404,19 @@ void PersonalWindow::on_pushEmail_clicked()
     }
 }
 
-void PersonalWindow::on_tabWidgetMain_tabBarClicked(int index)
-{
-    if (index == 1)
-        refreshEinzel();
-    if (index == 0)
-        refreshGesamt();
-}
-
 void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, int column)
 {
     QString name = ui->tabelleGesamt->item(row, 0)->text() + " " + ui->tabelleGesamt->item(row, 1)->text();
+    Person * p = manager->getPerson(name);
+    if (p != nullptr) {
+        showPerson(p);
+        ui->tabWidgetMain->setCurrentIndex(1);
+    }
+}
+
+void PersonalWindow::on_tabelleMitglieder_cellDoubleClicked(int row, int column)
+{
+    QString name = ui->tabelleMitglieder->item(row, 1)->text() + " " + ui->tabelleMitglieder->item(row, 2)->text();
     Person * p = manager->getPerson(name);
     if (p != nullptr) {
         showPerson(p);
@@ -331,79 +428,79 @@ void PersonalWindow::on_checkShowGesamt_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Gesamt);
     else anzeige.remove(Category::Gesamt);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowAnzahl_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Anzahl);
     else anzeige.remove(Category::Anzahl);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowTf_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Tf);
     else anzeige.remove(Category::Tf);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowZf_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Zf);
     else anzeige.remove(Category::Zf);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowZub_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Zub);
     else anzeige.remove(Category::Zub);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowService_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Service);
     else anzeige.remove(Category::Service);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowVorbereiten_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::ZugVorbereiten);
     else anzeige.remove(Category::ZugVorbereiten);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowWerkstatt_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Werkstatt);
     else anzeige.remove(Category::Werkstatt);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowBuero_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Buero);
     else anzeige.remove(Category::Buero);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowAusbildung_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Ausbildung);
     else anzeige.remove(Category::Ausbildung);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowInfrastruktur_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Infrastruktur);
     else anzeige.remove(Category::Infrastruktur);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowSonstiges_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Sonstiges);
     else anzeige.remove(Category::Sonstiges);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 void PersonalWindow::on_checkShowKilometer_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Kilometer);
     else anzeige.remove(Category::Kilometer);
-    refreshGesamt();
+    refreshEinsatzzeiten();
 }
 
 void PersonalWindow::on_pushAdd_clicked()
@@ -434,7 +531,12 @@ void PersonalWindow::on_lineVorname_textChanged(const QString &arg1)
         } else {
             aktuellePerson->setVorname(arg1);
             if (personToItem.contains(aktuellePerson)) {
-                personToItem.value(aktuellePerson)->setText(aktuellePerson->getName());
+                if (Einstellungen::getReihenfolgeVorNach()) {
+                    personToItem.value(aktuellePerson)->setText(aktuellePerson->getName());
+                } else {
+                    personToItem.value(aktuellePerson)->setText(
+                                aktuellePerson->getNachname() + ", " + aktuellePerson->getVorname());
+                }
                 ui->listWidget->sortItems();
             }
         }
@@ -449,7 +551,12 @@ void PersonalWindow::on_lineNachname_textChanged(const QString &arg1)
         } else {
             aktuellePerson->setNachname(arg1);
             if (personToItem.contains(aktuellePerson)) {
-                personToItem.value(aktuellePerson)->setText(aktuellePerson->getName());
+                if (Einstellungen::getReihenfolgeVorNach()) {
+                    personToItem.value(aktuellePerson)->setText(aktuellePerson->getName());
+                } else {
+                    personToItem.value(aktuellePerson)->setText(
+                                aktuellePerson->getNachname() + ", " + aktuellePerson->getVorname());
+                }
                 ui->listWidget->sortItems();
             }
         }
@@ -527,7 +634,7 @@ void PersonalWindow::on_spinKm_valueChanged(int arg1)
 {
     if (enabled) {
         aktuellePerson->setStrecke(arg1);
-        ui->labelKilometerSum->setText(QString::number(aktuellePerson->get(Kilometer)));
+        ui->labelKilometerSum->setText(QString::number(aktuellePerson->getZeiten(Kilometer)));
     }
 }
 
@@ -648,14 +755,18 @@ void PersonalWindow::on_checkAustritt_clicked(bool checked)
         } else {
             aktuellePerson->setAustritt(QDate());
         }
+        refresh();
     }
 }
 
 void PersonalWindow::on_pushDelete_clicked()
 {
     if (enabled) {
-        if (aktuellePerson->getAnzahl() > 0) {
+        if (aktuellePerson->getZeiten(Anzahl) > 0) {
             QMessageBox::information(this, tr("Warnung"), tr("Die ausgewählte Person kann nicht gelöscht werden, da Sie noch bei Aktivitäten eingetragen ist.\nBitte lösen Sie diese Verbindung bevor Sie die Person löschen!"));
+            return;
+        }
+        if (QMessageBox::question(this, tr("Wirklich löschen"), tr("Möchten Sie die Person wirklich unwiderruflich löschen und aus dem System entfernen.\nFür ausgetretene Mitgleider können Sie auch ein Austrittsdatum angeben!")) != QMessageBox::Yes) {
             return;
         }
         enabled = false;
@@ -671,6 +782,7 @@ void PersonalWindow::on_pushDelete_clicked()
 
         aktuellePerson = nullptr;
         toggleFields(false);
+        refresh();
     }
 }
 
@@ -720,6 +832,7 @@ void PersonalWindow::on_doubleAnzahl_valueChanged(double arg1)
     if (enabled) {
         aktuellePerson->setAdditional(Anzahl, int(arg1));
         updateZeiten();
+        refresh();
     }
 }
 void PersonalWindow::on_doubleKilometer_valueChanged(double arg1)
@@ -727,6 +840,7 @@ void PersonalWindow::on_doubleKilometer_valueChanged(double arg1)
     if (enabled) {
         aktuellePerson->setAdditional(Kilometer, int(arg1));
         updateZeiten();
+        refresh();
     }
 }
 
@@ -805,19 +919,7 @@ void PersonalWindow::showPerson(Person *p)
     ui->tabelle->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     // ** Konto
-    ui->labelTfSum->setText(p->getString(Tf));
-    ui->labelZfSum->setText(p->getString(Zf));
-    ui->labelZubSum->setText((p->getString(Zub)));
-    ui->labelServiceSum->setText((p->getString(Service)));
-    ui->labelZugVorbereitenSum->setText((p->getString(ZugVorbereiten)));
-    ui->labelWerkstattSum->setText((p->getString(Werkstatt)));
-    ui->labelBueroSum->setText(p->getString(Buero));
-    ui->labelAusbildungSum->setText(p->getString(Ausbildung));
-    ui->labelInfrastrukturSum->setText(p->getString(Infrastruktur));
-    ui->labelSonstigesSum->setText(p->getString(Sonstiges));
-    ui->labelAnzahlSum->setText(p->getString(Anzahl));
-    ui->labelKilometerSum->setText(p->getString(Kilometer));
-    ui->labelGesamt->setText(p->getString(Gesamt)+" ("+manager->getMinimumHoursString(Gesamt)+")");
+    updateZeiten();
 
     ui->lineTf->setText(stringForDurationEditorFromMinutes(p->getAdditional(Tf)));
     ui->lineZf->setText(stringForDurationEditorFromMinutes(p->getAdditional(Zf)));
@@ -832,42 +934,32 @@ void PersonalWindow::showPerson(Person *p)
     ui->doubleAnzahl->setValue(p->getAdditional(Anzahl));
     ui->doubleKilometer->setValue(p->getAdditional(Kilometer));
 
-    if (manager->getMinimumHours(Tf, p) > 0)
-        ui->labelMinTf->setText(manager->getMinimumHoursString(Tf));
-    if (manager->getMinimumHours(Zf, p) > 0)
-        ui->labelMinZf->setText(manager->getMinimumHoursString(Zf));
-    if (manager->getMinimumHours(Zub, p) > 0)
-        ui->labelMinZub->setText(manager->getMinimumHoursString(Zub));
-    if (manager->getMinimumHours(Service, p) > 0)
-        ui->labelMinService->setText(manager->getMinimumHoursString(Service));
-    if (manager->getMinimumHours(ZugVorbereiten, p) > 0)
-        ui->labelMinZugVorbereiten->setText(manager->getMinimumHoursString(ZugVorbereiten));
-    if (manager->getMinimumHours(Werkstatt, p) > 0)
-        ui->labelMinWerkstatt->setText(manager->getMinimumHoursString(Werkstatt));
-    if (manager->getMinimumHours(Buero, p) > 0)
-        ui->labelMinBuero->setText(manager->getMinimumHoursString(Buero));
-    if (manager->getMinimumHours(Ausbildung, p) > 0)
-        ui->labelMinAusbildung->setText(manager->getMinimumHoursString(Ausbildung));
-    if (manager->getMinimumHours(Infrastruktur, p) > 0)
-        ui->labelMinInfrastruktur->setText(manager->getMinimumHoursString(Infrastruktur));
-    if (manager->getMinimumHours(Sonstiges, p) > 0)
-        ui->labelMinSonstiges->setText(manager->getMinimumHoursString(Sonstiges));
+    ui->labelMinTf->setText(minutesToHourString(p->getMinimumStunden(Tf)));
+    ui->labelMinZf->setText(minutesToHourString(p->getMinimumStunden(Zf)));
+    ui->labelMinZub->setText(minutesToHourString(p->getMinimumStunden(Zub)));
+    ui->labelMinService->setText(minutesToHourString(p->getMinimumStunden(Service)));
+    ui->labelMinZugVorbereiten->setText(minutesToHourString(p->getMinimumStunden(ZugVorbereiten)));
+    ui->labelMinWerkstatt->setText(minutesToHourString(p->getMinimumStunden(Werkstatt)));
+    ui->labelMinBuero->setText(minutesToHourString(p->getMinimumStunden(Buero)));
+    ui->labelMinAusbildung->setText(minutesToHourString(p->getMinimumStunden(Ausbildung)));
+    ui->labelMinInfrastruktur->setText(minutesToHourString(p->getMinimumStunden(Infrastruktur)));
+    ui->labelMinSonstiges->setText(minutesToHourString(p->getMinimumStunden(Sonstiges)));
 
     enabled = true;
 }
 
-void PersonalWindow::print(QPrinter *p)
+QList<Person*> PersonalWindow::getSortierteListe()
 {
-    QList<Person*> aktuelleSortierung = QList<Person*>();
+    QList<Person*> liste = QList<Person*>();
     for(int i = 0; i < ui->tabelleGesamt->rowCount(); i++) {
         QString name = ui->tabelleGesamt->item(i, 0)->text();
         if (name != "") name += " ";
         name += ui->tabelleGesamt->item(i, 1)->text();
         Person *pers = manager->getPerson(name);
         if (pers != nullptr)
-            aktuelleSortierung.append(pers);
+            liste.append(pers);
     }
-    Export::printPersonenGesamtuebersicht(aktuelleSortierung, anzeige, p);
+    return liste;
 }
 
 void PersonalWindow::toggleFields(bool state)
@@ -896,6 +988,8 @@ void PersonalWindow::toggleFields(bool state)
     ui->linePhone->setEnabled(state);
     ui->checkPhone->setEnabled(state);
 
+    ui->pushMailEinzel->setEnabled(state);
+
     ui->spinKm->setEnabled(state);
     ui->lineJob->setEnabled(state);
     ui->plainBemerkung->setEnabled(state);
@@ -918,6 +1012,8 @@ void PersonalWindow::toggleFields(bool state)
     ui->doubleAnzahl->setEnabled(state);
     ui->doubleKilometer->setEnabled(state);
 
+    ui->pushEinzelPDF->setEnabled(state);
+    ui->pushEinzelDrucken->setEnabled(state);
 }
 
 void PersonalWindow::setZeitenNachVeraenderung(Category cat, QString arg)
@@ -925,36 +1021,45 @@ void PersonalWindow::setZeitenNachVeraenderung(Category cat, QString arg)
     if (enabled) {
         aktuellePerson->setAdditional(cat, minutesFromStringForDurationEditor(arg));
         updateZeiten();
+        refresh();
     }
 }
 
 void PersonalWindow::updateZeiten()
 {
-    refresh();
-    ui->labelTfSum->setText(aktuellePerson->getString(Tf));
+    ui->labelTfSum->setText(minutesToHourString(aktuellePerson->getZeiten(Tf)));
     ui->labelTfSum->repaint();
-    ui->labelZfSum->setText(aktuellePerson->getString(Zf));
+    ui->labelZfSum->setText(minutesToHourString(aktuellePerson->getZeiten(Zf)));
     ui->labelZfSum->repaint();
-    ui->labelZubSum->setText(aktuellePerson->getString(Zub));
+    ui->labelZubSum->setText(minutesToHourString(aktuellePerson->getZeiten(Zub)));
     ui->labelZubSum->repaint();
-    ui->labelServiceSum->setText(aktuellePerson->getString(Service));
+    ui->labelServiceSum->setText(minutesToHourString(aktuellePerson->getZeiten(Service)));
     ui->labelServiceSum->repaint();
-    ui->labelZugVorbereitenSum->setText(aktuellePerson->getString(ZugVorbereiten));
+    ui->labelZugVorbereitenSum->setText(minutesToHourString(aktuellePerson->getZeiten(ZugVorbereiten)));
     ui->labelZugVorbereitenSum->repaint();
-    ui->labelWerkstattSum->setText(aktuellePerson->getString(Werkstatt));
+    ui->labelWerkstattSum->setText(minutesToHourString(aktuellePerson->getZeiten(Werkstatt)));
     ui->labelWerkstattSum->repaint();
-    ui->labelBueroSum->setText(aktuellePerson->getString(Buero));
+    ui->labelBueroSum->setText(minutesToHourString(aktuellePerson->getZeiten(Buero)));
     ui->labelBueroSum->repaint();
-    ui->labelAusbildungSum->setText(aktuellePerson->getString(Ausbildung));
+    ui->labelAusbildungSum->setText(minutesToHourString(aktuellePerson->getZeiten(Ausbildung)));
     ui->labelAusbildungSum->repaint();
-    ui->labelInfrastrukturSum->setText(aktuellePerson->getString(Infrastruktur));
+    ui->labelInfrastrukturSum->setText(minutesToHourString(aktuellePerson->getZeiten(Infrastruktur)));
     ui->labelInfrastrukturSum->repaint();
-    ui->labelSonstigesSum->setText(aktuellePerson->getString(Sonstiges));
+    ui->labelSonstigesSum->setText(minutesToHourString(aktuellePerson->getZeiten(Sonstiges)));
     ui->labelSonstigesSum->repaint();
-    ui->labelAnzahlSum->setText(aktuellePerson->getString(Anzahl));
+    ui->labelAnzahlSum->setText(QString::number(aktuellePerson->getZeiten(Anzahl)));
     ui->labelAnzahlSum->repaint();
-    ui->labelKilometerSum->setText(aktuellePerson->getString(Kilometer));
+    ui->labelKilometerSum->setText(QString("%1 km").arg(aktuellePerson->getZeiten(Kilometer)));
     ui->labelKilometerSum->repaint();
-    ui->labelGesamt->setText(aktuellePerson->getString(Gesamt)+" ("+manager->getMinimumHoursString(Gesamt)+")");
+    ui->labelGesamt->setText(QString("%1 (%2)")
+                             .arg(minutesToHourString(aktuellePerson->getZeiten(Gesamt)))
+                             .arg(minutesToHourString(aktuellePerson->getMinimumStunden(Gesamt))));
     ui->labelGesamt->repaint();
+}
+
+void PersonalWindow::on_pushMailEinzel_clicked()
+{
+    if (aktuellePerson->getMail() != "") {
+        QDesktopServices::openUrl(QUrl("mailto:"+aktuellePerson->getMail()));
+    }
 }

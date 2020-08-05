@@ -9,6 +9,9 @@ QString minutesToHourString(int min)
 
 QString minutesToHourStringShort(int min)
 {
+    if (min <= 0) return "0";
+    if (min % 60 == 0)
+        return QString("%1").arg(int(min/60));
     return QString("%1:%2").arg(int(min/60)).arg(min % 60, 2, 10,QLatin1Char('0'));
 }
 
@@ -65,5 +68,20 @@ QString getStringFromArt(Art art)
     case Bahnhofsfest: return QObject::tr("Bahnhofsfest");
     case SonstigerFahrtag: return QObject::tr("Sonstiges");
     case Arbeitseinsatz: return QObject::tr("Arbeitseinsatz");
+    }
+}
+
+QString getStringVonFilter(Mitglied filter)
+{
+    switch (filter) {
+    case AlleMitglieder: return QObject::tr("Alle Mitglieder");
+    case Aktiv: return QObject::tr("Aktive Mitglieder");
+    case AktivMit: return QObject::tr("Aktive Mitglieder mit erbrachten Stunden");
+    case AktivOhne: return QObject::tr("Aktive Mitglieder mit fehlenden Stunden");
+    case Passiv: return QObject::tr("Passive Mitglieder");
+    case PassivMit: return QObject::tr("Passive Mitglieder mit Stunden");
+    case PassivOhne: return QObject::tr("Passive Mitglieder ohne Stunden");
+    case Ausgetreten: return QObject::tr("Ausgetretene Mitglieder");
+    case Registriert: return QObject::tr("Registrierte Personen");
     }
 }

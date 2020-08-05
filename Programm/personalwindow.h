@@ -23,32 +23,37 @@ public slots:
     void refresh();
 
 private slots:
-    void refreshGesamt();
+    void refreshEinsatzzeiten();
     void refreshEinzel();
+    void refreshMitglieder();
 
     void editMinimumHours();
 
 
     // Export
-    void on_pushPDF_clicked();
-    void on_pushPrint_clicked();
+    void on_actionZeitenEinzelEinzelPDF_triggered();
+    void on_actionZeitenEinzelEinzelDrucken_triggered();
 
-    void on_actionEinzelPrint_triggered();
-    void on_actionEinzelPDF_triggered();
+    void on_actionZeitenEinzelListePDF_triggered();
+    void on_actionZeitenEinzelListeDrucken_triggered();
 
-    void on_actionMitgliederDrucken_triggered();
-    void on_actionMitgliederPDF_triggered();
+    void on_actionZeitenListePDF_triggered();
+    void on_actionZeitenListeDrucken_triggered();
 
-    void on_actionMitgliederCSV_triggered();
 
-    void on_pushPDFEinzel_clicked();
-    void on_pushPrintEinzel_clicked();
+    void on_actionMitgliederEinzelEinzelPDF_triggered();
+    void on_actionMitgliederEinzelEinzelDrucken_triggered();
+
+    void on_actionMitgliederEinzelListePDF_triggered();
+    void on_actionMitgliederEinzelListeDrucken_triggered();
+
+    void on_actionMitgliederListePDF_triggered();
+    void on_actionMitgliederListeDrucken_triggered();
+    void on_actionMitgliederListeCSV_triggered();
 
 
     // Fenster - Gesamt
     void on_pushEmail_clicked();
-
-    void on_tabWidgetMain_tabBarClicked(int index);
 
     void on_tabelleGesamt_cellDoubleClicked(int row, int column);
 
@@ -132,6 +137,11 @@ private slots:
 
     void showPerson(Person *p);
 
+    // Mitglieder
+    void on_tabelleMitglieder_cellDoubleClicked(int row, int column);
+
+    void on_pushMailEinzel_clicked();
+
 private:
     Ui::PersonalWindow *ui;
     ManagerPersonal *manager;
@@ -139,6 +149,7 @@ private:
     Person *aktuellePerson;
 
     QList<Person*> current;
+    Mitglied filter;
 
     QHash<Person*, QListWidgetItem*> personToItem;
 
@@ -146,7 +157,7 @@ private:
 
     bool enabled; // Gibt an, ob das Formular aktiviert ist oder nicht, und ob Änderungen übernommen werden
 
-    void print(QPrinter *p);
+    QList<Person*> getSortierteListe();
 
     void toggleFields(bool state);
 
