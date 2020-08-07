@@ -308,7 +308,7 @@ QString AActivity::listToString(QString sep, QMap<Person *, Infos> liste, QStrin
         l2.append(p->getName());
 
         if (liste.value(p).bemerkung != "") {
-            l2.append(bemerkungen);
+            l2.append(liste.value(p).bemerkung);
         }
         if (aufgabe && (liste.value(p).kategorie != Category::Sonstiges)) {
             l2.append(getLocalizedStringFromCategory(liste.value(p).kategorie));

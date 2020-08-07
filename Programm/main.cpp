@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-    CoreApplication a(argc, argv, {1, 6, 1}, false, GIT_CURRENT_SHA1);
+    CoreApplication a(argc, argv, {1, 6, 2}, true, GIT_CURRENT_SHA1);
 
     QTranslator qtTranslator;
     qtTranslator.load(":/translations/qt_" + QLocale::system().name());
