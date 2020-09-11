@@ -5,6 +5,8 @@
 #include "wagen.h"
 #include "basics.h"
 
+#include <QSet>
+
 class Verteiler
 {
 public:

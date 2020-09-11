@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QWindow>
 #include <QTimer>
+#include <QFileOpenEvent>
 
 Version CoreApplication::VERSION = {-1, -1, -1};
 QString CoreApplication::BUILD = "";

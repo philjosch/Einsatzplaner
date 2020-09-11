@@ -713,7 +713,6 @@ void FahrtagWindow::on_buttonDeleteReservierung_clicked()
         Reservierung *r = itemToRes.value(i);
         fahrtag->removeReservierung(r);
         itemToRes.remove(i);
-        delete r;
         delete i;
 
         nehmeRes = false;

@@ -7,7 +7,9 @@
 #include "exportgesamt.h"
 #include "personalwindow.h"
 
+#include <QCloseEvent>
 #include <QMainWindow>
+#include <QMap>
 
 namespace Ui {
 class MainWindow;
