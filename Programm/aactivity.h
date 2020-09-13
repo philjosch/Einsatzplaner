@@ -44,6 +44,8 @@ public:
     bool getZeitenUnbekannt() const;
     void setZeitenUnbekannt(bool value);
 
+    bool liegtInVergangenheit();
+
     QString getAnlass() const;
     void setAnlass(const QString &value);
 

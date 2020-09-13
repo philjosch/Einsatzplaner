@@ -177,7 +177,7 @@ int Export::autoUploadToServer(ManagerFileSettings *settings, Manager *mgr)
         AActivity *a = iter.next();
         // Beginndatum
         if (settings->getStartdate() == "tdy") {
-            if (a->getDatum() < QDate::currentDate()) {
+            if (a->liegtInVergangenheit()) {
                 continue;
             }
         } else if (settings->getStartdate() == "all") {

@@ -352,6 +352,14 @@ void AActivity::setZeitenUnbekannt(bool value)
     emit changed(this);
 }
 
+bool AActivity::liegtInVergangenheit()
+{
+    if (datum < QDate::currentDate()) return true;
+    if (datum > QDate::currentDate()) return false;
+    if (zeitEnde <= QTime::currentTime()) return true;
+    return false;
+}
+
 void AActivity::sort(QList<AActivity *> *list)
 {
     AActivity::mergeSort(list, 0, list->length()-1);

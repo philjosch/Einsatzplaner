@@ -129,7 +129,7 @@ bool ExportGesamt::testShow(AActivity *a)
             return false;
         break;
     case 1: // Ab heute
-        if (a->getDatum() < QDate::currentDate())
+        if (a->liegtInVergangenheit())
             return false;
         break;
     case 2: // Ab beginn des Jahres
