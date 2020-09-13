@@ -185,7 +185,7 @@ QString Fahrtag::getHtmlForSingleView()
         } else {
             html += "Triebfahrzeugführer (Tf)";
         }
-        html += ":</b><br/>"+listToString("| ", tf)+"</p>";
+        html += ":</b><br/>"+listToString(" | ", tf)+"</p>";
     }
     // *Zf
     if ((benoetigeZf && (art != Schnupperkurs)) || zf.size() > 0) {
@@ -202,7 +202,7 @@ QString Fahrtag::getHtmlForSingleView()
         // Begl. o.b.A
         if (! zub.isEmpty() && ! begl.isEmpty())
             html += " | ";
-        html += "<i>" + listToString("|", begl) + "</i></p>";
+        html += "<i>" + listToString(" | ", begl) + "</i></p>";
     }
     // *Service
     if ((benoetigeService && (art != Schnupperkurs)) || service.size() > 0) {
@@ -308,7 +308,7 @@ QString Fahrtag::getHtmlForTableView()
         html += "<b><u>Zugführer wird benötigt!</u></b><br/>";
     }
     if (benoetigeZub && (art != Schnupperkurs)) {
-        html += "<b><i>Zugbegleiter wird benötigt!</i></b>";
+        html += "<b><i>Begleitpersonal wird benötigt!</i></b>";
     }
     html += "<ul>";
     if (zf.size() > 0) {

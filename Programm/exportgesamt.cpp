@@ -7,6 +7,15 @@
 ExportGesamt::ExportGesamt(Manager *m, ManagerFileSettings *settings, QWidget *parent) : QDialog(parent), ui(new Ui::ExportGesamt)
 {
     ui->setupUi(this);
+    ui->buttonGroupExportFormat->setId(ui->checkAusdruck, 0);
+    ui->buttonGroupExportFormat->setId(ui->checkPDF, 1);
+    ui->buttonGroupExportFormat->setId(ui->checkUpload, 2);
+    ui->checkAusdruck->click();
+
+    ui->buttonGroupExportArt->setId(ui->checkListe, 0);
+    ui->buttonGroupExportArt->setId(ui->checkEinzel, 1);
+    ui->checkListe->click();
+
     p = parent;
     this->settings = settings;
     ui->dateVon->setDate(QDate::currentDate());
@@ -17,6 +26,8 @@ ExportGesamt::ExportGesamt(Manager *m, ManagerFileSettings *settings, QWidget *p
     connect(ui->dateBis, &QDateEdit::dateChanged, this, &ExportGesamt::show);
     connect(ui->comboFahrtag, &QComboBox::currentTextChanged, this, &ExportGesamt::show);
     connect(ui->checkActivity, &QCheckBox::clicked, this, &ExportGesamt::show);
+    connect(ui->listAnzeige, &QListWidget::itemSelectionChanged, this, [=]() {
+        ui->checkEinzel->setEnabled(! ui->listAnzeige->selectedItems().isEmpty()); });
 
     hardReload();
 }
@@ -35,7 +46,7 @@ void ExportGesamt::hardReload()
         QString farbe = getFarbe(a);
         QListWidgetItem *item = new QListWidgetItem(a->getListString());
         item->setBackground(QBrush(QColor(farbe)));
-        item->setToolTip(a->getAnlass());
+        item->setToolTip(a->getAnlass().replace("<br/>","\n"));
         ui->listAnzeige->insertItem(ui->listAnzeige->count(), item);
         actToList.insert(a, item);
     }
@@ -44,38 +55,57 @@ void ExportGesamt::hardReload()
 
 void ExportGesamt::on_pushDrucken_clicked()
 {
-    // Erstelle eine liste mit den Objekten für die Einzelansicht
-    QList<AActivity*> listeEinzel = QList<AActivity*>();
-    // Erstelle eine Liste für die Listenansicht
-    QList<AActivity*> listeListe = QList<AActivity*>();
+    QList<AActivity*> liste = QList<AActivity*>();
     foreach(AActivity *a, manager->getActivities()) {
-        if(! actToList.value(a)->isHidden()) {
-            listeListe.append(a);
-            if (actToList.value(a)->isSelected()) {
-                listeEinzel.append(a);
+        switch (ui->buttonGroupExportArt->checkedId()) {
+        case 1:
+            if(!(actToList.value(a)->isSelected())) {
+                continue;
             }
+        case 0:
+            if(! actToList.value(a)->isHidden()) {
+                liste.append(a);
+            }
+            break;
+        default:
+            continue;
         }
     }
+    if (liste.isEmpty()) return;
 
-    if (ui->checkEinzel->isChecked() && listeEinzel.length() > 0) {
-        if (ui->checkPDF->isChecked())
-            Export::printAktivitaetenEinzel(listeEinzel, Export::getPrinterPDF(p, "Einzelansicht.pdf", QPrinter::Orientation::Portrait));
-        if (ui->checkAusdruck->isChecked())
-            Export::printAktivitaetenEinzel(listeEinzel, Export::getPrinterPaper(p, QPrinter::Orientation::Portrait));
-    }
-    if (ui->checkListe->isChecked() && listeListe.length() > 0) {
-        if (ui->checkUpload->isChecked()) {
-            if (Export::uploadToServer(settings, listeListe)) {
-                QMessageBox::information(nullptr, tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
+
+    QPrinter *printer;
+    if (ui->buttonGroupExportArt->checkedId() == 0) {
+        switch (ui->buttonGroupExportFormat->checkedId()) {
+        case 0:
+            printer = Export::getPrinterPaper(parentWidget(), QPrinter::Orientation::Landscape);
+            break;
+        case 1:
+            printer = Export::getPrinterPDF(parentWidget(), "Listenansicht.pdf", QPrinter::Orientation::Landscape);
+            break;
+        case 2:
+            if (Export::uploadToServer(settings, liste)) {
+                QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
             } else {
-                QMessageBox::information(nullptr, tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden! :("));
+                QMessageBox::information(parentWidget(), tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden!"));
             }
+            return;
+        default:
+            return;
         }
-
-        if (ui->checkPDF->isChecked())
-            Export::printAktivitaetenListe(listeListe, Export::getPrinterPDF(p, "Listenansicht.pdf", QPrinter::Orientation::Landscape));
-        if (ui->checkAusdruck->isChecked())
-            Export::printAktivitaetenListe(listeListe, Export::getPrinterPaper(p, QPrinter::Orientation::Landscape));
+        Export::printAktivitaetenListe(liste, printer);
+    } else {
+        switch (ui->buttonGroupExportFormat->checkedId()) {
+        case 0:
+            printer = Export::getPrinterPaper(parentWidget(), QPrinter::Orientation::Portrait);
+            break;
+        case 1:
+            printer = Export::getPrinterPDF(parentWidget(), "Einzelansicht.pdf", QPrinter::Orientation::Portrait);
+            break;
+        default:
+            return;
+        }
+        Export::printAktivitaetenEinzel(liste, printer);
     }
 }
 
@@ -115,8 +145,14 @@ void ExportGesamt::on_comboBis_currentIndexChanged(int index)
 
 void ExportGesamt::show()
 {
+    ui->checkListe->setEnabled(false);
     foreach(AActivity *a, manager->getActivities()) {
-        actToList.value(a)->setHidden(!testShow(a));
+        if(testShow(a)) {
+            actToList.value(a)->setHidden(false);
+            ui->checkListe->setEnabled(true);
+        } else {
+            actToList.value(a)->setHidden(true);
+        }
     }
 }
 

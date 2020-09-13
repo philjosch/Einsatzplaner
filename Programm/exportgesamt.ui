@@ -272,16 +272,6 @@
    </item>
    <item row="4" column="0" colspan="5">
     <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0,0,1" columnminimumwidth="0,135,135,135,0">
-     <item row="1" column="3">
-      <widget class="QCheckBox" name="checkAusdruck">
-       <property name="text">
-        <string>Ausdruck</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="4">
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -295,16 +285,6 @@
        </property>
       </spacer>
      </item>
-     <item row="0" column="2">
-      <widget class="QCheckBox" name="checkListe">
-       <property name="text">
-        <string>Listenansicht</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="3">
       <widget class="QPushButton" name="pushDrucken">
        <property name="text">
@@ -312,31 +292,10 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QCheckBox" name="checkPDF">
-       <property name="text">
-        <string>PDF-Datei</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="1">
       <widget class="QPushButton" name="pushAbbruch">
        <property name="text">
         <string>Schließen</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QCheckBox" name="checkEinzel">
-       <property name="text">
-        <string>Einzelansichten</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QCheckBox" name="checkUpload">
-       <property name="text">
-        <string>Upload (nur Liste)</string>
        </property>
       </widget>
      </item>
@@ -358,6 +317,65 @@
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QRadioButton" name="checkUpload">
+       <property name="text">
+        <string>Upload (nur Liste)</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">buttonGroupExportFormat</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QRadioButton" name="checkPDF">
+       <property name="text">
+        <string>PDF-Datei</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">buttonGroupExportFormat</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QRadioButton" name="checkAusdruck">
+       <property name="text">
+        <string>Ausdruck</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">buttonGroupExportFormat</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QRadioButton" name="checkListe">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Listenansicht</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">buttonGroupExportArt</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QRadioButton" name="checkEinzel">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Einzelansichten</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">buttonGroupExportArt</string>
+       </attribute>
       </widget>
      </item>
     </layout>
@@ -399,4 +417,8 @@
    </hints>
   </connection>
  </connections>
+ <buttongroups>
+  <buttongroup name="buttonGroupExportFormat"/>
+  <buttongroup name="buttonGroupExportArt"/>
+ </buttongroups>
 </ui>

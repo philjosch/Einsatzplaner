@@ -12,7 +12,7 @@ const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td
                             "table tr, table td { page-break-inside: avoid; }"
                             "table tfoot tr, table tfoot td { border-width: 1px; }"
                             "ul { -qt-list-indent: 0; margin-top: 0px !important; margin-bottom: 0px !important }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }"
+                            "li { text-indent: 6px; margin-top: 0px !important; margin-bottom: 0px !important; }"
                             "p.last { page-break-after: always; }";
 const QFont Export::DEFAULT_FONT = QFont("Arial", 11, QFont::Normal);
 
