@@ -209,10 +209,8 @@ int Export::autoUploadToServer(ManagerFileSettings *settings, Manager *mgr)
         }
         // Auch Aktivitaeten?
         if (!settings->getActivities()) {
-            if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(a)) {
-            } else {
+            if (a->getArt() == Art::Arbeitseinsatz)
                 continue;
-            }
         }
         liste.append(a);
     }

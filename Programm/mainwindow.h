@@ -8,6 +8,7 @@
 #include "personalwindow.h"
 
 #include <QCloseEvent>
+#include <QJsonObject>
 #include <QMainWindow>
 #include <QMap>
 
@@ -69,8 +70,7 @@ protected slots:
     void itemInCalendarDayClicked(AActivity *a);
 
     // Aktivitäten
-    void openFahrtag(Fahrtag *f);
-    void openActivity(Activity *a);
+    void openAActivity(AActivity *a);
     void newAActivityHandler(AActivity *a);
     void on_buttonDelete_clicked();
 

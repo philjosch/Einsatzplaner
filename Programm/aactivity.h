@@ -27,6 +27,8 @@ public:
     AActivity(QJsonObject o, ManagerPersonal *p);
     virtual ~AActivity();
 
+    virtual Art getArt() const;
+
     virtual QJsonObject toJson();
 
     QDate getDatum();

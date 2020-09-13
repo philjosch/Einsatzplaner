@@ -130,38 +130,32 @@ void MainWindow::newFahrtag(QDate d)
 {
     Fahrtag *f = manager->newFahrtag(d);
     newAActivityHandler(f);
-    openFahrtag(f);
+    openAActivity(f);
 }
-void MainWindow::openFahrtag(Fahrtag *f)
-{
-    if (fenster.contains(f)) {
-        fenster.value(f)->show();
-        fenster.value(f)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-        fenster.value(f)->raise();  // for MacOS
-        fenster.value(f)->activateWindow(); // for Windows
-    } else {
-        FahrtagWindow *w = new FahrtagWindow(this, f);
-        w->setWindowFilePath(filePath);
-        fenster.insert(f, w);
-        w->show();
-    }
-}
-
 void MainWindow::newActivity(QDate d)
 {
     Activity *a = manager->newActivity(d);
     newAActivityHandler(a);
-    openActivity(a);
+    openAActivity(a);
 }
-void MainWindow::openActivity(Activity *a)
+void MainWindow::openAActivity(AActivity *a)
 {
+    if (a == nullptr) return;
+
     if (fenster.contains(a)) {
         fenster.value(a)->show();
         fenster.value(a)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
         fenster.value(a)->raise();  // for MacOS
         fenster.value(a)->activateWindow(); // for Windows
     } else {
-        ActivityWindow *w = new ActivityWindow(this, a);
+        QMainWindow *w;
+        if (a->getArt() == Art::Arbeitseinsatz) {
+            Activity* aa = dynamic_cast<Activity*>(a);
+            w = new ActivityWindow(this, aa);
+        } else {
+            Fahrtag* f = dynamic_cast<Fahrtag*>(a);
+            w = new FahrtagWindow(this, f);
+        }
         w->setWindowFilePath(filePath);
         fenster.insert(a, w);
         w->show();
@@ -298,15 +292,9 @@ void MainWindow::on_buttonToday_clicked()
 }
 
 void MainWindow::itemInCalendarDayClicked(AActivity *a)
-{
-    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
-        openFahrtag(f);
-    } else {
-        Activity *c = dynamic_cast<Activity*>(a);
-        openActivity(c);
-    }
+{   
+    openAActivity(a);
 }
-
 
 void MainWindow::on_actionPreferences_triggered()
 {
@@ -561,13 +549,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::onItemInListClicked(QListWidgetItem *item)
 {
-    AActivity *a = itemToList.value(item);
-    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
-        openFahrtag(f);
-    } else {
-        Activity *c = dynamic_cast<Activity*>(a);
-        openActivity(c);
-    }
+    openAActivity(itemToList.value(item));
 }
 void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
 {

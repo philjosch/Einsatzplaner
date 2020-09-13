@@ -162,11 +162,11 @@ bool ExportGesamt::testShow(AActivity *a)
     }
 
     // Prüfen, ob die Art stimmt (Fahrtag, Arbeitseinsatz)
-    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
+    if ((a->getArt() != Art::Arbeitseinsatz)) {
         int i = ui->comboFahrtag->currentIndex();
         if (i == 9) return false;
         if (i != 8) {
-            if (i != f->getArt()) {
+            if (i != a->getArt()) {
                 return false;
             }
         }

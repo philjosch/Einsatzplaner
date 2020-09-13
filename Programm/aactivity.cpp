@@ -13,10 +13,7 @@ QString AActivity::COLOR_REQUIRED = "#ff3333";
 
 const QString getFarbe(AActivity *a)
 {
-    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a))
-        return FARBE_FAHRTAGE.value(f->getArt());
-    else
-        return FARBE_FAHRTAGE.value(Arbeitseinsatz);
+    return FARBE_FAHRTAGE.value(a->getArt());
 }
 
 AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
@@ -78,6 +75,11 @@ AActivity::~AActivity()
     for(Einsatz e: personen.keys()) {
         (e.person)->removeActivity(this, e.cat);
     }
+}
+
+Art AActivity::getArt() const
+{
+    return Art::Arbeitseinsatz;
 }
 
 QJsonObject AActivity::toJson()
@@ -288,9 +290,9 @@ bool AActivity::lesser(const AActivity &second) const
             return false;
     }
     // Art und beliebig, bei gleicher Art
-    if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(this))
+    if (getArt() != Art::Arbeitseinsatz)
         return true;
-    if (const Activity *a = dynamic_cast<const Activity*>(&second))
+    if (second.getArt() == Art::Arbeitseinsatz)
         return true;
     return false;
 }
