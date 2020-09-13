@@ -64,7 +64,6 @@ Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p)
 
 Fahrtag::~Fahrtag()
 {
-    AActivity::~AActivity();
     foreach(Reservierung *r, reservierungen) {
         delete r;
     }

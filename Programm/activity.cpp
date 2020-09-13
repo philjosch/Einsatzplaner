@@ -10,5 +10,4 @@ Activity::Activity(QJsonObject o, ManagerPersonal *p) : AActivity(o, p)
 
 Activity::~Activity()
 {
-    AActivity::~AActivity();
 }

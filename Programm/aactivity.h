@@ -25,7 +25,7 @@ public:
     };
     AActivity(QDate date, ManagerPersonal *p);
     AActivity(QJsonObject o, ManagerPersonal *p);
-    ~AActivity();
+    virtual ~AActivity();
 
     virtual QJsonObject toJson();
 
