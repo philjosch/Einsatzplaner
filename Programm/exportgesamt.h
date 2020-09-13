@@ -35,7 +35,6 @@ private:
     QWidget *p;
     Manager *manager;
 
-    QList<AActivity*> liste;
     QMap<AActivity*, QListWidgetItem*> actToList;
     ManagerFileSettings *settings;
 

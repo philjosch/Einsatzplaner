@@ -896,7 +896,7 @@ void PersonalWindow::showPerson(Person *p)
 
     // ** Aktivitaeten
     while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
-    QMap<AActivity*,Category> liste = p->getActivities();
+    QMultiMap<AActivity*,Category> liste = p->getActivities();
     bool sortingSaved = ui->tabelle->isSortingEnabled();
     ui->tabelle->setSortingEnabled(false);
     for(AActivity *a: liste.uniqueKeys()) {

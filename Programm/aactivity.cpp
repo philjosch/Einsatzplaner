@@ -376,31 +376,31 @@ void AActivity::merge(QList<AActivity*> *arr, int l, int m, int r)
 {
     // First subarray is arr[l..m]
     // Second subarray is arr[m+1..r]
-    QLinkedList<AActivity*> L, R = QLinkedList<AActivity*>();
+    std::list<AActivity*> L, R = std::list<AActivity*>();
 
     for (int i = l; i <= m; i++)
-        L.append(arr->at(i));
+        L.push_back(arr->at(i));
     for (int j = m+1; j <= r; j++)
-        R.append(arr->at(j));
+        R.push_back(arr->at(j));
 
     /* Merge the temp arrays back into arr[l..r]*/
     int i = l;
-    while ((!(L.isEmpty())) && (!(R.isEmpty()))) {
-        if ( *(L.first()) <= *(R.first()) ) {
-            arr->replace(i++, L.first());
-            L.removeFirst();
+    while ((!(L.empty())) && (!(R.empty()))) {
+        if ( *(L.front()) <= *(R.front()) ) {
+            arr->replace(i++, L.front());
+            L.pop_front();
         } else {
-            arr->replace(i++, R.first());
-            R.removeFirst();
+            arr->replace(i++, R.front());
+            R.pop_front();
         }
     }
-    while(! L.isEmpty()) {
-        arr->replace(i++, L.first());
-        L.removeFirst();
+    while(! L.empty()) {
+        arr->replace(i++, L.front());
+        L.pop_front();
     }
-    while (! R.isEmpty()) {
-        arr->replace(i++, R.first());
-        R.removeFirst();
+    while (! R.empty()) {
+        arr->replace(i++, R.front());
+        R.pop_front();
     }
 }
 

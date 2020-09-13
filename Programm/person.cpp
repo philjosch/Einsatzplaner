@@ -114,7 +114,7 @@ void Person::personConstructor(QString vn, QString nn, ManagerPersonal *man, QSt
 {
     additional = QMap<Category, int>();
     zeiten = QMap<Category, int>();
-    activities = QMap<AActivity *, Category>();
+    activities = QMultiMap<AActivity *, Category>();
 
     valuesInvalid = true;
     manager = man;
@@ -503,7 +503,7 @@ void Person::berechne()
 bool Person::addActivity(AActivity *a, Category kat)
 {
     if (!activities.values(a).contains(kat)) {
-        activities.insertMulti(a, kat);
+        activities.insert(a, kat);
 
         valuesInvalid = true;
         return true;
@@ -518,7 +518,7 @@ bool Person::removeActivity(AActivity *a, Category kat)
     activities.remove(a);
     if (category.removeAll(kat)) {
         for(Category c: category) {
-            activities.insertMulti(a, c);
+            activities.insert(a, c);
         }
         valuesInvalid = true;
         return true;
@@ -526,7 +526,7 @@ bool Person::removeActivity(AActivity *a, Category kat)
     return false;
 }
 
-QMap<AActivity *, Category> Person::getActivities()
+QMultiMap<AActivity *, Category> Person::getActivities()
 {
     return activities;
 }
