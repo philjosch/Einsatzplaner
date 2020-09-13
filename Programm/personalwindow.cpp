@@ -280,7 +280,7 @@ void PersonalWindow::refreshMitglieder()
         i->setData(0, p->getTauglichkeit());
         ui->tabelleMitglieder->setItem(0, clmn++, i);
 
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getBemerkungen()));
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getBemerkungen().replace("<br/>","\n")));
     }
 
     ui->tabelleMitglieder->setSortingEnabled(true);
@@ -889,7 +889,7 @@ void PersonalWindow::showPerson(Person *p)
     ui->dateDienst->setDate(p->getTauglichkeit());
 
     // Sonstiges
-    ui->plainBemerkung->setPlainText(p->getBemerkungen());
+    ui->plainBemerkung->setPlainText(p->getBemerkungen().replace("<br/>","\n"));
     ui->checkAustritt->setChecked(p->getAustritt().isValid());
     ui->dateAustritt->setEnabled(p->getAustritt().isValid());
     ui->dateAustritt->setDate(p->getAustritt());
