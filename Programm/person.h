@@ -62,6 +62,7 @@ public:
 
     QDate getGeburtstag() const;
     void setGeburtstag(const QDate &value);
+    bool isMinderjaehrig();
 
     QDate getEintritt() const;
     void setEintritt(const QDate &value);

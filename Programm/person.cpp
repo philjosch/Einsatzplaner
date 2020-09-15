@@ -441,6 +441,7 @@ Mitglied Person::pruefeStunden(Category cat)
 
 int Person::getMinimumStunden(Category cat)
 {
+    if (isMinderjaehrig()) return 0;
     if (isAusgetreten()) return 0;
     switch (cat) {
     case Tf:
@@ -835,6 +836,12 @@ void Person::setGeburtstag(const QDate &value)
 {
     geburtstag = value;
     emit changed();
+}
+
+bool Person::isMinderjaehrig()
+{
+    if (geburtstag.isNull()) return false;
+    return geburtstag.addYears(18) > QDate::currentDate();
 }
 
 QDate Person::getEintritt() const
