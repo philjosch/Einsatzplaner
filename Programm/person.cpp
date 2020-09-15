@@ -745,7 +745,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML()
         h += help.arg("Austritt").arg(austritt.toString("dd.MM.yyyy"));
     } else {
         if (austritt.isValid())
-            h += "<br/>Austritt zum: "+austritt.toString("dd.MM.yyyy");
+            h += help.arg("Austritt zum").arg(austritt.toString("dd.MM.yyyy"));
     }
     h += help.arg("Beruf").arg(beruf);
 
@@ -760,8 +760,8 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML()
     h += "</p><h3>Kontaktdaten</h3><p>";
 
     // Kontakt
-    h += help.arg("Mail (darf %3weitergegeben werden)").arg(mail).arg(mailOK ? "" : "nicht");
-    h += help.arg("Telefon (darf %3weitergegeben werden)").arg(telefon).arg(telefonOK ? "" : "nicht");
+    h += help.arg("Mail (darf %3weitergegeben werden)").arg(mail).arg(mailOK ? "" : "nicht ");
+    h += help.arg("Telefon (darf %3weitergegeben werden)").arg(telefon).arg(telefonOK ? "" : "nicht ");
     h += "</p>";
 
     if (ausbildungRangierer || ausbildungTf || ausbildungZf || tauglichkeit.isValid()) {
