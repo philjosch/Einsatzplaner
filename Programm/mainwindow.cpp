@@ -354,7 +354,7 @@ void MainWindow::open(QString path)
 
 void MainWindow::on_menuRecentlyused_aboutToShow()
 {
-    QStringList list = FileIO::getLastUsed();
+    QStringList list = FileIO::History::get();
 
     if (list.length() > 0) {
         QList<QAction*> actions = ui->menuRecentlyused->actions();
@@ -371,7 +371,7 @@ void MainWindow::on_menuRecentlyused_aboutToShow()
 }
 void MainWindow::on_actionClear_triggered()
 {
-    FileIO::clearLastUsed();
+    FileIO::History::clear();
     QList<QAction*> actions = ui->menuRecentlyused->actions();
     for (int i = 2; i < actions.length(); i++) {
         ui->menuRecentlyused->removeAction(actions[i]);

@@ -38,14 +38,10 @@ QString FileIO::getFilePathSave(QWidget *parent, QString filename, QString filte
 
 QJsonObject FileIO::getJsonFromFile(QString filepath)
 {
-    QFile datei(filepath);
-    if(!datei.open(QIODevice::ReadOnly)) {
+    QByteArray data = readFromFile(filepath);
+    if (data.isEmpty())
         return QJsonObject();
-    }
-    QByteArray data = datei.readAll();
-    QJsonDocument tmp = QJsonDocument::fromJson(data);
-    QJsonDocument *json = new QJsonDocument(tmp);
-    datei.close();
+    QJsonDocument *json = new QJsonDocument(QJsonDocument::fromJson(data));
     insert(filepath);
     return json->object();
 }
@@ -60,12 +56,12 @@ bool FileIO::saveJsonToFile(QString filepath, QJsonObject object, bool showInMen
     return false;
 }
 
-QStringList FileIO::getLastUsed()
+QStringList FileIO::History::get()
 {
     return Einstellungen::getLastUsed();
 }
 
-void FileIO::clearLastUsed()
+void FileIO::History::clear()
 {
     lastUsed = QStringList();
     saveSettings();
