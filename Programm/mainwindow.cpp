@@ -394,6 +394,10 @@ void MainWindow::on_actionClear_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
+    if (istSchreibgeschuetzt) {
+        QMessageBox::information(this, tr("Nicht gespeichert"), tr("Die Datei konnte nicht gespeichert werden, da sie schreibgeschützt geöffnet wurde."));
+        return;
+    }
     if (filePath == "") {
         on_actionSaveas_triggered();
         return;
@@ -422,6 +426,11 @@ void MainWindow::on_actionSaveas_triggered()
 {
     QString newPath = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
     if (newPath != "") {
+        if (!FileIO::Schreibschutz::pruefen(newPath).isEmpty()) {
+            QMessageBox::warning(this, tr("Datei geöffnet"), tr("Unter der angegebenen Adresse befindet sich eine Datei, die aktuell geöffnet und bearbeitet wird. Ein Speichern ist somit nicht möglich!"));
+            return;
+        }
+
         filePath = newPath;
         QJsonObject o;
         bool erfolg = FileIO::saveJsonToFile(filePath, o);
@@ -430,6 +439,8 @@ void MainWindow::on_actionSaveas_triggered()
             filePath = "";
             return;
         }
+        istSchreibgeschuetzt = false;
+        FileIO::Schreibschutz::setzen(filePath);
         setWindowTitle(tr("Übersicht"));
         setWindowFilePath(filePath);
         personalfenster->setWindowFilePath(filePath);
@@ -481,6 +492,10 @@ void MainWindow::on_actionSavePersonal_triggered()
 {
     QString path = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
     if (path == "") return;
+    if (!FileIO::Schreibschutz::pruefen(path).isEmpty()) {
+        QMessageBox::warning(this, tr("Datei geöffnet"), tr("Unter der angegebenen Adresse befindet sich eine Datei, die aktuell geöffnet und bearbeitet wird. Ein Speichern ist somit nicht möglich!"));
+        return;
+    }
 
     QJsonObject personalJSON = manager->getPersonal()->personalToJson();
 

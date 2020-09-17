@@ -19,6 +19,10 @@ public:
     static void clearLastUsed();
 
     static bool saveToFile(QString path, QString content);
+    static QByteArray readFromFile(QString path);
+    static bool removeFile(QString path);
+
+
     class Schreibschutz {
     public:
         static bool setzen(QString dateiPfad);
