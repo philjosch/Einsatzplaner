@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDir>
+#include <QByteArray>
 
 QString FileIO::currentPath = Einstellungen::getLastPath();
 QStringList FileIO::lastUsed = Einstellungen::getLastUsed();
@@ -82,6 +83,44 @@ bool FileIO::saveToFile(QString path, QString content)
     return false;
 }
 
+QByteArray FileIO::readFromFile(QString path)
+{
+    QFile datei(path);
+    if(!datei.open(QIODevice::ReadOnly)) {
+        return QByteArray();
+    }
+    QByteArray data = datei.readAll();
+    datei.close();
+    return data;
+}
+
+bool FileIO::removeFile(QString path)
+{
+    return QFile::remove(path);
+}
+
+bool FileIO::Schreibschutz::setzen(QString dateiPfad)
+{
+    if (!Schreibschutz::pruefen(dateiPfad+".lock").isEmpty())
+        return false;
+    QString text = "";
+    text += QDateTime::currentDateTime().toString(QObject::tr("dd.MM.yyyy hh:mm:ss"));
+    text += ";" + getBenutzername();
+    return saveToFile(dateiPfad+".lock", text);
+}
+
+QStringList FileIO::Schreibschutz::pruefen(QString dateipfad)
+{
+    QString s = QString(readFromFile(dateipfad+".lock"));
+    if (s == "") return QStringList();
+    return s.split(";");
+}
+
+bool FileIO::Schreibschutz::freigeben(QString dateipfad)
+{
+    return removeFile(dateipfad+".lock");
+}
+
 void FileIO::insert(QString filepath)
 {
     if (filepath.endsWith(".ako", Qt::CaseInsensitive)) {
@@ -92,4 +131,12 @@ void FileIO::insert(QString filepath)
         lastUsed.insert(0, filepath);
         saveSettings();
     }
+}
+
+QString FileIO::getBenutzername()
+{
+    QString name = qEnvironmentVariable("USER");
+    if (name.isEmpty())
+            name = qEnvironmentVariable("USERNAME");
+    return name;
 }

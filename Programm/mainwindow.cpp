@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Modell
     manager = new Manager();
     filePath = "";
+    istSchreibgeschuetzt = false;
     saved = true;
     // Views
     personalfenster = new PersonalWindow(this, manager->getPersonal());
@@ -65,6 +66,18 @@ MainWindow::MainWindow(QJsonObject json, QString path) : MainWindow()
     filePath = path;
     setWindowFilePath(filePath);
     personalfenster->setWindowFilePath(filePath);
+
+    QStringList l = FileIO::Schreibschutz::pruefen(path);
+    if (!l.isEmpty()) {
+        QMessageBox::information(nullptr,
+                                 tr("Schreibgeschützt"),
+                                 tr("Die ausgewählte Datei wurde am %1 von \"%2\" zuletzt geöffnet und wird seitdem bearbeitet. Die Datei wird deshalb schreibgeschützt geöffnet!").arg(l.at(0),l.at(1)));
+        istSchreibgeschuetzt = true;
+        setWindowTitle(tr("Übersicht - Schreibgeschützt"));
+    } else {
+        istSchreibgeschuetzt = false;
+        FileIO::Schreibschutz::setzen(filePath);
+    }
 
     // Daten in Manager laden und darstellen lassen
     QJsonArray activities;
@@ -403,7 +416,6 @@ void MainWindow::on_actionSave_triggered()
 
     } else {
         QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
-        filePath = "";
     }
 }
 void MainWindow::on_actionSaveas_triggered()
@@ -429,12 +441,15 @@ void MainWindow::on_actionSaveas_triggered()
 }
 void MainWindow::autoSave()
 {
+    if (istSchreibgeschuetzt) return;
     if (filePath == "") return;
     if (saved) return;
     saveToPath(filePath+".autosave.ako", false);
 }
 bool MainWindow::saveToPath(QString path, bool showInMenu)
 {
+    if (istSchreibgeschuetzt)
+        return false;
     QJsonArray activitiesJSON = manager->toJson();
     QJsonObject personalJSON = manager->getPersonal()->toJson();
 
@@ -540,6 +555,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 
     if (toClose) {
+        FileIO::Schreibschutz::freigeben(filePath);
         event->accept();
     } else {
         event->ignore();
