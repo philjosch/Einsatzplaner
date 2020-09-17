@@ -81,6 +81,8 @@ protected slots:
     void unsave();
 
 private:
+    bool istSchreibgeschuetzt;
+
     Ui::MainWindow *ui;
     QList<CalendarDay*> tage;
 
