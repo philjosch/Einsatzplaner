@@ -48,9 +48,14 @@ public:
     static bool uploadToServer(ManagerFileSettings *settings, QList<AActivity *> liste);
     static int autoUploadToServer(ManagerFileSettings *settings, Manager *mgr);
 
+    // Helfer-Methoden, die auch Extern verwendet werden koennen
+    static bool druckeHtmlAufDrucker(QString text, QPrinter *printer);
+
 private:
-    static void preparePrinterPortrait(QPrinter *p);
-    static void preparePrinterLandscape(QPrinter *p);
+    static void preparePrinter(QPrinter *p, QPrinter::Orientation orientation);
+
+    static QString zeitStempel();
+
 
     static QTextDocument *newDefaultDocument();
 
