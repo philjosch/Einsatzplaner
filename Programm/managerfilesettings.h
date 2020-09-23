@@ -1,6 +1,8 @@
 #ifndef MANAGERFILESETTINGS_H
 #define MANAGERFILESETTINGS_H
 
+#include "aactivity.h"
+
 #include <QJsonObject>
 
 class ManagerFileSettings
@@ -24,6 +26,7 @@ public:
     void setPath(const QString &value);
 
     QString getFullServer() const;
+    QString getFullServerForTest() const;
 
     QString getId() const;
     void setId(const QString &value);
@@ -36,6 +39,8 @@ public:
 
     bool getActivities() const;
     void setActivities(bool value);
+
+    bool check(AActivity *a);
 
 protected:
     bool enabled = false;

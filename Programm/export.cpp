@@ -101,13 +101,7 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPrinter::Orienta
     return p;
 }
 
-bool Export::testServerConnection(ManagerFileSettings *settings)
-{
-    QString request = settings->getFullServer()+"?id="+settings->getId();
-    return (Networking::ladeDatenVonURL(request) == "OK");
-}
-
-bool Export::uploadToServer(ManagerFileSettings *settings, QList<AActivity *> liste)
+bool Export::uploadToServer(QList<AActivity *> liste, ManagerFileSettings *settings)
 {
     if (! settings->getEnabled()) return true;
 
@@ -125,64 +119,23 @@ bool Export::uploadToServer(ManagerFileSettings *settings, QList<AActivity *> li
     return Networking::ladeDateiHoch(settings->getFullServer(), &tempFile, settings->getId());
 }
 
-int Export::autoUploadToServer(ManagerFileSettings *settings, Manager *mgr)
+int Export::autoUploadToServer(QList<AActivity*> liste, ManagerFileSettings *settings)
 {
-    /* EINSTELLUNGEN LESEN */
     if (!Einstellungen::getUseAutoUpload()) return -1;
     if (!settings->getAutom()) return -1;
 
-    /* LISTE MIT DEN AKTIVITAETEN ERSTELLEN */
-    QList<AActivity *> liste = QList<AActivity*>();
-    QListIterator<AActivity*> iter = mgr->getActivities();
-    while(iter.hasNext()) {
-        AActivity *a = iter.next();
-        // Beginndatum
-        if (settings->getStartdate() == "tdy") {
-            if (a->liegtInVergangenheit()) {
-                continue;
-            }
-        } else if (settings->getStartdate() == "all") {
+    if (uploadToServer(liste, settings)) return 1;
+    return 0;
+}
 
-        } else if (settings->getStartdate() == "bgn") {
-            if (a->getDatum().year() < QDate::currentDate().year()) {
-                continue;
-            }
-        }
-        // Enddatum
-        if (settings->getEnddate() == "p1w") {
-            QDate ref = QDate::currentDate().addDays(7); // naechste Woche
-            ref = ref.addDays(7-ref.dayOfWeek()); // Ende der Woche
-            if (a->getDatum() > ref) {
-                continue;
-            }
-        } else if (settings->getEnddate() == "p1m") {
-            QDate ref = QDate::currentDate().addMonths(1); // naechster Monat
-            ref = QDate(ref.year(), ref.month(), ref.daysInMonth()); // Ende des Monats
-            if (a->getDatum() > ref) {
-                continue;
-            }
-        } else if (settings->getEnddate() == "eoy") {
-            if (a->getDatum().year() > QDate::currentDate().year()) {
-                continue;
-            }
-        } else if (settings->getEnddate() == "all") {
-
-        }
-        // Auch Aktivitaeten?
-        if (!settings->getActivities()) {
-            if (a->getArt() == Art::Arbeitseinsatz)
-                continue;
-        }
-        liste.append(a);
-    }
-
-    /* UPLOADFUNKTION NUTZEN; UM DATEIEN HOCHZULADEN */
-    if (liste.length() == 0)
-        return -1;
-    if (uploadToServer(settings, liste))
-        return 1;
-    else
-        return 0;
+bool Export::druckeHtmlAufDrucker(QString text, QPrinter *printer)
+{
+    if (printer == nullptr) return false;
+    if (text == "") return false;
+    QTextDocument *d = newDefaultDocument();
+    d->setHtml(text);
+    d->print(printer);
+    return true;
 }
 
 void Export::preparePrinter(QPrinter *p, QPrinter::Orientation orientation)

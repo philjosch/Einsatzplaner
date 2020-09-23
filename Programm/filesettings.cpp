@@ -2,6 +2,7 @@
 #include "export.h"
 #include "ui_filesettings.h"
 #include "einstellungen.h"
+#include "networking.h"
 
 #include <QMessageBox>
 
@@ -70,7 +71,7 @@ void FileSettings::on_pushCheck_clicked()
     m2.setServer(ui->lineServer->text());
     m2.setPath(ui->linePath->text());
     m2.setId(ui->lineID->text());
-    if(Export::testServerConnection(&m2)) {
+    if (Networking::testServerVerbindung(m2.getFullServerForTest())) {
         ui->labelStatus->setText(tr("Verbindung erfolgreich getestet!"));
     } else {
         ui->labelStatus->setText(tr("Verbindung zum Server fehlgeschlagen!"));

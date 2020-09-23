@@ -44,9 +44,8 @@ public:
     static QPrinter *getPrinterPDF(QWidget *parent, QString path, QPrinter::Orientation orientation);
 
     // Datei-Upload
-    static bool testServerConnection(ManagerFileSettings *settings);
-    static bool uploadToServer(ManagerFileSettings *settings, QList<AActivity *> liste);
-    static int autoUploadToServer(ManagerFileSettings *settings, Manager *mgr);
+    static bool uploadToServer(QList<AActivity *> liste, ManagerFileSettings *settings);
+    static int autoUploadToServer(QList<AActivity*> liste, ManagerFileSettings *settings);
 
     // Helfer-Methoden, die auch Extern verwendet werden koennen
     static bool druckeHtmlAufDrucker(QString text, QPrinter *printer);

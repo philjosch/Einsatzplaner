@@ -355,10 +355,9 @@ void MainWindow::open(QString path)
     Version version = Version::stringToVersion(generalJSON.value("version").toString());
     if (version > (CoreApplication::VERSION) || Version{-1,-1,-1} == version) {
         QMessageBox::warning(nullptr, tr("Nicht kompatibel"),
-                             tr("Die Datei kann nicht mit dieser Version geöffnet werden.\n"
+                             tr("Die Datei kann nicht mit dieser Version geöffnet werden. "
                                 "Das Dokument benötigt mindestens Version %1.\n"
-                                "Die aktuellste Version finden Sie auf der Webseite des Programms.\n"
-                                "Bei weiteren Fragen wenden Sie sich bitte an den Support.").arg(version.toString()));
+                                "Die aktuellste Version finden Sie auf der Webseite des Programms.").arg(version.toStringShort()));
         return;
     }
     MainWindow *mw = new MainWindow(object, path);
@@ -412,7 +411,7 @@ void MainWindow::on_actionSave_triggered()
             file.remove();
         }
 
-        int result = Export::autoUploadToServer(settings, manager);
+        int result = Export::autoUploadToServer(manager->filter(settings), settings);
         if (result == 0)
             ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
         else if (result > 0)

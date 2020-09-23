@@ -64,3 +64,11 @@ void Einstellungen::setLastUsed(QStringList value)
 {
     SETTINGS.setValue("io/lastused", value);
 }
+
+QString Einstellungen::getBenutzername()
+{
+    QString name = qEnvironmentVariable("USER");
+    if (name.isEmpty())
+            name = qEnvironmentVariable("USERNAME");
+    return name;
+}

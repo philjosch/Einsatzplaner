@@ -84,7 +84,7 @@ void ExportGesamt::on_pushDrucken_clicked()
             printer = Export::getPrinterPDF(parentWidget(), "Listenansicht.pdf", QPrinter::Orientation::Landscape);
             break;
         case 2:
-            if (Export::uploadToServer(settings, liste)) {
+            if (Export::uploadToServer(liste, settings)) {
                 QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
             } else {
                 QMessageBox::information(parentWidget(), tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden!"));

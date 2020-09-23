@@ -75,6 +75,11 @@ QString ManagerFileSettings::getFullServer() const
     return server + "/" + path;
 }
 
+QString ManagerFileSettings::getFullServerForTest() const
+{
+    return server + "/" + path + "?id=" + id;
+}
+
 QString ManagerFileSettings::getId() const
 {
     return id;
@@ -109,4 +114,45 @@ bool ManagerFileSettings::getActivities() const
 void ManagerFileSettings::setActivities(bool value)
 {
     activities = value;
+}
+
+bool ManagerFileSettings::check(AActivity *a)
+{
+    if (startdate == "tdy") {
+        if (a->liegtInVergangenheit()) {
+            return false;
+        }
+    } else if (startdate == "all") {
+
+    } else if (startdate == "bgn") {
+        if (a->getDatum().year() < QDate::currentDate().year()) {
+            return false;
+        }
+    }
+    // Enddatum
+    if (enddate == "p1w") {
+        QDate ref = QDate::currentDate().addDays(7); // naechste Woche
+        ref = ref.addDays(7-ref.dayOfWeek()); // Ende der Woche
+        if (a->getDatum() > ref) {
+            return false;
+        }
+    } else if (enddate == "p1m") {
+        QDate ref = QDate::currentDate().addMonths(1); // naechster Monat
+        ref = QDate(ref.year(), ref.month(), ref.daysInMonth()); // Ende des Monats
+        if (a->getDatum() > ref) {
+            return false;
+        }
+    } else if (enddate == "eoy") {
+        if (a->getDatum().year() > QDate::currentDate().year()) {
+            return false;
+        }
+    } else if (enddate == "all") {
+
+    }
+    // Auch Aktivitaeten?
+    if (!activities) {
+        if (a->getArt() == Art::Arbeitseinsatz)
+            return false;
+    }
+    return true;
 }

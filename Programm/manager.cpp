@@ -75,6 +75,16 @@ void Manager::activityChanged(AActivity *a)
         update(pos);
 }
 
+QList<AActivity *> Manager::filter(ManagerFileSettings *settings)
+{
+    QList<AActivity *> liste = QList<AActivity*>();
+    foreach (AActivity *a, activities) {
+        if (settings->check(a))
+            liste.append(a);
+    }
+    return liste;
+}
+
 QList<AActivity *> Manager::getActivities()
 {
     return activities;

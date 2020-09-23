@@ -65,3 +65,9 @@ bool Networking::ladeDateiHoch(QString url, QFile *datei, QString name)
     delete reply;
     return (s == "OK");
 }
+
+bool Networking::testServerVerbindung(QString url)
+{
+    return (Networking::ladeDatenVonURL(url) == "OK");
+
+}

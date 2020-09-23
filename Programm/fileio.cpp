@@ -18,22 +18,20 @@ void FileIO::saveSettings()
 QString FileIO::getFilePathOpen(QWidget *parent, QString filter)
 {
     QString path = QFileDialog::getOpenFileName(parent, QObject::tr("Datei öffnen ..."), currentPath, filter);
-    if (path != "") {
-        QFileInfo info(path);
-        currentPath = info.absolutePath();
-        saveSettings();
-    }
+    if (path == "") return "";
+    QFileInfo info(path);
+    currentPath = info.absolutePath();
+    saveSettings();
     return path;
 }
 
 QString FileIO::getFilePathSave(QWidget *parent, QString filename, QString filter)
 {
     QString path = QFileDialog::getSaveFileName(parent, QObject::tr("Datei speichern ..."), currentPath+"/"+filename, filter);
-    if (path != "") {
-        QFileInfo info(path);
-        currentPath = info.absolutePath();
-        saveSettings();
-    }
+    if (path == "") return "";
+    QFileInfo info(path);
+    currentPath = info.absolutePath();
+    saveSettings();
     return path;
 }
 
@@ -71,12 +69,12 @@ void FileIO::History::clear()
 bool FileIO::saveToFile(QString path, QString content)
 {
     QFile datei(path);
-    if (datei.open(QIODevice::WriteOnly)) {
-        datei.write(content.toUtf8());
-        datei.close();
-        return true;
+    if (!datei.open(QIODevice::WriteOnly)) {
+        return false;
     }
-    return false;
+    datei.write(content.toUtf8());
+    datei.close();
+    return true;
 }
 
 QByteArray FileIO::readFromFile(QString path)
@@ -101,7 +99,7 @@ bool FileIO::Schreibschutz::setzen(QString dateiPfad)
         return false;
     QString text = "";
     text += QDateTime::currentDateTime().toString(QObject::tr("dd.MM.yyyy hh:mm:ss"));
-    text += ";" + getBenutzername();
+    text += ";" + Einstellungen::getBenutzername();
     return saveToFile(dateiPfad+".lock", text);
 }
 
@@ -127,12 +125,4 @@ void FileIO::insert(QString filepath)
         lastUsed.insert(0, filepath);
         saveSettings();
     }
-}
-
-QString FileIO::getBenutzername()
-{
-    QString name = qEnvironmentVariable("USER");
-    if (name.isEmpty())
-            name = qEnvironmentVariable("USERNAME");
-    return name;
 }

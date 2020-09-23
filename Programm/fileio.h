@@ -36,9 +36,8 @@ private:
     static QStringList lastUsed;
 
     static void insert(QString filepath);
-        static void saveSettings();
+    static void saveSettings();
 
-    static QString getBenutzername();
 };
 
 #endif // FILEIO_H
