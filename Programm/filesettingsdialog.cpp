@@ -30,16 +30,16 @@ void FileSettingsDialog::getSettings(FileSettings *mgr)
 
     AActivity::Auswahl auswahl;
     switch (ui->comboFrom->currentIndex()) {
-    case 0: auswahl.startdate = "tdy"; break;
-    case 1: auswahl.startdate = "bgn"; break;
-    case 2: auswahl.startdate = "all"; break;
-    default: auswahl.startdate = "tdy"; break;
+    case 0: auswahl.startdate = AnfangBedingung::AbJetzt; break;
+    case 1: auswahl.startdate = AnfangBedingung::AbAnfangDesJahres; break;
+    case 2: auswahl.startdate = AnfangBedingung::AbAlle; break;
+    default: auswahl.startdate = AnfangBedingung::AbJetzt; break;
     }
     switch (ui->comboTo->currentIndex()) {
-    case 0: auswahl.enddate = "p1w"; break;
-    case 1: auswahl.enddate = "p1m"; break;
-    case 2: auswahl.enddate = "eoy"; break;
-    default: auswahl.enddate = "all"; break;
+    case 0: auswahl.enddate = EndeBedingung::BisEndeNaechsterWoche; break;
+    case 1: auswahl.enddate = EndeBedingung::BisEndeNaechsterMonat; break;
+    case 2: auswahl.enddate = EndeBedingung::BisEndeDesJahres; break;
+    default: auswahl.enddate = EndeBedingung::BisAlle; break;
     }
     auswahl.activities = ui->checkActivity->isChecked();
 }
@@ -90,22 +90,33 @@ void FileSettingsDialog::loadSettings()
     ui->linePath->setText(s.path);
     ui->lineID->setText(s.id);
     AActivity::Auswahl a = mngr->getAuswahl();
-    QString start = a.startdate;
-    if (start == "tdy") {
+    switch (a.startdate) {
+    case AnfangBedingung::AbJetzt:
         ui->comboFrom->setCurrentIndex(0);
-    } else if (start == "bgn") {
+        break;
+    case AnfangBedingung::AbAnfangDesJahres:
         ui->comboFrom->setCurrentIndex(1);
-    } else if (start == "all") {
+        break;
+    case AnfangBedingung::AbAlle:
+        ui->comboFrom->setCurrentIndex(2);
+        break;
+    default:
         ui->comboFrom->setCurrentIndex(2);
     }
-    QString end = a.enddate;
-    if (end == "p1w") {
+    switch (a.enddate) {
+    case EndeBedingung::BisEndeNaechsterWoche:
         ui->comboTo->setCurrentIndex(0);
-    } else if (end == "p1m") {
+        break;
+    case EndeBedingung::BisEndeNaechsterMonat:
         ui->comboTo->setCurrentIndex(1);
-    } else if (end == "eoy") {
+        break;
+    case EndeBedingung::BisEndeDesJahres:
         ui->comboTo->setCurrentIndex(2);
-    } else if (end == "all") {
+        break;
+    case EndeBedingung::BisAlle:
+        ui->comboTo->setCurrentIndex(3);
+        break;
+    default:
         ui->comboTo->setCurrentIndex(3);
     }
     ui->checkActivity->setChecked(a.activities);

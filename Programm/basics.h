@@ -148,5 +148,22 @@ struct Version {
     }
 };
 
+enum AnfangBedingung {
+    AbHeute,
+    AbJetzt,
+    AbDatum,
+    AbAnfangDesJahres,
+    AbAlle
+};
+
+enum EndeBedingung {
+    BisHeute,
+    BisJetzt,
+    BisDatum,
+    BisEndeDesJahres,
+    BisAlle,
+    BisEndeNaechsterWoche,
+    BisEndeNaechsterMonat
+};
 
 #endif // BASICS_H
