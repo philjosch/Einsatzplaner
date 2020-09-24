@@ -5,7 +5,7 @@
 #include "fileio.h"
 #include "coreapplication.h"
 #include "preferencesdialog.h"
-#include "filesettings.h"
+#include "filesettingsdialog.h"
 #include "fahrtagwindow.h"
 #include "activitywindow.h"
 
@@ -525,7 +525,7 @@ void MainWindow::on_actionSavePersonal_triggered()
 
 void MainWindow::on_actionSettings_triggered()
 {
-    FileSettings s(this, settings);
+    FileSettingsDialog s(this, settings);
     if (s.exec() == QDialog::Accepted) {
         s.getSettings(settings);
         emit unsave();
