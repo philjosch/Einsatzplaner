@@ -1,10 +1,10 @@
-#include "exportgesamt.h"
-#include "ui_exportgesamt.h"
+#include "exportdialog.h"
+#include "ui_exportdialog.h"
 #include "export.h"
 
 #include <QMessageBox>
 
-ExportGesamt::ExportGesamt(Manager *m, FileSettings *settings, QWidget *parent) : QDialog(parent), ui(new Ui::ExportGesamt)
+ExportDialog::ExportDialog(Manager *m, FileSettings *settings, QWidget *parent) : QDialog(parent), ui(new Ui::ExportDialog)
 {
     ui->setupUi(this);
     ui->buttonGroupExportFormat->setId(ui->checkAusdruck, 0);
@@ -22,22 +22,22 @@ ExportGesamt::ExportGesamt(Manager *m, FileSettings *settings, QWidget *parent) 
     ui->dateBis->setDate(QDate::currentDate().addDays(60)); // Anzeige für zwei Monate in der Zukunft
     manager = m;
 
-    connect(ui->dateVon, &QDateEdit::dateChanged, this, &ExportGesamt::show);
-    connect(ui->dateBis, &QDateEdit::dateChanged, this, &ExportGesamt::show);
-    connect(ui->comboFahrtag, &QComboBox::currentTextChanged, this, &ExportGesamt::show);
-    connect(ui->checkActivity, &QCheckBox::clicked, this, &ExportGesamt::show);
+    connect(ui->dateVon, &QDateEdit::dateChanged, this, &ExportDialog::show);
+    connect(ui->dateBis, &QDateEdit::dateChanged, this, &ExportDialog::show);
+    connect(ui->comboFahrtag, &QComboBox::currentTextChanged, this, &ExportDialog::show);
+    connect(ui->checkActivity, &QCheckBox::clicked, this, &ExportDialog::show);
     connect(ui->listAnzeige, &QListWidget::itemSelectionChanged, this, [=]() {
         ui->checkEinzel->setEnabled(! ui->listAnzeige->selectedItems().isEmpty()); });
 
     hardReload();
 }
 
-ExportGesamt::~ExportGesamt()
+ExportDialog::~ExportDialog()
 {
     delete ui;
 }
 
-void ExportGesamt::hardReload()
+void ExportDialog::hardReload()
 {
     actToList = QMap<AActivity*, QListWidgetItem*>();
 
@@ -53,7 +53,7 @@ void ExportGesamt::hardReload()
     show();
 }
 
-void ExportGesamt::on_pushDrucken_clicked()
+void ExportDialog::on_pushDrucken_clicked()
 {
     QList<AActivity*> liste = QList<AActivity*>();
     foreach(AActivity *a, manager->getActivities()) {
@@ -111,7 +111,7 @@ void ExportGesamt::on_pushDrucken_clicked()
     }
 }
 
-void ExportGesamt::on_comboVon_currentIndexChanged(int index)
+void ExportDialog::on_comboVon_currentIndexChanged(int index)
 {
     switch (index) {
     case 0: // Ab datum
@@ -128,7 +128,7 @@ void ExportGesamt::on_comboVon_currentIndexChanged(int index)
     show();
 }
 
-void ExportGesamt::on_comboBis_currentIndexChanged(int index)
+void ExportDialog::on_comboBis_currentIndexChanged(int index)
 {
     switch (index) {
     case 0: // Bis datum
@@ -145,7 +145,7 @@ void ExportGesamt::on_comboBis_currentIndexChanged(int index)
     show();
 }
 
-void ExportGesamt::show()
+void ExportDialog::show()
 {
     ui->checkListe->setEnabled(false);
     foreach(AActivity *a, manager->getActivities()) {
@@ -158,7 +158,7 @@ void ExportGesamt::show()
     }
 }
 
-bool ExportGesamt::testShow(AActivity *a)
+bool ExportDialog::testShow(AActivity *a)
 {
     // Prüfen bei den Einträgen, ob das Datum stimmt
     switch (ui->comboVon->currentIndex()) {

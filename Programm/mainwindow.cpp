@@ -1,10 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "export.h"
-#include "exportgesamt.h"
+#include "exportdialog.h"
 #include "fileio.h"
 #include "coreapplication.h"
-#include "preferencesdialog.h"
+#include "einstellungendialog.h"
 #include "filesettingsdialog.h"
 #include "fahrtagwindow.h"
 #include "activitywindow.h"
@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Views
     personalfenster = new PersonalWindow(this, manager->getPersonal());
     settings = new FileSettings();
-    exportDialog = new ExportGesamt(manager, settings, this);
+    exportDialog = new ExportDialog(manager, settings, this);
     // Controller
     listitem = QMap<AActivity*, QListWidgetItem*>();
     itemToList = QMap<QListWidgetItem*, AActivity*>();
@@ -311,7 +311,7 @@ void MainWindow::itemInCalendarDayClicked(AActivity *a)
 
 void MainWindow::on_actionPreferences_triggered()
 {
-    PreferencesDialog *dialog = new PreferencesDialog();
+    EinstellungenDialog *dialog = new EinstellungenDialog();
     dialog->setWindowFilePath("");
     dialog->show();
 }

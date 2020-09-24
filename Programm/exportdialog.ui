@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ExportGesamt</class>
- <widget class="QDialog" name="ExportGesamt">
+ <class>ExportDialog</class>
+ <widget class="QDialog" name="ExportDialog">
   <property name="windowModality">
    <enum>Qt::WindowModal</enum>
   </property>
@@ -403,7 +403,7 @@
   <connection>
    <sender>pushAbbruch</sender>
    <signal>clicked()</signal>
-   <receiver>ExportGesamt</receiver>
+   <receiver>ExportDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

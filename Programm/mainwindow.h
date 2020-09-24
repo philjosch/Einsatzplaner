@@ -4,7 +4,7 @@
 #include "activity.h"
 #include "fahrtag.h"
 #include "calendarday.h"
-#include "exportgesamt.h"
+#include "exportdialog.h"
 #include "personalwindow.h"
 
 #include <QCloseEvent>
@@ -89,7 +89,7 @@ private:
     QMap<AActivity*, QMainWindow*> fenster;
 
     PersonalWindow *personalfenster;
-    ExportGesamt *exportDialog;
+    ExportDialog *exportDialog;
     FileSettings *settings;
 
     Manager *manager;

@@ -34,12 +34,12 @@ SOURCES += main.cpp\
     calendarday.cpp \
     aactivity.cpp \
     export.cpp \
-    exportgesamt.cpp \
+    exportdialog.cpp \
     fileio.cpp \
     coreapplication.cpp \
     wagen.cpp \
     verteiler.cpp \
-    preferencesdialog.cpp \
+    einstellungendialog.cpp \
     minimumhourseditordialog.cpp \
     basics.cpp \
     filesettingsdialog.cpp \
@@ -61,12 +61,12 @@ HEADERS  += mainwindow.h \
     calendarday.h \
     aactivity.h \
     export.h \
-    exportgesamt.h \
+    exportdialog.h \
     fileio.h \
     coreapplication.h \
     wagen.h \
     verteiler.h \
-    preferencesdialog.h \
+    einstellungendialog.h \
     minimumhourseditordialog.h \
     basics.h \
     filesettingsdialog.h \
@@ -77,8 +77,8 @@ FORMS    += mainwindow.ui \
     activitywindow.ui \
     personalwindow.ui \
     calendarday.ui \
-    exportgesamt.ui \
-    preferencesdialog.ui \
+    exportdialog.ui \
+    einstellungendialog.ui \
     minimumhourseditordialog.ui \
     filesettingsdialog.ui
 

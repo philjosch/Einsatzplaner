@@ -1,12 +1,12 @@
-#include "preferencesdialog.h"
-#include "ui_preferencesdialog.h"
+#include "einstellungendialog.h"
+#include "ui_einstellungendialog.h"
 #include "coreapplication.h"
 #include "einstellungen.h"
 
 #include <QDesktopServices>
 #include <QMessageBox>
 
-PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new Ui::PreferencesDialog)
+EinstellungenDialog::EinstellungenDialog(QWidget *parent) : QDialog(parent), ui(new Ui::EinstellungenDialog)
 {
     ui->setupUi(this);
     ui->buttonGroupSortierung->setId(ui->radioVorNach, 1);
@@ -29,12 +29,12 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), ui(new 
     setWindowFilePath("");
 }
 
-PreferencesDialog::~PreferencesDialog()
+EinstellungenDialog::~EinstellungenDialog()
 {
     delete ui;
 }
 
-void PreferencesDialog::on_pushSearch_clicked()
+void EinstellungenDialog::on_pushSearch_clicked()
 {
     if (CoreApplication::isUpdateVerfuegbar()) {
         online = CoreApplication::loadVersion();
@@ -52,13 +52,13 @@ void PreferencesDialog::on_pushSearch_clicked()
     }
 }
 
-void PreferencesDialog::closeDialogOk()
+void EinstellungenDialog::closeDialogOk()
 {
     saveSettings();
     this->accept();
 }
 
-void PreferencesDialog::saveSettings()
+void EinstellungenDialog::saveSettings()
 {
     Einstellungen::setAutoSearchUpdate(ui->checkSearchAtStart->isChecked());
     int value = 0;
@@ -77,7 +77,7 @@ void PreferencesDialog::saveSettings()
     Einstellungen::setReihenfolgeVorNach(ui->buttonGroupSortierung->checkedId() == 1);
 }
 
-void PreferencesDialog::on_pushNotes_clicked()
+void EinstellungenDialog::on_pushNotes_clicked()
 {
     QMessageBox::information(nullptr,
                              tr("Über Version %1").arg(online.toString()),

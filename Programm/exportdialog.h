@@ -1,5 +1,5 @@
-#ifndef EXPORTGESAMT_H
-#define EXPORTGESAMT_H
+#ifndef EXPORTDIALOG_H
+#define EXPORTDIALOG_H
 
 #include "manager.h"
 #include "filesettings.h"
@@ -8,16 +8,16 @@
 #include <QListWidgetItem>
 
 namespace Ui {
-class ExportGesamt;
+class ExportDialog;
 }
 
-class ExportGesamt : public QDialog
+class ExportDialog: public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ExportGesamt(Manager *m, FileSettings *settings, QWidget *parent);
-    ~ExportGesamt();
+    explicit ExportDialog(Manager *m, FileSettings *settings, QWidget *parent);
+    ~ExportDialog();
 
     void hardReload();
 
@@ -31,7 +31,7 @@ private slots:
     void show();
 
 private:
-    Ui::ExportGesamt *ui;
+    Ui::ExportDialog *ui;
     QWidget *p;
     Manager *manager;
 
@@ -41,4 +41,4 @@ private:
     bool testShow(AActivity *a);
 };
 
-#endif // EXPORTGESAMT_H
+#endif // EXPORTDIALOG_H

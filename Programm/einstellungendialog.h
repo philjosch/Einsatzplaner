@@ -6,16 +6,16 @@
 #include <QDialog>
 
 namespace Ui {
-class PreferencesDialog;
+class EinstellungenDialog;
 }
 
-class PreferencesDialog : public QDialog
+class EinstellungenDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit PreferencesDialog(QWidget *parent = nullptr);
-    ~PreferencesDialog();
+    explicit EinstellungenDialog(QWidget *parent = nullptr);
+    ~EinstellungenDialog();
 
 private slots:
     void on_pushSearch_clicked();
@@ -27,7 +27,7 @@ private slots:
 private:
     void saveSettings();
 
-    Ui::PreferencesDialog *ui;
+    Ui::EinstellungenDialog *ui;
     Version online;
 };
 

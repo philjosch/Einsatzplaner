@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PreferencesDialog</class>
- <widget class="QDialog" name="PreferencesDialog">
+ <class>EinstellungenDialog</class>
+ <widget class="QDialog" name="EinstellungenDialog">
   <property name="windowModality">
    <enum>Qt::ApplicationModal</enum>
   </property>
@@ -318,7 +318,7 @@ Formaten angegeben werden!</string>
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>PreferencesDialog</receiver>
+   <receiver>EinstellungenDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
