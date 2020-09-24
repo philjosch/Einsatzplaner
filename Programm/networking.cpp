@@ -10,25 +10,8 @@ QString Networking::ladeDatenVonURL(QString url)
     if (!url.startsWith("http")) {
         url = "https://"+url;
     }
-    // create custom temporary event loop on stack
-    QEventLoop eventLoop;
-
-    // "quit()" the event-loop, when the network request "finished()"
-    QNetworkAccessManager mgr;
-    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-
-    // the HTTP request
     QNetworkRequest req( url );
-    QNetworkReply *reply = mgr.get(req);
-    eventLoop.exec(); // blocks stack until "finished()" has been called
-
-    QString s = "";
-    if (reply->error() == QNetworkReply::NoError) {
-        //success
-        s = QString(reply->readAll());
-    }
-    delete reply;
-    return s;
+    return get(req);
 }
 
 bool Networking::ladeDateiHoch(Networking::Server server, QFile *datei)
@@ -37,10 +20,6 @@ bool Networking::ladeDateiHoch(Networking::Server server, QFile *datei)
     if (!url.startsWith("http")) {
         url = "https://"+url;
     }
-    QEventLoop eventLoop;
-
-    QNetworkAccessManager am;
-    QObject::connect(&am, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
     QNetworkRequest request(url);
 
@@ -56,7 +35,23 @@ bool Networking::ladeDateiHoch(Networking::Server server, QFile *datei)
     request.setRawHeader(QString("Content-Type").toUtf8(), QString("multipart/form-data; boundary=margin").toUtf8());
     request.setRawHeader(QString("Content-Length").toUtf8(), QString::number(data.length()).toUtf8());
 
-    QNetworkReply *reply = am.post(request,data);
+    QString s = post(request, data);
+    return (s == "OK");
+}
+
+bool Networking::testServerVerbindung(Networking::Server server)
+{
+    return (Networking::ladeDatenVonURL(server.getServerKomplettFuerTest()) == "OK");
+}
+
+QString Networking::post(QNetworkRequest anfrage, QByteArray daten)
+{
+    QEventLoop eventLoop;
+
+    QNetworkAccessManager am;
+    QObject::connect(&am, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+    QNetworkReply *reply = am.post(anfrage,daten);
     eventLoop.exec();
 
     QString s = "";
@@ -64,10 +59,26 @@ bool Networking::ladeDateiHoch(Networking::Server server, QFile *datei)
         s = QString(reply->readAll());
     }
     delete reply;
-    return (s == "OK");
+    return s;
 }
 
-bool Networking::testServerVerbindung(Networking::Server server)
+QString Networking::get(QNetworkRequest anfrage)
 {
-    return (Networking::ladeDatenVonURL(server.getServerKomplettFuerTest()) == "OK");
+    QEventLoop eventLoop;
+
+    // "quit()" the event-loop, when the network request "finished()"
+    QNetworkAccessManager mgr;
+    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+
+    // the HTTP request
+    QNetworkReply *reply = mgr.get(anfrage);
+    eventLoop.exec(); // blocks stack until "finished()" has been called
+
+    QString s = "";
+    if (reply->error() == QNetworkReply::NoError) {
+        //success
+        s = QString(reply->readAll());
+    }
+    delete reply;
+    return s;
 }

@@ -55,7 +55,6 @@ private:
 
     static QString zeitStempel();
 
-
     static QTextDocument *newDefaultDocument();
 
     static const QString DEFAULT_STYLESHEET;

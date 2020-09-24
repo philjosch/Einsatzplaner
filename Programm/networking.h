@@ -3,6 +3,7 @@
 
 #include <QFile>
 #include <QJsonObject>
+#include <QNetworkRequest>
 
 class Networking
 {
@@ -34,6 +35,9 @@ public:
     static bool ladeDateiHoch(Networking::Server server, QFile *datei);
 
     static bool testServerVerbindung(Networking::Server server);
+
+    static QString post(QNetworkRequest anfrage, QByteArray daten);
+    static QString get(QNetworkRequest anfrage);
 };
 
 #endif // NETWORKING_H
