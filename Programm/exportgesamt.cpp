@@ -4,7 +4,7 @@
 
 #include <QMessageBox>
 
-ExportGesamt::ExportGesamt(Manager *m, ManagerFileSettings *settings, QWidget *parent) : QDialog(parent), ui(new Ui::ExportGesamt)
+ExportGesamt::ExportGesamt(Manager *m, FileSettings *settings, QWidget *parent) : QDialog(parent), ui(new Ui::ExportGesamt)
 {
     ui->setupUi(this);
     ui->buttonGroupExportFormat->setId(ui->checkAusdruck, 0);
@@ -84,10 +84,12 @@ void ExportGesamt::on_pushDrucken_clicked()
             printer = Export::getPrinterPDF(parentWidget(), "Listenansicht.pdf", QPrinter::Orientation::Landscape);
             break;
         case 2:
-            if (Export::uploadToServer(liste, settings)) {
-                QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
-            } else {
-                QMessageBox::information(parentWidget(), tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden!"));
+            if (settings->getEnabled()) {
+                if (Export::uploadToServer(liste, settings->getServer())) {
+                    QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
+                } else {
+                    QMessageBox::information(parentWidget(), tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden!"));
+                }
             }
             return;
         default:

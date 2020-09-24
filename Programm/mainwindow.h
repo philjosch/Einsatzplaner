@@ -90,7 +90,7 @@ private:
 
     PersonalWindow *personalfenster;
     ExportGesamt *exportDialog;
-    ManagerFileSettings *settings;
+    FileSettings *settings;
 
     Manager *manager;
 

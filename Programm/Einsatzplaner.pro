@@ -42,8 +42,8 @@ SOURCES += main.cpp\
     preferencesdialog.cpp \
     minimumhourseditordialog.cpp \
     basics.cpp \
-    managerfilesettings.cpp
     filesettingsdialog.cpp \
+    filesettings.cpp
 
 HEADERS  += mainwindow.h \
     einstellungen.h \
@@ -69,8 +69,8 @@ HEADERS  += mainwindow.h \
     preferencesdialog.h \
     minimumhourseditordialog.h \
     basics.h \
-    managerfilesettings.h
     filesettingsdialog.h \
+    filesettings.h
 
 FORMS    += mainwindow.ui \
     fahrtagwindow.ui \

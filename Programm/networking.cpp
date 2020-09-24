@@ -31,8 +31,9 @@ QString Networking::ladeDatenVonURL(QString url)
     return s;
 }
 
-bool Networking::ladeDateiHoch(QString url, QFile *datei, QString name)
+bool Networking::ladeDateiHoch(Networking::Server server, QFile *datei)
 {
+    QString url = server.getServerKomplett();
     if (!url.startsWith("http")) {
         url = "https://"+url;
     }
@@ -45,9 +46,9 @@ bool Networking::ladeDateiHoch(QString url, QFile *datei, QString name)
 
     QByteArray data;
     data.append("--margin\r\n");
-    data.append("Content-Disposition: form-data; name='id'\r\n\r\n"+name+"\r\n");
+    data.append("Content-Disposition: form-data; name='id'\r\n\r\n"+server.id+"\r\n");
     data.append("--margin\r\n");
-    data.append("Content-Disposition: form-data; name='uploaded'; filename='"+name+".pdf'\r\n");
+    data.append("Content-Disposition: form-data; name='uploaded'; filename='"+server.id+".pdf'\r\n");
     data.append("Content-Type: application/pdf\r\n\r\n");
     data.append(datei->readAll());
     data.append("\r\n");
@@ -66,8 +67,7 @@ bool Networking::ladeDateiHoch(QString url, QFile *datei, QString name)
     return (s == "OK");
 }
 
-bool Networking::testServerVerbindung(QString url)
+bool Networking::testServerVerbindung(Networking::Server server)
 {
-    return (Networking::ladeDatenVonURL(url) == "OK");
-
+    return (Networking::ladeDatenVonURL(server.getServerKomplettFuerTest()) == "OK");
 }

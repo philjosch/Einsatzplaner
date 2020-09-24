@@ -101,10 +101,8 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPrinter::Orienta
     return p;
 }
 
-bool Export::uploadToServer(QList<AActivity *> liste, ManagerFileSettings *settings)
+bool Export::uploadToServer(QList<AActivity *> liste, Networking::Server server)
 {
-    if (! settings->getEnabled()) return true;
-
     /* ERSTELLEN DER DATEI */
     QTemporaryFile tempFile;
     tempFile.open();
@@ -116,15 +114,14 @@ bool Export::uploadToServer(QList<AActivity *> liste, ManagerFileSettings *setti
 
     printAktivitaetenListe(liste, p);
 
-    return Networking::ladeDateiHoch(settings->getFullServer(), &tempFile, settings->getId());
+    return Networking::ladeDateiHoch(server, &tempFile);
 }
 
-int Export::autoUploadToServer(QList<AActivity*> liste, ManagerFileSettings *settings)
+int Export::autoUploadToServer(QList<AActivity*> liste, Networking::Server server)
 {
     if (!Einstellungen::getUseAutoUpload()) return -1;
-    if (!settings->getAutom()) return -1;
 
-    if (uploadToServer(liste, settings)) return 1;
+    if (uploadToServer(liste, server)) return 1;
     return 0;
 }
 

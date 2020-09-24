@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     saved = true;
     // Views
     personalfenster = new PersonalWindow(this, manager->getPersonal());
-    settings = new ManagerFileSettings();
+    settings = new FileSettings();
     exportDialog = new ExportGesamt(manager, settings, this);
     // Controller
     listitem = QMap<AActivity*, QListWidgetItem*>();
@@ -411,11 +411,14 @@ void MainWindow::on_actionSave_triggered()
             file.remove();
         }
 
-        int result = Export::autoUploadToServer(manager->filter(settings), settings);
-        if (result == 0)
-            ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
-        else if (result > 0)
-            ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
+        if (settings->getAutom()) {
+            int result = Export::autoUploadToServer(manager->filter(settings->getAuswahl()), settings->getServer());
+            if (result == 0)
+                ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
+            else if (result > 0)
+                ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
+        }
+
 
     } else {
         QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));

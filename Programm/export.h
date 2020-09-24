@@ -6,7 +6,7 @@
 #include "activity.h"
 #include "person.h"
 #include "managerpersonal.h"
-#include "managerfilesettings.h"
+#include "filesettings.h"
 #include "manager.h"
 
 #include <QTextDocument>
@@ -44,8 +44,8 @@ public:
     static QPrinter *getPrinterPDF(QWidget *parent, QString path, QPrinter::Orientation orientation);
 
     // Datei-Upload
-    static bool uploadToServer(QList<AActivity *> liste, ManagerFileSettings *settings);
-    static int autoUploadToServer(QList<AActivity*> liste, ManagerFileSettings *settings);
+    static bool uploadToServer(QList<AActivity *> liste, Networking::Server server);
+    static int autoUploadToServer(QList<AActivity*> liste, Networking::Server server);
 
     // Helfer-Methoden, die auch Extern verwendet werden koennen
     static bool druckeHtmlAufDrucker(QString text, QPrinter *printer);

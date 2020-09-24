@@ -4,7 +4,7 @@
 #include "fahrtag.h"
 #include "activity.h"
 #include "managerpersonal.h"
-#include "managerfilesettings.h"
+#include "filesettings.h"
 
 #include <QJsonObject>
 
@@ -30,7 +30,7 @@ public slots:
 
     void activityChanged(AActivity *a);
 
-    QList<AActivity*> filter(ManagerFileSettings *settings);
+    QList<AActivity*> filter(AActivity::Auswahl auswahl);
 
 protected:
     void update(int pos);

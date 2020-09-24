@@ -75,11 +75,11 @@ void Manager::activityChanged(AActivity *a)
         update(pos);
 }
 
-QList<AActivity *> Manager::filter(ManagerFileSettings *settings)
+QList<AActivity *> Manager::filter(AActivity::Auswahl auswahl)
 {
     QList<AActivity *> liste = QList<AActivity*>();
     foreach (AActivity *a, activities) {
-        if (settings->check(a))
+        if (auswahl.check(a))
             liste.append(a);
     }
     return liste;
