@@ -2659,12 +2659,12 @@
   </action>
   <action name="actionZeitenListePDF">
    <property name="text">
-    <string>Übersicht Einsatzzeiten als PDF speichern …</string>
+    <string>Tabelle Einsatzzeiten als PDF speichern …</string>
    </property>
   </action>
   <action name="actionZeitenListeDrucken">
    <property name="text">
-    <string>Übersicht Einsatzzeiten drucken …</string>
+    <string>Tabelle Einsatzzeiten drucken …</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
