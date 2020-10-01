@@ -572,7 +572,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 
     if (toClose) {
-        FileIO::Schreibschutz::freigeben(filePath);
+        if (!istSchreibgeschuetzt)
+            FileIO::Schreibschutz::freigeben(filePath);
         event->accept();
     } else {
         event->ignore();
