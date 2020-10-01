@@ -496,7 +496,7 @@ QString AActivity::getHtmlForSingleView()
     }
     // Personal
     html += "<p><b>Helfer";
-    html += (personalBenoetigt ? required1+" werden benötigt"+required2:"");
+    html += (personalBenoetigt ? required1+" benötigt"+required2:"");
     html += ":</b></p>";
     if (personen.count() > 0) {
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Name</th><th>Beginn*</th><th>Ende*</th><th>Aufgabe</th></tr></thead><tbody>";
@@ -531,9 +531,21 @@ QString AActivity::getHtmlForTableView()
         html += "Arbeitseinsatz";
     }
     if (ort != "") {
-        html += " | Ort: "+ort;
+        html += " in "+ort;
     }
     html += "</td>";
+
+    // Dienstzeiten
+    if (zeitenUnbekannt) {
+        html += "<td>Zeiten werden noch bekannt gegeben!</td>";
+    } else {
+        html += "<td>Beginn: "+zeitAnfang.toString("hh:mm") + "<br/>";
+        if (datum < QDate::currentDate()) {
+            html += "Ende: "+zeitEnde.toString("hh:mm") + "</td>";
+        } else {
+            html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+        }
+    }
 
     QMap<Person*, Infos> tf;
     QMap<Person*, Infos> zf;
@@ -590,49 +602,37 @@ QString AActivity::getHtmlForTableView()
     }
     html += "</td>";
 
-    // Dienstzeiten
-    if (zeitenUnbekannt) {
-        html += "<td>Zeiten werden noch bekannt gegeben!</td>";
-    } else {
-        html += "<td>Beginn: "+zeitAnfang.toString("hh:mm") + "<br/>";
-        if (datum < QDate::currentDate()) {
-            html += "Ende: "+zeitEnde.toString("hh:mm") + "</td>";
-        } else {
-            html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
-        }
-    }
-
     // Sonstiges
     html += "<td>";
     if (personalBenoetigt) {
-        html += "<b>Helfer werden benötigt!</b>";
+        html += "<b>Helfer benötigt!</b><br/>";
     }
-    if (werkstatt.size() > 2) {
-        html += "<b>Werkstatt:</b><ul style='margin-top: 0px; margin-bottom: 0px'>";
+    if (werkstatt.size() >= 2) {
+        html += "<b>Werkstatt:</b><ul>";
         html += listToString("", werkstatt, "<li>", "</li>");
         html += "</ul>";
     } else {
         for(Person *p: werkstatt.keys()) sonstige.insert(p, werkstatt.value(p));
         werkstatt.clear();
     }
-    if (ausbildung.size() > 2) {
-        html += "<b>Ausbildung:</b><ul style='margin-top: 0px; margin-bottom: 0px'>";
+    if (ausbildung.size() >= 2) {
+        html += "<b>Ausbildung:</b><ul>";
         html += listToString("", ausbildung, "<li>", "</li>");
         html += "</ul>";
     } else {
         for(Person *p: ausbildung.keys()) sonstige.insert(p, ausbildung.value(p));
         ausbildung.clear();
     }
-    if (zugvorbereitung.size() > 2) {
-        html += "<b>Zugvorbereitung:</b><ul style='margin-top: 0px; margin-bottom: 0px'>";
+    if (zugvorbereitung.size() >= 2) {
+        html += "<b>Zugvorbereitung:</b><ul>";
         html += listToString("", zugvorbereitung, "<li>", "</li>");
         html += "</ul>";
     } else {
         for(Person *p: zugvorbereitung.keys()) sonstige.insert(p, zugvorbereitung.value(p));
         zugvorbereitung.clear();
     }
-    if (infrastruktur.size() > 2) {
-        html += "<b>Infrastruktur:</b><ul style='margin-top: 0px; margin-bottom: 0px'>";
+    if (infrastruktur.size() >= 2) {
+        html += "<b>Infrastruktur:</b><ul>";
         html += listToString("", infrastruktur, "<li>", "</li>");
         html += "</ul>";
     } else {
@@ -641,7 +641,7 @@ QString AActivity::getHtmlForTableView()
     }
     if (sonstige.size() > 0) {
         if (werkstatt.size() + ausbildung.size() + zugvorbereitung.size() + infrastruktur.size() > 0) {
-            html += "<b>Sonstige:</b><ul style='margin-top: 0px'>";
+            html += "<b>Sonstige:</b><ul>";
         } else {
             html += "<ul>";
         }

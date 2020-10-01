@@ -262,15 +262,31 @@ QString Fahrtag::getHtmlForTableView()
     } else {
         html += "<td>";
     }
-    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>("+getStringFromArt(art)+")";
+    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>";
+    html += getStringFromArt(art);
+    if (anlass != "") {
+        html += ":<br/><i>"+anlass.replace("\n", "<br/>")+"</i>";
+    }
     // Wagenreihung
     if (wagenreihung != "") {
         html += "<br/>"+ wagenreihung;
     }
-    if (anlass != "") {
-        html += "<br/>"+anlass.replace("\n", "<br/>");
-    }
     html += "</td>";
+
+    // Dienstzeiten
+    if (zeitenUnbekannt) {
+        html += "<td>Dienstzeiten werden noch bekannt gegeben!</td>";
+    } else {
+        html += "<td>Beginn Tf: "+zeitTf.toString("hh:mm") + "<br/>";
+        if (art != Schnupperkurs) {
+            html += "Sonstige: "+zeitAnfang.toString("hh:mm") + "<br/>";
+        }
+        if (datum < QDate::currentDate()) {
+            html += "Ende: "+zeitEnde.toString("hh:mm") + "</td>";
+        } else {
+            html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+        }
+    }
 
     QMap<Person*, Infos> tf;
     QMap<Person*, Infos> zf;
@@ -294,8 +310,9 @@ QString Fahrtag::getHtmlForTableView()
 
     // Tf, Tb
     html += "<td>";
+    QString benoetigt = "<b>%1</b>";
     if (benoetigeTf > 0) {
-        html += "<b>"+QString::number(benoetigeTf)+" Lokführer benötigt!</b>";
+        html += benoetigt.arg("%2 Lokführer benötigt!").arg(benoetigeTf);
     }
     if (tf.size() > 0) {
         html += "<ul>" + listToString("", tf, "<li>", "</li>") + "</ul>";
@@ -305,10 +322,10 @@ QString Fahrtag::getHtmlForTableView()
     // Zf, Zub, Begl.o.b.A.
     html += "<td>";
     if (benoetigeZf && (art != Schnupperkurs)) {
-        html += "<b><u>Zugführer wird benötigt!</u></b><br/>";
+        html += "<u>"+benoetigt.arg("Zugführer benötigt!")+"</u><br/>";
     }
     if (benoetigeZub && (art != Schnupperkurs)) {
-        html += "<b><i>Begleitpersonal wird benötigt!</i></b>";
+        html += "<i>"+benoetigt.arg("Begleitpersonal benötigt!")+"</i>";
     }
     html += "<ul>";
     if (zf.size() > 0) {
@@ -325,32 +342,17 @@ QString Fahrtag::getHtmlForTableView()
     // Service
     html += "<td>";
     if (benoetigeService && (art != Schnupperkurs)) {
-        html += "<b>Service-Personal wird benötigt!</b>";
+        html += benoetigt.arg("Service-Personal benötigt!");
     }
     if (service.size() > 0) {
         html += "<ul>" + listToString("", service, "<li>", "</li>") + "</ul>";
     }
     html += "</td>";
 
-    // Dienstzeiten
-    if (zeitenUnbekannt) {
-        html += "<td>Dienstzeiten werden noch bekannt gegeben!</td>";
-    } else {
-        html += "<td>Beginn Tf: "+zeitTf.toString("hh:mm") + "<br/>";
-        if (art != Schnupperkurs) {
-            html += "Sonstige: "+zeitAnfang.toString("hh:mm") + "<br/>";
-        }
-        if (datum < QDate::currentDate()) {
-            html += "Ende: "+zeitEnde.toString("hh:mm") + "</td>";
-        } else {
-            html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
-        }
-    }
-
     // Sonstiges
     html += "<td>";
     if (personalBenoetigt) {
-        html += "<b>Sonstiges Personal wird benötigt!</b><br/>";
+        html += benoetigt.arg("Sonstiges Personal wird benötigt!")+"<br/>";
     }
     if (sonstige.size() > 0) {
         html += "<ul>";

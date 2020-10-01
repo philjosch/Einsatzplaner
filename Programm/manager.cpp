@@ -94,8 +94,9 @@ QString Manager::getHtmlFuerListenansicht(QList<AActivity *> liste)
 {
     QString a = "<h3>Übersicht über die Aktivitäten</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr>"
-                "<th>Datum, Anlass</th> <th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th>"
-                "<th>Service</th> <th>Dienstzeiten</th> <th>Sonstiges</th></tr></thead><tbody>";
+                "<th>Datum, Anlass</th> <th>Dienstzeiten</th>"
+                "<th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th> <th>Service</th>"
+                "<th>Sonstiges</th> </tr></thead><tbody>";
     for(AActivity *akt: liste) {
         a += akt->getHtmlForTableView();
     }

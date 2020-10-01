@@ -6,7 +6,7 @@
 #include <QTemporaryFile>
 #include <QPrintDialog>
 
-const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td, p { font-size: 10px; font-weight: normal !important;}"
+const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td, p { font-size: 11px; font-weight: normal;}"
                             "table { border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
                             "table tr, table td { page-break-inside: avoid; }"
