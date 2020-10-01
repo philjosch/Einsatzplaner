@@ -9,3 +9,19 @@ Ebenso kann mit ihm eine Verwaltung der Mitglieder durchgeführt werden.
 %
 Fahrtage unterschieden sich von Arbeitseinsätzen dadurch, dass das Personal direkt bestimmten Aufgabengebieten zugeordnet werden kann.
 Ebenso können Reservierungen eingetragen werden.
+
+\section{\neu{Schreibschutz}}\label{schreibschutz}
+\neu{
+Beim Öffnen einer Datei \texttt{X.ako} wird automatisch eine neue Datei mit dem Namen \texttt{X.ako.lock} erstellt.
+Durch diese Datei wird sichergestellt, dass nicht mehrere Personen gleichzeitig an der Datei \texttt{X.ako} arbeiten.
+Wird eine bereits geöffnete Datei erneut geöffnet (vom gleichen oder fremden Benutzer),
+kann sie nur schreibgeschützt geöffnet werden und Änderungen können nicht gespeichert werden.
+Beim Schließen einer Datei bzw.\ beim Beenden des Programms wird die Datei \texttt{X.ako.lock} automatisch wieder gelöscht.
+Danach kann ein anderer Benutzer die Datei wieder uneingeschränkt öffnen.
+
+\hinweis{Der Schreibschutz steht nur effektiv zur Verfügung, wenn alle Beteiligten Version 1.6.2 oder neuer des Einsatzplaners verwendet.
+Wird eine frühere Version verwendet, kann die Datei allerdings weiterhin uneingeschränkt geöffnet und bearbeitet werden!}
+
+\hinweis{Die oben beschriebene Datei sollte unter normalen Umständen  nicht manuell gelöscht werden, da dies zu Datenverlusten führen kann.
+Löschen Sie die Datei nur, wenn Sie sicherstellen können, dass keine weiteren Benutzer auf die Datei zugreifen.}
+}

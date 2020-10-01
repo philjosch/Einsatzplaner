@@ -1,5 +1,22 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 06. August 2020
+Stand: 01. Oktober 2020
+
+## Version 1.6.2 – 2020-XX-XX
+### Neu
+- Die Mindeststunden werden nicht mehr für Mitglieder berechnet, die noch nicht volljährig sind.
+- Schreibschutz für geöffnete Dateien eingefügt.
+
+### Verbessert
+- Vergangene Aktivitäten des gleichen Tages werden nicht mehr ausgegeben, wenn ``ab Heute`` bzw. ``ab Jetzt`` gewählt wird.
+- Dialog der Exportfunktion überarbeitet
+- Export der Daten verbessert: Gesonderte Hervorhebung, wenn Personal bei Aktivitäten benötigt wird, die in Kürze (10 Tage) anstehen.
+- Die Standardeinstellungen für den Export auf Druckern wird auch beim Datei-Upload benutzt.
+
+### Fehlerbehebungen
+- Behebt mehrere Fehler durch die das Programm abstürzt, wenn eine Reservierung, ein Fahrtag oder ein Arbeitseinsatz gelöscht wird.
+- Zeilenumbrüche werden wieder korrekt ausgegeben und angezeigt.
+- Diverse Verbesserungen und Optimierungen
+
 
 ## Version 1.6.1 – 2020-08-06
 ### Neu
@@ -217,7 +234,6 @@ Diese Zeiten können in der Einzelansicht einer Person angegeben werden.
 - Weitere kleine Fehlerkorrekturen und Verbesserungen.
 
 
-
 ## Version 1.0.3 - 2016-12-02
 ### Neu
 - Beim Export werden jetzt die Aufgaben der Personen angegeben, wenn sie unter sonstigem Personal gelistet wurden
@@ -228,7 +244,6 @@ Diese Zeiten können in der Einzelansicht einer Person angegeben werden.
 - Personen können jetzt wieder in die Personallisten korrekt eingetragen und gelöscht werden, auch wenn eine Bemerkung angegeben ist
 - Die Auswahl eines Datum bei der Export-Funktion für das "Bis Datum" funktioniert jetzt wieder wie erwartet
 - Weitere kleinere Verbesserungen und Fehlerbehebungen
-
 
 
 ## Version 1.0.2 - 2016-11-13
@@ -248,12 +263,10 @@ Diese Zeiten können in der Einzelansicht einer Person angegeben werden.
 - Allgemeine Verbesserungen bei der Stabilität und Behebung von Fehlern.
 
 
-
 ## Version 1.0.1 - 2016-10-07
 ### Fehlerbehebungen
 - Problem beim Öffnen von Dateien behoben (Externe Personen wurden nicht geladen, Personen wurden nicht im Arbeitseinsatzfenster angezeigt)
 - Problem bei Anzeige von Personen behoben (Die Informationen zu den Aktivitäten wurden unter Umständen falsch dargestellt)
-
 
 
 ## Version 1.0.0 - 2016-10-06
