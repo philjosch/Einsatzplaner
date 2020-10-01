@@ -522,6 +522,9 @@ QString AActivity::getHtmlForSingleView()
 QString AActivity::getHtmlForTableView()
 {
     QString html = "<tr bgcolor='"+FARBE_FAHRTAGE.value(Arbeitseinsatz)+"'>";
+    if (anlass.contains("vlexx", Qt::CaseSensitivity::CaseInsensitive)) {
+        html = "<tr bgcolor='#DCF57E'>";//a3c526'>";
+    }
     // Datum, Anlass
     html += "<td>";
     html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br</>";
