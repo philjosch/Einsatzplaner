@@ -309,10 +309,16 @@ QString Fahrtag::getHtmlForTableView()
     }
 
     // Tf, Tb
-    html += "<td>";
+    QString beginnZelleBenoetigt = "<td>";
+    if (QDate::currentDate().addDays(10) >= datum && datum >= QDate::currentDate()) {
+        beginnZelleBenoetigt = "<td bgcolor='#ff8888'>";
+    }
     QString benoetigt = "<b>%1</b>";
     if (benoetigeTf > 0) {
+        html += beginnZelleBenoetigt;
         html += benoetigt.arg("%2 Lokführer benötigt!").arg(benoetigeTf);
+    } else {
+        html += "<td>";
     }
     if (tf.size() > 0) {
         html += "<ul>" + listToString("", tf, "<li>", "</li>") + "</ul>";
@@ -320,9 +326,11 @@ QString Fahrtag::getHtmlForTableView()
     html += "</td>";
 
     // Zf, Zub, Begl.o.b.A.
-    html += "<td>";
     if (benoetigeZf && (art != Schnupperkurs)) {
+        html += beginnZelleBenoetigt;
         html += "<u>"+benoetigt.arg("Zugführer benötigt!")+"</u><br/>";
+    } else {
+        html += "<td>";
     }
     if (benoetigeZub && (art != Schnupperkurs)) {
         html += "<i>"+benoetigt.arg("Begleitpersonal benötigt!")+"</i>";
@@ -340,9 +348,11 @@ QString Fahrtag::getHtmlForTableView()
     html += "</ul></td>";
 
     // Service
-    html += "<td>";
     if (benoetigeService && (art != Schnupperkurs)) {
+        html += beginnZelleBenoetigt;
         html += benoetigt.arg("Service-Personal benötigt!");
+    } else {
+        html += "<td>";
     }
     if (service.size() > 0) {
         html += "<ul>" + listToString("", service, "<li>", "</li>") + "</ul>";
@@ -350,9 +360,11 @@ QString Fahrtag::getHtmlForTableView()
     html += "</td>";
 
     // Sonstiges
-    html += "<td>";
     if (personalBenoetigt) {
+        html += beginnZelleBenoetigt;
         html += benoetigt.arg("Sonstiges Personal wird benötigt!")+"<br/>";
+    } else {
+        html += "<td>";
     }
     if (sonstige.size() > 0) {
         html += "<ul>";

@@ -603,9 +603,15 @@ QString AActivity::getHtmlForTableView()
     html += "</td>";
 
     // Sonstiges
-    html += "<td>";
     if (personalBenoetigt) {
+        if (QDate::currentDate().addDays(10) >= datum && datum >= QDate::currentDate()) {
+            html += "<td bgcolor='#ff8888'>";
+        } else {
+            html += "<td>";
+        }
         html += "<b>Helfer benötigt!</b><br/>";
+    } else {
+        html += "<td>";
     }
     if (werkstatt.size() >= 2) {
         html += "<b>Werkstatt:</b><ul>";
