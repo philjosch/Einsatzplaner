@@ -388,8 +388,19 @@ void PersonalWindow::on_pushEmail_clicked()
         }
     }
     if (! mails.isEmpty()) {
+        QString betreff = "&subject=[%1]";
+        if (filter == Mitglied::AlleMitglieder) {
+            betreff = betreff.arg(tr("AkO-Alle"));
+        } else if (filter == Mitglied::Aktiv) {
+            betreff = betreff.arg(tr("AkO-Aktive"));
+        } else if (filter == Mitglied::Passiv) {
+            betreff = betreff.arg(tr("AkO-Passive"));
+        } else {
+            betreff = "";
+        }
         QString s = "mailto:?bcc=";
         s += mails.values().join(",");
+        s += betreff;
         QDesktopServices::openUrl(QUrl(s));
     }
     if (keineMail.isEmpty()) return;
