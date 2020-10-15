@@ -10,6 +10,17 @@
 const QString Person::FARBE_FEHLENDE_STUNDEN = "#ff9999";
 const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";
 const QString Person::FARBE_STANDARD = "#ffffff";
+const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsdatum;Eintritt;Status;Austritt;Tf;Zf;Rangierer;Tauglichkeit;Straße;PLZ;Ort;Mail;Zustimmung Mail;Telefon;Zustimmung Telefon;Strecke;Beruf;Bemerkung\n";
+const QString Person::KOPF_TABELLE_LISTE_HTML = "<h3>%1 – Stand %2</h3>"
+                                                   "<table cellspacing='0' width='100%'><thead><tr>"
+                                                   "<th>Name<br/>Mitgliedsnummer<br/>Status</th>"
+                                                   "<th>Geburtsdatum<br/>Eintritt<br/>Beruf</th>"
+                                                   "<th>Anschrift</th>"
+                                                   "<th>E-Mail<br/>Telefon</th>"
+                                                   "<th>Betriebsdienst</th>"
+                                                   "<th>Sonstiges</th>"
+                                                   "</thead><tbody>";
+const QString Person::FUSS_TABELLE_LISTE_HTML = "</tbody></table>";
 
 Person::Person(QString name, ManagerPersonal *manager) : QObject()
 {
@@ -114,7 +125,7 @@ void Person::personConstructor(QString vn, QString nn, ManagerPersonal *man, QSt
 {
     additional = QMap<Category, int>();
     zeiten = QMap<Category, int>();
-    activities = QMap<AActivity *, Category>();
+    activities = QMultiMap<AActivity *, Category>();
 
     valuesInvalid = true;
     manager = man;
@@ -441,6 +452,7 @@ Mitglied Person::pruefeStunden(Category cat)
 
 int Person::getMinimumStunden(Category cat)
 {
+    if (isMinderjaehrig()) return 0;
     if (isAusgetreten()) return 0;
     switch (cat) {
     case Tf:
@@ -503,7 +515,7 @@ void Person::berechne()
 bool Person::addActivity(AActivity *a, Category kat)
 {
     if (!activities.values(a).contains(kat)) {
-        activities.insertMulti(a, kat);
+        activities.insert(a, kat);
 
         valuesInvalid = true;
         return true;
@@ -518,7 +530,7 @@ bool Person::removeActivity(AActivity *a, Category kat)
     activities.remove(a);
     if (category.removeAll(kat)) {
         for(Category c: category) {
-            activities.insertMulti(a, c);
+            activities.insert(a, c);
         }
         valuesInvalid = true;
         return true;
@@ -526,7 +538,7 @@ bool Person::removeActivity(AActivity *a, Category kat)
     return false;
 }
 
-QMap<AActivity *, Category> Person::getActivities()
+QMultiMap<AActivity *, Category> Person::getActivities()
 {
     return activities;
 }
@@ -744,7 +756,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML()
         h += help.arg("Austritt").arg(austritt.toString("dd.MM.yyyy"));
     } else {
         if (austritt.isValid())
-            h += "<br/>Austritt zum: "+austritt.toString("dd.MM.yyyy");
+            h += help.arg("Austritt zum").arg(austritt.toString("dd.MM.yyyy"));
     }
     h += help.arg("Beruf").arg(beruf);
 
@@ -759,8 +771,8 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML()
     h += "</p><h3>Kontaktdaten</h3><p>";
 
     // Kontakt
-    h += help.arg("Mail (darf %3weitergegeben werden)").arg(mail).arg(mailOK ? "" : "nicht");
-    h += help.arg("Telefon (darf %3weitergegeben werden)").arg(telefon).arg(telefonOK ? "" : "nicht");
+    h += help.arg("Mail (darf %3weitergegeben werden)").arg(mail).arg(mailOK ? "" : "nicht ");
+    h += help.arg("Telefon (darf %3weitergegeben werden)").arg(telefon).arg(telefonOK ? "" : "nicht ");
     h += "</p>";
 
     if (ausbildungRangierer || ausbildungTf || ausbildungZf || tauglichkeit.isValid()) {
@@ -835,6 +847,12 @@ void Person::setGeburtstag(const QDate &value)
 {
     geburtstag = value;
     emit changed();
+}
+
+bool Person::isMinderjaehrig()
+{
+    if (geburtstag.isNull()) return false;
+    return geburtstag.addYears(18) > QDate::currentDate();
 }
 
 QDate Person::getEintritt() const

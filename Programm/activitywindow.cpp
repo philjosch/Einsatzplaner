@@ -17,9 +17,9 @@ ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(paren
     // Allgemeine Daten von AActivity
     ui->dateDatum->setDate(activity->getDatum());
     ui->lineOrt->setText(activity->getOrt());
-    ui->lineAnlass->setText(activity->getAnlass());
-    setPredefinedValue(activity->getAnlass());
-    ui->plainBeschreibung->setPlainText(activity->getBemerkungen());
+    ui->lineAnlass->setText(activity->getAnlass().replace("<br/>","\n"));
+    setPredefinedValue(activity->getAnlass().replace("<br/>","\n"));
+    ui->plainBeschreibung->setPlainText(activity->getBemerkungen().replace("<br/>","\n"));
     ui->timeBeginn->setTime(activity->getZeitAnfang());
     ui->timeEnde->setTime(activity->getZeitEnde());
     ui->checkZeiten->setChecked(activity->getZeitenUnbekannt());
@@ -70,16 +70,18 @@ void ActivityWindow::on_lineOrt_textChanged(const QString &arg1)
 
 void ActivityWindow::on_lineAnlass_textChanged(const QString &arg1)
 {
+    QString n = arg1;
+    n = n.replace("\n","<br/>");
     if (nehme)
-        activity->setAnlass(arg1);
-    setPredefinedValue(arg1);
+        activity->setAnlass(n);
+    setPredefinedValue(n);
     updateWindowTitle();
 }
 
 void ActivityWindow::on_plainBeschreibung_textChanged()
 {
     if (nehme)
-        activity->setBemerkungen(ui->plainBeschreibung->toPlainText());
+        activity->setBemerkungen(ui->plainBeschreibung->toPlainText().replace("\n","<br/>"));
 }
 
 void ActivityWindow::on_timeBeginn_timeChanged(const QTime &time)
@@ -192,7 +194,7 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
             switch (activity->addPerson(name, bemerkung, beginn, ende, kat)) {
             case Mistake::PassivOk:
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
-                [[clang::fallthrough]];
+                [[fallthrough]];
             case Mistake::OK:
             case Mistake::ExternOk:
                 break;

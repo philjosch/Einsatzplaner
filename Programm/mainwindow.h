@@ -4,10 +4,13 @@
 #include "activity.h"
 #include "fahrtag.h"
 #include "calendarday.h"
-#include "exportgesamt.h"
+#include "exportdialog.h"
 #include "personalwindow.h"
 
+#include <QCloseEvent>
+#include <QJsonObject>
 #include <QMainWindow>
+#include <QMap>
 
 namespace Ui {
 class MainWindow;
@@ -67,8 +70,7 @@ protected slots:
     void itemInCalendarDayClicked(AActivity *a);
 
     // Aktivitäten
-    void openFahrtag(Fahrtag *f);
-    void openActivity(Activity *a);
+    void openAActivity(AActivity *a);
     void newAActivityHandler(AActivity *a);
     void on_buttonDelete_clicked();
 
@@ -79,14 +81,16 @@ protected slots:
     void unsave();
 
 private:
+    bool istSchreibgeschuetzt;
+
     Ui::MainWindow *ui;
     QList<CalendarDay*> tage;
 
     QMap<AActivity*, QMainWindow*> fenster;
 
     PersonalWindow *personalfenster;
-    ExportGesamt *exportDialog;
-    ManagerFileSettings *settings;
+    ExportDialog *exportDialog;
+    FileSettings *settings;
 
     Manager *manager;
 

@@ -11,12 +11,16 @@ QStringList AActivity::EXTERNAL_LIST = QStringList() << "Extern" << "Führerstan
 QStringList AActivity::QUALIFICATION_LIST = QStringList() << "Azubi" << "Ausbildung" << "Tf-Ausbildung" << "Zf-Ausbildung" << "Tf-Unterricht" << "Zf-Unterricht" << "Weiterbildung";
 QString AActivity::COLOR_REQUIRED = "#ff3333";
 
+const QString AActivity::KOPF_LISTE_HTML = "<h3>Übersicht über die Aktivitäten</h3>"
+                                         "<table cellspacing='0' width='100%'><thead><tr>"
+                                         "<th>Datum, Anlass</th> <th>Dienstzeiten</th>"
+                                         "<th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th> <th>Service</th>"
+                                         "<th>Sonstiges</th> </tr></thead><tbody>";
+const QString AActivity::FUSS_LISTE_HTML = "</tbody></table>";
+
 const QString getFarbe(AActivity *a)
 {
-    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a))
-        return FARBE_FAHRTAGE.value(f->getArt());
-    else
-        return FARBE_FAHRTAGE.value(Arbeitseinsatz);
+    return FARBE_FAHRTAGE.value(a->getArt());
 }
 
 AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
@@ -43,8 +47,8 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
     zeitAnfang = QTime::fromString(o.value("zeitAnfang").toString(), "hh:mm");
     zeitEnde = QTime::fromString(o.value("zeitEnde").toString(), "hh:mm");
     zeitenUnbekannt = o.value("zeitenUnbekannt").toBool();
-    anlass = o.value("anlass").toString().replace("<br/>","\n");
-    bemerkungen = o.value("bemerkungen").toString().replace("<br/>", "\n");
+    anlass = o.value("anlass").toString();
+    bemerkungen = o.value("bemerkungen").toString();
     QJsonArray array = o.value("personen").toArray();
     for(int i = 0; i < array.size(); i++) {
         QJsonObject aO = array.at(i).toObject();
@@ -80,6 +84,11 @@ AActivity::~AActivity()
     }
 }
 
+Art AActivity::getArt() const
+{
+    return Art::Arbeitseinsatz;
+}
+
 QJsonObject AActivity::toJson()
 {
     QJsonObject data;
@@ -89,8 +98,8 @@ QJsonObject AActivity::toJson()
     data.insert("zeitAnfang", zeitAnfang.toString("hh:mm"));
     data.insert("zeitEnde", zeitEnde.toString("hh:mm"));
     data.insert("zeitenUnbekannt", zeitenUnbekannt);
-    data.insert("anlass", anlass.replace("\n", "<br/>"));
-    data.insert("bemerkungen", bemerkungen.replace("\n", "<br/>"));
+    data.insert("anlass", anlass);
+    data.insert("bemerkungen", bemerkungen);
     QJsonArray personenJSON;
     for(Einsatz e: personen.keys()) {
         QJsonObject persJson;
@@ -262,35 +271,38 @@ void AActivity::updatePersonBemerkung(Person *p, Category kat, QString bem)
     personen.insert(Einsatz{p, kat}, i);
 }
 
-bool AActivity::lesser(const AActivity &second) const
+bool AActivity::lesser(const AActivity *lhs, const AActivity *rhs)
 {
     // Datum
-    if (this->datum < second.datum)
+    if (lhs->datum < rhs->datum)
         return true;
-    if (this->datum > second.datum)
+    if (lhs->datum > rhs->datum)
         return false;
     // Zeiten?
-    if (this->zeitenUnbekannt && !second.zeitenUnbekannt)
+    if (lhs->zeitenUnbekannt && !rhs->zeitenUnbekannt)
         return true;
-    if (!this->zeitenUnbekannt && second.zeitenUnbekannt)
+    if (!lhs->zeitenUnbekannt && rhs->zeitenUnbekannt)
         return false;
 
-    if (!this->zeitenUnbekannt) {
+    if (!lhs->zeitenUnbekannt) {
         // Beginn
-        if (this->zeitAnfang < second.zeitAnfang)
+        if (lhs->zeitAnfang < rhs->zeitAnfang)
             return true;
-        if (this->zeitAnfang > second.zeitAnfang)
+        if (lhs->zeitAnfang > rhs->zeitAnfang)
             return false;
         // Ende
-        if (this->zeitEnde < second.zeitEnde)
+        if (lhs->zeitEnde < rhs->zeitEnde)
             return true;
-        if (this->zeitEnde > second.zeitEnde)
+        if (lhs->zeitEnde > rhs->zeitEnde)
             return false;
     }
+    // Folgender Teil zerstoert die Irreflexivitaet der Operation
+    // Dieser Fall muss also extra abgefangen werden.
+    if (lhs == rhs) return false;
     // Art und beliebig, bei gleicher Art
-    if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(this))
+    if (lhs->getArt() != Art::Arbeitseinsatz)
         return true;
-    if (const Activity *a = dynamic_cast<const Activity*>(&second))
+    if (rhs->getArt() == Art::Arbeitseinsatz)
         return true;
     return false;
 }
@@ -308,7 +320,7 @@ QString AActivity::listToString(QString sep, QMap<Person *, Infos> liste, QStrin
         l2.append(p->getName());
 
         if (liste.value(p).bemerkung != "") {
-            l2.append(bemerkungen);
+            l2.append(liste.value(p).bemerkung);
         }
         if (aufgabe && (liste.value(p).kategorie != Category::Sonstiges)) {
             l2.append(getLocalizedStringFromCategory(liste.value(p).kategorie));
@@ -352,62 +364,22 @@ void AActivity::setZeitenUnbekannt(bool value)
     emit changed(this);
 }
 
+bool AActivity::liegtInVergangenheit()
+{
+    if (datum < QDate::currentDate()) return true;
+    if (datum > QDate::currentDate()) return false;
+    if (zeitEnde <= QTime::currentTime()) return true;
+    return false;
+}
+
 void AActivity::sort(QList<AActivity *> *list)
 {
-    AActivity::mergeSort(list, 0, list->length()-1);
+    std::sort(list->begin(), list->end(), AActivity::lesser);
 }
 
 QMap<AActivity::Einsatz, Infos> AActivity::getPersonen() const
 {
     return personen;
-}
-
-void AActivity::merge(QList<AActivity*> *arr, int l, int m, int r)
-{
-    // First subarray is arr[l..m]
-    // Second subarray is arr[m+1..r]
-    QLinkedList<AActivity*> L, R = QLinkedList<AActivity*>();
-
-    for (int i = l; i <= m; i++)
-        L.append(arr->at(i));
-    for (int j = m+1; j <= r; j++)
-        R.append(arr->at(j));
-
-    /* Merge the temp arrays back into arr[l..r]*/
-    int i = l;
-    while ((!(L.isEmpty())) && (!(R.isEmpty()))) {
-        if ( *(L.first()) <= *(R.first()) ) {
-            arr->replace(i++, L.first());
-            L.removeFirst();
-        } else {
-            arr->replace(i++, R.first());
-            R.removeFirst();
-        }
-    }
-    while(! L.isEmpty()) {
-        arr->replace(i++, L.first());
-        L.removeFirst();
-    }
-    while (! R.isEmpty()) {
-        arr->replace(i++, R.first());
-        R.removeFirst();
-    }
-}
-
-/* l is for left index and r is right index of the sub-array of arr to be sorted */
-void AActivity::mergeSort(QList<AActivity*> *arr, int l, int r)
-{
-    if (l < r) {
-        // Same as (l+r)/2, but avoids overflow for
-        // large l and h
-        int m = l+(r-l)/2;
-
-        // Sort first and second halves
-        mergeSort(arr, l, m);
-        mergeSort(arr, m+1, r);
-
-        merge(arr, l, m, r);
-    }
 }
 
 QString AActivity::getKurzbeschreibung()
@@ -486,7 +458,7 @@ QString AActivity::getHtmlForSingleView()
     }
     // Personal
     html += "<p><b>Helfer";
-    html += (personalBenoetigt ? required1+" werden benötigt"+required2:"");
+    html += (personalBenoetigt ? required1+" benötigt"+required2:"");
     html += ":</b></p>";
     if (personen.count() > 0) {
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Name</th><th>Beginn*</th><th>Ende*</th><th>Aufgabe</th></tr></thead><tbody>";
@@ -512,6 +484,9 @@ QString AActivity::getHtmlForSingleView()
 QString AActivity::getHtmlForTableView()
 {
     QString html = "<tr bgcolor='"+FARBE_FAHRTAGE.value(Arbeitseinsatz)+"'>";
+    if (anlass.contains("vlexx", Qt::CaseSensitivity::CaseInsensitive)) {
+        html = "<tr bgcolor='#DCF57E'>";//a3c526'>";
+    }
     // Datum, Anlass
     html += "<td>";
     html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br</>";
@@ -521,9 +496,21 @@ QString AActivity::getHtmlForTableView()
         html += "Arbeitseinsatz";
     }
     if (ort != "") {
-        html += " | Ort: "+ort;
+        html += " in "+ort;
     }
     html += "</td>";
+
+    // Dienstzeiten
+    if (zeitenUnbekannt) {
+        html += "<td>Zeiten werden noch bekannt gegeben!</td>";
+    } else {
+        html += "<td>Beginn: "+zeitAnfang.toString("hh:mm") + "<br/>";
+        if (datum < QDate::currentDate()) {
+            html += "Ende: "+zeitEnde.toString("hh:mm") + "</td>";
+        } else {
+            html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+        }
+    }
 
     QMap<Person*, Infos> tf;
     QMap<Person*, Infos> zf;
@@ -580,49 +567,54 @@ QString AActivity::getHtmlForTableView()
     }
     html += "</td>";
 
-    // Dienstzeiten
-    if (zeitenUnbekannt) {
-        html += "<td>Zeiten werden noch bekannt gegeben!</td>";
-    } else {
-        html += "<td>Beginn: "+zeitAnfang.toString("hh:mm") + "<br/>";
-        if (datum < QDate::currentDate()) {
-            html += "Ende: "+zeitEnde.toString("hh:mm") + "</td>";
+    // Sonstiges
+    bool zeilenUmbruch = false;
+    if (personalBenoetigt) {
+        if (QDate::currentDate().addDays(10) >= datum && datum >= QDate::currentDate()) {
+            html += "<td bgcolor='#ff8888'>";
         } else {
-            html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+            html += "<td>";
         }
+        html += "<b>Helfer benötigt!</b>";
+        zeilenUmbruch = true;
+    } else {
+        html += "<td>";
     }
 
-    // Sonstiges
-    html += "<td>";
-    if (personalBenoetigt) {
-        html += "<b>Helfer werden benötigt!</b>";
-    }
-    if (werkstatt.size() > 2) {
-        html += "<b>Werkstatt:</b><ul style='margin-top: 0px; margin-bottom: 0px'>";
+    if (werkstatt.size() >= 2) {
+        if (zeilenUmbruch) html += "<br/>";
+        zeilenUmbruch = false;
+        html += "<b>Werkstatt:</b><ul>";
         html += listToString("", werkstatt, "<li>", "</li>");
         html += "</ul>";
     } else {
         for(Person *p: werkstatt.keys()) sonstige.insert(p, werkstatt.value(p));
         werkstatt.clear();
     }
-    if (ausbildung.size() > 2) {
-        html += "<b>Ausbildung:</b><ul style='margin-top: 0px; margin-bottom: 0px'>";
+    if (ausbildung.size() >= 2) {
+        if (zeilenUmbruch) html += "<br/>";
+        zeilenUmbruch = false;
+        html += "<b>Ausbildung:</b><ul>";
         html += listToString("", ausbildung, "<li>", "</li>");
         html += "</ul>";
     } else {
         for(Person *p: ausbildung.keys()) sonstige.insert(p, ausbildung.value(p));
         ausbildung.clear();
     }
-    if (zugvorbereitung.size() > 2) {
-        html += "<b>Zugvorbereitung:</b><ul style='margin-top: 0px; margin-bottom: 0px'>";
+    if (zugvorbereitung.size() >= 2) {
+        if (zeilenUmbruch) html += "<br/>";
+        zeilenUmbruch = false;
+        html += "<b>Zugvorbereitung:</b><ul>";
         html += listToString("", zugvorbereitung, "<li>", "</li>");
         html += "</ul>";
     } else {
         for(Person *p: zugvorbereitung.keys()) sonstige.insert(p, zugvorbereitung.value(p));
         zugvorbereitung.clear();
     }
-    if (infrastruktur.size() > 2) {
-        html += "<b>Infrastruktur:</b><ul style='margin-top: 0px; margin-bottom: 0px'>";
+    if (infrastruktur.size() >= 2) {
+        if (zeilenUmbruch) html += "<br/>";
+        zeilenUmbruch = false;
+        html += "<b>Infrastruktur:</b><ul>";
         html += listToString("", infrastruktur, "<li>", "</li>");
         html += "</ul>";
     } else {
@@ -631,18 +623,19 @@ QString AActivity::getHtmlForTableView()
     }
     if (sonstige.size() > 0) {
         if (werkstatt.size() + ausbildung.size() + zugvorbereitung.size() + infrastruktur.size() > 0) {
-            html += "<b>Sonstige:</b><ul style='margin-top: 0px'>";
+            if (zeilenUmbruch) html += "<br/>";
+            html += "<b>Sonstiges:</b><ul>";
         } else {
             html += "<ul>";
         }
         html += listToString("", sonstige, "<li>", "</li>", true);
         html += "</ul>";
-    } else if (werkstatt.size() + ausbildung.size() + zugvorbereitung.size() + infrastruktur.size() == 0) {
-        html += "<br/>";
+        zeilenUmbruch = false;
     }
 
     // Bemerkungen
     if (bemerkungen != "") {
+        if (zeilenUmbruch) html += "<br/>";
         html += bemerkungen;
     }
     html += "</td></tr>";

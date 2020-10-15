@@ -4,6 +4,7 @@
 #include "fahrtag.h"
 #include "activity.h"
 #include "managerpersonal.h"
+#include "filesettings.h"
 
 #include <QJsonObject>
 
@@ -27,7 +28,9 @@ public slots:
 
     bool removeActivity(AActivity *a);
 
-    void activityChanged(AActivity *a);
+    void sort();
+
+    QList<AActivity*> filter(AActivity::Auswahl auswahl);
 
 protected:
     void update(int pos);

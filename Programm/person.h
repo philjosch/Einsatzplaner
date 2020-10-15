@@ -3,6 +3,8 @@
 
 #include "aactivity.h"
 
+#include <QMultiMap>
+
 class Person : public QObject
 {
     Q_OBJECT
@@ -14,6 +16,9 @@ public:
     static const QString FARBE_FEHLENDE_STUNDEN;
     static const QString FARBE_GENUG_STUNDEN;
     static const QString FARBE_STANDARD;
+    static const QString KOPF_TABELLE_LISTE_CSV;
+    static const QString KOPF_TABELLE_LISTE_HTML;
+    static const QString FUSS_TABELLE_LISTE_HTML;
 
     QJsonObject toJson();
     QJsonObject personalToJson();
@@ -30,7 +35,7 @@ public:
     bool addActivity(AActivity *a, Category kat);
     bool removeActivity(AActivity *a, Category kat);
 
-    QMap<AActivity*,Category> getActivities();
+    QMultiMap<AActivity*,Category> getActivities();
 
 
     QString getZeitenFuerListeAlsHTML(QSet<Category> liste);
@@ -60,6 +65,7 @@ public:
 
     QDate getGeburtstag() const;
     void setGeburtstag(const QDate &value);
+    bool isMinderjaehrig();
 
     QDate getEintritt() const;
     void setEintritt(const QDate &value);
@@ -149,7 +155,7 @@ protected:
     QMap<Category, int> additional;
 
     QMap<Category, int> zeiten;
-    QMap<AActivity*, Category> activities;
+    QMultiMap<AActivity*, Category> activities;
 
 private:
     void personConstructor(QString vn, QString nn, ManagerPersonal *man, QString ID="");

@@ -1,6 +1,7 @@
 #ifndef WAGEN_H
 #define WAGEN_H
 
+#include <QHash>
 #include <QList>
 
 #include "reservierung.h"

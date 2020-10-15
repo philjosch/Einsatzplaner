@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDir>
+#include <QByteArray>
 
 QString FileIO::currentPath = Einstellungen::getLastPath();
 QStringList FileIO::lastUsed = Einstellungen::getLastUsed();
@@ -17,35 +18,29 @@ void FileIO::saveSettings()
 QString FileIO::getFilePathOpen(QWidget *parent, QString filter)
 {
     QString path = QFileDialog::getOpenFileName(parent, QObject::tr("Datei öffnen ..."), currentPath, filter);
-    if (path != "") {
-        QFileInfo info(path);
-        currentPath = info.absolutePath();
-        saveSettings();
-    }
+    if (path == "") return "";
+    QFileInfo info(path);
+    currentPath = info.absolutePath();
+    saveSettings();
     return path;
 }
 
 QString FileIO::getFilePathSave(QWidget *parent, QString filename, QString filter)
 {
     QString path = QFileDialog::getSaveFileName(parent, QObject::tr("Datei speichern ..."), currentPath+"/"+filename, filter);
-    if (path != "") {
-        QFileInfo info(path);
-        currentPath = info.absolutePath();
-        saveSettings();
-    }
+    if (path == "") return "";
+    QFileInfo info(path);
+    currentPath = info.absolutePath();
+    saveSettings();
     return path;
 }
 
 QJsonObject FileIO::getJsonFromFile(QString filepath)
 {
-    QFile datei(filepath);
-    if(!datei.open(QIODevice::ReadOnly)) {
+    QByteArray data = readFromFile(filepath);
+    if (data.isEmpty())
         return QJsonObject();
-    }
-    QByteArray data = datei.readAll();
-    QJsonDocument tmp = QJsonDocument::fromJson(data);
-    QJsonDocument *json = new QJsonDocument(tmp);
-    datei.close();
+    QJsonDocument *json = new QJsonDocument(QJsonDocument::fromJson(data));
     insert(filepath);
     return json->object();
 }
@@ -60,12 +55,12 @@ bool FileIO::saveJsonToFile(QString filepath, QJsonObject object, bool showInMen
     return false;
 }
 
-QStringList FileIO::getLastUsed()
+QStringList FileIO::History::get()
 {
     return Einstellungen::getLastUsed();
 }
 
-void FileIO::clearLastUsed()
+void FileIO::History::clear()
 {
     lastUsed = QStringList();
     saveSettings();
@@ -74,12 +69,50 @@ void FileIO::clearLastUsed()
 bool FileIO::saveToFile(QString path, QString content)
 {
     QFile datei(path);
-    if (datei.open(QIODevice::WriteOnly)) {
-        datei.write(content.toUtf8());
-        datei.close();
-        return true;
+    if (!datei.open(QIODevice::WriteOnly)) {
+        return false;
     }
-    return false;
+    datei.write(content.toUtf8());
+    datei.close();
+    return true;
+}
+
+QByteArray FileIO::readFromFile(QString path)
+{
+    QFile datei(path);
+    if(!datei.open(QIODevice::ReadOnly)) {
+        return QByteArray();
+    }
+    QByteArray data = datei.readAll();
+    datei.close();
+    return data;
+}
+
+bool FileIO::removeFile(QString path)
+{
+    return QFile::remove(path);
+}
+
+bool FileIO::Schreibschutz::setzen(QString dateiPfad)
+{
+    if (!Schreibschutz::pruefen(dateiPfad+".lock").isEmpty())
+        return false;
+    QString text = "";
+    text += QDateTime::currentDateTime().toString(QObject::tr("dd.MM.yyyy hh:mm:ss"));
+    text += ";" + Einstellungen::getBenutzername();
+    return saveToFile(dateiPfad+".lock", text);
+}
+
+QStringList FileIO::Schreibschutz::pruefen(QString dateipfad)
+{
+    QString s = QString(readFromFile(dateipfad+".lock"));
+    if (s == "") return QStringList();
+    return s.split(";");
+}
+
+bool FileIO::Schreibschutz::freigeben(QString dateipfad)
+{
+    return removeFile(dateipfad+".lock");
 }
 
 void FileIO::insert(QString filepath)

@@ -24,6 +24,8 @@ public:
     static QStringList getLastUsed();
     static void setLastUsed(QStringList value);
 
+    static QString getBenutzername();
+
 private:
     static QSettings SETTINGS;
 };

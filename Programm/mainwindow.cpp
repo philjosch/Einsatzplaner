@@ -1,11 +1,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "export.h"
-#include "exportgesamt.h"
+#include "exportdialog.h"
 #include "fileio.h"
 #include "coreapplication.h"
-#include "preferencesdialog.h"
-#include "filesettings.h"
+#include "einstellungendialog.h"
+#include "filesettingsdialog.h"
 #include "fahrtagwindow.h"
 #include "activitywindow.h"
 
@@ -18,11 +18,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Modell
     manager = new Manager();
     filePath = "";
+    istSchreibgeschuetzt = false;
     saved = true;
     // Views
     personalfenster = new PersonalWindow(this, manager->getPersonal());
-    settings = new ManagerFileSettings();
-    exportDialog = new ExportGesamt(manager, settings, this);
+    settings = new FileSettings();
+    exportDialog = new ExportDialog(manager, settings, this);
     // Controller
     listitem = QMap<AActivity*, QListWidgetItem*>();
     itemToList = QMap<QListWidgetItem*, AActivity*>();
@@ -65,6 +66,18 @@ MainWindow::MainWindow(QJsonObject json, QString path) : MainWindow()
     filePath = path;
     setWindowFilePath(filePath);
     personalfenster->setWindowFilePath(filePath);
+
+    QStringList l = FileIO::Schreibschutz::pruefen(path);
+    if (!l.isEmpty()) {
+        QMessageBox::information(nullptr,
+                                 tr("Schreibgeschützt"),
+                                 tr("Die ausgewählte Datei wurde am %1 von \"%2\" zuletzt geöffnet und wird seitdem bearbeitet. Die Datei wird deshalb schreibgeschützt geöffnet!").arg(l.at(0),l.at(1)));
+        istSchreibgeschuetzt = true;
+        setWindowTitle(tr("Übersicht - Schreibgeschützt"));
+    } else {
+        istSchreibgeschuetzt = false;
+        FileIO::Schreibschutz::setzen(filePath);
+    }
 
     // Daten in Manager laden und darstellen lassen
     QJsonArray activities;
@@ -130,38 +143,32 @@ void MainWindow::newFahrtag(QDate d)
 {
     Fahrtag *f = manager->newFahrtag(d);
     newAActivityHandler(f);
-    openFahrtag(f);
+    openAActivity(f);
 }
-void MainWindow::openFahrtag(Fahrtag *f)
-{
-    if (fenster.contains(f)) {
-        fenster.value(f)->show();
-        fenster.value(f)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-        fenster.value(f)->raise();  // for MacOS
-        fenster.value(f)->activateWindow(); // for Windows
-    } else {
-        FahrtagWindow *w = new FahrtagWindow(this, f);
-        w->setWindowFilePath(filePath);
-        fenster.insert(f, w);
-        w->show();
-    }
-}
-
 void MainWindow::newActivity(QDate d)
 {
     Activity *a = manager->newActivity(d);
     newAActivityHandler(a);
-    openActivity(a);
+    openAActivity(a);
 }
-void MainWindow::openActivity(Activity *a)
+void MainWindow::openAActivity(AActivity *a)
 {
+    if (a == nullptr) return;
+
     if (fenster.contains(a)) {
         fenster.value(a)->show();
         fenster.value(a)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
         fenster.value(a)->raise();  // for MacOS
         fenster.value(a)->activateWindow(); // for Windows
     } else {
-        ActivityWindow *w = new ActivityWindow(this, a);
+        QMainWindow *w;
+        if (a->getArt() == Art::Arbeitseinsatz) {
+            Activity* aa = dynamic_cast<Activity*>(a);
+            w = new ActivityWindow(this, aa);
+        } else {
+            Fahrtag* f = dynamic_cast<Fahrtag*>(a);
+            w = new FahrtagWindow(this, f);
+        }
         w->setWindowFilePath(filePath);
         fenster.insert(a, w);
         w->show();
@@ -186,7 +193,7 @@ void MainWindow::newAActivityHandler(AActivity *a)
 
 void MainWindow::activityChanged(AActivity *a, QDate oldDate)
 {
-    manager->activityChanged(a);
+    manager->sort();
     int oldPos = -1;
     if (oldDate.isValid())
         oldPos = getPosInCalendar(oldDate);
@@ -298,19 +305,13 @@ void MainWindow::on_buttonToday_clicked()
 }
 
 void MainWindow::itemInCalendarDayClicked(AActivity *a)
-{
-    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
-        openFahrtag(f);
-    } else {
-        Activity *c = dynamic_cast<Activity*>(a);
-        openActivity(c);
-    }
+{   
+    openAActivity(a);
 }
-
 
 void MainWindow::on_actionPreferences_triggered()
 {
-    PreferencesDialog *dialog = new PreferencesDialog();
+    EinstellungenDialog *dialog = new EinstellungenDialog();
     dialog->setWindowFilePath("");
     dialog->show();
 }
@@ -354,10 +355,9 @@ void MainWindow::open(QString path)
     Version version = Version::stringToVersion(generalJSON.value("version").toString());
     if (version > (CoreApplication::VERSION) || Version{-1,-1,-1} == version) {
         QMessageBox::warning(nullptr, tr("Nicht kompatibel"),
-                             tr("Die Datei kann nicht mit dieser Version geöffnet werden.\n"
+                             tr("Die Datei kann nicht mit dieser Version geöffnet werden. "
                                 "Das Dokument benötigt mindestens Version %1.\n"
-                                "Die aktuellste Version finden Sie auf der Webseite des Programms.\n"
-                                "Bei weiteren Fragen wenden Sie sich bitte an den Support.").arg(version.toString()));
+                                "Die aktuellste Version finden Sie auf der Webseite des Programms.").arg(version.toStringShort()));
         return;
     }
     MainWindow *mw = new MainWindow(object, path);
@@ -366,7 +366,7 @@ void MainWindow::open(QString path)
 
 void MainWindow::on_menuRecentlyused_aboutToShow()
 {
-    QStringList list = FileIO::getLastUsed();
+    QStringList list = FileIO::History::get();
 
     if (list.length() > 0) {
         QList<QAction*> actions = ui->menuRecentlyused->actions();
@@ -383,7 +383,7 @@ void MainWindow::on_menuRecentlyused_aboutToShow()
 }
 void MainWindow::on_actionClear_triggered()
 {
-    FileIO::clearLastUsed();
+    FileIO::History::clear();
     QList<QAction*> actions = ui->menuRecentlyused->actions();
     for (int i = 2; i < actions.length(); i++) {
         ui->menuRecentlyused->removeAction(actions[i]);
@@ -393,6 +393,10 @@ void MainWindow::on_actionClear_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
+    if (istSchreibgeschuetzt) {
+        QMessageBox::information(this, tr("Nicht gespeichert"), tr("Die Datei konnte nicht gespeichert werden, da sie schreibgeschützt geöffnet wurde."));
+        return;
+    }
     if (filePath == "") {
         on_actionSaveas_triggered();
         return;
@@ -407,21 +411,28 @@ void MainWindow::on_actionSave_triggered()
             file.remove();
         }
 
-        int result = Export::autoUploadToServer(settings, manager);
-        if (result == 0)
-            ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
-        else if (result > 0)
-            ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
+        if (settings->getAutom()) {
+            int result = Export::autoUploadToServer(manager->filter(settings->getAuswahl()), settings->getServer());
+            if (result == 0)
+                ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
+            else if (result > 0)
+                ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
+        }
+
 
     } else {
         QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
-        filePath = "";
     }
 }
 void MainWindow::on_actionSaveas_triggered()
 {
     QString newPath = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
     if (newPath != "") {
+        if (!FileIO::Schreibschutz::pruefen(newPath).isEmpty()) {
+            QMessageBox::warning(this, tr("Datei geöffnet"), tr("Unter der angegebenen Adresse befindet sich eine Datei, die aktuell geöffnet und bearbeitet wird. Ein Speichern ist somit nicht möglich!"));
+            return;
+        }
+
         filePath = newPath;
         QJsonObject o;
         bool erfolg = FileIO::saveJsonToFile(filePath, o);
@@ -430,6 +441,8 @@ void MainWindow::on_actionSaveas_triggered()
             filePath = "";
             return;
         }
+        istSchreibgeschuetzt = false;
+        FileIO::Schreibschutz::setzen(filePath);
         setWindowTitle(tr("Übersicht"));
         setWindowFilePath(filePath);
         personalfenster->setWindowFilePath(filePath);
@@ -441,12 +454,15 @@ void MainWindow::on_actionSaveas_triggered()
 }
 void MainWindow::autoSave()
 {
+    if (istSchreibgeschuetzt) return;
     if (filePath == "") return;
     if (saved) return;
     saveToPath(filePath+".autosave.ako", false);
 }
 bool MainWindow::saveToPath(QString path, bool showInMenu)
 {
+    if (istSchreibgeschuetzt)
+        return false;
     QJsonArray activitiesJSON = manager->toJson();
     QJsonObject personalJSON = manager->getPersonal()->toJson();
 
@@ -478,6 +494,10 @@ void MainWindow::on_actionSavePersonal_triggered()
 {
     QString path = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
     if (path == "") return;
+    if (!FileIO::Schreibschutz::pruefen(path).isEmpty()) {
+        QMessageBox::warning(this, tr("Datei geöffnet"), tr("Unter der angegebenen Adresse befindet sich eine Datei, die aktuell geöffnet und bearbeitet wird. Ein Speichern ist somit nicht möglich!"));
+        return;
+    }
 
     QJsonObject personalJSON = manager->getPersonal()->personalToJson();
 
@@ -508,7 +528,7 @@ void MainWindow::on_actionSavePersonal_triggered()
 
 void MainWindow::on_actionSettings_triggered()
 {
-    FileSettings s(this, settings);
+    FileSettingsDialog s(this, settings);
     if (s.exec() == QDialog::Accepted) {
         s.getSettings(settings);
         emit unsave();
@@ -552,6 +572,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 
     if (toClose) {
+        if (!istSchreibgeschuetzt)
+            FileIO::Schreibschutz::freigeben(filePath);
         event->accept();
     } else {
         event->ignore();
@@ -561,20 +583,14 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::onItemInListClicked(QListWidgetItem *item)
 {
-    AActivity *a = itemToList.value(item);
-    if (Fahrtag *f = dynamic_cast<Fahrtag*>(a)) {
-        openFahrtag(f);
-    } else {
-        Activity *c = dynamic_cast<Activity*>(a);
-        openActivity(c);
-    }
+    openAActivity(itemToList.value(item));
 }
 void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
 {
     if (i == nullptr) return;
     i->setText(a->getListString());
-    i->setToolTip(a->getAnlass());
-    i->setWhatsThis(a->getAnlass());
+    i->setToolTip(a->getAnlass().replace("<br/>","\n"));
+    i->setWhatsThis(a->getAnlass().replace("<br/>","\n"));
     i->setBackground(QBrush(QColor(getFarbe(a))));
 }
 

@@ -34,16 +34,16 @@ SOURCES += main.cpp\
     calendarday.cpp \
     aactivity.cpp \
     export.cpp \
-    exportgesamt.cpp \
+    exportdialog.cpp \
     fileio.cpp \
     coreapplication.cpp \
     wagen.cpp \
     verteiler.cpp \
-    preferencesdialog.cpp \
+    einstellungendialog.cpp \
     minimumhourseditordialog.cpp \
     basics.cpp \
-    filesettings.cpp \
-    managerfilesettings.cpp
+    filesettingsdialog.cpp \
+    filesettings.cpp
 
 HEADERS  += mainwindow.h \
     einstellungen.h \
@@ -61,39 +61,39 @@ HEADERS  += mainwindow.h \
     calendarday.h \
     aactivity.h \
     export.h \
-    exportgesamt.h \
+    exportdialog.h \
     fileio.h \
     coreapplication.h \
     wagen.h \
     verteiler.h \
-    preferencesdialog.h \
+    einstellungendialog.h \
     minimumhourseditordialog.h \
     basics.h \
-    filesettings.h \
-    managerfilesettings.h
+    filesettingsdialog.h \
+    filesettings.h
 
 FORMS    += mainwindow.ui \
     fahrtagwindow.ui \
     activitywindow.ui \
     personalwindow.ui \
     calendarday.ui \
-    exportgesamt.ui \
-    preferencesdialog.ui \
+    exportdialog.ui \
+    einstellungendialog.ui \
     minimumhourseditordialog.ui \
-    filesettings.ui
+    filesettingsdialog.ui
 
 CONFIG -= console
 
 #OTHER_FILES += qt_de.qm
 
-VERSION = 1.6.1
+VERSION = 1.6.2
 win32 {
     RC_ICONS = ../Icon/keks.ico
     QMAKE_TARGET_COMPANY = Philipp Schepper
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
     QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2020
     QMAKE_TARGET_PRODUCT = Einsatzplaner
-    VERSION = 1.6.1.1
+    VERSION = 1.6.2.1
 }
 
 macx {

@@ -1,37 +1,36 @@
 #ifndef FILESETTINGS_H
 #define FILESETTINGS_H
 
-#include "managerfilesettings.h"
+#include "aactivity.h"
+#include "networking.h"
 
-#include <QAbstractButton>
-#include <QDialog>
+#include <QJsonObject>
 
-namespace Ui {
-class FileSettings;
-}
-
-class FileSettings : public QDialog
+class FileSettings
 {
-    Q_OBJECT
-
 public:
-    explicit FileSettings(QWidget *parent, ManagerFileSettings *manager);
-    ~FileSettings();
+    FileSettings();
 
-    void getSettings(ManagerFileSettings *mgr);
+    void fromJson(QJsonObject obj);
+    QJsonObject toJson();
 
-private slots:
-    void on_checkEnable_clicked(bool checked);
+    bool getEnabled() const;
+    void setEnabled(bool value);
 
-    void on_buttonBox_clicked(QAbstractButton *button);
+    bool getAutom() const;
+    void setAutom(bool value);
 
-    void on_pushCheck_clicked();
+    Networking::Server getServer() const;
+    void setServer(const Networking::Server &value);
 
-private:
-    Ui::FileSettings *ui;
-    ManagerFileSettings *mngr;
+    AActivity::Auswahl getAuswahl() const;
+    void setAuswahl(const AActivity::Auswahl &value);
 
-    void loadSettings();
+protected:
+    bool enabled = false;
+    bool autom = true;
+    Networking::Server server;
+    AActivity::Auswahl auswahl;
 };
 
 #endif // FILESETTINGS_H

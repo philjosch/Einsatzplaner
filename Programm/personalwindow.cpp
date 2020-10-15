@@ -280,7 +280,7 @@ void PersonalWindow::refreshMitglieder()
         i->setData(0, p->getTauglichkeit());
         ui->tabelleMitglieder->setItem(0, clmn++, i);
 
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getBemerkungen()));
+        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getBemerkungen().replace("<br/>","\n")));
     }
 
     ui->tabelleMitglieder->setSortingEnabled(true);
@@ -371,7 +371,7 @@ void PersonalWindow::on_actionMitgliederListeDrucken_triggered()
 }
 void PersonalWindow::on_actionMitgliederListeCSV_triggered()
 {
-    Export::exportMitgliederAlsCSV(current, filter,
+    Export::exportMitgliederAlsCSV(current,
                                   FileIO::getFilePathSave(this, "Mitglieder.csv", tr("CSV-Datei (*.csv)")));
 }
 
@@ -388,8 +388,19 @@ void PersonalWindow::on_pushEmail_clicked()
         }
     }
     if (! mails.isEmpty()) {
+        QString betreff = "&subject=[%1]";
+        if (filter == Mitglied::AlleMitglieder) {
+            betreff = betreff.arg(tr("AkO-Alle"));
+        } else if (filter == Mitglied::Aktiv) {
+            betreff = betreff.arg(tr("AkO-Aktive"));
+        } else if (filter == Mitglied::Passiv) {
+            betreff = betreff.arg(tr("AkO-Passive"));
+        } else {
+            betreff = "";
+        }
         QString s = "mailto:?bcc=";
         s += mails.values().join(",");
+        s += betreff;
         QDesktopServices::openUrl(QUrl(s));
     }
     if (keineMail.isEmpty()) return;
@@ -404,7 +415,7 @@ void PersonalWindow::on_pushEmail_clicked()
     }
 }
 
-void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, int column)
+void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, [[maybe_unused]] int column)
 {
     QString name = ui->tabelleGesamt->item(row, 0)->text() + " " + ui->tabelleGesamt->item(row, 1)->text();
     Person * p = manager->getPerson(name);
@@ -414,7 +425,7 @@ void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, int column)
     }
 }
 
-void PersonalWindow::on_tabelleMitglieder_cellDoubleClicked(int row, int column)
+void PersonalWindow::on_tabelleMitglieder_cellDoubleClicked(int row, [[maybe_unused]] int column)
 {
     QString name = ui->tabelleMitglieder->item(row, 1)->text() + " " + ui->tabelleMitglieder->item(row, 2)->text();
     Person * p = manager->getPerson(name);
@@ -889,14 +900,14 @@ void PersonalWindow::showPerson(Person *p)
     ui->dateDienst->setDate(p->getTauglichkeit());
 
     // Sonstiges
-    ui->plainBemerkung->setPlainText(p->getBemerkungen());
+    ui->plainBemerkung->setPlainText(p->getBemerkungen().replace("<br/>","\n"));
     ui->checkAustritt->setChecked(p->getAustritt().isValid());
     ui->dateAustritt->setEnabled(p->getAustritt().isValid());
     ui->dateAustritt->setDate(p->getAustritt());
 
     // ** Aktivitaeten
     while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
-    QMap<AActivity*,Category> liste = p->getActivities();
+    QMultiMap<AActivity*,Category> liste = p->getActivities();
     bool sortingSaved = ui->tabelle->isSortingEnabled();
     ui->tabelle->setSortingEnabled(false);
     for(AActivity *a: liste.uniqueKeys()) {

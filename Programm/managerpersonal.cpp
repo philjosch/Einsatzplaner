@@ -178,12 +178,6 @@ void ManagerPersonal::personChangedName(Person *p, QString alt)
     personenSorted.insert(p->getName(), p);
 }
 
-QListIterator<Person *> ManagerPersonal::getPersonen() const
-{
-    QListIterator<Person*> i(personenSorted.values());
-    return i;
-}
-
 QList<Person *> ManagerPersonal::getPersonenSortiertNachNummer()
 {
     QList<Person *> l;
@@ -349,34 +343,34 @@ QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> lis
     switch (filter) {
     case Registriert:
         titelSeite += help.arg(getStringVonFilter(Registriert)).arg(getAnzahlMitglieder(Registriert));
-        [[clang::fallthrough]];
+        [[fallthrough]];
     case AlleMitglieder:
         titelSeite += help.arg(getStringVonFilter(AlleMitglieder)).arg(getAnzahlMitglieder(AlleMitglieder));
-        [[clang::fallthrough]];
+        [[fallthrough]];
     case Ausgetreten:
         titelSeite += help.arg(getStringVonFilter(Ausgetreten)).arg(getAnzahlMitglieder(Ausgetreten));
         if (filter == Ausgetreten) break;
         titelSeite += "</ul><ul>";
-        [[clang::fallthrough]];
+        [[fallthrough]];
     case Aktiv:
         titelSeite += help.arg(getStringVonFilter(Aktiv)).arg(getAnzahlMitglieder(Aktiv));
-        [[clang::fallthrough]];
+        [[fallthrough]];
     case AktivMit:
         titelSeite += help.arg(getStringVonFilter(AktivMit)).arg(getAnzahlMitglieder(AktivMit));
         if (filter == AktivMit) break;
-        [[clang::fallthrough]];
+        [[fallthrough]];
     case AktivOhne:
         titelSeite += help.arg(getStringVonFilter(AktivOhne)).arg(getAnzahlMitglieder(AktivOhne));
         if (filter == AktivOhne) break;
         if (filter == Aktiv) break;
-        [[clang::fallthrough]];
+        [[fallthrough]];
     case Passiv:
         titelSeite += help.arg(getStringVonFilter(Passiv)).arg(getAnzahlMitglieder(Passiv));
-        [[clang::fallthrough]];
+        [[fallthrough]];
     case PassivMit:
         titelSeite += help.arg(getStringVonFilter(PassivMit)).arg(getAnzahlMitglieder(PassivMit));
         if (filter == PassivMit) break;
-        [[clang::fallthrough]];
+        [[fallthrough]];
     case PassivOhne:
         break;
     }
@@ -387,28 +381,19 @@ QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> lis
 
 QString ManagerPersonal::getMitgliederFuerListeAlsHtml(QList<Person*> liste, Mitglied filter)
 {
-    QString a = tr("<h3>%1 – Stand %2</h3>"
-                "<table cellspacing='0' width='100%'><thead><tr>"
-                "<th>Name<br/>Mitgliedsnummer<br/>Status</th>"
-                "<th>Geburtsdatum<br/>Eintritt<br/>Beruf</th>"
-                "<th>Anschrift</th>"
-                "<th>E-Mail<br/>Telefon</th>"
-                "<th>Betriebsdienst</th>"
-                "<th>Sonstiges</th>"
-                "</thead><tbody>");
-    a = a.arg(getStringVonFilter(filter),
-              QDateTime::currentDateTime().toString("d.M.yyyy"));
+    QString a = Person::KOPF_TABELLE_LISTE_HTML
+            .arg(getStringVonFilter(filter), QDateTime::currentDateTime().toString("d.M.yyyy"));
     foreach(Person *akt, liste) {
         a += akt->getPersonaldatenFuerListeAlsHTML();
     }
-    a += "</tbody></table>";
+    a += Person::FUSS_TABELLE_LISTE_HTML;
     a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     return a;
 }
 
-QString ManagerPersonal::getMitgliederFuerListeAlsCSV(QList<Person *> liste, Mitglied filter)
+QString ManagerPersonal::getMitgliederFuerListeAlsCSV(QList<Person *> liste)
 {
-    QString t = "Nummer;Nachname;Vorname;Geburtsdatum;Eintritt;Status;Austritt;Tf;Zf;Rangierer;Tauglichkeit;Straße;PLZ;Ort;Mail;Zustimmung Mail;Telefon;Zustimmung Telefon;Strecke;Beruf;Bemerkung\n";
+    QString t = Person::KOPF_TABELLE_LISTE_CSV;
     foreach(Person *akt, liste) {
         t += akt->getPersonaldatenFuerListeAlsCSV();
     }

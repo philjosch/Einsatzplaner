@@ -1,16 +1,16 @@
-<project version = 9 civer = 7.4.1 winver = "2.9/6.1.7601" >
+﻿<project version = 9 civer = 8.7.0 winver = "2.12/6.2.9200" >
    <autorun >1</>
    <autoclose >0</>
    <compname >Philipp Schepper</>
    <produrl >http://epl.philipp-schepper.de</>
-   <ver >Version 1.6.0</>
+   <ver >Version 1.6.2</>
    <supurl ></>
    <updurl ></>
    <dlgfont >verdana</>
    <headlogo >default - 1</>
    <dlgfontsize >s8</>
-   <output >C:\Users\Administrator\Desktop</>
-   <exename >einsatzplaner-setup-v1-6-0.exe</>
+   <output >C:\Users\philipp\Desktop</>
+   <exename >einsatzplaner-setup-v1-6-2.exe</>
    <beffile ></>
    <aftfile ></>
    <uninclude >1</>
@@ -81,7 +81,7 @@
                   <desc ></>
                   <buttons >auto</>
                   <design >left</>
-                  <headlogo >C:\Users\Administrator\Desktop\Einsatzplaner\Icon\keks.ico</>
+                  <headlogo >C:\Users\philipp\Documents\GitHub\Einsatzplaner\Icon\keks.ico</>
                   <varlist >
                      <rows ></>
                   </>
@@ -143,25 +143,28 @@
                         <srclist >
                            <rows rel = unpack >
                               <_ >
-                                 <filename >C:\Users\Administrator\Desktop\build\*</>
+                                 <filename >C:\Users\philipp\Desktop\build\*</>
                                  <recurse >1</>
                                  <justfile >0</>
                                  <emptydir >0</>
                                  <exclude ></>
+                                 <comm ></>
                               </>
                               <_ >
-                                 <filename >C:\Users\Administrator\Desktop\Einsatzplaner\Icon\keks.ico</>
-                                 <recurse >1</>
+                                 <filename >C:\Users\philipp\Documents\GitHub\Einsatzplaner\Icon\keks.ico</>
+                                 <recurse >0</>
                                  <justfile >0</>
                                  <emptydir >0</>
                                  <exclude ></>
+                                 <comm ></>
                               </>
                               <_ >
-                                 <filename >C:\Users\Administrator\Desktop\DLLS\*</>
+                                 <filename >C:\Users\philipp\Desktop\DLLS</>
                                  <recurse >1</>
                                  <justfile >0</>
                                  <emptydir >0</>
                                  <exclude ></>
+                                 <comm ></>
                               </>
                            </>
                         </>
@@ -198,6 +201,7 @@
                                  <work >inst</>
                                  <defwork ></>
                                  <if ></>
+                                 <comm ></>
                               </>
                               <_ >
                                  <shpath >qlaunch</>
@@ -209,6 +213,7 @@
                                  <work >inst</>
                                  <defwork ></>
                                  <if ></>
+                                 <comm ></>
                               </>
                               <_ >
                                  <shpath >desk</>
@@ -220,6 +225,7 @@
                                  <work >inst</>
                                  <defwork ></>
                                  <if ></>
+                                 <comm ></>
                               </>
                            </>
                         </>
@@ -266,13 +272,15 @@
                   <if ></>
                </>
             </>
-            <icofile >C:\Users\Administrator\Desktop\Einsatzplaner\Icon\keks.ico</>
+            <icofile >C:\Users\philipp\Documents\GitHub\Einsatzplaner\Icon\keks.ico</>
             <resfile ></>
             <leftimg >disk-install</>
             <caption ></>
-            <verinfo >1</>
+            <verinfo >0</>
             <noadmin >0</>
             <selfdelete >0</>
+            <allowinst >0</>
+            <priv >0</>
          </>
       </>
    </>
@@ -345,6 +353,7 @@
             <leftimg >uninstall - 1</>
             <caption ></>
             <noadmin >0</>
+            <priv >0</>
          </>
       </>
    </>
@@ -556,6 +565,7 @@
             <leftimg >update - 1</>
             <caption ></>
             <noadmin >1</>
+            <priv >0</>
          </>
       </>
    </>

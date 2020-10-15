@@ -6,7 +6,7 @@
 #include "activity.h"
 #include "person.h"
 #include "managerpersonal.h"
-#include "managerfilesettings.h"
+#include "filesettings.h"
 #include "manager.h"
 
 #include <QTextDocument>
@@ -37,20 +37,23 @@ public:
     static bool printMitgliederEinzelEinzel(Person *p, QPrinter *printer);
     static bool printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer);
     static bool printMitgliederListe(QList<Person *> liste, Mitglied filter, QPrinter *printer);
-    static bool exportMitgliederAlsCSV(QList<Person *> liste, Mitglied filter, QString pfad);
+    static bool exportMitgliederAlsCSV(QList<Person *> liste, QString pfad);
 
     // Allgemeines
     static QPrinter *getPrinterPaper(QWidget *parent, QPrinter::Orientation orientation);
     static QPrinter *getPrinterPDF(QWidget *parent, QString path, QPrinter::Orientation orientation);
 
     // Datei-Upload
-    static bool testServerConnection(ManagerFileSettings *settings);
-    static bool uploadToServer(ManagerFileSettings *settings, QList<AActivity *> liste);
-    static int autoUploadToServer(ManagerFileSettings *settings, Manager *mgr);
+    static bool uploadToServer(QList<AActivity *> liste, Networking::Server server);
+    static int autoUploadToServer(QList<AActivity*> liste, Networking::Server server);
+
+    // Helfer-Methoden, die auch Extern verwendet werden koennen
+    static bool druckeHtmlAufDrucker(QString text, QPrinter *printer);
 
 private:
-    static void preparePrinterPortrait(QPrinter *p);
-    static void preparePrinterLandscape(QPrinter *p);
+    static void preparePrinter(QPrinter *p, QPrinter::Orientation orientation);
+
+    static QString zeitStempel();
 
     static QTextDocument *newDefaultDocument();
 

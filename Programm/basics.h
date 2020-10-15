@@ -53,7 +53,7 @@ QString getStringVonFilter(Mitglied filter);
 
 const QMap<Art, QString> FARBE_FAHRTAGE = {{Museumszug, "#ffffff"},
                                           {Sonderzug, "#ffcccc"},
-                                          {Gesellschaftssonderzug, "#ffcc66"},
+                                          {Gesellschaftssonderzug, "#FFDA91"},//ffcc66"},
                                           {Nikolauszug, "#ffccff"},
                                           {ELFundMuseumszug, "#e7e7fd"},
                                           {Schnupperkurs, "#918fe3"},
@@ -148,5 +148,22 @@ struct Version {
     }
 };
 
+enum AnfangBedingung {
+    AbHeute,
+    AbJetzt,
+    AbDatum,
+    AbAnfangDesJahres,
+    AbAlle
+};
+
+enum EndeBedingung {
+    BisHeute,
+    BisJetzt,
+    BisDatum,
+    BisEndeDesJahres,
+    BisAlle,
+    BisEndeNaechsterWoche,
+    BisEndeNaechsterMonat
+};
 
 #endif // BASICS_H

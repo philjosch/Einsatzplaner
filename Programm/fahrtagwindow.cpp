@@ -34,13 +34,13 @@ FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent),
 
     // Allgemeine Daten von AActivity
     ui->dateDate->setDate(fahrtag->getDatum());
-    ui->textAnlass->setPlainText(fahrtag->getAnlass());
+    ui->textAnlass->setPlainText(fahrtag->getAnlass().replace("<br/>","\n"));
     ui->comboTimeEndeH->setCurrentText(fahrtag->getZeitEnde().toString("HH"));
     ui->comboTimeEndeM->setCurrentText(fahrtag->getZeitEnde().toString("mm"));
     ui->checkZeiten->setChecked(fahrtag->getZeitenUnbekannt());
     on_checkZeiten_clicked(fahrtag->getZeitenUnbekannt());
     ui->checkBoxBenoetigt->setChecked(fahrtag->getPersonalBenoetigt());
-    ui->textBemerkungen->setPlainText(fahrtag->getBemerkungen());
+    ui->textBemerkungen->setPlainText(fahrtag->getBemerkungen().replace("<br/>","\n"));
 
     // Daten von Fahrtag
     ui->comboArt->setCurrentIndex(fahrtag->getArt());
@@ -157,7 +157,7 @@ void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
 void FahrtagWindow::on_textAnlass_textChanged()
 {
     if (nehme)
-        fahrtag->setAnlass(ui->textAnlass->toPlainText());
+        fahrtag->setAnlass(ui->textAnlass->toPlainText().replace("\n","<br/>"));
 }
 
 void FahrtagWindow::on_checkWichtig_clicked(bool checked)
@@ -206,7 +206,7 @@ void FahrtagWindow::on_comboTimeZM_currentTextChanged(const QString &arg1)
 void FahrtagWindow::on_textBemerkungen_textChanged()
 {
     if (nehme)
-        fahrtag->setBemerkungen(ui->textBemerkungen->toPlainText());
+        fahrtag->setBemerkungen(ui->textBemerkungen->toPlainText().replace("\n","<br/>"));
 }
 
 void FahrtagWindow::on_comboTimeEndeH_currentTextChanged(const QString &arg1)
@@ -302,7 +302,7 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
     switch (fahrtag->addPerson(name, bemerkung, beginn, ende, kat)) {
     case Mistake::PassivOk:
         QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
-        [[clang::fallthrough]];
+        [[fallthrough]];
     case Mistake::ExternOk:
     case Mistake::OK:
         // Zeile für die Person in die Tabelle einfügen
@@ -463,7 +463,7 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
             switch (fahrtag->addPerson(name, bemerkung, beginn, ende, kat)) {
             case Mistake::PassivOk:
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
-                [[clang::fallthrough]];
+                [[fallthrough]];
             case Mistake::OK:
             case Mistake::ExternOk:
                 break;
@@ -713,7 +713,6 @@ void FahrtagWindow::on_buttonDeleteReservierung_clicked()
         Reservierung *r = itemToRes.value(i);
         fahrtag->removeReservierung(r);
         itemToRes.remove(i);
-        delete r;
         delete i;
 
         nehmeRes = false;

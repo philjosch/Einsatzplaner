@@ -6,121 +6,85 @@
 #include <QTemporaryFile>
 #include <QPrintDialog>
 
-const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td, p { font-size: 10px; font-weight: normal !important;}"
+const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td, p { font-size: 11px; font-weight: normal;}"
                             "table { border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
                             "table tr, table td { page-break-inside: avoid; }"
                             "table tfoot tr, table tfoot td { border-width: 1px; }"
                             "ul { -qt-list-indent: 0; margin-top: 0px !important; margin-bottom: 0px !important }"
-                            "li { text-indent: 12px; margin-top: 0px !important; margin-bottom: 0px !important; }"
+                            "li { text-indent: 6px; margin-top: 0px !important; margin-bottom: 0px !important; }"
                             "p.last { page-break-after: always; }";
 const QFont Export::DEFAULT_FONT = QFont("Arial", 11, QFont::Normal);
 
 bool Export::printAktivitaetenEinzel(QList<AActivity *> liste, QPrinter *printer)
 {
-    if (printer == nullptr) return false;
     if (liste.isEmpty()) return true;
-    QTextDocument *d = newDefaultDocument();
     QString html = Manager::getHtmlFuerEinzelansichten(liste);
-    d->setHtml(html);
-    d->print(printer);
-    return true;
+    return druckeHtmlAufDrucker(html, printer);
 }
 
 bool Export::printAktivitaetenListe(QList<AActivity *> liste, QPrinter *printer)
 {
-    if (printer == nullptr) return false;
     if (liste.isEmpty()) return true;
-    QTextDocument *d = newDefaultDocument();
-    QString a = Manager::getHtmlFuerListenansicht(liste);
-    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
-    d->setHtml(a);
-    d->print(printer);
-    return true;
+    QString html = Manager::getHtmlFuerListenansicht(liste) + zeitStempel();
+    return druckeHtmlAufDrucker(html, printer);
 }
 
 bool Export::printReservierung(Fahrtag *f, QPrinter *printer)
 {
-    if (f->getAnzahlReservierungen() == 0 || printer == nullptr) return false;
-    QTextDocument *d = newDefaultDocument();
-    QString a = f->getHtmlFuerReservierungsuebersicht();
-    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
-    d->setHtml(a);
-    d->print(printer);
-    return true;
+    if (f->getAnzahlReservierungen() == 0) return false;
+    QString html = f->getHtmlFuerReservierungsuebersicht() + zeitStempel();
+    return druckeHtmlAufDrucker(html, printer);
 }
 
 bool Export::printZeitenEinzelEinzel(Person *p, QPrinter *printer)
 {
-    if (p == nullptr || printer == nullptr) return false;
-    QTextDocument *d = newDefaultDocument();
-    QString a = p->getZeitenFuerEinzelAlsHTML();
-    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
-    d->setHtml(a);
-    d->print(printer);
-    return true;
+    if (p == nullptr) return false;
+    QString html = p->getZeitenFuerEinzelAlsHTML() + zeitStempel();
+    return druckeHtmlAufDrucker(html, printer);
 }
 bool Export::printZeitenEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
 {
-    if (printer == nullptr) return false;
-    QTextDocument *d = newDefaultDocument();
-    QString a = m->getZeitenFuerEinzelListeAlsHTML(liste, filter);
-    d->setHtml(a);
-    d->print(printer);
-    return true;
+    if (liste.isEmpty()) return false;
+    QString html = m->getZeitenFuerEinzelListeAlsHTML(liste, filter);
+    return druckeHtmlAufDrucker(html, printer);
 }
 bool Export::printZeitenListe(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer)
 {
-    if (printer == nullptr) return false;
     if (personen.isEmpty()) return true;
-    QTextDocument *d = newDefaultDocument();
-    QString a = ManagerPersonal::getZeitenFuerListeAlsHTML(personen, data, filter);
-    d->setHtml(a);
-    d->print(printer);
-    return true;
+    QString html = ManagerPersonal::getZeitenFuerListeAlsHTML(personen, data, filter);
+    return druckeHtmlAufDrucker(html, printer);
 }
 
 bool Export::printMitgliederEinzelEinzel(Person *p, QPrinter *printer)
 {
-    if (p == nullptr || printer == nullptr) return false;
-    QTextDocument *d = newDefaultDocument();
-    QString a = p->getPersonaldatenFuerEinzelAlsHTML();
-    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
-    d->setHtml(a);
-    d->print(printer);
-    return true;
+    if (p == nullptr) return false;
+    QString html = p->getPersonaldatenFuerEinzelAlsHTML() + zeitStempel();
+    return druckeHtmlAufDrucker(html, printer);
 }
 bool Export::printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
 {
-    if (printer == nullptr) return false;
-    QTextDocument *d = newDefaultDocument();
-    QString a = m->getMitgliederFuerEinzelListeAlsHTML(liste, filter);
-    d->setHtml(a);
-    d->print(printer);
-    return true;
+    if (liste.isEmpty()) return false;
+    QString html = m->getMitgliederFuerEinzelListeAlsHTML(liste, filter);
+    return druckeHtmlAufDrucker(html, printer);
 }
 bool Export::printMitgliederListe(QList<Person*> liste, Mitglied filter, QPrinter *printer)
 {
-    if (printer == nullptr) return false;
-    QTextDocument *d = newDefaultDocument();
-    QString a = ManagerPersonal::getMitgliederFuerListeAlsHtml(liste, filter);
-    d->setHtml(a);
-    d->print(printer);
-    return true;
+    if (liste.isEmpty()) return false;
+    QString html = ManagerPersonal::getMitgliederFuerListeAlsHtml(liste, filter);
+    return druckeHtmlAufDrucker(html, printer);
 }
 
-bool Export::exportMitgliederAlsCSV(QList<Person *> liste, Mitglied filter, QString pfad)
+bool Export::exportMitgliederAlsCSV(QList<Person *> liste, QString pfad)
 {
-    return FileIO::saveToFile(pfad, ManagerPersonal::getMitgliederFuerListeAlsCSV(liste, filter));
+    if (liste.isEmpty()) return false;
+    return FileIO::saveToFile(pfad, ManagerPersonal::getMitgliederFuerListeAlsCSV(liste));
 }
 
 QPrinter *Export::getPrinterPaper(QWidget *parent, QPrinter::Orientation orientation)
 {
     QPrinter *p = new QPrinter();
-    if (orientation == QPrinter::Orientation::Portrait)
-        preparePrinterPortrait(p);
-    else
-        preparePrinterLandscape(p);
+    preparePrinter(p, orientation);
     if (QPrintDialog(p, parent).exec() == QDialog::Accepted)
         return p;
     return nullptr;
@@ -133,113 +97,63 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPrinter::Orienta
     QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
     p->setOutputFormat(QPrinter::PdfFormat);
     p->setOutputFileName(filePath);
-    if (orientation == QPrinter::Orientation::Portrait)
-        preparePrinterPortrait(p);
-    else
-        preparePrinterLandscape(p);
+    preparePrinter(p, orientation);
     return p;
 }
 
-bool Export::testServerConnection(ManagerFileSettings *settings)
+bool Export::uploadToServer(QList<AActivity *> liste, Networking::Server server)
 {
-    QString request = settings->getFullServer()+"?id="+settings->getId();
-    return (Networking::ladeDatenVonURL(request) == "OK");
-}
-
-bool Export::uploadToServer(ManagerFileSettings *settings, QList<AActivity *> liste)
-{
-    if (! settings->getEnabled()) return true;
-
     /* ERSTELLEN DER DATEI */
     QTemporaryFile tempFile;
     tempFile.open();
     QString localFile = tempFile.fileName();
     QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
-    p->setOrientation(QPrinter::Orientation::Landscape);
     p->setOutputFormat(QPrinter::PdfFormat);
     p->setOutputFileName(localFile);
+    preparePrinter(p, QPrinter::Landscape);
 
     printAktivitaetenListe(liste, p);
 
-    return Networking::ladeDateiHoch(settings->getFullServer(), &tempFile, settings->getId());
+    return Networking::ladeDateiHoch(server, &tempFile);
 }
 
-int Export::autoUploadToServer(ManagerFileSettings *settings, Manager *mgr)
+int Export::autoUploadToServer(QList<AActivity*> liste, Networking::Server server)
 {
-    /* EINSTELLUNGEN LESEN */
     if (!Einstellungen::getUseAutoUpload()) return -1;
-    if (!settings->getAutom()) return -1;
 
-    /* LISTE MIT DEN AKTIVITAETEN ERSTELLEN */
-    QList<AActivity *> liste = QList<AActivity*>();
-    QListIterator<AActivity*> iter = mgr->getActivities();
-    while(iter.hasNext()) {
-        AActivity *a = iter.next();
-        // Beginndatum
-        if (settings->getStartdate() == "tdy") {
-            if (a->getDatum() < QDate::currentDate()) {
-                continue;
-            }
-        } else if (settings->getStartdate() == "all") {
+    if (uploadToServer(liste, server)) return 1;
+    return 0;
+}
 
-        } else if (settings->getStartdate() == "bgn") {
-            if (a->getDatum().year() < QDate::currentDate().year()) {
-                continue;
-            }
-        }
-        // Enddatum
-        if (settings->getEnddate() == "p1w") {
-            QDate ref = QDate::currentDate().addDays(7); // naechste Woche
-            ref = ref.addDays(7-ref.dayOfWeek()); // Ende der Woche
-            if (a->getDatum() > ref) {
-                continue;
-            }
-        } else if (settings->getEnddate() == "p1m") {
-            QDate ref = QDate::currentDate().addMonths(1); // naechster Monat
-            ref = QDate(ref.year(), ref.month(), ref.daysInMonth()); // Ende des Monats
-            if (a->getDatum() > ref) {
-                continue;
-            }
-        } else if (settings->getEnddate() == "eoy") {
-            if (a->getDatum().year() > QDate::currentDate().year()) {
-                continue;
-            }
-        } else if (settings->getEnddate() == "all") {
+bool Export::druckeHtmlAufDrucker(QString text, QPrinter *printer)
+{
+    if (printer == nullptr) return false;
+    if (text == "") return false;
+    QTextDocument *d = newDefaultDocument();
+    d->setHtml(text);
+    d->print(printer);
+    return true;
+}
 
-        }
-        // Auch Aktivitaeten?
-        if (!settings->getActivities()) {
-            if (const Fahrtag *f = dynamic_cast<const Fahrtag*>(a)) {
-            } else {
-                continue;
-            }
-        }
-        liste.append(a);
+void Export::preparePrinter(QPrinter *p, QPrinter::Orientation orientation)
+{
+    if (p == nullptr) return;
+    p->setFullPage(true);
+    switch (orientation) {
+    case QPrinter::Portrait:
+        p->setPageMargins(20, 15, 15, 15, QPrinter::Millimeter);
+        p->setPageOrientation(QPageLayout::Portrait);
+        break;
+    case QPrinter::Landscape:
+        p->setPageMargins(15, 20, 15, 15, QPrinter::Millimeter);
+        p->setPageOrientation(QPageLayout::Landscape);
+        break;
     }
-
-    /* UPLOADFUNKTION NUTZEN; UM DATEIEN HOCHZULADEN */
-    if (liste.length() == 0)
-        return -1;
-    if (uploadToServer(settings, liste))
-        return 1;
-    else
-        return 0;
 }
 
-void Export::preparePrinterPortrait(QPrinter *p)
+QString Export::zeitStempel()
 {
-    if (p == nullptr) return;
-    p->setFullPage(true);
-    p->setPageMargins(20, 15, 15, 15, QPrinter::Millimeter);
-    p->setPageOrientation(QPageLayout::Portrait);
-}
-
-void Export::preparePrinterLandscape(QPrinter *p)
-{
-    if (p == nullptr) return;
-    p->setFullPage(true);
-    p->setPageMargins(15, 20, 15, 15, QPrinter::Millimeter);
-    p->setPageOrientation(QPageLayout::Landscape);
+    return QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString(QObject::tr("d.M.yyyy HH:mm")));
 }
 
 QTextDocument *Export::newDefaultDocument()
