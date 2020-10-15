@@ -1,7 +1,7 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 01. Oktober 2020
+Stand: 16. Oktober 2020
 
-## Version 1.6.2 – 2020-XX-XX
+## Version 1.6.2 – 2020-10-16
 ### Neu
 - Die Mindeststunden werden nicht mehr für Mitglieder berechnet, die noch nicht volljährig sind.
 - Schreibschutz für geöffnete Dateien eingefügt.
