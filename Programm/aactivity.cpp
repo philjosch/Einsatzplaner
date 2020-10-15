@@ -606,68 +606,74 @@ QString AActivity::getHtmlForTableView()
     html += "</td>";
 
     // Sonstiges
-    if (personalBenoetigt && (QDate::currentDate().addDays(10) >= datum && datum >= QDate::currentDate())) {
-        html += "<td bgcolor='#ff8888'>";
+    bool zeilenUmbruch = false;
+    if (personalBenoetigt) {
+        if (QDate::currentDate().addDays(10) >= datum && datum >= QDate::currentDate()) {
+            html += "<td bgcolor='#ff8888'>";
+        } else {
+            html += "<td>";
+        }
+        html += "<b>Helfer benötigt!</b>";
+        zeilenUmbruch = true;
     } else {
         html += "<td>";
     }
 
-    QString pers = "";
     if (werkstatt.size() >= 2) {
-        pers += "<b>Werkstatt:</b><ul>";
-        pers += listToString("", werkstatt, "<li>", "</li>");
-        pers += "</ul>";
+        if (zeilenUmbruch) html += "<br/>";
+        zeilenUmbruch = false;
+        html += "<b>Werkstatt:</b><ul>";
+        html += listToString("", werkstatt, "<li>", "</li>");
+        html += "</ul>";
     } else {
         for(Person *p: werkstatt.keys()) sonstige.insert(p, werkstatt.value(p));
         werkstatt.clear();
     }
     if (ausbildung.size() >= 2) {
-        pers += "<b>Ausbildung:</b><ul>";
-        pers += listToString("", ausbildung, "<li>", "</li>");
-        pers += "</ul>";
+        if (zeilenUmbruch) html += "<br/>";
+        zeilenUmbruch = false;
+        html += "<b>Ausbildung:</b><ul>";
+        html += listToString("", ausbildung, "<li>", "</li>");
+        html += "</ul>";
     } else {
         for(Person *p: ausbildung.keys()) sonstige.insert(p, ausbildung.value(p));
         ausbildung.clear();
     }
     if (zugvorbereitung.size() >= 2) {
-        pers += "<b>Zugvorbereitung:</b><ul>";
-        pers += listToString("", zugvorbereitung, "<li>", "</li>");
-        pers += "</ul>";
+        if (zeilenUmbruch) html += "<br/>";
+        zeilenUmbruch = false;
+        html += "<b>Zugvorbereitung:</b><ul>";
+        html += listToString("", zugvorbereitung, "<li>", "</li>");
+        html += "</ul>";
     } else {
         for(Person *p: zugvorbereitung.keys()) sonstige.insert(p, zugvorbereitung.value(p));
         zugvorbereitung.clear();
     }
     if (infrastruktur.size() >= 2) {
-        pers += "<b>Infrastruktur:</b><ul>";
-        pers += listToString("", infrastruktur, "<li>", "</li>");
-        pers += "</ul>";
+        if (zeilenUmbruch) html += "<br/>";
+        zeilenUmbruch = false;
+        html += "<b>Infrastruktur:</b><ul>";
+        html += listToString("", infrastruktur, "<li>", "</li>");
+        html += "</ul>";
     } else {
         for(Person *p: infrastruktur.keys()) sonstige.insert(p, infrastruktur.value(p));
         infrastruktur.clear();
     }
     if (sonstige.size() > 0) {
         if (werkstatt.size() + ausbildung.size() + zugvorbereitung.size() + infrastruktur.size() > 0) {
-            pers += "<b>Sonstiges:</b><ul>";
+            if (zeilenUmbruch) html += "<br/>";
+            html += "<b>Sonstiges:</b><ul>";
         } else {
-            pers += "<ul>";
+            html += "<ul>";
         }
-        pers += listToString("", sonstige, "<li>", "</li>", true);
-        pers += "</ul>";
+        html += listToString("", sonstige, "<li>", "</li>", true);
+        html += "</ul>";
+        zeilenUmbruch = false;
     }
-
-    if (personalBenoetigt) {
-        html += "<b>Helfer benötigt!</b>";
-        if ((pers != "") && (! pers.startsWith("<ul>"))) {
-            html += "<br/>";
-        }
-    }
-    html += pers;
 
     // Bemerkungen
     if (bemerkungen != "") {
-        if (personalBenoetigt && pers == "") {
-            html += "<br>";
-        }
+        if (zeilenUmbruch) html += "<br/>";
         html += bemerkungen;
     }
     html += "</td></tr>";

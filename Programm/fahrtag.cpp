@@ -195,7 +195,7 @@ QString Fahrtag::getHtmlForSingleView()
     }
     // *Zub, Begl.o.b.A
     if ((benoetigeZub && (art != Schnupperkurs)) || (zub.size() > 0 || begl.size() > 0)) {
-        html += "<p><b>Zugbegleiter und <i>Begleiter ohne betriebliche Ausbildung</i>";
+        html += "<p><b>Zugbegleiter und <i><b>Begleiter ohne betriebliche Ausbildung/b></i>";
         html += (benoetigeZub && (art != Schnupperkurs) ? required.arg(" werden benötigt"):"");
         html += ":</b><br/>";
         html += listToString(" | ", zub);
@@ -223,31 +223,29 @@ QString Fahrtag::getHtmlForSingleView()
     // Reservierungen
     if (getAnzahlReservierungen() > 0) {
         html += "<p><b>Reservierungen:</b>";
-        if (art != Nikolauszug) {
-            QString helperRes = "<br/>Zug %1: %2 Plätze in 1.Klasse, %3 Plätze in 2./3.Klasse";
-            if (getBelegung(-1, 2201) > 0)
-                html += helperRes.arg(2201).arg(getBelegung(1, 2201)).arg(getBelegung(0, 2201));
-            if (getBelegung(-1, 2202) > 0)
-                html += helperRes.arg(2202).arg(getBelegung(1, 2202)).arg(getBelegung(0, 2202));
-            if (getBelegung(-1, 2203) > 0)
-                html += helperRes.arg(2203).arg(getBelegung(1, 2203)).arg(getBelegung(0, 2203));
-            if (getBelegung(-1, 2204) > 0)
-                html += helperRes.arg(2204).arg(getBelegung(1, 2204)).arg(getBelegung(0, 2204));
-            if (getBelegung(-1, 2205) > 0)
-                html += helperRes.arg(2205).arg(getBelegung(1, 2205)).arg(getBelegung(0, 2205));
-            if (getBelegung(-1, 2206) > 0)
-                html += helperRes.arg(2206).arg(getBelegung(1, 2206)).arg(getBelegung(0, 2206));
-            if (getBelegung(-1, 0) > 0)
-                html += QString("<br/>Gesamt: %1 Plätze 1.Klasse, %2 Plätze 2./3.Klasse <br/>").arg(getBelegung(1)).arg(getBelegung(0));
-            html += "</p>";
+        QString helperRes = "<br/>Zug %1: %2 Plätze in 1.Klasse, %3 Plätze in 2./3.Klasse";
+        if (getBelegung(-1, 2201) > 0)
+            html += helperRes.arg(2201).arg(getBelegung(1, 2201)).arg(getBelegung(0, 2201));
+        if (getBelegung(-1, 2202) > 0)
+            html += helperRes.arg(2202).arg(getBelegung(1, 2202)).arg(getBelegung(0, 2202));
+        if (getBelegung(-1, 2203) > 0)
+            html += helperRes.arg(2203).arg(getBelegung(1, 2203)).arg(getBelegung(0, 2203));
+        if (getBelegung(-1, 2204) > 0)
+            html += helperRes.arg(2204).arg(getBelegung(1, 2204)).arg(getBelegung(0, 2204));
+        if (getBelegung(-1, 2205) > 0)
+            html += helperRes.arg(2205).arg(getBelegung(1, 2205)).arg(getBelegung(0, 2205));
+        if (getBelegung(-1, 2206) > 0)
+            html += helperRes.arg(2206).arg(getBelegung(1, 2206)).arg(getBelegung(0, 2206));
+        if (getBelegung(-1, 0) > 0)
+            html += QString("<br/>Gesamt: %1 Plätze 1.Klasse, %2 Plätze 2./3.Klasse <br/>").arg(getBelegung(1)).arg(getBelegung(0));
+        html += "</p>";
 
+        if (art != Nikolauszug) {
             html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
             for(Reservierung *r: reservierungen) {
                 html += r->getHtmlForTable();
             }
             html += "</tbody></table>";
-        } else {
-            html += "</p>";
         }
     }
     return html;
@@ -360,9 +358,11 @@ QString Fahrtag::getHtmlForTableView()
     html += "</td>";
 
     // Sonstiges
+    bool zeilenUmbruch = false;
     if (personalBenoetigt) {
         html += beginnZelleBenoetigt;
-        html += benoetigt.arg("Sonstiges Personal wird benötigt!")+"<br/>";
+        html += benoetigt.arg("Sonstiges Personal wird benötigt!");
+        zeilenUmbruch = true;
     } else {
         html += "<td>";
     }
@@ -370,17 +370,22 @@ QString Fahrtag::getHtmlForTableView()
         html += "<ul>";
         html += listToString("", sonstige, "<li>", "</li>", true);
         html += "</ul>";
+        zeilenUmbruch = false;
     }
     // Sneek-Peek Reservierungen
     if (art != Schnupperkurs && art != Gesellschaftssonderzug && getBelegung(-1) > 0) {
-        html += QString::number(getBelegung(-1));
-        html += (getBelegung(-1) == 1 ? " reservierter Sitzplatz": " reservierte Sitzplätze");
-        html += tr(" bei %1 %2").arg(QString::number(getAnzahlReservierungen())).arg(getAnzahlReservierungen() == 1 ? " Reservierung" : " Reservierungen");
-        html += "<br/>";
+        if(zeilenUmbruch) html += "<br/>";
+        zeilenUmbruch = true;
+        html += tr("%1 %2 bei %3 %4")
+                .arg(getBelegung(-1))
+                .arg(getBelegung(-1) == 1 ? tr("reservierter Sitzplatz"): tr("reservierte Sitzplätze"))
+                .arg(getAnzahlReservierungen())
+                .arg(getAnzahlReservierungen() == 1 ? tr("Reservierung") : tr("Reservierungen"));
     }
 
     // Bemerkungen
     if (bemerkungen != "") {
+        if (zeilenUmbruch) html += "<br/>";
         html += bemerkungen.replace("\n", "<br/>");
     }
 
