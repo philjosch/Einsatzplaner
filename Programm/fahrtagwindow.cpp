@@ -302,7 +302,7 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
     switch (fahrtag->addPerson(name, bemerkung, beginn, ende, kat)) {
     case Mistake::PassivOk:
         QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
-        [[clang::fallthrough]];
+        [[fallthrough]];
     case Mistake::ExternOk:
     case Mistake::OK:
         // Zeile für die Person in die Tabelle einfügen
@@ -463,7 +463,7 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
             switch (fahrtag->addPerson(name, bemerkung, beginn, ende, kat)) {
             case Mistake::PassivOk:
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
-                [[clang::fallthrough]];
+                [[fallthrough]];
             case Mistake::OK:
             case Mistake::ExternOk:
                 break;

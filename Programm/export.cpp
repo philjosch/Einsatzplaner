@@ -75,10 +75,10 @@ bool Export::printMitgliederListe(QList<Person*> liste, Mitglied filter, QPrinte
     return druckeHtmlAufDrucker(html, printer);
 }
 
-bool Export::exportMitgliederAlsCSV(QList<Person *> liste, Mitglied filter, QString pfad)
+bool Export::exportMitgliederAlsCSV(QList<Person *> liste, QString pfad)
 {
     if (liste.isEmpty()) return false;
-    return FileIO::saveToFile(pfad, ManagerPersonal::getMitgliederFuerListeAlsCSV(liste, filter));
+    return FileIO::saveToFile(pfad, ManagerPersonal::getMitgliederFuerListeAlsCSV(liste));
 }
 
 QPrinter *Export::getPrinterPaper(QWidget *parent, QPrinter::Orientation orientation)

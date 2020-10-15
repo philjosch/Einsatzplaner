@@ -28,7 +28,7 @@ public slots:
 
     bool removeActivity(AActivity *a);
 
-    void activityChanged(AActivity *a);
+    void sort();
 
     QList<AActivity*> filter(AActivity::Auswahl auswahl);
 

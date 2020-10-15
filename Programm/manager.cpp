@@ -41,15 +41,15 @@ void Manager::fromJson(QJsonArray array)
             }
         }
         activities.append(akt);
-        update(activities.length()-1);
     }
+    sort();
 }
 
 Fahrtag *Manager::newFahrtag(QDate datum)
 {
     Fahrtag *f = new Fahrtag(datum, personal);
     activities.append(f);
-    update(activities.length()-1);
+    sort();
     return f;
 }
 
@@ -57,7 +57,7 @@ Activity *Manager::newActivity(QDate datum)
 {
     Activity *a = new Activity(datum, personal);
     activities.append(a);
-    update(activities.length()-1);
+    sort();
     return a;
 }
 
@@ -68,11 +68,9 @@ bool Manager::removeActivity(AActivity *a)
     return ret;
 }
 
-void Manager::activityChanged(AActivity *a)
+void Manager::sort()
 {
-    int pos = activities.indexOf(a);
-    if (pos >= 0)
-        update(pos);
+    AActivity::sort(&activities);
 }
 
 QList<AActivity *> Manager::filter(AActivity::Auswahl auswahl)
@@ -92,15 +90,11 @@ QList<AActivity *> Manager::getActivities()
 
 QString Manager::getHtmlFuerListenansicht(QList<AActivity *> liste)
 {
-    QString a = "<h3>Übersicht über die Aktivitäten</h3>"
-                "<table cellspacing='0' width='100%'><thead><tr>"
-                "<th>Datum, Anlass</th> <th>Dienstzeiten</th>"
-                "<th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th> <th>Service</th>"
-                "<th>Sonstiges</th> </tr></thead><tbody>";
+    QString a = AActivity::KOPF_LISTE_HTML;
     for(AActivity *akt: liste) {
         a += akt->getHtmlForTableView();
     }
-    a += "</tbody></table>";
+    a += AActivity::FUSS_LISTE_HTML;
     return a;
 }
 
@@ -115,28 +109,6 @@ QString Manager::getHtmlFuerEinzelansichten(QList<AActivity *> liste)
             html += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     }
     return html;
-}
-
-void Manager::update(int pos)
-{
-    // Verschieb das Objekt an Stelle pos an die Richtige Stelle, sodass später schneller darauf zugegriffen werden kann
-    int i = pos;
-    while (i < activities.length()-1) {
-        if (*activities.at(i) > *activities.at(i+1)) {
-            activities.swapItemsAt(i, i+1);
-            i++;
-        } else {
-            break;
-        }
-    }
-    while (i > 0) {
-        if (*activities.at(i) <  *activities.at(i-1)) {
-            activities.swapItemsAt(i, i-1);
-            i--;
-        } else {
-            break;
-        }
-    }
 }
 
 ManagerPersonal *Manager::getPersonal() const

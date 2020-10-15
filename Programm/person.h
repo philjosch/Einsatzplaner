@@ -16,6 +16,9 @@ public:
     static const QString FARBE_FEHLENDE_STUNDEN;
     static const QString FARBE_GENUG_STUNDEN;
     static const QString FARBE_STANDARD;
+    static const QString KOPF_TABELLE_LISTE_CSV;
+    static const QString KOPF_TABELLE_LISTE_HTML;
+    static const QString FUSS_TABELLE_LISTE_HTML;
 
     QJsonObject toJson();
     QJsonObject personalToJson();

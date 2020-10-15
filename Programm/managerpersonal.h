@@ -37,7 +37,6 @@ public:
     int getMinimumHours(Category cat);
     static int getMinimumHoursDefault(Category kat);
 
-    QListIterator<Person *> getPersonen() const;
     QList<Person *> getPersonenSortiertNachNummer();
 
     void berechne();
@@ -54,7 +53,7 @@ public:
 
     QString getMitgliederFuerEinzelListeAlsHTML(QList<Person*> liste, Mitglied filter);
     static QString getMitgliederFuerListeAlsHtml(QList<Person *> liste, Mitglied filter);
-    static QString getMitgliederFuerListeAlsCSV(QList<Person *> liste, Mitglied filter);
+    static QString getMitgliederFuerListeAlsCSV(QList<Person *> liste);
 
     int getAnzahlMitglieder(Mitglied filter);
     QList<Person *> getPersonen(Mitglied filter);

@@ -11,6 +11,13 @@ QStringList AActivity::EXTERNAL_LIST = QStringList() << "Extern" << "Führerstan
 QStringList AActivity::QUALIFICATION_LIST = QStringList() << "Azubi" << "Ausbildung" << "Tf-Ausbildung" << "Zf-Ausbildung" << "Tf-Unterricht" << "Zf-Unterricht" << "Weiterbildung";
 QString AActivity::COLOR_REQUIRED = "#ff3333";
 
+const QString AActivity::KOPF_LISTE_HTML = tr("<h3>Übersicht über die Aktivitäten</h3>"
+                                         "<table cellspacing='0' width='100%'><thead><tr>"
+                                         "<th>Datum, Anlass</th> <th>Dienstzeiten</th>"
+                                         "<th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th> <th>Service</th>"
+                                         "<th>Sonstiges</th> </tr></thead><tbody>");
+const QString AActivity::FUSS_LISTE_HTML = "</tbody></table>";
+
 const QString getFarbe(AActivity *a)
 {
     return FARBE_FAHRTAGE.value(a->getArt());
@@ -264,35 +271,38 @@ void AActivity::updatePersonBemerkung(Person *p, Category kat, QString bem)
     personen.insert(Einsatz{p, kat}, i);
 }
 
-bool AActivity::lesser(const AActivity &second) const
+bool AActivity::lesser(const AActivity *lhs, const AActivity *rhs)
 {
     // Datum
-    if (this->datum < second.datum)
+    if (lhs->datum < rhs->datum)
         return true;
-    if (this->datum > second.datum)
+    if (lhs->datum > rhs->datum)
         return false;
     // Zeiten?
-    if (this->zeitenUnbekannt && !second.zeitenUnbekannt)
+    if (lhs->zeitenUnbekannt && !rhs->zeitenUnbekannt)
         return true;
-    if (!this->zeitenUnbekannt && second.zeitenUnbekannt)
+    if (!lhs->zeitenUnbekannt && rhs->zeitenUnbekannt)
         return false;
 
-    if (!this->zeitenUnbekannt) {
+    if (!lhs->zeitenUnbekannt) {
         // Beginn
-        if (this->zeitAnfang < second.zeitAnfang)
+        if (lhs->zeitAnfang < rhs->zeitAnfang)
             return true;
-        if (this->zeitAnfang > second.zeitAnfang)
+        if (lhs->zeitAnfang > rhs->zeitAnfang)
             return false;
         // Ende
-        if (this->zeitEnde < second.zeitEnde)
+        if (lhs->zeitEnde < rhs->zeitEnde)
             return true;
-        if (this->zeitEnde > second.zeitEnde)
+        if (lhs->zeitEnde > rhs->zeitEnde)
             return false;
     }
+    // Folgender Teil zerstoert die Irreflexivitaet der Operation
+    // Dieser Fall muss also extra abgefangen werden.
+    if (lhs == rhs) return false;
     // Art und beliebig, bei gleicher Art
-    if (getArt() != Art::Arbeitseinsatz)
+    if (lhs->getArt() != Art::Arbeitseinsatz)
         return true;
-    if (second.getArt() == Art::Arbeitseinsatz)
+    if (rhs->getArt() == Art::Arbeitseinsatz)
         return true;
     return false;
 }
@@ -364,60 +374,12 @@ bool AActivity::liegtInVergangenheit()
 
 void AActivity::sort(QList<AActivity *> *list)
 {
-    AActivity::mergeSort(list, 0, list->length()-1);
+    std::sort(list->begin(), list->end(), AActivity::lesser);
 }
 
 QMap<AActivity::Einsatz, Infos> AActivity::getPersonen() const
 {
     return personen;
-}
-
-void AActivity::merge(QList<AActivity*> *arr, int l, int m, int r)
-{
-    // First subarray is arr[l..m]
-    // Second subarray is arr[m+1..r]
-    std::list<AActivity*> L, R = std::list<AActivity*>();
-
-    for (int i = l; i <= m; i++)
-        L.push_back(arr->at(i));
-    for (int j = m+1; j <= r; j++)
-        R.push_back(arr->at(j));
-
-    /* Merge the temp arrays back into arr[l..r]*/
-    int i = l;
-    while ((!(L.empty())) && (!(R.empty()))) {
-        if ( *(L.front()) <= *(R.front()) ) {
-            arr->replace(i++, L.front());
-            L.pop_front();
-        } else {
-            arr->replace(i++, R.front());
-            R.pop_front();
-        }
-    }
-    while(! L.empty()) {
-        arr->replace(i++, L.front());
-        L.pop_front();
-    }
-    while (! R.empty()) {
-        arr->replace(i++, R.front());
-        R.pop_front();
-    }
-}
-
-/* l is for left index and r is right index of the sub-array of arr to be sorted */
-void AActivity::mergeSort(QList<AActivity*> *arr, int l, int r)
-{
-    if (l < r) {
-        // Same as (l+r)/2, but avoids overflow for
-        // large l and h
-        int m = l+(r-l)/2;
-
-        // Sort first and second halves
-        mergeSort(arr, l, m);
-        mergeSort(arr, m+1, r);
-
-        merge(arr, l, m, r);
-    }
 }
 
 QString AActivity::getKurzbeschreibung()

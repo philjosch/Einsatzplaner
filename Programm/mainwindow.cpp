@@ -193,7 +193,7 @@ void MainWindow::newAActivityHandler(AActivity *a)
 
 void MainWindow::activityChanged(AActivity *a, QDate oldDate)
 {
-    manager->activityChanged(a);
+    manager->sort();
     int oldPos = -1;
     if (oldDate.isValid())
         oldPos = getPosInCalendar(oldDate);

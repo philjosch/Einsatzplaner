@@ -190,7 +190,8 @@ public:
     void updatePersonBemerkung(Person *p, Category kat, QString bemerkung);
     bool removePerson(Person *p, Category kat);
 
-    friend bool operator<(const AActivity &lhs, const AActivity &rhs) { return lhs.lesser(rhs);}
+    static bool lesser(const AActivity *lhs, const AActivity *rhs);
+    friend bool operator<(const AActivity &lhs, const AActivity &rhs) { return lesser(&lhs, &rhs);}
     friend bool operator>(const AActivity &lhs, const AActivity &rhs) { return rhs < lhs; }
     friend bool operator==(const AActivity &lhs, const AActivity &rhs) { return (lhs <= rhs) && (lhs >= rhs);}
     friend bool operator<=(const AActivity &lhs, const AActivity &rhs) { return !(lhs > rhs);}
@@ -207,6 +208,8 @@ public:
 
     static QStringList EXTERNAL_LIST;
     static QStringList QUALIFICATION_LIST;
+    static const QString KOPF_LISTE_HTML;
+    static const QString FUSS_LISTE_HTML;
 
     static bool hasQualification(Person *p, Category kat, QString bemerkung, QDate datum = QDate());
     static bool isExtern(QString bemerkung);
@@ -234,11 +237,6 @@ protected:
     QString listToString(QString sep, QMap<Person *, Infos> liste, QString prefix="", QString suffix="", bool aufgabe=false);
 
     static QString COLOR_REQUIRED;
-    bool lesser(const AActivity &second) const;
-
-private:
-    static void mergeSort(QList<AActivity *> *arr, int l, int r);
-    static void merge(QList<AActivity *> *arr, int l, int m, int r);
 };
 
 const QString getFarbe(AActivity *a);

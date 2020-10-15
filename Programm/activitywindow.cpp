@@ -194,7 +194,7 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
             switch (activity->addPerson(name, bemerkung, beginn, ende, kat)) {
             case Mistake::PassivOk:
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
-                [[clang::fallthrough]];
+                [[fallthrough]];
             case Mistake::OK:
             case Mistake::ExternOk:
                 break;

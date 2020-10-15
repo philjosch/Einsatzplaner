@@ -371,7 +371,7 @@ void PersonalWindow::on_actionMitgliederListeDrucken_triggered()
 }
 void PersonalWindow::on_actionMitgliederListeCSV_triggered()
 {
-    Export::exportMitgliederAlsCSV(current, filter,
+    Export::exportMitgliederAlsCSV(current,
                                   FileIO::getFilePathSave(this, "Mitglieder.csv", tr("CSV-Datei (*.csv)")));
 }
 
@@ -415,7 +415,7 @@ void PersonalWindow::on_pushEmail_clicked()
     }
 }
 
-void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, int column)
+void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, [[maybe_unused]] int column)
 {
     QString name = ui->tabelleGesamt->item(row, 0)->text() + " " + ui->tabelleGesamt->item(row, 1)->text();
     Person * p = manager->getPerson(name);
@@ -425,7 +425,7 @@ void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, int column)
     }
 }
 
-void PersonalWindow::on_tabelleMitglieder_cellDoubleClicked(int row, int column)
+void PersonalWindow::on_tabelleMitglieder_cellDoubleClicked(int row, [[maybe_unused]] int column)
 {
     QString name = ui->tabelleMitglieder->item(row, 1)->text() + " " + ui->tabelleMitglieder->item(row, 2)->text();
     Person * p = manager->getPerson(name);
