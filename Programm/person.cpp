@@ -10,8 +10,8 @@
 const QString Person::FARBE_FEHLENDE_STUNDEN = "#ff9999";
 const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";
 const QString Person::FARBE_STANDARD = "#ffffff";
-const QString Person::KOPF_TABELLE_LISTE_CSV = tr("Nummer;Nachname;Vorname;Geburtsdatum;Eintritt;Status;Austritt;Tf;Zf;Rangierer;Tauglichkeit;Straße;PLZ;Ort;Mail;Zustimmung Mail;Telefon;Zustimmung Telefon;Strecke;Beruf;Bemerkung\n");
-const QString Person::KOPF_TABELLE_LISTE_HTML = tr("<h3>%1 – Stand %2</h3>"
+const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsdatum;Eintritt;Status;Austritt;Tf;Zf;Rangierer;Tauglichkeit;Straße;PLZ;Ort;Mail;Zustimmung Mail;Telefon;Zustimmung Telefon;Strecke;Beruf;Bemerkung\n";
+const QString Person::KOPF_TABELLE_LISTE_HTML = "<h3>%1 – Stand %2</h3>"
                                                    "<table cellspacing='0' width='100%'><thead><tr>"
                                                    "<th>Name<br/>Mitgliedsnummer<br/>Status</th>"
                                                    "<th>Geburtsdatum<br/>Eintritt<br/>Beruf</th>"
@@ -19,7 +19,7 @@ const QString Person::KOPF_TABELLE_LISTE_HTML = tr("<h3>%1 – Stand %2</h3>"
                                                    "<th>E-Mail<br/>Telefon</th>"
                                                    "<th>Betriebsdienst</th>"
                                                    "<th>Sonstiges</th>"
-                                                   "</thead><tbody>");
+                                                   "</thead><tbody>";
 const QString Person::FUSS_TABELLE_LISTE_HTML = "</tbody></table>";
 
 Person::Person(QString name, ManagerPersonal *manager) : QObject()
