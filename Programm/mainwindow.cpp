@@ -253,7 +253,9 @@ bool MainWindow::removeActivity(AActivity *a)
     ui->listWidget->takeItem(ui->listWidget->row(listitem.value(a)));
     itemToList.remove(listitem.value(a));
     listitem.remove(a);
-    tage.at(getPosInCalendar(a->getDatum()))->remove(a);
+    int pos = getPosInCalendar(a->getDatum());
+    if (pos >= 0)
+        tage.at(pos)->remove(a);
     bool ret = manager->removeActivity(a);
     unsave();
     if (fenster.contains(a))
