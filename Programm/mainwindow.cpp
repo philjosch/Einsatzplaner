@@ -83,7 +83,7 @@ MainWindow::MainWindow(QJsonObject json, QString path) : MainWindow()
     QJsonArray activities;
     QJsonObject personal;
     QDate currentDate;
-    if (json.contains("personal") && json.contains("activities")) {
+    if (json.contains("personal") || json.contains("activities")) {
         // Ab Version 1.6
         activities = json.value("activities").toArray();
         personal = json.value("personal").toObject();

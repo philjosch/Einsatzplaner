@@ -86,14 +86,14 @@ CONFIG -= console
 
 #OTHER_FILES += qt_de.qm
 
-VERSION = 1.6.2
+VERSION = 1.6.3
 win32 {
     RC_ICONS = ../Icon/keks.ico
     QMAKE_TARGET_COMPANY = Philipp Schepper
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
     QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2020
     QMAKE_TARGET_PRODUCT = Einsatzplaner
-    VERSION = 1.6.2.1
+    VERSION = 1.6.3.1
 }
 
 macx {
