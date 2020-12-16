@@ -5,72 +5,37 @@
 #
 #-------------------------------------------------
 
-!versionAtLeast(QT_VERSION, 5.13.0):error("Qt version 5.13 is required for this project")
+include(../share.pri)
 
-win32: LCONVERT=$$[QT_INSTALL_BINS]\lconvert.exe
-else:  LCONVERT=$$[QT_INSTALL_BINS]/lconvert
-system(\"$$LCONVERT\" -o \"$$_PRO_FILE_PWD_/qt_de.qm\" \"$$[QT_INSTALL_TRANSLATIONS]/qtbase_de.qm\")
-
-QT       += core gui printsupport network widgets
 
 TARGET = Einsatzplaner
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    einstellungen.cpp \
     guihelper.cpp \
     mainwindow.cpp \
-    networking.cpp \
-    person.cpp \
-    managerpersonal.cpp \
-    activity.cpp \
-    reservierung.cpp \
-    manager.cpp \
     fahrtagwindow.cpp \
     activitywindow.cpp \
     personalwindow.cpp \
-    fahrtag.cpp \
     calendarday.cpp \
-    aactivity.cpp \
-    export.cpp \
     exportdialog.cpp \
-    fileio.cpp \
     coreapplication.cpp \
-    wagen.cpp \
-    verteiler.cpp \
     einstellungendialog.cpp \
     minimumhourseditordialog.cpp \
-    basics.cpp \
-    filesettingsdialog.cpp \
-    filesettings.cpp
+    filesettingsdialog.cpp
 
 HEADERS  += mainwindow.h \
-    einstellungen.h \
     guihelper.h \
-    networking.h \
-    person.h \
-    managerpersonal.h \
-    activity.h \
-    reservierung.h \
-    manager.h \
     fahrtagwindow.h \
     activitywindow.h \
     personalwindow.h \
-    fahrtag.h \
     calendarday.h \
-    aactivity.h \
-    export.h \
     exportdialog.h \
-    fileio.h \
     coreapplication.h \
-    wagen.h \
-    verteiler.h \
     einstellungendialog.h \
     minimumhourseditordialog.h \
-    basics.h \
-    filesettingsdialog.h \
-    filesettings.h
+    filesettingsdialog.h
 
 FORMS    += mainwindow.ui \
     fahrtagwindow.ui \
@@ -82,11 +47,6 @@ FORMS    += mainwindow.ui \
     minimumhourseditordialog.ui \
     filesettingsdialog.ui
 
-CONFIG -= console
-
-#OTHER_FILES += qt_de.qm
-
-VERSION = 1.6.3
 win32 {
     RC_ICONS = ../Icon/keks.ico
     QMAKE_TARGET_COMPANY = Philipp Schepper
@@ -104,9 +64,5 @@ macx {
     ICON = ../Icon/keks.icns
 }
 
-RESOURCES += \
-    resources.qrc
 
-win32: COMMIT_HASH = $$system(git.exe -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)
-else:  COMMIT_HASH = $$system(git -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)
-DEFINES += GIT_CURRENT_SHA1="\"\\\"$${COMMIT_HASH}\\\"\""
+

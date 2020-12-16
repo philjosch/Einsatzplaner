@@ -1,4 +1,3 @@
-#include "personalwindow.h"
 #include "managerpersonal.h"
 #include "person.h"
 
