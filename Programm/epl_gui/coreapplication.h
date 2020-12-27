@@ -33,6 +33,8 @@ public:
 
     static bool isUpdateVerfuegbar();
 
+    static bool *openHelper(QString);
+
 public slots:
     static void closeAllWindows();
     static void autoSaveWindows();
@@ -46,6 +48,9 @@ protected:
     static QString URL_DOWNLOAD;
     static QString URL_VERSION;
     static QString URL_NOTES;
+
+signals:
+    void triggerOpen(QString);
 };
 
 #endif // COREAPPLICATION_H

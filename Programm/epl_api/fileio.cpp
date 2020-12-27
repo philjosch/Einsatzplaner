@@ -41,18 +41,14 @@ QJsonObject FileIO::getJsonFromFile(QString filepath)
     if (data.isEmpty())
         return QJsonObject();
     QJsonDocument *json = new QJsonDocument(QJsonDocument::fromJson(data));
-    insert(filepath);
+    History::insert(filepath);
     return json->object();
 }
 
-bool FileIO::saveJsonToFile(QString filepath, QJsonObject object, bool showInMenu)
+bool FileIO::saveJsonToFile(QString filepath, QJsonObject object)
 {
     QJsonDocument saveDoc = QJsonDocument(object);
-    if (saveToFile(filepath, saveDoc.toJson())) {
-        if (showInMenu) insert(filepath);
-        return true;
-    }
-    return false;
+    return saveToFile(filepath, saveDoc.toJson());
 }
 
 QStringList FileIO::History::get()
@@ -115,7 +111,7 @@ bool FileIO::Schreibschutz::freigeben(QString dateipfad)
     return removeFile(dateipfad+".lock");
 }
 
-void FileIO::insert(QString filepath)
+void FileIO::History::insert(QString filepath)
 {
     if (filepath.endsWith(".ako", Qt::CaseInsensitive)) {
         if (lastUsed.contains(filepath))

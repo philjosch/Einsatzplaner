@@ -9,9 +9,12 @@
 
 TEMPLATE = subdirs
 SUBDIRS += Einsatzplaner \
-    epl_api
+    Personalplaner \
+    epl_api \
+    epl_gui
 
 Einsatzplaner.depends = epl_api
+Personalplaner.depends = epl_api
 
 
 DISTFILES += share.pri

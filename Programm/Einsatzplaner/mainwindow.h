@@ -11,18 +11,19 @@
 #include <QJsonObject>
 #include <QMainWindow>
 #include <QMap>
+#include "coremainwindow.h"
 
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow : public CoreMainWindow
 {
     Q_OBJECT
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    MainWindow(QJsonObject json, QString path);
+    bool handlerLadeDatei(QJsonObject json);
     ~MainWindow();
 
 public slots:
@@ -33,30 +34,9 @@ public slots:
 
     void showDate(QDate date);
 
-    static void open(QString path);
-    void autoSave();
+    static bool open(QString path);
 
 protected slots:
-    // Einsatzplaner
-    void on_actionPreferences_triggered();
-    void on_actionAboutQt_triggered();
-    void on_actionAboutApp_triggered();
-    void on_actionQuit_triggered();
-
-    // Datei
-    void on_actionNew_triggered();
-    void on_actionOpen_triggered();
-    void on_menuRecentlyused_aboutToShow();
-    void on_actionClear_triggered();
-    void on_actionSave_triggered();
-    void on_actionSaveas_triggered();
-    bool saveToPath(QString path, bool showInMenu=true);
-    void on_actionSavePersonal_triggered();
-
-    void on_actionSettings_triggered();
-
-    bool on_actionClose_triggered();
-    void closeEvent(QCloseEvent *event);
 
     // Sonstige Buttons im Fenster
     void on_buttonPersonal_clicked();
@@ -78,7 +58,17 @@ protected slots:
     void setListItem(QListWidgetItem *i, AActivity *a);
     void onItemInListClicked(QListWidgetItem *item);
 
-    void unsave();
+
+
+    CoreMainWindow *handlerNew();
+    QJsonObject handlerSave();
+    bool handlerSaveAdditional();
+    bool handlerOpen(QString path);
+    bool handlerClose();
+    bool handlerPreferenes();
+    bool handlerSettings();
+    QJsonObject handlerSavePersonal();
+
 
 private:
     bool istSchreibgeschuetzt;

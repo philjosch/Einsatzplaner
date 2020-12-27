@@ -12,26 +12,24 @@
 #include <QMessageBox>
 #include <QJsonArray>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : CoreMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     // Modell
     manager = new Manager();
-    filePath = "";
-    istSchreibgeschuetzt = false;
-    saved = true;
+
     // Views
     personalfenster = new PersonalWindow(this, manager->getPersonal());
+    windows.insert(personalfenster);
     settings = new FileSettings();
     exportDialog = new ExportDialog(manager, settings, this);
+    recentlyUsedMenu = ui->menuRecentlyused;
+    recentlyUsedClear = ui->actionClear;
+
     // Controller
     listitem = QMap<AActivity*, QListWidgetItem*>();
     itemToList = QMap<QListWidgetItem*, AActivity*>();
     fenster = QMap<AActivity*, QMainWindow*>();
-
-    setWindowTitle(tr("Neues Dokument – Übersicht"));
-    setWindowModified(false);
-    setWindowIcon(QApplication::windowIcon());
 
     connect(manager->getPersonal(), SIGNAL(changed()), this, SLOT(unsave()));
     connect(ui->buttonAddActivity, SIGNAL(clicked(bool)), this, SLOT(newActivity()));
@@ -60,23 +58,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     on_buttonToday_clicked();
 }
 
-MainWindow::MainWindow(QJsonObject json, QString path) : MainWindow()
+bool MainWindow::handlerLadeDatei(QJsonObject json)
 {
-    setWindowTitle(tr("Übersicht"));
-    filePath = path;
-    setWindowFilePath(filePath);
-    personalfenster->setWindowFilePath(filePath);
-
-    QStringList l = FileIO::Schreibschutz::pruefen(path);
-    if (!l.isEmpty()) {
-        QMessageBox::information(nullptr,
-                                 tr("Schreibgeschützt"),
-                                 tr("Die ausgewählte Datei wurde am %1 von \"%2\" zuletzt geöffnet und wird seitdem bearbeitet. Die Datei wird deshalb schreibgeschützt geöffnet!").arg(l.at(0),l.at(1)));
-        istSchreibgeschuetzt = true;
+    if (istSchreibgeschuetzt) {
         setWindowTitle(tr("Übersicht - Schreibgeschützt"));
-    } else {
-        istSchreibgeschuetzt = false;
-        FileIO::Schreibschutz::setzen(filePath);
     }
 
     // Daten in Manager laden und darstellen lassen
@@ -131,11 +116,12 @@ MainWindow::MainWindow(QJsonObject json, QString path) : MainWindow()
     personalfenster->hide();
 
     settings->fromJson(json.value("settings").toObject());
+    return true;
 }
 
 MainWindow::~MainWindow()
 {
-    this->close();
+    close();
     delete ui;
 }
 
@@ -171,6 +157,7 @@ void MainWindow::openAActivity(AActivity *a)
         }
         w->setWindowFilePath(filePath);
         fenster.insert(a, w);
+        windows.insert(w);
         w->show();
     }
 }
@@ -258,8 +245,10 @@ bool MainWindow::removeActivity(AActivity *a)
         tage.at(pos)->remove(a);
     bool ret = manager->removeActivity(a);
     unsave();
-    if (fenster.contains(a))
+    if (fenster.contains(a)) {
+        windows.remove(fenster.value(a));
         fenster.remove(a);
+    }
     return ret;
 }
 
@@ -290,6 +279,30 @@ void MainWindow::showDate(QDate date)
     }
 }
 
+bool MainWindow::open(QString path)
+{
+    if (path == "") return false;
+
+    // Daten aus Datei laden
+    QJsonObject object = FileIO::getJsonFromFile(path);
+    if (object.isEmpty()) return false;
+
+    // Prüfen, ob Version kompatibel ist
+    QJsonObject generalJSON = object.value("general").toObject();
+
+    Version version = Version::stringToVersion(generalJSON.value("version").toString());
+    if (! pruefeVersionMitWarnung(version)) return false;
+
+
+    // Schreibschutz pruefen
+    bool schreibschutz = !setzeSchreibschutzOderWarnung(path);
+
+    MainWindow *mw = new MainWindow();
+    mw->ladeDatei(path, object, schreibschutz);
+    mw->show();
+    return true;
+}
+
 void MainWindow::on_buttonPrev_clicked()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addMonths(-1));
@@ -311,196 +324,87 @@ void MainWindow::itemInCalendarDayClicked(AActivity *a)
     openAActivity(a);
 }
 
-void MainWindow::on_actionPreferences_triggered()
+void MainWindow::onItemInListClicked(QListWidgetItem *item)
+{
+    openAActivity(itemToList.value(item));
+}
+void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
+{
+    if (i == nullptr) return;
+    i->setText(a->getListString());
+    i->setToolTip(a->getAnlass().replace("<br/>","\n"));
+    i->setWhatsThis(a->getAnlass().replace("<br/>","\n"));
+    i->setBackground(QBrush(QColor(getFarbe(a))));
+}
+
+void MainWindow::on_buttonPersonal_clicked()
+{
+    personalfenster->show();
+    personalfenster->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    personalfenster->raise();
+    personalfenster->activateWindow();
+}
+
+void MainWindow::on_buttonExport_clicked()
+{
+    exportDialog->hardReload();
+    exportDialog->exec();
+}
+
+CoreMainWindow* MainWindow::handlerNew()
+{
+    return new MainWindow();
+}
+
+QJsonObject MainWindow::handlerSave()
+{
+    QJsonObject json = handlerSavePersonal();
+    json.insert("activities", manager->toJson());
+    return json;
+}
+
+bool MainWindow::handlerSaveAdditional()
+{
+    if (settings->getAutom()) {
+        int result = Export::autoUploadToServer(manager->filter(settings->getAuswahl()), settings->getServer());
+        if (result == 0)
+            ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
+        else if (result > 0)
+            ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
+    }
+    return true;
+}
+
+bool MainWindow::handlerOpen(QString path)
+{
+    return MainWindow::open(path);
+}
+
+bool MainWindow::handlerClose()
+{
+    return true;
+}
+
+bool MainWindow::handlerPreferenes()
 {
     EinstellungenDialog *dialog = new EinstellungenDialog();
     dialog->setWindowFilePath("");
     dialog->show();
-}
-void MainWindow::on_actionAboutQt_triggered()
-{
-    QMessageBox::aboutQt(this);
-}
-void MainWindow::on_actionAboutApp_triggered()
-{
-    QMessageBox::about(this,
-                       tr("Über Einsatzplaner"),
-                       tr("<h1>Einsatzplaner</h1><p>Version %1<br/>2016-2020 Philipp Schepper</p>")
-                       .arg(QCoreApplication::applicationVersion()));
-}
-void MainWindow::on_actionQuit_triggered()
-{
-    CoreApplication::closeAllWindows();
+    return true;
 }
 
-
-void MainWindow::on_actionNew_triggered()
+bool MainWindow::handlerSettings()
 {
-    MainWindow *w = new MainWindow();
-    w->show();
-}
-
-void MainWindow::on_actionOpen_triggered()
-{
-    open(FileIO::getFilePathOpen(this, tr("AkO-Dateien (*.ako)")));
-}
-void MainWindow::open(QString path)
-{
-    if (path == "") return;
-    // Daten aus Datei laden
-    QJsonObject object = FileIO::getJsonFromFile(path);
-    if (object.isEmpty()) return;
-
-    // Prüfen, ob Version kompatibel ist
-    QJsonObject generalJSON = object.value("general").toObject();
-
-    Version version = Version::stringToVersion(generalJSON.value("version").toString());
-    if (version > (CoreApplication::VERSION) || Version{-1,-1,-1} == version) {
-        QMessageBox::warning(nullptr, tr("Nicht kompatibel"),
-                             tr("Die Datei kann nicht mit dieser Version geöffnet werden. "
-                                "Das Dokument benötigt mindestens Version %1.\n"
-                                "Die aktuellste Version finden Sie auf der Webseite des Programms.").arg(version.toStringShort()));
-        return;
+    FileSettingsDialog s(this, settings);
+    if (s.exec() == QDialog::Accepted) {
+        s.getSettings(settings);
+        emit unsave();
     }
-    MainWindow *mw = new MainWindow(object, path);
-    mw->show();
+    return true;
 }
 
-void MainWindow::on_menuRecentlyused_aboutToShow()
+QJsonObject MainWindow::handlerSavePersonal()
 {
-    QStringList list = FileIO::History::get();
-
-    if (list.length() > 0) {
-        QList<QAction*> actions = ui->menuRecentlyused->actions();
-        for (int i = 2; i < actions.length(); i++) {
-            ui->menuRecentlyused->removeAction(actions[i]);
-        }
-        ui->actionClear->setEnabled(true);
-        foreach (QString entry, list) {
-            QAction *a = new QAction(entry, this);
-            connect(a, &QAction::triggered, this, [=]() { open(entry); });
-            ui->menuRecentlyused->insertAction(nullptr, a);
-        }
-    }
-}
-void MainWindow::on_actionClear_triggered()
-{
-    FileIO::History::clear();
-    QList<QAction*> actions = ui->menuRecentlyused->actions();
-    for (int i = 2; i < actions.length(); i++) {
-        ui->menuRecentlyused->removeAction(actions[i]);
-    }
-    ui->actionClear->setEnabled(false);
-}
-
-void MainWindow::on_actionSave_triggered()
-{
-    if (istSchreibgeschuetzt) {
-        QMessageBox::information(this, tr("Nicht gespeichert"), tr("Die Datei konnte nicht gespeichert werden, da sie schreibgeschützt geöffnet wurde."));
-        return;
-    }
-    if (filePath == "") {
-        on_actionSaveas_triggered();
-        return;
-    }
-
-    bool erfolg = saveToPath(filePath);
-    if (erfolg) {
-        saved = true;
-        setWindowModified(false);
-        if (filePath != "") {
-            QFile file (filePath+".autosave.ako");
-            file.remove();
-        }
-
-        if (settings->getAutom()) {
-            int result = Export::autoUploadToServer(manager->filter(settings->getAuswahl()), settings->getServer());
-            if (result == 0)
-                ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
-            else if (result > 0)
-                ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
-        }
-
-
-    } else {
-        QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
-    }
-}
-void MainWindow::on_actionSaveas_triggered()
-{
-    QString newPath = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
-    if (newPath != "") {
-        if (!FileIO::Schreibschutz::pruefen(newPath).isEmpty()) {
-            QMessageBox::warning(this, tr("Datei geöffnet"), tr("Unter der angegebenen Adresse befindet sich eine Datei, die aktuell geöffnet und bearbeitet wird. Ein Speichern ist somit nicht möglich!"));
-            return;
-        }
-
-        filePath = newPath;
-        QJsonObject o;
-        bool erfolg = FileIO::saveJsonToFile(filePath, o);
-        if (! erfolg) {
-            QMessageBox::information(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
-            filePath = "";
-            return;
-        }
-        istSchreibgeschuetzt = false;
-        FileIO::Schreibschutz::setzen(filePath);
-        setWindowTitle(tr("Übersicht"));
-        setWindowFilePath(filePath);
-        personalfenster->setWindowFilePath(filePath);
-        for(QMainWindow *mw: fenster.values()) {
-            mw->setWindowFilePath(filePath);
-        }
-        on_actionSave_triggered();
-    }
-}
-void MainWindow::autoSave()
-{
-    if (istSchreibgeschuetzt) return;
-    if (filePath == "") return;
-    if (saved) return;
-    saveToPath(filePath+".autosave.ako", false);
-}
-bool MainWindow::saveToPath(QString path, bool showInMenu)
-{
-    if (istSchreibgeschuetzt)
-        return false;
-    QJsonArray activitiesJSON = manager->toJson();
-    QJsonObject personalJSON = manager->getPersonal()->toJson();
-
-    QJsonObject viewJSON;
-    viewJSON.insert("xMain", this->x());
-    viewJSON.insert("yMain", this->y());
-    viewJSON.insert("widthMain", this->width());
-    viewJSON.insert("heightMain", this->height());
-    viewJSON.insert("xPersonal", personalfenster->x());
-    viewJSON.insert("yPersonal", personalfenster->y());
-    viewJSON.insert("widthPersonal", personalfenster->width());
-    viewJSON.insert("heightPersonal", personalfenster->height());
-    viewJSON.insert("currentDate", ui->dateSelector->date().toString("yyyy-MM-dd"));
-
-    QJsonObject generalJSON;
-    generalJSON.insert("version", CoreApplication::VERSION.toStringShort());
-
-    QJsonObject json;
-    json.insert("activities", activitiesJSON);
-    json.insert("personal", personalJSON);
-    json.insert("view", viewJSON);
-    json.insert("settings", settings->toJson());
-    json.insert("general", generalJSON);
-
-    return FileIO::saveJsonToFile(path, json, showInMenu);
-}
-
-void MainWindow::on_actionSavePersonal_triggered()
-{
-    QString path = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
-    if (path == "") return;
-    if (!FileIO::Schreibschutz::pruefen(path).isEmpty()) {
-        QMessageBox::warning(this, tr("Datei geöffnet"), tr("Unter der angegebenen Adresse befindet sich eine Datei, die aktuell geöffnet und bearbeitet wird. Ein Speichern ist somit nicht möglich!"));
-        return;
-    }
-
     QJsonObject personalJSON = manager->getPersonal()->personalToJson();
 
     QJsonObject viewJSON;
@@ -523,98 +427,7 @@ void MainWindow::on_actionSavePersonal_triggered()
     object.insert("settings", settings->toJson());
     object.insert("general", generalJSON);
 
-    if (! FileIO::saveJsonToFile(path, object)) {
-        QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
-    }
-}
-
-void MainWindow::on_actionSettings_triggered()
-{
-    FileSettingsDialog s(this, settings);
-    if (s.exec() == QDialog::Accepted) {
-        s.getSettings(settings);
-        emit unsave();
-    }
-}
-
-bool MainWindow::on_actionClose_triggered()
-{
-    return close();
-}
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    bool toClose = false;
-    if (!saved) {
-        QMessageBox::StandardButton answ = QMessageBox::question(this, tr("Ungesicherte Änderungen"),
-                                                                 tr("Möchten Sie die Datei wirklich schließen?\nIhre ungesicherten Änderungen gehen dann verloren!"),
-                                                                 QMessageBox::Close|QMessageBox::Cancel|QMessageBox::Save, QMessageBox::Save);
-        if (answ == QMessageBox::Save) {
-            on_actionSave_triggered();
-            if (saved) {
-                toClose = close();
-            }
-        } else if (answ == QMessageBox::Cancel) {
-            toClose = false;
-        } else if (answ == QMessageBox::Close) {
-            toClose = close();
-        }
-    } else {
-        toClose = true;
-    }
-
-    if (toClose) {
-        personalfenster->close();
-        for(QMainWindow *m: fenster.values()) {
-            m->close();
-        }
-        if (filePath != "") {
-            QFile file (filePath+".autosave.ako");
-            file.remove();
-        }
-    }
-
-    if (toClose) {
-        if (!istSchreibgeschuetzt)
-            FileIO::Schreibschutz::freigeben(filePath);
-        event->accept();
-    } else {
-        event->ignore();
-    }
-}
-
-
-void MainWindow::onItemInListClicked(QListWidgetItem *item)
-{
-    openAActivity(itemToList.value(item));
-}
-void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
-{
-    if (i == nullptr) return;
-    i->setText(a->getListString());
-    i->setToolTip(a->getAnlass().replace("<br/>","\n"));
-    i->setWhatsThis(a->getAnlass().replace("<br/>","\n"));
-    i->setBackground(QBrush(QColor(getFarbe(a))));
-}
-
-
-void MainWindow::on_buttonPersonal_clicked()
-{
-    personalfenster->show();
-    personalfenster->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-    personalfenster->raise();
-    personalfenster->activateWindow();
-}
-
-void MainWindow::on_buttonExport_clicked()
-{
-    exportDialog->hardReload();
-    exportDialog->exec();
-}
-
-void MainWindow::unsave()
-{
-    this->saved = false;
-    setWindowModified(true);
+    return object;
 }
 
 int MainWindow::getPosInCalendar(QDate date)

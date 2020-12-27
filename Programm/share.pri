@@ -1,3 +1,6 @@
+CONFIG+=sdk_no_version_check
+
+
 !versionAtLeast(QT_VERSION, 5.13.0):error("Qt version 5.13 is required for this project")
 
 win32: LCONVERT=$$[QT_INSTALL_BINS]\lconvert.exe
@@ -16,6 +19,8 @@ CONFIG += c++11
 
 INCLUDEPATH += ../epl_api
 LIBS += -L../epl_api -lepl_api
+INCLUDEPATH += ../epl_gui
+LIBS += -L../epl_gui -lepl_gui
 
 
 # Default rules for deployment.
@@ -26,7 +31,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 CONFIG -= console
 CONFIG += macos
-
 #OTHER_FILES += qt_de.qm
 
 VERSION = 1.6.3

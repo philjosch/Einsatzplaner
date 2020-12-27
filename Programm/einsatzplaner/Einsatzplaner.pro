@@ -20,7 +20,6 @@ SOURCES += main.cpp\
     personalwindow.cpp \
     calendarday.cpp \
     exportdialog.cpp \
-    coreapplication.cpp \
     einstellungendialog.cpp \
     minimumhourseditordialog.cpp \
     filesettingsdialog.cpp
@@ -32,7 +31,6 @@ HEADERS  += mainwindow.h \
     personalwindow.h \
     calendarday.h \
     exportdialog.h \
-    coreapplication.h \
     einstellungendialog.h \
     minimumhourseditordialog.h \
     filesettingsdialog.h

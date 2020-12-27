@@ -1,5 +1,5 @@
 #include "coreapplication.h"
-#include "mainwindow.h"
+#include "coremainwindow.h"
 #include "networking.h"
 
 #include <QDesktopServices>
@@ -7,6 +7,7 @@
 #include <QWindow>
 #include <QTimer>
 #include <QFileOpenEvent>
+#include <QTranslator>
 
 Version CoreApplication::VERSION = {-1, -1, -1};
 QString CoreApplication::BUILD = "";
@@ -50,7 +51,7 @@ bool CoreApplication::event(QEvent *event)
     if (event->type() == QEvent::FileOpen) {
         isFirst = false;
         QFileOpenEvent *openEvent = static_cast<QFileOpenEvent *>(event);
-        MainWindow::open(openEvent->file());
+        emit triggerOpen(openEvent->file());
     }
     return QApplication::event(event);
 }
@@ -82,7 +83,7 @@ void CoreApplication::startAutoSave(int delay)
 void CoreApplication::autoSaveWindows()
 {
     foreach (QWidget *w, allWidgets()) {
-        if (MainWindow *mW = dynamic_cast<MainWindow*>(w)) {
+        if (CoreMainWindow *mW = dynamic_cast<CoreMainWindow*>(w)) {
             mW->autoSave();
         }
     }

@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
     qtTranslator.load(":/translations/qt_" + QLocale::system().name());
     a.installTranslator(&qtTranslator);
 
+    QObject::connect(&a, &CoreApplication::triggerOpen, MainWindow::open);
 
     if (Einstellungen::getAutoSearchUpdate())
         a.checkVersion();
