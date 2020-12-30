@@ -71,8 +71,6 @@ void ExportDialog::on_pushDrucken_clicked()
             continue;
         }
     }
-    if (liste.isEmpty()) return;
-
 
     QPrinter *printer;
     if (ui->buttonGroupExportArt->checkedId() == 0) {

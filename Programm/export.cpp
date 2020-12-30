@@ -18,66 +18,56 @@ const QFont Export::DEFAULT_FONT = QFont("Arial", 11, QFont::Normal);
 
 bool Export::printAktivitaetenEinzel(QList<AActivity *> liste, QPrinter *printer)
 {
-    if (liste.isEmpty()) return true;
     QString html = Manager::getHtmlFuerEinzelansichten(liste);
     return druckeHtmlAufDrucker(html, printer);
 }
 
 bool Export::printAktivitaetenListe(QList<AActivity *> liste, QPrinter *printer)
 {
-    if (liste.isEmpty()) return true;
     QString html = Manager::getHtmlFuerListenansicht(liste) + zeitStempel();
     return druckeHtmlAufDrucker(html, printer);
 }
 
 bool Export::printReservierung(Fahrtag *f, QPrinter *printer)
 {
-    if (f->getAnzahlReservierungen() == 0) return false;
     QString html = f->getHtmlFuerReservierungsuebersicht() + zeitStempel();
     return druckeHtmlAufDrucker(html, printer);
 }
 
 bool Export::printZeitenEinzelEinzel(Person *p, QPrinter *printer)
 {
-    if (p == nullptr) return false;
     QString html = p->getZeitenFuerEinzelAlsHTML() + zeitStempel();
     return druckeHtmlAufDrucker(html, printer);
 }
 bool Export::printZeitenEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
 {
-    if (liste.isEmpty()) return false;
     QString html = m->getZeitenFuerEinzelListeAlsHTML(liste, filter);
     return druckeHtmlAufDrucker(html, printer);
 }
 bool Export::printZeitenListe(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer)
 {
-    if (personen.isEmpty()) return true;
     QString html = ManagerPersonal::getZeitenFuerListeAlsHTML(personen, data, filter);
     return druckeHtmlAufDrucker(html, printer);
 }
 
 bool Export::printMitgliederEinzelEinzel(Person *p, QPrinter *printer)
 {
-    if (p == nullptr) return false;
     QString html = p->getPersonaldatenFuerEinzelAlsHTML() + zeitStempel();
     return druckeHtmlAufDrucker(html, printer);
 }
 bool Export::printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
 {
-    if (liste.isEmpty()) return false;
     QString html = m->getMitgliederFuerEinzelListeAlsHTML(liste, filter);
     return druckeHtmlAufDrucker(html, printer);
 }
 bool Export::printMitgliederListe(QList<Person*> liste, Mitglied filter, QPrinter *printer)
 {
-    if (liste.isEmpty()) return false;
     QString html = ManagerPersonal::getMitgliederFuerListeAlsHtml(liste, filter);
     return druckeHtmlAufDrucker(html, printer);
 }
 
 bool Export::exportMitgliederAlsCSV(QList<Person *> liste, QString pfad)
 {
-    if (liste.isEmpty()) return false;
     return FileIO::saveToFile(pfad, ManagerPersonal::getMitgliederFuerListeAlsCSV(liste));
 }
 
@@ -128,7 +118,6 @@ int Export::autoUploadToServer(QList<AActivity*> liste, Networking::Server serve
 bool Export::druckeHtmlAufDrucker(QString text, QPrinter *printer)
 {
     if (printer == nullptr) return false;
-    if (text == "") return false;
     QTextDocument *d = newDefaultDocument();
     d->setHtml(text);
     d->print(printer);
