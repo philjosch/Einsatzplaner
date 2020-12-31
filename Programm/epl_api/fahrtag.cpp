@@ -64,10 +64,10 @@ Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p)
 
 Fahrtag::~Fahrtag()
 {
-    foreach(Reservierung *r, reservierungen) {
+    for(Reservierung *r: reservierungen) {
         delete r;
     }
-    foreach(Wagen *w, wagen) {
+    for(Wagen *w: wagen) {
         delete w;
     }
 }
@@ -407,7 +407,7 @@ QString Fahrtag::getHtmlFuerReservierungsuebersicht()
 
     // Sortieren der Reservierungen
     QHash<int, QList<Reservierung*>*> wagenZuRes;
-    foreach (Reservierung *r, reservierungen) {
+    for (Reservierung *r: reservierungen) {
         for(int i: r->getSitzplatz().keys()) {
             if (!wagenZuRes.contains(i))
                 wagenZuRes.insert(i, new QList<Reservierung*>());

@@ -76,7 +76,7 @@ void Manager::sort()
 QList<AActivity *> Manager::filter(AActivity::Auswahl auswahl)
 {
     QList<AActivity *> liste = QList<AActivity*>();
-    foreach (AActivity *a, activities) {
+    for (AActivity *a: activities) {
         if (auswahl.check(a))
             liste.append(a);
     }

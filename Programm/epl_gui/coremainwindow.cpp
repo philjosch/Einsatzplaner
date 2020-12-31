@@ -81,7 +81,7 @@ void CoreMainWindow::on_menuRecentlyused_aboutToShow()
             recentlyUsedMenu->removeAction(actions[i]);
         }
         recentlyUsedClear->setEnabled(true);
-        foreach (QString entry, list) {
+        for (QString entry: list) {
             QAction *a = new QAction(entry, this);
             connect(a, &QAction::triggered, this, [=]() { handlerOpen(entry); });
             recentlyUsedMenu->insertAction(nullptr, a);

@@ -169,7 +169,7 @@ QJsonObject Person::toJson()
     // Zusätzliche Zeiten einfügen
     QJsonArray keys;
     QJsonArray values;
-    foreach (Category cat, additional.keys()) {
+    for (Category cat: additional.keys()) {
         if (additional.value(cat) > 0) {
             keys.append(int(cat));
             values.append(additional.value(cat));
@@ -427,7 +427,7 @@ Mitglied Person::pruefeStunden()
             return Mitglied::PassivMit;
         else return Mitglied::Passiv;
     }
-    foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+    for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
         if (pruefeStunden(cat) == AktivOhne) {
             return Mitglied::AktivOhne;
         }
@@ -498,7 +498,7 @@ void Person::berechne()
                 zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);
         }
     }
-    foreach (Category cat, additional.keys()) {
+    for (Category cat: additional.keys()) {
        zeiten.insert(cat, zeiten.value(cat)+additional.value(cat));
        switch (cat) {
        case Anzahl: break;
@@ -588,7 +588,7 @@ QString Person::getZeitenFuerListeAlsHTML(QSet<Category> liste)
     }
     html += "'>"+getName()+"</td>";
 
-    foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+    for(Category cat: ANZEIGEREIHENFOLGEGESAMT) {
         if (!liste.contains(cat)) continue;
         html += "<td align='right' style='background-color: ";
         switch (pruefeStunden(cat)) {
@@ -622,7 +622,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
     html += "<ul>";
     QString help = "<li %1>%3: %4%2</li>";
     QString helpcurrent;
-    foreach (Category cat, ANZEIGEREIHENFOLGE) {
+    for (Category cat: ANZEIGEREIHENFOLGE) {
         if (getZeiten(cat) > 0 || getMinimumStunden(cat) > 0) {
             if (pruefeStunden(cat) != Mitglied::AktivOhne) helpcurrent = help.arg("", "");
             else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(getMinimumStunden(cat))+")");
@@ -665,7 +665,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
     }
     help = "<li>%1: %2</li>";
     QString h2 = "";
-    foreach (Category cat, ANZEIGEREIHENFOLGE) {
+    for (Category cat: ANZEIGEREIHENFOLGE) {
         if (getAdditional(cat) > 0)
             h2 += help.arg(getLocalizedStringFromCategory(cat), minutesToHourString(getAdditional(cat)));
     }

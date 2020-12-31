@@ -102,7 +102,7 @@ void PersonalWindow::refreshEinsatzzeiten()
     // Einzelne Personen einfuegen und Summe berechnen
     int pos;
     QMap<Category, int> sum;
-    foreach (Person *p, current) {
+    for (Person *p: current) {
         QString farbe = Person::FARBE_STANDARD;
         switch (p->pruefeStunden()) {
         case AktivOhne:  farbe = Person::FARBE_FEHLENDE_STUNDEN; break;
@@ -119,7 +119,7 @@ void PersonalWindow::refreshEinsatzzeiten()
         ui->tabelleGesamt->setItem(0, 1, i);
 
         pos = 2;
-        foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+        for(Category cat: ANZEIGEREIHENFOLGEGESAMT) {
             if (! anzeige.contains(cat)) continue;
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
             i = new QTableWidgetItem();
@@ -148,7 +148,7 @@ void PersonalWindow::refreshEinsatzzeiten()
     ui->tabelleGesamt->setItem(0, 1, new QTableWidgetItem(tr(" Gesamt")));
     pos = 2;
     QTableWidgetItem *ii;
-    foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+    for(Category cat: ANZEIGEREIHENFOLGEGESAMT) {
         if (! anzeige.contains(cat)) continue;
         ii = new QTableWidgetItem();
         ii->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
@@ -174,7 +174,7 @@ void PersonalWindow::refreshEinzel()
 {
     ui->listWidget->clear();
     personToItem.clear();
-    foreach (Person *p, current) {
+    for (Person *p: current) {
         QListWidgetItem *item = new QListWidgetItem(p->getName());
         if (! Einstellungen::getReihenfolgeVorNach()) {
             item->setText(
@@ -204,7 +204,7 @@ void PersonalWindow::refreshMitglieder()
 
     int clmn;
     QTableWidgetItem *i;
-    foreach (Person *p, current) {
+    for (Person *p: current) {
         clmn = 0;
         ui->tabelleMitglieder->insertRow(0);
 
@@ -380,7 +380,7 @@ void PersonalWindow::on_pushEmail_clicked()
     if (current.isEmpty()) return;
     QSet<QString> mails;
     QList<Person*> keineMail;
-    foreach (Person *p, current) {
+    for (Person *p: current) {
         if (p->getMail() != "") {
             mails.insert(p->getMail());
         } else {
@@ -407,7 +407,7 @@ void PersonalWindow::on_pushEmail_clicked()
 
     if (QMessageBox::question(this, tr("Personen ohne E-Mail gefunden"), tr("Für %1 Personen ist keine E-Mail-Adresse hinterlegt.\nMöchten Sie die Liste der Personen speichern?").arg(keineMail.size())) == QMessageBox::Yes) {
         QString s = "Name;Straße;PLZ;Ort\n";
-        foreach(Person *p, keineMail) {
+        for(Person *p: keineMail) {
             s += p->getName() + ";"+p->getStrasse()+";"+p->getPLZ()+";"+p->getOrt()+"\n";
         }
         QString path = FileIO::getFilePathSave(this, "Adressen.csv", tr("CSV-Datei (*.csv)"));

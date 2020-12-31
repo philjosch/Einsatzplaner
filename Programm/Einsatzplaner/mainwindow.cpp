@@ -271,7 +271,7 @@ void MainWindow::showDate(QDate date)
         akt = akt.addDays(1);
     }
 
-    foreach (AActivity *a, manager->getActivities()) {
+    for (AActivity *a: manager->getActivities()) {
         int pos = getPosInCalendar(a->getDatum());
         if (pos != -1) {
             tage.at(pos)->insert(a);

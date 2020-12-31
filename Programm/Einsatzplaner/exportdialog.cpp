@@ -42,7 +42,7 @@ void ExportDialog::hardReload()
     actToList = QMap<AActivity*, QListWidgetItem*>();
 
     ui->listAnzeige->clear();
-    foreach(AActivity *a, manager->getActivities()) {
+    for(AActivity *a: manager->getActivities()) {
         QString farbe = getFarbe(a);
         QListWidgetItem *item = new QListWidgetItem(a->getListString());
         item->setBackground(QBrush(QColor(farbe)));
@@ -56,7 +56,7 @@ void ExportDialog::hardReload()
 void ExportDialog::on_pushDrucken_clicked()
 {
     QList<AActivity*> liste = QList<AActivity*>();
-    foreach(AActivity *a, manager->getActivities()) {
+    for(AActivity *a: manager->getActivities()) {
         switch (ui->buttonGroupExportArt->checkedId()) {
         case 1:
             if(!(actToList.value(a)->isSelected())) {
@@ -148,7 +148,7 @@ void ExportDialog::on_comboBis_currentIndexChanged(int index)
 void ExportDialog::show()
 {
     ui->checkListe->setEnabled(false);
-    foreach(AActivity *a, manager->getActivities()) {
+    for(AActivity *a: manager->getActivities()) {
         if(testShow(a)) {
             actToList.value(a)->setHidden(false);
             ui->checkListe->setEnabled(true);

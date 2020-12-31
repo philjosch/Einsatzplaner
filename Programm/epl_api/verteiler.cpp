@@ -125,7 +125,7 @@ Verteiler::ResBewTuple Verteiler::getNaechsteReservierungen(QSet<Reservierung *>
     QList<Reservierung*> listRes;
     QList<double> listBew;
     QSet<int> setAnzahl;
-    foreach(Reservierung *r, res) {
+    for(Reservierung *r: res) {
         if (setAnzahl.contains(r->getAnzahl())) continue;
         if (aktuellerWagen->getAnzahlFrei() < r->getAnzahl()) continue;
 

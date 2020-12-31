@@ -59,7 +59,7 @@ FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent),
     // Daten von Manager_Reservierungen
     itemToRes = QMap<QListWidgetItem*, Reservierung*>();
     ui->comboWagenreihung->setCurrentText(fahrtag->getWagenreihung());
-    foreach (Reservierung *r, fahrtag->getReservierungen()) {
+    for (Reservierung *r: fahrtag->getReservierungen()) {
         QListWidgetItem *item = new QListWidgetItem(r->getName());
         ui->listRes->insertItem(0, item);
         itemToRes.insert(item, r);

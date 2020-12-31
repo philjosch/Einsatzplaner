@@ -30,7 +30,7 @@ QJsonObject ManagerPersonal::toJson()
     // Mindesstunden
     QJsonArray keys;
     QJsonArray values;
-    foreach (Category cat, minimumHours.keys()) {
+    for (Category cat: minimumHours.keys()) {
         if (minimumHours.value(cat) > 0) {
             keys.append(int(cat));
             values.append(minimumHours.value(cat));
@@ -54,7 +54,7 @@ QJsonObject ManagerPersonal::personalToJson()
     // Mindesstunden
     QJsonArray keys;
     QJsonArray values;
-    foreach (Category cat, minimumHours.keys()) {
+    for (Category cat: minimumHours.keys()) {
         if (minimumHours.value(cat) > 0) {
             keys.append(int(cat));
             values.append(minimumHours.value(cat));
@@ -91,7 +91,7 @@ void ManagerPersonal::fromJson(QJsonObject o)
         minimumHours.insert(Gesamt, int(o.value("minimumTotal").toDouble(0)*60));
         if (o.contains("minimumHours")) {
             QJsonObject o2 = o.value("minimumHours").toObject();
-            foreach (QString cat, o2.keys()) {
+            for (QString cat: o2.keys()) {
                 Category catt = getCategoryFromLocalizedString(cat);
                 minimumHours.insert(catt, int(o2.value(cat).toDouble(0)*60));
             }
@@ -182,7 +182,7 @@ QList<Person *> ManagerPersonal::getPersonenSortiertNachNummer()
 {
     QList<Person *> l;
     int i = 0;
-    foreach (Person *p, personen) {
+    for (Person *p: personen) {
         l.append(p);
         i = l.size()-1;
         while(i > 0 && l.at(i-1)->getNummer() > l.at(i)->getNummer()) {
@@ -196,9 +196,9 @@ QList<Person *> ManagerPersonal::getPersonenSortiertNachNummer()
 void ManagerPersonal::berechne()
 {
     time.clear();
-    foreach (Person *p, personenSorted.values()) {
+    for (Person *p: personenSorted.values()) {
         p->berechne();
-        foreach(Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+        for(Category cat: ANZEIGEREIHENFOLGEGESAMT) {
             time.insert(cat, time.value(cat)+p->getZeiten(cat));
         }
     }
@@ -222,7 +222,7 @@ QString ManagerPersonal::getGoodName(QString name)
 int ManagerPersonal::getNextNummer()
 {
     int max = 0;
-    foreach (Person *p, personen.values()) {
+    for (Person *p: personen.values()) {
         if (p->getNummer() > max) max = p->getNummer();
     }
     return max+1;
@@ -243,21 +243,21 @@ QString ManagerPersonal::getZeitenFuerEinzelListeAlsHTML(QList<Person *> liste, 
     QString a = "";
     // Seite fuer jede Person einfuegen
     QMap<Category, int> sum;
-    foreach(Person *p, liste) {
+    for(Person *p: liste) {
         a += p->getZeitenFuerEinzelAlsHTML();
         QString help = "<p><small>Stand: %1</small></p>";
         if (p != liste.last()) {
             help = "<div style='page-break-after:always'>" + help + "</div>";
         }
         a += help.arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
-        foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+        for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
     }
 
     QString help = "<li>%1: %2</li>";
     QString titelSeite = QString("<h1>Einsatzzeiten: %1</h1><h2>Geleistete Stunden</h2><ul>").arg(getStringVonFilter(filter));
-    foreach(Category cat, ANZEIGEREIHENFOLGE) {
+    for(Category cat: ANZEIGEREIHENFOLGE) {
         if (sum.value(cat) > 0) titelSeite += help.arg(getLocalizedStringFromCategory(cat), minutesToHourString(sum.value(cat)));
     }
     titelSeite += "</ul><ul>";
@@ -266,7 +266,7 @@ QString ManagerPersonal::getZeitenFuerEinzelListeAlsHTML(QList<Person *> liste, 
 
     titelSeite += "</ul><h2>Mindeststunden</h2><ul>";
     if (getMinimumHours(Gesamt) > 0) titelSeite += help.arg("Insgesamt", minutesToHourString(getMinimumHours(Gesamt)));
-    foreach (Category cat, ANZEIGEREIHENFOLGE) {
+    for (Category cat: ANZEIGEREIHENFOLGE) {
         if (getMinimumHours(cat) > 0) titelSeite += help.arg(getLocalizedStringFromCategory(cat), minutesToHourString(getMinimumHours(cat)));
     }
     titelSeite += "</ul>";
@@ -281,7 +281,7 @@ QString ManagerPersonal::getZeitenFuerListeAlsHTML(QList<Person *> personen, QSe
     QString a = "<h3>Einsatzzeiten: %1</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
     a = a.arg(getStringVonFilter(filter));
-    foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+    for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
         if (! spalten.contains(cat)) continue;
         switch (cat) {
         case Tf:
@@ -299,13 +299,13 @@ QString ManagerPersonal::getZeitenFuerListeAlsHTML(QList<Person *> personen, QSe
     QMap<Category, int> sum;
     for(Person *p: personen) {
         a += p->getZeitenFuerListeAlsHTML(spalten);
-        foreach (Category cat, spalten) {
+        for (Category cat: spalten) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
     }
     a += "</tbody><tfoot><tr>";
     a += "<td>Summe:</td>";
-    foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+    for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
         if (! spalten.contains(cat)) continue;
         switch (cat) {
         case Category::Anzahl:
@@ -326,14 +326,14 @@ QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> lis
     QString a = "";
     // Seite fuer jede Person einfuegen
     QMap<Category, int> sum;
-    foreach(Person *p, liste) {
+    for(Person *p: liste) {
         a += p->getPersonaldatenFuerEinzelAlsHTML();
         QString help = "<p><small>Stand: %1</small></p>";
         if (p != liste.last()) {
             help = "<div style='page-break-after:always'>" + help + "</div>";
         }
         a += help.arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
-        foreach (Category cat, ANZEIGEREIHENFOLGEGESAMT) {
+        for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
     }
@@ -383,7 +383,7 @@ QString ManagerPersonal::getMitgliederFuerListeAlsHtml(QList<Person*> liste, Mit
 {
     QString a = Person::KOPF_TABELLE_LISTE_HTML
             .arg(getStringVonFilter(filter), QDateTime::currentDateTime().toString("d.M.yyyy"));
-    foreach(Person *akt, liste) {
+    for(Person *akt: liste) {
         a += akt->getPersonaldatenFuerListeAlsHTML();
     }
     a += Person::FUSS_TABELLE_LISTE_HTML;
@@ -394,7 +394,7 @@ QString ManagerPersonal::getMitgliederFuerListeAlsHtml(QList<Person*> liste, Mit
 QString ManagerPersonal::getMitgliederFuerListeAlsCSV(QList<Person *> liste)
 {
     QString t = Person::KOPF_TABELLE_LISTE_CSV;
-    foreach(Person *akt, liste) {
+    for(Person *akt: liste) {
         t += akt->getPersonaldatenFuerListeAlsCSV();
     }
     return t;
@@ -403,7 +403,7 @@ QString ManagerPersonal::getMitgliederFuerListeAlsCSV(QList<Person *> liste)
 int ManagerPersonal::getAnzahlMitglieder(Mitglied filter)
 {
     int i = 0;
-    foreach(Person *akt, personen) {
+    for(Person *akt: personen) {
         if (akt->pruefeFilter(filter))
             ++i;
     }
@@ -413,7 +413,7 @@ int ManagerPersonal::getAnzahlMitglieder(Mitglied filter)
 QList<Person *> ManagerPersonal::getPersonen(Mitglied filter)
 {
     QList<Person *> current = QList<Person*>();
-    foreach(Person *p, getPersonenSortiertNachNummer()) {
+    for(Person *p: getPersonenSortiertNachNummer()) {
         if (p->pruefeFilter(filter))
             current.append(p);
     }
