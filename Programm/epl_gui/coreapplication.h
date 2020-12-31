@@ -14,7 +14,7 @@ public:
     CoreApplication(int &argc, char **argv, Version version, bool devVersion, QString build);
     ~CoreApplication();
 
-    bool getIsFirst() const;
+    bool generateWindow();
 
     bool event(QEvent *event);
 
@@ -35,6 +35,8 @@ public:
 
     static bool *openHelper(QString);
 
+    static bool isSupportedVersion(Version test);
+
 public slots:
     static void closeAllWindows();
     static void autoSaveWindows();
@@ -43,7 +45,6 @@ public slots:
 
 protected:
     QTimer *autoSaveTimer;
-    bool isFirst;
 
     static QString URL_DOWNLOAD;
     static QString URL_VERSION;

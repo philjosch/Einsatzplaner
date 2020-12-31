@@ -47,8 +47,6 @@ protected slots:
     void on_buttonToday_clicked();
     void on_buttonNext_clicked();
 
-    void itemInCalendarDayClicked(AActivity *a);
-
     // Aktivitäten
     void openAActivity(AActivity *a);
     void newAActivityHandler(AActivity *a);
@@ -62,11 +60,10 @@ protected slots:
 
     CoreMainWindow *handlerNew();
     QJsonObject handlerSave();
-    bool handlerSaveAdditional();
-    bool handlerOpen(QString path);
-    bool handlerClose();
-    bool handlerPreferenes();
-    bool handlerSettings();
+    void handlerSaveAdditional();
+    void handlerOpen(QString path);
+    void handlerPreferenes();
+    void handlerSettings();
     QJsonObject handlerSavePersonal();
 
 

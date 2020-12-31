@@ -20,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent) : CoreMainWindow(parent), ui(new Ui::Mai
 
     // Views
     personalfenster = new PersonalWindow(this, manager->getPersonal());
-    windows.insert(personalfenster);
     settings = new FileSettings();
     exportDialog = new ExportDialog(manager, settings, this);
     recentlyUsedMenu = ui->menuRecentlyused;
@@ -52,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) : CoreMainWindow(parent), ui(new Ui::Mai
     tage.append(ui->day1_6);    tage.append(ui->day2_6);    tage.append(ui->day3_6);    tage.append(ui->day4_6);
     tage.append(ui->day5_6);    tage.append(ui->day6_6);    tage.append(ui->day7_6);
     for(CalendarDay *c: tage) {
-        connect(c, SIGNAL(clickedItem(AActivity*)), this, SLOT(itemInCalendarDayClicked(AActivity*)));
+        connect(c, SIGNAL(clickedItem(AActivity*)), this, SLOT(openAActivity(AActivity*)));
         connect(c, SIGNAL(addActivity(QDate)), this, SLOT(newActivity(QDate)));
     }
     on_buttonToday_clicked();
@@ -68,18 +67,26 @@ bool MainWindow::handlerLadeDatei(QJsonObject json)
     QJsonArray activities;
     QJsonObject personal;
     QDate currentDate;
-    if (json.contains("personal") || json.contains("activities")) {
-        // Ab Version 1.6
-        activities = json.value("activities").toArray();
-        personal = json.value("personal").toObject();
-        currentDate = QDate::fromString(json.value("view").toObject().value("currentDate").toString(), "yyyy-MM-dd");
-    } else {
+    Version version = Version::stringToVersion(json.value("general").toObject().value("version").toString());
+    if (version == Version {-1, -1, -1}) {
+        QMessageBox::warning(this, tr("Datei nicht kompatibel"), tr("Die Datei kann nicht geladen werden. Wenden Sie sich an den Entwickler für mehr Informationen."));
+        return false;
+    } else if (version < Version {1, 6, -1}) {
         // Fallback fuer Version <1.6
         QJsonObject calendarJSON = json.value("calendar").toObject();
         activities = calendarJSON.value("activites").toArray();
         personal = calendarJSON.value("personal").toObject();
         // Daten in den Manager laden und die Logik herstellen
         currentDate = QDate::fromString(calendarJSON.value("currentDate").toString(), "yyyy-MM-dd");
+    } else if (version <= CoreApplication::VERSION) {
+        // Ab Version 1.6
+        activities = json.value("activities").toArray();
+        personal = json.value("personal").toObject();
+        currentDate = QDate::fromString(json.value("view").toObject().value("currentDate").toString(), "yyyy-MM-dd");
+    } else {
+        // Version inkompatibel, zu neu
+        QMessageBox::warning(this, tr("Datei zu neu"), tr("Die Datei kann nicht geladen werden, da sie mindestens Version %1 benötigt.").arg(version.toString()));
+        return false;
     }
     manager->getPersonal()->fromJson(personal);
     manager->fromJson(activities);
@@ -157,7 +164,6 @@ void MainWindow::openAActivity(AActivity *a)
         }
         w->setWindowFilePath(filePath);
         fenster.insert(a, w);
-        windows.insert(w);
         w->show();
     }
 }
@@ -246,7 +252,6 @@ bool MainWindow::removeActivity(AActivity *a)
     bool ret = manager->removeActivity(a);
     unsave();
     if (fenster.contains(a)) {
-        windows.remove(fenster.value(a));
         fenster.remove(a);
     }
     return ret;
@@ -289,10 +294,8 @@ bool MainWindow::open(QString path)
 
     // Prüfen, ob Version kompatibel ist
     QJsonObject generalJSON = object.value("general").toObject();
-
     Version version = Version::stringToVersion(generalJSON.value("version").toString());
     if (! pruefeVersionMitWarnung(version)) return false;
-
 
     // Schreibschutz pruefen
     bool schreibschutz = !setzeSchreibschutzOderWarnung(path);
@@ -317,11 +320,6 @@ void MainWindow::on_buttonToday_clicked()
 {
     ui->dateSelector->setDate(QDate::currentDate());
     ui->dateSelector->repaint();
-}
-
-void MainWindow::itemInCalendarDayClicked(AActivity *a)
-{   
-    openAActivity(a);
 }
 
 void MainWindow::onItemInListClicked(QListWidgetItem *item)
@@ -363,7 +361,7 @@ QJsonObject MainWindow::handlerSave()
     return json;
 }
 
-bool MainWindow::handlerSaveAdditional()
+void MainWindow::handlerSaveAdditional()
 {
     if (settings->getAutom()) {
         int result = Export::autoUploadToServer(manager->filter(settings->getAuswahl()), settings->getServer());
@@ -372,35 +370,27 @@ bool MainWindow::handlerSaveAdditional()
         else if (result > 0)
             ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
     }
-    return true;
+    return;
 }
 
-bool MainWindow::handlerOpen(QString path)
+void MainWindow::handlerOpen(QString path)
 {
-    return MainWindow::open(path);
+    MainWindow::open(path);
 }
 
-bool MainWindow::handlerClose()
-{
-    return true;
-}
-
-bool MainWindow::handlerPreferenes()
+void MainWindow::handlerPreferenes()
 {
     EinstellungenDialog *dialog = new EinstellungenDialog();
-    dialog->setWindowFilePath("");
     dialog->show();
-    return true;
 }
 
-bool MainWindow::handlerSettings()
+void MainWindow::handlerSettings()
 {
     FileSettingsDialog s(this, settings);
     if (s.exec() == QDialog::Accepted) {
         s.getSettings(settings);
         emit unsave();
     }
-    return true;
 }
 
 QJsonObject MainWindow::handlerSavePersonal()

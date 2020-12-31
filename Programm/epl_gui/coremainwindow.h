@@ -45,18 +45,15 @@ protected slots:
     bool on_actionClose_triggered();
     void closeEvent(QCloseEvent *event);
 
-
     void unsave();
-
-
 
     virtual CoreMainWindow *handlerNew() = 0;
     virtual QJsonObject handlerSave() = 0;
-    virtual bool handlerSaveAdditional() = 0;
-    virtual bool handlerOpen(QString path) = 0;
-    virtual bool handlerClose() = 0;
-    virtual bool handlerPreferenes() = 0;
-    virtual bool handlerSettings() = 0;
+    virtual void handlerSaveAdditional() {};
+    virtual void handlerOpen(QString path) = 0;
+    virtual bool handlerClose() {return true;};
+    virtual void handlerPreferenes() = 0;
+    virtual void handlerSettings() = 0;
     virtual QJsonObject handlerSavePersonal() = 0;
     virtual bool handlerLadeDatei(QJsonObject json) = 0;
 
@@ -64,6 +61,8 @@ protected slots:
     static bool pruefeVersionMitWarnung(Version test);
     static bool setzeSchreibschutzOderWarnung(QString pfad);
 
+
+    QList<QMainWindow*> getChildWindows();
 
 protected:
     QMenu *recentlyUsedMenu;
@@ -73,7 +72,9 @@ protected:
     QString filePath;
     bool saved;
 
-    QSet<QMainWindow*> windows;
+    void updateWindowHeaders(bool modified, QString path = "");
+
+    void saveFailed();
 };
 
 #endif // MAINWINDOW_H

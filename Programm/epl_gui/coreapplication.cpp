@@ -8,6 +8,8 @@
 #include <QTimer>
 #include <QFileOpenEvent>
 #include <QTranslator>
+#include <einstellungen.h>
+#include <QWindow>
 
 Version CoreApplication::VERSION = {-1, -1, -1};
 QString CoreApplication::BUILD = "";
@@ -25,15 +27,25 @@ CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool d
     QCoreApplication::setOrganizationName("Philipp Schepper");
     QCoreApplication::setOrganizationDomain("philipp-schepper.de");
     QCoreApplication::setApplicationName("Einsatzplaner");
-    if (devVersion) {
+    if (DEVELOPER_MODE) {
         QCoreApplication::setApplicationVersion(QString("%1 (%2)").arg(VERSION.toString()).arg(CoreApplication::BUILD));
     } else {
         QCoreApplication::setApplicationVersion(VERSION.toString());
     }
     QIcon icon(":/icons/square.png");
     setWindowIcon(icon);
-    isFirst = true;
     autoSaveTimer = nullptr;
+
+    QTranslator qtTranslator;
+    qtTranslator.load(":/translations/qt_" + QLocale::system().name());
+    installTranslator(&qtTranslator);
+
+
+    if (Einstellungen::getAutoSearchUpdate())
+        checkVersion();
+
+    if (int delay = Einstellungen::getAutoSave())
+        startAutoSave(delay);
 }
 
 CoreApplication::~CoreApplication()
@@ -41,15 +53,19 @@ CoreApplication::~CoreApplication()
 
 }
 
-bool CoreApplication::getIsFirst() const
+bool CoreApplication::generateWindow()
 {
-    return isFirst;
+    for (QWidget *w: allWidgets()) {
+        if (CoreMainWindow *mW = dynamic_cast<CoreMainWindow*>(w)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool CoreApplication::event(QEvent *event)
 {
     if (event->type() == QEvent::FileOpen) {
-        isFirst = false;
         QFileOpenEvent *openEvent = static_cast<QFileOpenEvent *>(event);
         emit triggerOpen(openEvent->file());
     }
@@ -82,7 +98,7 @@ void CoreApplication::startAutoSave(int delay)
 }
 void CoreApplication::autoSaveWindows()
 {
-    foreach (QWidget *w, allWidgets()) {
+    for(QWindow *w: allWindows()) {
         if (CoreMainWindow *mW = dynamic_cast<CoreMainWindow*>(w)) {
             mW->autoSave();
         }
@@ -121,6 +137,13 @@ bool CoreApplication::isUpdateVerfuegbar()
 {
     Version v = loadVersion();
     return (v>VERSION) || ((v == VERSION) && DEVELOPER_MODE);
+}
+
+bool CoreApplication::isSupportedVersion(Version test)
+{
+    if (test == Version{-1,-1,-1}) return false;
+    if (test > CoreApplication::VERSION) return false;
+    return true;
 }
 
 void CoreApplication::closeAllWindows()

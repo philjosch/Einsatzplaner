@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QDir>
 #include <QByteArray>
+#include <QMessageBox>
 
 QString FileIO::currentPath = Einstellungen::getLastPath();
 QStringList FileIO::lastUsed = Einstellungen::getLastUsed();
@@ -29,6 +30,12 @@ QString FileIO::getFilePathSave(QWidget *parent, QString filename, QString filte
 {
     QString path = QFileDialog::getSaveFileName(parent, QObject::tr("Datei speichern ..."), currentPath+"/"+filename, filter);
     if (path == "") return "";
+
+    if (!Schreibschutz::pruefen(path).isEmpty()) {
+        QMessageBox::warning(parent, QObject::tr("Datei geöffnet"), QObject::tr("Unter der angegebenen Adresse befindet sich eine Datei, die aktuell geöffnet und bearbeitet wird. Ein Speichern ist somit nicht möglich!"));
+        return "";
+    }
+
     QFileInfo info(path);
     currentPath = info.absolutePath();
     saveSettings();

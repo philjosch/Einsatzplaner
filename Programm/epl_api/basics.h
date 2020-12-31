@@ -132,7 +132,7 @@ struct Version {
         if ((major == second.major) && ((minor > second.minor) || (second.minor == -1))) {
             return true;
         }
-        if ((major == second.major) && (minor == second.minor) && ((patch > second.patch) || (second.patch == -1))) {
+        if ((major == second.major) && (minor == second.minor) && ((patch > second.patch) || (patch != -1 && second.patch == -1))) {
             return true;
         }
         return false;

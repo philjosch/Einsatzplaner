@@ -14,10 +14,8 @@ CoreMainWindow::CoreMainWindow(QWidget *parent) : QMainWindow(parent)
     saved = true;
     // Views
 
-    windows = QSet<QMainWindow*>();
-
-    setWindowTitle(tr("Neues Dokument – Übersicht"));
-    setWindowModified(false);
+    setWindowTitle(tr("Übersicht"));
+    updateWindowHeaders(false);
     setWindowIcon(QApplication::windowIcon());
 }
 
@@ -26,8 +24,7 @@ bool CoreMainWindow::ladeDatei(QString path, QJsonObject json, bool schreibschut
     istSchreibgeschuetzt = schreibschutz;
     filePath = path;
 
-    setWindowFilePath(filePath);
-    // Update WindowFilePaths TODO::TODO
+    updateWindowHeaders(false, filePath);
     handlerLadeDatei(json);
     return true;
 }
@@ -36,8 +33,6 @@ CoreMainWindow::~CoreMainWindow()
 {
     close();
 }
-
-
 
 void CoreMainWindow::on_actionPreferences_triggered()
 {
@@ -112,7 +107,7 @@ void CoreMainWindow::on_actionSave_triggered()
     bool erfolg = saveToPath(filePath);
     if (erfolg) {
         saved = true;
-        setWindowModified(false);
+        updateWindowHeaders(false);
         if (filePath != "") {
             QFile file (filePath+".autosave.ako");
             file.remove();
@@ -121,35 +116,26 @@ void CoreMainWindow::on_actionSave_triggered()
 
         handlerSaveAdditional();
     } else {
-        QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+        saveFailed();
     }
 }
 void CoreMainWindow::on_actionSaveas_triggered()
 {
     QString newPath = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
-    if (newPath != "") {
-        if (!FileIO::Schreibschutz::pruefen(newPath).isEmpty()) {
-            QMessageBox::warning(this, tr("Datei geöffnet"), tr("Unter der angegebenen Adresse befindet sich eine Datei, die aktuell geöffnet und bearbeitet wird. Ein Speichern ist somit nicht möglich!"));
-            return;
-        }
+    if (newPath == "") return;
 
-        filePath = newPath;
-        QJsonObject o;
-        bool erfolg = FileIO::saveJsonToFile(filePath, o);
-        if (! erfolg) {
-            QMessageBox::information(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
-            filePath = "";
-            return;
-        }
-        istSchreibgeschuetzt = false;
-        FileIO::Schreibschutz::setzen(filePath);
-        setWindowTitle(tr("Übersicht"));
-        setWindowFilePath(filePath);
-        for(QMainWindow *mw: windows.values()) {
-            mw->setWindowFilePath(filePath);
-        }
-        on_actionSave_triggered();
+    QJsonObject o;
+    bool erfolg = FileIO::saveJsonToFile(newPath, o);
+    if (! erfolg) {
+        saveFailed();
+        return;
     }
+    filePath = newPath;
+    istSchreibgeschuetzt = false;
+    FileIO::Schreibschutz::setzen(filePath);
+    setWindowTitle(tr("Übersicht"));
+    updateWindowHeaders(false, filePath);
+    on_actionSave_triggered();
 }
 void CoreMainWindow::autoSave()
 {
@@ -169,15 +155,11 @@ void CoreMainWindow::on_actionSavePersonal_triggered()
 {
     QString path = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
     if (path == "") return;
-    if (!FileIO::Schreibschutz::pruefen(path).isEmpty()) {
-        QMessageBox::warning(this, tr("Datei geöffnet"), tr("Unter der angegebenen Adresse befindet sich eine Datei, die aktuell geöffnet und bearbeitet wird. Ein Speichern ist somit nicht möglich!"));
-        return;
-    }
 
     QJsonObject object = handlerSavePersonal();
 
     if (! FileIO::saveJsonToFile(path, object)) {
-        QMessageBox::warning(this, tr("Fehler"), tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
+        saveFailed();
     }
 }
 
@@ -202,8 +184,6 @@ void CoreMainWindow::closeEvent(QCloseEvent *event)
             if (saved) {
                 toClose = close();
             }
-        } else if (answ == QMessageBox::Cancel) {
-            toClose = false;
         } else if (answ == QMessageBox::Close) {
             toClose = close();
         }
@@ -212,17 +192,16 @@ void CoreMainWindow::closeEvent(QCloseEvent *event)
     }
 
     if (toClose) {
-        for(QMainWindow *m: windows.values()) {
-            m->close();
+        for(QMainWindow *w: getChildWindows()) {
+            w->close();
         }
         toClose = handlerClose();
+    }
+    if (toClose) {
         if (filePath != "") {
             QFile file (filePath+".autosave.ako");
             file.remove();
         }
-    }
-
-    if (toClose) {
         if (!istSchreibgeschuetzt)
             FileIO::Schreibschutz::freigeben(filePath);
         event->accept();
@@ -234,14 +213,12 @@ void CoreMainWindow::closeEvent(QCloseEvent *event)
 void CoreMainWindow::unsave()
 {
     saved = false;
-    for(QMainWindow *m: windows.values()) {
-        m->setWindowModified(true);
-    }
+    updateWindowHeaders(true);
 }
 
 bool CoreMainWindow::pruefeVersionMitWarnung(Version test)
 {
-    if (test > (CoreApplication::VERSION) || Version{-1,-1,-1} == test) {
+    if (!CoreApplication::isSupportedVersion(test)) {
         QMessageBox::warning(nullptr, tr("Nicht kompatibel"),
                              tr("Die Datei kann nicht mit dieser Version geöffnet werden. "
                                 "Das Dokument benötigt mindestens Version %1.\n"
@@ -263,4 +240,36 @@ bool CoreMainWindow::setzeSchreibschutzOderWarnung(QString pfad)
         FileIO::Schreibschutz::setzen(pfad);
         return true;
     }
+}
+
+QList<QMainWindow *> CoreMainWindow::getChildWindows()
+{
+    QList<QMainWindow*> list;
+    for(QObject *w: children()) {
+        if (QMainWindow *mW = dynamic_cast<QMainWindow*>(w)) {
+            list.append(mW);
+        }
+    }
+    return list;
+}
+
+void CoreMainWindow::updateWindowHeaders(bool modified, QString path)
+{
+    QList<QMainWindow*> list = getChildWindows();
+    for(QMainWindow *m: list) {
+        m->setWindowModified(modified);
+    }
+
+    if (path != "") {
+        setWindowFilePath(path);
+        for(QMainWindow *mw: list) {
+            mw->setWindowFilePath(path);
+        }
+    }
+}
+
+void CoreMainWindow::saveFailed()
+{
+    QMessageBox::warning(this, tr("Fehler"),
+                         tr("Das Speichern unter der angegebenen Adresse ist fehlgeschlagen!"));
 }

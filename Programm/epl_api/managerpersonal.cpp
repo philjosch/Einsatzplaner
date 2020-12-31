@@ -230,9 +230,8 @@ int ManagerPersonal::getNextNummer()
 
 bool ManagerPersonal::checkNummer(int neu)
 {
-    QSet<Person*>::iterator i;
-    for(i= personen.begin(); i != personen.end(); ++i) {
-        if ((*i)->getNummer() == neu) return false;
+    for(Person *p: personen) {
+        if (p->getNummer() == neu) return false;
     }
     return true;
 }
