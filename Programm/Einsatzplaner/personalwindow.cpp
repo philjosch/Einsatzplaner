@@ -64,7 +64,6 @@ void PersonalWindow::refresh()
     // Aktualisiere die Ansichten
     refreshEinsatzzeiten();
     refreshEinzel();
-    refreshMitglieder();
 }
 void PersonalWindow::refreshEinsatzzeiten()
 {
@@ -196,105 +195,6 @@ void PersonalWindow::refreshEinzel()
     ui->listWidget->sortItems();
 }
 
-void PersonalWindow::refreshMitglieder()
-{
-    // Tabelle leeren
-    ui->tabelleMitglieder->setRowCount(0);
-    ui->tabelleMitglieder->setSortingEnabled(false);
-
-    int clmn;
-    QTableWidgetItem *i;
-    for (Person *p: current) {
-        clmn = 0;
-        ui->tabelleMitglieder->insertRow(0);
-
-
-        i = new QTableWidgetItem();
-        i->setData(0, p->getNummer());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        i = new QTableWidgetItem(p->getVorname());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        i = new QTableWidgetItem(p->getNachname());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        i = new QTableWidgetItem(
-                    QString("%1%2")
-                    .arg(p->isAusgetreten() ? "Ehemals ": "")
-                    .arg(p->getAktiv() ? "Aktiv" : "Passiv"));
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        i = new QTableWidgetItem();
-        i->setData(0, p->getGeburtstag());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        i = new QTableWidgetItem();
-        i->setData(0, p->getEintritt());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        if (p->isAusgetreten() || p->getAustritt().isValid()) {
-            i = new QTableWidgetItem();
-            i->setData(0, p->getAustritt());
-            ui->tabelleMitglieder->setItem(0, clmn++, i);
-        } else {
-            clmn++;
-        }
-
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getBeruf()));
-
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getStrasse()));
-        i = new QTableWidgetItem();
-        i->setData(0, p->getPLZ());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getOrt()));
-        i = new QTableWidgetItem();
-        i->setData(0, p->getStrecke());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getMail()));
-        if (p->getMailOK())
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
-        else
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Nein"));
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getTelefon()));
-        if (p->getTelefonOK())
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
-        else
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Nein"));
-
-        if (p->getAusbildungTf())
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
-        else
-            clmn++;
-        if (p->getAusbildungZf())
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
-        else
-            clmn++;
-        if (p->getAusbildungRangierer())
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
-        else
-            clmn++;
-
-        i = new QTableWidgetItem();
-        i->setData(0, p->getTauglichkeit());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getBemerkungen().replace("<br/>","\n")));
-    }
-
-    ui->tabelleMitglieder->setSortingEnabled(true);
-    ui->tabelleMitglieder->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
-    ui->labelMitgliederAnzMitglieder->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::AlleMitglieder)));
-    ui->labelMitgliederAnzAktiv->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::Aktiv)));
-    ui->labelMitgliederAnzAktivMit->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::AktivMit)));
-    ui->labelMitgliederAnzAktivOhne->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::AktivOhne)));
-    ui->labelMitgliederAnzPassiv->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::Passiv)));
-    ui->labelMitgliederAnzAusgetreten->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::Ausgetreten)));
-    ui->labelMitgliederAnzErfasst->setText(QString::number(manager->getAnzahlMitglieder(Mitglied::Registriert)));
-}
-
 void PersonalWindow::editMinimumHours()
 {
    if (MinimumHoursEditorDialog(manager, this).exec() == QDialog::Accepted) {
@@ -418,16 +318,6 @@ void PersonalWindow::on_pushEmail_clicked()
 void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, [[maybe_unused]] int column)
 {
     QString name = ui->tabelleGesamt->item(row, 0)->text() + " " + ui->tabelleGesamt->item(row, 1)->text();
-    Person * p = manager->getPerson(name);
-    if (p != nullptr) {
-        showPerson(p);
-        ui->tabWidgetMain->setCurrentIndex(1);
-    }
-}
-
-void PersonalWindow::on_tabelleMitglieder_cellDoubleClicked(int row, [[maybe_unused]] int column)
-{
-    QString name = ui->tabelleMitglieder->item(row, 1)->text() + " " + ui->tabelleMitglieder->item(row, 2)->text();
     Person * p = manager->getPerson(name);
     if (p != nullptr) {
         showPerson(p);
@@ -600,36 +490,11 @@ void PersonalWindow::on_dateGeburtstag_dateChanged(const QDate &date)
         aktuellePerson->setGeburtstag(date);
     }
 }
-void PersonalWindow::on_checkGeburtstag_clicked(bool checked)
-{
-    if (enabled) {
-        ui->dateGeburtstag->setEnabled(!checked);
-        if (checked) {
-            aktuellePerson->setGeburtstag(QDate());
-        } else {
-            ui->dateGeburtstag->setDate(QDate::currentDate());
-            aktuellePerson->setGeburtstag(QDate::currentDate());
-        }
-        refresh();
-    }
-}
 
 void PersonalWindow::on_dateEintritt_dateChanged(const QDate &date)
 {
     if (enabled) {
         aktuellePerson->setEintritt(date);
-    }
-}
-void PersonalWindow::on_checkEintritt_clicked(bool checked)
-{
-    if (enabled) {
-        ui->dateEintritt->setEnabled(!checked);
-        if (checked) {
-            aktuellePerson->setEintritt(QDate());
-        } else {
-            ui->dateEintritt->setDate(QDate::currentDate());
-            aktuellePerson->setEintritt(QDate::currentDate());
-        }
     }
 }
 
@@ -756,19 +621,6 @@ void PersonalWindow::on_dateAustritt_dateChanged(const QDate &date)
         refresh();
     }
 }
-void PersonalWindow::on_checkAustritt_clicked(bool checked)
-{
-    if (enabled) {
-        ui->dateAustritt->setEnabled(checked);
-        if (checked) {
-            ui->dateAustritt->setDate(QDate::currentDate());
-            aktuellePerson->setAustritt(QDate::currentDate());
-        } else {
-            aktuellePerson->setAustritt(QDate());
-        }
-        refresh();
-    }
-}
 
 void PersonalWindow::on_pushDelete_clicked()
 {
@@ -871,24 +723,8 @@ void PersonalWindow::showPerson(Person *p)
 
     // ** Stammdaten
     // Allgemein
-    ui->checkGeburtstag->setChecked(p->getGeburtstag().isNull());
-    ui->dateGeburtstag->setEnabled(p->getGeburtstag().isValid());
-    ui->dateGeburtstag->setDate(p->getGeburtstag());
-    ui->checkEintritt->setChecked(p->getEintritt().isNull());
-    ui->dateEintritt->setEnabled(p->getEintritt().isValid());
-    ui->dateEintritt->setDate(p->getEintritt());
     ui->checkAktiv->setChecked(p->getAktiv());
     ui->spinKm->setValue(p->getStrecke());
-    ui->lineJob->setText(p->getBeruf());
-
-    // Kontakt
-    ui->lineStrasse->setText(p->getStrasse());
-    ui->linePLZ->setText(p->getPLZ());
-    ui->lineOrt->setText(p->getOrt());
-    ui->linePhone->setText(p->getTelefon());
-    ui->checkPhone->setChecked(p->getTelefonOK());
-    ui->lineMail->setText(p->getMail());
-    ui->checkMail->setChecked(p->getMailOK());
 
     // Betriebsdienst
     ui->checkTf->setChecked(p->getAusbildungTf());
@@ -901,9 +737,6 @@ void PersonalWindow::showPerson(Person *p)
 
     // Sonstiges
     ui->plainBemerkung->setPlainText(p->getBemerkungen().replace("<br/>","\n"));
-    ui->checkAustritt->setChecked(p->getAustritt().isValid());
-    ui->dateAustritt->setEnabled(p->getAustritt().isValid());
-    ui->dateAustritt->setDate(p->getAustritt());
 
     // ** Aktivitaeten
     while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
@@ -976,13 +809,8 @@ QList<Person*> PersonalWindow::getSortierteListe()
 void PersonalWindow::toggleFields(bool state)
 {
     ui->lineID->setEnabled(state);
-    ui->pushAutoID->setEnabled(state);
     ui->lineVorname->setEnabled(state);
     ui->lineNachname->setEnabled(state);
-    ui->checkGeburtstag->setEnabled(state);
-    ui->dateGeburtstag->setEnabled(false);
-    ui->checkEintritt->setEnabled(state);
-    ui->dateEintritt->setEnabled(false);
     ui->checkAktiv->setEnabled(state);
 
     ui->checkRangierer->setEnabled(state);
@@ -991,21 +819,10 @@ void PersonalWindow::toggleFields(bool state)
     ui->checkDienst->setEnabled(state);
     ui->dateDienst->setEnabled(false);
 
-    ui->lineStrasse->setEnabled(state);
-    ui->linePLZ->setEnabled(state);
-    ui->lineOrt->setEnabled(state);
-    ui->lineMail->setEnabled(state);
-    ui->checkMail->setEnabled(state);
-    ui->linePhone->setEnabled(state);
-    ui->checkPhone->setEnabled(state);
-
     ui->pushMailEinzel->setEnabled(state);
 
     ui->spinKm->setEnabled(state);
-    ui->lineJob->setEnabled(state);
     ui->plainBemerkung->setEnabled(state);
-    ui->checkAustritt->setEnabled(state);
-    ui->dateAustritt->setEnabled(false);
     ui->pushDelete->setEnabled(state);
 
     ui->tabelle->setEnabled(state);

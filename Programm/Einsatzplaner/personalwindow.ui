@@ -39,6 +39,122 @@
     <property name="spacing">
      <number>6</number>
     </property>
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,1,0,1,0">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <item row="0" column="4">
+       <spacer name="horizontalSpacer_6">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="5">
+       <widget class="QPushButton" name="pushEmail">
+        <property name="text">
+         <string>E-Mail an diese Personen</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QPushButton" name="pushAktualisieren">
+        <property name="toolTip">
+         <string>Die Werte neuberechnen und die Anzeige aktualisieren</string>
+        </property>
+        <property name="statusTip">
+         <string>Die Werte neuberechnen und die Anzeige aktualisieren</string>
+        </property>
+        <property name="text">
+         <string>Aktualisieren</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <spacer name="horizontalSpacer_10">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="comboAnzeige">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>Alle Mitglieder</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Aktiv</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Passiv</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Aktiv mit Stunden</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Aktiv ohne Stunden</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Passiv mit Stunden</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Ausgetreten</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Alle</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_25">
+        <property name="text">
+         <string>Anzeigen</string>
+        </property>
+        <property name="buddy">
+         <cstring>comboAnzeige</cstring>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidgetMain">
       <property name="enabled">
@@ -461,7 +577,7 @@
        <attribute name="title">
         <string>Einzelansicht</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_8" columnstretch="1,2">
+       <layout class="QGridLayout" name="gridLayout_8" rowstretch="0,1,0" columnstretch="0,0,1">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -496,18 +612,8 @@
          </layout>
         </item>
         <item row="0" column="1">
-         <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,1,0,0">
+         <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Vorname</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineVorname</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
            <widget class="QLineEdit" name="lineVorname">
             <property name="enabled">
              <bool>false</bool>
@@ -529,13 +635,23 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_26">
-            <property name="text">
-             <string>ID</string>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineNachname">
+            <property name="enabled">
+             <bool>false</bool>
             </property>
-            <property name="buddy">
-             <cstring>lineID</cstring>
+            <property name="placeholderText">
+             <string>Nachname</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QCheckBox" name="checkAktiv">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Aktiv</string>
             </property>
            </widget>
           </item>
@@ -550,41 +666,14 @@
               <height>16777215</height>
              </size>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_27">
-            <property name="text">
-             <string>Nachname</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineNachname</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineNachname">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="placeholderText">
-             <string>Nachname</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2" colspan="2">
-           <widget class="QPushButton" name="pushAutoID">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>autom.</string>
+            <property name="readOnly">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
          </layout>
         </item>
-        <item row="1" column="1">
+        <item row="1" column="1" colspan="2">
          <widget class="QTabWidget" name="tabWidgetEinzel">
           <property name="minimumSize">
            <size>
@@ -593,7 +682,7 @@
            </size>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="tabsClosable">
            <bool>false</bool>
@@ -605,7 +694,7 @@
            <attribute name="title">
             <string>Stammdaten</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_9">
+           <layout class="QGridLayout" name="gridLayout_9" rowstretch="0,0,0,0,1,0" columnstretch="0,0,0,1">
             <property name="leftMargin">
              <number>0</number>
             </property>
@@ -618,642 +707,161 @@
             <property name="bottomMargin">
              <number>0</number>
             </property>
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <item row="0" column="1">
+             <widget class="QLabel" name="labelAusbildung_3">
+              <property name="text">
+               <string>Tauglichkeit:</string>
+              </property>
+             </widget>
+            </item>
             <item row="0" column="0">
-             <widget class="QToolBox" name="toolBoxStammdaten">
-              <property name="currentIndex">
+             <widget class="QLabel" name="labelAusbildung">
+              <property name="text">
+               <string>Ausbildung:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QSpinBox" name="spinKm">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="suffix">
+               <string> km</string>
+              </property>
+              <property name="minimum">
                <number>0</number>
               </property>
-              <widget class="QWidget" name="pageAllgemein">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>0</y>
-                 <width>435</width>
-                 <height>168</height>
-                </rect>
-               </property>
-               <attribute name="label">
-                <string>Allgemein</string>
-               </attribute>
-               <layout class="QGridLayout" name="gridLayout_10" rowstretch="0,0,0,0,0,1" columnstretch="0,0,0,1">
-                <property name="leftMargin">
-                 <number>6</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>6</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <property name="spacing">
-                 <number>6</number>
-                </property>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="labelEntfernung">
-                  <property name="statusTip">
-                   <string>Die Entfernung zum Heimatbahnhof. Wird benötigt, um die Strecke auszurechnen.</string>
-                  </property>
-                  <property name="text">
-                   <string>Entfernung</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>spinKm</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QCheckBox" name="checkGeburtstag">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Unbekannt</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0">
-                 <widget class="QLabel" name="labelBeruf">
-                  <property name="text">
-                   <string>Beruf</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>lineJob</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QCheckBox" name="checkEintritt">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Unbekannt</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QDateEdit" name="dateGeburtstag">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>100</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="displayFormat">
-                   <string>dd.MM.yyyy</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="labelEintritt">
-                  <property name="text">
-                   <string>Eintritt</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>dateEintritt</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QDateEdit" name="dateEintritt">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="minimumDate">
-                   <date>
-                    <year>1999</year>
-                    <month>11</month>
-                    <day>27</day>
-                   </date>
-                  </property>
-                  <property name="displayFormat">
-                   <string>dd.MM.yyyy</string>
-                  </property>
-                  <property name="calendarPopup">
-                   <bool>false</bool>
-                  </property>
-                  <property name="timeSpec">
-                   <enum>Qt::UTC</enum>
-                  </property>
-                  <property name="date">
-                   <date>
-                    <year>1999</year>
-                    <month>11</month>
-                    <day>27</day>
-                   </date>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QSpinBox" name="spinKm">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="suffix">
-                   <string> km</string>
-                  </property>
-                  <property name="minimum">
-                   <number>0</number>
-                  </property>
-                  <property name="maximum">
-                   <number>40000</number>
-                  </property>
-                  <property name="value">
-                   <number>0</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1" colspan="3">
-                 <widget class="QLineEdit" name="lineJob"/>
-                </item>
-                <item row="5" column="1">
-                 <spacer name="verticalSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>47</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="labelGeburtstag">
-                  <property name="text">
-                   <string>Geburtstag</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>dateGeburtstag</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QCheckBox" name="checkAktiv">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Aktiv</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="labelAktiv">
-                  <property name="text">
-                   <string>Status</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>checkAktiv</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <spacer name="horizontalSpacer_7">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </widget>
-              <widget class="QWidget" name="pageKontakt">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>0</y>
-                 <width>181</width>
-                 <height>146</height>
-                </rect>
-               </property>
-               <attribute name="label">
-                <string>Kontakt</string>
-               </attribute>
-               <layout class="QGridLayout" name="gridLayout_11" columnstretch="0,0,1">
-                <property name="leftMargin">
-                 <number>6</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>6</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <property name="spacing">
-                 <number>6</number>
-                </property>
-                <item row="6" column="1">
-                 <spacer name="verticalSpacer_3">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>66</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="2" column="0" rowspan="2">
-                 <widget class="QLabel" name="labelPhone">
-                  <property name="text">
-                   <string>Telefon</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                  </property>
-                  <property name="buddy">
-                   <cstring>linePhone</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="labelAdress">
-                  <property name="text">
-                   <string>Anschrift</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0" rowspan="2">
-                 <widget class="QLabel" name="labelMail">
-                  <property name="text">
-                   <string>Mail</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                  </property>
-                  <property name="buddy">
-                   <cstring>lineMail</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QLineEdit" name="linePLZ">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="maxLength">
-                   <number>14</number>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Postleitzahl</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QLineEdit" name="lineOrt">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Ort</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1" colspan="2">
-                 <widget class="QLineEdit" name="lineStrasse">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Straße und Hausnummer</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1" colspan="2">
-                 <widget class="QLineEdit" name="linePhone">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1" colspan="2">
-                 <widget class="QCheckBox" name="checkPhone">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Veröffentlichen</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1" colspan="2">
-                 <widget class="QLineEdit" name="lineMail">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="placeholderText">
-                   <string>beispiel@ostertalbahn.de</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="1" colspan="2">
-                 <widget class="QCheckBox" name="checkMail">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Veröffentlichen</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-              <widget class="QWidget" name="pageBetriebsdienst">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>0</y>
-                 <width>280</width>
-                 <height>97</height>
-                </rect>
-               </property>
-               <attribute name="label">
-                <string>Betriebsdienst</string>
-               </attribute>
-               <layout class="QGridLayout" name="gridLayout_12">
-                <property name="leftMargin">
-                 <number>6</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>6</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <property name="spacing">
-                 <number>6</number>
-                </property>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="labelAusbildung">
-                  <property name="text">
-                   <string>Ausbildung</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QCheckBox" name="checkTf">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Lokführer</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="3">
-                 <spacer name="horizontalSpacer_2">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>228</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QCheckBox" name="checkRangierer">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Rangierer</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QCheckBox" name="checkZf">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Zugführer</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QDateEdit" name="dateDienst">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>100</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="minimumDate">
-                   <date>
-                    <year>1999</year>
-                    <month>11</month>
-                    <day>26</day>
-                   </date>
-                  </property>
-                  <property name="displayFormat">
-                   <string>dd.MM.yyyy</string>
-                  </property>
-                  <property name="timeSpec">
-                   <enum>Qt::UTC</enum>
-                  </property>
-                  <property name="date">
-                   <date>
-                    <year>1999</year>
-                    <month>11</month>
-                    <day>26</day>
-                   </date>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
-                 <spacer name="verticalSpacer_4">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>58</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="labelDienst">
-                  <property name="text">
-                   <string>Tauglichkeit</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>dateDienst</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="2">
-                 <widget class="QCheckBox" name="checkDienst">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Unbekannt</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-              <widget class="QWidget" name="pageSonstiges">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>0</y>
-                 <width>384</width>
-                 <height>163</height>
-                </rect>
-               </property>
-               <attribute name="label">
-                <string>Sonstiges</string>
-               </attribute>
-               <layout class="QGridLayout" name="gridLayout_13" rowstretch="1,0,0" columnstretch="0,0,0,1">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="labelBemerkung">
-                  <property name="text">
-                   <string>Bemerkungen</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                  </property>
-                  <property name="buddy">
-                   <cstring>plainBemerkung</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1" colspan="3">
-                 <widget class="QPlainTextEdit" name="plainBemerkung">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="labelAustritt">
-                  <property name="text">
-                   <string>Austritt</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>dateAustritt</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QCheckBox" name="checkAustritt">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>Austritt zum</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QDateEdit" name="dateAustritt">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>150</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="minimumDate">
-                   <date>
-                    <year>1999</year>
-                    <month>11</month>
-                    <day>26</day>
-                   </date>
-                  </property>
-                  <property name="displayFormat">
-                   <string>dd.MM.yyyy</string>
-                  </property>
-                  <property name="timeSpec">
-                   <enum>Qt::UTC</enum>
-                  </property>
-                  <property name="date">
-                   <date>
-                    <year>1999</year>
-                    <month>11</month>
-                    <day>26</day>
-                   </date>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <spacer name="horizontalSpacer_4">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>18</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="2" column="1" colspan="2">
-                 <widget class="QPushButton" name="pushDelete">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="statusTip">
-                   <string>Aktuelle Person löschen</string>
-                  </property>
-                  <property name="text">
-                   <string>Person löschen</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
+              <property name="maximum">
+               <number>40000</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QPushButton" name="pushDelete">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="statusTip">
+               <string>Aktuelle Person löschen</string>
+              </property>
+              <property name="text">
+               <string>Person löschen</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="labelEntfernung">
+              <property name="statusTip">
+               <string>Die Entfernung zum Heimatbahnhof. Wird benötigt, um die Strecke auszurechnen.</string>
+              </property>
+              <property name="text">
+               <string>Entfernung:</string>
+              </property>
+              <property name="buddy">
+               <cstring>spinKm</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0" colspan="4">
+             <widget class="QPlainTextEdit" name="plainBemerkung"/>
+            </item>
+            <item row="2" column="1">
+             <widget class="QCheckBox" name="checkDienst">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Unbekannt</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QCheckBox" name="checkRangierer">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Rangierer</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QCheckBox" name="checkZf">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Zugführer</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="checkTf">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Lokführer</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3" rowspan="2">
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>105</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="1">
+             <widget class="QDateEdit" name="dateDienst">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="minimumDate">
+               <date>
+                <year>1999</year>
+                <month>11</month>
+                <day>23</day>
+               </date>
+              </property>
+              <property name="displayFormat">
+               <string>dd.MM.yyyy</string>
+              </property>
+              <property name="timeSpec">
+               <enum>Qt::UTC</enum>
+              </property>
+              <property name="date">
+               <date>
+                <year>1999</year>
+                <month>11</month>
+                <day>26</day>
+               </date>
+              </property>
              </widget>
             </item>
            </layout>
@@ -1342,6 +950,21 @@
             <string>Konto</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,0,0,1">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>6</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="horizontalSpacing">
+             <number>6</number>
+            </property>
             <property name="verticalSpacing">
              <number>0</number>
             </property>
@@ -2047,7 +1670,7 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0,0">
+         <layout class="QGridLayout" name="gridLayout_7">
           <item row="0" column="0">
            <widget class="QLabel" name="labelGesamt_2">
             <property name="text">
@@ -2059,6 +1682,16 @@
            <widget class="QLabel" name="labelGesamt">
             <property name="text">
              <string>0 h (0 h)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QPushButton" name="pushMailEinzel">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Mail an diese Person</string>
             </property>
            </widget>
           </item>
@@ -2089,352 +1722,16 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="4">
-           <spacer name="horizontalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="2">
-           <widget class="QPushButton" name="pushMailEinzel">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Mail an diese Person</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="mitglieder">
-       <attribute name="title">
-        <string>Mitgliederliste</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_17" rowstretch="1,0" columnstretch="1,0,1">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>6</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <item row="0" column="0" colspan="3">
-         <widget class="QTableWidget" name="tabelleMitglieder">
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-          <property name="selectionMode">
-           <enum>QAbstractItemView::ExtendedSelection</enum>
-          </property>
-          <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectRows</enum>
-          </property>
-          <property name="sortingEnabled">
-           <bool>true</bool>
-          </property>
-          <attribute name="horizontalHeaderDefaultSectionSize">
-           <number>97</number>
-          </attribute>
-          <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-           <bool>true</bool>
-          </attribute>
-          <column>
-           <property name="text">
-            <string>Nr.</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Vorname</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Nachname</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Status</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Geburtsdatum</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Eintritt</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Austritt</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Beruf</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Straße</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>PLZ</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Ort</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Strecke</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>E-Mail</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>E-Mail veröff.</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Telefon</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Telefon veröff.</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Tf-Ausbildung</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Zf-Ausbildung</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Rangierer</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Tauglichkeit</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Bemerkung</string>
-           </property>
-          </column>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <spacer name="horizontalSpacer_9">
+        <item row="2" column="2">
+         <spacer name="horizontalSpacer_5">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="1">
-         <layout class="QGridLayout" name="gridLayout_15">
-          <item row="0" column="7" rowspan="3">
-           <widget class="Line" name="line">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="5">
-           <widget class="QLabel" name="labelMitgliederPassive">
-            <property name="text">
-             <string>Passiv</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="6">
-           <widget class="QLabel" name="labelMitgliederAnzPassiv">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3">
-           <widget class="QLabel" name="labelMitgliederAnzAktivOhne">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="labelMitgliederAktiveOhne">
-            <property name="text">
-             <string>ohne Stunden</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="labelMitgliederAktiv">
-            <property name="text">
-             <string>Aktiv</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="labelMitgliederAnzAktiv">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="labelMitglieder">
-            <property name="text">
-             <string>Mitglieder</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLabel" name="labelMitgliederAnzAktivMit">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="5" colspan="5">
-           <widget class="QPushButton" name="pushMitgliederDrucken">
-            <property name="text">
-             <string>Daten drucken …</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="labelMitgliederAnzMitglieder">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="labelMitgliederAktiveMit">
-            <property name="text">
-             <string>mit Stunden</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4" rowspan="2">
-           <widget class="Line" name="line_2">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="8">
-           <widget class="QLabel" name="labelMitgliederErfasst">
-            <property name="text">
-             <string>Erfasst</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="8">
-           <widget class="QLabel" name="labelMitgliederAusgetreten">
-            <property name="text">
-             <string>Ausgetreten</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="9">
-           <widget class="QLabel" name="labelMitgliederAnzErfasst">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="9">
-           <widget class="QLabel" name="labelMitgliederAnzAusgetreten">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="5">
-           <widget class="QPushButton" name="pushMitgliederPDF">
-            <property name="text">
-             <string>Daten als PDF speichern …</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="2">
-         <spacer name="horizontalSpacer_8">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
+            <width>37</width>
             <height>20</height>
            </size>
           </property>
@@ -2443,122 +1740,6 @@
        </layout>
       </widget>
      </widget>
-    </item>
-    <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,1,0,1,0">
-      <property name="spacing">
-       <number>6</number>
-      </property>
-      <item row="0" column="4">
-       <spacer name="horizontalSpacer_6">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="5">
-       <widget class="QPushButton" name="pushEmail">
-        <property name="text">
-         <string>E-Mail an diese Personen</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QPushButton" name="pushAktualisieren">
-        <property name="toolTip">
-         <string>Die Werte neuberechnen und die Anzeige aktualisieren</string>
-        </property>
-        <property name="statusTip">
-         <string>Die Werte neuberechnen und die Anzeige aktualisieren</string>
-        </property>
-        <property name="text">
-         <string>Aktualisieren</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <spacer name="horizontalSpacer_10">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="comboAnzeige">
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <item>
-         <property name="text">
-          <string>Alle Mitglieder</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Aktiv</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Passiv</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Aktiv mit Stunden</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Aktiv ohne Stunden</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Passiv mit Stunden</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Ausgetreten</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Alle</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_25">
-        <property name="text">
-         <string>Anzeigen</string>
-        </property>
-        <property name="buddy">
-         <cstring>comboAnzeige</cstring>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </item>
    </layout>
   </widget>
@@ -2767,34 +1948,8 @@
   <tabstop>pushZeitenDrucken</tabstop>
   <tabstop>pushAdd</tabstop>
   <tabstop>listWidget</tabstop>
-  <tabstop>lineVorname</tabstop>
-  <tabstop>lineNachname</tabstop>
   <tabstop>lineID</tabstop>
-  <tabstop>pushAutoID</tabstop>
   <tabstop>tabWidgetEinzel</tabstop>
-  <tabstop>dateGeburtstag</tabstop>
-  <tabstop>checkGeburtstag</tabstop>
-  <tabstop>dateEintritt</tabstop>
-  <tabstop>checkEintritt</tabstop>
-  <tabstop>checkAktiv</tabstop>
-  <tabstop>spinKm</tabstop>
-  <tabstop>lineJob</tabstop>
-  <tabstop>lineStrasse</tabstop>
-  <tabstop>linePLZ</tabstop>
-  <tabstop>lineOrt</tabstop>
-  <tabstop>linePhone</tabstop>
-  <tabstop>checkPhone</tabstop>
-  <tabstop>lineMail</tabstop>
-  <tabstop>checkMail</tabstop>
-  <tabstop>checkTf</tabstop>
-  <tabstop>checkZf</tabstop>
-  <tabstop>checkRangierer</tabstop>
-  <tabstop>dateDienst</tabstop>
-  <tabstop>checkDienst</tabstop>
-  <tabstop>plainBemerkung</tabstop>
-  <tabstop>checkAustritt</tabstop>
-  <tabstop>dateAustritt</tabstop>
-  <tabstop>pushDelete</tabstop>
   <tabstop>tabelle</tabstop>
   <tabstop>lineTf</tabstop>
   <tabstop>lineZf</tabstop>
@@ -2811,9 +1966,6 @@
   <tabstop>pushMailEinzel</tabstop>
   <tabstop>pushEinzelPDF</tabstop>
   <tabstop>pushEinzelDrucken</tabstop>
-  <tabstop>tabelleMitglieder</tabstop>
-  <tabstop>pushMitgliederDrucken</tabstop>
-  <tabstop>pushMitgliederPDF</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -2844,8 +1996,8 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>127</x>
-     <y>80</y>
+     <x>136</x>
+     <y>129</y>
     </hint>
    </hints>
   </connection>
@@ -2905,38 +2057,6 @@
    <hints>
     <hint type="sourcelabel">
      <x>572</x>
-     <y>554</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushMitgliederDrucken</sender>
-   <signal>clicked()</signal>
-   <receiver>actionMitgliederListeDrucken</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>452</x>
-     <y>554</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushMitgliederPDF</sender>
-   <signal>clicked()</signal>
-   <receiver>actionMitgliederListePDF</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>244</x>
      <y>554</y>
     </hint>
     <hint type="destinationlabel">

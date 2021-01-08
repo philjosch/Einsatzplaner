@@ -25,7 +25,6 @@ public slots:
 private slots:
     void refreshEinsatzzeiten();
     void refreshEinzel();
-    void refreshMitglieder();
 
     void editMinimumHours();
 
@@ -84,10 +83,8 @@ private slots:
     void on_pushAutoID_clicked();
 
     void on_dateGeburtstag_dateChanged(const QDate &date);
-    void on_checkGeburtstag_clicked(bool checked);
 
     void on_dateEintritt_dateChanged(const QDate &date);
-    void on_checkEintritt_clicked(bool checked);
 
     void on_checkAktiv_clicked(bool checked);
 
@@ -114,7 +111,6 @@ private slots:
 
     void on_plainBemerkung_textChanged();
 
-    void on_checkAustritt_clicked(bool checked);
     void on_dateAustritt_dateChanged(const QDate &date);
 
     void on_pushDelete_clicked();
@@ -138,8 +134,6 @@ private slots:
     void showPerson(Person *p);
 
     // Mitglieder
-    void on_tabelleMitglieder_cellDoubleClicked(int row, int column);
-
     void on_pushMailEinzel_clicked();
 
 private:
