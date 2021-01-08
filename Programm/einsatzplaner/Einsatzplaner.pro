@@ -1,7 +1,7 @@
 #-------------------------------------------------
 #
 # Developers:
-# 2016-2020: Philipp Schepper
+# 2016-2021: Philipp Schepper
 #
 #-------------------------------------------------
 
@@ -38,20 +38,11 @@ FORMS    += mainwindow.ui \
     filesettingsdialog.ui
 
 win32 {
-    RC_ICONS = ../Icon/keks.ico
-    QMAKE_TARGET_COMPANY = Philipp Schepper
-    QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
-    QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2020
     QMAKE_TARGET_PRODUCT = Einsatzplaner
-    VERSION = 1.6.3.1
 }
 
 macx {
-    OTHER_FILES += Info.plist ../Icon/keks.icns
-    QMAKE_INFO_PLIST = Info.plist
-    DISTFILES += Info.plist
     BUNDLEID = de.philipp-schepper.einsatzplaner
-    ICON = ../Icon/keks.icns
 }
 
 

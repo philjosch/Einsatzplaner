@@ -1,7 +1,7 @@
 #-------------------------------------------------
 #
 # Developers:
-# 2016-2020: Philipp Schepper
+# 2016-2021: Philipp Schepper
 #
 #-------------------------------------------------
 
@@ -13,9 +13,10 @@ SUBDIRS += Einsatzplaner \
     epl_api \
     epl_gui
 
-Einsatzplaner.depends = epl_api
-Personalplaner.depends = epl_api
+Einsatzplaner.depends = epl_api epl_gui
+Personalplaner.depends = epl_api epl_gui
 
 
 DISTFILES += share.pri
 RESOURCES += resources.qrc
+OTHER_FILES += Info.plist

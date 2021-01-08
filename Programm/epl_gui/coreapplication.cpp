@@ -26,7 +26,6 @@ CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool d
 
     QCoreApplication::setOrganizationName("Philipp Schepper");
     QCoreApplication::setOrganizationDomain("philipp-schepper.de");
-    QCoreApplication::setApplicationName("Einsatzplaner");
     if (DEVELOPER_MODE) {
         QCoreApplication::setApplicationVersion(QString("%1 (%2)").arg(VERSION.toString()).arg(CoreApplication::BUILD));
     } else {
@@ -35,11 +34,6 @@ CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool d
     QIcon icon(":/icons/square.png");
     setWindowIcon(icon);
     autoSaveTimer = nullptr;
-
-    QTranslator qtTranslator;
-    qtTranslator.load(":/translations/qt_" + QLocale::system().name());
-    installTranslator(&qtTranslator);
-
 
     if (Einstellungen::getAutoSearchUpdate())
         checkVersion();
@@ -50,7 +44,7 @@ CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool d
 
 CoreApplication::~CoreApplication()
 {
-
+    closeAllWindows();
 }
 
 bool CoreApplication::generateWindow()

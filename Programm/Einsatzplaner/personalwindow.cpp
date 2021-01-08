@@ -464,40 +464,6 @@ void PersonalWindow::on_lineNachname_textChanged(const QString &arg1)
     }
 }
 
-void PersonalWindow::on_lineID_textChanged(const QString &arg1)
-{
-    if (enabled) {
-        if (arg1.toInt() > 0) {
-            if (! aktuellePerson->setNummer(arg1.toInt())) {
-                QMessageBox::information(this, tr("Fehler"), tr("Die Mitgliedsnummer konnte nicht geändert werden, da sie bereits vergeben ist. Bitte wählen Sie eine andere Nummer!"));
-            }
-        }
-    }
-}
-void PersonalWindow::on_pushAutoID_clicked()
-{
-    if (enabled) {
-        enabled=false;
-        aktuellePerson->setNummer(manager->getNextNummer());
-        ui->lineID->setText(QString::number(aktuellePerson->getNummer()));
-        enabled=true;
-    }
-}
-
-void PersonalWindow::on_dateGeburtstag_dateChanged(const QDate &date)
-{
-    if (enabled) {
-        aktuellePerson->setGeburtstag(date);
-    }
-}
-
-void PersonalWindow::on_dateEintritt_dateChanged(const QDate &date)
-{
-    if (enabled) {
-        aktuellePerson->setEintritt(date);
-    }
-}
-
 void PersonalWindow::on_checkAktiv_clicked(bool checked)
 {
     if (enabled) {
@@ -511,58 +477,6 @@ void PersonalWindow::on_spinKm_valueChanged(int arg1)
     if (enabled) {
         aktuellePerson->setStrecke(arg1);
         ui->labelKilometerSum->setText(QString::number(aktuellePerson->getZeiten(Kilometer)));
-    }
-}
-
-void PersonalWindow::on_lineJob_textChanged(const QString &arg1)
-{
-    if (enabled) {
-        aktuellePerson->setBeruf(arg1);
-    }
-}
-
-void PersonalWindow::on_lineStrasse_textChanged(const QString &arg1)
-{
-    if (enabled) {
-        aktuellePerson->setStrasse(arg1);
-    }
-}
-void PersonalWindow::on_linePLZ_textChanged(const QString &arg1)
-{
-    if (enabled) {
-        aktuellePerson->setPLZ(arg1);
-    }
-}
-void PersonalWindow::on_lineOrt_textChanged(const QString &arg1)
-{
-    if (enabled) {
-        aktuellePerson->setOrt(arg1);
-    }
-}
-
-void PersonalWindow::on_linePhone_textChanged(const QString &arg1)
-{
-    if (enabled) {
-        aktuellePerson->setTelefon(arg1);
-    }
-}
-void PersonalWindow::on_checkPhone_clicked(bool checked)
-{
-    if (enabled) {
-        aktuellePerson->setTelefonOK(checked);
-    }
-}
-
-void PersonalWindow::on_lineMail_textChanged(const QString &arg1)
-{
-    if (enabled) {
-        aktuellePerson->setMail(arg1);
-    }
-}
-void PersonalWindow::on_checkMail_clicked(bool checked)
-{
-    if (enabled) {
-        aktuellePerson->setMailOK(checked);
     }
 }
 
@@ -611,14 +525,6 @@ void PersonalWindow::on_plainBemerkung_textChanged()
 {
     if (enabled) {
         aktuellePerson->setBemerkungen(ui->plainBemerkung->toPlainText());
-    }
-}
-
-void PersonalWindow::on_dateAustritt_dateChanged(const QDate &date)
-{
-    if (enabled) {
-        aktuellePerson->setAustritt(date);
-        refresh();
     }
 }
 

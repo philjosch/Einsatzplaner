@@ -44,8 +44,9 @@ void CoreMainWindow::on_actionAboutQt_triggered()
 void CoreMainWindow::on_actionAboutApp_triggered()
 {
     QMessageBox::about(this,
-                       tr("Über Einsatzplaner"),
-                       tr("<h1>Einsatzplaner</h1><p>Version %1<br/>2016-2020 Philipp Schepper</p>")
+                       tr("Über %1").arg(QCoreApplication::applicationName()),
+                       tr("<h1>%1</h1><p>Ein Programm der EPL-Familie<br/>Version %2<br/>2016-2021 Philipp Schepper</p>")
+                       .arg(QCoreApplication::applicationName())
                        .arg(QCoreApplication::applicationVersion()));
 }
 void CoreMainWindow::on_actionQuit_triggered()
