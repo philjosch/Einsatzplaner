@@ -2,6 +2,8 @@
 
 #include <QObject>
 
+Version Version::CURRENT_API_VERSION = {1, 6, 3};
+
 QString minutesToHourString(int min)
 {
     return minutesToHourStringShort(min)+" h";
@@ -85,3 +87,4 @@ QString getStringVonFilter(Mitglied filter)
     case Registriert: return QObject::tr("Registrierte Personen");
     }
 }
+

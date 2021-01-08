@@ -218,7 +218,7 @@ void CoreMainWindow::unsave()
 
 bool CoreMainWindow::pruefeVersionMitWarnung(Version test)
 {
-    if (!CoreApplication::isSupportedVersion(test)) {
+    if (!Version::isSupportedVersion(test)) {
         QMessageBox::warning(nullptr, tr("Nicht kompatibel"),
                              tr("Die Datei kann nicht mit dieser Version geöffnet werden. "
                                 "Das Dokument benötigt mindestens Version %1.\n"

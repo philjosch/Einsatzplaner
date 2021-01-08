@@ -99,6 +99,9 @@ struct Version {
     int minor;
     int patch;
 
+    static Version CURRENT_API_VERSION;
+
+
     QString toString() {
         return QString("%1.%2.%3").arg(major).arg(minor).arg(patch);
     }
@@ -145,6 +148,11 @@ struct Version {
     }
     bool operator <=(Version second) {
         return *this == second || second > *this;
+    }
+    static bool isSupportedVersion(Version test) {
+        if (test == Version{-1,-1,-1}) return false;
+        if (test > CURRENT_API_VERSION) return false;
+        return true;
     }
 };
 
