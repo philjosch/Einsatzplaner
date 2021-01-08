@@ -13,26 +13,20 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    guihelper.cpp \
     mainwindow.cpp \
     fahrtagwindow.cpp \
     activitywindow.cpp \
     personalwindow.cpp \
     calendarday.cpp \
     exportdialog.cpp \
-    einstellungendialog.cpp \
-    minimumhourseditordialog.cpp \
     filesettingsdialog.cpp
 
 HEADERS  += mainwindow.h \
-    guihelper.h \
     fahrtagwindow.h \
     activitywindow.h \
     personalwindow.h \
     calendarday.h \
     exportdialog.h \
-    einstellungendialog.h \
-    minimumhourseditordialog.h \
     filesettingsdialog.h
 
 FORMS    += mainwindow.ui \
@@ -41,8 +35,6 @@ FORMS    += mainwindow.ui \
     personalwindow.ui \
     calendarday.ui \
     exportdialog.ui \
-    einstellungendialog.ui \
-    minimumhourseditordialog.ui \
     filesettingsdialog.ui
 
 win32 {

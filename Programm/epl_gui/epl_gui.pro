@@ -10,12 +10,22 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    guihelper.cpp \
     coremainwindow.cpp \
+    einstellungendialog.cpp \
+    minimumhourseditordialog.cpp \
     coreapplication.cpp
 
 HEADERS += \
+    guihelper.h \
     coremainwindow.h \
+    einstellungendialog.h \
+    minimumhourseditordialog.h \
     coreapplication.h
+
+FORMS += \
+    minimumhourseditordialog.ui \
+    einstellungendialog.ui
 
 # Default rules for deployment.
 unix {
