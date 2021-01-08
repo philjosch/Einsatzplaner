@@ -163,6 +163,11 @@ void Person::personConstructor(QString vn, QString nn, ManagerPersonal *man, QSt
     bemerkungen = "";
 }
 
+ManagerPersonal *Person::getManager() const
+{
+    return manager;
+}
+
 QJsonObject Person::toJson()
 {
     QJsonObject o = personalToJson();
@@ -335,6 +340,13 @@ bool Person::setNummer(int value)
         return true;
     }
     return false;
+}
+
+int Person::setAutoNummer()
+{
+    nummer = manager->getNextNummer();
+    emit changed();
+    return nummer;
 }
 
 QString Person::getPLZ() const
@@ -554,28 +566,36 @@ QString Person::getVorname() const
 {
     return vorname;
 }
-void Person::setVorname(const QString &value)
+bool Person::setVorname(const QString &value)
 {
+    if (manager->personExists(value, nachname)) {
+        return false;
+    }
     QString old = getName();
     vorname = value;
     while (vorname.endsWith(" ")) vorname.chop(1);
     while (vorname.startsWith(" ")) vorname = vorname.remove(0, 1);
     emit nameChanged(this, old);
     emit changed();
+    return true;
 }
 
 QString Person::getNachname() const
 {
     return nachname;
 }
-void Person::setNachname(const QString &value)
+bool Person::setNachname(const QString &value)
 {
+    if (manager->personExists(vorname, value)) {
+        return false;
+    }
     QString old = getName();
     nachname = value;
     while (nachname.endsWith(" ")) nachname.chop(1);
     while (nachname.startsWith(" ")) nachname = nachname.remove(0, 1);
     emit nameChanged(this, old);
     emit changed();
+    return true;
 }
 
 QString Person::getZeitenFuerListeAlsHTML(QSet<Category> liste)

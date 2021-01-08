@@ -23,7 +23,7 @@ class MainWindow : public CoreMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    bool handlerLadeDatei(QJsonObject json);
+    MainWindow(EplFile *file, QWidget *parent = nullptr);
     ~MainWindow();
 
 public slots:
@@ -59,16 +59,14 @@ protected slots:
 
 
     CoreMainWindow *handlerNew();
-    QJsonObject handlerSave();
-    void handlerSaveAdditional();
+    void handlerPrepareSave();
+    void handlerOnSuccessfullSave();
     void handlerOpen(QString path);
-    void handlerPreferenes();
     void handlerSettings();
-    QJsonObject handlerSavePersonal();
 
 
 private:
-    bool istSchreibgeschuetzt;
+    void constructor();
 
     Ui::MainWindow *ui;
     QList<CalendarDay*> tage;
@@ -80,9 +78,6 @@ private:
     FileSettings *settings;
 
     Manager *manager;
-
-    QString filePath;
-    bool saved;
 
     int getPosInCalendar(QDate date);
 

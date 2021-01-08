@@ -3,6 +3,7 @@
 
 #include "activity.h"
 #include "fahrtag.h"
+#include "eplexception.h"
 
 #include <QAction>
 #include <QCloseEvent>
@@ -10,6 +11,7 @@
 #include <QMainWindow>
 #include <QMap>
 #include <QMenu>
+#include <eplfile.h>
 
 class CoreMainWindow : public QMainWindow
 {
@@ -17,11 +19,12 @@ class CoreMainWindow : public QMainWindow
 
 public:
     CoreMainWindow(QWidget *parent = nullptr);
-    bool ladeDatei(QString path, QJsonObject json, bool schreibschutz);
+    CoreMainWindow(EplFile *datei, QWidget *parent = nullptr);
     ~CoreMainWindow();
 
+
 public slots:
-    void autoSave();
+    virtual void autoSave();
 
 protected slots:
     // Einsatzplaner
@@ -37,7 +40,6 @@ protected slots:
     void on_actionClear_triggered();
     void on_actionSave_triggered();
     void on_actionSaveas_triggered();
-    bool saveToPath(QString path);
     void on_actionSavePersonal_triggered();
 
     void on_actionSettings_triggered();
@@ -48,19 +50,14 @@ protected slots:
     void unsave();
 
     virtual CoreMainWindow *handlerNew() = 0;
-    virtual QJsonObject handlerSave() = 0;
-    virtual void handlerSaveAdditional() {};
+    virtual void handlerPrepareSave() {};
+    virtual void handlerOnSuccessfullSave();
     virtual void handlerOpen(QString path) = 0;
     virtual bool handlerClose() {return true;};
-    virtual void handlerPreferenes() = 0;
-    virtual void handlerSettings() = 0;
-    virtual QJsonObject handlerSavePersonal() = 0;
-    virtual bool handlerLadeDatei(QJsonObject json) = 0;
+    virtual void handlerPreferenes();
+    virtual void handlerSettings() {};
 
-
-    static bool pruefeVersionMitWarnung(Version test);
-    static bool setzeSchreibschutzOderWarnung(QString pfad);
-
+    static EplFile *open(QString path);
 
     QList<QMainWindow*> getChildWindows();
 
@@ -68,13 +65,9 @@ protected:
     QMenu *recentlyUsedMenu;
     QAction *recentlyUsedClear;
 
-    bool istSchreibgeschuetzt;
-    QString filePath;
-    bool saved;
+    void updateWindowHeaders();
 
-    void updateWindowHeaders(bool modified, QString path = "");
-
-    void saveFailed();
+    EplFile *datei;
 };
 
 #endif // MAINWINDOW_H

@@ -4,7 +4,6 @@
 #include "exportdialog.h"
 #include "fileio.h"
 #include "coreapplication.h"
-#include "einstellungendialog.h"
 #include "filesettingsdialog.h"
 #include "fahrtagwindow.h"
 #include "activitywindow.h"
@@ -12,14 +11,59 @@
 #include <QMessageBox>
 #include <QJsonArray>
 
-MainWindow::MainWindow(QWidget *parent) : CoreMainWindow(parent), ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) :
+    CoreMainWindow(parent), ui(new Ui::MainWindow)
+{
+    constructor();
+}
+
+MainWindow::MainWindow(EplFile *file, QWidget *parent) :
+    CoreMainWindow(file, parent), ui(new Ui::MainWindow)
+{
+    constructor();
+
+    if (datei->istSchreibgeschuetzt()) {
+        setWindowTitle(tr("Übersicht - Schreibgeschützt"));
+    }
+
+
+    QDate currentDate = datei->getAnzeigeDatum();
+    // Alle aktivitäten in die seitenleiste eintragen
+    for(AActivity *a: manager->getActivities()) {
+        QListWidgetItem *i = new QListWidgetItem("");
+        connect(a, SIGNAL(changed(AActivity*, QDate)), this, SLOT(activityChanged(AActivity*, QDate)));
+        connect(a, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
+        setListItem(i, a);
+        ui->listWidget->insertItem(ui->listWidget->count(), i);
+        listitem.insert(a, i);
+        itemToList.insert(i, a);
+    }
+    // an das gespeicherte Datum gehen
+    ui->dateSelector->setDate(currentDate);
+    ui->dateSelector->repaint();
+    showDate(currentDate);
+
+    personalfenster->refresh();
+
+    //- Hier prüfen, ob Personalfenster angezeigt wurde und wiederherstellen der Fensterpositionen
+    EplFile::FensterPosition kalender = datei->getPositionKalender();
+    this->setGeometry(kalender.x, kalender.y, kalender.width, kalender.height);
+    // Personalfenster
+    EplFile::FensterPosition personal = datei->getPositionPersonal();
+    personalfenster->setGeometry(personal.x, personal.y, personal.width, personal.height);
+    personalfenster->hide();
+
+    settings = datei->getDateiEigenschaften();
+}
+
+void MainWindow::constructor()
 {
     ui->setupUi(this);
     // Modell
-    manager = new Manager();
+    manager = datei->getManager();
 
     // Views
-    personalfenster = new PersonalWindow(this, manager->getPersonal());
+    personalfenster = new PersonalWindow(this, datei->getPersonal());
     settings = new FileSettings();
     exportDialog = new ExportDialog(manager, settings, this);
     recentlyUsedMenu = ui->menuRecentlyused;
@@ -57,74 +101,6 @@ MainWindow::MainWindow(QWidget *parent) : CoreMainWindow(parent), ui(new Ui::Mai
     on_buttonToday_clicked();
 }
 
-bool MainWindow::handlerLadeDatei(QJsonObject json)
-{
-    if (istSchreibgeschuetzt) {
-        setWindowTitle(tr("Übersicht - Schreibgeschützt"));
-    }
-
-    // Daten in Manager laden und darstellen lassen
-    QJsonArray activities;
-    QJsonObject personal;
-    QDate currentDate;
-    Version version = Version::stringToVersion(json.value("general").toObject().value("version").toString());
-    if (version == Version {-1, -1, -1}) {
-        QMessageBox::warning(this, tr("Datei nicht kompatibel"), tr("Die Datei kann nicht geladen werden. Wenden Sie sich an den Entwickler für mehr Informationen."));
-        return false;
-    } else if (version < Version {1, 6, -1}) {
-        // Fallback fuer Version <1.6
-        QJsonObject calendarJSON = json.value("calendar").toObject();
-        activities = calendarJSON.value("activites").toArray();
-        personal = calendarJSON.value("personal").toObject();
-        // Daten in den Manager laden und die Logik herstellen
-        currentDate = QDate::fromString(calendarJSON.value("currentDate").toString(), "yyyy-MM-dd");
-    } else if (version <= CoreApplication::VERSION) {
-        // Ab Version 1.6
-        activities = json.value("activities").toArray();
-        personal = json.value("personal").toObject();
-        currentDate = QDate::fromString(json.value("view").toObject().value("currentDate").toString(), "yyyy-MM-dd");
-    } else {
-        // Version inkompatibel, zu neu
-        QMessageBox::warning(this, tr("Datei zu neu"), tr("Die Datei kann nicht geladen werden, da sie mindestens Version %1 benötigt.").arg(version.toString()));
-        return false;
-    }
-    manager->getPersonal()->fromJson(personal);
-    manager->fromJson(activities);
-    // Alle aktivitäten in die seitenleiste eintragen
-    for(AActivity *a: manager->getActivities()) {
-        QListWidgetItem *i = new QListWidgetItem("");
-        connect(a, SIGNAL(changed(AActivity*, QDate)), this, SLOT(activityChanged(AActivity*, QDate)));
-        connect(a, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
-        setListItem(i, a);
-        ui->listWidget->insertItem(ui->listWidget->count(), i);
-        listitem.insert(a, i);
-        itemToList.insert(i, a);
-    }
-    // an das gespeicherte Datum gehen
-    ui->dateSelector->setDate(currentDate);
-    ui->dateSelector->repaint();
-    showDate(currentDate);
-
-    personalfenster->refresh();
-
-    //- Hier prüfen, ob Personalfenster angezeigt wurde und wiederherstellen der Fensterpositionen
-    QJsonObject viewJSON = json.value("view").toObject();
-    int x = viewJSON.value("xMain").toInt();
-    int y = viewJSON.value("yMain").toInt();
-    int w = viewJSON.value("widthMain").toInt();
-    int h = viewJSON.value("heightMain").toInt();
-    this->setGeometry(x, y, w, h);
-    // Personalfenster
-    x = viewJSON.value("xPersonal").toInt();
-    y = viewJSON.value("yPersonal").toInt();
-    w = viewJSON.value("widthPersonal").toInt();
-    h = viewJSON.value("heightPersonal").toInt();
-    personalfenster->setGeometry(x, y, w, h);
-    personalfenster->hide();
-
-    settings->fromJson(json.value("settings").toObject());
-    return true;
-}
 
 MainWindow::~MainWindow()
 {
@@ -162,7 +138,7 @@ void MainWindow::openAActivity(AActivity *a)
             Fahrtag* f = dynamic_cast<Fahrtag*>(a);
             w = new FahrtagWindow(this, f);
         }
-        w->setWindowFilePath(filePath);
+        w->setWindowFilePath(datei->getPfad());
         fenster.insert(a, w);
         w->show();
     }
@@ -286,22 +262,10 @@ void MainWindow::showDate(QDate date)
 
 bool MainWindow::open(QString path)
 {
-    if (path == "") return false;
+    EplFile* datei = CoreMainWindow::open(path);
+    if (datei == nullptr) return false;
 
-    // Daten aus Datei laden
-    QJsonObject object = FileIO::getJsonFromFile(path);
-    if (object.isEmpty()) return false;
-
-    // Prüfen, ob Version kompatibel ist
-    QJsonObject generalJSON = object.value("general").toObject();
-    Version version = Version::stringToVersion(generalJSON.value("version").toString());
-    if (! pruefeVersionMitWarnung(version)) return false;
-
-    // Schreibschutz pruefen
-    bool schreibschutz = !setzeSchreibschutzOderWarnung(path);
-
-    MainWindow *mw = new MainWindow();
-    mw->ladeDatei(path, object, schreibschutz);
+    CoreMainWindow *mw = new MainWindow(datei);
     mw->show();
     return true;
 }
@@ -354,15 +318,20 @@ CoreMainWindow* MainWindow::handlerNew()
     return new MainWindow();
 }
 
-QJsonObject MainWindow::handlerSave()
+void MainWindow::handlerPrepareSave()
 {
-    QJsonObject json = handlerSavePersonal();
-    json.insert("activities", manager->toJson());
-    return json;
+    datei->setPositionKalender(EplFile::FensterPosition {x(), y(), width(), height() });
+    datei->setPositionPersonal(
+                EplFile::FensterPosition {personalfenster->x(),
+                                          personalfenster->y(),
+                                          personalfenster->width(),
+                                          personalfenster->height() });
+    datei->setAnzeigeDatum(ui->dateSelector->date());
 }
 
-void MainWindow::handlerSaveAdditional()
+void MainWindow::handlerOnSuccessfullSave()
 {
+    CoreMainWindow::handlerOnSuccessfullSave();
     if (settings->getAutom()) {
         int result = Export::autoUploadToServer(manager->filter(settings->getAuswahl()), settings->getServer());
         if (result == 0)
@@ -378,12 +347,6 @@ void MainWindow::handlerOpen(QString path)
     MainWindow::open(path);
 }
 
-void MainWindow::handlerPreferenes()
-{
-    EinstellungenDialog *dialog = new EinstellungenDialog();
-    dialog->show();
-}
-
 void MainWindow::handlerSettings()
 {
     FileSettingsDialog s(this, settings);
@@ -391,33 +354,6 @@ void MainWindow::handlerSettings()
         s.getSettings(settings);
         emit unsave();
     }
-}
-
-QJsonObject MainWindow::handlerSavePersonal()
-{
-    QJsonObject personalJSON = manager->getPersonal()->personalToJson();
-
-    QJsonObject viewJSON;
-    viewJSON.insert("xMain", this->x());
-    viewJSON.insert("yMain", this->y());
-    viewJSON.insert("widthMain", this->width());
-    viewJSON.insert("heightMain", this->height());
-    viewJSON.insert("xPersonal", personalfenster->x());
-    viewJSON.insert("yPersonal", personalfenster->y());
-    viewJSON.insert("widthPersonal", personalfenster->width());
-    viewJSON.insert("heightPersonal", personalfenster->height());
-    viewJSON.insert("currentDate", ui->dateSelector->date().toString("yyyy-MM-dd"));
-
-    QJsonObject generalJSON;
-    generalJSON.insert("version", CoreApplication::VERSION.toStringShort());
-
-    QJsonObject object;
-    object.insert("personal", personalJSON);
-    object.insert("view", viewJSON);
-    object.insert("settings", settings->toJson());
-    object.insert("general", generalJSON);
-
-    return object;
 }
 
 int MainWindow::getPosInCalendar(QDate date)

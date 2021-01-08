@@ -54,14 +54,15 @@ public:
 
     int getNummer() const;
     bool setNummer(int value);
+    int setAutoNummer();
 
     QString getName() const;
 
     QString getVorname() const;
-    void setVorname(const QString &value);
+    bool setVorname(const QString &value);
 
     QString getNachname() const;
-    void setNachname(const QString &value);
+    bool setNachname(const QString &value);
 
     QDate getGeburtstag() const;
     void setGeburtstag(const QDate &value);
@@ -124,6 +125,8 @@ public:
 
     bool pruefeFilter(Mitglied filter);
 
+    ManagerPersonal *getManager() const;
+
 protected:
     // Stammdaten
     QString id;
@@ -171,6 +174,7 @@ private:
 signals:
     void changed();
     void nameChanged(Person*, QString);// Person ist die Person und QString gibt den !ALTEN! Namen an
+    void del(Person *);
 };
 
 #endif // PERSON_H

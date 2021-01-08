@@ -35,8 +35,6 @@ public:
 
     static bool *openHelper(QString);
 
-    static bool isSupportedVersion(Version test);
-
 public slots:
     static void closeAllWindows();
     static void autoSaveWindows();

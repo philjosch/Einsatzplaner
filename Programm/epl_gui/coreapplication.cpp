@@ -139,14 +139,6 @@ bool CoreApplication::isUpdateVerfuegbar()
     return (v>VERSION) || ((v == VERSION) && DEVELOPER_MODE);
 }
 
-[[deprecated("Moved to basics")]]
-bool CoreApplication::isSupportedVersion(Version test)
-{
-    if (test == Version{-1,-1,-1}) return false;
-    if (test > CoreApplication::VERSION) return false;
-    return true;
-}
-
 void CoreApplication::closeAllWindows()
 {
     bool ok = true;
