@@ -141,12 +141,14 @@ Person *ManagerPersonal::newPerson()
     idToPerson.insert(neu->getId(), neu);
     connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
     connect(neu, &Person::changed, this, [=]() { emit changed();});
+    connect(neu, &Person::del, this, [=] (Person *p) { emit del(p); });
     emit changed();
     return neu;
 }
 
 bool ManagerPersonal::removePerson(Person *p)
 {
+    // TODO: pruefen, ob Person wirklich geloescht werden kann/soll wg. Eintrag Aktivitaeten
     if (personen.contains(p)) {
         personen.remove(p);
         personenSorted.remove(p->getName());

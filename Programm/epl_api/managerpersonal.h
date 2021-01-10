@@ -63,6 +63,7 @@ public slots:
 
 signals:
     void changed();
+    void del(Person*);
 
 private:
     QSet<Person *> personen;

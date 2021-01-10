@@ -14,8 +14,23 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_3">
-    <item row="0" column="0" colspan="3">
+   <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,1">
+    <property name="leftMargin">
+     <number>6</number>
+    </property>
+    <property name="topMargin">
+     <number>6</number>
+    </property>
+    <property name="rightMargin">
+     <number>6</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>6</number>
+    </property>
+    <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,0,0,0">
       <item row="0" column="2">
        <widget class="QLabel" name="label_26">
@@ -92,7 +107,7 @@
       </item>
      </layout>
     </item>
-    <item row="1" column="0" colspan="3">
+    <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidgetStammdaten">
       <property name="currentIndex">
        <number>0</number>
@@ -117,13 +132,6 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <item row="2" column="0">
-         <widget class="QLabel" name="labelAktiv">
-          <property name="text">
-           <string>Status</string>
-          </property>
-         </widget>
-        </item>
         <item row="4" column="1">
          <spacer name="verticalSpacer">
           <property name="orientation">
@@ -137,6 +145,106 @@
           </property>
          </spacer>
         </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="labelAustritt">
+          <property name="text">
+           <string>Austritt</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="labelGeburtstag">
+          <property name="text">
+           <string>Geburtstag</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <spacer name="horizontalSpacer_7">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1">
+         <widget class="QDateEdit" name="dateGeburtstag">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="displayFormat">
+           <string>dd.MM.yyyy</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QDateEdit" name="dateAustritt">
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="minimumDate">
+           <date>
+            <year>1999</year>
+            <month>11</month>
+            <day>20</day>
+           </date>
+          </property>
+          <property name="displayFormat">
+           <string>dd.MM.yyyy</string>
+          </property>
+          <property name="timeSpec">
+           <enum>Qt::UTC</enum>
+          </property>
+          <property name="date">
+           <date>
+            <year>1999</year>
+            <month>11</month>
+            <day>26</day>
+           </date>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="labelAktiv">
+          <property name="text">
+           <string>Status</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QCheckBox" name="checkAustritt">
+          <property name="text">
+           <string>Austritt zum</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="labelEintritt">
+          <property name="text">
+           <string>Eintritt</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="1">
          <widget class="QDateEdit" name="dateEintritt">
           <property name="enabled">
@@ -149,7 +257,7 @@
            <date>
             <year>1999</year>
             <month>11</month>
-            <day>23</day>
+            <day>21</day>
            </date>
           </property>
           <property name="displayFormat">
@@ -170,36 +278,6 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="labelEintritt">
-          <property name="text">
-           <string>Eintritt</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1" colspan="2">
-         <widget class="QPushButton" name="pushDelete">
-          <property name="statusTip">
-           <string>Aktuelle Person löschen</string>
-          </property>
-          <property name="text">
-           <string>Person löschen</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <spacer name="horizontalSpacer_7">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="0" column="2">
          <widget class="QCheckBox" name="checkEintritt">
           <property name="enabled">
@@ -210,83 +288,10 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="labelAustritt">
-          <property name="text">
-           <string>Austritt</string>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="1">
          <widget class="QCheckBox" name="checkAktiv">
           <property name="text">
            <string>Aktiv</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QCheckBox" name="checkAustritt">
-          <property name="text">
-           <string>Austritt zum</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QDateEdit" name="dateAustritt">
-          <property name="minimumSize">
-           <size>
-            <width>150</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="minimumDate">
-           <date>
-            <year>1999</year>
-            <month>11</month>
-            <day>22</day>
-           </date>
-          </property>
-          <property name="displayFormat">
-           <string>dd.MM.yyyy</string>
-          </property>
-          <property name="timeSpec">
-           <enum>Qt::UTC</enum>
-          </property>
-          <property name="date">
-           <date>
-            <year>1999</year>
-            <month>11</month>
-            <day>26</day>
-           </date>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="labelGeburtstag">
-          <property name="text">
-           <string>Geburtstag</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QDateEdit" name="dateGeburtstag">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="displayFormat">
-           <string>dd.MM.yyyy</string>
           </property>
          </widget>
         </item>
@@ -491,7 +496,7 @@
            <date>
             <year>1999</year>
             <month>11</month>
-            <day>22</day>
+            <day>20</day>
            </date>
           </property>
           <property name="displayFormat">
@@ -619,27 +624,6 @@
       </widget>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QPushButton" name="pushEinzelPDF">
-      <property name="text">
-       <string>Als PDF speichern …</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QPushButton" name="pushEinzelDrucken">
-      <property name="text">
-       <string>Drucken …</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QPushButton" name="pushMailEinzel">
-      <property name="text">
-       <string>Mail verfassen</string>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -651,9 +635,166 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuPerson">
+    <property name="title">
+     <string>Person</string>
+    </property>
+    <addaction name="actionMail"/>
+    <addaction name="separator"/>
+    <addaction name="actionLoeschen"/>
+    <addaction name="separator"/>
+    <addaction name="actionSchliessen"/>
+   </widget>
+   <widget class="QMenu" name="menuExport">
+    <property name="title">
+     <string>Export</string>
+    </property>
+    <addaction name="actionEinzelDrucken"/>
+    <addaction name="actionEinzelPDF"/>
+   </widget>
+   <addaction name="menuPerson"/>
+   <addaction name="menuExport"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::TopToolBarArea</set>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionEinzelPDF"/>
+   <addaction name="actionEinzelDrucken"/>
+   <addaction name="separator"/>
+   <addaction name="actionMail"/>
+  </widget>
+  <action name="actionEinzelDrucken">
+   <property name="icon">
+    <iconset resource="../icons/icons_rc.qrc">
+     <normaloff>:/icon/printer.svg</normaloff>:/icon/printer.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Drucken …</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionEinzelPDF">
+   <property name="icon">
+    <iconset resource="../icons/icons_rc.qrc">
+     <normaloff>:/icon/document.svg</normaloff>:/icon/document.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Als PDF speichern …</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+P</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionLoeschen">
+   <property name="text">
+    <string>Löschen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Backspace</string>
+   </property>
+  </action>
+  <action name="actionSchliessen">
+   <property name="text">
+    <string>Schließen</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionMail">
+   <property name="icon">
+    <iconset resource="../icons/icons_rc.qrc">
+     <normaloff>:/icon/at-symbol.svg</normaloff>:/icon/at-symbol.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Mail-Senden</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
  </widget>
- <resources/>
- <connections/>
+ <tabstops>
+  <tabstop>lineVorname</tabstop>
+  <tabstop>lineNachname</tabstop>
+  <tabstop>lineID</tabstop>
+  <tabstop>pushAutoID</tabstop>
+  <tabstop>tabWidgetStammdaten</tabstop>
+  <tabstop>checkEintritt</tabstop>
+  <tabstop>dateEintritt</tabstop>
+  <tabstop>checkGeburtstag</tabstop>
+  <tabstop>dateGeburtstag</tabstop>
+  <tabstop>checkAktiv</tabstop>
+  <tabstop>checkAustritt</tabstop>
+  <tabstop>dateAustritt</tabstop>
+  <tabstop>lineStrasse</tabstop>
+  <tabstop>linePLZ</tabstop>
+  <tabstop>lineOrt</tabstop>
+  <tabstop>linePhone</tabstop>
+  <tabstop>checkPhone</tabstop>
+  <tabstop>lineMail</tabstop>
+  <tabstop>checkMail</tabstop>
+  <tabstop>checkTf</tabstop>
+  <tabstop>checkZf</tabstop>
+  <tabstop>checkRangierer</tabstop>
+  <tabstop>dateDienst</tabstop>
+  <tabstop>checkDienst</tabstop>
+  <tabstop>spinKm</tabstop>
+  <tabstop>lineJob</tabstop>
+  <tabstop>plainBemerkung</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../icons/icons_rc.qrc"/>
+  <include location="../icons/icons_rc.qrc"/>
+  <include location="../icons/icons_rc.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>actionSchliessen</sender>
+   <signal>triggered()</signal>
+   <receiver>PersonWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>225</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

@@ -47,6 +47,7 @@ void MainWindowPersonal::constructor()
 
 
     connect(personal, SIGNAL(changed()), this, SLOT(unsave()));
+    connect(personal, SIGNAL(del(Person *)), this, SLOT(personLoeschen(Person*)));
 
     connect(ui->actionMindeststunden, SIGNAL(triggered()), this, SLOT(editMinimumHours()));
     connect(ui->comboAnzeige, SIGNAL(currentIndexChanged(int)), this, SLOT(refresh()));
@@ -228,7 +229,7 @@ void MainWindowPersonal::on_actionMitgliederListeCSV_triggered()
                                   FileIO::getFilePathSave(this, "Mitglieder.csv", tr("CSV-Datei (*.csv)")));
 }
 
-void MainWindowPersonal::on_pushEmail_clicked()
+void MainWindowPersonal::on_actionMailListe_triggered()
 {
     if (current.isEmpty()) return;
     QSet<QString> mails;
@@ -277,7 +278,7 @@ void MainWindowPersonal::on_tabelleMitglieder_cellDoubleClicked(int row, [[maybe
     }
 }
 
-void MainWindowPersonal::on_pushAdd_clicked()
+void MainWindowPersonal::on_actionAddPerson_triggered()
 {
     Person *neu = manager->getPersonal()->newPerson();
     showPerson(neu);
@@ -299,6 +300,16 @@ void MainWindowPersonal::showPerson(Person *p)
         w->setWindowFilePath(datei->getPfad());
         fenster.insert(p, w);
         w->show();
+    }
+}
+
+void MainWindowPersonal::personLoeschen(Person *p)
+{
+    if (personal->removePerson(p)) {
+        if (fenster.contains(p)) {
+            fenster.remove(p);
+        }
+        refresh();
     }
 }
 

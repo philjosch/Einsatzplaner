@@ -34,7 +34,7 @@ CONFIG += macos
 #OTHER_FILES += qt_de.qm
 
 win32 {
-    RC_ICONS = ../Icon/keks.ico
+    RC_ICONS = $$PWD/keks/keks.ico
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
     QMAKE_TARGET_COMPANY = Philipp Schepper
     QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2021
@@ -47,14 +47,16 @@ DEFINES += GIT_CURRENT_SHA1="\"\\\"$${COMMIT_HASH}\\\"\""
 
 
 RESOURCES += \
-    ../resources.qrc
+    $$PWD/icons/icons_rc.qrc \
+    $$PWD/keks/keks_rc.qrc \
+    $$PWD/resources.qrc
 
 macx {
-    OTHER_FILES += ../Icon/keks.icns
-    OTHER_FILES += ../Info.plist
-    QMAKE_INFO_PLIST = ../Info.plist
-    DISTFILES += ../Info.plist
-    ICON = ../Icon/keks.icns
+    OTHER_FILES += $$PWD/keks/keks.icns
+    OTHER_FILES += $$PWD/Info.plist
+    QMAKE_INFO_PLIST = $$PWD/Info.plist
+    DISTFILES += $$PWD/Info.plist
+    ICON = $$PWD/keks/keks.icns
 }
 
 

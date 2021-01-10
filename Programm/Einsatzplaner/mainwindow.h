@@ -39,8 +39,8 @@ public slots:
 protected slots:
 
     // Sonstige Buttons im Fenster
-    void on_buttonPersonal_clicked();
-    void on_buttonExport_clicked();
+    void on_actionPersonal_triggered();
+    void on_actionExport_triggered();
 
     // Kalender
     void on_buttonPrev_clicked();
@@ -50,7 +50,7 @@ protected slots:
     // Aktivitäten
     void openAActivity(AActivity *a);
     void newAActivityHandler(AActivity *a);
-    void on_buttonDelete_clicked();
+    void on_actionLoeschen_triggered();
 
     // Liste der Aktivitäten
     void setListItem(QListWidgetItem *i, AActivity *a);

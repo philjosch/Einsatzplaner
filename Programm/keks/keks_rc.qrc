@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/keks">
+        <file>keks.icns</file>
+        <file>keks.png</file>
+        <file>square.png</file>
+        <file>square@2x.png</file>
+    </qresource>
+</RCC>

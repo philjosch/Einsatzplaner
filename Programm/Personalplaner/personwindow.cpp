@@ -1,6 +1,8 @@
 #include "personwindow.h"
 #include "ui_personwindow.h"
 
+#include "export.h"
+
 #include <QDesktopServices>
 #include <QMessageBox>
 
@@ -61,6 +63,42 @@ PersonWindow::PersonWindow(QWidget *parent, Person *p) :
 PersonWindow::~PersonWindow()
 {
     delete ui;
+}
+
+void PersonWindow::on_actionMail_triggered()
+{
+    if (person->getMail() != "") {
+        QDesktopServices::openUrl(QUrl("mailto:"+person->getMail()));
+    }
+}
+
+void PersonWindow::on_actionLoeschen_triggered()
+{
+    if (enabled) {
+        if (person->getZeiten(Anzahl) > 0) {
+            QMessageBox::information(this, tr("Warnung"), tr("Die ausgewählte Person kann nicht gelöscht werden, da Sie noch bei Aktivitäten eingetragen ist.\nBitte lösen Sie diese Verbindung bevor Sie die Person löschen!"));
+            return;
+        }
+        if (QMessageBox::question(this, tr("Wirklich löschen"), tr("Möchten Sie die Person wirklich unwiderruflich löschen und aus dem System entfernen.\nFür ausgetretene Mitglieder können Sie auch ein Austrittsdatum angeben!")) != QMessageBox::Yes) {
+            return;
+        }
+        enabled = false;
+
+        emit person->del(person);
+        this->close();
+        deleteLater();
+    }
+}
+
+void PersonWindow::on_actionEinzelPDF_triggered()
+{
+    Export::printMitgliederEinzelEinzel(person,
+                        Export::getPrinterPDF(this, "Stammdatenblatt.pdf", QPrinter::Orientation::Portrait));
+}
+void PersonWindow::on_actionEinzelDrucken_triggered()
+{
+    Export::printMitgliederEinzelEinzel(person,
+                        Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 
 
@@ -274,28 +312,3 @@ void PersonWindow::on_checkAustritt_clicked(bool checked)
         }
     }
 }
-
-void PersonWindow::on_pushDelete_clicked()
-{
-    if (enabled) {
-        if (person->getZeiten(Anzahl) > 0) {
-            QMessageBox::information(this, tr("Warnung"), tr("Die ausgewählte Person kann nicht gelöscht werden, da Sie noch bei Aktivitäten eingetragen ist.\nBitte lösen Sie diese Verbindung bevor Sie die Person löschen!"));
-            return;
-        }
-        if (QMessageBox::question(this, tr("Wirklich löschen"), tr("Möchten Sie die Person wirklich unwiderruflich löschen und aus dem System entfernen.\nFür ausgetretene Mitgleider können Sie auch ein Austrittsdatum angeben!")) != QMessageBox::Yes) {
-            return;
-        }
-        enabled = false;
-
-        emit person->del(person);
-        this->close();
-        deleteLater();
-    }
-}
-void PersonWindow::on_pushMailEinzel_clicked()
-{
-    if (person->getMail() != "") {
-        QDesktopServices::openUrl(QUrl("mailto:"+person->getMail()));
-    }
-}
-

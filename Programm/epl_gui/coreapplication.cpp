@@ -31,7 +31,7 @@ CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool d
     } else {
         QCoreApplication::setApplicationVersion(VERSION.toString());
     }
-    QIcon icon(":/icons/square.png");
+    QIcon icon(":/keks/square.png");
     setWindowIcon(icon);
     autoSaveTimer = nullptr;
 

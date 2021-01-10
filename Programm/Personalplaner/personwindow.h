@@ -18,6 +18,17 @@ public:
 
 
 private slots:
+    // Menueleiste
+    // Person
+    void on_actionMail_triggered();
+
+    void on_actionLoeschen_triggered();
+    // Export
+    void on_actionEinzelPDF_triggered();
+    void on_actionEinzelDrucken_triggered();
+
+
+    // Felder Oberflaeche
     void on_lineVorname_textChanged(const QString &arg1);
     void on_lineNachname_textChanged(const QString &arg1);
 
@@ -58,9 +69,6 @@ private slots:
     void on_checkAustritt_clicked(bool checked);
     void on_dateAustritt_dateChanged(const QDate &date);
 
-    void on_pushDelete_clicked();
-
-    void on_pushMailEinzel_clicked();
 
 private:
     Ui::PersonWindow *ui;

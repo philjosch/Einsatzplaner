@@ -75,8 +75,8 @@ void MainWindow::constructor()
     fenster = QMap<AActivity*, QMainWindow*>();
 
     connect(manager->getPersonal(), SIGNAL(changed()), this, SLOT(unsave()));
-    connect(ui->buttonAddActivity, SIGNAL(clicked(bool)), this, SLOT(newActivity()));
-    connect(ui->buttonAddFahrtag, SIGNAL(clicked(bool)), this, SLOT(newFahrtag()));
+    connect(ui->actionNeuArbeitseinsatz, SIGNAL(triggered(bool)), this, SLOT(newActivity()));
+    connect(ui->actionNeuFahrtag, SIGNAL(triggered(bool)), this, SLOT(newFahrtag()));
     connect(ui->dateSelector, SIGNAL(dateChanged(QDate)), this, SLOT(showDate(QDate)));
     connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), SLOT(onItemInListClicked(QListWidgetItem*)));
 
@@ -206,7 +206,7 @@ void MainWindow::activityChanged(AActivity *a, QDate oldDate)
     unsave();
 }
 
-void MainWindow::on_buttonDelete_clicked()
+void MainWindow::on_actionLoeschen_triggered()
 {
     QList<QListWidgetItem*> selected = ui->listWidget->selectedItems();
     if (! selected.isEmpty()) {
@@ -299,7 +299,7 @@ void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
     i->setBackground(QBrush(QColor(getFarbe(a))));
 }
 
-void MainWindow::on_buttonPersonal_clicked()
+void MainWindow::on_actionPersonal_triggered()
 {
     personalfenster->show();
     personalfenster->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
@@ -307,7 +307,7 @@ void MainWindow::on_buttonPersonal_clicked()
     personalfenster->activateWindow();
 }
 
-void MainWindow::on_buttonExport_clicked()
+void MainWindow::on_actionExport_triggered()
 {
     exportDialog->hardReload();
     exportDialog->exec();

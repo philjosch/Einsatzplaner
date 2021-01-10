@@ -34,9 +34,11 @@ private slots:
 
     void editMinimumHours();
 
-    void on_pushAdd_clicked();
+    void on_actionAddPerson_triggered();
 
     void showPerson(Person *p);
+
+    void personLoeschen(Person *p);
 
 
     void on_actionMitgliederEinzelListePDF_triggered();
@@ -46,7 +48,7 @@ private slots:
     void on_actionMitgliederListeDrucken_triggered();
     void on_actionMitgliederListeCSV_triggered();
 
-    void on_pushEmail_clicked();
+    void on_actionMailListe_triggered();
 
     void on_tabelleMitglieder_cellDoubleClicked(int row, int column);
 
