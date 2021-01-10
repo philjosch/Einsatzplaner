@@ -38,7 +38,7 @@
 			<key>CFBundleTypeName</key>
 			<string>AkO-File</string>
 			<key>CFBundleTypeIconFile</key>
-			<string>keks.icns</string>
+                        <string>EplDocIcon</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>

@@ -32,4 +32,5 @@ win32 {
 }
 macx {
     BUNDLEID = de.philipp-schepper.personalplaner
+    ICON = $$PWD/../../Icon/Personalplaner.icns
 }

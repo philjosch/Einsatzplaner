@@ -79,6 +79,8 @@ EplFile::EplFile(QString path)
     personal = manager->getPersonal();
     personal->fromJson(personalJson);
     manager->fromJson(activitiesJson);
+    dateiEigenschaften = new FileSettings();
+    dateiEigenschaften->fromJson(geladen.value("settings").toObject());
 
     QJsonObject viewJSON = geladen.value("view").toObject();
     int x = viewJSON.value("xMain").toInt();
@@ -183,9 +185,9 @@ void EplFile::speichern()
 }
 void EplFile::speichernUnter(QString path)
 {
-    if (pfad == "")
+    if (path == "")
         throw FilePathInvalidException();
-    if (! FileIO::Schreibschutz::pruefen(pfad).isEmpty())
+    if (! FileIO::Schreibschutz::pruefen(path).isEmpty())
         throw FileWriteProtectedException();
 
     if (FileIO::saveJsonToFile(path, generiereJson())) {

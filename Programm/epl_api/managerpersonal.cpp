@@ -77,7 +77,8 @@ void ManagerPersonal::fromJson(QJsonObject o)
         personenSorted.insert(neu->getName(), neu);
         idToPerson.insert(neu->getId(), neu);
         connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
-        connect(neu, &Person::changed, this, [=]() { emit changed();});
+        connect(neu, &Person::changed, this, [=]() { emit changed();} );
+        connect(neu, &Person::del, this, [=](Person *p) {emit del(p);} );
     }
     if (o.contains("minimumKeys") && o.contains("minimumValues")) {
         minimumHours.clear();

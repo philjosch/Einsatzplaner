@@ -14,6 +14,9 @@ int main(int argc, char *argv[])
     qtTranslator.load(":/translations/qt_" + QLocale::system().name());
     a.installTranslator(&qtTranslator);
 
+    QIcon icon(":/appIcon/EinsatzplanerAppIcon.png");
+    a.setWindowIcon(icon);
+
     if (a.generateWindow()) {
         MainWindow *w = new MainWindow();
         w->show();

@@ -43,6 +43,7 @@ win32 {
 
 macx {
     BUNDLEID = de.philipp-schepper.einsatzplaner
+    ICON = $$PWD/../../Icon/Einsatzplaner.icns
 }
 
 

@@ -15,6 +15,9 @@ int main(int argc, char *argv[])
     qtTranslator.load(":/translations/qt_" + QLocale::system().name());
     a.installTranslator(&qtTranslator);
 
+    QIcon icon(":/appIcon/PersonalplanerAppIcon.png");
+    a.setWindowIcon(icon);
+
     if (a.generateWindow()) {
         MainWindowPersonal *w = new MainWindowPersonal();
         w->show();

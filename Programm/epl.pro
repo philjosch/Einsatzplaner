@@ -20,5 +20,6 @@ Personalplaner.depends = epl_api epl_gui
 DISTFILES += share.pri
 RESOURCES += resources.qrc \
     icons/icons_rc.qrc \
-    keks/keks_rc.qrc
-OTHER_FILES += Info.plist
+    ../Icon/appicon.qrc
+OTHER_FILES += Info.plist \
+    ../Icon/EplDocIcon.icns
