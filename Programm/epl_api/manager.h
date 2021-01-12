@@ -8,8 +8,10 @@
 
 #include <QJsonObject>
 
-class Manager
+class Manager : public QObject
 {
+    Q_OBJECT
+
 public:
     Manager();
     QJsonArray toJson();
@@ -21,6 +23,9 @@ public:
 
     static QString getHtmlFuerListenansicht(QList<AActivity *> liste);
     static QString getHtmlFuerEinzelansichten(QList<AActivity *> liste);
+
+signals:
+    void changed();
 
 public slots:
     Fahrtag *newFahrtag(QDate datum);

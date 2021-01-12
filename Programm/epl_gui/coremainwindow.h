@@ -4,6 +4,7 @@
 #include "activity.h"
 #include "fahrtag.h"
 #include "eplexception.h"
+#include "eplfile.h"
 
 #include <QAction>
 #include <QCloseEvent>
@@ -11,7 +12,6 @@
 #include <QMainWindow>
 #include <QMap>
 #include <QMenu>
-#include <eplfile.h>
 
 class CoreMainWindow : public QMainWindow
 {
@@ -59,15 +59,18 @@ protected slots:
 
     static EplFile *open(QString path);
 
-    QList<QMainWindow*> getChildWindows();
 
 protected:
+    /** Hilfsmethoden **/
+    void updateWindowHeaders();
+    QList<QMainWindow*> getChildWindows();
+
+    /** Model **/
+    EplFile *datei;
+
+    /** View **/
     QMenu *recentlyUsedMenu;
     QAction *recentlyUsedClear;
-
-    void updateWindowHeaders();
-
-    EplFile *datei;
 };
 
 #endif // MAINWINDOW_H

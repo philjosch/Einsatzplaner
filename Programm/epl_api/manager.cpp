@@ -3,7 +3,7 @@
 #include <QJsonArray>
 #include <QListIterator>
 
-Manager::Manager()
+Manager::Manager() : QObject()
 {
     activities = QList<AActivity*>();
     personal = new ManagerPersonal();
@@ -40,6 +40,7 @@ void Manager::fromJson(QJsonArray array)
                 akt = new Activity(aO, personal);
             }
         }
+        connect(akt, &AActivity::changed, this, [=]() { emit changed();});
         activities.append(akt);
     }
     sort();
@@ -50,6 +51,8 @@ Fahrtag *Manager::newFahrtag(QDate datum)
     Fahrtag *f = new Fahrtag(datum, personal);
     activities.append(f);
     sort();
+    connect(f, &AActivity::changed, this, [=]() {emit changed();});
+    emit changed();
     return f;
 }
 
@@ -58,6 +61,8 @@ Activity *Manager::newActivity(QDate datum)
     Activity *a = new Activity(datum, personal);
     activities.append(a);
     sort();
+    connect(a, &AActivity::changed, this, [=]() {emit changed();});
+    emit changed();
     return a;
 }
 

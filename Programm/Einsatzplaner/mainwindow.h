@@ -1,17 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "coremainwindow.h"
 #include "activity.h"
 #include "fahrtag.h"
 #include "calendarday.h"
 #include "exportdialog.h"
 #include "personalwindow.h"
-
-#include <QCloseEvent>
-#include <QJsonObject>
-#include <QMainWindow>
-#include <QMap>
-#include "coremainwindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -26,61 +21,68 @@ public:
     MainWindow(EplFile *file, QWidget *parent = nullptr);
     ~MainWindow();
 
-public slots:
-    void newFahrtag(QDate d = QDate::currentDate());
-    void newActivity(QDate d = QDate::currentDate());
-    void activityChanged(AActivity *a, QDate oldDate = QDate());
-    bool removeActivity(AActivity *a);
-
-    void showDate(QDate date);
-
     static bool open(QString path);
 
+private:
+    void constructor();
+
 protected slots:
-
-    // Sonstige Buttons im Fenster
-    void on_actionPersonal_triggered();
-    void on_actionExport_triggered();
-
-    // Kalender
-    void on_buttonPrev_clicked();
-    void on_buttonToday_clicked();
-    void on_buttonNext_clicked();
-
-    // Aktivitäten
-    void openAActivity(AActivity *a);
-    void newAActivityHandler(AActivity *a);
-    void on_actionLoeschen_triggered();
-
-    // Liste der Aktivitäten
-    void setListItem(QListWidgetItem *i, AActivity *a);
-    void onItemInListClicked(QListWidgetItem *item);
-
-
-
+    /** Vererbte Methoden von CoreMainWindow **/
     CoreMainWindow *handlerNew();
     void handlerPrepareSave();
     void handlerOnSuccessfullSave();
     void handlerOpen(QString path);
     void handlerSettings();
 
+    /** Menueleiste **/
+    /* Datei */
+    void on_actionExport_triggered();
+    /* Bearbeiten */
+    void on_actionLoeschen_triggered();
+    /* Ansicht */
+    void on_actionPersonal_triggered();
 
-private:
-    void constructor();
+    /** Fenster **/
+    // Kalender
+    void on_buttonPrev_clicked();
+    void on_buttonToday_clicked();
+    void on_buttonNext_clicked();
 
+    void showDate(QDate date);
+
+
+    // Aktivitaeten
+    void newFahrtag(QDate d = QDate::currentDate());
+    void newActivity(QDate d = QDate::currentDate());
+    void newAActivityHandler(AActivity *a);
+
+    void openAActivity(AActivity *a);
+
+    void activityChanged(AActivity *a, QDate oldDate = QDate());
+    bool removeActivity(AActivity *a);
+
+
+    // Liste der Aktivitäten
+    void setListItem(QListWidgetItem *i, AActivity *a);
+    void onItemInListClicked(QListWidgetItem *item);
+
+
+protected:
+    /** Hilfsmethoden **/
+    int getPosInCalendar(QDate date);
+
+    /** Modell **/
+    Manager *manager;
+
+    /** View **/
     Ui::MainWindow *ui;
     QList<CalendarDay*> tage;
-
     QMap<AActivity*, QMainWindow*> fenster;
 
     PersonalWindow *personalfenster;
     ExportDialog *exportDialog;
-    FileSettings *settings;
 
-    Manager *manager;
-
-    int getPosInCalendar(QDate date);
-
+    /** Controller **/
     QMap<AActivity*, QListWidgetItem*> listitem; // Gibt an, welcher Aktivität welches Listenelement in der gesamtListe zugeordnet ist
     QMap<QListWidgetItem*, AActivity*> itemToList;
 };

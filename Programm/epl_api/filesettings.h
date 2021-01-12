@@ -6,8 +6,10 @@
 
 #include <QJsonObject>
 
-class FileSettings
+class FileSettings : public QObject
 {
+    Q_OBJECT
+
 public:
     FileSettings();
 
@@ -25,6 +27,9 @@ public:
 
     AActivity::Auswahl getAuswahl() const;
     void setAuswahl(const AActivity::Auswahl &value);
+
+signals:
+    void changed();
 
 protected:
     bool enabled = false;

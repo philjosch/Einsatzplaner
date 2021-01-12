@@ -23,6 +23,10 @@ EplFile::EplFile()
     currentDate = QDate::currentDate();
     positionKalender = FensterPosition{};
     positionPersonal = FensterPosition{};
+
+    connect(manager, &Manager::changed, this, &EplFile::veraendern);
+    connect(personal, &ManagerPersonal::changed, this, &EplFile::veraendern);
+    connect(dateiEigenschaften, &FileSettings::changed, this, &EplFile::veraendern);
 }
 
 EplFile::EplFile(QString path)
@@ -93,6 +97,10 @@ EplFile::EplFile(QString path)
     w = viewJSON.value("widthPersonal").toInt();
     h = viewJSON.value("heightPersonal").toInt();
     positionPersonal = FensterPosition {x, y, w, h};
+
+    connect(manager, &Manager::changed, this, &EplFile::veraendern);
+    connect(personal, &ManagerPersonal::changed, this, &EplFile::veraendern);
+    connect(dateiEigenschaften, &FileSettings::changed, this, &EplFile::veraendern);
 }
 
 
@@ -118,6 +126,7 @@ bool EplFile::istGespeichert() const
 void EplFile::veraendern()
 {
     gespeichert = false;
+    emit changed();
 }
 
 
@@ -141,7 +150,7 @@ QDate EplFile::getAnzeigeDatum() const
 void EplFile::setAnzeigeDatum(const QDate &value)
 {
     currentDate = value;
-    gespeichert = false;
+    veraendern();
 }
 
 EplFile::FensterPosition EplFile::getPositionKalender()
@@ -151,7 +160,7 @@ EplFile::FensterPosition EplFile::getPositionKalender()
 void EplFile::setPositionKalender(const FensterPosition &value)
 {
     positionKalender = value;
-    gespeichert = false;
+    veraendern();
 }
 
 EplFile::FensterPosition EplFile::getPositionPersonal()
@@ -161,7 +170,7 @@ EplFile::FensterPosition EplFile::getPositionPersonal()
 void EplFile::setPositionPersonal(const FensterPosition &value)
 {
     positionPersonal = value;
-    gespeichert = false;
+    veraendern();
 }
 
 

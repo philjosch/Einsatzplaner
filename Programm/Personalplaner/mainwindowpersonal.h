@@ -3,7 +3,6 @@
 
 #include "coremainwindow.h"
 #include "manager.h"
-#include "personwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindowPersonal; }
@@ -18,29 +17,25 @@ public:
     MainWindowPersonal(EplFile *file, QWidget *parent = nullptr);
     ~MainWindowPersonal();
 
-public slots:
     static bool open(QString path);
-    void refresh();
 
+private:
+    void constructor();
 
 protected slots:
+    /** Vererbte Methoden von CoreMainWindow **/
     CoreMainWindow *handlerNew();
     void handlerPrepareSave();
     void handlerOpen(QString path);
 
-
-private slots:
-    void constructor();
-
-    void editMinimumHours();
-
+    /** Menueleiste **/
+    /* Bearbeiten */
     void on_actionAddPerson_triggered();
+    void on_actionAktualisieren_triggered();
+    void on_actionMindeststunden_triggered();
+    void on_actionMailListe_triggered();
 
-    void showPerson(Person *p);
-
-    void personLoeschen(Person *p);
-
-
+    /* Export */
     void on_actionMitgliederEinzelListePDF_triggered();
     void on_actionMitgliederEinzelListeDrucken_triggered();
 
@@ -48,25 +43,28 @@ private slots:
     void on_actionMitgliederListeDrucken_triggered();
     void on_actionMitgliederListeCSV_triggered();
 
-    void on_actionMailListe_triggered();
+    /** Fenster **/
+    void on_comboAnzeige_currentIndexChanged(int index);
 
     void on_tabelleMitglieder_cellDoubleClicked(int row, int column);
 
-
-private:
-    Ui::MainWindowPersonal *ui;
-
-    ManagerPersonal *personal;
-
-    QMap<Person*, PersonWindow*> fenster;
-
-
-    QList<Person*> current;
-    Mitglied filter;
+protected:
+    /** Hilfsmethoden **/
+    void showPerson(Person *p);
+    void personLoeschen(Person *p);
 
     QList<Person*> getSortierteListe();
 
-    Manager *manager;
+    /** Modell **/
+    ManagerPersonal *personal;
+
+    /** View **/
+    Ui::MainWindowPersonal *ui;
+    QMap<Person*, QMainWindow*> fenster;
+
+    /** Controller **/
+    QList<Person*> current;
+    Mitglied filter;
 
 };
 #endif // MAINWINDOWPERSONAL_H

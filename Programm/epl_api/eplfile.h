@@ -48,6 +48,8 @@ public slots:
 
     void close();
 
+signals:
+    void changed();
 
 private:
     QString pfad;

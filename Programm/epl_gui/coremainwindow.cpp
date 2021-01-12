@@ -5,12 +5,11 @@
 #include "einstellungendialog.h"
 
 #include <QMessageBox>
-#include <QJsonArray>
-#include <QMessageBox>
 
 CoreMainWindow::CoreMainWindow(QWidget *parent) : QMainWindow(parent)
 {
     datei = new EplFile();
+    connect(datei, &EplFile::changed, this, &CoreMainWindow::unsave);
     // Views
 
     setWindowTitle(tr("Übersicht"));
@@ -21,6 +20,7 @@ CoreMainWindow::CoreMainWindow(QWidget *parent) : QMainWindow(parent)
 CoreMainWindow::CoreMainWindow(EplFile *datei, QWidget *parent) : QMainWindow(parent)
 {
     this->datei = datei;
+    connect(datei, &EplFile::changed, this, &CoreMainWindow::unsave);
     // Views
 
     setWindowTitle(tr("Übersicht"));
@@ -180,7 +180,6 @@ void CoreMainWindow::closeEvent(QCloseEvent *event)
 
 void CoreMainWindow::unsave()
 {
-    datei->veraendern();
     updateWindowHeaders();
 }
 

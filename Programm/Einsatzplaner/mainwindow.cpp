@@ -52,8 +52,6 @@ MainWindow::MainWindow(EplFile *file, QWidget *parent) :
     EplFile::FensterPosition personal = datei->getPositionPersonal();
     personalfenster->setGeometry(personal.x, personal.y, personal.width, personal.height);
     personalfenster->hide();
-
-    settings = datei->getDateiEigenschaften();
 }
 
 void MainWindow::constructor()
@@ -64,8 +62,7 @@ void MainWindow::constructor()
 
     // Views
     personalfenster = new PersonalWindow(this, datei->getPersonal());
-    settings = new FileSettings();
-    exportDialog = new ExportDialog(manager, settings, this);
+    exportDialog = new ExportDialog(manager, datei->getDateiEigenschaften(), this);
     recentlyUsedMenu = ui->menuRecentlyused;
     recentlyUsedClear = ui->actionClear;
 
@@ -74,7 +71,6 @@ void MainWindow::constructor()
     itemToList = QMap<QListWidgetItem*, AActivity*>();
     fenster = QMap<AActivity*, QMainWindow*>();
 
-    connect(manager->getPersonal(), SIGNAL(changed()), this, SLOT(unsave()));
     connect(ui->actionNeuArbeitseinsatz, SIGNAL(triggered(bool)), this, SLOT(newActivity()));
     connect(ui->actionNeuFahrtag, SIGNAL(triggered(bool)), this, SLOT(newFahrtag()));
     connect(ui->dateSelector, SIGNAL(dateChanged(QDate)), this, SLOT(showDate(QDate)));
@@ -146,8 +142,6 @@ void MainWindow::openAActivity(AActivity *a)
 
 void MainWindow::newAActivityHandler(AActivity *a)
 {
-    unsave();
-
     connect(a, SIGNAL(changed(AActivity*, QDate)), this, SLOT(activityChanged(AActivity*, QDate)));
     connect(a, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
 
@@ -203,7 +197,6 @@ void MainWindow::activityChanged(AActivity *a, QDate oldDate)
             break;
         }
     }
-    unsave();
 }
 
 void MainWindow::on_actionLoeschen_triggered()
@@ -226,7 +219,6 @@ bool MainWindow::removeActivity(AActivity *a)
     if (pos >= 0)
         tage.at(pos)->remove(a);
     bool ret = manager->removeActivity(a);
-    unsave();
     if (fenster.contains(a)) {
         fenster.remove(a);
     }
@@ -332,8 +324,8 @@ void MainWindow::handlerPrepareSave()
 void MainWindow::handlerOnSuccessfullSave()
 {
     CoreMainWindow::handlerOnSuccessfullSave();
-    if (settings->getAutom()) {
-        int result = Export::autoUploadToServer(manager->filter(settings->getAuswahl()), settings->getServer());
+    if (datei->getDateiEigenschaften()->getAutom()) {
+        int result = Export::autoUploadToServer(manager->filter(datei->getDateiEigenschaften()->getAuswahl()), datei->getDateiEigenschaften()->getServer());
         if (result == 0)
             ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
         else if (result > 0)
@@ -349,10 +341,9 @@ void MainWindow::handlerOpen(QString path)
 
 void MainWindow::handlerSettings()
 {
-    FileSettingsDialog s(this, settings);
+    FileSettingsDialog s(this, datei->getDateiEigenschaften());
     if (s.exec() == QDialog::Accepted) {
-        s.getSettings(settings);
-        emit unsave();
+        s.getSettings(datei->getDateiEigenschaften());
     }
 }
 

@@ -1,6 +1,6 @@
 #include "filesettings.h"
 
-FileSettings::FileSettings()
+FileSettings::FileSettings() : QObject()
 {
     server = Networking::Server{"", "", ""};
     auswahl = AActivity::Auswahl();
@@ -35,6 +35,7 @@ bool FileSettings::getEnabled() const
 void FileSettings::setEnabled(bool value)
 {
     enabled = value;
+    emit changed();
 }
 
 bool FileSettings::getAutom() const
@@ -44,6 +45,7 @@ bool FileSettings::getAutom() const
 void FileSettings::setAutom(bool value)
 {
     autom = value;
+    emit changed();
 }
 
 AActivity::Auswahl FileSettings::getAuswahl() const
@@ -54,6 +56,7 @@ AActivity::Auswahl FileSettings::getAuswahl() const
 void FileSettings::setAuswahl(const AActivity::Auswahl &value)
 {
     auswahl = value;
+    emit changed();
 }
 
 Networking::Server FileSettings::getServer() const
@@ -64,4 +67,5 @@ Networking::Server FileSettings::getServer() const
 void FileSettings::setServer(const Networking::Server &value)
 {
     server = value;
+    emit changed();
 }
