@@ -67,13 +67,6 @@ enum Mistake {
     OK, // Operation wurde erfolgreich durchgefuehrt
     SonstigerFehler, // Unbestimmter Fehler
 
-    // Fehler bei der Personalverwaltung
-    ExternOk, // Die Person ist nicht im System bekannt, wurde aber als externe Person akzeptiert
-    PassivOk, // Die Person wurde eingetragen, ist allerdings als passives Mitglied gefuehrt
-
-    PersonNichtGefunden, // Die Person wurde nicht gefunden
-    FalscheQualifikation, // Die Person hat nicht die noetigen Qualifikationen
-
     // Fehler bei der Verteilung der Sitzplaetze
     KapazitaetUeberlauf // Es gibt nicht genuegend Sitzplaetze fuer die Reservierungen
 };

@@ -3,6 +3,7 @@
 #include "fahrtag.h"
 #include "activity.h"
 #include "aactivity.h"
+#include "eplexception.h"
 
 #include <QJsonArray>
 #include <QLinkedList>
@@ -214,16 +215,22 @@ bool AActivity::removePerson(Person *p, Category kat)
     return p->removeActivity(this, kat);
 }
 
-Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat)
+AActivity::Einsatz AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat)
 {
    /*
     * Angaben fuer die Aufgabe pruefen
     * pruefen ob die Person geeignet ist
     * Person hinzufuegen oder Fehlermeldung zurueckgeben
     */
+    if (p == nullptr)
+        throw AActivityException();
+
+    if (kat == Zub && !hasQualification(p, kat, bemerkung, datum)) {
+        kat = Begleiter;
+    }
 
     if (! hasQualification(p, kat, bemerkung, datum))
-        return Mistake::FalscheQualifikation;
+        throw FalscheQualifikationException(p->getName());
 
     // jetzt ist alles richtig und die person kann registiert werden.
     p->addActivity(this, kat);
@@ -233,13 +240,14 @@ Mistake AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime en
     info.ende = ende;
     info.kategorie = kat;
     info.bemerkung = bemerkung;
+    Einsatz e = Einsatz{p, kat};
 
-    personen.insert(Einsatz{p, kat}, info);
+    personen.insert(e, info);
 
     emit changed(this);
-    return Mistake::OK;
+    return e;
 }
-Mistake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat)
+AActivity::Einsatz AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat)
 {
     Person *pers = personal->getPerson(p);
     if (pers != nullptr) {
@@ -251,11 +259,9 @@ Mistake AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime en
         neuePerson->setAusbildungTf(true);
         neuePerson->setAusbildungZf(true);
         neuePerson->setAusbildungRangierer(true);
-        Mistake atw = addPerson(neuePerson, bemerkung, start, ende, kat);
-        if (atw == Mistake::OK) return ExternOk;
-        return atw;
+        return addPerson(neuePerson, bemerkung, start, ende, kat);
     }
-    return Mistake::PersonNichtGefunden;
+    throw PersonNichtGefundenException(p);
 }
 
 void AActivity::updatePersonInfos(Person *p, Category kat, Infos neu)

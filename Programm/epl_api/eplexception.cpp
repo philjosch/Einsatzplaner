@@ -2,6 +2,7 @@
 
 EplException::EplException()
 {
+    message = QObject::tr("Es ist ein unbekannter Fehler augetreten.");
 
 }
 

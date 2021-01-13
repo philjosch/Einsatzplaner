@@ -325,7 +325,7 @@ void MainWindow::handlerOnSuccessfullSave()
 {
     CoreMainWindow::handlerOnSuccessfullSave();
     if (datei->getDateiEigenschaften()->getAutom()) {
-        int result = Export::autoUploadToServer(manager->filter(datei->getDateiEigenschaften()->getAuswahl()), datei->getDateiEigenschaften()->getServer());
+        int result = Export::Upload::autoUploadToServer(manager->filter(datei->getDateiEigenschaften()->getAuswahl()), datei->getDateiEigenschaften()->getServer());
         if (result == 0)
             ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
         else if (result > 0)

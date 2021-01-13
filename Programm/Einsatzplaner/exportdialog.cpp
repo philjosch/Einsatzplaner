@@ -85,7 +85,7 @@ void ExportDialog::on_pushDrucken_clicked()
             break;
         case 2:
             if (settings->getEnabled()) {
-                if (Export::uploadToServer(liste, settings->getServer())) {
+                if (Export::Upload::uploadToServer(liste, settings->getServer())) {
                     QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
                 } else {
                     QMessageBox::information(parentWidget(), tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden!"));
@@ -95,7 +95,7 @@ void ExportDialog::on_pushDrucken_clicked()
         default:
             return;
         }
-        Export::printAktivitaetenListe(liste, printer);
+        Export::Aktivitaeten::printAktivitaetenListe(liste, printer);
     } else {
         switch (ui->buttonGroupExportFormat->checkedId()) {
         case 0:
@@ -107,7 +107,7 @@ void ExportDialog::on_pushDrucken_clicked()
         default:
             return;
         }
-        Export::printAktivitaetenEinzel(liste, printer);
+        Export::Aktivitaeten::printAktivitaetenEinzel(liste, printer);
     }
 }
 

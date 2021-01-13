@@ -16,66 +16,66 @@ const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td
                             "p.last { page-break-after: always; }";
 const QFont Export::DEFAULT_FONT = QFont("Arial", 11, QFont::Normal);
 
-bool Export::printAktivitaetenEinzel(QList<AActivity *> liste, QPrinter *printer)
+bool Export::Aktivitaeten::printAktivitaetenEinzel(QList<AActivity *> liste, QPrinter *printer)
 {
     if (liste.isEmpty()) return true;
     QString html = Manager::getHtmlFuerEinzelansichten(liste);
     return druckeHtmlAufDrucker(html, printer);
 }
 
-bool Export::printAktivitaetenListe(QList<AActivity *> liste, QPrinter *printer)
+bool Export::Aktivitaeten::printAktivitaetenListe(QList<AActivity *> liste, QPrinter *printer)
 {
     if (liste.isEmpty()) return true;
     QString html = Manager::getHtmlFuerListenansicht(liste) + zeitStempel();
     return druckeHtmlAufDrucker(html, printer);
 }
 
-bool Export::printReservierung(Fahrtag *f, QPrinter *printer)
+bool Export::Aktivitaeten::printReservierung(Fahrtag *f, QPrinter *printer)
 {
     if (f->getAnzahlReservierungen() == 0) return false;
     QString html = f->getHtmlFuerReservierungsuebersicht() + zeitStempel();
     return druckeHtmlAufDrucker(html, printer);
 }
 
-bool Export::printZeitenEinzelEinzel(Person *p, QPrinter *printer)
+bool Export::Personal::printZeitenEinzelEinzel(Person *p, QPrinter *printer)
 {
     if (p == nullptr) return false;
     QString html = p->getZeitenFuerEinzelAlsHTML() + zeitStempel();
     return druckeHtmlAufDrucker(html, printer);
 }
-bool Export::printZeitenEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
+bool Export::Personal::printZeitenEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
 {
     if (liste.isEmpty()) return false;
     QString html = m->getZeitenFuerEinzelListeAlsHTML(liste, filter);
     return druckeHtmlAufDrucker(html, printer);
 }
-bool Export::printZeitenListe(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer)
+bool Export::Personal::printZeitenListe(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer)
 {
     if (personen.isEmpty()) return true;
     QString html = ManagerPersonal::getZeitenFuerListeAlsHTML(personen, data, filter);
     return druckeHtmlAufDrucker(html, printer);
 }
 
-bool Export::printMitgliederEinzelEinzel(Person *p, QPrinter *printer)
+bool Export::Mitglieder::printMitgliederEinzelEinzel(Person *p, QPrinter *printer)
 {
     if (p == nullptr) return false;
     QString html = p->getPersonaldatenFuerEinzelAlsHTML() + zeitStempel();
     return druckeHtmlAufDrucker(html, printer);
 }
-bool Export::printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
+bool Export::Mitglieder::printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
 {
     if (liste.isEmpty()) return false;
     QString html = m->getMitgliederFuerEinzelListeAlsHTML(liste, filter);
     return druckeHtmlAufDrucker(html, printer);
 }
-bool Export::printMitgliederListe(QList<Person*> liste, Mitglied filter, QPrinter *printer)
+bool Export::Mitglieder::printMitgliederListe(QList<Person*> liste, Mitglied filter, QPrinter *printer)
 {
     if (liste.isEmpty()) return false;
     QString html = ManagerPersonal::getMitgliederFuerListeAlsHtml(liste, filter);
     return druckeHtmlAufDrucker(html, printer);
 }
 
-bool Export::exportMitgliederAlsCSV(QList<Person *> liste, QString pfad)
+bool Export::Mitglieder::exportMitgliederAlsCSV(QList<Person *> liste, QString pfad)
 {
     if (liste.isEmpty()) return false;
     return FileIO::saveToFile(pfad, ManagerPersonal::getMitgliederFuerListeAlsCSV(liste));
@@ -101,7 +101,7 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPrinter::Orienta
     return p;
 }
 
-bool Export::uploadToServer(QList<AActivity *> liste, Networking::Server server)
+bool Export::Upload::uploadToServer(QList<AActivity *> liste, Networking::Server server)
 {
     /* ERSTELLEN DER DATEI */
     QTemporaryFile tempFile;
@@ -112,16 +112,16 @@ bool Export::uploadToServer(QList<AActivity *> liste, Networking::Server server)
     p->setOutputFileName(localFile);
     preparePrinter(p, QPrinter::Landscape);
 
-    printAktivitaetenListe(liste, p);
+    Aktivitaeten::printAktivitaetenListe(liste, p);
 
     return Networking::ladeDateiHoch(server, &tempFile);
 }
 
-int Export::autoUploadToServer(QList<AActivity*> liste, Networking::Server server)
+int Export::Upload::autoUploadToServer(QList<AActivity*> liste, Networking::Server server)
 {
     if (!Einstellungen::getUseAutoUpload()) return -1;
 
-    if (uploadToServer(liste, server)) return 1;
+    if (Upload::uploadToServer(liste, server)) return 1;
     return 0;
 }
 

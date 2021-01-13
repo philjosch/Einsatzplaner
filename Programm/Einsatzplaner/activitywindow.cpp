@@ -4,6 +4,7 @@
 #include "guihelper.h"
 
 #include <QMessageBox>
+#include <eplexception.h>
 
 ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(parent), ui(new Ui::ActivityWindow)
 {
@@ -188,27 +189,15 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
             if (e.person != nullptr)
                 activity->removePerson(e.person, e.cat);
 
-            if (kat == Zub && !AActivity::hasQualification(activity->getPersonal()->getPerson(name), kat, bemerkung))
-                kat = Begleiter;
-
-            switch (activity->addPerson(name, bemerkung, beginn, ende, kat)) {
-            case Mistake::PassivOk:
-                QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
-                [[fallthrough]];
-            case Mistake::OK:
-            case Mistake::ExternOk:
-                break;
-            case Mistake::PersonNichtGefunden:
-                QMessageBox::warning(this, tr("Person nicht gefunden"), tr("Die eingegebene Person konnte nicht gefunden werden!"));
-                break;
-            case Mistake::FalscheQualifikation:
-                QMessageBox::warning(this, tr("Fehlende Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da eine betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
-                break;
-            default:
-                QMessageBox::warning(this, tr("Sonstiger Fehler"), tr("Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!"));
-                break;
+            try {
+                AActivity::Einsatz e = activity->addPerson(name, bemerkung, beginn, ende, kat);
+                tabelleZuEinsatz.insert(item, e);
+                if (! e.person->getAktiv()) {
+                    QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
+                }
+            }  catch (AActivityException &e) {
+                QMessageBox::warning(this, tr("Fehler"), e.getError());
             }
-            tabelleZuEinsatz.insert(item, AActivity::Einsatz{activity->getPerson(name), kat});
         }
         nehme = true;
     }
@@ -216,12 +205,12 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
 
 void ActivityWindow::on_actionPrint_triggered()
 {
-    Export::printAktivitaetenEinzel({activity},
+    Export::Aktivitaeten::printAktivitaetenEinzel({activity},
                                     Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 void ActivityWindow::on_actionPdf_triggered()
 {
-    Export::printAktivitaetenEinzel({activity},
+    Export::Aktivitaeten::printAktivitaetenEinzel({activity},
                                     Export::getPrinterPDF(this, windowTitle()+".pdf", QPrinter::Orientation::Portrait));
 }
 

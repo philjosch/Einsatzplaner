@@ -195,7 +195,7 @@ QString Fahrtag::getHtmlForSingleView()
     }
     // *Zub, Begl.o.b.A
     if ((benoetigeZub && (art != Schnupperkurs)) || (zub.size() > 0 || begl.size() > 0)) {
-        html += "<p><b>Zugbegleiter und <i><b>Begleiter ohne betriebliche Ausbildung/b></i>";
+        html += "<p><b>Zugbegleiter und <i><b>Begleiter ohne betriebliche Ausbildung</b></i>";
         html += (benoetigeZub && (art != Schnupperkurs) ? required.arg(" werden benötigt"):"");
         html += ":</b><br/>";
         html += listToString(" | ", zub);

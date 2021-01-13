@@ -184,8 +184,8 @@ public:
     Person *getPerson(QString name);
     QMap<Einsatz, Infos> getPersonen() const;
     virtual Infos getIndividual(Person *person, Category kat);
-    Mistake addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
-    Mistake addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
+    Einsatz addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
+    Einsatz addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
     void updatePersonInfos(Person *p, Category kat, Infos neu);
     void updatePersonBemerkung(Person *p, Category kat, QString bemerkung);
     bool removePerson(Person *p, Category kat);

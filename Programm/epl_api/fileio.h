@@ -2,7 +2,6 @@
 #define FILEIO_H
 
 #include <QWidget>
-#include <QFileDialog>
 
 class FileIO
 {

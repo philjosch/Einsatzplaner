@@ -92,12 +92,12 @@ void PersonWindow::on_actionLoeschen_triggered()
 
 void PersonWindow::on_actionEinzelPDF_triggered()
 {
-    Export::printMitgliederEinzelEinzel(person,
+    Export::Mitglieder::printMitgliederEinzelEinzel(person,
                         Export::getPrinterPDF(this, "Stammdatenblatt.pdf", QPrinter::Orientation::Portrait));
 }
 void PersonWindow::on_actionEinzelDrucken_triggered()
 {
-    Export::printMitgliederEinzelEinzel(person,
+    Export::Mitglieder::printMitgliederEinzelEinzel(person,
                         Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 

@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QByteArray>
 #include <QMessageBox>
+#include <QFileDialog>
 
 QString FileIO::currentPath = Einstellungen::getLastPath();
 QStringList FileIO::lastUsed = Einstellungen::getLastUsed();

@@ -7,6 +7,7 @@
 
 #include <QMessageBox>
 #include <QTableWidgetItem>
+#include <eplexception.h>
 
 FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent), ui(new Ui::FahrtagWindow)
 {
@@ -299,28 +300,17 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
     QTime beginn = QTime(0,0);
     QTime ende = QTime(0,0);
     int row;
-    switch (fahrtag->addPerson(name, bemerkung, beginn, ende, kat)) {
-    case Mistake::PassivOk:
-        QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
-        [[fallthrough]];
-    case Mistake::ExternOk:
-    case Mistake::OK:
+    try {
+        AActivity::Einsatz e = fahrtag->addPerson(name, bemerkung, beginn, ende, kat);
+        if (!e.person->getAktiv())
+            QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
         // Zeile für die Person in die Tabelle einfügen
         row = fuegeZeileInTabelleEin(name, kat, bemerkung, true);
 
         listeZuTabelle.insert(item, ui->tablePersonen->item(row, 0));
-        tabelleZuEinsatz.insert(ui->tablePersonen->item(row,0), AActivity::Einsatz{fahrtag->getPerson(name), kat});
-        break;
-
-    case Mistake::FalscheQualifikation:
-        QMessageBox::warning(this, tr("Fehlende Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da eine betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
-        break;
-    case Mistake::PersonNichtGefunden:
-        QMessageBox::information(this, tr("Person nicht gefunden"), tr("Die eingegebene Person konnte nicht gefunden werden!"));
-        break;
-    default:
-        QMessageBox::information(this, tr("Fehler"), tr("Beim Hinzufügen der Person zum Fahrtag ist ein Fehler aufgetreten! Bitte überprüfen Sie ihre Eingaben!"));
-        break;
+        tabelleZuEinsatz.insert(ui->tablePersonen->item(row,0), e);
+    }  catch (AActivityException &e) {
+        QMessageBox::warning(this, tr("Fehler"), e.getError());
     }
 }
 
@@ -457,27 +447,14 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, int column)
             if (e.person != nullptr)
                 fahrtag->removePerson(e.person, e.cat);
 
-            if (kat == Zub && !AActivity::hasQualification(fahrtag->getPersonal()->getPerson(name), kat, bemerkung))
-                kat = Begleiter;
-
-            switch (fahrtag->addPerson(name, bemerkung, beginn, ende, kat)) {
-            case Mistake::PassivOk:
-                QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
-                [[fallthrough]];
-            case Mistake::OK:
-            case Mistake::ExternOk:
-                break;
-            case Mistake::PersonNichtGefunden:
-                QMessageBox::warning(this, tr("Person nicht gefunden"), tr("Die eingegebene Person konnte nicht gefunden werden!"));
-                break;
-            case Mistake::FalscheQualifikation:
-                QMessageBox::warning(this, tr("Fehlene Qualifikation"), tr("Die Aufgabe kann/darf nicht von der angegebenen Person übernommen werden, da eine betriebliche Ausbildung und gültige Tauglichkeitsuntersuchung benötigt wird."));
-                break;
-            default:
-                QMessageBox::warning(this, tr("Sonstiger Fehler"), tr("Während der Verarbeitung der Eingabe ist ein Fehler unterlaufen.\nPrüfen Sie Ihre Eingaben und versuchen es erneut!"));
-                break;
+            try {
+                AActivity::Einsatz e = fahrtag->addPerson(name, bemerkung, beginn, ende, kat);
+                if (! e.person->getAktiv())
+                    QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
+                tabelleZuEinsatz.insert(item, e);
+            }  catch (AActivityException &e) {
+                QMessageBox::warning(this, tr("Fehler"), e.getError());
             }
-            tabelleZuEinsatz.insert(item, AActivity::Einsatz{fahrtag->getPerson(name), kat});
         }
         nehme = true;
     }
@@ -515,23 +492,23 @@ void FahrtagWindow::on_actionDelete_triggered()
 
 void FahrtagWindow::on_actionPrint_triggered()
 {
-    Export::printAktivitaetenEinzel({fahrtag},
+    Export::Aktivitaeten::printAktivitaetenEinzel({fahrtag},
                                     Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 void FahrtagWindow::on_actionPdf_triggered()
 {
-    Export::printAktivitaetenEinzel({fahrtag},
+    Export::Aktivitaeten::printAktivitaetenEinzel({fahrtag},
                                     Export::getPrinterPDF(this, windowTitle()+".pdf", QPrinter::Orientation::Portrait));
 }
 
 void FahrtagWindow::on_actionResPrint_triggered()
 {
-    Export::printReservierung(fahrtag,
+    Export::Aktivitaeten::printReservierung(fahrtag,
                               Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 void FahrtagWindow::on_actionResPdf_triggered()
 {
-    Export::printReservierung(fahrtag,
+    Export::Aktivitaeten::printReservierung(fahrtag,
                               Export::getPrinterPDF(this, windowTitle()+"-Reservierungen.pdf", QPrinter::Orientation::Portrait));
 }
 
@@ -666,6 +643,7 @@ int FahrtagWindow::fuegeZeileInTabelleEin(QString name, Category kat, QString be
     ui->tablePersonen->setItem(0, 0, item);
 
     QComboBox *box = generateNewCategoryComboBox();
+    if (kat == Begleiter) kat = Zub;
     box->setCurrentText(getLocalizedStringFromCategory(kat));
     ui->tablePersonen->setCellWidget(0, 1, box);
 
