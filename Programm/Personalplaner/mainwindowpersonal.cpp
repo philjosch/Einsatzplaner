@@ -219,7 +219,7 @@ void MainWindowPersonal::on_actionMailListe_triggered()
         for(Person *p: keineMail) {
             s += p->getName() + ";"+p->getStrasse()+";"+p->getPLZ()+";"+p->getOrt()+"\n";
         }
-        QString path = FileIO::getFilePathSave(this, "Adressen.csv", tr("CSV-Datei (*.csv)"));
+        QString path = FileIO::getFilePathSave(this, "Adressen", FileIO::DateiTyp::CSV);
         FileIO::saveToFile(path, s);
     }
 }
@@ -228,7 +228,7 @@ void MainWindowPersonal::on_actionMailListe_triggered()
 void MainWindowPersonal::on_actionMitgliederEinzelListePDF_triggered()
 {
     Export::Mitglieder::printMitgliederEinzelListe(getSortierteListe(), personal, filter,
-                        Export::getPrinterPDF(this, "Stammdatenblaetter.pdf", QPrinter::Orientation::Portrait));
+                        Export::getPrinterPDF(this, "Stammdatenblaetter", QPrinter::Orientation::Portrait));
 }
 void MainWindowPersonal::on_actionMitgliederEinzelListeDrucken_triggered()
 {
@@ -239,7 +239,7 @@ void MainWindowPersonal::on_actionMitgliederEinzelListeDrucken_triggered()
 void MainWindowPersonal::on_actionMitgliederListePDF_triggered()
 {
     Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter,
-                            Export::getPrinterPDF(this, "Mitgliederliste.pdf", QPrinter::Orientation::Portrait));
+                            Export::getPrinterPDF(this, "Mitgliederliste", QPrinter::Orientation::Portrait));
 }
 void MainWindowPersonal::on_actionMitgliederListeDrucken_triggered()
 {
@@ -249,7 +249,7 @@ void MainWindowPersonal::on_actionMitgliederListeDrucken_triggered()
 void MainWindowPersonal::on_actionMitgliederListeCSV_triggered()
 {
     Export::Mitglieder::exportMitgliederAlsCSV(current,
-                                   FileIO::getFilePathSave(this, "Mitglieder.csv", tr("CSV-Datei (*.csv)")));
+                                   FileIO::getFilePathSave(this, "Mitglieder", FileIO::DateiTyp::CSV));
 }
 
 

@@ -205,7 +205,7 @@ void PersonalWindow::editMinimumHours()
 void PersonalWindow::on_actionZeitenEinzelEinzelPDF_triggered()
 {
     Export::Personal::printZeitenEinzelEinzel(aktuellePerson,
-                        Export::getPrinterPDF(this, "Einsatzzeiten-Einzelansicht.pdf", QPrinter::Orientation::Portrait));
+                        Export::getPrinterPDF(this, "Einsatzzeiten-Einzelansicht", QPrinter::Orientation::Portrait));
 }
 void PersonalWindow::on_actionZeitenEinzelEinzelDrucken_triggered()
 {
@@ -216,7 +216,7 @@ void PersonalWindow::on_actionZeitenEinzelEinzelDrucken_triggered()
 void PersonalWindow::on_actionZeitenEinzelListePDF_triggered()
 {
     Export::Personal::printZeitenEinzelListe(getSortierteListe(), manager, filter,
-                        Export::getPrinterPDF(this, "Einsatzzeiten-Einzelansichten.pdf", QPrinter::Orientation::Portrait));
+                        Export::getPrinterPDF(this, "Einsatzzeiten-Einzelansichten", QPrinter::Orientation::Portrait));
 }
 void PersonalWindow::on_actionZeitenEinzelListeDrucken_triggered()
 {
@@ -228,7 +228,7 @@ void PersonalWindow::on_actionZeitenListePDF_triggered()
 {
     Export::Personal::printZeitenListe(
                 getSortierteListe(), anzeige, filter,
-                Export::getPrinterPDF(this, "Einsatzzeiten-Gesamt.pdf", QPrinter::Orientation::Landscape));
+                Export::getPrinterPDF(this, "Einsatzzeiten-Gesamt", QPrinter::Orientation::Landscape));
 }
 void PersonalWindow::on_actionZeitenListeDrucken_triggered()
 {
@@ -240,7 +240,7 @@ void PersonalWindow::on_actionZeitenListeDrucken_triggered()
 void PersonalWindow::on_actionMitgliederEinzelEinzelPDF_triggered()
 {
     Export::Mitglieder::printMitgliederEinzelEinzel(aktuellePerson,
-                        Export::getPrinterPDF(this, "Stammdatenblatt.pdf", QPrinter::Orientation::Portrait));
+                        Export::getPrinterPDF(this, "Stammdatenblatt", QPrinter::Orientation::Portrait));
 }
 void PersonalWindow::on_actionMitgliederEinzelEinzelDrucken_triggered()
 {
@@ -251,7 +251,7 @@ void PersonalWindow::on_actionMitgliederEinzelEinzelDrucken_triggered()
 void PersonalWindow::on_actionMitgliederEinzelListePDF_triggered()
 {
     Export::Mitglieder::printMitgliederEinzelListe(getSortierteListe(), manager, filter,
-                        Export::getPrinterPDF(this, "Stammdatenblaetter.pdf", QPrinter::Orientation::Portrait));
+                        Export::getPrinterPDF(this, "Stammdatenblaetter", QPrinter::Orientation::Portrait));
 }
 void PersonalWindow::on_actionMitgliederEinzelListeDrucken_triggered()
 {
@@ -262,7 +262,7 @@ void PersonalWindow::on_actionMitgliederEinzelListeDrucken_triggered()
 void PersonalWindow::on_actionMitgliederListePDF_triggered()
 {
     Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter,
-                            Export::getPrinterPDF(this, "Mitgliederliste.pdf", QPrinter::Orientation::Portrait));
+                            Export::getPrinterPDF(this, "Mitgliederliste", QPrinter::Orientation::Portrait));
 }
 void PersonalWindow::on_actionMitgliederListeDrucken_triggered()
 {
@@ -272,7 +272,7 @@ void PersonalWindow::on_actionMitgliederListeDrucken_triggered()
 void PersonalWindow::on_actionMitgliederListeCSV_triggered()
 {
     Export::Mitglieder::exportMitgliederAlsCSV(current,
-                                  FileIO::getFilePathSave(this, "Mitglieder.csv", tr("CSV-Datei (*.csv)")));
+                                  FileIO::getFilePathSave(this, "Mitglieder", FileIO::DateiTyp::CSV));
 }
 
 void PersonalWindow::on_pushEmail_clicked()
@@ -310,7 +310,7 @@ void PersonalWindow::on_pushEmail_clicked()
         for(Person *p: keineMail) {
             s += p->getName() + ";"+p->getStrasse()+";"+p->getPLZ()+";"+p->getOrt()+"\n";
         }
-        QString path = FileIO::getFilePathSave(this, "Adressen.csv", tr("CSV-Datei (*.csv)"));
+        QString path = FileIO::getFilePathSave(this, "Adressen", FileIO::DateiTyp::CSV);
         FileIO::saveToFile(path, s);
     }
 }

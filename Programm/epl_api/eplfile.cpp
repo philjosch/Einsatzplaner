@@ -184,7 +184,7 @@ void EplFile::speichern()
     if (FileIO::saveJsonToFile(pfad, json)) {
         gespeichert = true;
         if (pfad != "") {
-            QFile file (pfad+".autosave.ako");
+            QFile file (pfad+FileIO::getSuffixVonTyp(FileIO::DateiTyp::EPLAutoSave));
             file.remove();
         }
         FileIO::History::insert(pfad);
@@ -226,13 +226,13 @@ void EplFile::autoSave()
     if (schreibgeschuetzt) return;
     if (pfad == "") return;
     if (gespeichert) return;
-    FileIO::saveJsonToFile(pfad+".autosave.ako", generiereJson());
+    FileIO::saveJsonToFile(pfad+FileIO::getSuffixVonTyp(FileIO::DateiTyp::EPLAutoSave), generiereJson());
 }
 
 void EplFile::close()
 {
     if (pfad != "") {
-        QFile file (pfad+".autosave.ako");
+        QFile file (pfad+FileIO::getSuffixVonTyp(FileIO::DateiTyp::EPLAutoSave));
         file.remove();
     }
     if (!schreibgeschuetzt) {

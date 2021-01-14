@@ -6,8 +6,13 @@
 class FileIO
 {
 public:
-    static QString getFilePathOpen(QWidget *parent, QString filter);
-    static QString getFilePathSave(QWidget *parent, QString filename, QString filter);
+    enum DateiTyp {EPL,
+                   EPLAutoSave,
+                   PDF,
+                   CSV};
+
+    static QString getFilePathOpen(QWidget *parent, DateiTyp typ);
+    static QString getFilePathSave(QWidget *parent, QString filename, DateiTyp typ);
 
     static QJsonObject getJsonFromFile(QString filepath);
     static bool saveJsonToFile(QString filepath, QJsonObject object);
@@ -31,11 +36,15 @@ public:
         static bool freigeben(QString dateipfad);
     };
 
+    static QString getSuffixVonTyp(DateiTyp typ);
+
 private:
     static QString currentPath;
     static QStringList lastUsed;
 
     static void saveSettings();
+
+    static QString getFilterVonTyp(DateiTyp typ);
 
 };
 

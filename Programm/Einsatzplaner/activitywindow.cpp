@@ -211,7 +211,7 @@ void ActivityWindow::on_actionPrint_triggered()
 void ActivityWindow::on_actionPdf_triggered()
 {
     Export::Aktivitaeten::printAktivitaetenEinzel({activity},
-                                    Export::getPrinterPDF(this, windowTitle()+".pdf", QPrinter::Orientation::Portrait));
+                                    Export::getPrinterPDF(this, windowTitle(), QPrinter::Orientation::Portrait));
 }
 
 void ActivityWindow::on_buttonDelete_clicked()

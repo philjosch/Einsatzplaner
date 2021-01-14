@@ -17,9 +17,37 @@ void FileIO::saveSettings()
     Einstellungen::setLastUsed(lastUsed);
 }
 
-QString FileIO::getFilePathOpen(QWidget *parent, QString filter)
+QString FileIO::getFilterVonTyp(FileIO::DateiTyp typ)
 {
-    QString path = QFileDialog::getOpenFileName(parent, QObject::tr("Datei öffnen ..."), currentPath, filter);
+    switch (typ) {
+    case EPL:
+        return QObject::tr("AkO-Dateien (*.ako)");
+    case EPLAutoSave:
+        return QObject::tr("AkO-Sicherungskopie-Dateien (*.autosave.ako)");
+    case PDF:
+        return QObject::tr("PDF-Dateien (*.pdf)");
+    case CSV:
+        return QObject::tr("CSV-Datei (*.csv)");
+    }
+}
+
+QString FileIO::getSuffixVonTyp(FileIO::DateiTyp typ)
+{
+    switch (typ) {
+    case EPL:
+        return ".ako";
+    case EPLAutoSave:
+        return ".autosave.ako";
+    case PDF:
+        return ".pdf";
+    case CSV:
+        return ".csv";
+    }
+}
+
+QString FileIO::getFilePathOpen(QWidget *parent, DateiTyp typ)
+{
+    QString path = QFileDialog::getOpenFileName(parent, QObject::tr("Datei öffnen ..."), currentPath, getFilterVonTyp(typ));
     if (path == "") return "";
     QFileInfo info(path);
     currentPath = info.absolutePath();
@@ -27,9 +55,9 @@ QString FileIO::getFilePathOpen(QWidget *parent, QString filter)
     return path;
 }
 
-QString FileIO::getFilePathSave(QWidget *parent, QString filename, QString filter)
+QString FileIO::getFilePathSave(QWidget *parent, QString filename, DateiTyp typ)
 {
-    QString path = QFileDialog::getSaveFileName(parent, QObject::tr("Datei speichern ..."), currentPath+"/"+filename, filter);
+    QString path = QFileDialog::getSaveFileName(parent, QObject::tr("Datei speichern ..."), currentPath+"/"+filename+getSuffixVonTyp(typ), getFilterVonTyp(typ));
     if (path == "") return "";
 
     if (!Schreibschutz::pruefen(path).isEmpty()) {
@@ -121,7 +149,7 @@ bool FileIO::Schreibschutz::freigeben(QString dateipfad)
 
 void FileIO::History::insert(QString filepath)
 {
-    if (filepath.endsWith(".ako", Qt::CaseInsensitive)) {
+    if (filepath.endsWith(getSuffixVonTyp(EPL), Qt::CaseInsensitive)) {
         if (lastUsed.contains(filepath))
             lastUsed.removeOne(filepath);
         else if (lastUsed.length() >= 5)

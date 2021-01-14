@@ -63,7 +63,7 @@ void CoreMainWindow::on_actionNew_triggered()
 
 void CoreMainWindow::on_actionOpen_triggered()
 {
-    handlerOpen(FileIO::getFilePathOpen(this, tr("AkO-Dateien (*.ako)")));
+    handlerOpen(FileIO::getFilePathOpen(this, FileIO::DateiTyp::EPL));
 }
 
 void CoreMainWindow::on_menuRecentlyused_aboutToShow()
@@ -107,7 +107,7 @@ void CoreMainWindow::on_actionSave_triggered()
 }
 void CoreMainWindow::on_actionSaveas_triggered()
 {
-    QString newPath = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
+    QString newPath = FileIO::getFilePathSave(this, tr("Einsatzplan"), FileIO::DateiTyp::EPL);
     if (newPath == "") return;
 
     try {
@@ -125,7 +125,7 @@ void CoreMainWindow::autoSave()
 
 void CoreMainWindow::on_actionSavePersonal_triggered()
 {
-    QString path = FileIO::getFilePathSave(this, tr("Einsatzplan.ako"), tr("AkO-Dateien (*.ako)"));
+    QString path = FileIO::getFilePathSave(this, tr("Einsatzplan"), FileIO::DateiTyp::EPL);
     if (path == "") return;
 
     try {
@@ -197,6 +197,7 @@ void CoreMainWindow::handlerPreferenes()
 
 EplFile *CoreMainWindow::open(QString path)
 {
+    if (path == "") return nullptr;
     EplFile* datei;
     try {
         datei = new EplFile(path);
