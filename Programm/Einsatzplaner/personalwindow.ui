@@ -1874,21 +1874,6 @@
     <string>Für alle als PDF speichern ...</string>
    </property>
   </action>
-  <action name="actionMitgliederDrucken">
-   <property name="text">
-    <string>Mitgliederliste drucken …</string>
-   </property>
-  </action>
-  <action name="actionMitgliederPDF">
-   <property name="text">
-    <string>Mitgliederliste als PDF speichern …</string>
-   </property>
-  </action>
-  <action name="actionMitgliederCSV">
-   <property name="text">
-    <string>Mitgliederliste als CSV-Datei speichern …</string>
-   </property>
-  </action>
   <action name="actionMitgliederEinzelEinzelDrucken">
    <property name="text">
     <string>Für aktuelle Person drucken …</string>

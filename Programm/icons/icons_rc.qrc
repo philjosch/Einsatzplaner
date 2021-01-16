@@ -10,5 +10,6 @@
         <file>upload.svg</file>
         <file>user-group.svg</file>
         <file>wrench.svg</file>
+        <file>user-add.svg</file>
     </qresource>
 </RCC>

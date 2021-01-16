@@ -957,6 +957,9 @@
    <property name="text">
     <string>Stammdatenblätter drucken …</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+P</string>
+   </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
    </property>
@@ -964,6 +967,9 @@
   <action name="actionMitgliederEinzelListePDF">
    <property name="text">
     <string>Stammdatenblätter als PDF speichern …</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+Shift+P</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
@@ -1015,6 +1021,9 @@
    <property name="text">
     <string>E-Mail an Liste senden</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
    </property>
@@ -1038,7 +1047,7 @@
    <sender>actionToolbar</sender>
    <signal>triggered(bool)</signal>
    <receiver>mainToolBar</receiver>
-   <slot>showMinimized()</slot>
+   <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
