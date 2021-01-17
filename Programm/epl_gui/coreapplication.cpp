@@ -47,12 +47,7 @@ CoreApplication::~CoreApplication()
 
 bool CoreApplication::generateWindow()
 {
-    for (QWidget *w: allWidgets()) {
-        if (CoreMainWindow *mW = dynamic_cast<CoreMainWindow*>(w)) {
-            return false;
-        }
-    }
-    return true;
+    return (getCoreMainWindows().isEmpty());
 }
 
 bool CoreApplication::event(QEvent *event)
@@ -90,16 +85,25 @@ void CoreApplication::startAutoSave(int delay)
 }
 void CoreApplication::autoSaveWindows()
 {
-    for(QWindow *w: allWindows()) {
-        if (CoreMainWindow *mW = dynamic_cast<CoreMainWindow*>(w)) {
-            mW->autoSave();
-        }
+    for(CoreMainWindow *w: getCoreMainWindows()) {
+        w->autoSave();
     }
 }
 
 void CoreApplication::oeffneDownloadSeite()
 {
     QDesktopServices::openUrl(URL_DOWNLOAD);
+}
+
+QList<CoreMainWindow *> CoreApplication::getCoreMainWindows()
+{
+    QList<CoreMainWindow*> l;
+    for(QWidget *w: allWidgets()) {
+        if (CoreMainWindow *mW = dynamic_cast<CoreMainWindow*>(w)) {
+            l.append(mW);
+        }
+    }
+    return l;
 }
 
 void CoreApplication::stopAutoSave()
@@ -134,7 +138,7 @@ bool CoreApplication::isUpdateVerfuegbar()
 void CoreApplication::closeAllWindows()
 {
     bool ok = true;
-    QWindowList liste = allWindows();
+    QList<CoreMainWindow*> liste = getCoreMainWindows();
     for (int i = 0; i < liste.length(); i++) {
         ok = ok && liste.at(i)->close();
     }

@@ -100,7 +100,6 @@ void MainWindow::constructor()
 
 MainWindow::~MainWindow()
 {
-    close();
     delete ui;
 }
 

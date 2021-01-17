@@ -25,7 +25,6 @@ MainWindowPersonal::MainWindowPersonal(EplFile *file, QWidget *parent) :
 
 MainWindowPersonal::~MainWindowPersonal()
 {
-    close();
     delete ui;
 }
 

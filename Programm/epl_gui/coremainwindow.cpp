@@ -15,6 +15,7 @@ CoreMainWindow::CoreMainWindow(QWidget *parent) : QMainWindow(parent)
     setWindowTitle(tr("Übersicht"));
     updateWindowHeaders();
     setWindowIcon(QApplication::windowIcon());
+    setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
 CoreMainWindow::CoreMainWindow(EplFile *datei, QWidget *parent) : QMainWindow(parent)
@@ -26,11 +27,11 @@ CoreMainWindow::CoreMainWindow(EplFile *datei, QWidget *parent) : QMainWindow(pa
     setWindowTitle(tr("Übersicht"));
     updateWindowHeaders();
     setWindowIcon(QApplication::windowIcon());
+    setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
 CoreMainWindow::~CoreMainWindow()
 {
-    close();
 }
 
 void CoreMainWindow::on_actionPreferences_triggered()
@@ -172,7 +173,7 @@ void CoreMainWindow::closeEvent(QCloseEvent *event)
     }
     if (toClose) {
         datei->close();
-        event->accept();
+        QMainWindow::closeEvent(event);
     } else {
         event->ignore();
     }

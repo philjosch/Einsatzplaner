@@ -2,6 +2,7 @@
 #define COREAPPLICATION_H
 
 #include "basics.h"
+#include "coremainwindow.h"
 #include "networking.h"
 
 #include <QApplication>
@@ -47,6 +48,8 @@ protected:
     static QString URL_DOWNLOAD;
     static QString URL_VERSION;
     static QString URL_NOTES;
+
+    static QList<CoreMainWindow *> getCoreMainWindows();
 
 signals:
     void triggerOpen(QString);
