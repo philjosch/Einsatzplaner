@@ -5,11 +5,11 @@
 #
 #-------------------------------------------------
 
-include(../share.pri)
-
-
 TARGET = Einsatzplaner
-TEMPLATE = app
+TARGET_KLEIN = einsatzplaner
+
+
+include(../share.pri)
 
 
 SOURCES += main.cpp\
@@ -36,15 +36,3 @@ FORMS    += mainwindow.ui \
     calendarday.ui \
     exportdialog.ui \
     filesettingsdialog.ui
-
-win32 {
-    QMAKE_TARGET_PRODUCT = Einsatzplaner
-}
-
-macx {
-    BUNDLEID = de.philipp-schepper.einsatzplaner
-    ICON = $$PWD/../../Icon/Einsatzplaner.icns
-}
-
-
-

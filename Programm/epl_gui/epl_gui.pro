@@ -4,10 +4,14 @@
 # 2016-2021: Philipp Schepper
 #
 #-------------------------------------------------
-include(../share.pri)
-
 TEMPLATE = lib
 CONFIG += staticlib
+
+CONFIG += c++11
+CONFIG += console
+
+QT       += core printsupport network gui widgets
+
 
 SOURCES += \
     guihelper.cpp \
@@ -27,8 +31,14 @@ FORMS += \
     minimumhourseditordialog.ui \
     einstellungendialog.ui
 
+INCLUDEPATH += ../epl_api
+LIBS += -L../epl_api -lepl_api
+
+DEPENDPATH +=      $$PWD/../epl_api
+PRE_TARGETDEPS +=  $$PWD/../epl_api
+
 # Default rules for deployment.
-unix {
-    target.path = $$[QT_INSTALL_PLUGINS]/generic
-}
-!isEmpty(target.path): INSTALLS += target
+#unix {
+#    target.path = $$[QT_INSTALL_PLUGINS]/generic
+#}
+#!isEmpty(target.path): INSTALLS += target

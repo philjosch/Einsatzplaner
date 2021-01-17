@@ -5,10 +5,11 @@
 #
 #-------------------------------------------------
 
-include(../share.pri)
-
 TARGET = Personalplaner
-TEMPLATE = app
+TARGET_KLEIN = personalplaner
+
+
+include(../share.pri)
 
 
 SOURCES += \
@@ -24,13 +25,6 @@ FORMS += \
     mainwindowpersonal.ui \
     personwindow.ui
 
+
 #TRANSLATIONS += \
 #    Personalplaner_de_DE.ts
-
-win32 {
-    QMAKE_TARGET_PRODUCT = Personalplaner
-}
-macx {
-    BUNDLEID = de.philipp-schepper.personalplaner
-    ICON = $$PWD/../../Icon/Personalplaner.icns
-}

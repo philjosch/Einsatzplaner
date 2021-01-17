@@ -5,8 +5,6 @@
 #
 #-------------------------------------------------
 
-!versionAtLeast(QT_VERSION, 5.13.0):error("Qt version 5.13 is required for this project")
-
 TEMPLATE = subdirs
 SUBDIRS += Einsatzplaner \
     Personalplaner \
@@ -17,9 +15,8 @@ Einsatzplaner.depends = epl_api epl_gui
 Personalplaner.depends = epl_api epl_gui
 
 
-DISTFILES += share.pri
-RESOURCES += resources.qrc \
-    icons/icons_rc.qrc \
-    ../Icon/appicon.qrc
-OTHER_FILES += Info.plist \
-    ../Icon/EplDocIcon.icns
+RESOURCES += $$PWD/resources.qrc \
+    $$PWD/icons/icons_rc.qrc \
+    $$PWD/../Icon/appicon.qrc
+
+OTHER_FILES += Info.plist
