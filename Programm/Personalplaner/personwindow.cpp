@@ -6,12 +6,14 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 
-PersonWindow::PersonWindow(QWidget *parent, Person *p) :
+PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
     QMainWindow(parent), ui(new Ui::PersonWindow)
 {
     ui->setupUi(this);
 
     person = p;
+
+    connect(this, &PersonWindow::deletePerson, parent, &CoreMainWindow::deletePerson);
 
     enabled = false;
 
@@ -84,9 +86,8 @@ void PersonWindow::on_actionLoeschen_triggered()
         }
         enabled = false;
 
-        emit person->del(person);
-        this->close();
-        deleteLater();
+        emit deletePerson(person);
+        close();
     }
 }
 

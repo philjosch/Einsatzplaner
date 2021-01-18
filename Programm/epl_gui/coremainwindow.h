@@ -26,6 +26,9 @@ public:
 public slots:
     virtual void autoSave();
 
+    virtual void deletePerson(Person *p) = 0;
+    virtual void deleteAktivitaet(AActivity *a) = 0;
+
 protected slots:
     // Einsatzplaner
     void on_actionPreferences_triggered();

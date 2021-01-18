@@ -1,8 +1,8 @@
 #ifndef PERSONWINDOW_H
 #define PERSONWINDOW_H
 
-#include <QMainWindow>
-#include <person.h>
+#include "coremainwindow.h"
+#include "person.h"
 
 namespace Ui {
 class PersonWindow;
@@ -13,7 +13,7 @@ class PersonWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit PersonWindow(QWidget *parent, Person *p);
+    explicit PersonWindow(CoreMainWindow *parent, Person *p);
     ~PersonWindow();
 
 
@@ -69,6 +69,8 @@ private slots:
     void on_checkAustritt_clicked(bool checked);
     void on_dateAustritt_dateChanged(const QDate &date);
 
+signals:
+    void deletePerson(Person *);
 
 private:
     Ui::PersonWindow *ui;

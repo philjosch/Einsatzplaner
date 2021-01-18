@@ -174,6 +174,7 @@ void CoreMainWindow::closeEvent(QCloseEvent *event)
     if (toClose) {
         datei->close();
         QMainWindow::closeEvent(event);
+//        event->accept();
     } else {
         event->ignore();
     }
