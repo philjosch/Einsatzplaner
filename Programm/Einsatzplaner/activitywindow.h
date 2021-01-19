@@ -2,6 +2,7 @@
 #define ACTIVITYWINDOW_H
 
 #include "activity.h"
+#include "coremainwindow.h"
 
 #include <QMainWindow>
 #include <QTableWidgetItem>
@@ -15,7 +16,7 @@ class ActivityWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit ActivityWindow(QWidget *parent, Activity *a);
+    explicit ActivityWindow(CoreMainWindow *parent, Activity *a);
     ~ActivityWindow();
 
 private slots:
@@ -39,6 +40,9 @@ private slots:
     void on_actionPdf_triggered();
 
     void on_buttonDelete_clicked();
+
+signals:
+    void loeschen(AActivity*);
 
 private:
     Ui::ActivityWindow *ui;

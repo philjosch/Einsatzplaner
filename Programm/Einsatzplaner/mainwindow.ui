@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Neues Dokument – Übersicht</string>
   </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>true</bool>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
@@ -1114,7 +1117,6 @@
   <tabstop>listWidget</tabstop>
  </tabstops>
  <resources>
-  <include location="../icons/icons_rc.qrc"/>
   <include location="../icons/icons_rc.qrc"/>
   <include location="../icons/icons_rc.qrc"/>
  </resources>

@@ -26,6 +26,8 @@ public:
 
 signals:
     void changed();
+    void veraenderteAktivitaet(AActivity*, QDate);
+    void veraendertePerson(Person *p);
 
 public slots:
     Fahrtag *newFahrtag(QDate datum);

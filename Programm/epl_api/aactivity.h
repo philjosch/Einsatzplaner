@@ -219,7 +219,6 @@ public:
 
 signals:
     void changed(AActivity *, QDate = QDate());
-    void del(AActivity *);
 
 protected:
     QDate datum;

@@ -59,11 +59,11 @@ public:
     QList<Person *> getPersonen(Mitglied filter);
 
 public slots:
-    void personChangedName(Person *p, QString alt);
+    void personChangedNameHandler(Person *p, QString alt);
 
 signals:
     void changed();
-    void del(Person*);
+    void personChangedName(Person*, QString);
 
 private:
     QSet<Person *> personen;

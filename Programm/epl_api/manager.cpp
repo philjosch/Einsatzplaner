@@ -41,6 +41,7 @@ void Manager::fromJson(QJsonArray array)
             }
         }
         connect(akt, &AActivity::changed, this, [=]() { emit changed();});
+        connect(akt, &AActivity::changed, this, [=](AActivity *a, QDate date) {emit veraenderteAktivitaet(a, date);});
         activities.append(akt);
     }
     sort();
@@ -51,6 +52,7 @@ Fahrtag *Manager::newFahrtag(QDate datum)
     Fahrtag *f = new Fahrtag(datum, personal);
     activities.append(f);
     sort();
+    connect(f, &AActivity::changed, this, [=](AActivity *a, QDate date) {emit veraenderteAktivitaet(a, date);});
     connect(f, &AActivity::changed, this, [=]() {emit changed();});
     emit changed();
     return f;
@@ -61,6 +63,7 @@ Activity *Manager::newActivity(QDate datum)
     Activity *a = new Activity(datum, personal);
     activities.append(a);
     sort();
+    connect(a, &AActivity::changed, this, [=](AActivity *a, QDate date) {emit veraenderteAktivitaet(a, date);});
     connect(a, &AActivity::changed, this, [=]() {emit changed();});
     emit changed();
     return a;
@@ -70,6 +73,7 @@ bool Manager::removeActivity(AActivity *a)
 {
     bool ret = activities.removeOne(a);
     delete a;
+    emit changed();
     return ret;
 }
 

@@ -22,14 +22,17 @@ public:
     CoreMainWindow(EplFile *datei, QWidget *parent = nullptr);
     ~CoreMainWindow();
 
+private:
+    void constructorCoreMainWindow();
 
 public slots:
-    virtual void autoSave();
+    void autoSave();
 
-    virtual void deletePerson(Person *p) = 0;
-    virtual void deleteAktivitaet(AActivity *a) = 0;
+    void loeschenPerson(Person *p);
+    void loeschenAktivitaet(AActivity *a);
 
 protected slots:
+    //** Datei Menue
     // Einsatzplaner
     void on_actionPreferences_triggered();
     void on_actionAboutQt_triggered();
@@ -39,39 +42,57 @@ protected slots:
     // Datei
     void on_actionNew_triggered();
     void on_actionOpen_triggered();
+
     void on_menuRecentlyused_aboutToShow();
     void on_actionClear_triggered();
+
     void on_actionSave_triggered();
     void on_actionSaveas_triggered();
     void on_actionSavePersonal_triggered();
 
     void on_actionSettings_triggered();
-
     bool on_actionClose_triggered();
-    void closeEvent(QCloseEvent *event);
 
-    void unsave();
 
-    virtual CoreMainWindow *handlerNew() = 0;
-    virtual void handlerPrepareSave() {};
-    virtual void handlerOnSuccessfullSave();
-    virtual void handlerOpen(QString path) = 0;
-    virtual bool handlerClose() {return true;};
+    //** Dialog-Handling
     virtual void handlerPreferenes();
     virtual void handlerSettings() {};
 
-    static EplFile *open(QString path);
+    //** Virtuelle Methoden
+    // Fenster schliessen
+    virtual bool onFensterSollGeschlossenWerden() {return true;};
 
+    // Dateien erstellen oder laden
+    virtual CoreMainWindow *handlerNew() = 0;
+    virtual void handlerOpen(QString path) = 0;
+
+    // Dateien bezogene Methoden
+    virtual void onDateiWurdeVeraendert();
+    virtual void onDateiWirdGespeichertWerden() {};
+    virtual void onDateiWurdeErfolgreichGespeichert();
+
+    // Personen bezogene Methoden
+    virtual void onPersonWirdEntferntWerden([[maybe_unused]] Person *p) {};
+    virtual void onPersonWurdeBearbeitet([[maybe_unused]] Person *p) {};
+
+    // Aktivitaeten bezogene Methoden
+    virtual void onAktivitaetWirdEntferntWerden([[maybe_unused]] AActivity *a) {};
+    virtual void onAktivitaetWurdeBearbeitet([[maybe_unused]] AActivity *a, [[maybe_unused]] QDate altesDatum = QDate()) {};
 
 protected:
-    /** Hilfsmethoden **/
-    void updateWindowHeaders();
+    //** Hilfsmethoden
+    void closeEvent(QCloseEvent *event);
+
+    static EplFile *getDateiVonPfad(QString path);
     QList<QMainWindow*> getChildWindows();
+    void updateWindowHeaders();
 
-    /** Model **/
+    //** Modell
     EplFile *datei;
+    Manager *manager;
+    ManagerPersonal *personal;
 
-    /** View **/
+    //** View
     QMenu *recentlyUsedMenu;
     QAction *recentlyUsedClear;
 };

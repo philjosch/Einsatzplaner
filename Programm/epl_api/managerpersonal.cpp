@@ -76,9 +76,8 @@ void ManagerPersonal::fromJson(QJsonObject o)
         personen.insert(neu);
         personenSorted.insert(neu->getName(), neu);
         idToPerson.insert(neu->getId(), neu);
-        connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
+        connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedNameHandler(Person*,QString)));
         connect(neu, &Person::changed, this, [=]() { emit changed();} );
-        connect(neu, &Person::del, this, [=](Person *p) {emit del(p);} );
     }
     if (o.contains("minimumKeys") && o.contains("minimumValues")) {
         minimumHours.clear();
@@ -140,9 +139,8 @@ Person *ManagerPersonal::newPerson()
     personen.insert(neu);
     personenSorted.insert(name, neu);
     idToPerson.insert(neu->getId(), neu);
-    connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedName(Person*,QString)));
+    connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedNameHandler(Person*,QString)));
     connect(neu, &Person::changed, this, [=]() { emit changed();});
-    connect(neu, &Person::del, this, [=] (Person *p) { emit del(p); });
     emit changed();
     return neu;
 }
@@ -175,7 +173,7 @@ int ManagerPersonal::getMinimumHoursDefault(Category cat)
     return MINIMUM_HOURS_DEFAULT.value(cat, 0);
 }
 
-void ManagerPersonal::personChangedName(Person *p, QString alt)
+void ManagerPersonal::personChangedNameHandler(Person *p, QString alt)
 {
     personenSorted.remove(alt);
     personenSorted.insert(p->getName(), p);

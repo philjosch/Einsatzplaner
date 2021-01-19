@@ -70,7 +70,7 @@ private slots:
     void on_dateAustritt_dateChanged(const QDate &date);
 
 signals:
-    void deletePerson(Person *);
+    void loeschen(Person *);
 
 private:
     Ui::PersonWindow *ui;

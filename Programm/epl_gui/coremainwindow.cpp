@@ -9,30 +9,69 @@
 CoreMainWindow::CoreMainWindow(QWidget *parent) : QMainWindow(parent)
 {
     datei = new EplFile();
-    connect(datei, &EplFile::changed, this, &CoreMainWindow::unsave);
-    // Views
 
-    setWindowTitle(tr("Übersicht"));
-    updateWindowHeaders();
-    setWindowIcon(QApplication::windowIcon());
-    setAttribute(Qt::WA_DeleteOnClose, true);
+    constructorCoreMainWindow();
 }
-
 CoreMainWindow::CoreMainWindow(EplFile *datei, QWidget *parent) : QMainWindow(parent)
 {
     this->datei = datei;
-    connect(datei, &EplFile::changed, this, &CoreMainWindow::unsave);
+
+    constructorCoreMainWindow();
+}
+CoreMainWindow::~CoreMainWindow()
+{
+}
+void CoreMainWindow::constructorCoreMainWindow()
+{
+    connect(datei, &EplFile::changed, this, &CoreMainWindow::onDateiWurdeVeraendert);
     // Views
 
     setWindowTitle(tr("Übersicht"));
     updateWindowHeaders();
     setWindowIcon(QApplication::windowIcon());
     setAttribute(Qt::WA_DeleteOnClose, true);
+
+    manager = datei->getManager();
+    personal = datei->getPersonal();
+
+    connect(manager, &Manager::veraenderteAktivitaet,
+            this, &CoreMainWindow::onAktivitaetWurdeBearbeitet);
+    connect(personal, &ManagerPersonal::personChangedName,
+            this, &CoreMainWindow::onPersonWurdeBearbeitet);
 }
 
-CoreMainWindow::~CoreMainWindow()
+
+void CoreMainWindow::autoSave()
 {
+    datei->autoSave();
 }
+
+void CoreMainWindow::loeschenPerson(Person *p)
+{
+    if (p->getZeiten(Anzahl) > 0) {
+        QMessageBox::information(this, tr("Warnung"),
+                                 tr("%1 kann nicht gelöscht werden, da er/sie noch bei Aktivitäten eingetragen ist.\nBitte lösen Sie diese Verbindung und versuchen es erneut!").arg(p->getName()));
+        return;
+    }
+
+    if (QMessageBox::question(this, tr("Wirklich löschen"),
+                              tr("Möchten Sie %1 wirklich unwiderruflich löschen und aus dem System entfernen?\nFür ausgetretene Mitglieder können Sie auch ein Austrittsdatum angeben!").arg(p->getName())) != QMessageBox::Yes) {
+        return;
+    }
+
+    onPersonWirdEntferntWerden(p);
+    datei->getPersonal()->removePerson(p);
+}
+void CoreMainWindow::loeschenAktivitaet(AActivity *a)
+{
+    if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie %1 am %2 wirklich unwiderruflich löschen?").arg(a->getKurzbeschreibung(), a->getDatum().toString(tr("dd.MM.yyyy")))) != QMessageBox::Yes) {
+        return;
+    }
+
+    onAktivitaetWirdEntferntWerden(a);
+    datei->getManager()->removeActivity(a);
+}
+
 
 void CoreMainWindow::on_actionPreferences_triggered()
 {
@@ -61,7 +100,6 @@ void CoreMainWindow::on_actionNew_triggered()
     CoreMainWindow *mw = handlerNew();
     if (mw != nullptr) mw->show();
 }
-
 void CoreMainWindow::on_actionOpen_triggered()
 {
     handlerOpen(FileIO::getFilePathOpen(this, FileIO::DateiTyp::EPL));
@@ -97,9 +135,9 @@ void CoreMainWindow::on_actionClear_triggered()
 void CoreMainWindow::on_actionSave_triggered()
 {
     try {
-        handlerPrepareSave();
+        onDateiWirdGespeichertWerden();
         datei->speichern();
-        handlerOnSuccessfullSave();
+        onDateiWurdeErfolgreichGespeichert();
     } catch (FilePathInvalidException& e) {
         on_actionSaveas_triggered();
     } catch (FileException& e) {
@@ -112,25 +150,20 @@ void CoreMainWindow::on_actionSaveas_triggered()
     if (newPath == "") return;
 
     try {
-        handlerPrepareSave();
+        onDateiWirdGespeichertWerden();
         datei->speichernUnter(newPath);
-        handlerOnSuccessfullSave();
+        onDateiWurdeErfolgreichGespeichert();
     }  catch (FileException& e) {
         QMessageBox::warning(this, tr("Fehler beim Speichern"), e.getError());
     }
 }
-void CoreMainWindow::autoSave()
-{
-    datei->autoSave();
-}
-
 void CoreMainWindow::on_actionSavePersonal_triggered()
 {
     QString path = FileIO::getFilePathSave(this, tr("Einsatzplan"), FileIO::DateiTyp::EPL);
     if (path == "") return;
 
     try {
-        handlerPrepareSave();
+        onDateiWirdGespeichertWerden();
         datei->speichernPersonal(path);
     }  catch (FileException& e) {
         QMessageBox::warning(this, tr("Fehler beim Speichern"), e.getError());
@@ -141,11 +174,29 @@ void CoreMainWindow::on_actionSettings_triggered()
 {
     handlerSettings();
 }
-
 bool CoreMainWindow::on_actionClose_triggered()
 {
     return close();
 }
+
+
+void CoreMainWindow::handlerPreferenes()
+{
+    EinstellungenDialog *dialog = new EinstellungenDialog();
+    dialog->show();
+}
+
+void CoreMainWindow::onDateiWurdeVeraendert()
+{
+    updateWindowHeaders();
+}
+void CoreMainWindow::onDateiWurdeErfolgreichGespeichert()
+{
+    setWindowTitle(tr("Übersicht"));
+    updateWindowHeaders();
+}
+
+
 void CoreMainWindow::closeEvent(QCloseEvent *event)
 {
     bool toClose = false;
@@ -169,7 +220,7 @@ void CoreMainWindow::closeEvent(QCloseEvent *event)
         for(QMainWindow *w: getChildWindows()) {
             w->close();
         }
-        toClose = handlerClose();
+        toClose = onFensterSollGeschlossenWerden();
     }
     if (toClose) {
         datei->close();
@@ -180,24 +231,7 @@ void CoreMainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-void CoreMainWindow::unsave()
-{
-    updateWindowHeaders();
-}
-
-void CoreMainWindow::handlerOnSuccessfullSave()
-{
-    setWindowTitle(tr("Übersicht"));
-    updateWindowHeaders();
-}
-
-void CoreMainWindow::handlerPreferenes()
-{
-    EinstellungenDialog *dialog = new EinstellungenDialog();
-    dialog->show();
-}
-
-EplFile *CoreMainWindow::open(QString path)
+EplFile *CoreMainWindow::getDateiVonPfad(QString path)
 {
     if (path == "") return nullptr;
     EplFile* datei;

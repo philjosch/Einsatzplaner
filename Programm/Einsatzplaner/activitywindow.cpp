@@ -6,11 +6,13 @@
 #include <QMessageBox>
 #include <eplexception.h>
 
-ActivityWindow::ActivityWindow(QWidget *parent, Activity *a) : QMainWindow(parent), ui(new Ui::ActivityWindow)
+ActivityWindow::ActivityWindow(CoreMainWindow *parent, Activity *a) : QMainWindow(parent), ui(new Ui::ActivityWindow)
 {
     ui->setupUi(this);
     ui->tablePersonen->resizeColumnsToContents();
     activity = a;
+
+    connect(this, &ActivityWindow::loeschen, parent, &CoreMainWindow::loeschenAktivitaet);
 
     tabelleZuEinsatz = QMap<QTableWidgetItem*,AActivity::Einsatz>();
 
@@ -216,11 +218,7 @@ void ActivityWindow::on_actionPdf_triggered()
 
 void ActivityWindow::on_buttonDelete_clicked()
 {
-    if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie diesen Arbeitseinsatz wirklich unwiderruflich löschen?")) == QMessageBox::Yes) {
-        emit activity->del(activity);
-        this->close();
-        deleteLater();
-    }
+    emit loeschen(activity);
 }
 
 void ActivityWindow::setPredefinedValue(QString anlass)

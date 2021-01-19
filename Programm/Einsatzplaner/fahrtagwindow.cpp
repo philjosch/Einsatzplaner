@@ -9,12 +9,14 @@
 #include <QTableWidgetItem>
 #include <eplexception.h>
 
-FahrtagWindow::FahrtagWindow(QWidget *parent, Fahrtag *f) : QMainWindow(parent), ui(new Ui::FahrtagWindow)
+FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(parent), ui(new Ui::FahrtagWindow)
 {
     ui->setupUi(this);
     ui->buttonGroupTf->setId(ui->radioButtonTf0, 0);
     ui->buttonGroupTf->setId(ui->radioButtonTf1, 1);
     ui->buttonGroupTf->setId(ui->radioButtonTf2, 2);
+
+    connect(this, &FahrtagWindow::loeschen, parent, &CoreMainWindow::loeschenAktivitaet);
 
     connect(ui->comboStart1Zug, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
     connect(ui->comboStart1Hp, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
@@ -483,11 +485,7 @@ void FahrtagWindow::on_buttonRemovePerson_clicked()
 
 void FahrtagWindow::on_actionDelete_triggered()
 {
-    if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie diesen Fahrtag wirklich unwiderruflich löschen?")) == QMessageBox::Yes) {
-        emit fahrtag->del(fahrtag);
-        this->close();
-        deleteLater();
-    }
+    emit loeschen(fahrtag);
 }
 
 void FahrtagWindow::on_actionPrint_triggered()

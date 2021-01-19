@@ -174,7 +174,6 @@ private:
 signals:
     void changed();
     void nameChanged(Person*, QString);// Person ist die Person und QString gibt den !ALTEN! Namen an
-    void del(Person *);
 };
 
 #endif // PERSON_H

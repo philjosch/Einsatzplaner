@@ -2,6 +2,7 @@
 #define FAHRTAGWINDOW_H
 
 #include "fahrtag.h"
+#include "coremainwindow.h"
 
 #include <QMainWindow>
 #include <QTableWidgetItem>
@@ -17,7 +18,7 @@ class FahrtagWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit FahrtagWindow(QWidget *parent, Fahrtag *f);
+    explicit FahrtagWindow(CoreMainWindow *parent, Fahrtag *f);
     ~FahrtagWindow();
 
 private slots:
@@ -99,6 +100,10 @@ private slots:
     void on_actionResPrint_triggered();
 
     // Hilfe
+
+signals:
+    void loeschen(AActivity*);
+
 private:
     // Allgemeines
     Ui::FahrtagWindow *ui;

@@ -12,33 +12,20 @@
 MainWindowPersonal::MainWindowPersonal(QWidget *parent) :
     CoreMainWindow(parent), ui(new Ui::MainWindowPersonal)
 {
-    constructor();
+    constructorMainWindowPersonal();
 }
-
 MainWindowPersonal::MainWindowPersonal(EplFile *file, QWidget *parent) :
     CoreMainWindow(file, parent), ui(new Ui::MainWindowPersonal)
 {
-    constructor();
+    constructorMainWindowPersonal();
     updateWindowHeaders();
     on_actionAktualisieren_triggered();
 }
-
 MainWindowPersonal::~MainWindowPersonal()
 {
     delete ui;
 }
-
-bool MainWindowPersonal::open(QString path)
-{
-    EplFile* datei = CoreMainWindow::open(path);
-    if (datei == nullptr) return false;
-
-    CoreMainWindow *mw = new MainWindowPersonal(datei);
-    mw->show();
-    return true;
-}
-
-void MainWindowPersonal::constructor()
+void MainWindowPersonal::constructorMainWindowPersonal()
 {
     ui->setupUi(this);
 
@@ -48,14 +35,17 @@ void MainWindowPersonal::constructor()
     current = QList<Person*>();
     filter = Mitglied::Aktiv;
 
-    fenster = QMap<Person*, QMainWindow*>();
+    fenster = QMap<Person*, PersonWindow*>();
+}
 
+bool MainWindowPersonal::open(QString path)
+{
+    EplFile* datei = getDateiVonPfad(path);
+    if (datei == nullptr) return false;
 
-    personal = datei->getPersonal();
-
-
-    connect(personal, &ManagerPersonal::changed, this, &MainWindowPersonal::on_actionAktualisieren_triggered);
-    connect(personal, &ManagerPersonal::del, this, &MainWindowPersonal::personLoeschen);
+    CoreMainWindow *mw = new MainWindowPersonal(datei);
+    mw->show();
+    return true;
 }
 
 
@@ -63,13 +53,29 @@ CoreMainWindow *MainWindowPersonal::handlerNew()
 {
     return new MainWindowPersonal();
 }
-void MainWindowPersonal::handlerPrepareSave()
-{
-    // TODO
-}
 void MainWindowPersonal::handlerOpen(QString path)
 {
-    MainWindowPersonal::open(path);
+    open(path);
+}
+
+void MainWindowPersonal::onDateiWurdeVeraendert()
+{
+    CoreMainWindow::onDateiWurdeVeraendert();
+    on_actionAktualisieren_triggered();
+}
+
+void MainWindowPersonal::onPersonWirdEntferntWerden(Person *p)
+{
+    if (fenster.contains(p)) {
+        PersonWindow *w = fenster.value(p);
+        fenster.remove(p);
+        w->close();
+        delete w;
+    }
+}
+void MainWindowPersonal::onPersonWurdeBearbeitet([[maybe_unused]] Person *p)
+{
+    on_actionAktualisieren_triggered();
 }
 
 
@@ -291,15 +297,6 @@ void MainWindowPersonal::showPerson(Person *p)
         w->setWindowFilePath(datei->getPfad());
         fenster.insert(p, w);
         w->show();
-    }
-}
-void MainWindowPersonal::personLoeschen(Person *p)
-{
-    if (personal->removePerson(p)) {
-        if (fenster.contains(p)) {
-            fenster.remove(p);
-        }
-        on_actionAktualisieren_triggered();
     }
 }
 

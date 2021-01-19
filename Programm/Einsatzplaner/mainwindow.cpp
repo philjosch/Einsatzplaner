@@ -14,13 +14,12 @@
 MainWindow::MainWindow(QWidget *parent) :
     CoreMainWindow(parent), ui(new Ui::MainWindow)
 {
-    constructor();
+    constructorMainWindow();
 }
-
 MainWindow::MainWindow(EplFile *file, QWidget *parent) :
     CoreMainWindow(file, parent), ui(new Ui::MainWindow)
 {
-    constructor();
+    constructorMainWindow();
 
     if (datei->istSchreibgeschuetzt()) {
         setWindowTitle(tr("Übersicht - Schreibgeschützt"));
@@ -31,8 +30,6 @@ MainWindow::MainWindow(EplFile *file, QWidget *parent) :
     // Alle aktivitäten in die seitenleiste eintragen
     for(AActivity *a: manager->getActivities()) {
         QListWidgetItem *i = new QListWidgetItem("");
-        connect(a, SIGNAL(changed(AActivity*, QDate)), this, SLOT(activityChanged(AActivity*, QDate)));
-        connect(a, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
         setListItem(i, a);
         ui->listWidget->insertItem(ui->listWidget->count(), i);
         listitem.insert(a, i);
@@ -53,15 +50,17 @@ MainWindow::MainWindow(EplFile *file, QWidget *parent) :
     personalfenster->setGeometry(personal.x, personal.y, personal.width, personal.height);
     personalfenster->hide();
 }
-
-void MainWindow::constructor()
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+void MainWindow::constructorMainWindow()
 {
     ui->setupUi(this);
     // Modell
-    manager = datei->getManager();
 
     // Views
-    personalfenster = new PersonalWindow(this, datei->getPersonal());
+    personalfenster = new PersonalWindow(this, personal);
     exportDialog = new ExportDialog(manager, datei->getDateiEigenschaften(), this);
     recentlyUsedMenu = ui->menuRecentlyused;
     recentlyUsedClear = ui->actionClear;
@@ -97,68 +96,79 @@ void MainWindow::constructor()
     on_buttonToday_clicked();
 }
 
-
-MainWindow::~MainWindow()
+bool MainWindow::open(QString path)
 {
-    delete ui;
+    EplFile* datei = getDateiVonPfad(path);
+    if (datei == nullptr) return false;
+
+    CoreMainWindow *mw = new MainWindow(datei);
+    mw->show();
+    return true;
 }
 
-void MainWindow::newFahrtag(QDate d)
-{
-    Fahrtag *f = manager->newFahrtag(d);
-    newAActivityHandler(f);
-    openAActivity(f);
-}
-void MainWindow::newActivity(QDate d)
-{
-    Activity *a = manager->newActivity(d);
-    newAActivityHandler(a);
-    openAActivity(a);
-}
-void MainWindow::openAActivity(AActivity *a)
-{
-    if (a == nullptr) return;
 
-    if (fenster.contains(a)) {
-        fenster.value(a)->show();
-        fenster.value(a)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-        fenster.value(a)->raise();  // for MacOS
-        fenster.value(a)->activateWindow(); // for Windows
-    } else {
-        QMainWindow *w;
-        if (a->getArt() == Art::Arbeitseinsatz) {
-            Activity* aa = dynamic_cast<Activity*>(a);
-            w = new ActivityWindow(this, aa);
-        } else {
-            Fahrtag* f = dynamic_cast<Fahrtag*>(a);
-            w = new FahrtagWindow(this, f);
-        }
-        w->setWindowFilePath(datei->getPfad());
-        fenster.insert(a, w);
-        w->show();
+void MainWindow::handlerSettings()
+{
+    FileSettingsDialog s(this, datei->getDateiEigenschaften());
+    if (s.exec() == QDialog::Accepted) {
+        s.getSettings(datei->getDateiEigenschaften());
     }
 }
 
-void MainWindow::newAActivityHandler(AActivity *a)
+
+CoreMainWindow* MainWindow::handlerNew()
 {
-    connect(a, SIGNAL(changed(AActivity*, QDate)), this, SLOT(activityChanged(AActivity*, QDate)));
-    connect(a, SIGNAL(del(AActivity*)), this, SLOT(removeActivity(AActivity*)));
-
-    // Einfügen in die Seitenliste
-    ui->listWidget->insertItem(ui->listWidget->count(), a->getListString());
-    QListWidgetItem *i = ui->listWidget->item(ui->listWidget->count()-1);
-    listitem.insert(a, i);
-    itemToList.insert(i, a);
-
-    activityChanged(a);
+    return new MainWindow();
+}
+void MainWindow::handlerOpen(QString path)
+{
+    open(path);
 }
 
-void MainWindow::activityChanged(AActivity *a, QDate oldDate)
+void MainWindow::onDateiWirdGespeichertWerden()
+{
+    datei->setPositionKalender(EplFile::FensterPosition {x(), y(), width(), height() });
+    datei->setPositionPersonal(
+                EplFile::FensterPosition {personalfenster->x(),
+                                          personalfenster->y(),
+                                          personalfenster->width(),
+                                          personalfenster->height() });
+    datei->setAnzeigeDatum(ui->dateSelector->date());
+}
+void MainWindow::onDateiWurdeErfolgreichGespeichert()
+{
+    CoreMainWindow::onDateiWurdeErfolgreichGespeichert();
+    if (datei->getDateiEigenschaften()->getAutom()) {
+        int result = Export::Upload::autoUploadToServer(manager->filter(datei->getDateiEigenschaften()->getAuswahl()), datei->getDateiEigenschaften()->getServer());
+        if (result == 0)
+            ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
+        else if (result > 0)
+            ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
+    }
+    return;
+}
+
+void MainWindow::onAktivitaetWirdEntferntWerden(AActivity *a)
+{
+    ui->listWidget->takeItem(ui->listWidget->row(listitem.value(a)));
+    itemToList.remove(listitem.value(a));
+    listitem.remove(a);
+    int pos = getPosInCalendar(a->getDatum());
+    if (pos >= 0)
+        tage.at(pos)->remove(a);
+    if (fenster.contains(a)) {
+        QMainWindow *w = fenster.value(a);
+        fenster.remove(a);
+        w->close();
+        delete w;
+    }
+}
+void MainWindow::onAktivitaetWurdeBearbeitet(AActivity *a, QDate altesDatum)
 {
     manager->sort();
     int oldPos = -1;
-    if (oldDate.isValid())
-        oldPos = getPosInCalendar(oldDate);
+    if (altesDatum.isValid())
+        oldPos = getPosInCalendar(altesDatum);
 
     if (oldPos < 42 && oldPos >= 0) {
         tage.at(oldPos)->remove(a);
@@ -198,32 +208,47 @@ void MainWindow::activityChanged(AActivity *a, QDate oldDate)
     }
 }
 
+
+void MainWindow::on_actionExport_triggered()
+{
+    exportDialog->hardReload();
+    exportDialog->exec();
+}
+
 void MainWindow::on_actionLoeschen_triggered()
 {
     QList<QListWidgetItem*> selected = ui->listWidget->selectedItems();
     if (! selected.isEmpty()) {
-        if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie die ausgewählten Aktivitäten wirklich unwiderruflich löschen?")) == QMessageBox::Yes) {
-            for(QListWidgetItem *item: selected) {
-                removeActivity(itemToList.value(item));
-            }
+        for(QListWidgetItem *item: selected) {
+            loeschenAktivitaet(itemToList.value(item));
         }
     }
 }
-bool MainWindow::removeActivity(AActivity *a)
+
+void MainWindow::on_actionPersonal_triggered()
 {
-    ui->listWidget->takeItem(ui->listWidget->row(listitem.value(a)));
-    itemToList.remove(listitem.value(a));
-    listitem.remove(a);
-    int pos = getPosInCalendar(a->getDatum());
-    if (pos >= 0)
-        tage.at(pos)->remove(a);
-    bool ret = manager->removeActivity(a);
-    if (fenster.contains(a)) {
-        fenster.remove(a);
-    }
-    return ret;
+    personalfenster->show();
+    personalfenster->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    personalfenster->raise();
+    personalfenster->activateWindow();
 }
 
+
+void MainWindow::on_buttonPrev_clicked()
+{
+    ui->dateSelector->setDate(ui->dateSelector->date().addMonths(-1));
+    ui->dateSelector->repaint();
+}
+void MainWindow::on_buttonNext_clicked()
+{
+    ui->dateSelector->setDate(ui->dateSelector->date().addMonths(1));
+    ui->dateSelector->repaint();
+}
+void MainWindow::on_buttonToday_clicked()
+{
+    ui->dateSelector->setDate(QDate::currentDate());
+    ui->dateSelector->repaint();
+}
 void MainWindow::showDate(QDate date)
 {
     date = date.addDays(-date.day()+1); // Datum auf Monatsanfang setzen
@@ -251,31 +276,53 @@ void MainWindow::showDate(QDate date)
     }
 }
 
-bool MainWindow::open(QString path)
-{
-    EplFile* datei = CoreMainWindow::open(path);
-    if (datei == nullptr) return false;
 
-    CoreMainWindow *mw = new MainWindow(datei);
-    mw->show();
-    return true;
+void MainWindow::newFahrtag(QDate d)
+{
+    Fahrtag *f = manager->newFahrtag(d);
+    newAActivityHandler(f);
+    openAActivity(f);
+}
+void MainWindow::newActivity(QDate d)
+{
+    Activity *a = manager->newActivity(d);
+    newAActivityHandler(a);
+    openAActivity(a);
+}
+void MainWindow::openAActivity(AActivity *a)
+{
+    if (a == nullptr) return;
+
+    if (fenster.contains(a)) {
+        fenster.value(a)->show();
+        fenster.value(a)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+        fenster.value(a)->raise();  // for MacOS
+        fenster.value(a)->activateWindow(); // for Windows
+    } else {
+        QMainWindow *w;
+        if (a->getArt() == Art::Arbeitseinsatz) {
+            Activity* aa = dynamic_cast<Activity*>(a);
+            w = new ActivityWindow(this, aa);
+        } else {
+            Fahrtag* f = dynamic_cast<Fahrtag*>(a);
+            w = new FahrtagWindow(this, f);
+        }
+        w->setWindowFilePath(datei->getPfad());
+        fenster.insert(a, w);
+        w->show();
+    }
+}
+void MainWindow::newAActivityHandler(AActivity *a)
+{
+    // Einfügen in die Seitenliste
+    ui->listWidget->insertItem(ui->listWidget->count(), a->getListString());
+    QListWidgetItem *i = ui->listWidget->item(ui->listWidget->count()-1);
+    listitem.insert(a, i);
+    itemToList.insert(i, a);
+
+    onAktivitaetWurdeBearbeitet(a);
 }
 
-void MainWindow::on_buttonPrev_clicked()
-{
-    ui->dateSelector->setDate(ui->dateSelector->date().addMonths(-1));
-    ui->dateSelector->repaint();
-}
-void MainWindow::on_buttonNext_clicked()
-{
-    ui->dateSelector->setDate(ui->dateSelector->date().addMonths(1));
-    ui->dateSelector->repaint();
-}
-void MainWindow::on_buttonToday_clicked()
-{
-    ui->dateSelector->setDate(QDate::currentDate());
-    ui->dateSelector->repaint();
-}
 
 void MainWindow::onItemInListClicked(QListWidgetItem *item)
 {
@@ -288,62 +335,6 @@ void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
     i->setToolTip(a->getAnlass().replace("<br/>","\n"));
     i->setWhatsThis(a->getAnlass().replace("<br/>","\n"));
     i->setBackground(QBrush(QColor(getFarbe(a))));
-}
-
-void MainWindow::on_actionPersonal_triggered()
-{
-    personalfenster->show();
-    personalfenster->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-    personalfenster->raise();
-    personalfenster->activateWindow();
-}
-
-void MainWindow::on_actionExport_triggered()
-{
-    exportDialog->hardReload();
-    exportDialog->exec();
-}
-
-CoreMainWindow* MainWindow::handlerNew()
-{
-    return new MainWindow();
-}
-
-void MainWindow::handlerPrepareSave()
-{
-    datei->setPositionKalender(EplFile::FensterPosition {x(), y(), width(), height() });
-    datei->setPositionPersonal(
-                EplFile::FensterPosition {personalfenster->x(),
-                                          personalfenster->y(),
-                                          personalfenster->width(),
-                                          personalfenster->height() });
-    datei->setAnzeigeDatum(ui->dateSelector->date());
-}
-
-void MainWindow::handlerOnSuccessfullSave()
-{
-    CoreMainWindow::handlerOnSuccessfullSave();
-    if (datei->getDateiEigenschaften()->getAutom()) {
-        int result = Export::Upload::autoUploadToServer(manager->filter(datei->getDateiEigenschaften()->getAuswahl()), datei->getDateiEigenschaften()->getServer());
-        if (result == 0)
-            ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
-        else if (result > 0)
-            ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
-    }
-    return;
-}
-
-void MainWindow::handlerOpen(QString path)
-{
-    MainWindow::open(path);
-}
-
-void MainWindow::handlerSettings()
-{
-    FileSettingsDialog s(this, datei->getDateiEigenschaften());
-    if (s.exec() == QDialog::Accepted) {
-        s.getSettings(datei->getDateiEigenschaften());
-    }
 }
 
 int MainWindow::getPosInCalendar(QDate date)

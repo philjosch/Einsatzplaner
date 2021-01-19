@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Mitgliederübersicht</string>
   </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>true</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
     <property name="leftMargin">
@@ -309,6 +312,9 @@
       </widget>
       <widget class="QWidget" name="layoutWidget">
        <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,1,0" columnstretch="0,0,1">
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
         <property name="spacing">
          <number>6</number>
         </property>
@@ -1038,7 +1044,6 @@
   </action>
  </widget>
  <resources>
-  <include location="../icons/icons_rc.qrc"/>
   <include location="../icons/icons_rc.qrc"/>
   <include location="../icons/icons_rc.qrc"/>
  </resources>

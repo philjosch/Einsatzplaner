@@ -13,7 +13,7 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
 
     person = p;
 
-    connect(this, &PersonWindow::deletePerson, parent, &CoreMainWindow::deletePerson);
+    connect(this, &PersonWindow::loeschen, parent, &CoreMainWindow::loeschenPerson);
 
     enabled = false;
 
@@ -76,19 +76,7 @@ void PersonWindow::on_actionMail_triggered()
 
 void PersonWindow::on_actionLoeschen_triggered()
 {
-    if (enabled) {
-        if (person->getZeiten(Anzahl) > 0) {
-            QMessageBox::information(this, tr("Warnung"), tr("Die ausgewählte Person kann nicht gelöscht werden, da Sie noch bei Aktivitäten eingetragen ist.\nBitte lösen Sie diese Verbindung bevor Sie die Person löschen!"));
-            return;
-        }
-        if (QMessageBox::question(this, tr("Wirklich löschen"), tr("Möchten Sie die Person wirklich unwiderruflich löschen und aus dem System entfernen.\nFür ausgetretene Mitglieder können Sie auch ein Austrittsdatum angeben!")) != QMessageBox::Yes) {
-            return;
-        }
-        enabled = false;
-
-        emit deletePerson(person);
-        close();
-    }
+    emit loeschen(person);
 }
 
 void PersonWindow::on_actionEinzelPDF_triggered()

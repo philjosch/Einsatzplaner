@@ -24,57 +24,53 @@ public:
     static bool open(QString path);
 
 private:
-    void constructor();
+    void constructorMainWindow();
 
 protected slots:
-    /** Vererbte Methoden von CoreMainWindow **/
-    CoreMainWindow *handlerNew();
-    void handlerPrepareSave();
-    void handlerOnSuccessfullSave();
-    void handlerOpen(QString path);
+    //** Vererbte Methoden von CoreMainWindow
     void handlerSettings();
 
-    /** Menueleiste **/
-    /* Datei */
+    CoreMainWindow *handlerNew();
+    void handlerOpen(QString path);
+
+    void onDateiWirdGespeichertWerden();
+    void onDateiWurdeErfolgreichGespeichert();
+
+    void onAktivitaetWirdEntferntWerden(AActivity *a);
+    void onAktivitaetWurdeBearbeitet(AActivity *a, QDate altesDatum = QDate());
+
+    //** Menueleiste
+    // Datei
     void on_actionExport_triggered();
-    /* Bearbeiten */
+    // Bearbeiten
     void on_actionLoeschen_triggered();
-    /* Ansicht */
+    // Ansicht
     void on_actionPersonal_triggered();
 
-    /** Fenster **/
+    //** Fenster
     // Kalender
     void on_buttonPrev_clicked();
     void on_buttonToday_clicked();
     void on_buttonNext_clicked();
-
     void showDate(QDate date);
-
 
     // Aktivitaeten
     void newFahrtag(QDate d = QDate::currentDate());
     void newActivity(QDate d = QDate::currentDate());
+    void openAActivity(AActivity *a);
     void newAActivityHandler(AActivity *a);
 
-    void openAActivity(AActivity *a);
-
-    void activityChanged(AActivity *a, QDate oldDate = QDate());
-    bool removeActivity(AActivity *a);
-
-
     // Liste der Aktivitäten
-    void setListItem(QListWidgetItem *i, AActivity *a);
     void onItemInListClicked(QListWidgetItem *item);
-
+    void setListItem(QListWidgetItem *i, AActivity *a);
 
 protected:
-    /** Hilfsmethoden **/
+    //** Hilfsmethoden
     int getPosInCalendar(QDate date);
 
-    /** Modell **/
-    Manager *manager;
+    //** Modell
 
-    /** View **/
+    //** View
     Ui::MainWindow *ui;
     QList<CalendarDay*> tage;
     QMap<AActivity*, QMainWindow*> fenster;
@@ -82,7 +78,7 @@ protected:
     PersonalWindow *personalfenster;
     ExportDialog *exportDialog;
 
-    /** Controller **/
+    //** Controller
     QMap<AActivity*, QListWidgetItem*> listitem; // Gibt an, welcher Aktivität welches Listenelement in der gesamtListe zugeordnet ist
     QMap<QListWidgetItem*, AActivity*> itemToList;
 };
