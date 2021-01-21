@@ -38,6 +38,8 @@ CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool d
 
     if (int delay = Einstellungen::getAutoSave())
         startAutoSave(delay);
+
+    setAttribute(Qt::AA_UseHighDpiPixmaps);
 }
 
 CoreApplication::~CoreApplication()

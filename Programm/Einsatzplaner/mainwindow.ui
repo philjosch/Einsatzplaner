@@ -22,13 +22,13 @@
      <number>6</number>
     </property>
     <property name="topMargin">
-     <number>6</number>
+     <number>0</number>
     </property>
     <property name="rightMargin">
      <number>6</number>
     </property>
     <property name="bottomMargin">
-     <number>6</number>
+     <number>0</number>
     </property>
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter">
@@ -37,11 +37,14 @@
       </property>
       <widget class="QWidget" name="layoutWidget">
        <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,1">
+        <property name="topMargin">
+         <number>6</number>
+        </property>
         <property name="spacing">
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridKopf" columnstretch="0,0,0,0,0,0">
+         <layout class="QGridLayout" name="gridKopf" columnstretch="0,1,0,1,0,0">
           <property name="horizontalSpacing">
            <number>6</number>
           </property>
@@ -729,9 +732,6 @@
          <width>205</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
        </property>
        <property name="frameShadow">
         <enum>QFrame::Plain</enum>

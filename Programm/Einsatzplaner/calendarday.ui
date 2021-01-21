@@ -58,6 +58,9 @@
        <height>15</height>
       </size>
      </property>
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
      <property name="styleSheet">
       <string notr="true"/>
      </property>
@@ -83,6 +86,9 @@
    </item>
    <item row="1" column="0" colspan="2">
     <widget class="QListWidget" name="listWidget">
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -119,6 +125,9 @@
      </property>
      <property name="whatsThis">
       <string>Arbeitseinsatz hinzufügen</string>
+     </property>
+     <property name="autoFillBackground">
+      <bool>true</bool>
      </property>
      <property name="styleSheet">
       <string notr="true">border: none;</string>
