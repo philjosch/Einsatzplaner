@@ -87,67 +87,6 @@ QString getLocalizedStringFromCategory(Category c);
 
 QString getStringFromArt(Art art);
 
-struct Version {
-    int major;
-    int minor;
-    int patch;
-
-    static Version CURRENT_API_VERSION;
-
-
-    QString toString() {
-        return QString("%1.%2.%3").arg(major).arg(minor).arg(patch);
-    }
-    QString toStringShort() {
-        return QString("%1.%2").arg(major).arg(minor);
-    }
-    static Version stringToVersion (QString s) {
-        if (! s.contains(".")) return Version {-1, -1, -1};
-        QStringList vers = s.split(".");
-        if (vers.length() < 2) return Version {-1, -1, -1};
-        Version v;
-        v.major = vers.at(0).toInt();
-        v.minor = vers.at(1).toInt();
-        if (vers.length() >= 3) // Dritte Stelle nur nehmen, wenn sie vorhanden ist
-            v.patch = vers.at(2).toInt();
-        else
-            v.patch = -1;
-        return v;
-    }
-
-    bool operator ==(Version second) {
-        if ((major == second.major) && (minor == second.minor) && (patch == second.patch)) {
-            return true;
-        }
-        return false;
-    }
-    bool operator >(Version second) {
-        if ((major > second.major) || (second.major == -1)) {
-            return true;
-        }
-        if ((major == second.major) && ((minor > second.minor) || (second.minor == -1))) {
-            return true;
-        }
-        if ((major == second.major) && (minor == second.minor) && ((patch > second.patch) || (patch != -1 && second.patch == -1))) {
-            return true;
-        }
-        return false;
-    }
-    bool operator <(Version second) {
-        return second>*this;
-    }
-    bool operator >=(Version second) {
-        return *this == second || *this > second;
-    }
-    bool operator <=(Version second) {
-        return *this == second || second > *this;
-    }
-    static bool isSupportedVersion(Version test) {
-        if (test == Version{-1,-1,-1}) return false;
-        if (test > CURRENT_API_VERSION) return false;
-        return true;
-    }
-};
 
 enum AnfangBedingung {
     AbHeute,

@@ -12,7 +12,7 @@ class CoreApplication : public QApplication
     Q_OBJECT
 
 public:
-    CoreApplication(int &argc, char **argv, Version version, bool devVersion, QString build);
+    CoreApplication(int &argc, char **argv);
     ~CoreApplication();
 
     bool generateWindow();
@@ -24,15 +24,6 @@ public:
     void startAutoSave(int delay); // in Minuten
     void stopAutoSave();
 
-    static Version loadVersion();
-
-    static QString loadNotes(Version v);
-
-    static bool DEVELOPER_MODE;
-    static Version VERSION;
-    static QString BUILD;
-
-    static bool isUpdateVerfuegbar();
 
     static bool *openHelper(QString);
 
@@ -46,8 +37,6 @@ protected:
     QTimer *autoSaveTimer;
 
     static QString URL_DOWNLOAD;
-    static QString URL_VERSION;
-    static QString URL_NOTES;
 
     static QList<CoreMainWindow *> getCoreMainWindows();
 

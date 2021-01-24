@@ -36,8 +36,8 @@ EinstellungenDialog::~EinstellungenDialog()
 
 void EinstellungenDialog::on_pushSearch_clicked()
 {
-    if (CoreApplication::isUpdateVerfuegbar()) {
-        online = CoreApplication::loadVersion();
+    if (Version::isUpdateVerfuegbar()) {
+        online = Version::ladeNeusteVersion();
         ui->labelVersion->setText(
                     tr("Sie verwenden Version %1. Es ist Version %2 verfügbar.")
                     .arg(QCoreApplication::applicationVersion(), online.toString()));
@@ -81,6 +81,6 @@ void EinstellungenDialog::on_pushNotes_clicked()
 {
     QMessageBox::information(nullptr,
                              tr("Über Version %1").arg(online.toString()),
-                             CoreApplication::loadNotes(online),
+                             Version::loadNotes(online),
                              QMessageBox::Ok, QMessageBox::Ok);
 }

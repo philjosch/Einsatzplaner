@@ -29,6 +29,7 @@ SOURCES += einstellungen.cpp \
     wagen.cpp \
     verteiler.cpp \
     basics.cpp \
+    version.cpp \
     filesettings.cpp
 
 HEADERS  += einstellungen.h \
@@ -49,6 +50,7 @@ HEADERS  += einstellungen.h \
     basics.h \
     filesettings.h
 
+macx {
 # Default rules for deployment.
 #unix {
 #    target.path = $$[QT_INSTALL_PLUGINS]/generic

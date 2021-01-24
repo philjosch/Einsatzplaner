@@ -723,7 +723,7 @@ void FahrtagWindow::on_buttonVerteile_clicked()
         if (ok.count(Mistake::OK) == ok.length()) {
             QMessageBox::information(this, tr("Fertig"), tr("Die Reservierungen in allen Klassen wurden erfolgreich verteilt."));
         }
-        if (CoreApplication::DEVELOPER_MODE) {
+        if (Version::isDeveloperVersion()) {
             QMessageBox::information(this, tr("Fertig"), "mSek: "+QString::number(start.msecsTo(ende)));
         }
         updateAuswertungReservierungen();

@@ -5,6 +5,12 @@
 #
 #-------------------------------------------------
 
+###########
+# VERSION #
+###########
+VERSION = 1.6.3
+DEPLOYED = false
+
 ####################
 # QT EINSTELLUNGEN #
 ####################
@@ -65,6 +71,7 @@ win32 {
 
     QMAKE_TARGET_PRODUCT = $${TARGET}
     RC_ICONS = $$PWD/../Icon/$${TARGET}.ico
+    VERSION = $${VERSION}.1
 }
 macx {
     QMAKE_INFO_PLIST = $$PWD/Info.plist
@@ -94,14 +101,19 @@ macx {
 }
 
 
-###########
-# VERSION #
-###########
+#################
+# VERSIONSDATEN #
+#################
 win32: COMMIT_HASH = $$system(git.exe -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)
 else:  COMMIT_HASH = $$system(git -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)
 DEFINES += GIT_CURRENT_SHA1="\"\\\"$${COMMIT_HASH}\\\"\""
+DEFINES += APP_NAME="\"\\\"$${TARGET}\\\"\""
+DEFINES += APP_VERSION="\"\\\"$${VERSION}\\\"\""
+DEFINES += APP_DEPLOY="$${DEPLOYED}"
 
-VERSION = 1.6.3
-win32 {
-    VERSION = $${VERSION}.1
+CONFIG(debug, debug|release) {
+    DEFINES += APP_DEBUG="true"
+}
+CONFIG(release, debug|release) {
+    DEFINES += APP_DEBUG="false"
 }

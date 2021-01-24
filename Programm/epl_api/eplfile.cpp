@@ -57,7 +57,7 @@ EplFile::EplFile(QString path)
     QJsonArray activitiesJson;
     QJsonObject personalJson;
 
-    Version version = Version::stringToVersion(generalJSON.value("version").toString());
+    Version version = Version(generalJSON.value("version").toString());
     if (version == Version {-1, -1, -1}) {
         FileIO::Schreibschutz::freigeben(pfad);
         throw FileVersionNotSupportedException(tr("Die Datei ist nicht mit dieser Version des Einsatzplaner kompatibel."));
@@ -68,7 +68,7 @@ EplFile::EplFile(QString path)
         personalJson = calendarJSON.value("personal").toObject();
         // Daten in den Manager laden und die Logik herstellen
         currentDate = QDate::fromString(calendarJSON.value("currentDate").toString(), "yyyy-MM-dd");
-    } else if (version <= Version::CURRENT_API_VERSION) {
+    } else if (version <= Version::getVersion()) {
         // Ab Version 1.6
         activitiesJson = geladen.value("activities").toArray();
         personalJson = geladen.value("personal").toObject();
@@ -265,7 +265,7 @@ QJsonObject EplFile::generiereJsonPersonal()
     viewJSON.insert("currentDate", currentDate.toString("yyyy-MM-dd"));
 
     QJsonObject generalJSON = geladen.value("general").toObject();
-    generalJSON.insert("version", Version::CURRENT_API_VERSION.toStringShort());
+    generalJSON.insert("version", Version::getVersion().toStringShort());
 
     QJsonObject object = geladen;
     object.insert("personal", personalJSON);

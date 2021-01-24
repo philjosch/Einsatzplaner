@@ -11,26 +11,14 @@
 #include <einstellungen.h>
 #include <QWindow>
 
-Version CoreApplication::VERSION = {-1, -1, -1};
-QString CoreApplication::BUILD = "";
-bool CoreApplication::DEVELOPER_MODE = false;
 QString CoreApplication::URL_DOWNLOAD = "http://epl.philipp-schepper.de/#downloads";
-QString CoreApplication::URL_VERSION = "http://epl.philipp-schepper.de/version.txt";
-QString CoreApplication::URL_NOTES = "http://epl.philipp-schepper.de/version/v%1-%2/notes-v%1-%2-%3.txt";
 
-CoreApplication::CoreApplication(int &argc, char **argv, Version version, bool devVersion, QString build) : QApplication(argc, argv)
+CoreApplication::CoreApplication(int &argc, char **argv) : QApplication(argc, argv)
 {
-    VERSION = version;
-    DEVELOPER_MODE = devVersion;
-    BUILD = build;
 
     QCoreApplication::setOrganizationName("Philipp Schepper");
     QCoreApplication::setOrganizationDomain("philipp-schepper.de");
-    if (DEVELOPER_MODE) {
-        QCoreApplication::setApplicationVersion(QString("%1 (%2)").arg(VERSION.toString()).arg(CoreApplication::BUILD));
-    } else {
-        QCoreApplication::setApplicationVersion(VERSION.toString());
-    }
+
     autoSaveTimer = nullptr;
 
     if (Einstellungen::getAutoSearchUpdate())
@@ -63,15 +51,19 @@ bool CoreApplication::event(QEvent *event)
 
 void CoreApplication::checkVersion()
 {
-    if (isUpdateVerfuegbar()) {
-        Version v = loadVersion();
+    if (Version::isUpdateVerfuegbar()) {
+        Version v = Version::ladeNeusteVersion();
         QString message = tr("Es ist Version %1 des Programms verfügbar.\nSie benutzen Version %2.")
                 .arg(v.toString()).arg(QCoreApplication::applicationVersion());
         QMessageBox::StandardButton answ = QMessageBox::information(nullptr, tr("Neue Version"), message, QMessageBox::Ignore|QMessageBox::Help|QMessageBox::Open, QMessageBox::Open);
         if (answ == QMessageBox::Open) {
             oeffneDownloadSeite();
         } else if (answ == QMessageBox::Help) {
-            if (QMessageBox::information(nullptr, tr("Über die neue Version"), loadNotes(v), QMessageBox::Close|QMessageBox::Open, QMessageBox::Open) == QMessageBox::Open) {
+            if (QMessageBox::information(nullptr,
+                                         tr("Über die neue Version"),
+                                         Version::loadNotes(v),
+                                         QMessageBox::Close|QMessageBox::Open,
+                                         QMessageBox::Open) == QMessageBox::Open) {
                 oeffneDownloadSeite();
             }
         }
@@ -114,27 +106,6 @@ void CoreApplication::stopAutoSave()
     if (autoSaveTimer != nullptr) {
         autoSaveTimer->stop();
     }
-}
-
-Version CoreApplication::loadVersion()
-{
-    QString s = Networking::ladeDatenVonURL(URL_VERSION);
-    if (s == "") {
-        return Version {-1, -1, -1};
-    } else {
-        return Version::stringToVersion(s);
-    }
-}
-
-QString CoreApplication::loadNotes(Version v)
-{
-    return Networking::ladeDatenVonURL(URL_NOTES.arg(v.major).arg(v.minor).arg(v.patch));
-}
-
-bool CoreApplication::isUpdateVerfuegbar()
-{
-    Version v = loadVersion();
-    return (v>VERSION) || ((v == VERSION) && DEVELOPER_MODE);
 }
 
 void CoreApplication::closeAllWindows()

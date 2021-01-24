@@ -1,7 +1,7 @@
 #ifndef EPLEXCEPTION_H
 #define EPLEXCEPTION_H
 
-#include "basics.h"
+#include "version.h"
 
 #include <QString>
 #include <QObject>
