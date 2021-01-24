@@ -35,12 +35,12 @@ CoreApplication* CoreApplication::generateApp(int argc, char *argv[], QString na
 
     QCoreApplication::setApplicationName(name);
 
-    QTranslator qtTranslator;
-    qtTranslator.load(QString(":/translations/qt_%1.qm").arg(QLocale::system().name()));
-    a->installTranslator(&qtTranslator);
-
     QIcon icon(QString(":/appIcon/%1.icns").arg(name));
     a->setWindowIcon(icon);
+
+//    QTranslator qtTranslator;
+//    qtTranslator.load(lang);
+//    a->installTranslator(&qtTranslator);
 
     if (Einstellungen::getAutoSearchUpdate())
         a->checkVersion();
