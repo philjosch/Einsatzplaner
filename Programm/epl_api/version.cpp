@@ -33,14 +33,12 @@ Version::Version(QString vers)
     else
         patch = -1;
 }
-
 Version::Version(int maj, int min)
 {
     major = maj;
     minor = min;
     patch = -1;
 }
-
 Version::Version(int maj, int min, int pat)
 {
     major = maj;
@@ -52,50 +50,24 @@ QString Version::toString()
 {
     return QString("%1.%2.%3").arg(major).arg(minor).arg(patch);
 }
-
 QString Version::toStringShort()
 {
     return QString("%1.%2").arg(major).arg(minor);
 }
 
-void Version::setVersion(Version akt, bool deploy, bool debug, QString build)
+int Version::getMajor() const
 {
-    VERSION = akt;
-    IS_DEPLOY_VERSION = deploy;
-    IS_DEBUG_BUILD = debug;
-    BUILD_NUMBER = build;
-    QCoreApplication::setApplicationVersion(getKompletteVersionsnummer());
+    return major;
+}
+int Version::getMinor() const
+{
+    return minor;
+}
+int Version::getPatch() const
+{
+    return patch;
 }
 
-QString Version::getKompletteVersionsnummer()
-{
-    QString s = VERSION.toString()+" (%1: %2)";
-    if (IS_DEPLOY_VERSION) {
-        s = s.arg("rev");
-    } else {
-        s = s.arg("dev");
-    }
-    s = s.arg(BUILD_NUMBER);
-    if (IS_DEBUG_BUILD) {
-        s = s + " (deb)";
-    }
-    return s;
-}
-
-Version Version::getVersion()
-{
-    return VERSION;
-}
-
-bool Version::isDeveloperVersion()
-{
-    return !IS_DEPLOY_VERSION;
-}
-
-bool Version::isDebuggingVersion()
-{
-    return IS_DEBUG_BUILD;
-}
 
 bool operator==(const Version &lhs, const Version rhs)
 {
@@ -130,42 +102,61 @@ bool operator<=(const Version &lhs, const Version rhs)
     return !(lhs > rhs);
 }
 
+void Version::setProgrammVersion(Version akt, bool deploy, bool debug, QString build)
+{
+    VERSION = akt;
+    IS_DEPLOY_VERSION = deploy;
+    IS_DEBUG_BUILD = debug;
+    BUILD_NUMBER = build;
+    QCoreApplication::setApplicationVersion(getKompletteVersionsnummer());
+}
+QString Version::getKompletteVersionsnummer()
+{
+    QString s = VERSION.toString()+" (%1: %2)";
+    if (IS_DEPLOY_VERSION) {
+        s = s.arg("rev");
+    } else {
+        s = s.arg("dev");
+    }
+    s = s.arg(BUILD_NUMBER);
+    if (IS_DEBUG_BUILD) {
+        s = s + " (deb)";
+    }
+    return s;
+}
+Version Version::getProgrammVersion()
+{
+    return VERSION;
+}
+
+
+bool Version::isDeveloperVersion()
+{
+    return !IS_DEPLOY_VERSION;
+}
+bool Version::isDebuggingVersion()
+{
+    return IS_DEBUG_BUILD;
+}
+
+
 bool Version::isSupportedVersion(Version test) {
     if (test == Version{-1,-1,-1}) return false;
     if (test > VERSION) return false;
     return true;
 }
 
-int Version::getMajor() const
-{
-    return major;
-}
-int Version::getMinor() const
-{
-    return minor;
-}
-int Version::getPatch() const
-{
-    return patch;
-}
 
-bool Version::istAktualisierbar(Version v)
+bool Version::isUpdateVerfuegbar()
 {
+    Version v = ladeNeusteVersion();
     return (v>Version::VERSION) || ((v == Version::VERSION) && !Version::IS_DEPLOY_VERSION);
 }
-
-
 Version Version::ladeNeusteVersion()
 {
     return Version(Networking::ladeDatenVonURL(URL_VERSION));
 }
-
 QString Version::loadNotes(Version v)
 {
     return Networking::ladeDatenVonURL(URL_NOTES.arg(v.getMajor()).arg(v.getMinor()).arg(v.getPatch()));
-}
-
-bool Version::isUpdateVerfuegbar()
-{
-    return Version::istAktualisierbar(ladeNeusteVersion());
 }

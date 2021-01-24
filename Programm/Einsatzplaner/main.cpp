@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    Version::setVersion(Version(APP_VERSION), APP_DEPLOY, APP_DEBUG, GIT_CURRENT_SHA1);
+    Version::setProgrammVersion(Version(APP_VERSION), APP_DEPLOY, APP_DEBUG, GIT_CURRENT_SHA1);
     CoreApplication a(argc, argv);
     QObject::connect(&a, &CoreApplication::triggerOpen, MainWindow::open);
 

@@ -68,7 +68,7 @@ EplFile::EplFile(QString path)
         personalJson = calendarJSON.value("personal").toObject();
         // Daten in den Manager laden und die Logik herstellen
         currentDate = QDate::fromString(calendarJSON.value("currentDate").toString(), "yyyy-MM-dd");
-    } else if (version <= Version::getVersion()) {
+    } else if (version <= Version::getProgrammVersion()) {
         // Ab Version 1.6
         activitiesJson = geladen.value("activities").toArray();
         personalJson = geladen.value("personal").toObject();
@@ -268,7 +268,7 @@ QJsonObject EplFile::generiereJsonPersonal()
     viewJSON.insert("currentDate", currentDate.toString("yyyy-MM-dd"));
 
     QJsonObject generalJSON = geladen.value("general").toObject();
-    generalJSON.insert("version", Version::getVersion().toStringShort());
+    generalJSON.insert("version", Version::getProgrammVersion().toStringShort());
 
     QJsonObject object = geladen;
     object.insert("personal", personalJSON);
