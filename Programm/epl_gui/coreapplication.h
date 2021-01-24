@@ -14,6 +14,7 @@ class CoreApplication : public QApplication
 public:
     CoreApplication(int &argc, char **argv);
     ~CoreApplication();
+    static CoreApplication* generateApp(int argc, char *argv[], QString name, QString vers, bool deploy, bool debug, QString hash);
 
     bool generateWindow();
 
@@ -24,8 +25,7 @@ public:
     void startAutoSave(int delay); // in Minuten
     void stopAutoSave();
 
-
-    static bool *openHelper(QString);
+    void openUnopenedFiles();
 
 public slots:
     static void closeAllWindows();
@@ -40,6 +40,9 @@ protected:
 
     static QList<CoreMainWindow *> getCoreMainWindows();
 
+private:
+    QStringList unopenedFiles;
+    bool openHandlerSet = false;
 signals:
     void triggerOpen(QString);
 };

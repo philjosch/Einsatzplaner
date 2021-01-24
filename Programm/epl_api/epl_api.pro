@@ -51,7 +51,6 @@ HEADERS  += einstellungen.h \
     version.h \
     filesettings.h
 
-macx {
 # Default rules for deployment.
 #unix {
 #    target.path = $$[QT_INSTALL_PLUGINS]/generic

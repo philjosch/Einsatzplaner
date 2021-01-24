@@ -20,7 +20,7 @@ Version::Version(QString vers)
         return;
     }
     QStringList versList = vers.split(".");
-    if (vers.length() < 2){
+    if (versList.length() < 2){
         major = -1;
         minor = -1;
         patch = -1;
@@ -28,7 +28,7 @@ Version::Version(QString vers)
     }
     major = versList.at(0).toInt();
     minor = versList.at(1).toInt();
-    if (vers.length() >= 3) // Dritte Stelle nur nehmen, wenn sie vorhanden ist
+    if (versList.length() >= 3) // Dritte Stelle nur nehmen, wenn sie vorhanden ist
         patch = versList.at(2).toInt();
     else
         patch = -1;

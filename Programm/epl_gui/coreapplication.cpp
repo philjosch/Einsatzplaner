@@ -15,17 +15,10 @@ QString CoreApplication::URL_DOWNLOAD = "http://epl.philipp-schepper.de/#downloa
 
 CoreApplication::CoreApplication(int &argc, char **argv) : QApplication(argc, argv)
 {
-
     QCoreApplication::setOrganizationName("Philipp Schepper");
     QCoreApplication::setOrganizationDomain("philipp-schepper.de");
 
     autoSaveTimer = nullptr;
-
-    if (Einstellungen::getAutoSearchUpdate())
-        checkVersion();
-
-    if (int delay = Einstellungen::getAutoSave())
-        startAutoSave(delay);
 
     setAttribute(Qt::AA_UseHighDpiPixmaps);
 }
@@ -33,6 +26,28 @@ CoreApplication::CoreApplication(int &argc, char **argv) : QApplication(argc, ar
 CoreApplication::~CoreApplication()
 {
     closeAllWindows();
+}
+
+CoreApplication* CoreApplication::generateApp(int argc, char *argv[], QString name, QString vers, bool deploy, bool debug, QString hash)
+{
+    Version::setProgrammVersion(Version(vers), deploy, debug, hash);
+    CoreApplication *a = new CoreApplication(argc, argv);
+
+    QCoreApplication::setApplicationName(name);
+
+    QTranslator qtTranslator;
+    qtTranslator.load(QString(":/translations/qt_%1.qm").arg(QLocale::system().name()));
+    a->installTranslator(&qtTranslator);
+
+    QIcon icon(QString(":/appIcon/%1.icns").arg(name));
+    a->setWindowIcon(icon);
+
+    if (Einstellungen::getAutoSearchUpdate())
+        a->checkVersion();
+    if (int delay = Einstellungen::getAutoSave())
+        a->startAutoSave(delay);
+
+    return a;
 }
 
 bool CoreApplication::generateWindow()
@@ -44,7 +59,11 @@ bool CoreApplication::event(QEvent *event)
 {
     if (event->type() == QEvent::FileOpen) {
         QFileOpenEvent *openEvent = static_cast<QFileOpenEvent *>(event);
-        emit triggerOpen(openEvent->file());
+        if (openHandlerSet)
+            emit triggerOpen(openEvent->file());
+        else {
+            unopenedFiles.append(openEvent->file());
+        }
     }
     return QApplication::event(event);
 }
@@ -84,6 +103,14 @@ void CoreApplication::autoSaveWindows()
     }
 }
 
+void CoreApplication::openUnopenedFiles()
+{
+    openHandlerSet = true;
+    while(!unopenedFiles.isEmpty()) {
+        emit triggerOpen(unopenedFiles.takeFirst());
+    }
+}
+
 void CoreApplication::oeffneDownloadSeite()
 {
     QDesktopServices::openUrl(URL_DOWNLOAD);
@@ -107,7 +134,6 @@ void CoreApplication::stopAutoSave()
         autoSaveTimer->stop();
     }
 }
-
 void CoreApplication::closeAllWindows()
 {
     bool ok = true;
