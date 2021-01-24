@@ -201,6 +201,9 @@ void EplFile::speichernUnter(QString path)
 
     if (FileIO::saveJsonToFile(path, generiereJson())) {
         FileIO::Schreibschutz::setzen(path);
+        if (!schreibgeschuetzt) {
+            FileIO::Schreibschutz::freigeben(pfad);
+        }
         schreibgeschuetzt = false;
         pfad = path;
         gespeichert = true;

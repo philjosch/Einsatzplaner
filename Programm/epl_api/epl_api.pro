@@ -48,6 +48,7 @@ HEADERS  += einstellungen.h \
     wagen.h \
     verteiler.h \
     basics.h \
+    version.h \
     filesettings.h
 
 macx {

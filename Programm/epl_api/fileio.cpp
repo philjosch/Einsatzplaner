@@ -1,5 +1,6 @@
 #include "einstellungen.h"
 #include "fileio.h"
+#include "version.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -84,7 +85,11 @@ QJsonObject FileIO::getJsonFromFile(QString filepath)
 bool FileIO::saveJsonToFile(QString filepath, QJsonObject object)
 {
     QJsonDocument saveDoc = QJsonDocument(object);
-    return saveToFile(filepath, saveDoc.toJson());
+    QJsonDocument::JsonFormat format = QJsonDocument::JsonFormat::Compact;
+    if (Version::isDebuggingVersion()) {
+        format = QJsonDocument::JsonFormat::Indented;
+    }
+    return saveToFile(filepath, saveDoc.toJson(format));
 }
 
 QStringList FileIO::History::get()

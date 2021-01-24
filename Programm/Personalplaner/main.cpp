@@ -10,17 +10,17 @@ int main(int argc, char *argv[])
     CoreApplication a(argc, argv);
     QObject::connect(&a, &CoreApplication::triggerOpen, MainWindowPersonal::open);
 
-    QCoreApplication::setApplicationName("Personalplaner");
+    QCoreApplication::setApplicationName(APP_NAME);
 
     QTranslator qtTranslator;
-    qtTranslator.load(":/translations/qt_" + QLocale::system().name());
+    qtTranslator.load(QString(":/translations/qt_%1.qm").arg(QLocale::system().name()));
     a.installTranslator(&qtTranslator);
 
-    QIcon icon(":/appIcon/Personalplaner.png");
+    QIcon icon(QString(":/appIcon/%1.icns").arg(APP_NAME));
     a.setWindowIcon(icon);
 
     if (a.generateWindow()) {
-        MainWindowPersonal *w = new MainWindowPersonal();
+        CoreMainWindow *w = new MainWindowPersonal();
         w->show();
     }
     int code = a.exec();
