@@ -1,16 +1,34 @@
 \chapter{Allgemeines}
 
-Das Programm "`Einsatzplaner"' dienst dazu Fahrtage und Arbeitseinsätze einer Museumseisenbahn zu verwalten.
-Ebenso kann mit ihm eine Verwaltung der Mitglieder durchgeführt werden.
+Das EPL-Programmpaket dient dazu die Verwaltungstätigkeiten einer Museumseisenbahn zu verbessern.
+Dazu können mit dem Programm ``Einsatzplaner'' Fahrtage und Arbeitseinsätze verwalten werden, sowie die Einsatzzeiten der Mitglieder berechnet werden.
+Mit dem Programm ``Personalplaner'' kann eine Verwaltung der Mitglieder und Speicherung der entsprechenden Daten durchgeführt werden. 
 
-\begin{center}
-  \includegraphics{../../Icon/keks.png}
-\end{center}
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=\textwidth]{../../Icon/EPL.png}
+    \caption{Logo des Prgrammpakets}
+  \end{subfigure}
+    
+  \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=\textwidth]{../../Icon/Einsatzplaner.png}
+    \caption{Logo des Einsatzplaners}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=\textwidth]{../../Icon/Personalplaner.png}
+    \caption{Logo des Personalplaners}
+  \end{subfigure}
+  \caption{Die Logos des Programmpakets}
+\end{figure}
 %
 Fahrtage unterschieden sich von Arbeitseinsätzen dadurch, dass das Personal direkt bestimmten Aufgabengebieten zugeordnet werden kann.
 Ebenso können Reservierungen eingetragen werden.
 
-\section{\neu{Schreibschutz}}\label{schreibschutz}
+\section{Die EPL-Datei}
+\subsection{Passwortschutz}
+
+\subsection{\neu{Schreibschutz}}\label{schreibschutz}
 \neu{
 Beim Öffnen einer Datei \texttt{X.ako} wird automatisch eine neue Datei mit dem Namen \texttt{X.ako.lock} erstellt.
 Durch diese Datei wird sichergestellt, dass nicht mehrere Personen gleichzeitig an der Datei \texttt{X.ako} arbeiten.

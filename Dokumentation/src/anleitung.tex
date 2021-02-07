@@ -13,6 +13,7 @@
 \usepackage{graphicx,tabularx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{subcaption}
 
 \newcommand{\nach}{\xspace\textrightarrow\xspace}
 \newcommand{\cmnd}[1]{\texttt{#1}\xspace}
@@ -23,12 +24,12 @@
 
 \titlehead{}
 
-\subject{\centering\includegraphics{../../Icon/keks.png}}
-\title{Anleitung Einsatzplaner}
+\subject{\centering\includegraphics[width=0.25\textwidth]{../../Icon/EPL.png}}
+\title{Anleitung EPL-Programmpaket}
 \subtitle{Version 1.6.2}
 \author{Philipp Schepper}
 \date{Stand: \today}
-%\publishers{\Huge{\textsf{Arbeitsdatei}}}
+\publishers{\Huge{\textsf{Arbeitsdatei}}}
 
 \begin{document}
 \maketitle
@@ -38,8 +39,10 @@
 \include{vorne_u_hinten/aenderungen}
 
 \mainmatter
-\part{Grundlagen}
+\part*{EPL-Programmfamilie}
 \include{allgemein/allgemein}
+
+\part{Einsatzplaner}
 \include{allgemein/kalender}
 \include{allgemein/fahrtage}
 \include{allgemein/arbeitseinsaetze}
@@ -47,6 +50,8 @@
 \part{Export}
 \include{export/export}
 \include{export/upload}
+\part{Personalplaner}
+
 \part{Verschiedenes}
 \include{verschiedenes/einstellungen}
 \include{verschiedenes/sonstiges}
