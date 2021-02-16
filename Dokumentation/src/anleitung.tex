@@ -1,9 +1,12 @@
 \documentclass[a4paper,ngerman,oneside]{scrbook}
 \usepackage[ngerman]{babel}
+\usepackage[autostyle=true,german=quotes]{csquotes}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{xspace}
+
 \usepackage{hyperref}
+\usepackage{cleveref}
 
 \usepackage{scrhack}
 
@@ -14,11 +17,23 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{subcaption}
+\usepackage[color]{changebar}
+\setlength\changebarsep{10pt}
+
 
 \newcommand{\nach}{\xspace\textrightarrow\xspace}
 \newcommand{\cmnd}[1]{\texttt{#1}\xspace}
-\newcommand{\hinweis}[1]{\emph{\textbf{Hinweis:} #1}}
-\newcommand{\neu}[1]{{\color{red} #1}}
+
+\newcommand{\EPL}{\xspace\textsf{EPL}\xspace}
+\newcommand{\Einsatz}{\xspace\textsf{Einsatzplaner}\xspace}
+\newcommand{\Personal}{\xspace\textsf{Personalplaner}\xspace}
+\newcommand{\datei}[1]{\xspace\texttt{#1}\xspace}
+\newcommand{\aktion}[1]{\enquote{#1}\xspace}
+\newcommand{\button}[1]{\enquote{#1}\xspace}
+
+
+\newenvironment{neu}{ \color{red} \changebar }{ \endchangebar }
+\newenvironment{hinweis}{ \medskip \noindent\textsf{\textbf{Hinweis\ }} } {\medskip}
 
 \graphicspath{{./img/}}
 
@@ -39,22 +54,11 @@
 \include{vorne_u_hinten/aenderungen}
 
 \mainmatter
-\part*{EPL-Programmfamilie}
-\include{allgemein/allgemein}
 
-\part{Einsatzplaner}
-\include{allgemein/kalender}
-\include{allgemein/fahrtage}
-\include{allgemein/arbeitseinsaetze}
-\include{allgemein/personal}
-\part{Export}
-\include{export/export}
-\include{export/upload}
-\part{Personalplaner}
-
-\part{Verschiedenes}
-\include{verschiedenes/einstellungen}
-\include{verschiedenes/sonstiges}
+\input{epl/epl}
+\input{einsatzplaner/einsatzplaner}
+\input{personalplaner/personalplaner}
+\input{server/server}
 
 \appendix
 \part{Anhang}

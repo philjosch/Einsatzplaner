@@ -1,23 +1,26 @@
-\chapter{Mitglieder}\label{personal}
+\chapter{Mitgliederverwaltung}\label{einsatz:personal}
 Im Kopf des Fensters kann eingestellt werden welche Personen angezeigt werden sollen.
 Ebenso kann durch einen Knopfdruck eine E-Mail an alle angezeigten Personen erstellt werden.
 Werden bei dieser Aktion Personen gefunden, für die keine Mailadresse angegeben ist,
 so können die angegebenen Postadressen in einer CSV-Datei gespeichert werden.
 Diese Daten können dann z.B.\ für Serienbriefe genutzt werden.
 
-\section{\neu{Einsatzzeiten}}\label{personal:zeiten}
+\section{Einsatzzeiten}\label{einsatz:personal:zeiten}
 \begin{figure}[!h]
 	\includegraphics[width=\textwidth]{img/personal_gesamt}
 	\caption{Die Mitgliederverwaltung mit den Einsatzzeiten.}
-	\label{fig:personal:zeiten}
+	\label{fig:einsatz:personal:zeiten}
 \end{figure}
-In der Tabelle von Abbildung~\ref{fig:personal:zeiten} wird eine Übersicht über alle in der Kopfzeile ausgewählten Personen gegeben.
+In der Tabelle von \cref{fig:einsatz:personal:zeiten} wird eine Übersicht über alle in der Kopfzeile ausgewählten Personen gegeben.
 Die Einfärbung erfolgt anhand der mindestens zu erbringenden Stunden.
 Rot bedeutet hierbei, dass die Person ihre Stunden noch nicht erbracht hat.
 Eine weiße Markierung bestätigt, dass die Mindeststunden erbracht wurden, oder keine solchen gefordert sind (z.B.\ bei passiven Mitglieder).
-\neu{Minderjährige aktive Mitglieder müssen keine Mindeststunden erbringen.}
+\begin{neu}
+Minderjährige aktive Mitglieder müssen keine Mindeststunden erbringen.
+\end{neu}
 Für aktive Mitglieder gilt, dass sie in die Kategorie "`Aktiv mit Stunden"' fallen, sobald die Mindeststunden für "`Gesamt"' erreicht wurden.
-Die persönlichen Mindeststunden für Lokführer werden hierbei nicht berücksichtigt.
+Die persönlichen Mindeststunden (z.B.\ für Lokführer)
+werden hierbei nicht berücksichtigt.
 Dennoch werden diese Personen auch rot markiert.
 Passive Mitglieder, die Stunden geleistet haben, werden grün markiert.
 Durch einen Doppelklick auf den Eintrag einer Person in der Tabelle wird die entsprechende Einzelansicht geöffnet.
@@ -28,19 +31,19 @@ Ebenso wird die Summe der jeweiligen Spalten in der Zeile "`Gesamt"' angegeben.
 Diese Zeile ist in der Ausgabe ebenso enthalten.
 
 
-Mit den Knöpfen "`Tabelle als PDF speichern \dots"' und "`Tabelle drucken \dots"' kann man die Daten der Tabelle exportieren.
-Diese Funktionen sind auch im Menü "`Exportieren"' verfügbar.
+Mit den Knöpfen \button{Tabelle als PDF speichern \dots} und \button{Tabelle drucken \dots} kann man die Daten der Tabelle exportieren.
+Diese Funktionen sind auch im Menü \button{Exportieren} verfügbar.
 
 
 \paragraph{Mindeststunden}
-Die Mindeststunden können über den Eintrag "`Mindeststunden \dots"' im Menü "`Personalmanagement"' bearbeitet werden.
-Der sich öffnende Dialog ist in Abbildung~\ref{fig:personal:mindeststunden} dargestellt.
+Die Mindeststunden können über den Eintrag \aktion{Mindeststunden \dots} im Menü \aktion{Personalmanagement} bearbeitet werden.
+Der sich öffnende Dialog ist in \cref{fig:einsatz:personal:mindeststunden} dargestellt.
 
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.5\textwidth]{img/personal_mindeststunden}
 	\caption{Der Dialog zum Ändern der Mindeststunden.}
-	\label{fig:personal:mindeststunden}
+	\label{fig:einsatz:personal:mindeststunden}
 \end{figure}
 
 Standardmäßig sind 10 Stunden für alle aktiven Mitglieder eingestellt.
@@ -52,39 +55,30 @@ Die Mindeststunden für Ausbildung werden nur für Personal mit einer betrieblic
 
 
 
-\section{Einzelansicht}\label{personal:einzelansicht}
+\section{Einzelansicht}\label{einsatz:personal:einzelansicht}
 \begin{figure}[!h]
-	\includegraphics[width=\textwidth]{img/einzelansicht_stammdate_allgemein}
+	\includegraphics[width=\textwidth]{img/einzelansicht_stammdaten}
 	\caption{Die Einzelansicht mit geöffnetem Reiter für die Stammdaten}
-	\label{fig:personal:einzel:stammdaten}
+	\label{fig:einsatz:personal:einzel:stammdaten}
 \end{figure}
-Das Fenster mit geöffneter Einzelansicht ist in Abbildung~\ref{fig:personal:einzel:stammdaten} zu sehen.
+Das Fenster mit geöffneter Einzelansicht ist in \cref{fig:einsatz:personal:einzel:stammdaten} zu sehen.
 In der Liste sind alle Personen gelistet, die nach der Kopfzeile des Fenster angezeigt werden sollen.
-Die farbliche hervorhebung erfolgt analog zur Gesamtübersicht.
+Die farbliche Hervorhebung erfolgt analog zur Gesamtübersicht.
 Im oberen Teil können der Name und die Mitgliedsnummer der Person verändert werden.
 Alternativ zu manuellen Eingabe der Nummer, kann auch eine solche automatisch zugewiesen werden.
 Dabei wird die nächst größere Zahl der aktuell höchsten Mitgliedsnummer verwendet.
 Naturgemäß kann eine Nummer nicht doppelt vergeben werden.
 
-Mit den Knöpfen "`Als PDF speichern \dots"' und "`Drucken\dots"' kann eine Übersicht der aktuellen Person ausgegeben werden.
+Mit den Knöpfen \button{Als PDF speichern \dots} und \button{Drucken\dots} kann eine Übersicht der aktuellen Person ausgegeben werden.
 Dort werden dann die Aktivitäten einzeln mit den jeweiligen Zeiten aufgelistet.
 Diese Ansicht enthält nur wenige persönliche Informationen.
 
 
 \paragraph{Stammdaten}
-Unter \emph{Allgemein} können das Geburtsdatum, Eintrittsdatum und der Status (Aktiv/Passiv) der Person angegeben werden.
-Das Feld "`Entfernung"' wird verwendet die gefahrene Wegstrecke aufgrund der Aktivitäten zu berechnen.
-Ebenso kann der erlernte Beruf der Person eingegeben werden.
-
-Unter \emph{Kontakt} besteht die Möglichkeit eine Postadresse, Telefonnummmer und Mailadresse einzutragen.
-Ebenso besthet die Möglichkeit anzugebene, ob das Mitglied seine Einwilligung zur Veröffentlichung für Vereinsmitglieder und Betriebsangehörige erteilt hat.
-
-Der Bereich \emph{Betriebsdienst} bietet die Möglichkeit betriebliche Ausbildungen zu erfassen.
-Das Feld Tauglichkeit dient dazu anzugeben, bis wann die aktuelle Tauglichkeitsuntersuchung gilt (letzter Tag der Gültigkeit).
-Personal, dessen Tauglichkeit nicht mehr gegeben ist, wird wie Personal ohne betriebliche Ausbildung behandelt.
-
-Unter \emph{Sonstiges} gibt es ein Feld für Bemerkungen und die Möglichkeit den Austritt einer Person einzutragen.
-Auch kann dort die Person aus dem System entfernt werden.
+Es können nur die Daten bezüglich Betriebsdienstausbildung, Entfernung zum Bahnhof und die Bemerkungen bearbeitet werden.
+Weitere Daten können über das Programm \Personal bearbeitet werden.
+Ebenso kann die Person gelöscht werden.
+Allerdings kann die Person im Programm \Personal auch als ausgetreten markiert werden, sodass sie nicht gelöscht werden muss.
 
 \hinweis{Eine Person kann erst dann gelöscht werden, wenn Sie in keinen Aktivitäten mehr eingetragen ist.
 Siehe nächster Absatz.}
@@ -94,11 +88,11 @@ Siehe nächster Absatz.}
 	\centering
 	\includegraphics[width=.75\textwidth]{img/einzelansicht_aktivitaeten}
 	\caption{Die Einzelansicht mit geöffnetem Reiter für die Aktivitäten}
-	\label{fig:personal:einzel:aktivitaeten}
+	\label{fig:einsatz:personal:einzel:aktivitaeten}
 \end{figure}
 \paragraph{Aktivitäten}
 Der Reiter,
-des in Abbildung~\ref{fig:personal:einzel:aktivitaeten} dargestellten Fensters,
+des in \cref{fig:einsatz:personal:einzel:aktivitaeten} dargestellten Fensters,
 zeigt eine Tabelle mit den Aktivitäten,
 an denen die ausgewählte Person mitgeholfen hat.
 
@@ -107,31 +101,49 @@ an denen die ausgewählte Person mitgeholfen hat.
 	\centering
 	\includegraphics[width=.75\textwidth]{img/einzelansicht_konto}
 	\caption{Die Einzelansicht mit geöffnetem Reiter für das Zeitenkonto}
-	\label{fig:personal:einzel:konto}
+	\label{fig:einsatz:personal:einzel:konto}
 \end{figure}
 \paragraph{Konto}
-Die Übersicht in Abbildung~\ref{fig:personal:einzel:konto} enthält die Zeiten aufgeteilt nach den verschiedenen Zeit-Konten.
+Die Übersicht in \cref{fig:einsatz:personal:einzel:konto} enthält die Zeiten aufgeteilt nach den verschiedenen Zeit-Konten.
 Ebenso können hier zusätzliche Stunden und Kilometer eintragen werden,
 welche die Person geleistet hat, aber keiner im System erfassten Aktivität zuzuordnen sind.
 Die Anzahl der zusätzlichen Aktivitäten kann ebenfalls erfasst werden.
 Ebenso kann man sehen, in welchen Gebieten die Person ihre Pflichtstunden erfüllt hat und wieviele Mindeststunden Sie jeweils in den Gebieten erbringen muss.
 
+\begin{hinweis}
+  Für alle Darstellungen und Berechnungen werden nur die Zeiten angerechnet, die bisher auch wirklich abgeleistet wurden,
+  also deren Datum in der Vergangenheit lag.
+\end{hinweis}
 
-\hinweis{Für alle Darstellungen und Berechnungen werden nur die Zeiten angerechnet, die bisher auch wirklich abgeleistet wurden,
-also deren Datum in der Vergangenheit lag.}
 
 
-\section{Mitgliederliste}\label{personal:mitglieder}
-\begin{figure}[!h]
-	\includegraphics[width=\textwidth]{img/mitgliederliste}
-	\caption{Die Mitgliederliste mit allen ausgewählten Mitgliedern.}
-	\label{fig:personal:mitglieder}
-\end{figure}
-In der Tabelle aus Abbildung~\ref{fig:personal:mitglieder} werden alle gespeicherten Daten der ausgewählten Mitglieder angezeigt.
-Diese Tabelle kann über das Menü "`Exportieren"' unter dem Punkt "`Mitgliederliste"' ausgegeben werden.
-Die Ausgabe ist auch als CSV-Datei möglich, sodass die Daten in anderen Programmen verarbeitet werden können.
+\section{Exportfunktionen}
+Es stehen folgende Möglichkeiten zur Verfügung,
+die alle über das Menü \aktion{Exportieren} im Fenster des Mitgliederverwaltung aufgerufen werden können:
+\begin{description}
+  \item[Einzelansicht(en)]
+  Das ausgegebene Dokument enthält die Aktivitäten, die Einsatzzeiten und Mindeststunden für die jeweilige Person.
+  Ebenso wird die betriebliche Ausbildung (sofern vorhanden und Tauglichkeit gegeben) und die Entfernung zum Bahnhof angegeben.
 
-Ebenso besteht die Möglichkeit über den Eintrag "`Personalblatt"' die Daten eines Mitglieds bzw.\ aller angezeigten Personen auszugeben.
-Hierbei wird für jede Person eine Seite erzeugt und kann somit auch für jede Person getrennt gespeichert werden.
+  Alle Übersichten werden in einer Datei zusammengefasst.
+  Wenn \enquote{für alle} gewählt wurde,
+  wird das Dokument um eine Übersicht ergänzt,
+  welche die Summe aller geleisteten Stunden umfasst.
+  Dort sind auch die Mindeststunden der einzelnen Kategorien angegeben.
 
-Darüber hinaus wird im unteren Bereich des Fensters eine Statistik der aktuellen und ausgetretenen Mitglieder angezeigt.
+  \item[Tabelle Einsatzzeiten]
+  Alle in der Tabelle angezeigten Informationen werden in der angegebenen Sortierung ausgegeben.
+  Diese Ausgabemöglichkeit ist auch über die zwei Knöpfe in der Gesamtübersicht verfügbar.
+
+  \item[Personalblatt]
+  Die Personalblätter enthalten für jede Person alle personenbezogene Daten,
+  die im Programm verwaltet werden.
+  Einsatzzeiten und geleistete Stunden sind in diesen Ansichten nicht enthalten.
+
+  \item[Mitgliederliste]
+  In dieser Liste sind alle Personen enthalten, die aktuell in der Liste angezeigt werden.
+  Ausgegeben werden dabei alle personenbezogenen Daten,
+  die im Programm verwaltet werden.
+  Einsatzzeiten und geleistete Stunden sind in diesen Ansichten nicht enthalten.
+
+\end{description}

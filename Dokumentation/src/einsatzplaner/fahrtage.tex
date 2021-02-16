@@ -1,9 +1,9 @@
-\chapter{Fahrtage}\label{fahrtag}
+\chapter{Fahrtage}\label{einsatz:fahrtag}
 \section{Allgemeines und Personal}
 \begin{figure}[!h]
 	\includegraphics[width=\textwidth]{img/fahrtag_personal}
 	\caption{Das Fenster eines Fahrtags mit geöffnetem Tab für das Personal.}
-	\label{fig:fahrtag:personal}
+	\label{fig:einsatz:fahrtag:personal}
 \end{figure}
 \paragraph{Allgemein}
 Im oberen Bereich des Fensters können die grundlegenden Daten für einen Fahrtag eingegeben werden.
@@ -23,7 +23,7 @@ Sodass bei einem Sonderzug schnell der Grund erkennbar ist.
 \paragraph{Personal}
 In den vier Listen können Tf, Zf, Zub und Begl.o.b.A.\ und Service-Personal eingetragen werden.
 Für betriebliche Aufgaben (Tf, Tb, Zf) können nur Personen eingetragen werden, die die entsprechende Ausbildung haben.
-(Siehe Kapitel~\ref{personal:einzelansicht})
+(Siehe \cref{personal:person})
 Die Namen sind dabei wie folgt einzugeben: \texttt{Name; Bemerkung}.
 
 Da Personal in Ausbildung die entsprechenden Berechtigungen noch nicht hat, können folgende Wörter in der Bemerkung verwendet werden, um diese Personen dennoch in der entsprechenden Liste einzutragen:
@@ -38,8 +38,8 @@ Da Personal in Ausbildung die entsprechenden Berechtigungen noch nicht hat, kön
 \end{itemize}
 Ein Zugbegleiter ohne Ausbildung wird automatisch als Begl.o.b.A.\ geführt, sodass hier keine Unterscheidung vorgenommen werden muss.
 
-Generell können nur Personen eingetragen werden, die im System bereits registriert wurden und nicht augetreten sind
-(weiteres im Kapitel~\ref{personal}).
+Generell können nur Personen eingetragen werden, die im System bereits registriert wurden und nicht ausgetreten sind
+(weiteres im \cref{personal:person,einsatz:personal}).
 Auch hier gibt es wieder Ausnahmen, wenn einer der folgenden Begriffe in der Bemerkung erscheint:
 \begin{itemize}
 	\item Extern
@@ -52,8 +52,10 @@ Auch hier gibt es wieder Ausnahmen, wenn einer der folgenden Begriffe in der Bem
 \end{itemize}
 Darüber hinaus können weitere Bemerkungen eingegeben werden, die auch durch Strichpunkte voneinander getrennt sein dürfen.
 
-\hinweis{Wenn eine Person mehrfach eingetragen werden soll, muss sie für verschiedene Tätigkeiten (z.B.\ Tf und Zf) eingetragen werden.
-Die Zeiten sollten dann für jede Tätigkeit angepasst werden, da diese sonst mehrfach angerechnet werden.}
+\begin{hinweis}
+  Wenn eine Person mehrfach eingetragen werden soll, muss sie für verschiedene Tätigkeiten (z.B.\ Tf und Zf) eingetragen werden.
+  Die Zeiten sollten dann für jede Tätigkeit angepasst werden, da diese sonst mehrfach angerechnet werden.
+\end{hinweis}
 
 
 
@@ -61,7 +63,7 @@ Die Zeiten sollten dann für jede Tätigkeit angepasst werden, da diese sonst me
 \begin{figure}[!h]
 	\includegraphics[width=\textwidth]{img/fahrtag_reservierungen}
 	\caption{Das Fenster eines Fahrtags mit geöffnetem Tab für die Reservierungen.}
-	\label{fig:fahrtag:reservierungen}
+	\label{fig:einsatz:fahrtag:reservierungen}
 \end{figure}
 Im unteren Teil besteht die Möglichkeit die Reservierungen zu verwalten.
 Eine Reservierung können Sie bearbeiten, indem Sie doppelt auf den Eintrag in der Liste klicken.
@@ -121,21 +123,23 @@ In diese Summe geht jede Reservierung nur einmal ein, unabhängig von der angege
 
 
 \paragraph{Automatische Sitzplatzverteilung}
-Wenn Sie bei der Art des Fahrtags eine Nikolausfahrt ausgewählt haben, haben Sie die Möglichkeit die Sitzplätze automatisch durch einen Druck auf den Knopf "`Sitzplätze verteilen"' zu verteilen.
+Wenn Sie bei der Art des Fahrtags eine Nikolausfahrt ausgewählt haben, haben Sie die Möglichkeit die Sitzplätze automatisch durch einen Druck auf den Knopf \aktion{Sitzplätze verteilen} zu verteilen.
 Der Vorgang dauert in der Regel wenige Sekunden.
 Es kann aber auch unter Umständen mehrere Minuten dauern.
 Warten Sie diese Zeit bitte ab!
 Wir arbeiten ständig an einer Verbesserung des Algorithmus zur Verteilung der Sitzplätze.
 
-\hinweis{Aktivieren Sie das Feld "`Alle Kombinationen berechnen"' nur, wenn Sie wenige Reservierungen angegeben haben (maximal 5-7),
-denn durch diese Auswahl wird der Rechenaufwand erheblich vergrößert!}
+\begin{hinweis}
+  Aktivieren Sie das Feld \button{Alle Kombinationen berechnen} nur, wenn Sie wenige Reservierungen angegeben haben (maximal 5-7),
+  denn durch diese Auswahl wird der Rechenaufwand erheblich vergrößert!
+\end{hinweis}
 
 
 \paragraph{Reservierungen exportieren}
-Beim Export von "`normalen"' Fahrtagen werden die Reservierungen mit ausgegeben.
+Beim Export von \enquote{normalen} Fahrtagen werden die Reservierungen mit ausgegeben.
 Da bei Nikolausfahrten sehr viele Reservierungen vorliegen, werden Sie nicht bei der Einzelansicht des Fahrtags angegeben.
 Stattdessen können Sie, wie bei allen anderen Fahrtagen auch,
-die Funktion "`Reservierungen drucken \dots"' und "`Reservierungen als PDF sichern \dots"' im Menü Fahrtag nutzen.
+die Funktion \aktion{Reservierungen drucken \dots} und \aktion{Reservierungen als PDF sichern \dots} im Menü Fahrtag nutzen.
 Bei dieser Funktion werden dann die Reservierungen nach Wagen geordnet ausgegeben.
 Auch die Information über einen anderen als den Standard-Zustieg wird ausgegeben.
 
@@ -147,14 +151,14 @@ Eine grafische Ansicht der Sitzplatzverteilung ist aktuell noch nicht möglich.
 \begin{figure}[!h]
 	\includegraphics[width=\textwidth]{img/fahrtag_einsatzzeiten}
 	\caption{Das Fenster eines Fahrtags mit geöffnetem Tab für das weitere Personal.}
-	\label{fig:fahrtag:einsatzzeiten}
+	\label{fig:einsatz:fahrtag:einsatzzeiten}
 \end{figure}
 
-In der Tabelle von Abbildung~\ref{fig:fahrtag:einsatzzeiten} erhalten Sie eine Übersicht über alle Personen,
+In der Tabelle von \cref{fig:einsatz:fahrtag:einsatzzeiten} erhalten Sie eine Übersicht über alle Personen,
 die für diesen Fahrtag eingetragen wurden.
 Zu jeder Person wird die Aufgabe angezeigt, die sie durchführt.
 Die Arbeitszeit wird dann auf das entsprechende Konto angerechnet.
-Es stehen die standardmäßigen Aufgaben (siehe Anhang~\ref{glossar}) zum Einstellen zur Verfügung.
+Es stehen die standardmäßigen Aufgaben (siehe \cref{glossar}) zum Einstellen zur Verfügung.
 
 Personen die betriebliche oder regelmäßige Aufgaben haben und somit bereits im Reiter Personal in eine Liste eingetragen wurden, werden hier auch angezeigt.
 Allerdings können nur die Einsatzzeiten dieser Personen verändert werden.
@@ -171,3 +175,16 @@ sodass hier kein manueller Eintrag vorgenommen werden muss.
 \section{Menü}
 Im Menü Fahrtag gibt es die Möglichkeit die Einzelansicht des geöffneten Fahrtages zu exportieren.
 Ebenso können die Reservierungen ausgegeben werden oder der Fahrtag nach einer Sicherheitsanfrage komplett gelöscht werden.
+
+
+
+\section{Export der Reservierungen}
+Ein Fahrtag bietet noch eine weitere Methode Informationen zu exportieren.
+Diese Funktion wird vor allem bei Nikolausfahrten benötigt.
+Denn bei diesem Ausgabeformat werden viele Reservierungen übersichtlich nach Wagen sortiert ausgegeben.
+Diese Funktion ist insbesondere bei Nikolausfahrten wichtig, da dort keine Reservierungen in der Einzelansicht ausgegeben werden.
+
+Diese Funktion ist für jeden Fahrtag über das Menü \aktion{Fahrtag} erreichbar.
+Es gibt die Möglichkeit das Dokument entweder als PDF zu speichern oder auf einem Drucker zu drucken.
+
+Das exportierte Dokument enthält folgende Informationen zu einer Reservierung: Name, Anzahl Sitzplätze, Sitzplätze, Kommentare/Bemerkungen sowie den Zustieg, sofern er verschieden von Ottweiler ist.

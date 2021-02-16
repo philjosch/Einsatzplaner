@@ -1,0 +1,78 @@
+\chapter{Allgemeines}
+
+Das EPL-Programmpaket dient dazu die Verwaltungstätigkeiten einer Museumseisenbahn zu verbessern.
+Dazu können mit dem Programm \Einsatz Fahrtage und Arbeitseinsätze verwalten werden, sowie die Einsatzzeiten der Mitglieder berechnet werden.
+Fahrtage unterschieden sich von Arbeitseinsätzen dadurch, dass das Personal direkt bestimmten Aufgabengebieten zugeordnet werden kann.
+Ebenso können Reservierungen eingetragen werden.
+Mit dem Programm \Personal kann eine Verwaltung der Mitglieder und Speicherung der entsprechenden Daten durchgeführt werden.
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=\textwidth]{../../Icon/EPL.png}
+    \caption{Logo von \EPL}
+  \end{subfigure}
+
+  \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=\textwidth]{../../Icon/Einsatzplaner.png}
+    \caption{Logo des \Einsatz}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=\textwidth]{../../Icon/Personalplaner.png}
+    \caption{Logo des \Personal}
+  \end{subfigure}
+  \caption{Die Logos des Programmpakets}
+\end{figure}
+%
+
+
+\section{Die EPL-Datei}
+
+\subsection{Schreibschutz}\label{schreibschutz}
+Beim Öffnen einer Datei \datei{X.ako} wird automatisch eine neue Datei mit dem Namen \datei{X.ako.lock} erstellt.
+Durch diese Datei wird sichergestellt, dass nicht mehrere Personen gleichzeitig an der Datei \datei{X.ako} arbeiten.
+Wird eine bereits geöffnete Datei erneut geöffnet (vom gleichen oder fremden Benutzer),
+kann sie nur schreibgeschützt geöffnet werden und Änderungen können nicht gespeichert werden.
+Beim Schließen einer Datei bzw.\ beim Beenden des Programms wird die Datei \datei{X.ako.lock} automatisch wieder gelöscht.
+Danach kann ein anderer Benutzer die Datei wieder uneingeschränkt öffnen.
+
+\begin{hinweis}
+  Der Schreibschutz steht nur effektiv zur Verfügung, wenn alle Beteiligten Version 1.6.2 oder neuer des Einsatzplaners verwendet.
+  Wird eine frühere Version verwendet, kann die Datei allerdings weiterhin uneingeschränkt geöffnet und bearbeitet werden!
+\end{hinweis}
+
+
+\begin{hinweis}
+  Die oben beschriebene Datei sollte unter normalen Umständen  nicht manuell gelöscht werden, da dies zu Datenverlusten führen kann.
+  Löschen Sie die Datei nur, wenn Sie sicherstellen können, dass keine weiteren Benutzer auf die Datei zugreifen.
+\end{hinweis}
+
+
+\section{Installation}\label{sonstiges:installation}
+\subsection{macOS}
+Laden Sie das bereitgestellte Programm herunter und entpacken Sie die \datei{.dmg}-Datei durch einen Doppelklick.
+Ziehen Sie das Programm zum Installieren in Ihren Programmordner.
+
+\subsection{Windows}
+\begin{itemize}
+  \item Laden Sie den Installer für Windows herunter.
+  Öffnen Sie das Programm, und folgen dem Installationsprogramm.
+  \item Merken Sie sich den Pfad, an dem Sie den Einsatzplaner installieren, z.B.\ \datei{C:\/Program Files (x86)\/Einsatzplaner}.
+  \item Wenn Sie den Einsatzplaner das erste Mal installieren,
+  oder beim Start eine Fehlermeldung erhalten, navigieren Sie zu dem notierten Ordner.
+  \item Dort finden Sie eine Datei \datei{vc\_redist.x64}.
+  Öffnen Sie diese und führen die Installation von "`Microsoft Visual C++ Redistributable"' durch.
+  Hierdurch werden die fehlenden Dateien auf Ihrem Computer ergänzt.
+  \item Der Einsatzplaner kann jetzt verwendet werden.
+\end{itemize}
+
+
+
+\section{Über das Dokument}\label{epl:alg:sonstiges}
+Die Bilder in dieser Dokumentation stammen von Bildern der Entwicklerversionen des Programms für Version
+XXX
+und aus früheren Versionen.
+Dadurch können Programmobjekte und Funktionen leicht von denen in der veröffentlichten Version abweichen.
+
+Eine aktuelle Version des Programms und weitere Informationen finden Sie der Webseite \url{http://epl.philipp-schepper.de}
+oder im Repository unter \url{https://github.com/philjosch/Einsatzplaner}.
