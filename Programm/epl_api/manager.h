@@ -13,7 +13,8 @@ class Manager : public QObject
     Q_OBJECT
 
 public:
-    Manager();
+    Manager(ManagerPersonal *manPersonal);
+    Manager(ManagerPersonal *manPersonal, QJsonArray array);
     QJsonArray toJson();
     void fromJson(QJsonArray array);
 

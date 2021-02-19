@@ -12,8 +12,8 @@ class FileSettings : public QObject
 
 public:
     FileSettings();
+    FileSettings(QJsonObject json);
 
-    void fromJson(QJsonObject obj);
     QJsonObject toJson();
 
     bool getEnabled() const;

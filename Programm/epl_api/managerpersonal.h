@@ -19,11 +19,11 @@ class ManagerPersonal :  public QObject
 
 public:
     ManagerPersonal();
+    ManagerPersonal(QJsonObject o);
     ~ManagerPersonal();
 
     QJsonObject toJson();
     QJsonObject personalToJson();
-    void fromJson(QJsonObject o);
 
     Person *getPersonFromID(QString id);
     Person *getPerson(QString name);

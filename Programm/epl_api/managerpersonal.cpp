@@ -15,6 +15,41 @@ ManagerPersonal::ManagerPersonal()
     time = QMap<Category,int>();
 }
 
+ManagerPersonal::ManagerPersonal(QJsonObject o)
+{
+    personen = QSet<Person*>();
+    personenSorted = QMap<QString, Person*>();
+    idToPerson = QMap<QString, Person*>();
+    minimumHours = QMap<Category, int>();
+    time = QMap<Category,int>();
+
+    QJsonArray a = o.value("personen").toArray();
+    for(int i = 0; i < a.size(); i++) {
+        Person *neu = new Person(a.at(i).toObject(), this);
+        personen.insert(neu);
+        personenSorted.insert(neu->getName(), neu);
+        idToPerson.insert(neu->getId(), neu);
+        connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedNameHandler(Person*,QString)));
+        connect(neu, &Person::changed, this, [=]() { emit changed();} );
+    }
+    if (o.contains("minimumKeys") && o.contains("minimumValues")) {
+        QJsonArray keys = o.value("minimumKeys").toArray();
+        QJsonArray values = o.value("minimumValues").toArray();
+        for (int i = 0; i < keys.size() && i < values.size() ; i++) {
+            minimumHours.insert(Category(keys.at(i).toInt()), values.at(i).toInt());
+        }
+    } else {
+        minimumHours.insert(Gesamt, int(o.value("minimumTotal").toDouble(0)*60));
+        if (o.contains("minimumHours")) {
+            QJsonObject o2 = o.value("minimumHours").toObject();
+            for (QString cat: o2.keys()) {
+                Category catt = getCategoryFromLocalizedString(cat);
+                minimumHours.insert(catt, int(o2.value(cat).toDouble(0)*60));
+            }
+        }
+    }
+}
+
 ManagerPersonal::~ManagerPersonal()
 {
 
@@ -66,37 +101,6 @@ QJsonObject ManagerPersonal::personalToJson()
     o.insert("minimumKeys", keys);
     o.insert("minimumValues", values);
     return o;
-}
-
-void ManagerPersonal::fromJson(QJsonObject o)
-{
-    QJsonArray a = o.value("personen").toArray();
-    for(int i = 0; i < a.size(); i++) {
-        Person *neu = new Person(a.at(i).toObject(), this);
-        personen.insert(neu);
-        personenSorted.insert(neu->getName(), neu);
-        idToPerson.insert(neu->getId(), neu);
-        connect(neu, SIGNAL(nameChanged(Person*,QString)), this, SLOT(personChangedNameHandler(Person*,QString)));
-        connect(neu, &Person::changed, this, [=]() { emit changed();} );
-    }
-    if (o.contains("minimumKeys") && o.contains("minimumValues")) {
-        minimumHours.clear();
-        QJsonArray keys = o.value("minimumKeys").toArray();
-        QJsonArray values = o.value("minimumValues").toArray();
-        for (int i = 0; i < keys.size() && i < values.size() ; i++) {
-            minimumHours.insert(Category(keys.at(i).toInt()), values.at(i).toInt());
-        }
-    } else {
-        minimumHours.clear();
-        minimumHours.insert(Gesamt, int(o.value("minimumTotal").toDouble(0)*60));
-        if (o.contains("minimumHours")) {
-            QJsonObject o2 = o.value("minimumHours").toObject();
-            for (QString cat: o2.keys()) {
-                Category catt = getCategoryFromLocalizedString(cat);
-                minimumHours.insert(catt, int(o2.value(cat).toDouble(0)*60));
-            }
-        }
-    }
 }
 
 Person *ManagerPersonal::getPersonFromID(QString id)

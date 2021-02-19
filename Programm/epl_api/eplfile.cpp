@@ -17,8 +17,8 @@ EplFile::EplFile()
 
     geladen = QJsonObject();
 
-    manager = new Manager();
-    personal = manager->getPersonal();
+    personal = new ManagerPersonal();
+    manager = new Manager(personal);
     dateiEigenschaften = new FileSettings();
 
     currentDate = QDate::currentDate();
@@ -53,16 +53,13 @@ EplFile::EplFile(QString path)
 
     geladen = leseJsonAusDatei(pfad);
 
-    manager = new Manager();
-    personal = manager->getPersonal();
-    personal->fromJson(personalJson);
-    manager->fromJson(activitiesJson);
-    dateiEigenschaften = new FileSettings();
-    dateiEigenschaften->fromJson(geladen.value("settings").toObject());
     personalJson = geladen.value("personal").toObject();
     activitiesJson = geladen.value("activities").toArray();
 
     currentDate = QDate::fromString(geladen.value("view").toObject().value("currentDate").toString(), "yyyy-MM-dd");
+    personal = new ManagerPersonal(geladen.value("personal").toObject());
+    manager = new Manager(personal, geladen.value("activities").toArray());
+    dateiEigenschaften = new FileSettings(geladen.value("settings").toObject());
 
     QJsonObject viewJSON = geladen.value("view").toObject();
     int x = viewJSON.value("xMain").toInt();

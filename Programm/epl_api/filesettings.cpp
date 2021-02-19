@@ -7,9 +7,9 @@ FileSettings::FileSettings() : QObject()
 
 }
 
-void FileSettings::fromJson(QJsonObject obj)
+FileSettings::FileSettings(QJsonObject json)
 {
-    QJsonObject online = obj.value("online").toObject();
+    QJsonObject online = json.value("online").toObject();
     enabled = online.value("enabled").toBool();
     autom = online.value("auto").toBool(true);
     server = Networking::Server::fromJson(online);

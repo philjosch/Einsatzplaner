@@ -3,24 +3,17 @@
 #include <QJsonArray>
 #include <QListIterator>
 
-Manager::Manager() : QObject()
+Manager::Manager(ManagerPersonal *manPersonal) : QObject()
 {
     activities = QList<AActivity*>();
-    personal = new ManagerPersonal();
+    personal = manPersonal;
 }
 
-QJsonArray Manager::toJson()
+Manager::Manager(ManagerPersonal *manPersonal, QJsonArray array)
 {
-    QJsonArray array;
-    // Fahrtage und Arbeitseinsätze speichern
-    for(AActivity *a: activities) {
-        array.append(a->toJson());
-    }
-    return array;
-}
+    activities = QList<AActivity*>();
+    personal = manPersonal;
 
-void Manager::fromJson(QJsonArray array)
-{
     // Laden der Daten aus dem JSON Object
     activities = QList<AActivity*>();
     for(int i = 0; i < array.size(); i++) {
@@ -45,6 +38,16 @@ void Manager::fromJson(QJsonArray array)
         activities.append(akt);
     }
     sort();
+}
+
+QJsonArray Manager::toJson()
+{
+    QJsonArray array;
+    // Fahrtage und Arbeitseinsätze speichern
+    for(AActivity *a: activities) {
+        array.append(a->toJson());
+    }
+    return array;
 }
 
 Fahrtag *Manager::newFahrtag(QDate datum)
