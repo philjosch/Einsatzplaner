@@ -68,6 +68,9 @@ private:
 
     QJsonObject generiereJson();
     QJsonObject generiereJsonPersonal();
+
+    bool schreibeJsonInDatei(QString pfad, QJsonObject obj);
+    QJsonObject leseJsonAusDatei(QString pfad);
 };
 
 #endif // EPLFILE_H

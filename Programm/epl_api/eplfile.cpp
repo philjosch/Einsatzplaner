@@ -6,6 +6,7 @@
 #include <QJsonObject>
 #include "basics.h"
 
+#include <QJsonDocument>
 #include <exception>
 
 EplFile::EplFile()
@@ -38,11 +39,6 @@ EplFile::EplFile(QString path)
         throw FilePathInvalidException();
     }
 
-    // Daten aus Datei laden
-    geladen = FileIO::getJsonFromFile(path);
-    if (geladen.isEmpty()) {
-        throw FileException();
-    }
     // Schreibschutz pruefen
     QStringList l = FileIO::Schreibschutz::pruefen(pfad);
     if (!l.isEmpty()) {
@@ -52,32 +48,10 @@ EplFile::EplFile(QString path)
         FileIO::Schreibschutz::setzen(pfad);
     }
 
-    // Prüfen, ob Version kompatibel ist
-    QJsonObject generalJSON = geladen.value("general").toObject();
     QJsonArray activitiesJson;
     QJsonObject personalJson;
 
-    Version version = Version(generalJSON.value("version").toString());
-    if (version == Version {-1, -1, -1}) {
-        FileIO::Schreibschutz::freigeben(pfad);
-        throw FileVersionNotSupportedException(tr("Die Datei ist nicht mit dieser Version des Einsatzplaner kompatibel."));
-    } else if (version < Version {1, 6, -1}) {
-        // Fallback fuer Version <1.6
-        QJsonObject calendarJSON = geladen.value("calendar").toObject();
-        activitiesJson = calendarJSON.value("activites").toArray();
-        personalJson = calendarJSON.value("personal").toObject();
-        // Daten in den Manager laden und die Logik herstellen
-        currentDate = QDate::fromString(calendarJSON.value("currentDate").toString(), "yyyy-MM-dd");
-    } else if (version <= Version::getProgrammVersion()) {
-        // Ab Version 1.6
-        activitiesJson = geladen.value("activities").toArray();
-        personalJson = geladen.value("personal").toObject();
-        currentDate = QDate::fromString(geladen.value("view").toObject().value("currentDate").toString(), "yyyy-MM-dd");
-    } else {
-        // Version inkompatibel, zu neu
-        FileIO::Schreibschutz::freigeben(pfad);
-        throw FileToNewException(version);
-    }
+    geladen = leseJsonAusDatei(pfad);
 
     manager = new Manager();
     personal = manager->getPersonal();
@@ -85,6 +59,10 @@ EplFile::EplFile(QString path)
     manager->fromJson(activitiesJson);
     dateiEigenschaften = new FileSettings();
     dateiEigenschaften->fromJson(geladen.value("settings").toObject());
+    personalJson = geladen.value("personal").toObject();
+    activitiesJson = geladen.value("activities").toArray();
+
+    currentDate = QDate::fromString(geladen.value("view").toObject().value("currentDate").toString(), "yyyy-MM-dd");
 
     QJsonObject viewJSON = geladen.value("view").toObject();
     int x = viewJSON.value("xMain").toInt();
@@ -181,7 +159,7 @@ void EplFile::speichern()
     if (gespeichert) return;
 
     QJsonObject json = generiereJson();
-    if (FileIO::saveJsonToFile(pfad, json)) {
+    if (schreibeJsonInDatei(pfad, json)) {
         gespeichert = true;
         if (pfad != "") {
             QFile file (pfad+FileIO::getSuffixVonTyp(FileIO::DateiTyp::EPLAutoSave));
@@ -199,7 +177,7 @@ void EplFile::speichernUnter(QString path)
     if (! FileIO::Schreibschutz::pruefen(path).isEmpty())
         throw FileWriteProtectedException();
 
-    if (FileIO::saveJsonToFile(path, generiereJson())) {
+    if (schreibeJsonInDatei(path, generiereJson())) {
         FileIO::Schreibschutz::setzen(path);
         if (!schreibgeschuetzt) {
             FileIO::Schreibschutz::freigeben(pfad);
@@ -218,7 +196,7 @@ void EplFile::speichernPersonal(QString pfad)
         throw FilePathInvalidException();
     if (! FileIO::Schreibschutz::pruefen(pfad).isEmpty())
         throw FileWriteProtectedException();
-    if (FileIO::saveJsonToFile(pfad, generiereJsonPersonal())) {
+    if (schreibeJsonInDatei(pfad, generiereJsonPersonal())) {
         FileIO::History::insert(pfad);
     } else {
         throw FileWriteException();
@@ -229,7 +207,7 @@ void EplFile::autoSave()
     if (schreibgeschuetzt) return;
     if (pfad == "") return;
     if (gespeichert) return;
-    FileIO::saveJsonToFile(pfad+FileIO::getSuffixVonTyp(FileIO::DateiTyp::EPLAutoSave), generiereJson());
+    schreibeJsonInDatei(pfad+FileIO::getSuffixVonTyp(FileIO::DateiTyp::EPLAutoSave), generiereJson());
 }
 
 void EplFile::close()
@@ -277,5 +255,89 @@ QJsonObject EplFile::generiereJsonPersonal()
     object.insert("general", generalJSON);
 
     return object;
+}
+
+bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj)
+{
+    if (Version::isDeveloperVersion()) {
+        return FileIO::saveJsonToFile(pfad, obj);
+    } else {
+        QJsonObject generalJsonNeu;
+        QJsonObject generalJsonAlt = obj.value("general").toObject();
+
+        generalJsonNeu.insert("version", generalJsonAlt.value("version"));
+        generalJsonNeu.insert("komprimiert", true);
+
+        QJsonObject objectNeu;
+
+        objectNeu.insert("komprimiert",
+                         QString(qCompress(QJsonDocument(obj).toJson(QJsonDocument::JsonFormat::Compact)).toBase64())
+                         );
+        objectNeu.insert("general", generalJsonNeu);
+        return FileIO::saveJsonToFile(pfad, objectNeu);
+    }
+}
+
+QJsonObject EplFile::leseJsonAusDatei(QString pfad)
+{
+    // Daten aus Datei laden
+    QJsonObject daten = FileIO::getJsonFromFile(pfad);
+    if (daten.isEmpty()) {
+        throw FileException();
+    }
+
+    // Pruefen, ob Version kompatibel ist
+    QJsonObject generalJSON = daten.value("general").toObject();
+
+    Version version = Version(generalJSON.value("version").toString());
+    if (version == Version {-1, -1, -1}) {
+        FileIO::Schreibschutz::freigeben(pfad);
+        throw FileVersionNotSupportedException(tr("Die Datei ist nicht mit dieser Version des Einsatzplaner kompatibel."));
+    }
+
+    // Dateiversion zu neu abfangen
+    if (version > Version::getProgrammVersion()) {
+        // Version inkompatibel, zu neu
+        FileIO::Schreibschutz::freigeben(pfad);
+        throw FileToNewException(version);
+    }
+
+    // Dateiversion zu alt bzw. falsch eingestellt abfangen
+    if (version.getMajor() < 1) {
+        FileIO::Schreibschutz::freigeben(pfad);
+        throw FileVersionNotSupportedException(tr("Die Datei ist nicht mit dieser Version des Einsatzplaner kompatibel."));
+    }
+
+    // Daten entpacken, sofern komprimiert
+    if (generalJSON.value("komprimiert").toBool(false)) {
+        daten = QJsonDocument::fromJson(
+                    qUncompress(
+                        QByteArray::fromBase64(
+                            daten.value("komprimiert").toString().toUtf8()
+                            )
+                        )
+                    ).object();
+    }
+
+    // Daten anhand der angegebenen Version in aktuelles Format bringen
+    QJsonObject helper;
+    switch(version.getMinor()) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+        daten.insert("activities", daten.value("calendar").toObject().value("activites").toArray());
+        daten.insert("personal",   daten.value("calendar").toObject().value("personal").toObject());
+
+        helper = daten.value("view").toObject();
+        helper.insert("currentDate", daten.value("calendar").toObject().value("currentDate").toString());
+        daten.insert("view", helper);
+        break;
+    default:
+        break;
+    }
+    return daten;
 }
 

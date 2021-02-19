@@ -109,5 +109,7 @@ settings/			-> Speichert alle Einstellungen zur Datei
 
 general/ (object)
 	version (string)	-> Version die mindestens benötigt wird, um die Datei zu öffnen
+	komprimiert (bool)	-> Gibt an, ob die Daten komprimiert gespeichert wurden
 
+komprimiert (string)		-> Speichert, sofern benutzt (siehe auch general/komprimiert), die komprimierten Daten, welche entpackt eine vollstaendige EPL-Datei enthalten
 
