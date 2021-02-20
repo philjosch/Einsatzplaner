@@ -58,6 +58,7 @@ activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten. Bis V
 		aufgabe (string)
 		bemerkung (string)
 	personalBenoetigt (bool)
+	abgesagt (bool)			- > Wahr genau dann, wenn die Aktivität abgesagt wurde / worden ist; ab Version 1.7;
 
 	# Für Fahrtag kommt folgendes hinzu
 	zeitTf (time)

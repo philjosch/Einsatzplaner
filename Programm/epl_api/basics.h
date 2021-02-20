@@ -77,6 +77,7 @@ struct Infos {
     QTime ende;
     Category kategorie;
     QString bemerkung;
+    bool anrechnen;
 };
 
 QString minutesToHourString(int min);

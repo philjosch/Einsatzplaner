@@ -483,12 +483,10 @@ int Person::getMinimumStunden(Category cat)
 void Person::berechne()
 {
     zeiten.clear();
-    zeiten.insert(Anzahl, activities.size());
-    
     for(AActivity *a: activities.uniqueKeys()) {
-        if (a->getDatum() > QDate::currentDate()) continue;
         for(Category cat: activities.values(a)) {
             Infos info = a->getIndividual(this, cat);
+            if (! info.anrechnen) continue;
 
             // Einsatzstunden
             QTime start = info.beginn;
@@ -505,6 +503,7 @@ void Person::berechne()
                 zeiten.insert(cat, zeiten.value(cat)+duration);
                 break;
             }
+            zeiten.insert(Anzahl, zeiten.value(Anzahl)+1);
             zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
             if (cat != Category::Buero)
                 zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);

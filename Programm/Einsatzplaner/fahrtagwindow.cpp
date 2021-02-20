@@ -53,6 +53,7 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
     ui->comboTimeZH->setCurrentText(fahrtag->getZeitAnfang().toString("HH"));
     ui->comboTimeZM->setCurrentText(fahrtag->getZeitAnfang().toString("mm"));
     ui->checkWichtig->setChecked(fahrtag->getWichtig());
+    ui->checkAbgesagt->setChecked(fahrtag->getAbgesagt());
 
     ui->buttonGroupTf->button(fahrtag->getBenoetigeTf())->click();
     ui->checkZf->setChecked(fahrtag->getBenoetigeZf());
@@ -167,6 +168,12 @@ void FahrtagWindow::on_checkWichtig_clicked(bool checked)
 {
     if (nehme)
         fahrtag->setWichtig(checked);
+}
+
+void FahrtagWindow::on_checkAbgesagt_clicked(bool checked)
+{
+    if (nehme)
+        fahrtag->setAbgesagt(checked);
 }
 
 void FahrtagWindow::on_comboWagenreihung_currentTextChanged(const QString &arg1)

@@ -35,6 +35,7 @@ AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
     bemerkungen = "";
     personen = QMap<Einsatz, Infos>();
     personalBenoetigt = true;
+    abgesagt = false;
     personal = p;
 }
 
@@ -76,6 +77,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
         personen.insert(Einsatz{person, info.kategorie}, info);
     }
     personalBenoetigt = o.value("personalBenoetigt").toBool(true);
+    abgesagt = o.value("abgesagt").toBool(false);
 }
 
 AActivity::~AActivity()
@@ -117,6 +119,7 @@ QJsonObject AActivity::toJson()
     }
     data.insert("personen", personenJSON);
     data.insert("personalBenoetigt", personalBenoetigt);
+    data.insert("abgesagt", abgesagt);
     return data;
 }
 
@@ -124,7 +127,6 @@ QDate AActivity::getDatum()
 {
     return datum;
 }
-
 void AActivity::setDatum(QDate value)
 {
     QDate oldDate = datum;
@@ -189,6 +191,16 @@ bool AActivity::getPersonalBenoetigt() const
 void AActivity::setPersonalBenoetigt(bool value)
 {
     personalBenoetigt = value;
+    emit changed(this);
+}
+
+bool AActivity::getAbgesagt() const
+{
+    return abgesagt;
+}
+void AActivity::setAbgesagt(bool value)
+{
+    abgesagt = value;
     emit changed(this);
 }
 
@@ -406,10 +418,11 @@ QString AActivity::getListStringShort()
 
 QString AActivity::getListString()
 {
-    QString scnd = tr("Arbeitseinsatz");
-    if (anlass != "")
-        scnd = anlass;
-    return datum.toString("dddd dd.MM.yyyy")+" – "+scnd;
+    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – "+getStringFromArt(Art::Arbeitseinsatz);
+    if (abgesagt) {
+        s += " (Abgesagt)";
+    }
+    return s;
 }
 
 Infos AActivity::getIndividual(Person *person, Category kat)
@@ -417,23 +430,27 @@ Infos AActivity::getIndividual(Person *person, Category kat)
     if (person == nullptr) return Infos();
     if (!personen.contains(Einsatz{person, kat})) return Infos();
     Infos alt = personen.value(Einsatz{person, kat});
-    Infos neu = Infos();
-    neu.kategorie = alt.kategorie;
-    neu.beginn = alt.beginn;
-    neu.ende = alt.ende;
+//    Infos neu = Infos();
+//    neu.kategorie = alt.kategorie;
+//    neu.beginn = alt.beginn;
+//    neu.ende = alt.ende;
 
     if (zeitenUnbekannt) {
-        neu.beginn = QTime(0,0);
-        neu.ende = QTime(0,0);
+        alt.beginn = QTime(0,0);
+        alt.ende = QTime(0,0);
     } else {
         if (alt.beginn == QTime(0,0)) {
-            neu.beginn = zeitAnfang;
+            alt.beginn = zeitAnfang;
         }
         if (alt.ende == QTime(0,0)) {
-            neu.ende = zeitEnde;
+            alt.ende = zeitEnde;
         }
     }
-    return neu;
+    alt.anrechnen = !abgesagt;
+    if (datum > QDate::currentDate()) {
+        alt.anrechnen = false;
+    }
+    return alt;
 }
 
 QString AActivity::getHtmlForSingleView()
@@ -442,7 +459,15 @@ QString AActivity::getHtmlForSingleView()
     QString required2 = "</font>";
     QString html = "";
     // Überschrift
-    html += "<h2 class='pb'>"+(anlass != "" ? anlass : "Arbeitseinsatz")+" am " + datum.toString("dddd, dd.MM.yyyy")+"</h2>";
+    html += "<h2 class='pb'>";
+    if (anlass != "")
+        html += anlass;
+    else
+        html += "Arbeitseinsatz";
+    html += " am " + datum.toString("dddd, dd.MM.yyyy");
+    if (abgesagt)
+        html += required1+" ABGESAGT!"+required2;
+    html += "</h2>";
     // Ort
     if (ort != "")
         html += "<p><b>Ort:</b> "+ort+"</p>";
@@ -505,6 +530,12 @@ QString AActivity::getHtmlForTableView()
         html += " in "+ort;
     }
     html += "</td>";
+
+    if (abgesagt) {
+        html += "<td colspan='4'><b>Abgesagt!</b></td>";
+        html += "<td>"+bemerkungen.replace("\n", "<br/>")+"</td></tr>";
+        return html;
+    }
 
     // Dienstzeiten
     if (zeitenUnbekannt) {
@@ -642,7 +673,7 @@ QString AActivity::getHtmlForTableView()
     // Bemerkungen
     if (bemerkungen != "") {
         if (zeilenUmbruch) html += "<br/>";
-        html += bemerkungen;
+        html += bemerkungen.replace("\n", "<br/>");
     }
     html += "</td></tr>";
     return html;

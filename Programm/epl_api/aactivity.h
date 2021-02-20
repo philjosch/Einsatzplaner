@@ -181,6 +181,9 @@ public:
     bool getPersonalBenoetigt() const;
     void setPersonalBenoetigt(bool value);
 
+    bool getAbgesagt() const;
+    void setAbgesagt(bool value);
+
     Person *getPerson(QString name);
     QMap<Einsatz, Infos> getPersonen() const;
     virtual Infos getIndividual(Person *person, Category kat);
@@ -216,7 +219,6 @@ public:
 
     static void sort(QList<AActivity *> *list);
 
-
 signals:
     void changed(AActivity *, QDate = QDate());
 
@@ -230,6 +232,7 @@ protected:
     QString bemerkungen;
     QMap<Einsatz, Infos> personen;
     bool personalBenoetigt;
+    bool abgesagt;
 
     ManagerPersonal *personal;
 

@@ -23,7 +23,7 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,1,0" columnstretch="0,0,0,0,1" columnminimumwidth="50,100,70,80,0">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,1,0" columnstretch="0,0,0,0,0,1" columnminimumwidth="50,50,50,50,50,0">
     <property name="leftMargin">
      <number>6</number>
     </property>
@@ -39,182 +39,21 @@
     <property name="spacing">
      <number>6</number>
     </property>
-    <item row="3" column="1" colspan="2">
-     <widget class="QTimeEdit" name="timeBeginn">
-      <property name="time">
-       <time>
-        <hour>10</hour>
-        <minute>0</minute>
-        <second>0</second>
-       </time>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineAnlass">
-      <property name="placeholderText">
-       <string>Arbeitseinsatz</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Datum</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_6">
-      <property name="text">
-       <string>Ende</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0" colspan="2">
-     <widget class="QPushButton" name="buttonInsert">
-      <property name="text">
-       <string>Name hinzufügen</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string>Beginn</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="2" colspan="2">
-     <widget class="QPushButton" name="buttonRemove">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="text">
-       <string>Name entfernen</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1" colspan="2">
-     <widget class="QTimeEdit" name="timeEnde">
-      <property name="time">
-       <time>
-        <hour>16</hour>
-        <minute>0</minute>
-        <second>0</second>
-       </time>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Ort</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineOrt"/>
-    </item>
-    <item row="7" column="0" colspan="5">
-     <widget class="QTableWidget" name="tablePersonen">
-      <property name="sortingEnabled">
-       <bool>true</bool>
-      </property>
-      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-       <bool>true</bool>
-      </attribute>
-      <column>
-       <property name="text">
-        <string>Name</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Aufgabe</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Beginn*</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Ende*</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Bemerkung</string>
-       </property>
-       <property name="toolTip">
-        <string>Angeben, ob es sich bei der Person um eine Externe handelt, ob sie auf den Führerstand mitfährt, oder Azubi ist oder aber ein Teilnehmer eines Schnupperkurses.</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-    <item row="5" column="0" colspan="5">
+    <item row="5" column="0" colspan="6">
      <widget class="Line" name="line_2">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
-    <item row="3" column="3" rowspan="2">
-     <widget class="QCheckBox" name="checkZeiten">
+    <item row="3" column="4">
+     <widget class="QCheckBox" name="checkWichtig">
       <property name="text">
-       <string>Zeiten noch
-unbekannt</string>
+       <string>Wichtig</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1" colspan="3">
-     <widget class="QDateEdit" name="dateDatum">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>21</height>
-       </size>
-      </property>
-      <property name="displayFormat">
-       <string>dddd, dd. MMMM yyyy</string>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Anlass</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="4">
-     <widget class="QCheckBox" name="checkBoxBenoetigt">
-      <property name="text">
-       <string>Personal wird benötigt</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="4" rowspan="5">
+    <item row="0" column="5" rowspan="5">
      <widget class="QPlainTextEdit" name="plainBeschreibung">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
@@ -230,7 +69,41 @@ unbekannt</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="0" colspan="5">
+    <item row="2" column="1" colspan="4">
+     <widget class="QLineEdit" name="lineAnlass">
+      <property name="placeholderText">
+       <string>Arbeitseinsatz</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Ort</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="2">
+     <widget class="QTimeEdit" name="timeEnde">
+      <property name="maximumSize">
+       <size>
+        <width>120</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="time">
+       <time>
+        <hour>16</hour>
+        <minute>0</minute>
+        <second>0</second>
+       </time>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0" colspan="6">
      <layout class="QGridLayout" name="gridLayout_2">
       <property name="leftMargin">
        <number>0</number>
@@ -275,6 +148,159 @@ unbekannt</string>
        </widget>
       </item>
      </layout>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Datum</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="4">
+     <widget class="QLineEdit" name="lineOrt"/>
+    </item>
+    <item row="3" column="3" rowspan="2">
+     <widget class="QCheckBox" name="checkZeiten">
+      <property name="text">
+       <string>Zeiten noch
+unbekannt</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" colspan="4">
+     <widget class="QDateEdit" name="dateDatum">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>21</height>
+       </size>
+      </property>
+      <property name="displayFormat">
+       <string>dddd, dd. MMMM yyyy</string>
+      </property>
+      <property name="calendarPopup">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Beginn</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="4">
+     <widget class="QCheckBox" name="checkAbgesagt">
+      <property name="text">
+       <string>Abgesagt</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1" colspan="2">
+     <widget class="QTimeEdit" name="timeBeginn">
+      <property name="maximumSize">
+       <size>
+        <width>120</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="time">
+       <time>
+        <hour>10</hour>
+        <minute>0</minute>
+        <second>0</second>
+       </time>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="5">
+     <widget class="QCheckBox" name="checkBoxBenoetigt">
+      <property name="text">
+       <string>Personal wird benötigt</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Anlass</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Ende</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0" colspan="6">
+     <widget class="QTableWidget" name="tablePersonen">
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+       <bool>true</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Aufgabe</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Beginn*</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Ende*</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Bemerkung</string>
+       </property>
+       <property name="toolTip">
+        <string>Angeben, ob es sich bei der Person um eine Externe handelt, ob sie auf den Führerstand mitfährt, oder Azubi ist oder aber ein Teilnehmer eines Schnupperkurses.</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item row="6" column="3" colspan="2">
+     <widget class="QPushButton" name="buttonRemove">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string>Name entfernen</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="3">
+     <widget class="QPushButton" name="buttonInsert">
+      <property name="text">
+       <string>Name hinzufügen</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

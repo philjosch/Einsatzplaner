@@ -27,6 +27,7 @@ private slots:
     void on_comboArt_currentIndexChanged(int index);
     void on_textAnlass_textChanged();
     void on_checkWichtig_clicked(bool checked);
+    void on_checkAbgesagt_clicked(bool checked);
     void on_comboWagenreihung_currentTextChanged(const QString &arg1);
     void on_comboTimeTfH_currentTextChanged(const QString &arg1);
     void on_comboTimeTfM_currentTextChanged(const QString &arg1);

@@ -662,7 +662,7 @@ void PersonalWindow::showPerson(Person *p)
             ui->tabelle->setItem(0, 1, new QTableWidgetItem(getLocalizedStringFromCategory(infos.kategorie)));
             QTime duration = QTime::fromMSecsSinceStartOfDay(infos.beginn.msecsTo(infos.ende));
             ui->tabelle->setItem(0, 2, new QTableWidgetItem(duration.toString("hh:mm")));
-            ui->tabelle->setItem(0, 3, new QTableWidgetItem(a->getListStringShort()+(infos.bemerkung!= "" ? "<br/>"+infos.bemerkung : "")));
+            ui->tabelle->setItem(0, 3, new QTableWidgetItem(a->getListStringShort()+(infos.bemerkung!= "" ? "\n"+infos.bemerkung : "")));
         }
     }
     ui->tabelle->setSortingEnabled(sortingSaved);

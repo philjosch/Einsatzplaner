@@ -101,6 +101,9 @@ QString Fahrtag::getKurzbeschreibung()
 QString Fahrtag::getListString()
 {
     QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – "+getStringFromArt(art);
+    if (abgesagt) {
+        s += " (Abgesagt)";
+    }
     if (wichtig) {
         s += " WICHTIG!";
     }
@@ -116,18 +119,18 @@ QString Fahrtag::getListStringShort() {
 Infos Fahrtag::getIndividual(Person *person, Category kat)
 {
     Infos alt = AActivity::getIndividual(person, kat);
-    Infos neu = Infos();
-    neu.bemerkung = alt.bemerkung;
-    neu.kategorie = alt.kategorie;
-    neu.beginn = alt.beginn;
-    neu.ende = alt.ende;
+//    Infos neu = Infos();
+//    neu.bemerkung = alt.bemerkung;
+//    neu.kategorie = alt.kategorie;
+//    neu.beginn = alt.beginn;
+//    neu.ende = alt.ende;
 
     if (!zeitenUnbekannt) {
         if ((alt.beginn == zeitAnfang) && (alt.kategorie == Tf)) {
-            neu.beginn = zeitTf;
+            alt.beginn = zeitTf;
         }
     }
-    return neu;
+    return alt;
 }
 
 QString Fahrtag::getHtmlForSingleView()
@@ -135,7 +138,14 @@ QString Fahrtag::getHtmlForSingleView()
     QString required = "<font color='"+COLOR_REQUIRED+"'>%1</font>";
     QString html = "";
     // Überschrift
-    html += "<h2 class='pb'>" +getStringFromArt(art) + " am " + datum.toString("dddd, dd.MM.yyyy")+(wichtig?required.arg(" WICHTIG!"):"")+"</h2>";
+    html += "<h2 class='pb'>";
+    html += getStringFromArt(art);
+    html += " am " + datum.toString("dddd, dd.MM.yyyy");
+    if (abgesagt)
+        html += required.arg(" ABGESAGT!");
+    if (wichtig)
+        html += required.arg(" WICHTIG!");
+    html += "</h2>";
     // Anlass
     if (anlass != "") {
         html += "<p><b>Anlass:</b><br/>"+anlass+"</p>";
@@ -270,6 +280,12 @@ QString Fahrtag::getHtmlForTableView()
         html += "<br/>"+ wagenreihung;
     }
     html += "</td>";
+
+    if (abgesagt) {
+        html += "<td colspan='4'><b>Abgesagt!</b></td>";
+        html += "<td>"+bemerkungen.replace("\n", "<br/>")+"</td></tr>";
+        return html;
+    }
 
     // Dienstzeiten
     if (zeitenUnbekannt) {
