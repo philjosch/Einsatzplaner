@@ -18,8 +18,6 @@ public:
     QJsonObject toJson();
 
     QString getKurzbeschreibung();
-    QString getListString();
-    QString getListStringShort();
 
     QString getHtmlForSingleView();
     QString getHtmlForTableView();
@@ -33,9 +31,6 @@ public:
 
     QTime getZeitTf();
     void setZeitTf(QTime value);
-
-    bool getWichtig() const;
-    void setWichtig(bool value);
 
     int getBenoetigeTf() const;
     void setBenoetigeTf(int value);
@@ -75,9 +70,7 @@ public slots:
 protected:
     bool checkPlaetze(QMap<int, QList<int> > p, Reservierung *r);
 
-    Art art;
     QTime zeitTf;
-    bool wichtig;
     int benoetigeTf;
     bool benoetigeZf;
     bool benoetigeZub;

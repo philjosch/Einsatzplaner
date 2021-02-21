@@ -27,6 +27,7 @@ ActivityWindow::ActivityWindow(CoreMainWindow *parent, Activity *a) : QMainWindo
     ui->timeEnde->setTime(activity->getZeitEnde());
     ui->checkZeiten->setChecked(activity->getZeitenUnbekannt());
     on_checkZeiten_clicked(activity->getZeitenUnbekannt());
+    ui->checkWichtig->setChecked(activity->getWichtig());
     ui->checkAbgesagt->setChecked(activity->getAbgesagt());
     ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
 
@@ -104,6 +105,12 @@ void ActivityWindow::on_checkZeiten_clicked(bool checked)
     ui->timeEnde->setEnabled(!checked);
     if (nehme)
         activity->setZeitenUnbekannt(checked);
+}
+
+void ActivityWindow::on_checkWichtig_clicked(bool checked)
+{
+    if (nehme)
+        activity->setWichtig(checked);
 }
 
 void ActivityWindow::on_checkAbgesagt_clicked(bool checked)

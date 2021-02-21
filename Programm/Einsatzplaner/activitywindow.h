@@ -32,6 +32,7 @@ private slots:
     void on_timeEnde_timeChanged(const QTime &time);
     void on_checkZeiten_clicked(bool checked);
 
+    void on_checkWichtig_clicked(bool checked);
     void on_checkAbgesagt_clicked(bool checked);
 
     void on_checkBoxBenoetigt_toggled(bool checked);

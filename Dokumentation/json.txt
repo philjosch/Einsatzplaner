@@ -58,11 +58,11 @@ activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten. Bis V
 		aufgabe (string)
 		bemerkung (string)
 	personalBenoetigt (bool)
-	abgesagt (bool)			- > Wahr genau dann, wenn die Aktivität abgesagt wurde / worden ist; ab Version 1.7;
+	wichtig (bool)			-> Wurde aus Fahrtag hierhin verschoben; ab Version 1.7
+	abgesagt (bool)			-> Wahr genau dann, wenn die Aktivität abgesagt wurde / worden ist; ab Version 1.7;
 
 	# Für Fahrtag kommt folgendes hinzu
 	zeitTf (time)
-	wichtig (bool)
 	benoetigeTf (int)		-> Bis Version <1.6 bool als Typ 
 	benoetigeZf (bool)
 	benoetigeZub (bool)

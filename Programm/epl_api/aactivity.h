@@ -181,6 +181,9 @@ public:
     bool getPersonalBenoetigt() const;
     void setPersonalBenoetigt(bool value);
 
+    bool getWichtig() const;
+    void setWichtig(bool value);
+
     bool getAbgesagt() const;
     void setAbgesagt(bool value);
 
@@ -223,6 +226,7 @@ signals:
     void changed(AActivity *, QDate = QDate());
 
 protected:
+    Art art;
     QDate datum;
     QString ort;
     QTime zeitAnfang;
@@ -232,6 +236,7 @@ protected:
     QString bemerkungen;
     QMap<Einsatz, Infos> personen;
     bool personalBenoetigt;
+    bool wichtig;
     bool abgesagt;
 
     ManagerPersonal *personal;

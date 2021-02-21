@@ -9,7 +9,6 @@
 Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p)
 {
     art = Museumszug;
-    wichtig = false;
     zeitTf = QTime(8, 15);
     zeitAnfang = QTime(8, 45);
     zeitEnde = QTime(18, 45);
@@ -32,7 +31,6 @@ Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p)
     // Daten für Fahrtag extrahieren
     art = static_cast<Art>(o.value("art").toInt());
     zeitTf = QTime::fromString(o.value("zeitTf").toString(), "hh:mm");
-    wichtig = o.value("wichtig").toBool();
     if (! o.value("benoetigeTf").isBool()) {
         benoetigeTf = o.value("benoetigeTf").toInt(1);
     } else {
@@ -77,7 +75,6 @@ QJsonObject Fahrtag::toJson()
     QJsonObject o = AActivity::toJson();
     o.insert("art", art);
     o.insert("zeitTf", zeitTf.toString("hh:mm"));
-    o.insert("wichtig", wichtig);
     o.insert("benoetigeTf", benoetigeTf);
     o.insert("benoetigeZf", benoetigeZf);
     o.insert("benoetigeZub", benoetigeZub);
@@ -98,39 +95,15 @@ QString Fahrtag::getKurzbeschreibung()
     return getStringFromArt(art);
 }
 
-QString Fahrtag::getListString()
-{
-    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – "+getStringFromArt(art);
-    if (abgesagt) {
-        s += " (Abgesagt)";
-    }
-    if (wichtig) {
-        s += " WICHTIG!";
-    }
-    return s;
-}
-
-QString Fahrtag::getListStringShort() {
-    if (anlass.length() != 0)
-        return anlass;
-    return getStringFromArt(art);
-}
-
 Infos Fahrtag::getIndividual(Person *person, Category kat)
 {
-    Infos alt = AActivity::getIndividual(person, kat);
-//    Infos neu = Infos();
-//    neu.bemerkung = alt.bemerkung;
-//    neu.kategorie = alt.kategorie;
-//    neu.beginn = alt.beginn;
-//    neu.ende = alt.ende;
-
+    Infos info = AActivity::getIndividual(person, kat);
     if (!zeitenUnbekannt) {
-        if ((alt.beginn == zeitAnfang) && (alt.kategorie == Tf)) {
-            alt.beginn = zeitTf;
+        if ((info.beginn == zeitAnfang) && (info.kategorie == Tf)) {
+            info.beginn = zeitTf;
         }
     }
-    return alt;
+    return info;
 }
 
 QString Fahrtag::getHtmlForSingleView()
@@ -504,16 +477,6 @@ int Fahrtag::getBenoetigeTf() const
 void Fahrtag::setBenoetigeTf(int value)
 {
     benoetigeTf = value;
-    emit changed(this);
-}
-
-bool Fahrtag::getWichtig() const
-{
-    return wichtig;
-}
-void Fahrtag::setWichtig(bool value)
-{
-    wichtig = value;
     emit changed(this);
 }
 

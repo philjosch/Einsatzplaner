@@ -26,6 +26,7 @@ const QString getFarbe(AActivity *a)
 
 AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
 {
+    art = Arbeitseinsatz;
     datum = date;
     ort = "";
     zeitAnfang = QTime(10, 0);
@@ -35,6 +36,7 @@ AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
     bemerkungen = "";
     personen = QMap<Einsatz, Infos>();
     personalBenoetigt = true;
+    wichtig = false;
     abgesagt = false;
     personal = p;
 }
@@ -44,6 +46,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
     personal = p;
     personen = QMap<Einsatz, Infos>();
 
+    art = Arbeitseinsatz;
     datum = QDate::fromString(o.value("datum").toString(), "yyyy-MM-dd");
     ort = o.value("ort").toString();
     zeitAnfang = QTime::fromString(o.value("zeitAnfang").toString(), "hh:mm");
@@ -77,6 +80,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
         personen.insert(Einsatz{person, info.kategorie}, info);
     }
     personalBenoetigt = o.value("personalBenoetigt").toBool(true);
+    wichtig = o.value("wichtig").toBool(false);
     abgesagt = o.value("abgesagt").toBool(false);
 }
 
@@ -119,6 +123,7 @@ QJsonObject AActivity::toJson()
     }
     data.insert("personen", personenJSON);
     data.insert("personalBenoetigt", personalBenoetigt);
+    data.insert("wichtig", wichtig);
     data.insert("abgesagt", abgesagt);
     return data;
 }
@@ -191,6 +196,16 @@ bool AActivity::getPersonalBenoetigt() const
 void AActivity::setPersonalBenoetigt(bool value)
 {
     personalBenoetigt = value;
+    emit changed(this);
+}
+
+bool AActivity::getWichtig() const
+{
+    return wichtig;
+}
+void AActivity::setWichtig(bool value)
+{
+    wichtig = value;
     emit changed(this);
 }
 
@@ -404,23 +419,27 @@ QString AActivity::getKurzbeschreibung()
 {
     if (anlass != "")
         return anlass;
-    return "Arbeitseinsatz";
+    return getStringFromArt(Arbeitseinsatz);
 }
 
 QString AActivity::getListStringShort()
 {
+    QString s = getStringFromArt(art);
     if (anlass != "")
-        return anlass;
-    if (bemerkungen != "")
-        return bemerkungen;
-    return "Arbeitseinsatz";
+        s = anlass;
+    return s + (abgesagt ? " (Abg.)" : "")
+            + (wichtig ? "!!" : "");
 }
 
 QString AActivity::getListString()
 {
-    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – "+getStringFromArt(Art::Arbeitseinsatz);
+    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))
+            +" – "+getStringFromArt(art);
     if (abgesagt) {
         s += " (Abgesagt)";
+    }
+    if (wichtig) {
+        s += " WICHTIG!";
     }
     return s;
 }
@@ -429,34 +448,28 @@ Infos AActivity::getIndividual(Person *person, Category kat)
 {
     if (person == nullptr) return Infos();
     if (!personen.contains(Einsatz{person, kat})) return Infos();
-    Infos alt = personen.value(Einsatz{person, kat});
-//    Infos neu = Infos();
-//    neu.kategorie = alt.kategorie;
-//    neu.beginn = alt.beginn;
-//    neu.ende = alt.ende;
-
+    Infos info = personen.value(Einsatz{person, kat});
     if (zeitenUnbekannt) {
-        alt.beginn = QTime(0,0);
-        alt.ende = QTime(0,0);
+        info.beginn = QTime(0,0);
+        info.ende = QTime(0,0);
     } else {
-        if (alt.beginn == QTime(0,0)) {
-            alt.beginn = zeitAnfang;
+        if (info.beginn == QTime(0,0)) {
+            info.beginn = zeitAnfang;
         }
-        if (alt.ende == QTime(0,0)) {
-            alt.ende = zeitEnde;
+        if (info.ende == QTime(0,0)) {
+            info.ende = zeitEnde;
         }
     }
-    alt.anrechnen = !abgesagt;
+    info.anrechnen = !abgesagt;
     if (datum > QDate::currentDate()) {
-        alt.anrechnen = false;
+        info.anrechnen = false;
     }
-    return alt;
+    return info;
 }
 
 QString AActivity::getHtmlForSingleView()
 {
-    QString required1 = "<font color='"+COLOR_REQUIRED+"'>";
-    QString required2 = "</font>";
+    QString required = "<font color='"+COLOR_REQUIRED+"'>%1</font>";
     QString html = "";
     // Überschrift
     html += "<h2 class='pb'>";
@@ -466,7 +479,9 @@ QString AActivity::getHtmlForSingleView()
         html += "Arbeitseinsatz";
     html += " am " + datum.toString("dddd, dd.MM.yyyy");
     if (abgesagt)
-        html += required1+" ABGESAGT!"+required2;
+        html += required.arg(" ABGESAGT!");
+    if (wichtig)
+        html += required.arg(" WICHTIG!");
     html += "</h2>";
     // Ort
     if (ort != "")
@@ -489,7 +504,7 @@ QString AActivity::getHtmlForSingleView()
     }
     // Personal
     html += "<p><b>Helfer";
-    html += (personalBenoetigt ? required1+" benötigt"+required2:"");
+    html += (personalBenoetigt ? required.arg(" benötigt"):"");
     html += ":</b></p>";
     if (personen.count() > 0) {
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Name</th><th>Beginn*</th><th>Ende*</th><th>Aufgabe</th></tr></thead><tbody>";
@@ -519,7 +534,11 @@ QString AActivity::getHtmlForTableView()
         html = "<tr bgcolor='#DCF57E'>";//a3c526'>";
     }
     // Datum, Anlass
-    html += "<td>";
+    if (wichtig) {
+        html += "<td bgcolor='#ff8888'>";
+    } else {
+        html += "<td>";
+    }
     html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br</>";
     if (anlass != "") {
         html += anlass;
