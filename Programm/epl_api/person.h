@@ -163,6 +163,7 @@ public:
     void setBank(const QString &value);
 
     QString getKontoinhaber() const;
+    QString getKontoinhaberText();
     void setKontoinhaber(const QString &value);
 
     QString getSonstigeBetrieblich() const;

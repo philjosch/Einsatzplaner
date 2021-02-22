@@ -9,6 +9,13 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 
+
+const QList<QString> MainWindowPersonal::ANZEIGE_TABELLE = {"Vorname", "Nachname", "Geburtsdatum", "Geschlecht", "Anrede", "Beruf",
+                                                            "Nummer", "Eintritt", "Status", "Austritt", "Beitragsart", "IBAN", "Bank", "Kontoinhaber",
+                                                            "Straße", "PLZ", "Ort", "Strecke", "Mail", "Telefon", "Telefon2",
+                                                            "Tf", "Zf", "Rangierer", "Tauglichkeit", "Bemerkung Betrieb.", "Sonst. Ausbildung",
+                                                            "Mail Zustimmung", "Telefon Zustimmung",
+                                                            "Bemerkung"};
 MainWindowPersonal::MainWindowPersonal(QWidget *parent) :
     CoreMainWindow(parent), ui(new Ui::MainWindowPersonal)
 {
@@ -34,8 +41,14 @@ void MainWindowPersonal::constructorMainWindowPersonal()
 
     current = QList<Person*>();
     filter = Mitglied::AlleMitglieder;
+    anzeige = QSet<QString>();
 
     fenster = QMap<Person*, PersonWindow*>();
+
+    for(int i = 0; i < ui->listAnzeige->count(); ++i) {
+        if (ui->listAnzeige->item(i)->checkState() == Qt::CheckState::Checked)
+            on_listAnzeige_itemChanged(ui->listAnzeige->item(i));
+    }
 }
 
 bool MainWindowPersonal::open(QString path)
@@ -61,7 +74,7 @@ void MainWindowPersonal::handlerOpen(QString path)
 void MainWindowPersonal::onDateiWurdeVeraendert()
 {
     CoreMainWindow::onDateiWurdeVeraendert();
-    on_actionAktualisieren_triggered();
+//    on_actionAktualisieren_triggered();
 }
 
 void MainWindowPersonal::onPersonWirdEntferntWerden(Person *p)
@@ -94,85 +107,144 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
     ui->tabelleMitglieder->setRowCount(0);
     ui->tabelleMitglieder->setSortingEnabled(false);
 
-    int clmn;
+    // Setup columns
+    int clmn = 0;
+    ui->tabelleMitglieder->setColumnCount(0);
+
+    foreach (QString s, ANZEIGE_TABELLE) {
+        if (anzeige.contains(s)) {
+            ui->tabelleMitglieder->insertColumn(clmn);
+            ui->tabelleMitglieder->setHorizontalHeaderItem(clmn++, new QTableWidgetItem(s));
+        }
+    }
+
     QTableWidgetItem *i;
     for (Person *p: current) {
         clmn = 0;
         ui->tabelleMitglieder->insertRow(0);
 
-
-        i = new QTableWidgetItem(p->getVorname());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        i = new QTableWidgetItem(p->getNachname());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        i = new QTableWidgetItem();
-        i->setData(0, p->getNummer());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        i = new QTableWidgetItem(
-                    QString("%1%2")
-                    .arg(p->isAusgetreten() ? "Ehemals ": "")
-                    .arg(p->getAktiv() ? "Aktiv" : "Passiv"));
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        i = new QTableWidgetItem();
-        i->setData(0, p->getGeburtstag());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        i = new QTableWidgetItem();
-        i->setData(0, p->getEintritt());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-
-        if (p->isAusgetreten() || p->getAustritt().isValid()) {
-            i = new QTableWidgetItem();
-            i->setData(0, p->getAustritt());
+        if (anzeige.contains("Vorname"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getVorname()));
+        if (anzeige.contains("Nachname"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getNachname()));
+        if (anzeige.contains("Geburtsdatum")) {
+            i = new PersonTableWidgetItem(p);
+            i->setData(0, p->getGeburtstag());
             ui->tabelleMitglieder->setItem(0, clmn++, i);
-        } else {
-            clmn++;
+        }
+        if (anzeige.contains("Geschlecht"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, Person::getStringVonGeschlecht(p->getGeschlecht())));
+        if (anzeige.contains("Anrede"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getAnrede()));
+        if (anzeige.contains("Beruf"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getBeruf()));
+
+
+        if (anzeige.contains("Nummer")) {
+            i = new PersonTableWidgetItem(p);
+            i->setData(0, p->getNummer());
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
+        }
+        if (anzeige.contains("Eintritt")) {
+            i = new PersonTableWidgetItem(p);
+            i->setData(0, p->getEintritt());
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
+        }
+        if (anzeige.contains("Status")) {
+            i = new PersonTableWidgetItem(p,
+                        QString("%1%2")
+                        .arg(p->isAusgetreten() ? "Ehemals ": "")
+                        .arg(p->getAktiv() ? "Aktiv" : "Passiv"));
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
+        }
+        if (anzeige.contains("Austritt")) {
+            if (p->isAusgetreten() || p->getAustritt().isValid()) {
+                i = new PersonTableWidgetItem(p);
+                i->setData(0, p->getAustritt());
+                ui->tabelleMitglieder->setItem(0, clmn++, i);
+            } else {
+                clmn++;
+            }
+        }
+        if (anzeige.contains("Beitragsart"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, Person::getStringVonBeitragsart(p->getBeitragsart())));
+        if (anzeige.contains("IBAN"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getIban()));
+        if (anzeige.contains("Bank"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getBank()));
+        if (anzeige.contains("Kontoinhaber"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getKontoinhaberText()));
+
+
+        if (anzeige.contains("Straße"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getStrasse()));
+        if (anzeige.contains("PLZ")) {
+            i = new PersonTableWidgetItem(p);
+            i->setData(0, p->getPLZ());
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
+        }
+        if (anzeige.contains("Ort"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getOrt()));
+        if (anzeige.contains("Strecke")) {
+            i = new PersonTableWidgetItem(p);
+            i->setData(0, p->getStrecke());
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
         }
 
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getBeruf()));
 
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getStrasse()));
-        i = new QTableWidgetItem();
-        i->setData(0, p->getPLZ());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getOrt()));
-        i = new QTableWidgetItem();
-        i->setData(0, p->getStrecke());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
+        if (anzeige.contains("Mail"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getMail()));
+        if (anzeige.contains("Telefon"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getTelefon()));
+        if (anzeige.contains("Telefon2"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getTelefon2()));
 
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getMail()));
-        if (p->getMailOK())
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
-        else
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Nein"));
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getTelefon()));
-        if (p->getTelefonOK())
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
-        else
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Nein"));
 
-        if (p->getAusbildungTf())
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
-        else
-            clmn++;
-        if (p->getAusbildungZf())
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
-        else
-            clmn++;
-        if (p->getAusbildungRangierer())
-            ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem("Ja"));
-        else
-            clmn++;
+        if (anzeige.contains("Tf")) {
+            if (p->getAusbildungTf())
+                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Ja"));
+            else
+                clmn++;
+        }
+        if (anzeige.contains("Zf")) {
+            if (p->getAusbildungZf())
+                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Ja"));
+            else
+                clmn++;
+        }
+        if (anzeige.contains("Rangierer")) {
+            if (p->getAusbildungRangierer())
+                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Ja"));
+            else
+                clmn++;
+        }
+        if (anzeige.contains("Tauglichkeit")) {
+            i = new PersonTableWidgetItem(p);
+            i->setData(0, p->getTauglichkeit());
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
+        }
+        if (anzeige.contains("Bemerkung Betrieb."))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getSonstigeBetrieblich().replace("<br/>","\n")));
+        if (anzeige.contains("Sonst. Ausbildung"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getSonstigeAusbildung().replace("<br/>","\n")));
 
-        i = new QTableWidgetItem();
-        i->setData(0, p->getTauglichkeit());
-        ui->tabelleMitglieder->setItem(0, clmn++, i);
 
-        ui->tabelleMitglieder->setItem(0, clmn++, new QTableWidgetItem(p->getBemerkungen().replace("<br/>","\n")));
+        if (anzeige.contains("Mail Zustimmung")) {
+            if (p->getMailOK())
+                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Ja"));
+            else
+                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Nein"));
+        }
+        if (anzeige.contains("Telefon Zustimmung")) {
+            if (p->getTelefonOK())
+                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Ja"));
+            else
+                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Nein"));
+        }
+
+
+        if (anzeige.contains("Bemerkung"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getBemerkungen().replace("<br/>","\n")));
     }
 
     ui->tabelleMitglieder->setSortingEnabled(true);
@@ -275,11 +347,15 @@ void MainWindowPersonal::on_comboAnzeige_currentIndexChanged(int index)
 
 void MainWindowPersonal::on_tabelleMitglieder_cellDoubleClicked(int row, [[maybe_unused]] int column)
 {
-    QString name = ui->tabelleMitglieder->item(row, 0)->text() + " " + ui->tabelleMitglieder->item(row, 1)->text();
-    Person * p = personal->getPerson(name);
-    if (p != nullptr) {
-        showPerson(p);
+    PersonTableWidgetItem *clicked = dynamic_cast<PersonTableWidgetItem*>(ui->tabelleMitglieder->item(row, column));
+    if (clicked != nullptr) {
+        showPerson(clicked->getPerson());
     }
+//    QString name = ui->tabelleMitglieder->item(row, 0)->text() + " " + ui->tabelleMitglieder->item(row, 1)->text();
+//    Person * p = personal->getPerson(name);
+//    if (p != nullptr) {
+//        showPerson(p);
+//    }
 }
 
 
@@ -312,4 +388,14 @@ QList<Person*> MainWindowPersonal::getSortierteListe()
             liste.append(pers);
     }
     return liste;
+}
+
+void MainWindowPersonal::on_listAnzeige_itemChanged(QListWidgetItem *item)
+{
+    if (item->checkState() == Qt::CheckState::Checked) {
+        anzeige.insert(item->text());
+    } else {
+        anzeige.remove(item->text());
+    }
+    on_actionAktualisieren_triggered();
 }

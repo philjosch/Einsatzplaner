@@ -36,9 +36,6 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QListWidget" name="listAnzeige">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="maximumSize">
         <size>
          <width>175</width>
@@ -56,6 +53,62 @@
        </property>
        <item>
         <property name="text">
+         <string>Persönliches</string>
+        </property>
+        <property name="flags">
+         <set>ItemIsEnabled</set>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Vorname</string>
+        </property>
+        <property name="checkState">
+         <enum>Checked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Nachname</string>
+        </property>
+        <property name="checkState">
+         <enum>Checked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Geburtsdatum</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Geschlecht</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Anrede</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Beruf</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Mitgliedschaft</string>
         </property>
         <property name="flags">
@@ -64,15 +117,7 @@
        </item>
        <item>
         <property name="text">
-         <string>Mitgliedsnummer</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Status</string>
+         <string>Nummer</string>
         </property>
         <property name="checkState">
          <enum>Checked</enum>
@@ -88,6 +133,14 @@
        </item>
        <item>
         <property name="text">
+         <string>Status</string>
+        </property>
+        <property name="checkState">
+         <enum>Checked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Austritt</string>
         </property>
         <property name="checkState">
@@ -96,37 +149,34 @@
        </item>
        <item>
         <property name="text">
-         <string>Persönliches</string>
-        </property>
-        <property name="flags">
-         <set>ItemIsEnabled</set>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Geburtsdatum</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Beruf</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Geschlecht</string>
+         <string>Beitragsart</string>
         </property>
         <property name="checkState">
          <enum>Unchecked</enum>
         </property>
-        <property name="flags">
-         <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
+       </item>
+       <item>
+        <property name="text">
+         <string>IBAN</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Bank</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Kontoinhaber</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
         </property>
        </item>
        <item>
@@ -166,7 +216,7 @@
          <string>Strecke</string>
         </property>
         <property name="checkState">
-         <enum>Checked</enum>
+         <enum>Unchecked</enum>
         </property>
        </item>
        <item>
@@ -187,14 +237,6 @@
        </item>
        <item>
         <property name="text">
-         <string>Mail Zustimmung</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>Telefon</string>
         </property>
         <property name="checkState">
@@ -203,10 +245,10 @@
        </item>
        <item>
         <property name="text">
-         <string>Telefon Zustimmung</string>
+         <string>Telefon2</string>
         </property>
         <property name="checkState">
-         <enum>Unchecked</enum>
+         <enum>Checked</enum>
         </property>
        </item>
        <item>
@@ -262,7 +304,23 @@
        </item>
        <item>
         <property name="text">
-         <string>Sonstiges</string>
+         <string>Bemerkung Betrieb.</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Sonst. Ausbildung</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Datenschutz</string>
         </property>
         <property name="flags">
          <set>ItemIsEnabled</set>
@@ -270,35 +328,26 @@
        </item>
        <item>
         <property name="text">
-         <string>Beitragsart</string>
+         <string>Mail Zustimmung</string>
         </property>
         <property name="checkState">
          <enum>Unchecked</enum>
-        </property>
-        <property name="flags">
-         <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>IBAN</string>
+         <string>Telefon Zustimmung</string>
         </property>
         <property name="checkState">
          <enum>Unchecked</enum>
-        </property>
-        <property name="flags">
-         <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Bank</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
+         <string>Sonstiges</string>
         </property>
         <property name="flags">
-         <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
+         <set>ItemIsEnabled</set>
         </property>
        </item>
        <item>

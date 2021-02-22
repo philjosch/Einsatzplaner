@@ -10,7 +10,7 @@ const QString Person::FARBE_FEHLENDE_STUNDEN = "#ff9999";
 const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";
 const QString Person::FARBE_STANDARD = "#ffffff";
 const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsdatum;Geschlecht;Anrede;Beruf;"
-                                               "Eintritt;Status;Austritt;Beiragsart;IBAN;Bank;Konotinhaber;"
+                                               "Eintritt;Status;Austritt;Beiragsart;IBAN;Bank;Kontoinhaber;"
                                                "Tf;Zf;Rangierer;Tauglichkeit;BemerkungBetrieb;AusbildungSonst;"
                                                "Straße;PLZ;Ort;Strecke;Mail;Telefon;Telefon2;"
                                                "Zustimmung Mail;Zustimmung Telefon;"
@@ -917,9 +917,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML()
     }
     absch += help.arg("Beitragsart").arg(getStringVonBeitragsart(beitragsart));
     if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
-        Person *pers = manager->getPersonFromID(kontoinhaber);
-        if (pers != nullptr)
-            absch += help.arg("Zahler").arg(pers->getName());
+        absch += help.arg("Zahler").arg(getKontoinhaberText());
     } else {
         absch += help.arg("Konto").arg("%2 bei %3").arg(iban).arg(bank);
         absch += help.arg("Kontoinhaber").arg(kontoinhaber);
@@ -1015,10 +1013,7 @@ QString Person::getPersonaldatenFuerListeAlsCSV()
             +";"+getStringVonBeitragsart(beitragsart)
             +";"+iban
             +";"+bank
-            +";"+(
-                beitragsart == Person::Beitragsart::FamilienBeitragNutzer
-                ? (manager->getPersonFromID(kontoinhaber) != nullptr ? manager->getPersonFromID(kontoinhaber)->getName() : "")
-                : "")
+            +";"+getKontoinhaberText()
             +";"+sonstigeBetrieblich.replace("\n","<br/>")
             +";"+sonstigeAusbildung.replace("\n","<br/>")
 
@@ -1137,6 +1132,15 @@ void Person::setBank(const QString &value)
 
 QString Person::getKontoinhaber() const
 {
+    return kontoinhaber;
+}
+QString Person::getKontoinhaberText()
+{
+    if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
+        Person *pers = manager->getPersonFromID(kontoinhaber);
+        if (pers != nullptr)
+            return pers->getName();
+    }
     return kontoinhaber;
 }
 void Person::setKontoinhaber(const QString &value)

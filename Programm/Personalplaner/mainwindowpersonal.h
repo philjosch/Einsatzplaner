@@ -5,6 +5,9 @@
 #include "manager.h"
 #include "personwindow.h"
 
+#include <QListWidget>
+#include <QTableWidgetItem>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindowPersonal; }
 QT_END_NAMESPACE
@@ -20,8 +23,27 @@ public:
 
     static bool open(QString path);
 
+    class PersonTableWidgetItem : public QTableWidgetItem {
+    public:
+        PersonTableWidgetItem(Person *p, QString s) : QTableWidgetItem(s)
+        {
+            person = p;
+        }
+        PersonTableWidgetItem(Person *p) : QTableWidgetItem() {
+            person = p;
+        }
+        Person *getPerson() const
+        {
+            return person;
+        }
+
+    protected: Person *person;
+    };
+
 private:
     void constructorMainWindowPersonal();
+
+
 
 protected slots:
     //** Vererbte Methoden von CoreMainWindow
@@ -66,6 +88,11 @@ protected:
     //** Controller
     QList<Person*> current;
     Mitglied filter;
+    QSet<QString> anzeige;
 
+    static const QList<QString> ANZEIGE_TABELLE;
+
+private slots:
+    void on_listAnzeige_itemChanged(QListWidgetItem *item);
 };
 #endif // MAINWINDOWPERSONAL_H

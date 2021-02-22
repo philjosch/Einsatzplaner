@@ -47,15 +47,11 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
     ui->comboBeitragsart->setCurrentIndex(p->getBeitragsart());
     ui->lineIBAN->setText(p->getIban());
     ui->lineBank->setText(p->getBank());
+    ui->lineKontoinhaber->setText(p->getKontoinhaberText());
     if (p->getBeitragsart() == Person::Beitragsart::FamilienBeitragNutzer) {
-        Person *pers = p->getManager()->getPersonFromID(p->getKontoinhaber());
-        if (pers != nullptr)
-            ui->lineKontoinhaber->setText(pers->getName());
         ui->labelKonto->setText("Zahler");
         ui->lineIBAN->setEnabled(false);
         ui->lineBank->setEnabled(false);
-    } else {
-        ui->lineKontoinhaber->setText(p->getKontoinhaber());
     }
 
     // Kontakt
