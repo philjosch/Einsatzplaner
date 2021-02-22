@@ -1,9 +1,11 @@
 #include "networking.h"
+#include "version.h"
 
 #include <QEventLoop>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QFile>
+#include <QMessageBox>
 
 QString Networking::ladeDatenVonURL(QString url)
 {
@@ -16,6 +18,10 @@ QString Networking::ladeDatenVonURL(QString url)
 
 bool Networking::ladeDateiHoch(Networking::Server server, QFile *datei)
 {
+    if (Version::isDebuggingVersion()) {
+        if (QMessageBox::question(nullptr, "Upload", "Soll der Upload durchgefuehrt werden?") != QMessageBox::Yes)
+            return false;
+    }
     QString url = server.getServerKomplett();
     if (!url.startsWith("http")) {
         url = "https://"+url;
