@@ -10,10 +10,15 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
     QMainWindow(parent), ui(new Ui::PersonWindow)
 {
     ui->setupUi(this);
+    ui->buttonGeschlecht->setId(ui->radioUnbekannt,  Person::Geschlecht::GeschlechtUnbekannt);
+    ui->buttonGeschlecht->setId(ui->radioJuristisch, Person::Geschlecht::Juristisch);
+    ui->buttonGeschlecht->setId(ui->radioMaennlich,  Person::Geschlecht::Maennlich);
+    ui->buttonGeschlecht->setId(ui->radioWeiblich,   Person::Geschlecht::Weiblich);
+    ui->buttonGeschlecht->setId(ui->radioDivers,     Person::Geschlecht::Divers);
 
     person = p;
 
-    connect(this, &PersonWindow::loeschen, parent, &CoreMainWindow::loeschenPerson);
+    connect(this, &PersonWindow::loeschen, parent, &CoreMainWindow::loeschenPerson);    
 
     enabled = false;
 
@@ -21,26 +26,47 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
     ui->lineVorname->setText(p->getVorname());
     ui->lineNachname->setText(p->getNachname());
 
-    // ** Stammdaten
-    // Allgemein
+    // Persoenliches
     ui->checkGeburtstag->setChecked(p->getGeburtstag().isNull());
     ui->dateGeburtstag->setEnabled(p->getGeburtstag().isValid());
     ui->dateGeburtstag->setDate(p->getGeburtstag());
+    ui->lineJob->setText(p->getBeruf());
+    ui->comboAnrede->setCurrentText(p->getAnrede());
+    ui->buttonGeschlecht->button(p->getGeschlecht())->click();
+
+
+    // Mitgliedschaft
     ui->checkEintritt->setChecked(p->getEintritt().isNull());
     ui->dateEintritt->setEnabled(p->getEintritt().isValid());
     ui->dateEintritt->setDate(p->getEintritt());
     ui->checkAktiv->setChecked(p->getAktiv());
-    ui->spinKm->setValue(p->getStrecke());
-    ui->lineJob->setText(p->getBeruf());
+    ui->checkAustritt->setChecked(p->getAustritt().isValid());
+    ui->dateAustritt->setEnabled(p->getAustritt().isValid());
+    ui->dateAustritt->setDate(p->getAustritt());
+
+    ui->comboBeitragsart->setCurrentIndex(p->getBeitragsart());
+    ui->lineIBAN->setText(p->getIban());
+    ui->lineBank->setText(p->getBank());
+    if (p->getBeitragsart() == Person::Beitragsart::FamilienBeitragNutzer) {
+        Person *pers = p->getManager()->getPersonFromID(p->getKontoinhaber());
+        if (pers != nullptr)
+            ui->lineKontoinhaber->setText(pers->getName());
+        ui->labelKonto->setText("Zahler");
+        ui->lineIBAN->setEnabled(false);
+        ui->lineBank->setEnabled(false);
+    } else {
+        ui->lineKontoinhaber->setText(p->getKontoinhaber());
+    }
 
     // Kontakt
     ui->lineStrasse->setText(p->getStrasse());
     ui->linePLZ->setText(p->getPLZ());
     ui->lineOrt->setText(p->getOrt());
+    ui->spinKm->setValue(p->getStrecke());
+
     ui->linePhone->setText(p->getTelefon());
-    ui->checkPhone->setChecked(p->getTelefonOK());
+    ui->linePhone2->setText(p->getTelefon2());
     ui->lineMail->setText(p->getMail());
-    ui->checkMail->setChecked(p->getMailOK());
 
     // Betriebsdienst
     ui->checkTf->setChecked(p->getAusbildungTf());
@@ -51,11 +77,14 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
     ui->dateDienst->setEnabled(p->getTauglichkeit().isValid());
     ui->dateDienst->setDate(p->getTauglichkeit());
 
+    ui->plainBetrieb->setPlainText(p->getSonstigeBetrieblich().replace("<br/>", "\n"));
+    ui->plainAusbildung->setPlainText(p->getSonstigeAusbildung().replace("<br/>", "\n"));
+
     // Sonstiges
+    ui->checkMail->setChecked(p->getMailOK());
+    ui->checkPhone->setChecked(p->getTelefonOK());
+
     ui->plainBemerkung->setPlainText(p->getBemerkungen().replace("<br/>","\n"));
-    ui->checkAustritt->setChecked(p->getAustritt().isValid());
-    ui->dateAustritt->setEnabled(p->getAustritt().isValid());
-    ui->dateAustritt->setDate(p->getAustritt());
 
     enabled = true;
 
@@ -279,7 +308,7 @@ void PersonWindow::on_checkDienst_clicked(bool checked)
 void PersonWindow::on_plainBemerkung_textChanged()
 {
     if (enabled) {
-        person->setBemerkungen(ui->plainBemerkung->toPlainText());
+        person->setBemerkungen(ui->plainBemerkung->toPlainText().replace("\n","<br/>"));
     }
 }
 
@@ -300,4 +329,79 @@ void PersonWindow::on_checkAustritt_clicked(bool checked)
             person->setAustritt(QDate());
         }
     }
+}
+
+void PersonWindow::on_comboAnrede_currentTextChanged(const QString &arg1)
+{
+    if (enabled)
+        person->setAnrede(arg1);
+}
+
+void PersonWindow::on_buttonGeschlecht_buttonClicked(int button)
+{
+    if (enabled)
+        person->setGeschlecht(static_cast<Person::Geschlecht>(button));
+}
+
+void PersonWindow::on_comboBeitragsart_currentIndexChanged(int index)
+{
+    Person::Beitragsart ba = static_cast<Person::Beitragsart>(index);
+    if (enabled)
+        person->setBeitragsart(ba);
+    ui->lineIBAN->setEnabled(ba != Person::Beitragsart::FamilienBeitragNutzer);
+    ui->lineBank->setEnabled(ba != Person::Beitragsart::FamilienBeitragNutzer);
+    ui->labelKonto->setText(ba != Person::Beitragsart::FamilienBeitragNutzer? "Kontoinhaber":"Zahler");
+
+}
+
+void PersonWindow::on_lineIBAN_textChanged(const QString &arg1)
+{
+    if (enabled)
+        person->setIban(arg1);
+}
+
+void PersonWindow::on_lineBank_textChanged(const QString &arg1)
+{
+    if (enabled)
+        person->setBank(arg1);
+}
+
+void PersonWindow::on_lineKontoinhaber_textChanged(const QString &arg1)
+{
+    if (enabled) {
+        if (person->getBeitragsart() == Person::Beitragsart::FamilienBeitragNutzer) {
+            Person *zahler = person->getManager()->getPerson(arg1);
+            if (zahler != nullptr) {
+                if (zahler == person) {
+                    ui->statusbar->showMessage("Bitte geben Sie einen anderen Namen ein, als der der Person!");
+                } else {
+                    person->setKontoinhaber(zahler->getId());
+                    ui->statusbar->showMessage("Person wurde erfolgreich als Zahler hinterlegt!");
+                }
+            } else {
+                ui->statusbar->showMessage("Bitte geben Sie einen Namen für die Person ein, welche den Mitgliedbeitrag zahlt!");
+            }
+
+        } else {
+            person->setKontoinhaber(arg1);
+        }
+    }
+}
+
+void PersonWindow::on_linePhone2_textChanged(const QString &arg1)
+{
+    if (enabled)
+        person->setTelefon2(arg1);
+}
+
+void PersonWindow::on_plainBetrieb_textChanged()
+{
+    if (enabled)
+        person->setSonstigeBetrieblich(ui->plainBetrieb->toPlainText().replace("\n","<br/>"));
+}
+
+void PersonWindow::on_plainAusbildung_textChanged()
+{
+    if (enabled)
+        person->setSonstigeAusbildung(ui->plainAusbildung->toPlainText().replace("\n","<br/>"));
 }

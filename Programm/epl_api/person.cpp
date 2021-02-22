@@ -9,7 +9,12 @@
 const QString Person::FARBE_FEHLENDE_STUNDEN = "#ff9999";
 const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";
 const QString Person::FARBE_STANDARD = "#ffffff";
-const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsdatum;Eintritt;Status;Austritt;Tf;Zf;Rangierer;Tauglichkeit;Straße;PLZ;Ort;Mail;Zustimmung Mail;Telefon;Zustimmung Telefon;Strecke;Beruf;Bemerkung\n";
+const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsdatum;Geschlecht;Anrede;Beruf;"
+                                               "Eintritt;Status;Austritt;Beiragsart;IBAN;Bank;Konotinhaber;"
+                                               "Tf;Zf;Rangierer;Tauglichkeit;BemerkungBetrieb;AusbildungSonst;"
+                                               "Straße;PLZ;Ort;Strecke;Mail;Telefon;Telefon2;"
+                                               "Zustimmung Mail;Zustimmung Telefon;"
+                                               "Bemerkung\n";
 const QString Person::KOPF_TABELLE_LISTE_HTML = "<h3>%1 – Stand %2</h3>"
                                                    "<table cellspacing='0' width='100%'><thead><tr>"
                                                    "<th>Name<br/>Mitgliedsnummer<br/>Status</th>"
@@ -20,6 +25,42 @@ const QString Person::KOPF_TABELLE_LISTE_HTML = "<h3>%1 – Stand %2</h3>"
                                                    "<th>Sonstiges</th>"
                                                    "</thead><tbody>";
 const QString Person::FUSS_TABELLE_LISTE_HTML = "</tbody></table>";
+
+QString Person::getStringVonGeschlecht(Person::Geschlecht g)
+{
+    switch (g) {
+    case GeschlechtUnbekannt:
+        return tr("Unbekannt");
+    case Juristisch:
+        return tr("Juristische Person");
+    case Maennlich:
+        return tr("Männlich");
+    case Weiblich:
+        return tr("Weiblich");
+    case Divers:
+        return tr("Divers");
+    }
+}
+
+QString Person::getStringVonBeitragsart(Person::Beitragsart b)
+{
+    switch (b) {
+    case BeitragUnbekannt:
+        return tr("Unbekannt");
+    case Beitragsfrei:
+        return tr("beitragsbefreit");
+    case AktivenBeitrag:
+        return tr("Beitrag Aktive");
+    case FoerderBeitrag:
+        return tr("Förderbeitrag");
+    case FamilienBeitragZahler:
+        return tr("Familienbeitrag (Zahler)");
+    case FamilienBeitragNutzer:
+        return tr("Familienbeitrag (Nutzer)");
+    case Ermaessigt:
+        return tr("Ermäßigt");
+    }
+}
 
 Person::Person(QString name, ManagerPersonal *manager) : QObject()
 {
@@ -53,7 +94,7 @@ Person::Person(QJsonObject o, ManagerPersonal *man) : QObject()
     if (o.contains("id")) {
         id = o.value("id").toString();
     } else {
-        id = QString::number(QDateTime::currentDateTime().toSecsSinceEpoch())+QString::number(QRandomGenerator::global()->bounded(1000000,9999999));
+        id = getRandomID();
     }
     if (o.contains("vorname") && o.contains("nachname")) {
         vorname = o.value("vorname").toString();
@@ -78,25 +119,36 @@ Person::Person(QJsonObject o, ManagerPersonal *man) : QObject()
     }
 
     geburtstag = QDate::fromString(o.value("geburtstag").toString(), "yyyy-MM-dd");
+    anrede = o.value("anrede").toString();
+    geschlecht = static_cast<Geschlecht>(o.value("geschlecht").toInt());
+    beruf= o.value("beruf").toString();
+
     eintritt = QDate::fromString(o.value("eintritt").toString(), "yyyy-MM-dd");
     aktiv = o.value("aktiv").toBool(true);
     austritt = QDate::fromString(o.value("austritt").toString(), "yyyy-MM-dd");
+    beitragsart = static_cast<Beitragsart>(o.value("beitragsart").toInt());
+    iban = o.value("iban").toString();
+    bank = o.value("bank").toString();
+    kontoinhaber = o.value("kontoinhaber").toString();
 
     ausbildungRangierer = o.value("ausRang").toBool();
     ausbildungZf = o.value("ausZf").toBool();
     ausbildungTf = o.value("ausTf").toBool();
     tauglichkeit = QDate::fromString(o.value("tauglichkeit").toString(), "yyyy-MM-dd");
+    sonstigeBetrieblich = o.value("sonstBetrieb").toString();
+    sonstigeAusbildung = o.value("sonstigeAusb").toString();
 
     strasse = o.value("strasse").toString();
     plz = o.value("plz").toString();
     ort = o.value("ort").toString();
+    strecke = o.value("strecke").toInt();
     mail = o.value("mail").toString();
-    mailOK = o.value("mailOK").toBool(true);
     telefon = o.value("tel").toString();
+    telefon2 = o.value("tel2").toString();
+
+    mailOK = o.value("mailOK").toBool(true);
     telefonOK = o.value("telOK").toBool(true);
 
-    strecke = o.value("strecke").toInt();
-    beruf= o.value("beruf").toString();
     bemerkungen = o.value("bemerkung").toString();
     if (o.contains("additionalKeys") && o.contains("additionalValues")) {
         QJsonArray keys = o.value("additionalKeys").toArray();
@@ -120,7 +172,7 @@ Person::Person(QJsonObject o, ManagerPersonal *man) : QObject()
     }
 }
 
-void Person::personConstructor(QString vn, QString nn, ManagerPersonal *man, QString ID)
+void Person::personConstructor(QString vn, QString nn, ManagerPersonal *man)
 {
     additional = QMap<Category, int>();
     zeiten = QMap<Category, int>();
@@ -129,10 +181,7 @@ void Person::personConstructor(QString vn, QString nn, ManagerPersonal *man, QSt
     valuesInvalid = true;
     manager = man;
 
-    if (ID == "")
-        id = QString::number(QDateTime::currentDateTime().toSecsSinceEpoch())+QString::number(QRandomGenerator::global()->bounded(1000000,9999999));
-    else
-        id = ID;
+    id = getRandomID();
 
     if (manager == nullptr)
         nummer = 1;
@@ -141,31 +190,97 @@ void Person::personConstructor(QString vn, QString nn, ManagerPersonal *man, QSt
     vorname = vn;
     nachname = nn;
     geburtstag = QDate();
+    anrede = "";
+    geschlecht = Geschlecht::GeschlechtUnbekannt;
+    beruf = "";
+
     eintritt = QDate::currentDate();
     aktiv = true;
     austritt = QDate();
+    beitragsart = Beitragsart::AktivenBeitrag;
+    iban = "";
+    bank = "";
+    kontoinhaber = "";
 
     ausbildungTf = false;
     ausbildungZf = false;
     ausbildungRangierer = false;
     tauglichkeit = QDate();
+    sonstigeBetrieblich = "";
+    sonstigeAusbildung = "";
 
     strasse = "";
     plz = "";
     ort = "";
+    strecke = 0;
     mail = "";
-    mailOK = true;
     telefon = "";
+    telefon2 = "";
+
+    mailOK = true;
     telefonOK = true;
     // Sonstiges
-    strecke = 0;
-    beruf = "";
     bemerkungen = "";
+}
+
+QString Person::getRandomID()
+{
+    return QString::number(QDateTime::currentDateTime().toSecsSinceEpoch())+QString::number(QRandomGenerator::global()->bounded(1000000,9999999));
 }
 
 ManagerPersonal *Person::getManager() const
 {
     return manager;
+}
+
+QString Person::getAnrede() const
+{
+    return anrede;
+}
+void Person::setAnrede(const QString &value)
+{
+    anrede = value;
+    emit changed();
+}
+
+Person::Geschlecht Person::getGeschlecht() const
+{
+    return geschlecht;
+}
+void Person::setGeschlecht(const Person::Geschlecht &value)
+{
+    geschlecht = value;
+    emit changed();
+}
+
+QString Person::getSonstigeBetrieblich() const
+{
+    return sonstigeBetrieblich;
+}
+void Person::setSonstigeBetrieblich(const QString &value)
+{
+    sonstigeBetrieblich = value;
+    emit changed();
+}
+
+QString Person::getSonstigeAusbildung() const
+{
+    return sonstigeAusbildung;
+}
+void Person::setSonstigeAusbildung(const QString &value)
+{
+    sonstigeAusbildung = value;
+    emit changed();
+}
+
+QString Person::getTelefon2() const
+{
+    return telefon2;
+}
+void Person::setTelefon2(const QString &value)
+{
+    telefon2 = value;
+    emit changed();
 }
 
 QJsonObject Person::toJson()
@@ -193,25 +308,36 @@ QJsonObject Person::personalToJson()
     o.insert("vorname", vorname);
     o.insert("nachname", nachname);
     o.insert("geburtstag", geburtstag.toString("yyyy-MM-dd"));
+    o.insert("anrede", anrede);
+    o.insert("geschlecht", geschlecht);
+    o.insert("beruf", beruf);
+
     o.insert("eintritt", eintritt.toString("yyyy-MM-dd"));
     o.insert("aktiv", aktiv);
     o.insert("austritt", austritt.toString("yyyy-MM-dd"));
+    o.insert("beitragsart", beitragsart);
+    o.insert("iban", iban);
+    o.insert("bank", bank);
+    o.insert("kontoinhaber", kontoinhaber);
 
     o.insert("ausTf", ausbildungTf);
     o.insert("ausZf", ausbildungZf);
     o.insert("ausRang", ausbildungRangierer);
     o.insert("tauglichkeit", tauglichkeit.toString("yyyy-MM-dd"));
+    o.insert("sonstBetrieb", sonstigeBetrieblich);
+    o.insert("sonstigeAusb", sonstigeAusbildung);
 
     o.insert("strasse", strasse);
     o.insert("plz", plz);
     o.insert("ort", ort);
+    o.insert("strecke", strecke);
     o.insert("mail", mail);
-    o.insert("mailOK", mailOK);
     o.insert("tel", telefon);
+    o.insert("tel2", telefon2);
+
+    o.insert("mailOK", mailOK);
     o.insert("telOK", telefonOK);
 
-    o.insert("strecke", strecke);
-    o.insert("beruf", beruf);
     o.insert("bemerkung", bemerkungen);
     return o;
 }
@@ -700,6 +826,8 @@ QString Person::getZeitenFuerEinzelAlsHTML()
 
 QString Person::getPersonaldatenFuerListeAlsHTML()
 {
+    // TODO: Muss ueberarbeitet werden, wenn die Exportfunktion ueberarbeitet wird!!!!
+    // Ebenso muessen die neuen Werte it ausgegeben werden!!!
     QString h = "<tr>";
     h += "<td>"+getName()+"<br/>"
             +QString::number(nummer)+"<br/>";
@@ -760,55 +888,114 @@ QString Person::getPersonaldatenFuerListeAlsHTML()
 QString Person::getPersonaldatenFuerEinzelAlsHTML()
 {
     QString h = "<h2>"+vorname+" "+nachname+"</h2>";
+    QString absch = "";
 
-    QString help = "%1:\t\t %2<br/>";
-    h += "<h3>Stammdaten</h3><p>";
-    h += help.arg("Mitgliedsnummer").arg(nummer);
-    h += help.arg("Status").arg( isAusgetreten() ? "Ehemals %1" : "%1")
+    QString help = "<li>%1:\t\t %2</li>";
+
+    if (geburtstag.isValid())
+        absch += help.arg("Geburtstag").arg(geburtstag.toString("dd.MM.yyyy"));
+    if (anrede != "")
+        absch += help.arg("Anrede").arg(anrede);
+    absch += help.arg("Geschlecht").arg(getStringVonGeschlecht(geschlecht));
+    if (beruf != "")
+        absch += help.arg("Beruf").arg(beruf);
+    if (absch != "")
+        h += "<h3>Persönliche Daten</h3><ul>"+ absch + "</ul>";
+
+
+    // Mitgliedsdaten
+    absch = "";
+    absch += help.arg("Mitgliedsnummer").arg(nummer);
+    absch += help.arg("Status").arg( isAusgetreten() ? "Ehemals %1" : "%1")
             .arg(aktiv ? "Aktiv":"Passiv");
-
-    // Daten
-    h += help.arg("Geburtstag").arg(geburtstag.toString("dd.MM.yyyy"));
-    h += help.arg("Eintritt").arg(eintritt.toString("dd.MM.yyyy"));
+    absch += help.arg("Eintritt").arg(eintritt.toString("dd.MM.yyyy"));
     if (isAusgetreten()) {
-        h += help.arg("Austritt").arg(austritt.toString("dd.MM.yyyy"));
+        absch += help.arg("Austritt").arg(austritt.toString("dd.MM.yyyy"));
     } else {
         if (austritt.isValid())
-            h += help.arg("Austritt zum").arg(austritt.toString("dd.MM.yyyy"));
+            absch += help.arg("Austritt zum").arg(austritt.toString("dd.MM.yyyy"));
     }
-    h += help.arg("Beruf").arg(beruf);
+    absch += help.arg("Beitragsart").arg(getStringVonBeitragsart(beitragsart));
+    if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
+        Person *pers = manager->getPersonFromID(kontoinhaber);
+        if (pers != nullptr)
+            absch += help.arg("Zahler").arg(pers->getName());
+    } else {
+        absch += help.arg("Konto").arg("%2 bei %3").arg(iban).arg(bank);
+        absch += help.arg("Kontoinhaber").arg(kontoinhaber);
+    }
+    if (absch != "")
+        h += "<h3>Mitgliedschaft</h3><ul>" + absch + "</ul>";
 
-    h += "</p><h3>Anschrift</h3><p>";
 
     // Anschrift
-    h += help.arg("Straße").arg(strasse);
-    h += help.arg("PLZ").arg(plz);
-    h += help.arg("Ort").arg(ort);
-    h += help.arg("Strecke").arg("%1km").arg(strecke);
-
-    h += "</p><h3>Kontaktdaten</h3><p>";
+    absch = "";
+    if (strasse != "")
+        absch += help.arg("Straße").arg(strasse);
+    if (plz != "" || ort != "")
+        absch += help.arg("PLZ und Ort").arg("%1 %2").arg(plz).arg(ort);
+    if (strecke != 0)
+        absch +=  help.arg("Strecke").arg("%1km").arg(strecke);
+//    if (absch != "")
+//        h += "<h3>Anschrift</h3><ul>" + absch + "</ul>";
 
     // Kontakt
-    h += help.arg("Mail (darf %3weitergegeben werden)").arg(mail).arg(mailOK ? "" : "nicht ");
-    h += help.arg("Telefon (darf %3weitergegeben werden)").arg(telefon).arg(telefonOK ? "" : "nicht ");
-    h += "</p>";
-
-    if (ausbildungRangierer || ausbildungTf || ausbildungZf || tauglichkeit.isValid()) {
-        h += "<h3>Betriebsdienst</h3><p>";
-        h += help.arg("Tauglichkeit bis").arg(tauglichkeit.toString("dd.MM.yyyy"));
-        h += help.arg("Ausbildung zum").arg("") + "</p><ul>";
-        h += (ausbildungTf? "<li>Triebfahrzeugführer</li>": "");
-        h += (ausbildungZf? "<li>Zugführer</li>":"");
-        h += (ausbildungRangierer? "<li>Rangierer</li>":"");
-        h += "</ul>";
+//    absch = "";
+    if (mail != "")
+        absch += help.arg("Mail").arg(mail);
+    if (telefon != "") {
+        if (telefon2 != "")
+            absch += help.arg("Telefon").arg("%2, %3").arg(telefon).arg(telefon2);
+        else
+            absch += help.arg("Telefon").arg(telefon);
+    } else {
+        if (telefon2 != "")
+            absch += help.arg("Telefon").arg(telefon2);
     }
+    if (absch != "")
+        h += "<h3>Kontaktdaten</h3><ul>" + absch + "</ul>";
+
+    // Ausbildung
+    absch = "";
+    if (tauglichkeit.isValid())
+        absch += help.arg("Tauglichkeit bis").arg(tauglichkeit.toString("dd.MM.yyyy"));
+    if (ausbildungTf || ausbildungZf || ausbildungRangierer) {
+        bool komma = false;
+        absch += help.arg("Ausbildung zum");
+        if (ausbildungTf) {
+            komma = true;
+            absch = absch.arg("Triebfahrzeugführer%1");
+        }
+        if (ausbildungZf) {
+            if (komma) absch = absch.arg(", %1");
+            komma = true;
+            absch = absch.arg("Zugführer%1");
+        }
+        if (ausbildungRangierer) {
+            if (komma) absch = absch.arg(" und %1");
+            absch = absch.arg("Rangierer");
+        }
+    }
+    if (sonstigeBetrieblich != "")
+        absch += "<li>Sonstige Betriebliche Bemerkungen:<br/><i>" + sonstigeBetrieblich + "</i></li>";
+    if (sonstigeAusbildung != "")
+        absch += "<li>Sonstige Ausbildungen:<br/><i>" + sonstigeAusbildung + "</i></li>";
+    if (absch != "")
+        h += "<h3>Ausbildung</h3><ul>" + absch + "</ul>";
+
+    // Datenschutz
+    h += "<h3>Datenschutz</h3><ul>";
+    h += help.arg("Sperrvermerk Mail").arg(mailOK ? "Nein" : "Ja");
+    h += help.arg("Sperrvermerk Telefon").arg(telefonOK ? "Nein" : "Ja");
+    h += "</ul>";
 
     // Sonstiges
-    if (bemerkungen != "") {
-        h += "<h3>Sonstiges</h3><p>";
-        h += help.arg("Bemerkung").arg(bemerkungen);
-        h += "</p>";
-    }
+    absch = "";
+    if (bemerkungen != "")
+        absch += "Bemerkung:<br/><i>"+ bemerkungen + "</i>";
+    if (absch != "")
+        h += "<h3>Sonstiges</h3><p>" + absch + "</p>";
+
     return h;
 }
 
@@ -818,25 +1005,40 @@ QString Person::getPersonaldatenFuerListeAlsCSV()
             +";"+nachname
             +";"+vorname
             +";"+geburtstag.toString("dd.MM.yyyy")
+            +";"+getStringVonGeschlecht(geschlecht)
+            +";"+anrede
+            +";"+beruf
+
             +";"+eintritt.toString("dd.MM.yyyy")
             +";"+(aktiv?"Aktiv":"Passiv")
             +";"+austritt.toString("dd.MM.yyyy")
+            +";"+getStringVonBeitragsart(beitragsart)
+            +";"+iban
+            +";"+bank
+            +";"+(
+                beitragsart == Person::Beitragsart::FamilienBeitragNutzer
+                ? (manager->getPersonFromID(kontoinhaber) != nullptr ? manager->getPersonFromID(kontoinhaber)->getName() : "")
+                : "")
+            +";"+sonstigeBetrieblich.replace("\n","<br/>")
+            +";"+sonstigeAusbildung.replace("\n","<br/>")
 
             +";"+(ausbildungTf ? "WAHR":"FALSCH")
             +";"+(ausbildungZf ? "WAHR":"FALSCH")
             +";"+(ausbildungRangierer ? "WAHR":"FALSCH")
             +";"+tauglichkeit.toString("dd.MM.yyyy")
 
+
             +";"+strasse
             +";"+plz
             +";"+ort
+            +";"+QString::number(strecke)
             +";"+mail
-            +";"+(mailOK ? "WAHR" : "FALSCH")
             +";"+telefon
+            +";"+telefon2
+
+            +";"+(mailOK ? "WAHR" : "FALSCH")
             +";"+(telefonOK ? "WAHR" : "FALSCH")
 
-            +";"+QString::number(strecke)
-            +";"+beruf
             +";"+bemerkungen.replace("\n","<br/>")
             +"\n";
 }
@@ -900,6 +1102,46 @@ QDate Person::getAustritt() const
 void Person::setAustritt(const QDate &value)
 {
     austritt = value;
+    emit changed();
+}
+
+Person::Beitragsart Person::getBeitragsart() const
+{
+    return beitragsart;
+}
+void Person::setBeitragsart(const Person::Beitragsart &value)
+{
+    beitragsart = value;
+    emit changed();
+}
+
+QString Person::getIban() const
+{
+    return iban;
+}
+void Person::setIban(const QString &value)
+{
+    iban = value;
+    emit changed();
+}
+
+QString Person::getBank() const
+{
+    return bank;
+}
+void Person::setBank(const QString &value)
+{
+    bank = value;
+    emit changed();
+}
+
+QString Person::getKontoinhaber() const
+{
+    return kontoinhaber;
+}
+void Person::setKontoinhaber(const QString &value)
+{
+    kontoinhaber = value;
     emit changed();
 }
 

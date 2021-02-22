@@ -116,6 +116,198 @@
        <number>0</number>
       </property>
       <widget class="QWidget" name="tabWidgetStammdatenPage1">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="tabPersoenliches">
+       <attribute name="title">
+        <string>Persönliches</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0,0,1" columnstretch="0,0,0,1">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="labelGeburtstag">
+          <property name="text">
+           <string>Geburtstag</string>
+          </property>
+          <property name="buddy">
+           <cstring>dateGeburtstag</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QDateEdit" name="dateGeburtstag">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="displayFormat">
+           <string>dd.MM.yyyy</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2" colspan="2">
+         <widget class="QCheckBox" name="checkGeburtstag">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Unbekannt</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="labelGeschlecht">
+          <property name="text">
+           <string>Geschlecht</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QRadioButton" name="radioMaennlich">
+          <property name="text">
+           <string>Männlich</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGeschlecht</string>
+          </attribute>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QRadioButton" name="radioWeiblich">
+          <property name="text">
+           <string>Weiblich</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGeschlecht</string>
+          </attribute>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QRadioButton" name="radioDivers">
+          <property name="text">
+           <string>Divers</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGeschlecht</string>
+          </attribute>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="2">
+         <widget class="QRadioButton" name="radioJuristisch">
+          <property name="text">
+           <string>Juristische Person</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGeschlecht</string>
+          </attribute>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QRadioButton" name="radioUnbekannt">
+          <property name="text">
+           <string>Unbekannt</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGeschlecht</string>
+          </attribute>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="labelAnrede">
+          <property name="text">
+           <string>Anrede</string>
+          </property>
+          <property name="buddy">
+           <cstring>comboAnrede</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1" colspan="3">
+         <widget class="QComboBox" name="comboAnrede">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>Herr</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Frau</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Liebe</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Lieber</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Sehr geehrte Damen und Herren</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="labelBeruf">
+          <property name="text">
+           <string>Beruf</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineJob</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1" colspan="3">
+         <widget class="QLineEdit" name="lineJob"/>
+        </item>
+        <item row="5" column="1">
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>142</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabMitgliedschaft">
        <attribute name="title">
         <string>Mitgliedschaft</string>
        </attribute>
@@ -135,7 +327,7 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <item row="4" column="1">
+        <item row="7" column="1">
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -148,17 +340,23 @@
           </property>
          </spacer>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="labelAustritt">
+        <item row="1" column="0">
+         <widget class="QLabel" name="labelAktiv">
           <property name="text">
-           <string>Austritt</string>
+           <string>Status</string>
+          </property>
+          <property name="buddy">
+           <cstring>checkAktiv</cstring>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="labelGeburtstag">
+        <item row="4" column="0">
+         <widget class="QLabel" name="labelIBAN">
           <property name="text">
-           <string>Geburtstag</string>
+           <string>IBAN</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineIBAN</cstring>
           </property>
          </widget>
         </item>
@@ -175,26 +373,14 @@
           </property>
          </spacer>
         </item>
-        <item row="1" column="1">
-         <widget class="QDateEdit" name="dateGeburtstag">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="displayFormat">
-           <string>dd.MM.yyyy</string>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="checkAustritt">
+          <property name="text">
+           <string>Austritt zum</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
+        <item row="2" column="2">
          <widget class="QDateEdit" name="dateAustritt">
           <property name="minimumSize">
            <size>
@@ -209,7 +395,7 @@
            <date>
             <year>1999</year>
             <month>11</month>
-            <day>20</day>
+            <day>16</day>
            </date>
           </property>
           <property name="displayFormat">
@@ -227,24 +413,23 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="labelAktiv">
-          <property name="text">
-           <string>Status</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QCheckBox" name="checkAustritt">
-          <property name="text">
-           <string>Austritt zum</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="0">
          <widget class="QLabel" name="labelEintritt">
           <property name="text">
            <string>Eintritt</string>
+          </property>
+          <property name="buddy">
+           <cstring>dateEintritt</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="labelAustritt">
+          <property name="text">
+           <string>Austritt</string>
+          </property>
+          <property name="buddy">
+           <cstring>dateAustritt</cstring>
           </property>
          </widget>
         </item>
@@ -260,7 +445,7 @@
            <date>
             <year>1999</year>
             <month>11</month>
-            <day>21</day>
+            <day>17</day>
            </date>
           </property>
           <property name="displayFormat">
@@ -281,6 +466,13 @@
           </property>
          </widget>
         </item>
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="checkAktiv">
+          <property name="text">
+           <string>Aktiv</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="2">
          <widget class="QCheckBox" name="checkEintritt">
           <property name="enabled">
@@ -291,30 +483,94 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QCheckBox" name="checkAktiv">
+        <item row="3" column="0">
+         <widget class="QLabel" name="labelBeitragsart">
           <property name="text">
-           <string>Aktiv</string>
+           <string>Beitragsart</string>
+          </property>
+          <property name="buddy">
+           <cstring>comboBeitragsart</cstring>
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
-         <widget class="QCheckBox" name="checkGeburtstag">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
+        <item row="5" column="0">
+         <widget class="QLabel" name="labelBank">
           <property name="text">
-           <string>Unbekannt</string>
+           <string>Bankname</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineBank</cstring>
           </property>
          </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="labelKonto">
+          <property name="text">
+           <string>Kontoinhaber</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineKontoinhaber</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1" colspan="2">
+         <widget class="QComboBox" name="comboBeitragsart">
+          <property name="currentIndex">
+           <number>2</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>Unbekannt</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Beitragsfrei</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Aktivenbeitrag</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Förderbeitrag</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Familienbeitrag (Zahler)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Familienbeitrag (Nutzer)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Ermäßigt</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="4" column="1" colspan="2">
+         <widget class="QLineEdit" name="lineIBAN"/>
+        </item>
+        <item row="5" column="1" colspan="2">
+         <widget class="QLineEdit" name="lineBank"/>
+        </item>
+        <item row="6" column="1" colspan="2">
+         <widget class="QLineEdit" name="lineKontoinhaber"/>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabWidgetStammdatenPage2">
+      <widget class="QWidget" name="tabKontakt">
        <attribute name="title">
         <string>Kontakt</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_11" columnstretch="0,0,1">
+       <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,1" rowminimumheight="0,0,0,0,0,0,0,1">
         <property name="leftMargin">
          <number>6</number>
         </property>
@@ -330,29 +586,6 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <item row="6" column="1">
-         <spacer name="verticalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>66</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="2" column="0" rowspan="2">
-         <widget class="QLabel" name="labelPhone">
-          <property name="text">
-           <string>Telefon</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="0">
          <widget class="QLabel" name="labelAdress">
           <property name="text">
@@ -363,13 +596,10 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0" rowspan="2">
-         <widget class="QLabel" name="labelMail">
-          <property name="text">
-           <string>Mail</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        <item row="0" column="1" colspan="2">
+         <widget class="QLineEdit" name="lineStrasse">
+          <property name="placeholderText">
+           <string>Straße und Hausnummer</string>
           </property>
          </widget>
         </item>
@@ -390,188 +620,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1" colspan="2">
-         <widget class="QLineEdit" name="lineStrasse">
-          <property name="placeholderText">
-           <string>Straße und Hausnummer</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1" colspan="2">
-         <widget class="QLineEdit" name="linePhone"/>
-        </item>
-        <item row="3" column="1" colspan="2">
-         <widget class="QCheckBox" name="checkPhone">
-          <property name="text">
-           <string>Veröffentlichen</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1" colspan="2">
-         <widget class="QLineEdit" name="lineMail">
-          <property name="placeholderText">
-           <string>beispiel@ostertalbahn.de</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1" colspan="2">
-         <widget class="QCheckBox" name="checkMail">
-          <property name="text">
-           <string>Veröffentlichen</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tabWidgetStammdatenPage3">
-       <attribute name="title">
-        <string>Betriebsdienst</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_12">
-        <property name="leftMargin">
-         <number>6</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>6</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="labelAusbildung">
-          <property name="text">
-           <string>Ausbildung</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QCheckBox" name="checkTf">
-          <property name="text">
-           <string>Lokführer</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3">
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>228</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="2" column="1">
-         <widget class="QCheckBox" name="checkRangierer">
-          <property name="text">
-           <string>Rangierer</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="checkZf">
-          <property name="text">
-           <string>Zugführer</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QDateEdit" name="dateDienst">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="minimumDate">
-           <date>
-            <year>1999</year>
-            <month>11</month>
-            <day>20</day>
-           </date>
-          </property>
-          <property name="displayFormat">
-           <string>dd.MM.yyyy</string>
-          </property>
-          <property name="timeSpec">
-           <enum>Qt::UTC</enum>
-          </property>
-          <property name="date">
-           <date>
-            <year>1999</year>
-            <month>11</month>
-            <day>26</day>
-           </date>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <spacer name="verticalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>58</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="labelDienst">
-          <property name="text">
-           <string>Tauglichkeit</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QCheckBox" name="checkDienst">
-          <property name="text">
-           <string>Unbekannt</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Finanzen</string>
-       </attribute>
-      </widget>
-      <widget class="QWidget" name="tabWidgetStammdatenPage4">
-       <attribute name="title">
-        <string>Sonstiges</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,1" columnstretch="0,1">
-        <property name="leftMargin">
-         <number>6</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>6</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <item row="0" column="0">
+        <item row="2" column="0">
          <widget class="QLabel" name="labelEntfernung">
           <property name="statusTip">
            <string>Die Entfernung zum Heimatbahnhof. Wird benötigt, um die Strecke auszurechnen.</string>
@@ -579,9 +628,12 @@
           <property name="text">
            <string>Entfernung</string>
           </property>
+          <property name="buddy">
+           <cstring>spinKm</cstring>
+          </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="2" column="1">
          <widget class="QSpinBox" name="spinKm">
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -600,15 +652,269 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="labelBeruf">
+        <item row="3" column="0" colspan="3">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="labelPhone">
           <property name="text">
-           <string>Beruf</string>
+           <string>Telefon</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="buddy">
+           <cstring>linePhone</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1" colspan="2">
+         <widget class="QLineEdit" name="linePhone"/>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="labelPhone2">
+          <property name="text">
+           <string>Telefon2</string>
+          </property>
+          <property name="buddy">
+           <cstring>linePhone2</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1" colspan="2">
+         <widget class="QLineEdit" name="linePhone2"/>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="labelMail">
+          <property name="text">
+           <string>Mail</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="buddy">
+           <cstring>lineMail</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1" colspan="2">
+         <widget class="QLineEdit" name="lineMail">
+          <property name="placeholderText">
+           <string>beispiel@ostertalbahn.de</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1">
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>66</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabAusbildung">
+       <attribute name="title">
+        <string>Ausbildung</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_12">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="checkTf">
+          <property name="text">
+           <string>Lokführer</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="checkRangierer">
+          <property name="text">
+           <string>Rangierer</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QDateEdit" name="dateDienst">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="minimumDate">
+           <date>
+            <year>1999</year>
+            <month>11</month>
+            <day>16</day>
+           </date>
+          </property>
+          <property name="displayFormat">
+           <string>dd.MM.yyyy</string>
+          </property>
+          <property name="timeSpec">
+           <enum>Qt::UTC</enum>
+          </property>
+          <property name="date">
+           <date>
+            <year>1999</year>
+            <month>11</month>
+            <day>26</day>
+           </date>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="labelAusbildung">
+          <property name="text">
+           <string>Ausbildung</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="lineJob"/>
+         <widget class="QCheckBox" name="checkZf">
+          <property name="text">
+           <string>Zugführer</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="labelDienst">
+          <property name="text">
+           <string>Tauglichkeit</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QCheckBox" name="checkDienst">
+          <property name="text">
+           <string>Unbekannt</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>228</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="5" column="1" colspan="3">
+         <widget class="QPlainTextEdit" name="plainAusbildung">
+          <property name="placeholderText">
+           <string>Ausbildungen, Unterweisungen, Lehrgänge, ...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="labelAusbildungSonst">
+          <property name="text">
+           <string>Sonstige
+Ausbildung</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="buddy">
+           <cstring>plainAusbildung</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1" colspan="3">
+         <widget class="QPlainTextEdit" name="plainBetrieb">
+          <property name="placeholderText">
+           <string>Sonstige Betriebliche Ausbildungen, Unterweisungen oder Bemerkungen</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="labelBetrieb">
+          <property name="text">
+           <string>Sonstige
+Betriebliche</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="buddy">
+           <cstring>plainBetrieb</cstring>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabSonstiges">
+       <attribute name="title">
+        <string>Sonstiges</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_5" rowstretch="0,0,1" columnstretch="0,1">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="labelDatenschutz">
+          <property name="text">
+           <string>Datenschutz</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="checkPhone">
+          <property name="text">
+           <string>Telefonnummern Veröffentlichen</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="checkMail">
+          <property name="text">
+           <string>Mail Veröffentlichen</string>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="labelBemerkung">
@@ -617,6 +923,9 @@
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="buddy">
+           <cstring>plainBemerkung</cstring>
           </property>
          </widget>
         </item>
@@ -754,27 +1063,40 @@
   <tabstop>lineID</tabstop>
   <tabstop>pushAutoID</tabstop>
   <tabstop>tabWidgetStammdaten</tabstop>
-  <tabstop>checkEintritt</tabstop>
-  <tabstop>dateEintritt</tabstop>
   <tabstop>checkGeburtstag</tabstop>
   <tabstop>dateGeburtstag</tabstop>
+  <tabstop>radioMaennlich</tabstop>
+  <tabstop>radioWeiblich</tabstop>
+  <tabstop>radioDivers</tabstop>
+  <tabstop>radioJuristisch</tabstop>
+  <tabstop>radioUnbekannt</tabstop>
+  <tabstop>comboAnrede</tabstop>
+  <tabstop>lineJob</tabstop>
+  <tabstop>checkEintritt</tabstop>
+  <tabstop>dateEintritt</tabstop>
   <tabstop>checkAktiv</tabstop>
   <tabstop>checkAustritt</tabstop>
   <tabstop>dateAustritt</tabstop>
+  <tabstop>comboBeitragsart</tabstop>
+  <tabstop>lineIBAN</tabstop>
+  <tabstop>lineBank</tabstop>
+  <tabstop>lineKontoinhaber</tabstop>
   <tabstop>lineStrasse</tabstop>
   <tabstop>linePLZ</tabstop>
   <tabstop>lineOrt</tabstop>
+  <tabstop>spinKm</tabstop>
   <tabstop>linePhone</tabstop>
-  <tabstop>checkPhone</tabstop>
+  <tabstop>linePhone2</tabstop>
   <tabstop>lineMail</tabstop>
-  <tabstop>checkMail</tabstop>
   <tabstop>checkTf</tabstop>
   <tabstop>checkZf</tabstop>
   <tabstop>checkRangierer</tabstop>
   <tabstop>dateDienst</tabstop>
   <tabstop>checkDienst</tabstop>
-  <tabstop>spinKm</tabstop>
-  <tabstop>lineJob</tabstop>
+  <tabstop>plainBetrieb</tabstop>
+  <tabstop>plainAusbildung</tabstop>
+  <tabstop>checkPhone</tabstop>
+  <tabstop>checkMail</tabstop>
   <tabstop>plainBemerkung</tabstop>
  </tabstops>
  <resources>
@@ -799,4 +1121,7 @@
    </hints>
   </connection>
  </connections>
+ <buttongroups>
+  <buttongroup name="buttonGeschlecht"/>
+ </buttongroups>
 </ui>

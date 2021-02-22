@@ -69,6 +69,19 @@ private slots:
     void on_checkAustritt_clicked(bool checked);
     void on_dateAustritt_dateChanged(const QDate &date);
 
+    void on_comboAnrede_currentTextChanged(const QString &arg1);
+    void on_buttonGeschlecht_buttonClicked(int button);
+
+    void on_comboBeitragsart_currentIndexChanged(int index);
+    void on_lineIBAN_textChanged(const QString &arg1);
+    void on_lineBank_textChanged(const QString &arg1);
+    void on_lineKontoinhaber_textChanged(const QString &arg1);
+
+    void on_linePhone2_textChanged(const QString &arg1);
+
+    void on_plainBetrieb_textChanged();
+    void on_plainAusbildung_textChanged();
+
 signals:
     void loeschen(Person *);
 

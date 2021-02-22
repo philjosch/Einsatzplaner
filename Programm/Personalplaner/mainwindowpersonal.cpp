@@ -33,7 +33,7 @@ void MainWindowPersonal::constructorMainWindowPersonal()
     recentlyUsedClear = ui->actionClear;
 
     current = QList<Person*>();
-    filter = Mitglied::Aktiv;
+    filter = Mitglied::AlleMitglieder;
 
     fenster = QMap<Person*, PersonWindow*>();
 }

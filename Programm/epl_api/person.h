@@ -10,6 +10,26 @@ class Person : public QObject
     Q_OBJECT
 
 public:
+
+    enum Geschlecht {
+        GeschlechtUnbekannt =  0,
+        Juristisch          =  1,
+        Maennlich           = 10,
+        Weiblich            = 11,
+        Divers              = 12
+    };
+    static QString getStringVonGeschlecht(Geschlecht g);
+    enum Beitragsart {
+        BeitragUnbekannt      = 0,
+        Beitragsfrei          = 1,
+        AktivenBeitrag        = 2,
+        FoerderBeitrag        = 3,
+        FamilienBeitragZahler = 4,
+        FamilienBeitragNutzer = 5,
+        Ermaessigt            = 6
+    };
+    static QString getStringVonBeitragsart(Beitragsart b);
+
     Person(QString name, ManagerPersonal *manager);
     Person(QJsonObject o, ManagerPersonal *man); // Laden aus einem JSON-Objekt
 
@@ -127,32 +147,73 @@ public:
 
     ManagerPersonal *getManager() const;
 
+    QString getAnrede() const;
+    void setAnrede(const QString &value);
+
+    Geschlecht getGeschlecht() const;
+    void setGeschlecht(const Geschlecht &value);
+
+    Beitragsart getBeitragsart() const;
+    void setBeitragsart(const Beitragsart &value);
+
+    QString getIban() const;
+    void setIban(const QString &value);
+
+    QString getBank() const;
+    void setBank(const QString &value);
+
+    QString getKontoinhaber() const;
+    void setKontoinhaber(const QString &value);
+
+    QString getSonstigeBetrieblich() const;
+    void setSonstigeBetrieblich(const QString &value);
+
+    QString getSonstigeAusbildung() const;
+    void setSonstigeAusbildung(const QString &value);
+
+    QString getTelefon2() const;
+    void setTelefon2(const QString &value);
+
 protected:
     // Stammdaten
     QString id;
-    int nummer;
+
     QString vorname;
     QString nachname;
     QDate geburtstag;
+    QString anrede;
+    Geschlecht geschlecht;
+    QString beruf;
+
+    // Mitgliedschaft
+    int nummer;
     QDate eintritt;
     bool aktiv;
     QDate austritt;
-    // Betriebsdienst
+    Beitragsart beitragsart;
+    QString iban;
+    QString bank;
+    QString kontoinhaber;
+    // Ausbildung
     bool ausbildungTf;
     bool ausbildungZf;
     bool ausbildungRangierer;
     QDate tauglichkeit;
+    QString sonstigeBetrieblich;
+    QString sonstigeAusbildung;
+
     // Kontakt
     QString plz;
     QString ort;
     QString strasse;
+    int strecke;
     QString mail;
-    bool mailOK;
     QString telefon;
+    QString telefon2;
+    // Datenschutz
+    bool mailOK;
     bool telefonOK;
     // Sonstiges
-    int strecke;
-    QString beruf;
     QString bemerkungen;
     // Zusätzliche Stunden
     QMap<Category, int> additional;
@@ -161,7 +222,7 @@ protected:
     QMultiMap<AActivity*, Category> activities;
 
 private:
-    void personConstructor(QString vn, QString nn, ManagerPersonal *man, QString ID="");
+    void personConstructor(QString vn, QString nn, ManagerPersonal *man);
 
     bool valuesInvalid;
     /* Gibt an, ob die Werte verändert wurden und ob es bemerkt wurde,
@@ -170,6 +231,8 @@ private:
      * dann muss manuell neuberechnet werden */
 
     ManagerPersonal *manager;
+
+    static QString getRandomID();
 
 signals:
     void changed();
