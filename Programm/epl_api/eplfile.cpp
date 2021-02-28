@@ -262,7 +262,7 @@ QJsonObject EplFile::generiereJsonPersonal()
 bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj)
 {
     QJsonObject zuschreibendesObjekt = obj;
-//    if (! Version::isDeveloperVersion()) {
+    if (! Version::isDeveloperVersion()) {
 
         QJsonObject generalJson = zuschreibendesObjekt.value("general").toObject();
 
@@ -270,7 +270,7 @@ bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj)
         QString payload = komprimiere(zuschreibendesObjekt);
         zuschreibendesObjekt = QJsonObject();
 
-        if (passwort != "") {
+        if (dateiEigenschaften->getPasswort() != "") {
             generalJson.insert("encrypted", true);
 
             Crypto::EncryptedData eD = encrypt(payload);
@@ -284,7 +284,7 @@ bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj)
 
         zuschreibendesObjekt.insert("general", generalJson);
         zuschreibendesObjekt.insert("payload", payload);
-//    }
+    }
     return FileIO::saveJsonToFile(pfad, zuschreibendesObjekt);
 }
 
@@ -373,7 +373,7 @@ Crypto::EncryptedData EplFile::encrypt(QString data)
 {
     QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
 
-    QString key = passwort;//dateiEigenschaften->getPasswort();
+    QString key = dateiEigenschaften->getPasswort();
     QString salt = Crypto::generateSalt();
     QString iv = Crypto::generateSalt();
 

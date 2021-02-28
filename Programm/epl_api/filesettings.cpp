@@ -1,5 +1,7 @@
 #include "filesettings.h"
 
+#include <crypto.h>
+
 FileSettings::FileSettings() : QObject()
 {
     server = Networking::Server{"", "", ""};
@@ -56,6 +58,20 @@ AActivity::Auswahl FileSettings::getAuswahl() const
 void FileSettings::setAuswahl(const AActivity::Auswahl &value)
 {
     auswahl = value;
+    emit changed();
+}
+
+QString FileSettings::getPasswort() const
+{
+    return passwort;
+}
+void FileSettings::setPasswort(const QString &value)
+{
+    if (value == "") {
+        passwort = "";
+    } else {
+        passwort = Crypto::hash(value);
+    }
     emit changed();
 }
 

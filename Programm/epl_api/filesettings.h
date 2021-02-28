@@ -28,6 +28,17 @@ public:
     AActivity::Auswahl getAuswahl() const;
     void setAuswahl(const AActivity::Auswahl &value);
 
+    /**
+     * @brief Gibt das gehashte Passwort zurueck, mit dem der Zugriff auf die Datei gesichert wird
+     * @return Das gehashte Passwort
+     */
+    QString getPasswort() const;
+    /**
+     * @brief Setzen des Passworts, das den Zugriff auf die Datei schuetzt
+     * @param value: Das ungehashte Passwort
+     */
+    void setPasswort(const QString &value);
+
 signals:
     void changed();
 
@@ -36,6 +47,8 @@ protected:
     bool autom = true;
     Networking::Server server;
     AActivity::Auswahl auswahl;
+
+    QString passwort = "";
 };
 
 #endif // FILESETTINGS_H
