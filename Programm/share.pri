@@ -54,11 +54,11 @@ system(\"$$LCONVERT\" -o \"$$_PRO_FILE_PWD_/qt_de.qm\" \"$$[QT_INSTALL_TRANSLATI
 #############
 # LIBRARIES #
 #############
-INCLUDEPATH += ../epl_api ../epl_gui
-LIBS += -L../epl_api -lepl_api -L../epl_gui -lepl_gui
+INCLUDEPATH += ../crypto ../epl_api ../epl_gui
+LIBS += -L../crypto -lcrypto -L../epl_api -lepl_api -L../epl_gui -lepl_gui
 
-DEPENDPATH +=      $$PWD/epl_api $$PWD/epl_gui
-PRE_TARGETDEPS +=  $$PWD/epl_api $$PWD/epl_gui
+DEPENDPATH +=      $$PWD/crypto $$PWD/epl_api $$PWD/epl_gui
+PRE_TARGETDEPS +=  $$PWD/crypto $$PWD/epl_api $$PWD/epl_gui
 
 
 #############

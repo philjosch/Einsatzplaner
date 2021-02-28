@@ -5,6 +5,7 @@
 #include "managerpersonal.h"
 
 #include <QObject>
+#include "crypto.h"
 
 class EplFile : public QObject
 {
@@ -51,11 +52,12 @@ public slots:
 signals:
     void changed();
 
-private:
+protected:
     QString pfad;
     bool schreibgeschuetzt;
     bool gespeichert;
 
+    QString passwort;// = Crypto::hash("Passwort");
     QJsonObject geladen;
 
     Manager *manager;
@@ -71,6 +73,12 @@ private:
 
     bool schreibeJsonInDatei(QString pfad, QJsonObject obj);
     QJsonObject leseJsonAusDatei(QString pfad);
+
+    QString komprimiere(QJsonObject obj);
+    QJsonObject dekomprimiere(QString komprimiert);
+
+    Crypto::EncryptedData encrypt(QString data);
+    QString decrypt(Crypto::EncryptedData encrypted);
 };
 
 #endif // EPLFILE_H

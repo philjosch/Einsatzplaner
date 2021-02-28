@@ -9,10 +9,11 @@ TEMPLATE = subdirs
 SUBDIRS += Einsatzplaner \
     Personalplaner \
     epl_api \
-    epl_gui
+    epl_gui \
+    crypto
 
-Einsatzplaner.depends = epl_api epl_gui
-Personalplaner.depends = epl_api epl_gui
+Einsatzplaner.depends = crypto epl_api epl_gui
+Personalplaner.depends = crypto epl_api epl_gui
 
 
 RESOURCES += $$PWD/resources.qrc \

@@ -51,6 +51,13 @@ HEADERS  += einstellungen.h \
     version.h \
     filesettings.h
 
+INCLUDEPATH += ../crypto
+LIBS += -L../crypto -lcrypto
+
+DEPENDPATH +=      $$PWD/../crypto
+PRE_TARGETDEPS +=  $$PWD/../crypto
+
+
 # Default rules for deployment.
 #unix {
 #    target.path = $$[QT_INSTALL_PLUGINS]/generic

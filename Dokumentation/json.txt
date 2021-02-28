@@ -129,7 +129,13 @@ settings/			-> Speichert alle Einstellungen zur Datei
 
 general/ (object)
 	version (string)	-> Version die mindestens benötigt wird, um die Datei zu öffnen
-	komprimiert (bool)	-> Gibt an, ob die Daten komprimiert gespeichert wurden
+	komprimiert (bool)	-> Gibt an, ob die Daten komprimiert gespeichert wurden (ab Version 1.7)
+	encrypted (bool)	-> Gibt an, ob die Daten verschlüsselt wurden, muss dann auch komprimiert sein (ab Version 1.7)
 
-komprimiert (string)		-> Speichert, sofern benutzt (siehe auch general/komprimiert), die komprimierten Daten, welche entpackt eine vollstaendige EPL-Datei enthalten
+crypto (object)			-> Speichert alle Daten bezüglich einer Verschlüsselung der Datei, nur verwendet, wenn general/encrypted aus true gesetzt ist bzw. vorhanden ist (ab Version 1.7)
+	modus (string)		-> Das verwendete Verfahren als String: QtAES.
+	salt (string)		-> Gibt das Salt an, der für das Passwort verwendet wurde
+	iv (string)		-> Speichert den zufälligen Teil des Initialisierungvektors
+
+payload (string)		-> Speichert, sofern benutzt die Daten als Base64 kodiert, je nach Angabe unter general/... sind die Daten komprimiert oder zusätzlich noch verschlüsselt (ab Version 1.7)
 

@@ -31,11 +31,11 @@ FORMS += \
     minimumhourseditordialog.ui \
     einstellungendialog.ui
 
-INCLUDEPATH += ../epl_api
-LIBS += -L../epl_api -lepl_api
+INCLUDEPATH += ../crypto ../epl_api
+LIBS += -L../crypto -lcrypto -L../epl_api -lepl_api
 
-DEPENDPATH +=      $$PWD/../epl_api
-PRE_TARGETDEPS +=  $$PWD/../epl_api
+DEPENDPATH +=      $$PWD/../crypto $$PWD/../epl_api
+PRE_TARGETDEPS +=  $$PWD/../crypto $$PWD/../epl_api
 
 # Default rules for deployment.
 #unix {
