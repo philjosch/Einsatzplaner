@@ -18,21 +18,18 @@ SOURCES += main.cpp\
     activitywindow.cpp \
     personalwindow.cpp \
     calendarday.cpp \
-    exportdialog.cpp \
-    filesettingsdialog.cpp
+    exportdialog.cpp
 
 HEADERS  += mainwindow.h \
     fahrtagwindow.h \
     activitywindow.h \
     personalwindow.h \
     calendarday.h \
-    exportdialog.h \
-    filesettingsdialog.h
+    exportdialog.h
 
 FORMS    += mainwindow.ui \
     fahrtagwindow.ui \
     activitywindow.ui \
     personalwindow.ui \
     calendarday.ui \
-    exportdialog.ui \
-    filesettingsdialog.ui
+    exportdialog.ui

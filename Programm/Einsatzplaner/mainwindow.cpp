@@ -4,7 +4,6 @@
 #include "exportdialog.h"
 #include "fileio.h"
 #include "coreapplication.h"
-#include "filesettingsdialog.h"
 #include "fahrtagwindow.h"
 #include "activitywindow.h"
 
@@ -104,13 +103,6 @@ bool MainWindow::open(QString path)
     CoreMainWindow *mw = new MainWindow(datei);
     mw->show();
     return true;
-}
-
-
-void MainWindow::handlerSettings()
-{
-    FileSettingsDialog s(this, datei->getDateiEigenschaften());
-    s.exec();
 }
 
 

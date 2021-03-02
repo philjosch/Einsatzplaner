@@ -18,6 +18,7 @@ SOURCES += \
     coremainwindow.cpp \
     einstellungendialog.cpp \
     minimumhourseditordialog.cpp \
+    filesettingsdialog.cpp \
     coreapplication.cpp
 
 HEADERS += \
@@ -25,10 +26,12 @@ HEADERS += \
     coremainwindow.h \
     einstellungendialog.h \
     minimumhourseditordialog.h \
+    filesettingsdialog.h \
     coreapplication.h
 
 FORMS += \
     minimumhourseditordialog.ui \
+    filesettingsdialog.ui \
     einstellungendialog.ui
 
 INCLUDEPATH += ../crypto ../epl_api

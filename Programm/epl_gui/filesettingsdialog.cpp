@@ -67,7 +67,7 @@ void FileSettingsDialog::on_buttonBox_clicked(QAbstractButton *button)
     if (ui->buttonBox->buttonRole(button) == QDialogButtonBox::ResetRole) {
         loadSettings();
     } else if (ui->buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole) {
-        saveSettings(mngr);
+        saveSettings();
 
     }
 }

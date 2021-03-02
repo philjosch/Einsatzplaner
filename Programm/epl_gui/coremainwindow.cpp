@@ -3,6 +3,7 @@
 #include "fileio.h"
 #include "coreapplication.h"
 #include "einstellungendialog.h"
+#include "filesettingsdialog.h"
 
 #include <QInputDialog>
 #include <QMessageBox>
@@ -185,6 +186,12 @@ void CoreMainWindow::handlerPreferenes()
 {
     EinstellungenDialog *dialog = new EinstellungenDialog();
     dialog->show();
+}
+
+void CoreMainWindow::handlerSettings()
+{
+    FileSettingsDialog s(this, datei->getDateiEigenschaften());
+    s.exec();
 }
 
 void CoreMainWindow::onDateiWurdeVeraendert()

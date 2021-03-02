@@ -28,8 +28,6 @@ private:
 
 protected slots:
     //** Vererbte Methoden von CoreMainWindow
-    void handlerSettings();
-
     CoreMainWindow *handlerNew();
     void handlerOpen(QString path);
 

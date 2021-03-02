@@ -56,7 +56,7 @@ protected slots:
 
     //** Dialog-Handling
     virtual void handlerPreferenes();
-    virtual void handlerSettings() {};
+    virtual void handlerSettings();
 
     //** Virtuelle Methoden
     // Fenster schliessen
