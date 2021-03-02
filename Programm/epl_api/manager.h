@@ -2,7 +2,6 @@
 #define MANAGER_H
 
 #include "fahrtag.h"
-#include "activity.h"
 #include "managerpersonal.h"
 #include "filesettings.h"
 
@@ -32,7 +31,7 @@ signals:
 
 public slots:
     Fahrtag *newFahrtag(QDate datum);
-    Activity *newActivity(QDate datum);
+    AActivity *newActivity(QDate datum);
 
     bool removeActivity(AActivity *a);
 

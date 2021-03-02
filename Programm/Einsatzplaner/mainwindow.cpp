@@ -275,7 +275,7 @@ void MainWindow::newFahrtag(QDate d)
 }
 void MainWindow::newActivity(QDate d)
 {
-    Activity *a = manager->newActivity(d);
+    AActivity *a = manager->newActivity(d);
     newAActivityHandler(a);
     openAActivity(a);
 }
@@ -291,8 +291,7 @@ void MainWindow::openAActivity(AActivity *a)
     } else {
         QMainWindow *w;
         if (a->getArt() == Art::Arbeitseinsatz) {
-            Activity* aa = dynamic_cast<Activity*>(a);
-            w = new ActivityWindow(this, aa);
+            w = new ActivityWindow(this, a);
         } else {
             Fahrtag* f = dynamic_cast<Fahrtag*>(a);
             w = new FahrtagWindow(this, f);
@@ -324,7 +323,7 @@ void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
     i->setText(a->getListString());
     i->setToolTip(a->getAnlass().replace("<br/>","\n"));
     i->setWhatsThis(a->getAnlass().replace("<br/>","\n"));
-    i->setBackground(QBrush(QColor(getFarbe(a))));
+    i->setBackground(QBrush(QColor(a->getFarbe())));
 }
 
 int MainWindow::getPosInCalendar(QDate date)

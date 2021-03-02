@@ -43,7 +43,7 @@ void ExportDialog::hardReload()
 
     ui->listAnzeige->clear();
     for(AActivity *a: manager->getActivities()) {
-        QString farbe = getFarbe(a);
+        QString farbe = a->getFarbe();
         QListWidgetItem *item = new QListWidgetItem(a->getListString());
         item->setBackground(QBrush(QColor(farbe)));
         item->setToolTip(a->getAnlass().replace("<br/>","\n"));

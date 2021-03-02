@@ -16,7 +16,7 @@ class ActivityWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit ActivityWindow(CoreMainWindow *parent, Activity *a);
+    explicit ActivityWindow(CoreMainWindow *parent, AActivity *a);
     ~ActivityWindow();
 
 private slots:
@@ -49,7 +49,7 @@ signals:
 
 private:
     Ui::ActivityWindow *ui;
-    Activity *activity;
+    AActivity *activity;
 
     bool nehme;
 

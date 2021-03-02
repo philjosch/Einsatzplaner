@@ -11,9 +11,15 @@
 class EplException
 {
 public:
-    EplException();
-    EplException(QString msg);
-    virtual QString getError() const;
+    EplException() {
+        message = QObject::tr("Es ist ein unbekannter Fehler augetreten.");
+    }
+    EplException(QString msg) {
+        message = msg;
+    }
+    virtual QString getError() const {
+        return message;
+    }
 
 protected:
     QString message;

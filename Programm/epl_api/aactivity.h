@@ -212,6 +212,8 @@ public:
     virtual QString getHtmlForSingleView();
     virtual QString getHtmlForTableView();
 
+    virtual QString getFarbe();
+
     static QStringList EXTERNAL_LIST;
     static QStringList QUALIFICATION_LIST;
     static const QString KOPF_LISTE_HTML;
@@ -245,7 +247,5 @@ protected:
 
     static QString COLOR_REQUIRED;
 };
-
-const QString getFarbe(AActivity *a);
 
 #endif // AACTIVITY_H

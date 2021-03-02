@@ -5,7 +5,6 @@
 #include "managerpersonal.h"
 
 #include <QObject>
-#include "crypto.h"
 
 class EplFile : public QObject
 {
@@ -75,9 +74,6 @@ protected:
 
     QString komprimiere(QJsonObject obj);
     QJsonObject dekomprimiere(QString komprimiert);
-
-    Crypto::EncryptedData encrypt(QString data);
-    QString decrypt(Crypto::EncryptedData encrypted);
 };
 
 #endif // EPLFILE_H

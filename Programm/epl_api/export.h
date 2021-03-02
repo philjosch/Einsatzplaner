@@ -3,7 +3,6 @@
 
 #include "aactivity.h"
 #include "fahrtag.h"
-#include "activity.h"
 #include "person.h"
 #include "managerpersonal.h"
 #include "filesettings.h"

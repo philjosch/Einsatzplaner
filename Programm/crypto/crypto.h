@@ -3,8 +3,6 @@
 
 #include <QObject>
 
-
-
 class Crypto
 {
 public:
@@ -20,6 +18,8 @@ public:
 
     static QByteArray hash(QString password, QString salt = "jbkOEGsifP8sKkXE4lUK");
 
+    static EncryptedData encrypt(QString data, QString pwd);
+    static QString decrypt(EncryptedData encrypted);
 };
 
 #endif // CRYPTO_H

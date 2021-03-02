@@ -19,11 +19,6 @@ const QString AActivity::KOPF_LISTE_HTML = "<h3>Übersicht über die Aktivitäte
                                          "<th>Sonstiges</th> </tr></thead><tbody>";
 const QString AActivity::FUSS_LISTE_HTML = "</tbody></table>";
 
-const QString getFarbe(AActivity *a)
-{
-    return FARBE_FAHRTAGE.value(a->getArt());
-}
-
 AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
 {
     art = Arbeitseinsatz;
@@ -433,8 +428,11 @@ QString AActivity::getListStringShort()
 
 QString AActivity::getListString()
 {
-    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))
-            +" – "+getStringFromArt(art);
+    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – ";
+    if (art == Arbeitseinsatz && anlass != "")
+        s += anlass;
+    else
+        s += getStringFromArt(art);
     if (abgesagt) {
         s += " (Abgesagt)";
     }
@@ -529,10 +527,7 @@ QString AActivity::getHtmlForSingleView()
 
 QString AActivity::getHtmlForTableView()
 {
-    QString html = "<tr bgcolor='"+FARBE_FAHRTAGE.value(Arbeitseinsatz)+"'>";
-    if (anlass.contains("vlexx", Qt::CaseSensitivity::CaseInsensitive)) {
-        html = "<tr bgcolor='#DCF57E'>";//a3c526'>";
-    }
+    QString html = "<tr bgcolor='"+getFarbe()+"'>";
     // Datum, Anlass
     if (wichtig) {
         html += "<td bgcolor='#ff8888'>";
@@ -696,4 +691,12 @@ QString AActivity::getHtmlForTableView()
     }
     html += "</td></tr>";
     return html;
+}
+
+QString AActivity::getFarbe()
+{
+    if (anlass.contains("vlexx", Qt::CaseSensitivity::CaseInsensitive)) {
+        return "#DCF57E";//a3c526'>";
+    }
+    return FARBE_FAHRTAGE.value(art);
 }

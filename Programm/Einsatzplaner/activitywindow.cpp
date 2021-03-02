@@ -6,7 +6,7 @@
 #include <QMessageBox>
 #include <eplexception.h>
 
-ActivityWindow::ActivityWindow(CoreMainWindow *parent, Activity *a) : QMainWindow(parent), ui(new Ui::ActivityWindow)
+ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWindow(parent), ui(new Ui::ActivityWindow)
 {
     ui->setupUi(this);
     ui->tablePersonen->resizeColumnsToContents();

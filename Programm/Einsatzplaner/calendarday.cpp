@@ -43,7 +43,7 @@ void CalendarDay::insert(AActivity *a)
         remove(a);
     }
     QListWidgetItem* item = new QListWidgetItem(a->getListStringShort().replace("<br/>","\n"));
-    item->setBackground(QBrush(QColor(getFarbe(a))));
+    item->setBackground(QBrush(QColor(a->getFarbe())));
     ui->listWidget->insertItem(ui->listWidget->count(), item);
     actToItem.insert(a, item);
 }

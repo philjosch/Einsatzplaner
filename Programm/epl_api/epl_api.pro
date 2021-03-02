@@ -14,12 +14,10 @@ QT       += core printsupport network
 
 
 SOURCES += einstellungen.cpp \
-    eplexception.cpp \
     eplfile.cpp \
     networking.cpp \
     person.cpp \
     managerpersonal.cpp \
-    activity.cpp \
     reservierung.cpp \
     manager.cpp \
     fahrtag.cpp \
@@ -38,7 +36,6 @@ HEADERS  += einstellungen.h \
     networking.h \
     person.h \
     managerpersonal.h \
-    activity.h \
     reservierung.h \
     manager.h \
     fahrtag.h \

@@ -236,7 +236,7 @@ QString Fahrtag::getHtmlForSingleView()
 
 QString Fahrtag::getHtmlForTableView()
 {
-    QString html = "<tr bgcolor='"+FARBE_FAHRTAGE.value(art)+"'>";
+    QString html = "<tr bgcolor='"+getFarbe()+"'>";
     // Datum, Anlass
     if (wichtig) {
         html += "<td bgcolor='#ff8888'>";

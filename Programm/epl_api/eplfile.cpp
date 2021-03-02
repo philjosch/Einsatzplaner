@@ -1,18 +1,13 @@
 #include "eplexception.h"
 #include "eplfile.h"
 #include "fileio.h"
+#include "crypto.h"
+#include "basics.h"
 
 #include <QJsonArray>
 #include <QJsonObject>
-#include "basics.h"
-
 #include <QJsonDocument>
-#include <crypto.h>
 #include <exception>
-
-
-#include "qt-aes/qaesencryption.h"
-#include <QCryptographicHash>
 
 EplFile::EplFile(QString dateiPfad)
 {
@@ -211,7 +206,7 @@ void EplFile::open(QString passw)
         payload.chop(5);
         QJsonObject cryptoJSON = geladen.value("crypto").toObject();
         Crypto::EncryptedData eD = {payload, Crypto::hash(passw), cryptoJSON.value("salt").toString(), cryptoJSON.value("iv").toString()};
-        payload = decrypt(eD);
+        payload = Crypto::decrypt(eD);
         if (! payload.endsWith("-ZIP-"))
             throw FileWrongPasswordException();
     }
@@ -338,7 +333,7 @@ bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj)
     if (dateiEigenschaften->getPasswort() != "") {
         generalJson.insert("encrypted", true);
 
-        Crypto::EncryptedData eD = encrypt(payload);
+        Crypto::EncryptedData eD = Crypto::encrypt(payload, dateiEigenschaften->getPasswort());
         QJsonObject crypto;
         crypto.insert("modus", "QtAES");
         crypto.insert("salt", eD.salt);
@@ -357,7 +352,6 @@ QString EplFile::komprimiere(QJsonObject obj)
 {
     return QString(qCompress(QJsonDocument(obj).toJson(QJsonDocument::JsonFormat::Compact)).toBase64());
 }
-
 QJsonObject EplFile::dekomprimiere(QString komprimiert)
 {
     return QJsonDocument::fromJson(
@@ -367,34 +361,3 @@ QJsonObject EplFile::dekomprimiere(QString komprimiert)
                     )
                 ).object();
 }
-
-Crypto::EncryptedData EplFile::encrypt(QString data)
-{
-    QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
-
-    QString key = dateiEigenschaften->getPasswort();
-    QString salt = Crypto::generateSalt();
-    QString iv = Crypto::generateSalt();
-
-    QByteArray hashKey = QCryptographicHash::hash((key+salt).toUtf8(), QCryptographicHash::Sha256);
-    QByteArray hashIV = QCryptographicHash::hash(iv.toUtf8(), QCryptographicHash::Md5);
-
-    QByteArray encodeText = encryption.encode(data.toUtf8(), hashKey, hashIV);
-
-    return Crypto::EncryptedData{encodeText.toBase64(), key, salt, iv};
-}
-
-QString EplFile::decrypt(Crypto::EncryptedData encrypted)
-{
-    QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
-
-    QByteArray hashKey = QCryptographicHash::hash((encrypted.key+encrypted.salt).toUtf8(), QCryptographicHash::Sha256);
-    QByteArray hashIV = QCryptographicHash::hash((encrypted.iv).toUtf8(), QCryptographicHash::Md5);
-
-    QByteArray decodeText = encryption.decode(QByteArray::fromBase64(encrypted.data.toUtf8()), hashKey, hashIV);
-
-    QString decodedString = QString(encryption.removePadding(decodeText));
-
-    return decodedString;
-}
-

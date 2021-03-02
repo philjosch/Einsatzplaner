@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Neues Dokument – Übersicht</string>
+   <string>Übersicht</string>
   </property>
   <property name="unifiedTitleAndToolBarOnMac">
    <bool>true</bool>

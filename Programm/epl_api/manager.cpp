@@ -21,7 +21,7 @@ Manager::Manager(ManagerPersonal *manPersonal, QJsonArray array)
         AActivity *akt;
         if (! aO.contains("isFahrtag")) {
             if (Art::Arbeitseinsatz == static_cast<Art>(aO.value("art").toInt())) {
-                akt = new Activity(aO, personal);
+                akt = new AActivity(aO, personal);
             } else {
                 akt = new Fahrtag(aO, personal);
             }
@@ -30,7 +30,7 @@ Manager::Manager(ManagerPersonal *manPersonal, QJsonArray array)
             if (aO.value("isFahrtag").toBool()) {
                 akt = new Fahrtag(aO, personal);
             } else {
-                akt = new Activity(aO, personal);
+                akt = new AActivity(aO, personal);
             }
         }
         connect(akt, &AActivity::changed, this, [=]() { emit changed();});
@@ -61,9 +61,9 @@ Fahrtag *Manager::newFahrtag(QDate datum)
     return f;
 }
 
-Activity *Manager::newActivity(QDate datum)
+AActivity *Manager::newActivity(QDate datum)
 {
-    Activity *a = new Activity(datum, personal);
+    AActivity *a = new AActivity(datum, personal);
     activities.append(a);
     sort();
     connect(a, &AActivity::changed, this, [=](AActivity *a, QDate date) {emit veraenderteAktivitaet(a, date);});
