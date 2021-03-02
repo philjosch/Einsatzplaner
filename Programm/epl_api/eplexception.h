@@ -41,6 +41,9 @@ public: FilePathInvalidException() : FileException("Der angegebene Dateipfad ist
 class FileWriteException : public FileException {
 public: FileWriteException() : FileException("Die Datei konnte nicht unter dem angegebenen Dateipfad gespeichert werden.") {}
 };
+class FileWrongPasswordException : public FileException {
+public: FileWrongPasswordException() : FileException("Das angegebene Passwort ist falsch.") {}
+};
 
 
 

@@ -18,7 +18,7 @@ public:
     explicit FileSettingsDialog(QWidget *parent, FileSettings *manager);
     ~FileSettingsDialog();
 
-    void getSettings(FileSettings *mgr);
+    void saveSettings();
 
 private slots:
     void on_checkEnable_clicked(bool checked);
@@ -26,6 +26,8 @@ private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
 
     void on_pushCheck_clicked();
+
+    void on_pushPwdChange_clicked();
 
 private:
     Ui::FileSettingsDialog *ui;

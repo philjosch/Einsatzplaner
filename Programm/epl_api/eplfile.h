@@ -14,14 +14,14 @@ class EplFile : public QObject
 public:
     struct FensterPosition { int x, y, width, height; };
 
-    EplFile();
-    EplFile(QString dateipfad);
-
+    EplFile(QString dateiPfad = "");
 
     QString getPfad() const;
 
     bool istSchreibgeschuetzt() const;
     QStringList getInfoSchreibschutz();
+
+    bool istPasswortGeschuetzt();
 
     bool istGespeichert() const;
     void veraendern();
@@ -47,6 +47,7 @@ public slots:
     void speichernPersonal(QString pfad);
     void autoSave();
 
+    void open(QString passw = "");
     void close();
 
 signals:
@@ -57,7 +58,6 @@ protected:
     bool schreibgeschuetzt;
     bool gespeichert;
 
-    QString passwort;// = Crypto::hash("Passwort");
     QJsonObject geladen;
 
     Manager *manager;
@@ -72,7 +72,6 @@ protected:
     QJsonObject generiereJsonPersonal();
 
     bool schreibeJsonInDatei(QString pfad, QJsonObject obj);
-    QJsonObject leseJsonAusDatei(QString pfad);
 
     QString komprimiere(QJsonObject obj);
     QJsonObject dekomprimiere(QString komprimiert);

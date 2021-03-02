@@ -110,9 +110,7 @@ bool MainWindow::open(QString path)
 void MainWindow::handlerSettings()
 {
     FileSettingsDialog s(this, datei->getDateiEigenschaften());
-    if (s.exec() == QDialog::Accepted) {
-        s.getSettings(datei->getDateiEigenschaften());
-    }
+    s.exec();
 }
 
 

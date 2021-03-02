@@ -18,11 +18,11 @@ FileSettingsDialog::~FileSettingsDialog()
     delete ui;
 }
 
-void FileSettingsDialog::getSettings(FileSettings *mgr)
+void FileSettingsDialog::saveSettings()
 {
-    mgr->setEnabled(ui->checkEnable->isChecked());
-    mgr->setAutom(ui->checkAuto->isChecked());
-    mgr->setServer(Networking::Server{
+    mngr->setEnabled(ui->checkEnable->isChecked());
+    mngr->setAutom(ui->checkAuto->isChecked());
+    mngr->setServer(Networking::Server{
                        ui->lineServer->text(),
                        ui->linePath->text(),
                        ui->lineID->text()}
@@ -42,6 +42,7 @@ void FileSettingsDialog::getSettings(FileSettings *mgr)
     default: auswahl.enddate = EndeBedingung::BisAlle; break;
     }
     auswahl.activities = ui->checkActivity->isChecked();
+    mngr->setAuswahl(auswahl);
 }
 
 void FileSettingsDialog::on_checkEnable_clicked(bool checked)
@@ -65,6 +66,9 @@ void FileSettingsDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
     if (ui->buttonBox->buttonRole(button) == QDialogButtonBox::ResetRole) {
         loadSettings();
+    } else if (ui->buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole) {
+        saveSettings(mngr);
+
     }
 }
 
@@ -121,4 +125,28 @@ void FileSettingsDialog::loadSettings()
     }
     ui->checkActivity->setChecked(a.activities);
     on_checkEnable_clicked(mngr->getEnabled());
+
+    ui->linePwdAlt->setEnabled(mngr->getPasswort() != "");
+}
+
+void FileSettingsDialog::on_pushPwdChange_clicked()
+{
+    QString alt = ui->linePwdAlt->text();
+    QString neu1 = ui->linePwdNeu1->text();
+    QString neu2 = ui->linePwdNeu2->text();
+    ui->linePwdAlt->clear();
+    ui->linePwdNeu1->clear();
+    ui->linePwdNeu2->clear();
+
+    if (neu1 != neu2) {
+        QMessageBox::information(this, tr("Fehler"), tr("Die beiden neuen Passwörter stimmen nicht überein!"));
+        return;
+    }
+    if (! mngr->setPasswort(neu1, alt)) {
+        QMessageBox::information(this, tr("Fehler"), tr("Das Passwort konnte nciht geöndert werden, überprüfen Sie Ihre Eingabe."));
+        return;
+    }
+    QMessageBox::information(this, tr("Geändert"), tr("Das Passwort wurde erfolgreich geändert."));
+
+    ui->linePwdAlt->setEnabled(mngr->getPasswort() != "");
 }

@@ -12,7 +12,7 @@ class FileSettings : public QObject
 
 public:
     FileSettings();
-    FileSettings(QJsonObject json);
+    FileSettings(QJsonObject json, QString pwd);
 
     QJsonObject toJson();
 
@@ -37,7 +37,7 @@ public:
      * @brief Setzen des Passworts, das den Zugriff auf die Datei schuetzt
      * @param value: Das ungehashte Passwort
      */
-    void setPasswort(const QString &value);
+    bool setPasswort(const QString &neu, const QString &alt = "");
 
 signals:
     void changed();

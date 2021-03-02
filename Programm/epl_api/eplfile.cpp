@@ -14,9 +14,9 @@
 #include "qt-aes/qaesencryption.h"
 #include <QCryptographicHash>
 
-EplFile::EplFile()
+EplFile::EplFile(QString dateiPfad)
 {
-    pfad = "";
+    pfad = dateiPfad;
     schreibgeschuetzt = false;
     gespeichert = true;
 
@@ -33,54 +33,34 @@ EplFile::EplFile()
     connect(manager, &Manager::changed, this, &EplFile::veraendern);
     connect(personal, &ManagerPersonal::changed, this, &EplFile::veraendern);
     connect(dateiEigenschaften, &FileSettings::changed, this, &EplFile::veraendern);
-}
 
-EplFile::EplFile(QString path)
-{
-    pfad = path;
-    gespeichert = true;
+    if (pfad == "")
+        return;
 
-    if (path == "") {
-        throw FilePathInvalidException();
+    // Daten aus Datei laden
+    geladen = FileIO::getJsonFromFile(pfad);
+    if (geladen.isEmpty()) {
+        throw FileException();
     }
 
-    // Schreibschutz pruefen
-    QStringList l = FileIO::Schreibschutz::pruefen(pfad);
-    if (!l.isEmpty()) {
-        schreibgeschuetzt = true;
-    } else {
-        schreibgeschuetzt = false;
-        FileIO::Schreibschutz::setzen(pfad);
+    // Pruefen, ob Version kompatibel ist
+    QJsonObject generalJSON = geladen.value("general").toObject();
+
+    // Nicht spezifizierte Versionen sind inkompatibel
+    Version version = Version(generalJSON.value("version").toString());
+    if (version == Version {-1, -1, -1}) {
+        throw FileVersionNotSupportedException(tr("Die Datei ist nicht mit dieser Version des Einsatzplaner kompatibel."));
     }
 
-    QJsonArray activitiesJson;
-    QJsonObject personalJson;
+    // Version zu alt bzw. falsch eingestellt abfangen
+    if (version.getMajor() < 1) {
+        throw FileVersionNotSupportedException(tr("Die Datei ist nicht mit dieser Version des Einsatzplaner kompatibel."));
+    }
 
-    geladen = leseJsonAusDatei(pfad);
-
-    personalJson = geladen.value("personal").toObject();
-    activitiesJson = geladen.value("activities").toArray();
-
-    currentDate = QDate::fromString(geladen.value("view").toObject().value("currentDate").toString(), "yyyy-MM-dd");
-    personal = new ManagerPersonal(geladen.value("personal").toObject());
-    manager = new Manager(personal, geladen.value("activities").toArray());
-    dateiEigenschaften = new FileSettings(geladen.value("settings").toObject());
-
-    QJsonObject viewJSON = geladen.value("view").toObject();
-    int x = viewJSON.value("xMain").toInt();
-    int y = viewJSON.value("yMain").toInt();
-    int w = viewJSON.value("widthMain").toInt();
-    int h = viewJSON.value("heightMain").toInt();
-    positionKalender = FensterPosition {x, y, w, h};
-    x = viewJSON.value("xPersonal").toInt();
-    y = viewJSON.value("yPersonal").toInt();
-    w = viewJSON.value("widthPersonal").toInt();
-    h = viewJSON.value("heightPersonal").toInt();
-    positionPersonal = FensterPosition {x, y, w, h};
-
-    connect(manager, &Manager::changed, this, &EplFile::veraendern);
-    connect(personal, &ManagerPersonal::changed, this, &EplFile::veraendern);
-    connect(dateiEigenschaften, &FileSettings::changed, this, &EplFile::veraendern);
+    // Version zu neu
+    if (version > Version::getProgrammVersion()) {
+        throw FileToNewException(version);
+    }
 }
 
 
@@ -97,6 +77,11 @@ QStringList EplFile::getInfoSchreibschutz()
 {
     if (! schreibgeschuetzt) return QStringList();
     return FileIO::Schreibschutz::pruefen(pfad);
+}
+
+bool EplFile::istPasswortGeschuetzt()
+{
+    return geladen.value("general").toObject().value("encrypted").toBool();
 }
 
 bool EplFile::istGespeichert() const
@@ -212,6 +197,85 @@ void EplFile::autoSave()
     schreibeJsonInDatei(pfad+FileIO::getSuffixVonTyp(FileIO::DateiTyp::EPLAutoSave), generiereJson());
 }
 
+void EplFile::open(QString passw)
+{
+    // HIER BEGINNT DAS EIGENTLICHE EINLESEN DER DATEN/DATEI
+    QJsonObject generalJSON = geladen.value("general").toObject();
+    Version version = Version(generalJSON.value("version").toString());
+    QString payload = geladen.value("payload").toString();
+
+    // Payload entschluesseln
+    if (generalJSON.value("encrypted").toBool(false)) {
+        if (! payload.endsWith("-ENC-"))
+            throw FileException();
+        payload.chop(5);
+        QJsonObject cryptoJSON = geladen.value("crypto").toObject();
+        Crypto::EncryptedData eD = {payload, Crypto::hash(passw), cryptoJSON.value("salt").toString(), cryptoJSON.value("iv").toString()};
+        payload = decrypt(eD);
+        if (! payload.endsWith("-ZIP-"))
+            throw FileWrongPasswordException();
+    }
+    // Payload entpacken
+    if (payload != "" || generalJSON.value("komprimiert").toBool(false)) {
+        if (! payload.endsWith("-ZIP-"))
+            throw FileException();
+        payload.chop(5);
+        geladen = dekomprimiere(payload);
+    }
+
+    // Daten anhand der angegebenen Version in aktuelles Format bringen
+    switch(version.getMinor()) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    {
+        QJsonObject calJson = geladen.value("calendar").toObject();
+
+        personal = new ManagerPersonal(calJson.value("personal").toObject());
+        manager = new Manager(personal, calJson.value("activites").toArray());
+
+        currentDate = QDate::fromString(calJson.value("currentDate").toString(), "yyyy-MM-dd");
+        break;
+    }
+    default:
+        personal = new ManagerPersonal(geladen.value("personal").toObject());
+        manager = new Manager(personal, geladen.value("activities").toArray());
+
+        currentDate = QDate::fromString(geladen.value("view").toObject().value("currentDate").toString(), "yyyy-MM-dd");
+        break;
+    }
+
+    dateiEigenschaften = new FileSettings(geladen.value("settings").toObject(), passw);
+
+    QJsonObject viewJSON = geladen.value("view").toObject();
+    int x = viewJSON.value("xMain").toInt();
+    int y = viewJSON.value("yMain").toInt();
+    int w = viewJSON.value("widthMain").toInt();
+    int h = viewJSON.value("heightMain").toInt();
+    positionKalender = FensterPosition {x, y, w, h};
+    x = viewJSON.value("xPersonal").toInt();
+    y = viewJSON.value("yPersonal").toInt();
+    w = viewJSON.value("widthPersonal").toInt();
+    h = viewJSON.value("heightPersonal").toInt();
+    positionPersonal = FensterPosition {x, y, w, h};
+
+    connect(manager, &Manager::changed, this, &EplFile::veraendern);
+    connect(personal, &ManagerPersonal::changed, this, &EplFile::veraendern);
+    connect(dateiEigenschaften, &FileSettings::changed, this, &EplFile::veraendern);
+
+    // Schreibschutz pruefen
+    QStringList l = FileIO::Schreibschutz::pruefen(pfad);
+    if (!l.isEmpty()) {
+        schreibgeschuetzt = true;
+    } else {
+        schreibgeschuetzt = false;
+        FileIO::Schreibschutz::setzen(pfad);
+    }
+}
+
 void EplFile::close()
 {
     if (pfad != "") {
@@ -262,96 +326,31 @@ QJsonObject EplFile::generiereJsonPersonal()
 bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj)
 {
     QJsonObject zuschreibendesObjekt = obj;
-    if (! Version::isDeveloperVersion()) {
 
-        QJsonObject generalJson = zuschreibendesObjekt.value("general").toObject();
+    QJsonObject generalJson = zuschreibendesObjekt.value("general").toObject();
 
-        generalJson.insert("komprimiert", true);
-        QString payload = komprimiere(zuschreibendesObjekt);
-        zuschreibendesObjekt = QJsonObject();
+    // Daten komprimieren
+    generalJson.insert("komprimiert", true);
+    QString payload = komprimiere(zuschreibendesObjekt)+"-ZIP-";
 
-        if (dateiEigenschaften->getPasswort() != "") {
-            generalJson.insert("encrypted", true);
+    zuschreibendesObjekt = QJsonObject();
 
-            Crypto::EncryptedData eD = encrypt(payload);
-            QJsonObject crypto;
-            crypto.insert("modus", "QtAES");
-            crypto.insert("salt", eD.salt);
-            crypto.insert("iv", eD.iv);
-            zuschreibendesObjekt.insert("crypto", crypto);
-            payload = eD.data;
-        }
+    if (dateiEigenschaften->getPasswort() != "") {
+        generalJson.insert("encrypted", true);
 
-        zuschreibendesObjekt.insert("general", generalJson);
-        zuschreibendesObjekt.insert("payload", payload);
+        Crypto::EncryptedData eD = encrypt(payload);
+        QJsonObject crypto;
+        crypto.insert("modus", "QtAES");
+        crypto.insert("salt", eD.salt);
+        crypto.insert("iv", eD.iv);
+        zuschreibendesObjekt.insert("crypto", crypto);
+        payload = eD.data+"-ENC-";
     }
+
+    zuschreibendesObjekt.insert("general", generalJson);
+    zuschreibendesObjekt.insert("payload", payload);
+
     return FileIO::saveJsonToFile(pfad, zuschreibendesObjekt);
-}
-
-QJsonObject EplFile::leseJsonAusDatei(QString pfad)
-{
-    // Daten aus Datei laden
-    QJsonObject daten = FileIO::getJsonFromFile(pfad);
-    if (daten.isEmpty()) {
-        throw FileException();
-    }
-
-    // Pruefen, ob Version kompatibel ist
-    QJsonObject generalJSON = daten.value("general").toObject();
-
-    Version version = Version(generalJSON.value("version").toString());
-    if (version == Version {-1, -1, -1}) {
-        FileIO::Schreibschutz::freigeben(pfad);
-        throw FileVersionNotSupportedException(tr("Die Datei ist nicht mit dieser Version des Einsatzplaner kompatibel."));
-    }
-
-    // Dateiversion zu neu abfangen
-    if (version > Version::getProgrammVersion()) {
-        // Version inkompatibel, zu neu
-        FileIO::Schreibschutz::freigeben(pfad);
-        throw FileToNewException(version);
-    }
-
-    // Dateiversion zu alt bzw. falsch eingestellt abfangen
-    if (version.getMajor() < 1) {
-        FileIO::Schreibschutz::freigeben(pfad);
-        throw FileVersionNotSupportedException(tr("Die Datei ist nicht mit dieser Version des Einsatzplaner kompatibel."));
-    }
-
-    // HIER BEGINNT DAS EIGENTLICHE EINLESEN DER DATEN/DATEI
-
-    QString payload = daten.value("payload").toString();
-    // Payload entschluesseln
-    if (generalJSON.value("encrypted").toBool(false)) {
-        QJsonObject crypto = daten.value("crypto").toObject();
-        Crypto::EncryptedData eD = {payload, passwort, crypto.value("salt").toString(), crypto.value("iv").toString()};
-        payload = decrypt(eD);
-    }
-    // Payload entpacken
-    if (generalJSON.value("komprimiert").toBool(false)) {
-        daten = dekomprimiere(payload);
-    }
-
-    // Daten anhand der angegebenen Version in aktuelles Format bringen
-    QJsonObject helper;
-    switch(version.getMinor()) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-        daten.insert("activities", daten.value("calendar").toObject().value("activites").toArray());
-        daten.insert("personal",   daten.value("calendar").toObject().value("personal").toObject());
-
-        helper = daten.value("view").toObject();
-        helper.insert("currentDate", daten.value("calendar").toObject().value("currentDate").toString());
-        daten.insert("view", helper);
-        break;
-    default:
-        break;
-    }
-    return daten;
 }
 
 QString EplFile::komprimiere(QJsonObject obj)

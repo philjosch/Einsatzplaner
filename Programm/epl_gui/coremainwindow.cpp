@@ -4,6 +4,7 @@
 #include "coreapplication.h"
 #include "einstellungendialog.h"
 
+#include <QInputDialog>
 #include <QMessageBox>
 
 CoreMainWindow::CoreMainWindow(QWidget *parent) : QMainWindow(parent)
@@ -237,10 +238,40 @@ EplFile *CoreMainWindow::getDateiVonPfad(QString path)
     EplFile* datei;
     try {
         datei = new EplFile(path);
-    }  catch (FileException& e) {
+    } catch (FileException& e) {
         QMessageBox::warning(nullptr, tr("Fehler"), e.getError());
         return nullptr;
     }
+    if (datei->istPasswortGeschuetzt()) {
+        while (true) {
+            // Abfragen Passwort
+            bool ok;
+            QString pwd = QInputDialog::getText(nullptr,
+                                                tr("Abfrage Passwort"),
+                                                tr("Geben Sie das Passwort zum Öffnen der Datei ein."),
+                                                QLineEdit::Password, "", &ok);
+
+            if (! ok)
+                return nullptr;
+
+            try {
+                datei->open(pwd);
+                break;
+            } catch (FileWrongPasswordException& e) {
+            } catch (FileException& e) {
+                QMessageBox::warning(nullptr, tr("Fehler"), e.getError());
+                return nullptr;
+            }
+        }
+    } else {
+        try {
+            datei->open();
+        } catch (FileException& e) {
+            QMessageBox::warning(nullptr, tr("Fehler"), e.getError());
+            return nullptr;
+        }
+    }
+
     if (datei->istSchreibgeschuetzt()) {
         QStringList info = datei->getInfoSchreibschutz();
         QMessageBox::information(nullptr, tr("Schreibgeschützt"),
