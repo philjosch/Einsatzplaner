@@ -5,7 +5,7 @@
 FileSettings::FileSettings() : QObject()
 {
     server = Networking::Server{"", "", ""};
-    auswahl = AActivity::Auswahl();
+    auswahl = Auswahl();
 
 }
 
@@ -15,7 +15,7 @@ FileSettings::FileSettings(QJsonObject json, QString pwd)
     enabled = online.value("enabled").toBool();
     autom = online.value("auto").toBool(true);
     server = Networking::Server::fromJson(online);
-    auswahl = AActivity::Auswahl::fromJson(online);
+    auswahl = Auswahl::fromJson(online);
 
     if (pwd == "")
         passwort = "";
@@ -55,11 +55,11 @@ void FileSettings::setAutom(bool value)
     emit changed();
 }
 
-AActivity::Auswahl FileSettings::getAuswahl() const
+Auswahl FileSettings::getAuswahl() const
 {
     return auswahl;
 }
-void FileSettings::setAuswahl(const AActivity::Auswahl &value)
+void FileSettings::setAuswahl(const Auswahl &value)
 {
     auswahl = value;
     emit changed();

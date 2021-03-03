@@ -2,6 +2,7 @@
 #define BASICS_H
 
 #include <QDate>
+#include <QJsonObject>
 #include <QMap>
 
 enum Category {
@@ -88,23 +89,96 @@ QString getLocalizedStringFromCategory(Category c);
 
 QString getStringFromArt(Art art);
 
+struct Auswahl {
+    enum AnfangBedingung {
+        AbHeute,
+        AbJetzt,
+        AbDatum,
+        AbAnfangDesJahres,
+        AbAlle
+    };
+    enum EndeBedingung {
+        BisHeute,
+        BisJetzt,
+        BisDatum,
+        BisEndeDesJahres,
+        BisAlle,
+        BisEndeNaechsterWoche,
+        BisEndeNaechsterMonat
+    };
 
-enum AnfangBedingung {
-    AbHeute,
-    AbJetzt,
-    AbDatum,
-    AbAnfangDesJahres,
-    AbAlle
+    AnfangBedingung startdate = AbJetzt;
+    EndeBedingung enddate = BisAlle;
+    bool activities = true;
+
+    void insertJson(QJsonObject *o) {
+        o->insert("startdate", zuString(startdate));
+        o->insert("enddate", zuString(enddate));
+        o->insert("activities", activities);
+    }
+    static Auswahl fromJson(QJsonObject o) {
+        Auswahl a;
+        a.startdate = anfangAusString(o.value("startdate").toString());
+        a.enddate = endeAusString(o.value("enddate").toString());
+        a.activities = o.value("activities").toBool(true);
+        return a;
+    }
+
+    static AnfangBedingung anfangAusString(QString s) {
+        if (s == "tdy") {
+            return AbJetzt;
+        }
+        if (s == "all") {
+            return AbAlle;
+        }
+        if (s == "bgn") {
+            return AbAnfangDesJahres;
+        }
+        return AbAlle;
+    }
+    static QString zuString(AnfangBedingung a) {
+        switch (a) {
+        case AbJetzt:
+            return "tdy";
+        case AbAlle:
+            return "all";
+        case AbAnfangDesJahres:
+            return "bgn";
+        default:
+            return "all";
+        }
+    }
+
+    static EndeBedingung endeAusString(QString s) {
+        if (s == "p1w") {
+            return BisEndeNaechsterWoche;
+        }
+        if (s == "p1m") {
+            return BisEndeNaechsterMonat;
+        }
+        if (s == "eoy") {
+            return BisEndeDesJahres;
+        }
+        if (s == "all") {
+            return BisAlle;
+        }
+        return BisAlle;
+    }
+    static QString zuString(EndeBedingung e) {
+        switch (e) {
+        case BisEndeDesJahres:
+            return "eoy";
+        case BisAlle:
+            return "all";
+        case BisEndeNaechsterWoche:
+           return "p1w";
+        case BisEndeNaechsterMonat:
+            return "p1m";
+        default:
+            return "all";
+        }
+    }
 };
 
-enum EndeBedingung {
-    BisHeute,
-    BisJetzt,
-    BisDatum,
-    BisEndeDesJahres,
-    BisAlle,
-    BisEndeNaechsterWoche,
-    BisEndeNaechsterMonat
-};
 
 #endif // BASICS_H

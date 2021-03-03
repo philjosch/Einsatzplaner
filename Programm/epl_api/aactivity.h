@@ -16,130 +16,6 @@ class AActivity: public QObject
     Q_OBJECT
 
 public:
-    struct Auswahl {
-        AnfangBedingung startdate = AbJetzt;
-        EndeBedingung enddate = BisAlle;
-        bool activities = true;
-
-        void insertJson(QJsonObject *o) {
-            o->insert("startdate", zuString(startdate));
-            o->insert("enddate", zuString(enddate));
-            o->insert("activities", activities);
-        }
-        static Auswahl fromJson(QJsonObject o) {
-            Auswahl a;
-            a.startdate = anfangAusString(o.value("startdate").toString());
-            a.enddate = endeAusString(o.value("enddate").toString());
-            a.activities = o.value("activities").toBool(true);
-            return a;
-        }
-        static AnfangBedingung anfangAusString(QString s) {
-            if (s == "tdy") {
-                return AbJetzt;
-            }
-            if (s == "all") {
-                return AbAlle;
-            }
-            if (s == "bgn") {
-                return AbAnfangDesJahres;
-            }
-            return AbAlle;
-        }
-        static QString zuString(AnfangBedingung a) {
-            switch (a) {
-            case AbJetzt:
-                return "tdy";
-            case AbAlle:
-                return "all";
-            case AbAnfangDesJahres:
-                return "bgn";
-            default:
-                return "all";
-            }
-        }
-
-        static EndeBedingung endeAusString(QString s) {
-            if (s == "p1w") {
-                return BisEndeNaechsterWoche;
-            }
-            if (s == "p1m") {
-                return BisEndeNaechsterMonat;
-            }
-            if (s == "eoy") {
-                return BisEndeDesJahres;
-            }
-            if (s == "all") {
-                return BisAlle;
-            }
-            return BisAlle;
-        }
-        static QString zuString(EndeBedingung e) {
-            switch (e) {
-            case BisEndeDesJahres:
-                return "eoy";
-            case BisAlle:
-                return "all";
-            case BisEndeNaechsterWoche:
-               return "p1w";
-            case BisEndeNaechsterMonat:
-                return "p1m";
-            default:
-                return "all";
-            }
-        }
-
-        bool check(AActivity *a)
-        {
-            switch (startdate) {
-            case AbJetzt:
-                if (a->liegtInVergangenheit()) {
-                    return false;
-                }
-                break;
-            case AbAlle:
-                break;
-            case AbAnfangDesJahres:
-                if (a->getDatum().year() < QDate::currentDate().year()) {
-                    return false;
-                }
-                break;
-            default:
-                break;
-            }
-            // Enddatum
-            QDate ref;
-            switch (enddate) {
-            case BisAlle:
-                break;
-            case BisEndeNaechsterWoche:
-                ref = QDate::currentDate().addDays(7); // naechste Woche
-                ref = ref.addDays(7-ref.dayOfWeek()); // Ende der Woche
-                if (a->getDatum() > ref) {
-                    return false;
-                }
-                break;
-            case BisEndeNaechsterMonat:
-                ref = QDate::currentDate().addMonths(1); // naechster Monat
-                ref = QDate(ref.year(), ref.month(), ref.daysInMonth()); // Ende des Monats
-                if (a->getDatum() > ref) {
-                    return false;
-                }
-            case BisEndeDesJahres:
-                if (a->getDatum().year() > QDate::currentDate().year()) {
-                    return false;
-                }
-            default:
-                break;
-            }
-            // Auch Aktivitaeten?
-            if (!activities) {
-                if (a->getArt() == Art::Arbeitseinsatz)
-                    return false;
-            }
-            return true;
-        }
-
-    };
     struct Einsatz {
         Person *person;
         Category cat;
@@ -223,6 +99,8 @@ public:
     static bool isExtern(QString bemerkung);
 
     static void sort(QList<AActivity *> *list);
+
+    bool check(Auswahl aus);
 
 signals:
     void changed(AActivity *, QDate = QDate());

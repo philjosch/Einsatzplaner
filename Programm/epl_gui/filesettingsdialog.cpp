@@ -28,18 +28,18 @@ void FileSettingsDialog::saveSettings()
                        ui->lineID->text()}
                        );
 
-    AActivity::Auswahl auswahl;
+    Auswahl auswahl;
     switch (ui->comboFrom->currentIndex()) {
-    case 0: auswahl.startdate = AnfangBedingung::AbJetzt; break;
-    case 1: auswahl.startdate = AnfangBedingung::AbAnfangDesJahres; break;
-    case 2: auswahl.startdate = AnfangBedingung::AbAlle; break;
-    default: auswahl.startdate = AnfangBedingung::AbJetzt; break;
+    case 0: auswahl.startdate = Auswahl::AnfangBedingung::AbJetzt; break;
+    case 1: auswahl.startdate = Auswahl::AnfangBedingung::AbAnfangDesJahres; break;
+    case 2: auswahl.startdate = Auswahl::AnfangBedingung::AbAlle; break;
+    default: auswahl.startdate = Auswahl::AnfangBedingung::AbJetzt; break;
     }
     switch (ui->comboTo->currentIndex()) {
-    case 0: auswahl.enddate = EndeBedingung::BisEndeNaechsterWoche; break;
-    case 1: auswahl.enddate = EndeBedingung::BisEndeNaechsterMonat; break;
-    case 2: auswahl.enddate = EndeBedingung::BisEndeDesJahres; break;
-    default: auswahl.enddate = EndeBedingung::BisAlle; break;
+    case 0: auswahl.enddate = Auswahl::EndeBedingung::BisEndeNaechsterWoche; break;
+    case 1: auswahl.enddate = Auswahl::EndeBedingung::BisEndeNaechsterMonat; break;
+    case 2: auswahl.enddate = Auswahl::EndeBedingung::BisEndeDesJahres; break;
+    default: auswahl.enddate = Auswahl::EndeBedingung::BisAlle; break;
     }
     auswahl.activities = ui->checkActivity->isChecked();
     mngr->setAuswahl(auswahl);
@@ -93,31 +93,31 @@ void FileSettingsDialog::loadSettings()
     ui->lineServer->setText(s.server);
     ui->linePath->setText(s.path);
     ui->lineID->setText(s.id);
-    AActivity::Auswahl a = mngr->getAuswahl();
+    Auswahl a = mngr->getAuswahl();
     switch (a.startdate) {
-    case AnfangBedingung::AbJetzt:
+    case Auswahl::AnfangBedingung::AbJetzt:
         ui->comboFrom->setCurrentIndex(0);
         break;
-    case AnfangBedingung::AbAnfangDesJahres:
+    case Auswahl::AnfangBedingung::AbAnfangDesJahres:
         ui->comboFrom->setCurrentIndex(1);
         break;
-    case AnfangBedingung::AbAlle:
+    case Auswahl::AnfangBedingung::AbAlle:
         ui->comboFrom->setCurrentIndex(2);
         break;
     default:
         ui->comboFrom->setCurrentIndex(2);
     }
     switch (a.enddate) {
-    case EndeBedingung::BisEndeNaechsterWoche:
+    case Auswahl::EndeBedingung::BisEndeNaechsterWoche:
         ui->comboTo->setCurrentIndex(0);
         break;
-    case EndeBedingung::BisEndeNaechsterMonat:
+    case Auswahl::EndeBedingung::BisEndeNaechsterMonat:
         ui->comboTo->setCurrentIndex(1);
         break;
-    case EndeBedingung::BisEndeDesJahres:
+    case Auswahl::EndeBedingung::BisEndeDesJahres:
         ui->comboTo->setCurrentIndex(2);
         break;
-    case EndeBedingung::BisAlle:
+    case Auswahl::EndeBedingung::BisAlle:
         ui->comboTo->setCurrentIndex(3);
         break;
     default:

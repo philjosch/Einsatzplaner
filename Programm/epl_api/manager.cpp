@@ -85,11 +85,11 @@ void Manager::sort()
     AActivity::sort(&activities);
 }
 
-QList<AActivity *> Manager::filter(AActivity::Auswahl auswahl)
+QList<AActivity *> Manager::filter(Auswahl auswahl)
 {
     QList<AActivity *> liste = QList<AActivity*>();
     for (AActivity *a: activities) {
-        if (auswahl.check(a))
+        if (a->check(auswahl))
             liste.append(a);
     }
     return liste;

@@ -1,7 +1,7 @@
 #ifndef FILESETTINGS_H
 #define FILESETTINGS_H
 
-#include "aactivity.h"
+#include "basics.h"
 #include "networking.h"
 
 #include <QJsonObject>
@@ -25,8 +25,8 @@ public:
     Networking::Server getServer() const;
     void setServer(const Networking::Server &value);
 
-    AActivity::Auswahl getAuswahl() const;
-    void setAuswahl(const AActivity::Auswahl &value);
+    Auswahl getAuswahl() const;
+    void setAuswahl(const Auswahl &value);
 
     /**
      * @brief Gibt das gehashte Passwort zurueck, mit dem der Zugriff auf die Datei gesichert wird
@@ -46,7 +46,7 @@ protected:
     bool enabled = false;
     bool autom = true;
     Networking::Server server;
-    AActivity::Auswahl auswahl;
+    Auswahl auswahl;
 
     QString passwort = "";
 };
