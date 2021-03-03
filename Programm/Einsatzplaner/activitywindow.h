@@ -1,7 +1,7 @@
 #ifndef ACTIVITYWINDOW_H
 #define ACTIVITYWINDOW_H
 
-#include "activity.h"
+#include "aactivity.h"
 #include "coremainwindow.h"
 
 #include <QMainWindow>

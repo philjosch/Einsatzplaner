@@ -1,8 +1,5 @@
 #include "aactivity.h"
 #include "person.h"
-#include "fahrtag.h"
-#include "activity.h"
-#include "aactivity.h"
 #include "eplexception.h"
 
 #include <QJsonArray>

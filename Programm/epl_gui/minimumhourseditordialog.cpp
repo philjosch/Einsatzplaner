@@ -2,7 +2,6 @@
 #include "ui_minimumhourseditordialog.h"
 
 #include "guihelper.h"
-#include "aactivity.h"
 
 MinimumHoursEditorDialog::MinimumHoursEditorDialog(ManagerPersonal *manager, QWidget *parent) :
     QDialog(parent),

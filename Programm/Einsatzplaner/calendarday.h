@@ -2,7 +2,6 @@
 #define CALENDARDAY_H
 
 #include "aactivity.h"
-#include "fahrtag.h"
 
 #include <QListWidgetItem>
 

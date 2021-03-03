@@ -2,8 +2,7 @@
 #define MAINWINDOW_H
 
 #include "coremainwindow.h"
-#include "activity.h"
-#include "fahrtag.h"
+#include "aactivity.h"
 #include "calendarday.h"
 #include "exportdialog.h"
 #include "personalwindow.h"

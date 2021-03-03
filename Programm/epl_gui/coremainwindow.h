@@ -1,8 +1,7 @@
 #ifndef COREMAINWINDOW_H
 #define COREMAINWINDOW_H
 
-#include "activity.h"
-#include "fahrtag.h"
+#include "aactivity.h"
 #include "eplexception.h"
 #include "eplfile.h"
 

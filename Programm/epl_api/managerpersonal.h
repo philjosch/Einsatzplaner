@@ -7,10 +7,6 @@
 
 #include "basics.h"
 
-class ManagerPersonal;
-
-#include "aactivity.h"
-
 class Person;
 
 class ManagerPersonal :  public QObject
