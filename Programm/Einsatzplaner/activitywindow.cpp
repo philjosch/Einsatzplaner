@@ -14,7 +14,6 @@ ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWind
 
     connect(this, &ActivityWindow::loeschen, parent, &CoreMainWindow::loeschenAktivitaet);
 
-    tabelleZuEinsatz = QMap<QTableWidgetItem*,AActivity::Einsatz>();
 
     nehme = false;
     // Allgemeine Daten von AActivity
@@ -38,8 +37,9 @@ ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWind
 
         Infos info = personen.value(e);
 
-        ui->tablePersonen->item(0, 0)->setText((e.person)->getName());
-        tabelleZuEinsatz.insert(ui->tablePersonen->item(0, 0), e);
+        EinsatzTableWidgetItem *ptwi = dynamic_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(0, 0));
+        ptwi->setEinsatz(e);
+        ptwi->setText(e.person->getName());
 
         Category kat = info.kategorie;
         if (kat == Category::Begleiter)
@@ -132,7 +132,7 @@ void ActivityWindow::on_buttonInsert_clicked()
     ui->tablePersonen->setSortingEnabled(false);
     ui->tablePersonen->insertRow(0);
 
-    QTableWidgetItem *item = new QTableWidgetItem("");
+    QTableWidgetItem *item = new EinsatzTableWidgetItem("");
     ui->tablePersonen->setItem(0, 0, item);
 
     QComboBox *box = generateNewCategoryComboBox();
@@ -151,8 +151,6 @@ void ActivityWindow::on_buttonInsert_clicked()
     connect(beginn, &QTimeEdit::timeChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 2); });
     connect(ende, &QTimeEdit::timeChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 3); });
 
-    tabelleZuEinsatz.insert(item, AActivity::Einsatz{nullptr, Sonstiges});
-
     ui->buttonRemove->setEnabled(true);
     ui->tablePersonen->repaint();
 
@@ -164,24 +162,24 @@ void ActivityWindow::on_buttonRemove_clicked()
 {
     int i = ui->tablePersonen->currentRow();
     if (i < 0) return;
-    if (tabelleZuEinsatz.contains(ui->tablePersonen->item(i, 0))) {
-        AActivity::Einsatz e = tabelleZuEinsatz.value(ui->tablePersonen->item(i, 0));
-        activity->removePerson(e.person, e.cat);
-    }
+    EinsatzTableWidgetItem *ptwi = dynamic_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(i, 0));
+    activity->removePerson(ptwi->getEinsatz().person, ptwi->getEinsatz().cat);
 
-    tabelleZuEinsatz.remove(ui->tablePersonen->item(i, 0));
     ui->tablePersonen->removeRow(i);
 
     ui->buttonRemove->setEnabled(ui->tablePersonen->rowCount() > 0);
 }
 
-void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
+void ActivityWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int column)
 {
     // column 0: Name | 1: Aufgabe | 2: Beginn | 3: Ende | 4: Bemerkung
     // Wenn der Name geändert wurde, muss die Verknuepfung mit der alten Person aufgeloest werden
     ui->tablePersonen->resizeColumnsToContents();
     if (nehme) {
         nehme = false;
+
+        EinsatzTableWidgetItem *ptwi = dynamic_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(row, 0));
+        AActivity::Einsatz e = ptwi->getEinsatz();
 
         QTableWidgetItem *item = ui->tablePersonen->item(row, 0);
         QString name = item->text();
@@ -190,30 +188,15 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, int column)
         QTime ende = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
 
-        AActivity::Einsatz e = tabelleZuEinsatz.value(item);
-        Infos neu = Infos{beginn, ende, kat, bemerkung};
-        bool neuHinzufuegen = false;
-
-        if (column == 0 || column == 1) {
-            neuHinzufuegen = true;
-        } else if (column == 2 || column == 3) {
-            activity->updatePersonInfos(e.person, e.cat, neu);
-        } else if (column == 4) {
-            activity->updatePersonBemerkung(e.person, e.cat, bemerkung);
-        }
-        if (neuHinzufuegen) {
-            if (e.person != nullptr)
-                activity->removePerson(e.person, e.cat);
-
-            try {
-                AActivity::Einsatz e = activity->addPerson(name, bemerkung, beginn, ende, kat);
-                tabelleZuEinsatz.insert(item, e);
-                if (! e.person->getAktiv()) {
-                    QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
-                }
-            }  catch (AActivityException &e) {
-                QMessageBox::warning(this, tr("Fehler"), e.getError());
+        activity->removePerson(e.person, e.cat);
+        try {
+            AActivity::Einsatz e = activity->addPerson(name, bemerkung, beginn, ende, kat);
+            ptwi->setEinsatz(e);
+            if (! e.person->getAktiv()) {
+                QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
             }
+        }  catch (AActivityException &e) {
+            QMessageBox::warning(this, tr("Fehler"), e.getError());
         }
         nehme = true;
     }
@@ -230,7 +213,7 @@ void ActivityWindow::on_actionPdf_triggered()
                                     Export::getPrinterPDF(this, windowTitle(), QPrinter::Orientation::Portrait));
 }
 
-void ActivityWindow::on_buttonDelete_clicked()
+void ActivityWindow::on_actionDelete_triggered()
 {
     emit loeschen(activity);
 }

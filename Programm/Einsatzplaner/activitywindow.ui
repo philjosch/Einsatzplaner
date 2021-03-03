@@ -393,14 +393,14 @@ unbekannt</string>
    </hints>
   </connection>
   <connection>
-   <sender>actionDelete</sender>
-   <signal>triggered()</signal>
-   <receiver>buttonDelete</receiver>
-   <slot>click()</slot>
+   <sender>buttonDelete</sender>
+   <signal>clicked()</signal>
+   <receiver>actionDelete</receiver>
+   <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
+     <x>401</x>
+     <y>456</y>
     </hint>
     <hint type="destinationlabel">
      <x>401</x>

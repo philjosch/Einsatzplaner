@@ -19,6 +19,30 @@ public:
     explicit ActivityWindow(CoreMainWindow *parent, AActivity *a);
     ~ActivityWindow();
 
+    class EinsatzTableWidgetItem : public QTableWidgetItem {
+    public:
+        EinsatzTableWidgetItem(QString s) : QTableWidgetItem(s)
+        {
+            einsatz = AActivity::Einsatz();
+        }
+        EinsatzTableWidgetItem(AActivity::Einsatz e) : QTableWidgetItem() {
+            einsatz = e;
+        }
+
+        AActivity::Einsatz getEinsatz() const
+        {
+            return einsatz;
+        }
+        void setEinsatz(AActivity::Einsatz value)
+        {
+            einsatz = value;
+        }
+
+    protected:
+        AActivity::Einsatz einsatz;
+    };
+
+
 private slots:
     void on_buttonInsert_clicked();
     void on_buttonRemove_clicked();
@@ -42,7 +66,7 @@ private slots:
     void on_actionPrint_triggered();
     void on_actionPdf_triggered();
 
-    void on_buttonDelete_clicked();
+    void on_actionDelete_triggered();
 
 signals:
     void loeschen(AActivity*);
@@ -54,8 +78,6 @@ private:
     bool nehme;
 
     Category predefinedValueForTable;
-
-    QMap<QTableWidgetItem*, AActivity::Einsatz> tabelleZuEinsatz;
 
     void setPredefinedValue(QString anlass);
 

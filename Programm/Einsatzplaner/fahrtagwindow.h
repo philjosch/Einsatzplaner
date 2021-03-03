@@ -21,6 +21,54 @@ public:
     explicit FahrtagWindow(CoreMainWindow *parent, Fahrtag *f);
     ~FahrtagWindow();
 
+    class EinsatzTableWidgetItem : public QTableWidgetItem {
+    public:
+        EinsatzTableWidgetItem(QString s) : QTableWidgetItem(s)
+        {
+            einsatz = AActivity::Einsatz();
+        }
+        EinsatzTableWidgetItem(AActivity::Einsatz e) : QTableWidgetItem()
+        {
+            einsatz = e;
+        }
+
+        AActivity::Einsatz getEinsatz() const
+        {
+            return einsatz;
+        }
+        void setEinsatz(AActivity::Einsatz value)
+        {
+            einsatz = value;
+        }
+
+    protected:
+        AActivity::Einsatz einsatz;
+    };
+    class TableListWidgetItem : public QListWidgetItem {
+    public:
+        TableListWidgetItem(QString s) : QListWidgetItem(s)
+        {
+            tableItem = nullptr;
+        }
+        TableListWidgetItem() : QListWidgetItem()
+        {
+            tableItem = nullptr;
+        }
+
+        EinsatzTableWidgetItem *getTableItem() const
+        {
+            return tableItem;
+        }
+        void setTableItem(EinsatzTableWidgetItem *value)
+        {
+            tableItem = value;
+        }
+
+    protected:
+        EinsatzTableWidgetItem *tableItem;
+    };
+
+
 private slots:
     // Allgemeine Daten
     void on_dateDate_dateChanged(const QDate &date);
@@ -91,7 +139,7 @@ private slots:
     void on_tablePersonen_cellChanged(int row, int column);
 
     void on_buttonRemovePerson_clicked();
-    int fuegeZeileInTabelleEin(QString name="", Category kat=Sonstiges, QString bemerkung="", bool block=false, QTime beginn=QTime(0,0), QTime ende=QTime(0,0));
+    EinsatzTableWidgetItem *fuegeZeileInTabelleEin(QString name="", Category kat=Sonstiges, QString bemerkung="", bool block=false, QTime beginn=QTime(0,0), QTime ende=QTime(0,0));
 
     // Menue
     void on_actionDelete_triggered();
@@ -110,10 +158,6 @@ private:
     Ui::FahrtagWindow *ui;
     Fahrtag *fahrtag;
     bool nehme;
-
-    // Personal Verwaltung
-    QMap<QListWidgetItem*, QTableWidgetItem*> listeZuTabelle;
-    QMap<QTableWidgetItem*, AActivity::Einsatz> tabelleZuEinsatz;
 
     void addItemTolist(QListWidget *l, QPushButton *b);
     void deleteItemFromList(QListWidget *l, QPushButton *b);
