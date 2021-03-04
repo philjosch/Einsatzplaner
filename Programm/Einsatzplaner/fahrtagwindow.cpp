@@ -74,51 +74,37 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
     ui->checkBoxAll->setChecked(fahrtag->getCheckAll());
 
     /* Personal einfuegen */
-    QMap<AActivity::Einsatz, Infos> tf;
-    QMap<AActivity::Einsatz, Infos> zf;
-    QMap<AActivity::Einsatz, Infos> zub;
-    QMap<AActivity::Einsatz, Infos> service;
-    QMap<AActivity::Einsatz, Infos> sonstige;
 
-    for(AActivity::Einsatz e: fahrtag->getPersonen().keys()) {
-        Infos info = fahrtag->getPersonen().value(e);
-
+    for(Einsatz *e: fahrtag->getPersonen()) {
         // Fügt die Personene in die einzelnen Listen ein, sodass es direkt geändert werden kann
-        TableListWidgetItem *item = new TableListWidgetItem((e.person)->getName() + (info.bemerkung == "" ? "" : "; "+info.bemerkung));
+        TableListWidgetItem *item = new TableListWidgetItem((e->person)->getName() + (e->bemerkung == "" ? "" : "; "+e->bemerkung));
         item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
         bool block = true;
-        switch (e.cat) {
+        switch (e->kategorie) {
         case Category::Tf:
         case Category::Tb:
-            tf.insert(e, info);
             ui->listTf->addItem(item);
             ui->buttonTfDelete->setEnabled(true);
             break;
         case Category::Zf:
-            zf.insert(e, info);
             ui->listZf->addItem(item);
             ui->buttonZfDelete->setEnabled(true);
             break;
         case Category::Zub:
         case Category::Begleiter:
-            zub.insert(e, info);
             ui->listZub->addItem(item);
             ui->buttonZubDelete->setEnabled(true);
             break;
         case Category::Service:
-            service.insert(e, info);
             ui->listService->addItem(item);
             ui->buttonServiceDelete->setEnabled(true);
             break;
         default:
-            sonstige.insert(e, info);
             ui->buttonRemovePerson->setEnabled(true);
             block = false;
             break;
         }
-        EinsatzTableWidgetItem *ptwi = fuegeZeileInTabelleEin((e.person)->getName(),
-                                                              (info.kategorie == Category::Begleiter ? Zub : info.kategorie),
-                                                              info.bemerkung, block, info.beginn, info.ende);
+        EinsatzTableWidgetItem *ptwi = fuegeInTabelleEin(e);
         ptwi->setEinsatz(e);
         item->setTableItem(ptwi);
     }
@@ -258,8 +244,8 @@ void FahrtagWindow::deleteItemFromList(QListWidget *l, QPushButton *b)
 
     if (item->getTableItem() != nullptr) {
 
-        AActivity::Einsatz e = item->getTableItem()->getEinsatz();
-        fahrtag->removePerson(e.person, e.cat);
+        Einsatz *e = item->getTableItem()->getEinsatz();
+        fahrtag->removePerson(e);
 
         ui->tablePersonen->removeRow(ui->tablePersonen->row(item->getTableItem()));
     }
@@ -285,27 +271,27 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
     TableListWidgetItem *tlwi = static_cast<TableListWidgetItem*>(item);
     if (tlwi->getTableItem() != nullptr) {
         // Person wurde bereits eingetragen, entweder intern oder extern
-        AActivity::Einsatz e = tlwi->getTableItem()->getEinsatz();
-        if (name == (e.person)->getName()) {
+        Einsatz *e = tlwi->getTableItem()->getEinsatz();
+        if (name == (e->person)->getName()) {
             // Bemerkung wurde lediglich verändert
-            fahrtag->updatePersonBemerkung(e.person, e.cat, bemerkung);
+            e->bemerkung = bemerkung;
             ui->tablePersonen->item(ui->tablePersonen->row(tlwi->getTableItem()), 4)->setText(bemerkung);
             return;
         }
         // Name wurde veraendert, somit ist die Person zu entfernen und neu einzufuegen
-        fahrtag->removePerson(e.person, e.cat);
+        fahrtag->removePerson(e);
 
         ui->tablePersonen->removeRow(ui->tablePersonen->row(tlwi->getTableItem()));
         tlwi->setTableItem(nullptr);
     }
 
     try {
-        AActivity::Einsatz einsatz = fahrtag->addPerson(name, bemerkung, QTime(0,0), QTime(0,0), kat);
-        if (!einsatz.person->getAktiv())
+        Einsatz *einsatz = fahrtag->addPerson(name, bemerkung, QTime(0,0), QTime(0,0), kat);
+        if (!einsatz->person->getAktiv())
             QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
 
         // Zeile für die Person in die Tabelle einfügen
-        EinsatzTableWidgetItem *ptwi = fuegeZeileInTabelleEin(name, kat, bemerkung, true);
+        EinsatzTableWidgetItem *ptwi = fuegeInTabelleEin(einsatz, true);
         ptwi->setEinsatz(einsatz);
         tlwi->setTableItem(ptwi);
     }  catch (AActivityException &e) {
@@ -425,7 +411,7 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int c
         nehme = false;
 
         EinsatzTableWidgetItem *ptwi = static_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(row, 0));
-        AActivity::Einsatz e = ptwi->getEinsatz();
+        Einsatz *e = ptwi->getEinsatz();
 
         QString name = ptwi->text();
         Category kat = getCategoryFromLocalizedString(static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->currentText());
@@ -433,12 +419,12 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int c
         QTime ende = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
 
-        fahrtag->removePerson(e.person, e.cat);
+        fahrtag->removePerson(e);
 
         try {
-            AActivity::Einsatz e = fahrtag->addPerson(name, bemerkung, beginn, ende, kat);
+            Einsatz *e = fahrtag->addPerson(name, bemerkung, beginn, ende, kat);
             ptwi->setEinsatz(e);
-            if (! e.person->getAktiv())
+            if (! e->person->getAktiv())
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
         }  catch (AActivityException &e) {
             QMessageBox::warning(this, tr("Fehler"), e.getError());
@@ -458,11 +444,44 @@ void FahrtagWindow::on_buttonRemovePerson_clicked()
         return;
     }
     EinsatzTableWidgetItem *ptwi = static_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(i, 0));
-    AActivity::Einsatz e = ptwi->getEinsatz();
-    fahrtag->removePerson(e.person, e.cat);
+    Einsatz *e = ptwi->getEinsatz();
+    fahrtag->removePerson(e);
 
     ui->tablePersonen->removeRow(i);
     ui->buttonRemovePerson->setEnabled(ui->tablePersonen->rowCount() > 0);
+}
+
+FahrtagWindow::EinsatzTableWidgetItem *FahrtagWindow::fuegeInTabelleEin(Einsatz *e, bool block)
+{
+    if (e == nullptr)
+        return nullptr;
+
+    bool nehmeOld = nehme;
+    nehme = false;
+    EinsatzTableWidgetItem *etwi = fuegeZeileInTabelleEin();
+
+    int row = ui->tablePersonen->row(etwi);
+
+    etwi->setText(e->person->getName());
+    static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->setCurrentText(
+                getLocalizedStringFromCategory((e->kategorie == Begleiter ? Zub : e->kategorie))
+                );
+    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->setTime(e->beginn);
+    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->setTime(e->ende);
+    if (ui->tablePersonen->item(row, 4) == nullptr) {
+        ui->tablePersonen->setItem(row, 4, new QTableWidgetItem(""));
+    }
+    ui->tablePersonen->item(row,4)->setText(e->bemerkung);
+
+    if (block) {
+        ui->tablePersonen->item(0, 0)->setFlags(Qt::NoItemFlags);
+        ui->tablePersonen->cellWidget(0, 1)->setDisabled(block);
+        ui->tablePersonen->item(0, 4)->setFlags(Qt::NoItemFlags);
+    }
+
+    ui->buttonRemovePerson->setEnabled(true);
+    nehme = nehmeOld;
+    return etwi;
 }
 
 void FahrtagWindow::on_actionDelete_triggered()
@@ -613,35 +632,26 @@ QString FahrtagWindow::getBelegungVonKlasseUndZug(Fahrtag *f, int zug, int klass
     return d;
 }
 
-FahrtagWindow::EinsatzTableWidgetItem *FahrtagWindow::fuegeZeileInTabelleEin(QString name, Category kat, QString bemerkung, bool block, QTime beginn, QTime ende)
+FahrtagWindow::EinsatzTableWidgetItem *FahrtagWindow::fuegeZeileInTabelleEin()
 {
     bool nehmeOld = nehme;
     nehme = false;
     ui->tablePersonen->insertRow(0);
 
-    EinsatzTableWidgetItem *item = new EinsatzTableWidgetItem(name);
+    EinsatzTableWidgetItem *item = new EinsatzTableWidgetItem("");
     ui->tablePersonen->setItem(0, 0, item);
 
     QComboBox *box = generateNewCategoryComboBox();
-    if (kat == Begleiter) kat = Zub;
-    box->setCurrentText(getLocalizedStringFromCategory(kat));
     ui->tablePersonen->setCellWidget(0, 1, box);
 
     QTimeEdit *beginnEdit = generateNewTimeEdit();
-    beginnEdit->setTime(beginn);
     ui->tablePersonen->setCellWidget(0, 2, beginnEdit);
 
     QTimeEdit *endeEdit = generateNewTimeEdit();
-    endeEdit->setTime(ende);
     ui->tablePersonen->setCellWidget(0, 3, endeEdit);
 
-    ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(bemerkung));
-
-    if (block) {
-        ui->tablePersonen->item(0, 0)->setFlags(Qt::NoItemFlags);
-        ui->tablePersonen->cellWidget(0, 1)->setDisabled(block);
-        ui->tablePersonen->item(0, 4)->setFlags(Qt::NoItemFlags);
-    }
+    QTableWidgetItem *bem = new QTableWidgetItem();
+    ui->tablePersonen->setItem(0, 4, bem);
 
     connect(box, &QComboBox::currentTextChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 1); });
     connect(beginnEdit, &QTimeEdit::timeChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 2); });

@@ -72,15 +72,6 @@ enum Mistake {
     KapazitaetUeberlauf // Es gibt nicht genuegend Sitzplaetze fuer die Reservierungen
 };
 
-
-struct Infos {
-    QTime beginn;
-    QTime ende;
-    Category kategorie;
-    QString bemerkung;
-    bool anrechnen;
-};
-
 QString minutesToHourString(int min);
 QString minutesToHourStringShort(int min);
 
@@ -178,6 +169,27 @@ struct Auswahl {
             return "all";
         }
     }
+};
+
+
+class AActivity;
+class Person;
+
+struct Einsatz {
+    Person *person;
+    AActivity *activity;
+    Category kategorie;
+    QTime beginn;
+    QTime ende;
+    QString bemerkung;
+    bool anrechnen;
+
+    static void sort(QList<Einsatz*> *liste);
+    static void sort(QList<Einsatz> *liste);
+
+    static bool lesser(Einsatz lhs, Einsatz rhs);
+    static bool lesserPoint(const Einsatz *lhs, const Einsatz *rhs);
+
 };
 
 

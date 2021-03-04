@@ -26,7 +26,7 @@ AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
     zeitenUnbekannt = false;
     anlass = "";
     bemerkungen = "";
-    personen = QMap<Einsatz, Infos>();
+    personen = QList<Einsatz*>();
     personalBenoetigt = true;
     wichtig = false;
     abgesagt = false;
@@ -36,7 +36,7 @@ AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
 AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
 {
     personal = p;
-    personen = QMap<Einsatz, Infos>();
+    personen = QList<Einsatz*>();
 
     art = Arbeitseinsatz;
     datum = QDate::fromString(o.value("datum").toString(), "yyyy-MM-dd");
@@ -62,14 +62,14 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
             person->setAusbildungRangierer(true);
         }
 
-        Infos info = Infos();
-        info.beginn = QTime::fromString(aO.value("beginn").toString(), "hh:mm");
-        info.ende = QTime::fromString(aO.value("ende").toString(), "hh:mm");
-        info.kategorie = static_cast<Category>(aO.value("kat").toInt(100));
-        info.bemerkung = aO.value("bemerkung").toString();
+        Einsatz *e = new Einsatz{person, this,
+                      static_cast<Category>(aO.value("kat").toInt(100)),
+                      QTime::fromString(aO.value("beginn").toString(), "hh:mm"),
+                      QTime::fromString(aO.value("ende").toString(), "hh:mm"),
+                      aO.value("bemerkung").toString()};
 
-        person->addActivity(this, info.kategorie);
-        personen.insert(Einsatz{person, info.kategorie}, info);
+        person->addActivity(e);
+        personen.append(e);
     }
     personalBenoetigt = o.value("personalBenoetigt").toBool(true);
     wichtig = o.value("wichtig").toBool(false);
@@ -78,8 +78,8 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
 
 AActivity::~AActivity()
 {
-    for(Einsatz e: personen.keys()) {
-        (e.person)->removeActivity(this, e.cat);
+    for(Einsatz *e: personen) {
+        (e->person)->removeActivity(e);
     }
 }
 
@@ -100,17 +100,17 @@ QJsonObject AActivity::toJson()
     data.insert("anlass", anlass);
     data.insert("bemerkungen", bemerkungen);
     QJsonArray personenJSON;
-    for(Einsatz e: personen.keys()) {
+    for(Einsatz *e: personen) {
         QJsonObject persJson;
-        if (personal->personExists((e.person)->getName())) {
-            persJson.insert("id", (e.person)->getId());
+        if (personal->personExists((e->person)->getName())) {
+            persJson.insert("id", (e->person)->getId());
         } else {
-            persJson.insert("name", (e.person)->getName());
+            persJson.insert("name", (e->person)->getName());
         }
-        persJson.insert("beginn", personen.value(e).beginn.toString("hh:mm"));
-        persJson.insert("ende", personen.value(e).ende.toString("hh:mm"));
-        persJson.insert("kat", personen.value(e).kategorie);
-        persJson.insert("bemerkung", personen.value(e).bemerkung);
+        persJson.insert("beginn", e->beginn.toString("hh:mm"));
+        persJson.insert("ende", e->ende.toString("hh:mm"));
+        persJson.insert("kat", e->kategorie);
+        persJson.insert("bemerkung", e->bemerkung);
         personenJSON.append(persJson);
     }
     data.insert("personen", personenJSON);
@@ -211,30 +211,18 @@ void AActivity::setAbgesagt(bool value)
     emit changed(this);
 }
 
-Person *AActivity::getPerson(QString name)
+bool AActivity::removePerson(Einsatz *e)
 {
-    Person *pers = personal->getPerson(name);
-    if (pers != nullptr) {
-        return pers;
+    personen.removeAll(e);
+    bool ret = false;
+    if (e->person != nullptr) {
+        ret = e->person->removeActivity(e);
     }
-    for(Einsatz e: personen.keys()) {
-        if ((e.person)->getName() == name) {
-            pers = e.person;
-            break;
-        }
-    }
-    return pers;
-}
-
-bool AActivity::removePerson(Person *p, Category kat)
-{
-    if (p == nullptr) return true;
-    personen.remove(Einsatz{p,kat});
     emit changed(this);
-    return p->removeActivity(this, kat);
+    return ret;
 }
 
-AActivity::Einsatz AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat)
+Einsatz *AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat)
 {
    /*
     * Angaben fuer die Aufgabe pruefen
@@ -252,21 +240,16 @@ AActivity::Einsatz AActivity::addPerson(Person *p, QString bemerkung, QTime star
         throw FalscheQualifikationException(p->getName());
 
     // jetzt ist alles richtig und die person kann registiert werden.
-    p->addActivity(this, kat);
 
-    Infos info = Infos();
-    info.beginn = start;
-    info.ende = ende;
-    info.kategorie = kat;
-    info.bemerkung = bemerkung;
-    Einsatz e = Einsatz{p, kat};
+    Einsatz *e = new Einsatz{p, this, kat, start, ende, bemerkung};
 
-    personen.insert(e, info);
+    p->addActivity(e);
+    personen.append(e);
 
     emit changed(this);
     return e;
 }
-AActivity::Einsatz AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat)
+Einsatz *AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat)
 {
     Person *pers = personal->getPerson(p);
     if (pers != nullptr) {
@@ -281,19 +264,6 @@ AActivity::Einsatz AActivity::addPerson(QString p, QString bemerkung, QTime star
         return addPerson(neuePerson, bemerkung, start, ende, kat);
     }
     throw PersonNichtGefundenException(p);
-}
-
-void AActivity::updatePersonInfos(Person *p, Category kat, Infos neu)
-{
-    personen.insert(Einsatz{p, kat}, neu);
-    emit changed(this);
-}
-
-void AActivity::updatePersonBemerkung(Person *p, Category kat, QString bem)
-{
-    Infos i = personen.value(Einsatz{p, kat});
-    i.bemerkung = bem;
-    personen.insert(Einsatz{p, kat}, i);
 }
 
 bool AActivity::lesser(const AActivity *lhs, const AActivity *rhs)
@@ -337,18 +307,18 @@ ManagerPersonal *AActivity::getPersonal() const
     return personal;
 }
 
-QString AActivity::listToString(QString sep, QMap<Person *, Infos> liste, QString prefix, QString suffix, bool aufgabe)
+QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString prefix, QString suffix, bool aufgabe)
 {
     QStringList l;
     QStringList l2;
-    for(Person *p: liste.keys()) {
-        l2.append(p->getName());
+    for(Einsatz *e: liste) {
+        l2.append(e->person->getName());
 
-        if (liste.value(p).bemerkung != "") {
-            l2.append(liste.value(p).bemerkung);
+        if (e->bemerkung != "") {
+            l2.append(e->bemerkung);
         }
-        if (aufgabe && (liste.value(p).kategorie != Category::Sonstiges)) {
-            l2.append(getLocalizedStringFromCategory(liste.value(p).kategorie));
+        if (aufgabe && (e->kategorie != Category::Sonstiges)) {
+            l2.append(getLocalizedStringFromCategory(e->kategorie));
         }
         l.append(prefix+l2.join("; ")+suffix);
         l2.clear();
@@ -453,7 +423,7 @@ bool AActivity::check(Auswahl aus)
     return true;
 }
 
-QMap<AActivity::Einsatz, Infos> AActivity::getPersonen() const
+QList<Einsatz*> AActivity::getPersonen() const
 {
     return personen;
 }
@@ -490,27 +460,33 @@ QString AActivity::getListString()
     return s;
 }
 
-Infos AActivity::getIndividual(Person *person, Category kat)
+QList<Einsatz> AActivity::getIndividual(Person *person)
 {
-    if (person == nullptr) return Infos();
-    if (!personen.contains(Einsatz{person, kat})) return Infos();
-    Infos info = personen.value(Einsatz{person, kat});
-    if (zeitenUnbekannt) {
-        info.beginn = QTime(0,0);
-        info.ende = QTime(0,0);
-    } else {
-        if (info.beginn == QTime(0,0)) {
-            info.beginn = zeitAnfang;
-        }
-        if (info.ende == QTime(0,0)) {
-            info.ende = zeitEnde;
+    QList<Einsatz> liste;
+    if (person == nullptr)
+        return liste;
+    for(Einsatz *e: personen) {
+        if (e->person == person) {
+            Einsatz neu = Einsatz(*e);
+            if (zeitenUnbekannt) {
+                neu.beginn = QTime(0,0);
+                neu.ende = QTime(0,0);
+            } else {
+                if (neu.beginn == QTime(0,0)) {
+                    neu.beginn = zeitAnfang;
+                }
+                if (neu.ende == QTime(0,0)) {
+                    neu.ende = zeitEnde;
+                }
+            }
+            neu.anrechnen = !abgesagt;
+            if (datum > QDate::currentDate()) {
+                neu.anrechnen = false;
+            }
+            liste.append(neu);
         }
     }
-    info.anrechnen = !abgesagt;
-    if (datum > QDate::currentDate()) {
-        info.anrechnen = false;
-    }
-    return info;
+    return liste;
 }
 
 QString AActivity::getHtmlForSingleView()
@@ -554,18 +530,17 @@ QString AActivity::getHtmlForSingleView()
     html += ":</b></p>";
     if (personen.count() > 0) {
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Name</th><th>Beginn*</th><th>Ende*</th><th>Aufgabe</th></tr></thead><tbody>";
-        for(Einsatz e: personen.keys()) {
-            Infos info = personen.value(e);
-            html += "<tr><td>"+e.person->getName()+"</td><td>";
-            html += (info.beginn == QTime(0,0) ? "" : info.beginn.toString("hh:mm"));
+        for(Einsatz *e: personen) {
+            html += "<tr><td>"+e->person->getName()+"</td><td>";
+            html += (e->beginn == QTime(0,0) ? "" : e->beginn.toString("hh:mm"));
             html += "</td><td>";
-            html += (info.ende == QTime(0,0) ? "" : info.ende.toString("hh:mm"));
+            html += (e->ende == QTime(0,0) ? "" : e->ende.toString("hh:mm"));
             html += "</td><td>";
-            if (info.kategorie != Category::Sonstiges) {
-                html += getLocalizedStringFromCategory(info.kategorie);
-                if (info.bemerkung != "") html += "<br/>";
+            if (e->kategorie != Category::Sonstiges) {
+                html += getLocalizedStringFromCategory(e->kategorie);
+                if (e->bemerkung != "") html += "<br/>";
             }
-            html += info.bemerkung;
+            html += e->bemerkung;
             html +="</td></tr>";
         }
         html += "</tbody></table><p>* Abweichend von obigen Zeiten!</p>";
@@ -611,31 +586,36 @@ QString AActivity::getHtmlForTableView()
         }
     }
 
-    QMap<Person*, Infos> tf;
-    QMap<Person*, Infos> zf;
-    QMap<Person*, Infos> zub;
-    QMap<Person*, Infos> begl;
-    QMap<Person*, Infos> service;
-    QMap<Person*, Infos> sonstige;
-    QMap<Person*, Infos> werkstatt;
-    QMap<Person*, Infos> zugvorbereitung;
-    QMap<Person*, Infos> ausbildung;
-    QMap<Person*, Infos> infrastruktur;
+    QList<Einsatz*> tf;
+    QList<Einsatz*> zf;
+    QList<Einsatz*> zub;
+    QList<Einsatz*> begl;
+    QList<Einsatz*> service;
+    QList<Einsatz*> sonstige;
+    QList<Einsatz*> werkstatt;
+    QList<Einsatz*> zugvorbereitung;
+    QList<Einsatz*> ausbildung;
+    QList<Einsatz*> infrastruktur;
 
     // Aufsplitten der Personen auf die Einzelnen Listen
-    for(Einsatz e: personen.keys()) {
-        switch (e.cat) {
+    for(Einsatz *e: personen) {
+        switch (e->kategorie) {
         case Category::Tf:
-        case Category::Tb: tf.insert(e.person, personen.value(e)); break;
-        case Category::Zf: zf.insert(e.person, personen.value(e)); break;
-        case Category::Service: service.insert(e.person, personen.value(e)); break;
-        case Category::Zub: zub.insert(e.person, personen.value(e)); break;
-        case Category::Begleiter: begl.insert(e.person, personen.value(e)); break;
-        case Category::Werkstatt: werkstatt.insert(e.person, personen.value(e)); break;
-        case Category::ZugVorbereiten: zugvorbereitung.insert(e.person, personen.value(e)); break;
-        case Category::Ausbildung: ausbildung.insert(e.person, personen.value(e)); break;
-        case Category::Infrastruktur: infrastruktur.insert(e.person, personen.value(e)); break;
-        default: sonstige.insert(e.person, personen.value(e)); break;
+        case Category::Tb: tf.append(e); break;
+        case Category::Zf: zf.append(e); break;
+        case Category::Service: service.append(e); break;
+        case Category::Zub: zub.append(e); break;
+        case Category::Begleiter: begl.append(e); break;
+        case Category::Werkstatt: werkstatt.append(e); break;
+        case Category::ZugVorbereiten: zugvorbereitung.append(e); break;
+        case Category::Ausbildung: ausbildung.append(e); break;
+        case Category::Infrastruktur: infrastruktur.append(e); break;
+        case Category::Sonstiges: sonstige.append(e); break;
+        case Category::Buero:
+        case Category::Gesamt:
+        case Category::Kilometer:
+        case Category::Anzahl:
+            continue;
         }
     }
 
@@ -687,7 +667,7 @@ QString AActivity::getHtmlForTableView()
         html += listToString("", werkstatt, "<li>", "</li>");
         html += "</ul>";
     } else {
-        for(Person *p: werkstatt.keys()) sonstige.insert(p, werkstatt.value(p));
+        sonstige.append(werkstatt);
         werkstatt.clear();
     }
     if (ausbildung.size() >= 2) {
@@ -697,7 +677,7 @@ QString AActivity::getHtmlForTableView()
         html += listToString("", ausbildung, "<li>", "</li>");
         html += "</ul>";
     } else {
-        for(Person *p: ausbildung.keys()) sonstige.insert(p, ausbildung.value(p));
+        sonstige.append(ausbildung);
         ausbildung.clear();
     }
     if (zugvorbereitung.size() >= 2) {
@@ -707,7 +687,7 @@ QString AActivity::getHtmlForTableView()
         html += listToString("", zugvorbereitung, "<li>", "</li>");
         html += "</ul>";
     } else {
-        for(Person *p: zugvorbereitung.keys()) sonstige.insert(p, zugvorbereitung.value(p));
+        sonstige.append(zugvorbereitung);
         zugvorbereitung.clear();
     }
     if (infrastruktur.size() >= 2) {
@@ -717,7 +697,7 @@ QString AActivity::getHtmlForTableView()
         html += listToString("", infrastruktur, "<li>", "</li>");
         html += "</ul>";
     } else {
-        for(Person *p: infrastruktur.keys()) sonstige.insert(p, infrastruktur.value(p));
+        sonstige.append(infrastruktur);
         infrastruktur.clear();
     }
     if (sonstige.size() > 0) {

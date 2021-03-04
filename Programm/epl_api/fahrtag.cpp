@@ -95,15 +95,20 @@ QString Fahrtag::getKurzbeschreibung()
     return getStringFromArt(art);
 }
 
-Infos Fahrtag::getIndividual(Person *person, Category kat)
+QList<Einsatz> Fahrtag::getIndividual(Person *person)
 {
-    Infos info = AActivity::getIndividual(person, kat);
-    if (!zeitenUnbekannt) {
-        if ((info.beginn == zeitAnfang) && (info.kategorie == Tf)) {
-            info.beginn = zeitTf;
+    QList<Einsatz> liste = AActivity::getIndividual(person);
+    QList<Einsatz> neu;
+    for(Einsatz e: liste) {
+        Einsatz e2 = e;
+        if (!zeitenUnbekannt) {
+            if ((e2.beginn == zeitAnfang) && (e2.kategorie == Tf)) {
+                e2.beginn = zeitTf;
+            }
         }
+        neu.append(e2);
     }
-    return info;
+    return neu;
 }
 
 QString Fahrtag::getHtmlForSingleView()
@@ -138,24 +143,23 @@ QString Fahrtag::getHtmlForSingleView()
     }
 
     // Personal
-    QMap<Person*, Infos> tf;
-    QMap<Person*, Infos> zf;
-    QMap<Person*, Infos> zub;
-    QMap<Person*, Infos> begl;
-    QMap<Person*, Infos> service;
-    QMap<Person*, Infos> sonstige;
+    QList<Einsatz*> tf;
+    QList<Einsatz*> zf;
+    QList<Einsatz*> zub;
+    QList<Einsatz*> begl;
+    QList<Einsatz*> service;
+    QList<Einsatz*> sonstige;
 
     // Aufsplitten der Personen auf die Einzelnen Listen
-    for(Einsatz e: personen.keys()) {
-        Person *p = e.person;
-        switch (e.cat) {
+    for(Einsatz *e: personen) {
+        switch (e->kategorie) {
         case Tf:
-        case Tb: tf.insert(p, personen.value(e)); break;
-        case Zf: zf.insert(p, personen.value(e)); break;
-        case Zub: zub.insert(p, personen.value(e)); break;
-        case Begleiter: begl.insert(p, personen.value(e)); break;
-        case Service: service.insert(p, personen.value(e)); break;
-        default: sonstige.insert(p, personen.value(e)); break;
+        case Tb: tf.append(e); break;
+        case Zf: zf.append(e); break;
+        case Zub: zub.append(e); break;
+        case Begleiter: begl.append(e); break;
+        case Service: service.append(e); break;
+        default: sonstige.append(e); break;
         }
     }
     // *Tf/Tb
@@ -275,23 +279,23 @@ QString Fahrtag::getHtmlForTableView()
         }
     }
 
-    QMap<Person*, Infos> tf;
-    QMap<Person*, Infos> zf;
-    QMap<Person*, Infos> zub;
-    QMap<Person*, Infos> begl;
-    QMap<Person*, Infos> service;
-    QMap<Person*, Infos> sonstige;
+    QList<Einsatz*> tf;
+    QList<Einsatz*> zf;
+    QList<Einsatz*> zub;
+    QList<Einsatz*> begl;
+    QList<Einsatz*> service;
+    QList<Einsatz*> sonstige;
 
     // Aufsplitten der Personen auf die Einzelnen Listen
-    for(Einsatz e: personen.keys()) {
-        switch (e.cat) {
+    for(Einsatz *e: personen) {
+        switch (e->kategorie) {
         case Tf:
-        case Tb: tf.insert(e.person, personen.value(e)); break;
-        case Zf: zf.insert(e.person, personen.value(e)); break;
-        case Zub: zub.insert(e.person, personen.value(e)); break;
-        case Begleiter: begl.insert(e.person, personen.value(e)); break;
-        case Service: service.insert(e.person, personen.value(e)); break;
-        default: sonstige.insert(e.person, personen.value(e)); break;
+        case Tb: tf.append(e); break;
+        case Zf: zf.append(e); break;
+        case Zub: zub.append(e); break;
+        case Begleiter: begl.append(e); break;
+        case Service: service.append(e); break;
+        default: sonstige.append(e); break;
         }
     }
 

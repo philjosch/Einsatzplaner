@@ -25,24 +25,24 @@ public:
     public:
         EinsatzTableWidgetItem(QString s) : QTableWidgetItem(s)
         {
-            einsatz = AActivity::Einsatz();
+            einsatz = new Einsatz();
         }
-        EinsatzTableWidgetItem(AActivity::Einsatz e) : QTableWidgetItem()
+        EinsatzTableWidgetItem(Einsatz *e) : QTableWidgetItem()
         {
             einsatz = e;
         }
 
-        AActivity::Einsatz getEinsatz() const
+        Einsatz *getEinsatz() const
         {
             return einsatz;
         }
-        void setEinsatz(AActivity::Einsatz value)
+        void setEinsatz(Einsatz *value)
         {
             einsatz = value;
         }
 
     protected:
-        AActivity::Einsatz einsatz;
+        Einsatz *einsatz;
     };
     class TableListWidgetItem : public QListWidgetItem {
     public:
@@ -139,7 +139,8 @@ private slots:
     void on_tablePersonen_cellChanged(int row, int column);
 
     void on_buttonRemovePerson_clicked();
-    EinsatzTableWidgetItem *fuegeZeileInTabelleEin(QString name="", Category kat=Sonstiges, QString bemerkung="", bool block=false, QTime beginn=QTime(0,0), QTime ende=QTime(0,0));
+    EinsatzTableWidgetItem *fuegeZeileInTabelleEin();
+    EinsatzTableWidgetItem *fuegeInTabelleEin(Einsatz *e=nullptr, bool block=false);
 
     // Menue
     void on_actionDelete_triggered();

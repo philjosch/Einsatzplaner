@@ -23,23 +23,23 @@ public:
     public:
         EinsatzTableWidgetItem(QString s) : QTableWidgetItem(s)
         {
-            einsatz = AActivity::Einsatz();
+            einsatz = new Einsatz();
         }
-        EinsatzTableWidgetItem(AActivity::Einsatz e) : QTableWidgetItem() {
+        EinsatzTableWidgetItem(Einsatz *e) : QTableWidgetItem() {
             einsatz = e;
         }
 
-        AActivity::Einsatz getEinsatz() const
+        Einsatz *getEinsatz() const
         {
             return einsatz;
         }
-        void setEinsatz(AActivity::Einsatz value)
+        void setEinsatz(Einsatz *value)
         {
             einsatz = value;
         }
 
     protected:
-        AActivity::Einsatz einsatz;
+        Einsatz *einsatz;
     };
 
 

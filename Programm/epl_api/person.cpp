@@ -1,3 +1,4 @@
+#include "einstellungen.h"
 #include "managerpersonal.h"
 #include "person.h"
 
@@ -86,7 +87,7 @@ Person::Person(QJsonObject o, ManagerPersonal *man) : QObject()
 {
     additional = QMap<Category, int>();
     zeiten = QMap<Category, int>();
-    activities = QMap<AActivity *, Category>();
+    activities = QList<Einsatz*>();
 
     valuesInvalid = true;
     manager = man;
@@ -176,7 +177,7 @@ void Person::personConstructor(QString vn, QString nn, ManagerPersonal *man)
 {
     additional = QMap<Category, int>();
     zeiten = QMap<Category, int>();
-    activities = QMultiMap<AActivity *, Category>();
+    activities = QList<Einsatz*>();
 
     valuesInvalid = true;
     manager = man;
@@ -609,16 +610,20 @@ int Person::getMinimumStunden(Category cat)
 void Person::berechne()
 {
     zeiten.clear();
-    for(AActivity *a: activities.uniqueKeys()) {
-        for(Category cat: activities.values(a)) {
-            Infos info = a->getIndividual(this, cat);
-            if (! info.anrechnen) continue;
+    QSet<AActivity*> actis;
+    for(Einsatz *e: activities) {
+        actis.insert(e->activity);
+    }
+
+    for(Einsatz ee: getActivities()) {
+            Einsatz *e = &(ee);
+            if (! e->anrechnen) continue;
 
             // Einsatzstunden
-            QTime start = info.beginn;
-            QTime ende = info.ende;
+            QTime start = e->beginn;
+            QTime ende = e->ende;
             int duration = (start.msecsTo(ende) / 60000); // in Minuten
-            switch (cat) {
+            switch (e->kategorie) {
             case Begleiter:
                 zeiten.insert(Zub, zeiten.value(Zub)+duration);
                 break;
@@ -626,14 +631,13 @@ void Person::berechne()
             case Kilometer: break;
             case Gesamt: break;
             default:
-                zeiten.insert(cat, zeiten.value(cat)+duration);
+                zeiten.insert(e->kategorie, zeiten.value(e->kategorie)+duration);
                 break;
             }
             zeiten.insert(Anzahl, zeiten.value(Anzahl)+1);
             zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
-            if (cat != Category::Buero)
+            if (e->kategorie != Category::Buero)
                 zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);
-        }
     }
     for (Category cat: additional.keys()) {
        zeiten.insert(cat, zeiten.value(cat)+additional.value(cat));
@@ -648,35 +652,31 @@ void Person::berechne()
     valuesInvalid = false;
 }
 
-bool Person::addActivity(AActivity *a, Category kat)
+bool Person::addActivity(Einsatz *e)
 {
-    if (!activities.values(a).contains(kat)) {
-        activities.insert(a, kat);
-
-        valuesInvalid = true;
-        return true;
-    } else {
-        return false;
-    }
+    activities.append(e);
+    return true;
 }
 
-bool Person::removeActivity(AActivity *a, Category kat)
+bool Person::removeActivity(Einsatz *e)
 {
-    QList<Category> category = activities.values(a);
-    activities.remove(a);
-    if (category.removeAll(kat)) {
-        for(Category c: category) {
-            activities.insert(a, c);
-        }
-        valuesInvalid = true;
-        return true;
-    }
-    return false;
+    return activities.removeAll(e);
 }
 
-QMultiMap<AActivity *, Category> Person::getActivities()
+QList<Einsatz> Person::getActivities()
 {
-    return activities;
+    QSet<AActivity*> actis;
+    for(Einsatz *e: activities) {
+        actis.insert(e->activity);
+    }
+
+    QList<Einsatz> liste;
+    for(AActivity *activity: actis) {
+        liste.append(activity->getIndividual(this));
+    }
+    Einsatz::sort(&liste);
+
+    return liste;
 }
 
 QString Person::getName() const
@@ -685,6 +685,17 @@ QString Person::getName() const
     if (vorname != "" && nachname != "") return vorname + " " + nachname;
     else if (vorname != "") return vorname;
     else return nachname;
+}
+
+QString Person::getNameSortierung() const
+{
+    if (Einstellungen::getReihenfolgeVorNach()) {
+        return getName();
+    } else {
+        if (vorname != "" && nachname != "") return nachname + ", " + vorname;
+        else if (vorname != "") return vorname;
+        else return nachname;
+    }
 }
 
 QString Person::getVorname() const
@@ -789,20 +800,14 @@ QString Person::getZeitenFuerEinzelAlsHTML()
     if (activities.size() > 0) {
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
-        QList<AActivity*> list = activities.uniqueKeys();
-        AActivity::sort(&list);
-        for(int i=0; i<list.length(); i++) {
-            AActivity *a = list.at(i);
-            for(Category cat: activities.values(a)) {
-                Infos info = a->getIndividual(this, cat);
-                html += "<tr><td>"+a->getDatum().toString("dd.MM.yyyy")+"<br/>"+a->getKurzbeschreibung();
-                if (a->getAnlass() != a->getKurzbeschreibung() && a->getAnlass() != "")
-                    html += "<br/>"+a->getAnlass();
+        for (Einsatz e: getActivities()) {
+                html += "<tr><td>"+e.activity->getDatum().toString("dd.MM.yyyy")+"<br/>"+e.activity->getKurzbeschreibung();
+                if (e.activity->getAnlass() != e.activity->getKurzbeschreibung() && e.activity->getAnlass() != "")
+                    html += "<br/>"+e.activity->getAnlass();
                 html +="</td><td>"
-                     + info.beginn.toString("HH:mm")+"-"+info.ende.toString("HH:mm")+"</td><td>"
-                     + getLocalizedStringFromCategory(info.kategorie) + "</td><td>"
-                     + info.bemerkung + "</td></tr>";
-            }
+                     + e.beginn.toString("HH:mm")+"-"+e.ende.toString("HH:mm")+"</td><td>"
+                     + getLocalizedStringFromCategory(e.kategorie) + "</td><td>"
+                     + e.bemerkung + "</td></tr>";
         }
         html += "</tbody></table>";
     } else {

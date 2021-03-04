@@ -1,6 +1,8 @@
 #ifndef AACTIVITY_H
 #define AACTIVITY_H
 
+#include "basics.h"
+
 #include <QTime>
 #include <QComboBox>
 #include <QTimeEdit>
@@ -16,13 +18,6 @@ class AActivity: public QObject
     Q_OBJECT
 
 public:
-    struct Einsatz {
-        Person *person;
-        Category cat;
-        bool operator<(const Einsatz &o)  const {
-            return (person < o.person || (person == o.person && cat<o.cat));
-        }
-    };
     AActivity(QDate date, ManagerPersonal *p);
     AActivity(QJsonObject o, ManagerPersonal *p);
     virtual ~AActivity();
@@ -63,14 +58,11 @@ public:
     bool getAbgesagt() const;
     void setAbgesagt(bool value);
 
-    Person *getPerson(QString name);
-    QMap<Einsatz, Infos> getPersonen() const;
-    virtual Infos getIndividual(Person *person, Category kat);
-    Einsatz addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
-    Einsatz addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
-    void updatePersonInfos(Person *p, Category kat, Infos neu);
-    void updatePersonBemerkung(Person *p, Category kat, QString bemerkung);
-    bool removePerson(Person *p, Category kat);
+    QList<Einsatz*> getPersonen() const;
+    virtual QList<Einsatz> getIndividual(Person *person);
+    Einsatz *addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
+    Einsatz *addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
+    bool removePerson(Einsatz *e);
 
     static bool lesser(const AActivity *lhs, const AActivity *rhs);
     friend bool operator<(const AActivity &lhs, const AActivity &rhs) { return lesser(&lhs, &rhs);}
@@ -114,14 +106,14 @@ protected:
     bool zeitenUnbekannt;
     QString anlass;
     QString bemerkungen;
-    QMap<Einsatz, Infos> personen;
+    QList<Einsatz*> personen;
     bool personalBenoetigt;
     bool wichtig;
     bool abgesagt;
 
     ManagerPersonal *personal;
 
-    QString listToString(QString sep, QMap<Person *, Infos> liste, QString prefix="", QString suffix="", bool aufgabe=false);
+    QString listToString(QString sep, QList<Einsatz*> liste, QString prefix="", QString suffix="", bool aufgabe=false);
 
     static QString COLOR_REQUIRED;
 };

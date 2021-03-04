@@ -52,10 +52,10 @@ public:
 
     void berechne();
 
-    bool addActivity(AActivity *a, Category kat);
-    bool removeActivity(AActivity *a, Category kat);
+    bool addActivity(Einsatz *e);
+    bool removeActivity(Einsatz *e);
 
-    QMultiMap<AActivity*,Category> getActivities();
+    QList<Einsatz> getActivities();
 
 
     QString getZeitenFuerListeAlsHTML(QSet<Category> liste);
@@ -77,6 +77,7 @@ public:
     int setAutoNummer();
 
     QString getName() const;
+    QString getNameSortierung() const;
 
     QString getVorname() const;
     bool setVorname(const QString &value);
@@ -220,7 +221,7 @@ protected:
     QMap<Category, int> additional;
 
     QMap<Category, int> zeiten;
-    QMultiMap<AActivity*, Category> activities;
+    QList<Einsatz*> activities;
 
 private:
     void personConstructor(QString vn, QString nn, ManagerPersonal *man);

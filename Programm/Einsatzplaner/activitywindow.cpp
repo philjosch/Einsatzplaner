@@ -30,24 +30,22 @@ ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWind
     ui->checkAbgesagt->setChecked(activity->getAbgesagt());
     ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
 
-    QMap<AActivity::Einsatz, Infos> personen = activity->getPersonen();
+    QList<Einsatz*> personen = activity->getPersonen();
     // Tabelle laden und alles einfügen
-    for(AActivity::Einsatz e: personen.keys()) {
+    for(Einsatz *e: personen) {
         on_buttonInsert_clicked();
-
-        Infos info = personen.value(e);
 
         EinsatzTableWidgetItem *ptwi = dynamic_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(0, 0));
         ptwi->setEinsatz(e);
-        ptwi->setText(e.person->getName());
+        ptwi->setText(e->person->getName());
 
-        Category kat = info.kategorie;
+        Category kat = e->kategorie;
         if (kat == Category::Begleiter)
             kat = Category::Zub;
         static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(getLocalizedStringFromCategory(kat));
-        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(info.beginn);
-        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(info.ende);
-        ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(info.bemerkung));
+        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(e->beginn);
+        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(e->ende);
+        ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(e->bemerkung));
     }
 
     updateWindowTitle();
@@ -163,7 +161,7 @@ void ActivityWindow::on_buttonRemove_clicked()
     int i = ui->tablePersonen->currentRow();
     if (i < 0) return;
     EinsatzTableWidgetItem *ptwi = dynamic_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(i, 0));
-    activity->removePerson(ptwi->getEinsatz().person, ptwi->getEinsatz().cat);
+    activity->removePerson(ptwi->getEinsatz());
 
     ui->tablePersonen->removeRow(i);
 
@@ -179,7 +177,7 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int 
         nehme = false;
 
         EinsatzTableWidgetItem *ptwi = dynamic_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(row, 0));
-        AActivity::Einsatz e = ptwi->getEinsatz();
+        Einsatz *e = ptwi->getEinsatz();
 
         QTableWidgetItem *item = ui->tablePersonen->item(row, 0);
         QString name = item->text();
@@ -188,11 +186,11 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int 
         QTime ende = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
 
-        activity->removePerson(e.person, e.cat);
+        activity->removePerson(e);
         try {
-            AActivity::Einsatz e = activity->addPerson(name, bemerkung, beginn, ende, kat);
+            Einsatz *e = activity->addPerson(name, bemerkung, beginn, ende, kat);
             ptwi->setEinsatz(e);
-            if (! e.person->getAktiv()) {
+            if (! e->person->getAktiv()) {
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
             }
         }  catch (AActivityException &e) {

@@ -22,7 +22,7 @@ public:
     QString getHtmlForSingleView();
     QString getHtmlForTableView();
 
-    Infos getIndividual(Person *person, Category kat);
+    QList<Einsatz> getIndividual(Person *person);
 
     QString getHtmlFuerReservierungsuebersicht();
 
