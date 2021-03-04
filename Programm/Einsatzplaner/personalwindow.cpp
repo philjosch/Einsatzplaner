@@ -5,7 +5,6 @@
 #include "minimumhourseditordialog.h"
 #include "fileio.h"
 #include "guihelper.h"
-#include "einstellungen.h"
 
 #include <QMessageBox>
 #include <math.h>
@@ -15,7 +14,6 @@
 PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
 {
     ui->setupUi(this);
-    connect(ui->actionMindeststunden, SIGNAL(triggered()), this, SLOT(editMinimumHours()));
     connect(ui->comboAnzeige, SIGNAL(currentIndexChanged(int)), this, SLOT(refresh()));
     connect(ui->actionAktualisieren, SIGNAL(triggered()), this, SLOT(refresh()));
 
@@ -40,7 +38,6 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     ui->tabelleGesamt->sortItems(1);
     aktuellePerson = nullptr;
     refresh();
-
 }
 
 PersonalWindow::~PersonalWindow()
@@ -109,11 +106,11 @@ void PersonalWindow::refreshEinsatzzeiten()
         default: farbe = Person::FARBE_STANDARD;
         }
         ui->tabelleGesamt->insertRow(0);
-        QTableWidgetItem *i = new QTableWidgetItem(p->getVorname());
+        PersonTableWidgetItem *i = new PersonTableWidgetItem(p, p->getVorname());
         i->setBackground(QBrush(QColor(farbe)));
         ui->tabelleGesamt->setItem(0, 0, i);
 
-        i = new QTableWidgetItem(p->getNachname());
+        i = new PersonTableWidgetItem(p, p->getNachname());
         i->setBackground(QBrush(QColor(farbe)));
         ui->tabelleGesamt->setItem(0, 1, i);
 
@@ -121,7 +118,7 @@ void PersonalWindow::refreshEinsatzzeiten()
         for(Category cat: ANZEIGEREIHENFOLGEGESAMT) {
             if (! anzeige.contains(cat)) continue;
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
-            i = new QTableWidgetItem();
+            i = new PersonTableWidgetItem(p);
             i->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
             switch (cat) {
             case Anzahl:
@@ -143,13 +140,13 @@ void PersonalWindow::refreshEinsatzzeiten()
 
     // Zeile Gesamt einfuegen
     ui->tabelleGesamt->insertRow(0);
-    ui->tabelleGesamt->setItem(0, 0, new QTableWidgetItem());
-    ui->tabelleGesamt->setItem(0, 1, new QTableWidgetItem(tr(" Gesamt")));
+    ui->tabelleGesamt->setItem(0, 0, new PersonTableWidgetItem(nullptr));
+    ui->tabelleGesamt->setItem(0, 1, new PersonTableWidgetItem(nullptr, tr(" Gesamt")));
     pos = 2;
     QTableWidgetItem *ii;
     for(Category cat: ANZEIGEREIHENFOLGEGESAMT) {
         if (! anzeige.contains(cat)) continue;
-        ii = new QTableWidgetItem();
+        ii = new PersonTableWidgetItem(nullptr);
         ii->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
         switch(cat) {
         case Anzahl:
@@ -174,11 +171,7 @@ void PersonalWindow::refreshEinzel()
     ui->listWidget->clear();
     personToItem.clear();
     for (Person *p: current) {
-        QListWidgetItem *item = new QListWidgetItem(p->getName());
-        if (! Einstellungen::getReihenfolgeVorNach()) {
-            item->setText(
-                        p->getNachname() + ", " + p->getVorname());
-        }
+        QListWidgetItem *item = new PersonListWidgetItem(p, p->getNameSortierung());
         switch (p->pruefeStunden()) {
         case AktivOhne:
             item->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN)));
@@ -195,7 +188,7 @@ void PersonalWindow::refreshEinzel()
     ui->listWidget->sortItems();
 }
 
-void PersonalWindow::editMinimumHours()
+void PersonalWindow::on_actionMindeststunden_triggered()
 {
    if (MinimumHoursEditorDialog(manager, this).exec() == QDialog::Accepted) {
        refresh();
@@ -315,14 +308,14 @@ void PersonalWindow::on_pushEmail_clicked()
     }
 }
 
-void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, [[maybe_unused]] int column)
+void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, int column)
 {
-    QString name = ui->tabelleGesamt->item(row, 0)->text() + " " + ui->tabelleGesamt->item(row, 1)->text();
-    Person * p = manager->getPerson(name);
-    if (p != nullptr) {
-        showPerson(p);
-        ui->tabWidgetMain->setCurrentIndex(1);
-    }
+    PersonTableWidgetItem *ptwi = static_cast<PersonTableWidgetItem*>(ui->tabelleGesamt->item(row, column));
+    if (ptwi->getPerson() == nullptr)
+        return;
+
+    showPerson(ptwi->getPerson());
+    ui->tabWidgetMain->setCurrentIndex(1);
 }
 
 void PersonalWindow::on_checkShowGesamt_clicked(bool checked)
@@ -404,62 +397,44 @@ void PersonalWindow::on_checkShowKilometer_clicked(bool checked)
     refreshEinsatzzeiten();
 }
 
-void PersonalWindow::on_pushAdd_clicked()
+void PersonalWindow::on_actionPersonAdd_triggered()
 {
     Person *p = manager->newPerson();
-    if (p == nullptr) {
+    if (p == nullptr)
         return;
-    }
-    aktuellePerson = p;
-    QListWidgetItem *item = new QListWidgetItem(aktuellePerson->getName());
-    ui->listWidget->insertItem(0, item);
-    personToItem.insert(aktuellePerson, item);
-    showPerson(aktuellePerson);
+
     refresh();
+    showPerson(p);
 }
 
 void PersonalWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
-    showPerson(personToItem.key(item));
+    showPerson(static_cast<PersonListWidgetItem*>(item)->getPerson());
 }
 
 void PersonalWindow::on_lineVorname_textChanged(const QString &arg1)
 {
     if (enabled) {
-        // test, ob Person vorhanden ist
-        if (manager->personExists(arg1, aktuellePerson->getNachname())) {
-            QMessageBox::information(this, tr("Name doppelt vergeben"), tr("Der eingegebene Namen ist bereits im System registriert.\nSomit kann keine zweite Personen den gleichen Namen haben!"));
-        } else {
-            aktuellePerson->setVorname(arg1);
+        if (aktuellePerson->setVorname(arg1)) {
             if (personToItem.contains(aktuellePerson)) {
-                if (Einstellungen::getReihenfolgeVorNach()) {
-                    personToItem.value(aktuellePerson)->setText(aktuellePerson->getName());
-                } else {
-                    personToItem.value(aktuellePerson)->setText(
-                                aktuellePerson->getNachname() + ", " + aktuellePerson->getVorname());
-                }
+                personToItem.value(aktuellePerson)->setText(aktuellePerson->getNameSortierung());
                 ui->listWidget->sortItems();
             }
+        } else {
+            QMessageBox::information(this, tr("Name doppelt vergeben"), tr("Der eingegebene Namen ist bereits im System registriert.\nSomit kann keine zweite Personen den gleichen Namen haben!"));
         }
     }
 }
 void PersonalWindow::on_lineNachname_textChanged(const QString &arg1)
 {
     if (enabled) {
-        // test, ob Person vorhanden ist
-        if (manager->personExists(aktuellePerson->getVorname(), arg1)) {
-            QMessageBox::information(this, tr("Name doppelt vergeben"), tr("Der eingegebene Namen ist bereits im System registriert.\nSomit kann keine zweite Personen den gleichen Namen haben!"));
-        } else {
-            aktuellePerson->setNachname(arg1);
+        if (aktuellePerson->setNachname(arg1)) {
             if (personToItem.contains(aktuellePerson)) {
-                if (Einstellungen::getReihenfolgeVorNach()) {
-                    personToItem.value(aktuellePerson)->setText(aktuellePerson->getName());
-                } else {
-                    personToItem.value(aktuellePerson)->setText(
-                                aktuellePerson->getNachname() + ", " + aktuellePerson->getVorname());
-                }
+                personToItem.value(aktuellePerson)->setText(aktuellePerson->getNameSortierung());
                 ui->listWidget->sortItems();
             }
+        } else {
+            QMessageBox::information(this, tr("Name doppelt vergeben"), tr("Der eingegebene Namen ist bereits im System registriert.\nSomit kann keine zweite Personen den gleichen Namen haben!"));
         }
     }
 }
@@ -506,6 +481,7 @@ void PersonalWindow::on_dateDienst_dateChanged(const QDate &date)
 {
     if (enabled) {
         aktuellePerson->setTauglichkeit(date);
+        refresh();
     }
 }
 void PersonalWindow::on_checkDienst_clicked(bool checked)

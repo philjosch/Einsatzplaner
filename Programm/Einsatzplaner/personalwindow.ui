@@ -1756,7 +1756,7 @@
     <property name="title">
      <string>Personalmanagement</string>
     </property>
-    <addaction name="actionPerson_hinzuf_gen"/>
+    <addaction name="actionPersonAdd"/>
     <addaction name="separator"/>
     <addaction name="actionAktualisieren"/>
     <addaction name="separator"/>
@@ -1817,7 +1817,7 @@
     <string>Ctrl+W</string>
    </property>
   </action>
-  <action name="actionPerson_hinzuf_gen">
+  <action name="actionPersonAdd">
    <property name="text">
     <string>Person hinzufügen</string>
    </property>
@@ -1971,14 +1971,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionPerson_hinzuf_gen</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>pushAdd</receiver>
-   <slot>click()</slot>
+   <sender>pushAdd</sender>
+   <signal>clicked()</signal>
+   <receiver>actionPersonAdd</receiver>
+   <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
+     <x>118</x>
+     <y>113</y>
     </hint>
     <hint type="destinationlabel">
      <x>136</x>

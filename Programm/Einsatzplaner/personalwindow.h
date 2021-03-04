@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <QPrinter>
+#include <QTableWidgetItem>
 
 namespace Ui {
 class PersonalWindow;
@@ -19,6 +20,36 @@ public:
     explicit PersonalWindow(QWidget *parent, ManagerPersonal *m);
     ~PersonalWindow();
 
+    class PersonTableWidgetItem : public QTableWidgetItem {
+    public:
+        PersonTableWidgetItem(Person *p, QString s) : QTableWidgetItem(s)
+        {
+            person = p;
+        }
+        PersonTableWidgetItem(Person *p) : QTableWidgetItem() {
+            person = p;
+        }
+        Person *getPerson() const
+        {
+            return person;
+        }
+
+    protected: Person *person;
+    };
+    class PersonListWidgetItem : public QListWidgetItem {
+    public:
+        PersonListWidgetItem(Person *p, QString s) : QListWidgetItem(s)
+        {
+            person = p;
+        }
+        Person *getPerson() const
+        {
+            return person;
+        }
+
+    protected: Person *person;
+    };
+
 public slots:
     void refresh();
 
@@ -26,8 +57,9 @@ private slots:
     void refreshEinsatzzeiten();
     void refreshEinzel();
 
-    void editMinimumHours();
-
+    // Personalmanager
+    void on_actionPersonAdd_triggered();
+    void on_actionMindeststunden_triggered();
 
     // Export
     void on_actionZeitenEinzelEinzelPDF_triggered();
@@ -72,7 +104,6 @@ private slots:
 
 
     // Fenster - Einzel
-    void on_pushAdd_clicked();
 
     void on_listWidget_itemClicked(QListWidgetItem *item);
 
