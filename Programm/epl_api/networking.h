@@ -36,6 +36,7 @@ public:
 
     static bool testServerVerbindung(Networking::Server server);
 
+protected:
     static QString post(QNetworkRequest anfrage, QByteArray daten);
     static QString get(QNetworkRequest anfrage);
 };
