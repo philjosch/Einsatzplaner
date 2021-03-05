@@ -48,6 +48,9 @@
     </item>
     <item row="3" column="4">
      <widget class="QCheckBox" name="checkWichtig">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="text">
        <string>Wichtig</string>
       </property>
@@ -198,6 +201,9 @@ unbekannt</string>
     </item>
     <item row="4" column="4">
      <widget class="QCheckBox" name="checkAbgesagt">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="text">
        <string>Abgesagt</string>
       </property>
@@ -403,8 +409,8 @@ unbekannt</string>
      <y>456</y>
     </hint>
     <hint type="destinationlabel">
-     <x>401</x>
-     <y>456</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>

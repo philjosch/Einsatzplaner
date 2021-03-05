@@ -238,6 +238,9 @@
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="0">
       <widget class="QLineEdit" name="linePwdAlt">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
        </property>
@@ -248,6 +251,9 @@
      </item>
      <item row="2" column="0">
       <widget class="QLineEdit" name="linePwdNeu1">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
        </property>
@@ -258,6 +264,9 @@
      </item>
      <item row="2" column="1">
       <widget class="QLineEdit" name="linePwdNeu2">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
        </property>
@@ -268,6 +277,9 @@
      </item>
      <item row="3" column="0">
       <widget class="QPushButton" name="pushPwdChange">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Passwort ändern</string>
        </property>

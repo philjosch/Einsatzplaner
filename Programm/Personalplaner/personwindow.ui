@@ -186,6 +186,9 @@
         </item>
         <item row="1" column="1">
          <widget class="QRadioButton" name="radioMaennlich">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>Männlich</string>
           </property>
@@ -196,6 +199,9 @@
         </item>
         <item row="1" column="2">
          <widget class="QRadioButton" name="radioWeiblich">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>Weiblich</string>
           </property>
@@ -206,6 +212,9 @@
         </item>
         <item row="1" column="3">
          <widget class="QRadioButton" name="radioDivers">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>Divers</string>
           </property>
@@ -216,6 +225,9 @@
         </item>
         <item row="2" column="1" colspan="2">
          <widget class="QRadioButton" name="radioJuristisch">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>Juristische Person</string>
           </property>
@@ -226,6 +238,9 @@
         </item>
         <item row="2" column="3">
          <widget class="QRadioButton" name="radioUnbekannt">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>Unbekannt</string>
           </property>
@@ -246,6 +261,9 @@
         </item>
         <item row="3" column="1" colspan="3">
          <widget class="QComboBox" name="comboAnrede">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="editable">
            <bool>true</bool>
           </property>
@@ -395,7 +413,7 @@
            <date>
             <year>1999</year>
             <month>11</month>
-            <day>16</day>
+            <day>15</day>
            </date>
           </property>
           <property name="displayFormat">
@@ -445,7 +463,7 @@
            <date>
             <year>1999</year>
             <month>11</month>
-            <day>17</day>
+            <day>16</day>
            </date>
           </property>
           <property name="displayFormat">
@@ -515,6 +533,9 @@
         </item>
         <item row="3" column="1" colspan="2">
          <widget class="QComboBox" name="comboBeitragsart">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="currentIndex">
            <number>2</number>
           </property>
@@ -556,13 +577,25 @@
          </widget>
         </item>
         <item row="4" column="1" colspan="2">
-         <widget class="QLineEdit" name="lineIBAN"/>
+         <widget class="QLineEdit" name="lineIBAN">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item row="5" column="1" colspan="2">
-         <widget class="QLineEdit" name="lineBank"/>
+         <widget class="QLineEdit" name="lineBank">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item row="6" column="1" colspan="2">
-         <widget class="QLineEdit" name="lineKontoinhaber"/>
+         <widget class="QLineEdit" name="lineKontoinhaber">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -686,7 +719,11 @@
          </widget>
         </item>
         <item row="5" column="1" colspan="2">
-         <widget class="QLineEdit" name="linePhone2"/>
+         <widget class="QLineEdit" name="linePhone2">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item row="6" column="0">
          <widget class="QLabel" name="labelMail">
@@ -772,7 +809,7 @@
            <date>
             <year>1999</year>
             <month>11</month>
-            <day>16</day>
+            <day>15</day>
            </date>
           </property>
           <property name="displayFormat">
@@ -833,6 +870,9 @@
         </item>
         <item row="5" column="1" colspan="3">
          <widget class="QPlainTextEdit" name="plainAusbildung">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="placeholderText">
            <string>Ausbildungen, Unterweisungen, Lehrgänge, ...</string>
           </property>
@@ -854,6 +894,9 @@ Ausbildung</string>
         </item>
         <item row="4" column="1" colspan="3">
          <widget class="QPlainTextEdit" name="plainBetrieb">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="placeholderText">
            <string>Sonstige Betriebliche Ausbildungen, Unterweisungen oder Bemerkungen</string>
           </property>

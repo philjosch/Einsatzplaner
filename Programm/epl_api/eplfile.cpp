@@ -319,7 +319,7 @@ QJsonObject EplFile::generiereJsonPersonal()
 bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj)
 {
     QJsonObject zuschreibendesObjekt = obj;
-
+/*
     QJsonObject generalJson = zuschreibendesObjekt.value("general").toObject();
 
     // Daten komprimieren
@@ -342,7 +342,7 @@ bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj)
 
     zuschreibendesObjekt.insert("general", generalJson);
     zuschreibendesObjekt.insert("payload", payload);
-
+*/
     return FileIO::saveJsonToFile(pfad, zuschreibendesObjekt);
 }
 
