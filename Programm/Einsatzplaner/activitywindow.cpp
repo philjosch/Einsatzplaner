@@ -30,9 +30,8 @@ ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWind
     ui->checkAbgesagt->setChecked(activity->getAbgesagt());
     ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
 
-    QList<Einsatz*> personen = activity->getPersonen();
     // Tabelle laden und alles einfügen
-    for(Einsatz *e: personen) {
+    for(Einsatz *e: activity->getPersonen()) {
         on_buttonInsert_clicked();
 
         EinsatzTableWidgetItem *ptwi = dynamic_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(0, 0));
@@ -177,7 +176,7 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int 
         nehme = false;
 
         EinsatzTableWidgetItem *ptwi = dynamic_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(row, 0));
-        Einsatz *e = ptwi->getEinsatz();
+        activity->removePerson(ptwi->getEinsatz());
 
         QTableWidgetItem *item = ui->tablePersonen->item(row, 0);
         QString name = item->text();
@@ -186,9 +185,10 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int 
         QTime ende = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
 
-        activity->removePerson(e);
         try {
-            Einsatz *e = activity->addPerson(name, bemerkung, beginn, ende, kat);
+            Einsatz *e = activity->addPerson(name, bemerkung, kat);
+            e->beginn = beginn;
+            e->ende = ende;
             ptwi->setEinsatz(e);
             if (! e->person->getAktiv()) {
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));

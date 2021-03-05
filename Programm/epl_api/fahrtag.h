@@ -5,6 +5,7 @@
 #include "wagen.h"
 #include "basics.h"
 #include "aactivity.h"
+#include "verteiler.h"
 
 class Fahrtag : public AActivity
 {
@@ -22,7 +23,7 @@ public:
     QString getHtmlForSingleView();
     QString getHtmlForTableView();
 
-    QList<Einsatz> getIndividual(Person *person);
+    QList<Einsatz> getIndividual(const Person* const person) const;
 
     QString getHtmlFuerReservierungsuebersicht();
 

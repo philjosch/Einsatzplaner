@@ -62,7 +62,7 @@ void CoreMainWindow::loeschenPerson(Person *p)
     }
 
     onPersonWirdEntferntWerden(p);
-    datei->getPersonal()->removePerson(p);
+    personal->removePerson(p);
 }
 void CoreMainWindow::loeschenAktivitaet(AActivity *a)
 {
@@ -71,7 +71,7 @@ void CoreMainWindow::loeschenAktivitaet(AActivity *a)
     }
 
     onAktivitaetWirdEntferntWerden(a);
-    datei->getManager()->removeActivity(a);
+    manager->removeActivity(a);
 }
 
 

@@ -155,7 +155,6 @@ void MainWindow::onAktivitaetWirdEntferntWerden(AActivity *a)
 }
 void MainWindow::onAktivitaetWurdeBearbeitet(AActivity *a, QDate altesDatum)
 {
-    manager->sort();
     int oldPos = -1;
     if (altesDatum.isValid())
         oldPos = getPosInCalendar(altesDatum);

@@ -291,8 +291,6 @@ QJsonObject EplFile::generiereJson()
 }
 QJsonObject EplFile::generiereJsonPersonal()
 {
-    QJsonObject personalJSON = manager->getPersonal()->personalToJson();
-
     QJsonObject viewJSON = geladen.value("view").toObject();
     viewJSON.insert("xMain", positionKalender.x);
     viewJSON.insert("yMain", positionKalender.y);
@@ -310,7 +308,7 @@ QJsonObject EplFile::generiereJsonPersonal()
     generalJSON.insert("version", Version::getProgrammVersion().toStringShort());
 
     QJsonObject object = geladen;
-    object.insert("personal", personalJSON);
+    object.insert("personal", personal->personalToJson());
     object.insert("view", viewJSON);
     object.insert("settings", dateiEigenschaften->toJson());
     object.insert("general", generalJSON);

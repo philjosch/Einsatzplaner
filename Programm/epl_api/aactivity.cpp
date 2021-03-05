@@ -5,9 +5,9 @@
 #include <QJsonArray>
 #include <QLinkedList>
 
-QStringList AActivity::EXTERNAL_LIST = QStringList() << "Extern" << "Führerstand" << "FS" << "Schnupperkurs" << "ELF" << "Ehrenlokführer" << "ELF-Kurs";
-QStringList AActivity::QUALIFICATION_LIST = QStringList() << "Azubi" << "Ausbildung" << "Tf-Ausbildung" << "Zf-Ausbildung" << "Tf-Unterricht" << "Zf-Unterricht" << "Weiterbildung";
-QString AActivity::COLOR_REQUIRED = "#ff3333";
+const QStringList AActivity::EXTERNAL_LIST = QStringList() << "Extern" << "Führerstand" << "FS" << "Schnupperkurs" << "ELF" << "Ehrenlokführer" << "ELF-Kurs";
+const QStringList AActivity::QUALIFICATION_LIST = QStringList() << "Azubi" << "Ausbildung" << "Tf-Ausbildung" << "Zf-Ausbildung" << "Tf-Unterricht" << "Zf-Unterricht" << "Weiterbildung";
+const QString AActivity::COLOR_REQUIRED = "#ff3333";
 
 const QString AActivity::KOPF_LISTE_HTML = "<h3>Übersicht über die Aktivitäten</h3>"
                                          "<table cellspacing='0' width='100%'><thead><tr>"
@@ -15,6 +15,17 @@ const QString AActivity::KOPF_LISTE_HTML = "<h3>Übersicht über die Aktivitäte
                                          "<th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th> <th>Service</th>"
                                          "<th>Sonstiges</th> </tr></thead><tbody>";
 const QString AActivity::FUSS_LISTE_HTML = "</tbody></table>";
+
+const QMap<Art, QString> AActivity::FARBE_FAHRTAGE = {{Museumszug, "#ffffff"},
+                                          {Sonderzug, "#ffcccc"},
+                                          {Gesellschaftssonderzug, "#FFDA91"},//ffcc66"},
+                                          {Nikolauszug, "#ffccff"},
+                                          {ELFundMuseumszug, "#e7e7fd"},
+                                          {Schnupperkurs, "#918fe3"},
+                                          {Bahnhofsfest, "#80e3b1"},
+                                          {SonstigerFahrtag, "#ffeb90"},
+                                          {Arbeitseinsatz, "#CCBEBE"}
+                                         };
 
 AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
 {
@@ -222,7 +233,7 @@ bool AActivity::removePerson(Einsatz *e)
     return ret;
 }
 
-Einsatz *AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat)
+Einsatz *AActivity::addPerson(Person *p, QString bemerkung, Category kat)
 {
    /*
     * Angaben fuer die Aufgabe pruefen
@@ -232,6 +243,8 @@ Einsatz *AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime e
     if (p == nullptr)
         throw AActivityException();
 
+    if (kat == Tf && bemerkung.contains(getLocalizedStringFromCategory(Tb), Qt::CaseInsensitive))
+        kat = Tb;
     if (kat == Zub && !hasQualification(p, kat, bemerkung, datum)) {
         kat = Begleiter;
     }
@@ -241,7 +254,7 @@ Einsatz *AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime e
 
     // jetzt ist alles richtig und die person kann registiert werden.
 
-    Einsatz *e = new Einsatz{p, this, kat, start, ende, bemerkung};
+    Einsatz *e = new Einsatz{p, this, kat, QTime(0,0), QTime(0,0), bemerkung};
 
     p->addActivity(e);
     personen.append(e);
@@ -249,11 +262,11 @@ Einsatz *AActivity::addPerson(Person *p, QString bemerkung, QTime start, QTime e
     emit changed(this);
     return e;
 }
-Einsatz *AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat)
+Einsatz *AActivity::addPerson(QString p, QString bemerkung, Category kat)
 {
     Person *pers = personal->getPerson(p);
     if (pers != nullptr) {
-        return addPerson(pers, bemerkung, start, ende, kat);
+        return addPerson(pers, bemerkung, kat);
     }
     if (isExtern(bemerkung)) {
         if (kat == Category::Zub) kat = Category::Begleiter;
@@ -261,7 +274,7 @@ Einsatz *AActivity::addPerson(QString p, QString bemerkung, QTime start, QTime e
         neuePerson->setAusbildungTf(true);
         neuePerson->setAusbildungZf(true);
         neuePerson->setAusbildungRangierer(true);
-        return addPerson(neuePerson, bemerkung, start, ende, kat);
+        return addPerson(neuePerson, bemerkung, kat);
     }
     throw PersonNichtGefundenException(p);
 }
@@ -300,11 +313,6 @@ bool AActivity::lesser(const AActivity *lhs, const AActivity *rhs)
     if (rhs->getArt() == Art::Arbeitseinsatz)
         return true;
     return false;
-}
-
-ManagerPersonal *AActivity::getPersonal() const
-{
-    return personal;
 }
 
 QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString prefix, QString suffix, bool aufgabe)
@@ -460,7 +468,7 @@ QString AActivity::getListString()
     return s;
 }
 
-QList<Einsatz> AActivity::getIndividual(Person *person)
+QList<Einsatz> AActivity::getIndividual(const Person * const person) const
 {
     QList<Einsatz> liste;
     if (person == nullptr)
@@ -721,7 +729,7 @@ QString AActivity::getHtmlForTableView()
     return html;
 }
 
-QString AActivity::getFarbe()
+QString AActivity::getFarbe() const
 {
     if (anlass.contains("vlexx", Qt::CaseSensitivity::CaseInsensitive)) {
         return "#DCF57E";//a3c526'>";

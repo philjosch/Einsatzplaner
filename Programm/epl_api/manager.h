@@ -15,9 +15,6 @@ public:
     Manager(ManagerPersonal *manPersonal);
     Manager(ManagerPersonal *manPersonal, QJsonArray array);
     QJsonArray toJson();
-    void fromJson(QJsonArray array);
-
-    ManagerPersonal *getPersonal() const;
 
     QList<AActivity *> getActivities();
 
@@ -35,13 +32,9 @@ public slots:
 
     bool removeActivity(AActivity *a);
 
-    void sort();
-
     QList<AActivity*> filter(Auswahl auswahl);
 
 protected:
-    void update(int pos);
-
     QList<AActivity *> activities;
     ManagerPersonal *personal;
 

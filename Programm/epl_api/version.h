@@ -128,14 +128,14 @@ protected:
     /**
      * @brief Vollstaendige URL zur Datei mit der aktuellen Programmversion
      */
-    static QString URL_VERSION;
+    static const QString URL_VERSION;
     /**
      * @brief Generische URL zu den Versionshinweisen
      * %1 dient als Platzhalter fuer die Major-Nummer der Version.
      * %2 dient als Platzhalter fuer die Minor-Nummer der Version.
      * %3 dient als Platzhalter fuer die Patch-Nummer der Version.
      */
-    static QString URL_NOTES;
+    static const QString URL_NOTES;
 };
 
 #endif // VERSION_H

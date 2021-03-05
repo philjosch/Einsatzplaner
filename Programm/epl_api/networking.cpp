@@ -31,9 +31,9 @@ bool Networking::ladeDateiHoch(Networking::Server server, QFile *datei)
 
     QByteArray data;
     data.append("--margin\r\n");
-    data.append("Content-Disposition: form-data; name='id'\r\n\r\n"+server.id+"\r\n");
+    data.append("Content-Disposition: form-data; name='id'\r\n\r\n"+server.id.toUtf8()+"\r\n");
     data.append("--margin\r\n");
-    data.append("Content-Disposition: form-data; name='uploaded'; filename='"+server.id+".pdf'\r\n");
+    data.append("Content-Disposition: form-data; name='uploaded'; filename='"+server.id.toUtf8()+".pdf'\r\n");
     data.append("Content-Type: application/pdf\r\n\r\n");
     data.append(datei->readAll());
     data.append("\r\n");

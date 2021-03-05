@@ -610,10 +610,6 @@ int Person::getMinimumStunden(Category cat)
 void Person::berechne()
 {
     zeiten.clear();
-    QSet<AActivity*> actis;
-    for(Einsatz *e: activities) {
-        actis.insert(e->activity);
-    }
 
     for(Einsatz ee: getActivities()) {
             Einsatz *e = &(ee);

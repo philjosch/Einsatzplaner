@@ -130,11 +130,11 @@ void Export::preparePrinter(QPrinter *p, QPrinter::Orientation orientation)
     p->setFullPage(true);
     switch (orientation) {
     case QPrinter::Portrait:
-        p->setPageMargins(20, 15, 15, 15, QPrinter::Millimeter);
+        p->setPageMargins(QMarginsF(20, 15, 15, 15), QPageLayout::Millimeter);
         p->setPageOrientation(QPageLayout::Portrait);
         break;
     case QPrinter::Landscape:
-        p->setPageMargins(15, 20, 15, 15, QPrinter::Millimeter);
+        p->setPageMargins(QMarginsF(15, 20, 15, 15), QPageLayout::Millimeter);
         p->setPageOrientation(QPageLayout::Landscape);
         break;
     }

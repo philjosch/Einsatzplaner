@@ -8,8 +8,8 @@ bool Version::IS_DEPLOY_VERSION = false;
 bool Version::IS_DEBUG_BUILD = false;
 QString Version::BUILD_NUMBER = "???????";
 
-QString Version::URL_VERSION = "http://epl.philipp-schepper.de/version.txt";
-QString Version::URL_NOTES = "http://epl.philipp-schepper.de/version/v%1-%2/notes-v%1-%2-%3.txt";
+const QString Version::URL_VERSION = "http://epl.philipp-schepper.de/version.txt";
+const QString Version::URL_NOTES = "http://epl.philipp-schepper.de/version/v%1-%2/notes-v%1-%2-%3.txt";
 
 Version::Version(QString vers)
 {

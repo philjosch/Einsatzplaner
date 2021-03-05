@@ -95,11 +95,10 @@ QString Fahrtag::getKurzbeschreibung()
     return getStringFromArt(art);
 }
 
-QList<Einsatz> Fahrtag::getIndividual(Person *person)
+QList<Einsatz> Fahrtag::getIndividual(const Person * const person) const
 {
-    QList<Einsatz> liste = AActivity::getIndividual(person);
     QList<Einsatz> neu;
-    for(Einsatz e: liste) {
+    for(Einsatz e: AActivity::getIndividual(person)) {
         Einsatz e2 = e;
         if (!zeitenUnbekannt) {
             if ((e2.beginn == zeitAnfang) && (e2.kategorie == Tf)) {

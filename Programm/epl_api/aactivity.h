@@ -59,9 +59,9 @@ public:
     void setAbgesagt(bool value);
 
     QList<Einsatz*> getPersonen() const;
-    virtual QList<Einsatz> getIndividual(Person *person);
-    Einsatz *addPerson(Person *p, QString bemerkung, QTime start, QTime ende, Category kat);
-    Einsatz *addPerson(QString p, QString bemerkung, QTime start, QTime ende, Category kat);
+    virtual QList<Einsatz> getIndividual(const Person* const person) const;
+    Einsatz *addPerson(Person *p, QString bemerkung, Category kat);
+    Einsatz *addPerson(QString p, QString bemerkung, Category kat);
     bool removePerson(Einsatz *e);
 
     static bool lesser(const AActivity *lhs, const AActivity *rhs);
@@ -75,17 +75,17 @@ public:
     virtual QString getListString();
     virtual QString getListStringShort();
 
-    ManagerPersonal *getPersonal() const;
-
     virtual QString getHtmlForSingleView();
     virtual QString getHtmlForTableView();
 
-    virtual QString getFarbe();
+    virtual QString getFarbe() const;
 
-    static QStringList EXTERNAL_LIST;
-    static QStringList QUALIFICATION_LIST;
+    static const QStringList EXTERNAL_LIST;
+    static const QStringList QUALIFICATION_LIST;
     static const QString KOPF_LISTE_HTML;
     static const QString FUSS_LISTE_HTML;
+
+    static const QMap<Art, QString> FARBE_FAHRTAGE;
 
     static bool hasQualification(Person *p, Category kat, QString bemerkung, QDate datum = QDate());
     static bool isExtern(QString bemerkung);
@@ -115,7 +115,7 @@ protected:
 
     QString listToString(QString sep, QList<Einsatz*> liste, QString prefix="", QString suffix="", bool aufgabe=false);
 
-    static QString COLOR_REQUIRED;
+    static const QString COLOR_REQUIRED;
 };
 
 #endif // AACTIVITY_H

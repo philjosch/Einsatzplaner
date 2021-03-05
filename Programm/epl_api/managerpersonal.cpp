@@ -3,7 +3,7 @@
 
 #include <QJsonArray>
 
-QMap<Category, int> ManagerPersonal::MINIMUM_HOURS_DEFAULT {{Category::Tf, 100*60}, {Gesamt, 10*60}};
+const QMap<Category, int> ManagerPersonal::MINIMUM_HOURS_DEFAULT {{Category::Tf, 100*60}, {Gesamt, 10*60}};
 
 
 ManagerPersonal::ManagerPersonal()
@@ -12,7 +12,6 @@ ManagerPersonal::ManagerPersonal()
     personenSorted = QMap<QString, Person*>();
     idToPerson = QMap<QString, Person*>();
     minimumHours = MINIMUM_HOURS_DEFAULT;
-    time = QMap<Category,int>();
 }
 
 ManagerPersonal::ManagerPersonal(QJsonObject o)
@@ -21,7 +20,6 @@ ManagerPersonal::ManagerPersonal(QJsonObject o)
     personenSorted = QMap<QString, Person*>();
     idToPerson = QMap<QString, Person*>();
     minimumHours = QMap<Category, int>();
-    time = QMap<Category,int>();
 
     QJsonArray a = o.value("personen").toArray();
     for(int i = 0; i < a.size(); i++) {
@@ -200,19 +198,9 @@ QList<Person *> ManagerPersonal::getPersonenSortiertNachNummer()
 
 void ManagerPersonal::berechne()
 {
-    time.clear();
     for (Person *p: personenSorted.values()) {
         p->berechne();
-        for(Category cat: ANZEIGEREIHENFOLGEGESAMT) {
-            time.insert(cat, time.value(cat)+p->getZeiten(cat));
-        }
     }
-    time.insert(Anzahl, 0);
-}
-
-int ManagerPersonal::getZeiten(Category kat)
-{
-    return time.value(kat, 0);
 }
 
 QString ManagerPersonal::getGoodName(QString name)
@@ -243,7 +231,6 @@ bool ManagerPersonal::checkNummer(int neu)
 
 QString ManagerPersonal::getZeitenFuerEinzelListeAlsHTML(QList<Person *> liste, Mitglied filter)
 {
-    berechne();
     QString a = "";
     // Seite fuer jede Person einfuegen
     QMap<Category, int> sum;

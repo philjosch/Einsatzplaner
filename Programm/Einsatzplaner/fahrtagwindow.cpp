@@ -263,11 +263,6 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
     liste.removeFirst();
     QString bemerkung = liste.join("; ");
 
-    if (kat == Tf && bemerkung.contains(getLocalizedStringFromCategory(Tb), Qt::CaseInsensitive))
-        kat = Tb;
-    if (kat == Zub && !AActivity::hasQualification(fahrtag->getPersonal()->getPerson(name), kat, bemerkung))
-        kat = Begleiter;
-
     TableListWidgetItem *tlwi = static_cast<TableListWidgetItem*>(item);
     if (tlwi->getTableItem() != nullptr) {
         // Person wurde bereits eingetragen, entweder intern oder extern
@@ -286,7 +281,7 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
     }
 
     try {
-        Einsatz *einsatz = fahrtag->addPerson(name, bemerkung, QTime(0,0), QTime(0,0), kat);
+        Einsatz *einsatz = fahrtag->addPerson(name, bemerkung, kat);
         if (!einsatz->person->getAktiv())
             QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
 
@@ -411,7 +406,7 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int c
         nehme = false;
 
         EinsatzTableWidgetItem *ptwi = static_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(row, 0));
-        Einsatz *e = ptwi->getEinsatz();
+        fahrtag->removePerson(ptwi->getEinsatz());
 
         QString name = ptwi->text();
         Category kat = getCategoryFromLocalizedString(static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->currentText());
@@ -419,10 +414,10 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int c
         QTime ende = static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->time();
         QString bemerkung = (ui->tablePersonen->item(row, 4) == nullptr) ? "" :  ui->tablePersonen->item(row,4)->text();
 
-        fahrtag->removePerson(e);
-
         try {
-            Einsatz *e = fahrtag->addPerson(name, bemerkung, beginn, ende, kat);
+            Einsatz *e = fahrtag->addPerson(name, bemerkung, kat);
+            e->beginn = beginn;
+            e->ende = ende;
             ptwi->setEinsatz(e);
             if (! e->person->getAktiv())
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));

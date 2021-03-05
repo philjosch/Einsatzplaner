@@ -3,9 +3,17 @@
 
 #include "reservierung.h"
 #include "wagen.h"
-#include "basics.h"
 
 #include <QSet>
+
+enum Mistake {
+    // General errors
+    OK, // Operation wurde erfolgreich durchgefuehrt
+    SonstigerFehler, // Unbestimmter Fehler
+
+    // Fehler bei der Verteilung der Sitzplaetze
+    KapazitaetUeberlauf // Es gibt nicht genuegend Sitzplaetze fuer die Reservierungen
+};
 
 class Verteiler
 {

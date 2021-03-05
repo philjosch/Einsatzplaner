@@ -23,8 +23,13 @@ enum Category {
     Anzahl=122    // Wird nur verwendet, um Funktionsaufrufe einfacher zu gestalten
 };
 
+Category getCategoryFromLocalizedString(QString s);
+QString getLocalizedStringFromCategory(Category c);
+
+
 const QList<Category> ANZEIGEREIHENFOLGE =                       {Tf, Zf, Zub, Service, ZugVorbereiten, Werkstatt, Buero, Ausbildung, Infrastruktur, Sonstiges};
 const QList<Category> ANZEIGEREIHENFOLGEGESAMT = {Gesamt, Anzahl, Tf, Zf, Zub, Service, ZugVorbereiten, Werkstatt, Buero, Ausbildung, Infrastruktur, Sonstiges, Kilometer};
+
 
 enum Art {
     Museumszug,
@@ -37,6 +42,9 @@ enum Art {
     SonstigerFahrtag,
     Arbeitseinsatz = 100
 };
+
+QString getStringFromArt(Art art);
+
 
 enum Mitglied {
     AlleMitglieder,
@@ -52,33 +60,10 @@ enum Mitglied {
 
 QString getStringVonFilter(Mitglied filter);
 
-const QMap<Art, QString> FARBE_FAHRTAGE = {{Museumszug, "#ffffff"},
-                                          {Sonderzug, "#ffcccc"},
-                                          {Gesellschaftssonderzug, "#FFDA91"},//ffcc66"},
-                                          {Nikolauszug, "#ffccff"},
-                                          {ELFundMuseumszug, "#e7e7fd"},
-                                          {Schnupperkurs, "#918fe3"},
-                                          {Bahnhofsfest, "#80e3b1"},
-                                          {SonstigerFahrtag, "#ffeb90"},
-                                          {Arbeitseinsatz, "#CCBEBE"}
-                                         };
-
-enum Mistake {
-    // General errors
-    OK, // Operation wurde erfolgreich durchgefuehrt
-    SonstigerFehler, // Unbestimmter Fehler
-
-    // Fehler bei der Verteilung der Sitzplaetze
-    KapazitaetUeberlauf // Es gibt nicht genuegend Sitzplaetze fuer die Reservierungen
-};
 
 QString minutesToHourString(int min);
 QString minutesToHourStringShort(int min);
 
-Category getCategoryFromLocalizedString(QString s);
-QString getLocalizedStringFromCategory(Category c);
-
-QString getStringFromArt(Art art);
 
 struct Auswahl {
     enum AnfangBedingung {
@@ -102,75 +87,15 @@ struct Auswahl {
     EndeBedingung enddate = BisAlle;
     bool activities = true;
 
-    void insertJson(QJsonObject *o) {
-        o->insert("startdate", zuString(startdate));
-        o->insert("enddate", zuString(enddate));
-        o->insert("activities", activities);
-    }
-    static Auswahl fromJson(QJsonObject o) {
-        Auswahl a;
-        a.startdate = anfangAusString(o.value("startdate").toString());
-        a.enddate = endeAusString(o.value("enddate").toString());
-        a.activities = o.value("activities").toBool(true);
-        return a;
-    }
+    void insertJson(QJsonObject *o) const;
+    static Auswahl fromJson(QJsonObject o);
 
-    static AnfangBedingung anfangAusString(QString s) {
-        if (s == "tdy") {
-            return AbJetzt;
-        }
-        if (s == "all") {
-            return AbAlle;
-        }
-        if (s == "bgn") {
-            return AbAnfangDesJahres;
-        }
-        return AbAlle;
-    }
-    static QString zuString(AnfangBedingung a) {
-        switch (a) {
-        case AbJetzt:
-            return "tdy";
-        case AbAlle:
-            return "all";
-        case AbAnfangDesJahres:
-            return "bgn";
-        default:
-            return "all";
-        }
-    }
+    static AnfangBedingung anfangAusString(QString s);
+    static QString zuString(AnfangBedingung a);
 
-    static EndeBedingung endeAusString(QString s) {
-        if (s == "p1w") {
-            return BisEndeNaechsterWoche;
-        }
-        if (s == "p1m") {
-            return BisEndeNaechsterMonat;
-        }
-        if (s == "eoy") {
-            return BisEndeDesJahres;
-        }
-        if (s == "all") {
-            return BisAlle;
-        }
-        return BisAlle;
-    }
-    static QString zuString(EndeBedingung e) {
-        switch (e) {
-        case BisEndeDesJahres:
-            return "eoy";
-        case BisAlle:
-            return "all";
-        case BisEndeNaechsterWoche:
-           return "p1w";
-        case BisEndeNaechsterMonat:
-            return "p1m";
-        default:
-            return "all";
-        }
-    }
+    static EndeBedingung endeAusString(QString s);
+    static QString zuString(EndeBedingung e);
 };
-
 
 class AActivity;
 class Person;
@@ -189,8 +114,6 @@ struct Einsatz {
 
     static bool lesser(Einsatz lhs, Einsatz rhs);
     static bool lesserPoint(const Einsatz *lhs, const Einsatz *rhs);
-
 };
-
 
 #endif // BASICS_H

@@ -7,6 +7,7 @@ Manager::Manager(ManagerPersonal *manPersonal) : QObject()
 {
     activities = QList<AActivity*>();
     personal = manPersonal;
+    connect(this, &Manager::changed, this, [=]() { AActivity::sort(&activities);});
 }
 
 Manager::Manager(ManagerPersonal *manPersonal, QJsonArray array)
@@ -37,7 +38,8 @@ Manager::Manager(ManagerPersonal *manPersonal, QJsonArray array)
         connect(akt, &AActivity::changed, this, [=](AActivity *a, QDate date) {emit veraenderteAktivitaet(a, date);});
         activities.append(akt);
     }
-    sort();
+    AActivity::sort(&activities);
+    connect(this, &Manager::changed, this, [=]() { AActivity::sort(&activities);});
 }
 
 QJsonArray Manager::toJson()
@@ -54,7 +56,7 @@ Fahrtag *Manager::newFahrtag(QDate datum)
 {
     Fahrtag *f = new Fahrtag(datum, personal);
     activities.append(f);
-    sort();
+    AActivity::sort(&activities);
     connect(f, &AActivity::changed, this, [=](AActivity *a, QDate date) {emit veraenderteAktivitaet(a, date);});
     connect(f, &AActivity::changed, this, [=]() {emit changed();});
     emit changed();
@@ -65,7 +67,7 @@ AActivity *Manager::newActivity(QDate datum)
 {
     AActivity *a = new AActivity(datum, personal);
     activities.append(a);
-    sort();
+    AActivity::sort(&activities);
     connect(a, &AActivity::changed, this, [=](AActivity *a, QDate date) {emit veraenderteAktivitaet(a, date);});
     connect(a, &AActivity::changed, this, [=]() {emit changed();});
     emit changed();
@@ -78,11 +80,6 @@ bool Manager::removeActivity(AActivity *a)
     delete a;
     emit changed();
     return ret;
-}
-
-void Manager::sort()
-{
-    AActivity::sort(&activities);
 }
 
 QList<AActivity *> Manager::filter(Auswahl auswahl)
@@ -121,9 +118,4 @@ QString Manager::getHtmlFuerEinzelansichten(QList<AActivity *> liste)
             html += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
     }
     return html;
-}
-
-ManagerPersonal *Manager::getPersonal() const
-{
-    return personal;
 }

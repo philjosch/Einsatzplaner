@@ -73,7 +73,7 @@ void CoreApplication::checkVersion()
     if (Version::isUpdateVerfuegbar()) {
         Version v = Version::ladeNeusteVersion();
         QString message = tr("Es ist Version %1 des Programms verfügbar.\nSie benutzen Version %2.")
-                .arg(v.toString()).arg(QCoreApplication::applicationVersion());
+                .arg(v.toString(), QCoreApplication::applicationVersion());
         QMessageBox::StandardButton answ = QMessageBox::information(nullptr, tr("Neue Version"), message, QMessageBox::Ignore|QMessageBox::Help|QMessageBox::Open, QMessageBox::Open);
         if (answ == QMessageBox::Open) {
             oeffneDownloadSeite();

@@ -37,8 +37,6 @@ public:
 
     void berechne();
 
-    int getZeiten(Category kat);
-
     static QString getGoodName(QString name); // Wandlet einen Namen in das Format Vorname Nachname um
 
     int getNextNummer();
@@ -68,9 +66,7 @@ private:
 
     QMap<Category, int> minimumHours;
 
-    static QMap<Category, int> MINIMUM_HOURS_DEFAULT;
-
-    QMap<Category, int> time;
+    static const QMap<Category, int> MINIMUM_HOURS_DEFAULT;
 };
 
 #endif // MANAGERPERSONAL_H
