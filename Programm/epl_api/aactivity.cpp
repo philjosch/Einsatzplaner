@@ -339,7 +339,7 @@ bool AActivity::hasQualification(Person *p, Category kat, QString bemerkung, QDa
     if (p == nullptr) return false;
     if (p->isTauglich(kat, datum)) return true;
 
-    for(QString s: QUALIFICATION_LIST) {
+    for(const QString &s: QUALIFICATION_LIST) {
         if (bemerkung.contains(s, Qt::CaseInsensitive)) {
             return true;
         }
@@ -349,7 +349,7 @@ bool AActivity::hasQualification(Person *p, Category kat, QString bemerkung, QDa
 
 bool AActivity::isExtern(QString bemerkung)
 {
-    for(QString s: EXTERNAL_LIST) {
+    for(const QString &s: EXTERNAL_LIST) {
         if (bemerkung.contains(s, Qt::CaseInsensitive)) {
             return true;
         }

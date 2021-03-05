@@ -894,10 +894,10 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML()
     QString help = "<li>%1:\t\t %2</li>";
 
     if (geburtstag.isValid())
-        absch += help.arg("Geburtstag").arg(geburtstag.toString("dd.MM.yyyy"));
+        absch += help.arg("Geburtstag", geburtstag.toString("dd.MM.yyyy"));
     if (anrede != "")
-        absch += help.arg("Anrede").arg(anrede);
-    absch += help.arg("Geschlecht").arg(getStringVonGeschlecht(geschlecht));
+        absch += help.arg("Anrede", anrede);
+    absch += help.arg("Geschlecht", getStringVonGeschlecht(geschlecht));
     if (beruf != "")
         absch += help.arg("Beruf").arg(beruf);
     if (absch != "")
@@ -907,21 +907,20 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML()
     // Mitgliedsdaten
     absch = "";
     absch += help.arg("Mitgliedsnummer").arg(nummer);
-    absch += help.arg("Status").arg( isAusgetreten() ? "Ehemals %1" : "%1")
-            .arg(aktiv ? "Aktiv":"Passiv");
-    absch += help.arg("Eintritt").arg(eintritt.toString("dd.MM.yyyy"));
+    absch += help.arg("Status", (isAusgetreten() ? "Ehemals %1" : "%1"), (aktiv ? "Aktiv":"Passiv"));
+    absch += help.arg("Eintritt", eintritt.toString("dd.MM.yyyy"));
     if (isAusgetreten()) {
-        absch += help.arg("Austritt").arg(austritt.toString("dd.MM.yyyy"));
+        absch += help.arg("Austritt", austritt.toString("dd.MM.yyyy"));
     } else {
         if (austritt.isValid())
-            absch += help.arg("Austritt zum").arg(austritt.toString("dd.MM.yyyy"));
+            absch += help.arg("Austritt zum", austritt.toString("dd.MM.yyyy"));
     }
-    absch += help.arg("Beitragsart").arg(getStringVonBeitragsart(beitragsart));
+    absch += help.arg("Beitragsart", getStringVonBeitragsart(beitragsart));
     if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
-        absch += help.arg("Zahler").arg(getKontoinhaberText());
+        absch += help.arg("Zahler", getKontoinhaberText());
     } else {
-        absch += help.arg("Konto").arg("%2 bei %3").arg(iban).arg(bank);
-        absch += help.arg("Kontoinhaber").arg(kontoinhaber);
+        absch += help.arg("Konto", "%2 bei %3").arg(iban, bank);
+        absch += help.arg("Kontoinhaber", kontoinhaber);
     }
     if (absch != "")
         h += "<h3>Mitgliedschaft</h3><ul>" + absch + "</ul>";
@@ -930,26 +929,26 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML()
     // Anschrift
     absch = "";
     if (strasse != "")
-        absch += help.arg("Straße").arg(strasse);
+        absch += help.arg("Straße", strasse);
     if (plz != "" || ort != "")
-        absch += help.arg("PLZ und Ort").arg("%1 %2").arg(plz).arg(ort);
+        absch += help.arg("PLZ und Ort", "%1 %2").arg(plz, ort);
     if (strecke != 0)
-        absch +=  help.arg("Strecke").arg("%1km").arg(strecke);
+        absch +=  help.arg("Strecke", "%1km").arg(strecke);
 //    if (absch != "")
 //        h += "<h3>Anschrift</h3><ul>" + absch + "</ul>";
 
     // Kontakt
 //    absch = "";
     if (mail != "")
-        absch += help.arg("Mail").arg(mail);
+        absch += help.arg("Mail", mail);
     if (telefon != "") {
         if (telefon2 != "")
-            absch += help.arg("Telefon").arg("%2, %3").arg(telefon).arg(telefon2);
+            absch += help.arg("Telefon", "%2, %3").arg(telefon, telefon2);
         else
-            absch += help.arg("Telefon").arg(telefon);
+            absch += help.arg("Telefon", telefon);
     } else {
         if (telefon2 != "")
-            absch += help.arg("Telefon").arg(telefon2);
+            absch += help.arg("Telefon", telefon2);
     }
     if (absch != "")
         h += "<h3>Kontaktdaten</h3><ul>" + absch + "</ul>";
@@ -957,7 +956,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML()
     // Ausbildung
     absch = "";
     if (tauglichkeit.isValid())
-        absch += help.arg("Tauglichkeit bis").arg(tauglichkeit.toString("dd.MM.yyyy"));
+        absch += help.arg("Tauglichkeit bis", tauglichkeit.toString("dd.MM.yyyy"));
     if (ausbildungTf || ausbildungZf || ausbildungRangierer) {
         bool komma = false;
         absch += help.arg("Ausbildung zum");
@@ -984,8 +983,8 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML()
 
     // Datenschutz
     h += "<h3>Datenschutz</h3><ul>";
-    h += help.arg("Sperrvermerk Mail").arg(mailOK ? "Nein" : "Ja");
-    h += help.arg("Sperrvermerk Telefon").arg(telefonOK ? "Nein" : "Ja");
+    h += help.arg("Sperrvermerk Mail", (mailOK ? "Nein" : "Ja"));
+    h += help.arg("Sperrvermerk Telefon", (telefonOK ? "Nein" : "Ja"));
     h += "</ul>";
 
     // Sonstiges

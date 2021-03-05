@@ -88,8 +88,7 @@ void CoreMainWindow::on_actionAboutApp_triggered()
     QMessageBox::about(this,
                        tr("Über %1").arg(QCoreApplication::applicationName()),
                        tr("<h1>%1</h1><p>Ein Programm der EPL-Familie<br/>Version %2<br/>2016-2021 Philipp Schepper</p>")
-                       .arg(QCoreApplication::applicationName())
-                       .arg(QCoreApplication::applicationVersion()));
+                       .arg(QCoreApplication::applicationName(), QCoreApplication::applicationVersion()));
 }
 void CoreMainWindow::on_actionQuit_triggered()
 {
@@ -117,7 +116,7 @@ void CoreMainWindow::on_menuRecentlyused_aboutToShow()
             recentlyUsedMenu->removeAction(actions[i]);
         }
         recentlyUsedClear->setEnabled(true);
-        for (QString entry: list) {
+        for (const QString &entry: list) {
             QAction *a = new QAction(entry, this);
             connect(a, &QAction::triggered, this, [=]() { handlerOpen(entry); });
             recentlyUsedMenu->insertAction(nullptr, a);

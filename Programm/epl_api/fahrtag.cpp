@@ -395,7 +395,8 @@ QString Fahrtag::getHtmlFuerReservierungsuebersicht()
     // Sortieren der Daten nach Wagenreihung
     QStringList wagen = wagenreihung.split(QRegExp("\\s*,\\s*"));
     QList<int> wagenNummern;
-    for(QString s: wagen) wagenNummern.append(s.toInt());
+    for(const QString &s: wagen)
+        wagenNummern.append(s.toInt());
 
     // Sortieren der Reservierungen
     QHash<int, QList<Reservierung*>*> wagenZuRes;
