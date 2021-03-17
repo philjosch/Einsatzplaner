@@ -11,7 +11,7 @@ public:
         QString key;
         QString salt;
         QString iv;
-//        QString typ = "qt-aes";
+        QString typ;// = "QtAES";
     };
 
     static QString generateSalt();

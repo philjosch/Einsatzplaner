@@ -205,7 +205,7 @@ void EplFile::open(QString passw)
             throw FileException();
         payload.chop(5);
         QJsonObject cryptoJSON = geladen.value("crypto").toObject();
-        Crypto::EncryptedData eD = {payload, Crypto::hash(passw), cryptoJSON.value("salt").toString(), cryptoJSON.value("iv").toString()};
+        Crypto::EncryptedData eD = {payload, Crypto::hash(passw), cryptoJSON.value("salt").toString(), cryptoJSON.value("iv").toString(), cryptoJSON.value("modus").toString() };
         payload = Crypto::decrypt(eD);
         if (! payload.endsWith("-ZIP-"))
             throw FileWrongPasswordException();
@@ -333,7 +333,7 @@ bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj)
 
         Crypto::EncryptedData eD = Crypto::encrypt(payload, dateiEigenschaften->getPasswort());
         QJsonObject crypto;
-        crypto.insert("modus", "QtAES");
+        crypto.insert("modus", eD.typ);
         crypto.insert("salt", eD.salt);
         crypto.insert("iv", eD.iv);
         zuschreibendesObjekt.insert("crypto", crypto);

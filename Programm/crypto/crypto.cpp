@@ -21,7 +21,6 @@ QByteArray Crypto::hash(QString password, QString salt)
 
 Crypto::EncryptedData Crypto::encrypt(QString data, QString pwd)
 {
-    QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
 
     QString key = pwd;
     QString salt = Crypto::generateSalt();
@@ -30,18 +29,21 @@ Crypto::EncryptedData Crypto::encrypt(QString data, QString pwd)
     QByteArray hashKey = QCryptographicHash::hash((key+salt).toUtf8(), QCryptographicHash::Sha256);
     QByteArray hashIV = QCryptographicHash::hash(iv.toUtf8(), QCryptographicHash::Md5);
 
+    QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
     QByteArray encodeText = encryption.encode(data.toUtf8(), hashKey, hashIV);
 
-    return Crypto::EncryptedData{encodeText.toBase64(), key, salt, iv};
+    return Crypto::EncryptedData{encodeText.toBase64(), key, salt, iv, "QtAES"};
 }
 
 QString Crypto::decrypt(Crypto::EncryptedData encrypted)
 {
-    QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
+    if (encrypted.typ != "QtAES")
+        return "";
 
     QByteArray hashKey = QCryptographicHash::hash((encrypted.key+encrypted.salt).toUtf8(), QCryptographicHash::Sha256);
     QByteArray hashIV = QCryptographicHash::hash((encrypted.iv).toUtf8(), QCryptographicHash::Md5);
 
+    QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
     QByteArray decodeText = encryption.decode(QByteArray::fromBase64(encrypted.data.toUtf8()), hashKey, hashIV);
 
     QString decodedString = QString(encryption.removePadding(decodeText));
