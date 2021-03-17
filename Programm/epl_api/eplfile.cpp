@@ -307,7 +307,7 @@ QJsonObject EplFile::generiereJsonPersonal()
     QJsonObject generalJSON = geladen.value("general").toObject();
     generalJSON.insert("version", Version::getProgrammVersion().toStringShort());
 
-    QJsonObject object = geladen;
+    QJsonObject object = QJsonObject();
     object.insert("personal", personal->personalToJson());
     object.insert("view", viewJSON);
     object.insert("settings", dateiEigenschaften->toJson());
