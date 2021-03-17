@@ -30,15 +30,15 @@ QString Person::getStringVonGeschlecht(Person::Geschlecht g)
 {
     switch (g) {
     case GeschlechtUnbekannt:
-        return tr("Unbekannt");
+        return tr("unbekannt");
     case Juristisch:
-        return tr("Juristische Person");
+        return tr("juristische Person");
     case Maennlich:
-        return tr("Männlich");
+        return tr("männlich");
     case Weiblich:
-        return tr("Weiblich");
+        return tr("weiblich");
     case Divers:
-        return tr("Divers");
+        return tr("divers");
     }
 }
 
