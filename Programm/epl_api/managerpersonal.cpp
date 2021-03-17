@@ -370,12 +370,12 @@ QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> lis
     return titelSeite+a;
 }
 
-QString ManagerPersonal::getMitgliederFuerListeAlsHtml(QList<Person*> liste, Mitglied filter)
+QString ManagerPersonal::getMitgliederFuerListeAlsHtml(QList<Person*> liste, Mitglied filter, QSet<QString> data)
 {
-    QString a = Person::KOPF_TABELLE_LISTE_HTML
+    QString a = Person::getKopfTabelleListeHtml(data)
             .arg(getStringVonFilter(filter), QDateTime::currentDateTime().toString("d.M.yyyy"));
     for(Person *akt: liste) {
-        a += akt->getPersonaldatenFuerListeAlsHTML();
+        a += akt->getPersonaldatenFuerListeAlsHTML(data);
     }
     a += Person::FUSS_TABELLE_LISTE_HTML;
     a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));

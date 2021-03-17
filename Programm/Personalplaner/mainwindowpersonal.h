@@ -90,8 +90,6 @@ protected:
     Mitglied filter;
     QSet<QString> anzeige;
 
-    static const QList<QString> ANZEIGE_TABELLE;
-
 private slots:
     void on_listAnzeige_itemChanged(QListWidgetItem *item);
 };

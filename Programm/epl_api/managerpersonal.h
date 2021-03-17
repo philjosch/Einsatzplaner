@@ -46,7 +46,7 @@ public:
     static QString getZeitenFuerListeAlsHTML(QList<Person *> personen, QSet<Category> spalten, Mitglied filter);
 
     QString getMitgliederFuerEinzelListeAlsHTML(QList<Person*> liste, Mitglied filter);
-    static QString getMitgliederFuerListeAlsHtml(QList<Person *> liste, Mitglied filter);
+    static QString getMitgliederFuerListeAlsHtml(QList<Person *> liste, Mitglied filter, QSet<QString> data);
     static QString getMitgliederFuerListeAlsCSV(QList<Person *> liste);
 
     int getAnzahlMitglieder(Mitglied filter);

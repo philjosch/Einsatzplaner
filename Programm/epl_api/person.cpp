@@ -16,16 +16,15 @@ const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsd
                                                "Straße;PLZ;Ort;Strecke;Mail;Telefon;Telefon2;"
                                                "Zustimmung Mail;Zustimmung Telefon;"
                                                "Bemerkung\n";
-const QString Person::KOPF_TABELLE_LISTE_HTML = "<h3>%1 – Stand %2</h3>"
-                                                   "<table cellspacing='0' width='100%'><thead><tr>"
-                                                   "<th>Name<br/>Mitgliedsnummer<br/>Status</th>"
-                                                   "<th>Geburtsdatum<br/>Eintritt<br/>Beruf</th>"
-                                                   "<th>Anschrift</th>"
-                                                   "<th>E-Mail<br/>Telefon</th>"
-                                                   "<th>Betriebsdienst</th>"
-                                                   "<th>Sonstiges</th>"
-                                                   "</thead><tbody>";
 const QString Person::FUSS_TABELLE_LISTE_HTML = "</tbody></table>";
+
+const QStringList Person::ANZEIGE_PERSONALDATEN = {"Vorname", "Nachname", "Geburtsdatum", "Geschlecht", "Anrede", "Beruf",
+                                                   "Nummer", "Eintritt", "Status", "Austritt", "Beitragsart", "IBAN", "Bank", "Kontoinhaber",
+                                                   "Straße", "PLZ", "Ort", "Strecke", "Mail", "Telefon", "Telefon2",
+                                                   "Tf", "Zf", "Rangierer", "Tauglichkeit", "Bemerkung Betrieb.", "Sonst. Ausbildung",
+                                                   "Mail Zustimmung", "Telefon Zustimmung",
+                                                   "Bemerkung"};
+
 
 QString Person::getStringVonGeschlecht(Person::Geschlecht g)
 {
@@ -173,6 +172,50 @@ Person::Person(QJsonObject o, ManagerPersonal *man) : QObject()
     }
 }
 
+QString Person::getKopfTabelleListeHtml(QSet<QString> data)
+{
+    QString kopf = "<h3>%1 – Stand %2</h3>"
+                   "<table cellspacing='0' width='100%'><thead><tr>";
+    if (data.contains("Nummer")
+            || data.contains("Eintritt")
+            || data.contains("Austritt"))
+        kopf += "<th>Mitgliedsdaten</th>";
+    if (data.contains("Vorname")
+            || data.contains("Nachname")
+            || data.contains("Geburtsdatum")
+            || data.contains("Anrede")
+            || data.contains("Geschlecht")
+            || data.contains("Beruf"))
+        kopf += "<th>Persönliches</th>";
+    if (data.contains("Beitragsart")
+            || data.contains("IBAN")
+            || data.contains("Bank")
+            || data.contains("Kontoinhaber"))
+        kopf += "<th>Beitrag</th>";
+    if (data.contains("Straße")
+            || data.contains("PLZ")
+            || data.contains("Ort")
+            || data.contains("Strecke"))
+        kopf += "<th>Anschrift</th>";
+    if (data.contains("Mail")
+            || data.contains("Telefon")
+            || data.contains("Telefon2"))
+        kopf += "<th>Kontakt</th>";
+    if (data.contains("Tf")
+            || data.contains("Zf")
+            || data.contains("Rangierer")
+            || data.contains("Tauglichkeit")
+            || data.contains("Bemerkung Betrieb.")
+            || data.contains("Sonst. Ausbildung"))
+        kopf += "<th>Ausbildung</th>";
+    if (data.contains("Mail Zustimmung")
+            || data.contains("Telefon Zustimmung")
+            || data.contains("Bemerkung"))
+        kopf += "<th>Sonstiges</th>";
+    return kopf + "</tr></thead><tbody>";
+
+}
+
 void Person::personConstructor(QString vn, QString nn, ManagerPersonal *man)
 {
     additional = QMap<Category, int>();
@@ -227,6 +270,14 @@ void Person::personConstructor(QString vn, QString nn, ManagerPersonal *man)
 QString Person::getRandomID()
 {
     return QString::number(QDateTime::currentDateTime().toSecsSinceEpoch())+QString::number(QRandomGenerator::global()->bounded(1000000,9999999));
+}
+
+void Person::anfuegen(QString *zelle, QString appendix, QString seperator)
+{
+    if (appendix == "") return;
+    if (!zelle->isEmpty())
+        zelle->append(seperator);
+    zelle->append(appendix);
 }
 
 ManagerPersonal *Person::getManager() const
@@ -825,65 +876,204 @@ QString Person::getZeitenFuerEinzelAlsHTML()
     return html;
 }
 
-QString Person::getPersonaldatenFuerListeAlsHTML()
+QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige)
 {
-    // TODO: Muss ueberarbeitet werden, wenn die Exportfunktion ueberarbeitet wird!!!!
-    // Ebenso muessen die neuen Werte it ausgegeben werden!!!
-    QString h = "<tr>";
-    h += "<td>"+getName()+"<br/>"
-            +QString::number(nummer)+"<br/>";
-    if (isAusgetreten())
-        h += "Ehemals: ";
-    h = h + (aktiv ? "Aktiv":"Passiv")+"</td>";
+    if (anzeige.isEmpty())
+        anzeige = QSet<QString>(ANZEIGE_PERSONALDATEN.begin(), ANZEIGE_PERSONALDATEN.end());
 
-    // Daten
-    h += "<td>"+geburtstag.toString("dd.MM.yyyy")+"<br/>"+eintritt.toString("dd.MM.yyyy");
-    if (isAusgetreten()) {
-        h += austritt.toString("-dd.MM.yyyy");
-    } else {
-        if (!austritt.isNull())
-            h += "<br/>Austritt zum: "+austritt.toString("dd.MM.yyyy");
+    QString h = "";
+
+    // Mitgliedschaft
+    QString zelle = "";
+    bool zelleNutzen = false;
+    if (anzeige.contains("Nummer")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, QString::number(nummer));
     }
-    if (beruf != "")
-        h += "<br/>"+beruf;
-    h += "</td>";
+    if (anzeige.contains("Status")) {
+        zelleNutzen = true;
+        if (zelle != "") zelle += "<br/>";
+        if (isAusgetreten())
+            zelle += "Ehemals: ";
+        zelle += (aktiv ? "Aktiv":"Passiv");
+    }
+    if (anzeige.contains("Eintritt")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, eintritt.toString("d.M.yyyy"));
+        if (anzeige.contains("Austritt") && isAusgetreten()) {
+            zelle += austritt.toString("-d.M.yyyy");
+        }
+    } else if (anzeige.contains("Austritt")) {
+        if (!austritt.isNull()) {
+            zelleNutzen = true;
+            anfuegen(&zelle, "Austritt zum: "+austritt.toString("d.M.yyyy"));
+        }
+    }
+    if (zelleNutzen) {
+        h += "<td>"+zelle+"</td>";
+    }
+
+    // Persoenliches
+    zelle = "";
+    zelleNutzen = false;
+    if (anzeige.contains("Anrede")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, anrede);
+    }
+    if (anzeige.contains("Vorname")) {
+        zelleNutzen = true;
+        if (zelle != "") zelle += "<br/>";
+        if (anzeige.contains("Nachname")) {
+            zelle += getName();
+        } else {
+            zelle += vorname;
+        }
+    } else if (anzeige.contains("Nachname")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, nachname);
+    }
+    if (anzeige.contains("Geschlecht")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, getStringVonGeschlecht(geschlecht));
+    }
+    if (anzeige.contains("Geburtsdatum")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, geburtstag.toString("*d.M.yyyy"));
+    }
+    if (anzeige.contains("Beruf")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, beruf);
+    }
+    if (zelleNutzen) {
+        h += "<td>"+zelle+"</td>";
+    }
+
+
+
+    // Mitgliedsbeitrag
+    zelle = "";
+    zelleNutzen = false;
+    if (anzeige.contains("Beitragsart")) {
+        zelleNutzen = true;
+        if (beitragsart != Person::Beitragsart::BeitragUnbekannt) {
+            anfuegen(&zelle, getStringVonBeitragsart(beitragsart));
+        }
+    }
+    if (anzeige.contains("IBAN")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, iban);
+    }
+    if (anzeige.contains("Bank")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, bank);
+    }
+    if (anzeige.contains("Kontoinhaber")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, getKontoinhaberText());
+    }
+    if (zelleNutzen) {
+        h += "<td>"+zelle+"</td>";
+    }
+
 
     // Anschrift
-    h += "<td>"+strasse + "<br/>"+plz + " "+ ort;
-    if (strecke > 0) {
-        h += "<br/>"+QString::number(strecke)+"km";
+    zelle = "";
+    zelleNutzen = false;
+    if (anzeige.contains("Straße")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, strasse);
     }
-    h += "</td>";
+    if (anzeige.contains("PLZ")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, plz);
+        if (anzeige.contains("Ort")) {
+            anfuegen(&zelle, ort, " ");
+        }
+    } else if (anzeige.contains("Ort")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, ort);
+    }
+    if (anzeige.contains("Strecke")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, (strecke != 0 ? QString::number(strecke)+"km" : ""));
+    }
+    if (zelleNutzen) {
+        h += "<td>"+zelle+"</td>";
+    }
+
 
     // Kontakt
-    h += "<td>";
-    if (mail != "") {
-        if (mailOK)
-            h += mail;
-        else
-            h += "("+mail+")";
+    zelle = "";
+    zelleNutzen = false;
+    if (anzeige.contains("Mail")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, mail);
     }
-    h += "<br/>";
-    if (telefon != "") {
-        if (telefonOK)
-            h += telefon;
-        else
-            h += "("+telefon+")";
+    if (anzeige.contains("Telefon")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, telefon);
     }
-    h += "</td>";
+    if (anzeige.contains("Telefon2")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, telefon2);
+    }
+    if (zelleNutzen) {
+        h += "<td>"+zelle+"</td>";
+    }
+
 
     // Betriebsdienst
-    h = h + "<td>"+ (ausbildungTf? "Triebfahrzeugführer<br/>":"")
-            + (ausbildungZf? "Zugführer<br/>":"")
-            + (ausbildungRangierer? "Rangierer<br/>":"")
-            + tauglichkeit.toString("dd.MM.yyyy")
-            + "</td>";
+    zelle = "";
+    zelleNutzen = false;
+    if (anzeige.contains("Tf")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, (ausbildungTf ? "Treibfahrzeugführer" : ""));
+    }
+    if (anzeige.contains("Zf")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, (ausbildungZf ? "Zugführer" : ""));
+    }
+    if (anzeige.contains("Rangierer")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, (ausbildungRangierer ? "Rangierer" : ""));
+    }
+    if (anzeige.contains("Tauglichkeit")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, tauglichkeit.toString("d.M.yyyy"));
+    }
+    if (anzeige.contains("Bemerkung Betrieb.")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, sonstigeBetrieblich);
+    }
+    if (anzeige.contains("Sonst. Ausbildung")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, sonstigeAusbildung);
+    }
+    if (zelleNutzen) {
+        h += "<td>"+zelle+"</td>";
+    }
+
 
     // Sonstiges
-    h += "<td>" + bemerkungen + "</td>";
+    zelle = "";
+    zelleNutzen = false;
+    if (anzeige.contains("Mail Zustimmung")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, (mailOK ? "" : "Sperrvermerk Mail"));
+    }
+    if (anzeige.contains("Mail Zustimmung")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, (telefonOK ? "" : "Sperrvermerk Telefon"));
+    }
+    if (anzeige.contains("Bemerkung")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, bemerkungen);
+    }
+    if (zelleNutzen) {
+        h += "<td>"+zelle+"</td>";
+    }
 
-    h += "</tr>";
-    return h;
+    return "<tr>"+h+"</tr>";
 }
 
 QString Person::getPersonaldatenFuerEinzelAlsHTML()

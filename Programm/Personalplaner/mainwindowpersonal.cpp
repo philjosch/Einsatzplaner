@@ -9,13 +9,6 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 
-
-const QList<QString> MainWindowPersonal::ANZEIGE_TABELLE = {"Vorname", "Nachname", "Geburtsdatum", "Geschlecht", "Anrede", "Beruf",
-                                                            "Nummer", "Eintritt", "Status", "Austritt", "Beitragsart", "IBAN", "Bank", "Kontoinhaber",
-                                                            "Straße", "PLZ", "Ort", "Strecke", "Mail", "Telefon", "Telefon2",
-                                                            "Tf", "Zf", "Rangierer", "Tauglichkeit", "Bemerkung Betrieb.", "Sonst. Ausbildung",
-                                                            "Mail Zustimmung", "Telefon Zustimmung",
-                                                            "Bemerkung"};
 MainWindowPersonal::MainWindowPersonal(QWidget *parent) :
     CoreMainWindow(parent), ui(new Ui::MainWindowPersonal)
 {
@@ -111,7 +104,7 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
     int clmn = 0;
     ui->tabelleMitglieder->setColumnCount(0);
 
-    foreach (QString s, ANZEIGE_TABELLE) {
+    foreach (QString s, Person::ANZEIGE_PERSONALDATEN) {
         if (anzeige.contains(s)) {
             ui->tabelleMitglieder->insertColumn(clmn);
             ui->tabelleMitglieder->setHorizontalHeaderItem(clmn++, new QTableWidgetItem(s));
@@ -315,12 +308,12 @@ void MainWindowPersonal::on_actionMitgliederEinzelListeDrucken_triggered()
 
 void MainWindowPersonal::on_actionMitgliederListePDF_triggered()
 {
-    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter,
+    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter, anzeige,
                             Export::getPrinterPDF(this, "Mitgliederliste", QPrinter::Orientation::Portrait));
 }
 void MainWindowPersonal::on_actionMitgliederListeDrucken_triggered()
 {
-    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter,
+    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter, anzeige,
                             Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
 }
 void MainWindowPersonal::on_actionMitgliederListeCSV_triggered()

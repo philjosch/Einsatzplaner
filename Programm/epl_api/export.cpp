@@ -60,9 +60,9 @@ bool Export::Mitglieder::printMitgliederEinzelListe(QList<Person *> liste, Manag
     QString html = m->getMitgliederFuerEinzelListeAlsHTML(liste, filter);
     return druckeHtmlAufDrucker(html, printer);
 }
-bool Export::Mitglieder::printMitgliederListe(QList<Person*> liste, Mitglied filter, QPrinter *printer)
+bool Export::Mitglieder::printMitgliederListe(QList<Person*> liste, Mitglied filter, QSet<QString> data, QPrinter *printer)
 {
-    QString html = ManagerPersonal::getMitgliederFuerListeAlsHtml(liste, filter);
+    QString html = ManagerPersonal::getMitgliederFuerListeAlsHtml(liste, filter, data);
     return druckeHtmlAufDrucker(html, printer);
 }
 

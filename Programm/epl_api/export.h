@@ -45,7 +45,7 @@ public:
     public:
         static bool printMitgliederEinzelEinzel(Person *p, QPrinter *printer);
         static bool printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer);
-        static bool printMitgliederListe(QList<Person *> liste, Mitglied filter, QPrinter *printer);
+        static bool printMitgliederListe(QList<Person *> liste, Mitglied filter, QSet<QString> data, QPrinter *printer);
         static bool exportMitgliederAlsCSV(QList<Person *> liste, QString pfad);
     };
 

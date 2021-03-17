@@ -254,12 +254,12 @@ void PersonalWindow::on_actionMitgliederEinzelListeDrucken_triggered()
 
 void PersonalWindow::on_actionMitgliederListePDF_triggered()
 {
-    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter,
+    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter, QSet<QString>(),
                             Export::getPrinterPDF(this, "Mitgliederliste", QPrinter::Orientation::Portrait));
 }
 void PersonalWindow::on_actionMitgliederListeDrucken_triggered()
 {
-    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter,
+    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter, QSet<QString>(),
                             Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
 }
 void PersonalWindow::on_actionMitgliederListeCSV_triggered()

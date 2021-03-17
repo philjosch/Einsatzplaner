@@ -37,8 +37,9 @@ public:
     static const QString FARBE_GENUG_STUNDEN;
     static const QString FARBE_STANDARD;
     static const QString KOPF_TABELLE_LISTE_CSV;
-    static const QString KOPF_TABELLE_LISTE_HTML;
+    static QString getKopfTabelleListeHtml(QSet<QString> data);
     static const QString FUSS_TABELLE_LISTE_HTML;
+    static const QStringList ANZEIGE_PERSONALDATEN;
 
     QJsonObject toJson();
     QJsonObject personalToJson();
@@ -61,7 +62,7 @@ public:
     QString getZeitenFuerListeAlsHTML(QSet<Category> liste);
     QString getZeitenFuerEinzelAlsHTML();
 
-    QString getPersonaldatenFuerListeAlsHTML();
+    QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige = QSet<QString>());
     QString getPersonaldatenFuerListeAlsCSV();
     QString getPersonaldatenFuerEinzelAlsHTML();
 
@@ -235,6 +236,8 @@ private:
     ManagerPersonal *manager;
 
     static QString getRandomID();
+
+    static void anfuegen(QString *zelle, QString appendix, QString seperator = "<br/>");
 
 signals:
     void changed();
