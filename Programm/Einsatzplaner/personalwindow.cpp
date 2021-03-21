@@ -622,20 +622,20 @@ void PersonalWindow::showPerson(Person *p)
 
     // ** Aktivitaeten
     while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
-    QList<Einsatz> liste = p->getActivities();
+    const QList<Einsatz*> liste = p->getActivities();
     bool sortingSaved = ui->tabelle->isSortingEnabled();
     ui->tabelle->setSortingEnabled(false);
-    for(Einsatz e: liste) {
+    for(Einsatz* e: liste) {
             // Datum
             ui->tabelle->insertRow(0);
             QTableWidgetItem *i0 = new QTableWidgetItem();
-            i0->setData(Qt::EditRole, e.activity->getDatum());
+            i0->setData(Qt::EditRole, e->getActivity()->getDatum());
             ui->tabelle->setItem(0, 0, i0);
 
-            ui->tabelle->setItem(0, 1, new QTableWidgetItem(getLocalizedStringFromCategory(e.kategorie)));
-            QTime duration = QTime::fromMSecsSinceStartOfDay(e.beginn.msecsTo(e.ende));
+            ui->tabelle->setItem(0, 1, new QTableWidgetItem(getLocalizedStringFromCategory(e->getKategorie())));
+            QTime duration = QTime::fromMSecsSinceStartOfDay(e->getBeginnRichtig().msecsTo(e->getEndeRichtig()));
             ui->tabelle->setItem(0, 2, new QTableWidgetItem(duration.toString("hh:mm")));
-            ui->tabelle->setItem(0, 3, new QTableWidgetItem(e.activity->getListStringShort()+(e.bemerkung!= "" ? "\n"+e.bemerkung : "")));
+            ui->tabelle->setItem(0, 3, new QTableWidgetItem(e->getActivity()->getListStringShort()+(e->getBemerkung() != "" ? "\n"+e->getBemerkung() : "")));
     }
     ui->tabelle->setSortingEnabled(sortingSaved);
     ui->tabelle->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);

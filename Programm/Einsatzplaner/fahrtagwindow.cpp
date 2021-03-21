@@ -77,10 +77,10 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
 
     for(Einsatz *e: fahrtag->getPersonen()) {
         // Fügt die Personene in die einzelnen Listen ein, sodass es direkt geändert werden kann
-        TableListWidgetItem *item = new TableListWidgetItem((e->person)->getName() + (e->bemerkung == "" ? "" : "; "+e->bemerkung));
+        TableListWidgetItem *item = new TableListWidgetItem((e->getPerson())->getName() + (e->getBemerkung() == "" ? "" : "; "+e->getBemerkung()));
         item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
         bool block = true;
-        switch (e->kategorie) {
+        switch (e->getKategorie()) {
         case Category::Tf:
         case Category::Tb:
             ui->listTf->addItem(item);
@@ -267,9 +267,9 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
     if (tlwi->getTableItem() != nullptr) {
         // Person wurde bereits eingetragen, entweder intern oder extern
         Einsatz *e = tlwi->getTableItem()->getEinsatz();
-        if (name == (e->person)->getName()) {
+        if (name == e->getPerson()->getName()) {
             // Bemerkung wurde lediglich verändert
-            e->bemerkung = bemerkung;
+            e->setBemerkung(bemerkung);
             ui->tablePersonen->item(ui->tablePersonen->row(tlwi->getTableItem()), 4)->setText(bemerkung);
             return;
         }
@@ -282,7 +282,7 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
 
     try {
         Einsatz *einsatz = fahrtag->addPerson(name, bemerkung, kat);
-        if (!einsatz->person->getAktiv())
+        if (!einsatz->getPerson()->getAktiv())
             QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
 
         // Zeile für die Person in die Tabelle einfügen
@@ -416,10 +416,10 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int c
 
         try {
             Einsatz *e = fahrtag->addPerson(name, bemerkung, kat);
-            e->beginn = beginn;
-            e->ende = ende;
+            e->setBeginnFiktiv(beginn);
+            e->setEndeFiktiv(ende);
             ptwi->setEinsatz(e);
-            if (! e->person->getAktiv())
+            if (! e->getPerson()->getAktiv())
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
         }  catch (AActivityException &e) {
             QMessageBox::warning(this, tr("Fehler"), e.getError());
@@ -457,16 +457,16 @@ FahrtagWindow::EinsatzTableWidgetItem *FahrtagWindow::fuegeInTabelleEin(Einsatz 
 
     int row = ui->tablePersonen->row(etwi);
 
-    etwi->setText(e->person->getName());
+    etwi->setText(e->getPerson()->getName());
     static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->setCurrentText(
-                getLocalizedStringFromCategory((e->kategorie == Begleiter ? Zub : e->kategorie))
+                getLocalizedStringFromCategory((e->getKategorie() == Begleiter ? Zub : e->getKategorie()))
                 );
-    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->setTime(e->beginn);
-    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->setTime(e->ende);
+    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->setTime(e->getBeginnFiktiv());
+    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->setTime(e->getEndeFiktiv());
     if (ui->tablePersonen->item(row, 4) == nullptr) {
         ui->tablePersonen->setItem(row, 4, new QTableWidgetItem(""));
     }
-    ui->tablePersonen->item(row,4)->setText(e->bemerkung);
+    ui->tablePersonen->item(row,4)->setText(e->getBemerkung());
 
     if (block) {
         ui->tablePersonen->item(0, 0)->setFlags(Qt::NoItemFlags);

@@ -30,7 +30,7 @@ public:
     };
     static QString getStringVonBeitragsart(Beitragsart b);
 
-    Person(QString name, ManagerPersonal *manager);
+    Person(QString name, ManagerPersonal *man);
     Person(QJsonObject o, ManagerPersonal *man); // Laden aus einem JSON-Objekt
 
     static const QString FARBE_FEHLENDE_STUNDEN;
@@ -56,7 +56,7 @@ public:
     bool addActivity(Einsatz *e);
     bool removeActivity(Einsatz *e);
 
-    QList<Einsatz> getActivities();
+    QList<Einsatz *> getActivities();
 
 
     QString getZeitenFuerListeAlsHTML(QSet<Category> liste);
@@ -225,8 +225,6 @@ protected:
     QList<Einsatz*> activities;
 
 private:
-    void personConstructor(QString vn, QString nn, ManagerPersonal *man);
-
     bool valuesInvalid;
     /* Gibt an, ob die Werte verändert wurden und ob es bemerkt wurde,
      * kann auch sein, dass dies an der Person vorbei passiert ist,

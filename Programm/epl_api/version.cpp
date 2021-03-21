@@ -141,7 +141,7 @@ bool Version::isDebuggingVersion()
 
 
 bool Version::isSupportedVersion(Version test) {
-    if (test == Version{-1,-1,-1}) return false;
+    if (test == Version()) return false;
     if (test > VERSION) return false;
     return true;
 }

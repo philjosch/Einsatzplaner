@@ -8,7 +8,7 @@ class Version
 public:
     /**
      * @brief Erstellt ein neues Versions-Objekt anhand der Nummer, die in einem String kodiert wurde.
-     * Liefert eine ungueltige Version, wenn das Foramt nicht stimmt
+     * Liefert eine ungueltige Version, wenn das Format nicht stimmt
      * @param vers: Die Text-Darstellung der Version
      * Zulaessige Formate sind
      * - 'Major.Minor.Patch'

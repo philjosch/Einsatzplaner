@@ -88,41 +88,6 @@ QString getStringVonFilter(Mitglied filter)
     }
 }
 
-void Einsatz::sort(QList<Einsatz *> *liste)
-{
-    std::sort(liste->begin(), liste->end(), Einsatz::lesserPoint);
-}
-
-void Einsatz::sort(QList<Einsatz> *liste)
-{
-    std::sort(liste->begin(), liste->end(), Einsatz::lesser);
-}
-
-bool Einsatz::lesser(Einsatz lhs, Einsatz rhs)
-{
-    if (AActivity::lesser(lhs.activity,rhs.activity))
-        return true;
-    if (AActivity::lesser(rhs.activity,lhs.activity))
-        return false;
-
-    if (lhs.beginn < rhs.beginn)
-        return true;
-    if (lhs.beginn > rhs.beginn)
-        return false;
-
-    if (lhs.ende < rhs.ende)
-        return true;
-    if (lhs.ende > rhs.ende)
-        return false;
-
-    return false;
-}
-
-bool Einsatz::lesserPoint(const Einsatz *lhs, const Einsatz *rhs)
-{
-    return lesser(*lhs, *rhs);
-}
-
 
 void Auswahl::insertJson(QJsonObject *o) const {
     o->insert("startdate", zuString(startdate));

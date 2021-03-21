@@ -2,6 +2,7 @@
 #define AACTIVITY_H
 
 #include "basics.h"
+#include "einsatz.h"
 
 #include <QTime>
 #include <QComboBox>
@@ -33,9 +34,11 @@ public:
     void setOrt(const QString &value);
 
     QTime getZeitAnfang();
+    virtual QTime getAnfang(const Category kat) const;
     void setZeitAnfang(QTime value);
 
     QTime getZeitEnde();
+    virtual QTime getEnde(const Category kat) const;
     void setZeitEnde(QTime value);
 
     bool getZeitenUnbekannt() const;
@@ -59,7 +62,6 @@ public:
     void setAbgesagt(bool value);
 
     QList<Einsatz*> getPersonen() const;
-    virtual QList<Einsatz> getIndividual(const Person* const person) const;
     Einsatz *addPerson(Person *p, QString bemerkung, Category kat);
     Einsatz *addPerson(QString p, QString bemerkung, Category kat);
     bool removePerson(Einsatz *e);

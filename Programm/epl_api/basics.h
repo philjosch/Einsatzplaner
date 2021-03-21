@@ -97,23 +97,5 @@ struct Auswahl {
     static QString zuString(EndeBedingung e);
 };
 
-class AActivity;
-class Person;
-
-struct Einsatz {
-    Person *person;
-    AActivity *activity;
-    Category kategorie;
-    QTime beginn;
-    QTime ende;
-    QString bemerkung;
-    bool anrechnen;
-
-    static void sort(QList<Einsatz*> *liste);
-    static void sort(QList<Einsatz> *liste);
-
-    static bool lesser(Einsatz lhs, Einsatz rhs);
-    static bool lesserPoint(const Einsatz *lhs, const Einsatz *rhs);
-};
 
 #endif // BASICS_H

@@ -73,11 +73,11 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
             person->setAusbildungRangierer(true);
         }
 
-        Einsatz *e = new Einsatz{person, this,
+        Einsatz *e = new Einsatz(person, this,
                       static_cast<Category>(aO.value("kat").toInt(100)),
+                      aO.value("bemerkung").toString(),
                       QTime::fromString(aO.value("beginn").toString(), "hh:mm"),
-                      QTime::fromString(aO.value("ende").toString(), "hh:mm"),
-                      aO.value("bemerkung").toString()};
+                      QTime::fromString(aO.value("ende").toString(), "hh:mm"));
 
         person->addActivity(e);
         personen.append(e);
@@ -90,7 +90,7 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
 AActivity::~AActivity()
 {
     for(Einsatz *e: personen) {
-        (e->person)->removeActivity(e);
+        e->getPerson()->removeActivity(e);
     }
 }
 
@@ -113,15 +113,15 @@ QJsonObject AActivity::toJson()
     QJsonArray personenJSON;
     for(Einsatz *e: personen) {
         QJsonObject persJson;
-        if (personal->personExists((e->person)->getName())) {
-            persJson.insert("id", (e->person)->getId());
+        if (personal->personExists(e->getPerson()->getName())) {
+            persJson.insert("id", e->getPerson()->getId());
         } else {
-            persJson.insert("name", (e->person)->getName());
+            persJson.insert("name", e->getPerson()->getName());
         }
-        persJson.insert("beginn", e->beginn.toString("hh:mm"));
-        persJson.insert("ende", e->ende.toString("hh:mm"));
-        persJson.insert("kat", e->kategorie);
-        persJson.insert("bemerkung", e->bemerkung);
+        persJson.insert("beginn", e->getBeginnFiktiv().toString("hh:mm"));
+        persJson.insert("ende", e->getEndeFiktiv().toString("hh:mm"));
+        persJson.insert("kat", e->getKategorie());
+        persJson.insert("bemerkung", e->getBemerkung());
         personenJSON.append(persJson);
     }
     data.insert("personen", personenJSON);
@@ -156,6 +156,15 @@ QTime AActivity::getZeitAnfang()
 {
     return zeitAnfang;
 }
+
+QTime AActivity::getAnfang(const Category kat) const
+{
+    if (abgesagt)
+        return QTime();
+    if (zeitenUnbekannt)
+        return QTime();
+    return zeitAnfang;
+}
 void AActivity::setZeitAnfang(QTime value)
 {
     zeitAnfang = value;
@@ -164,6 +173,15 @@ void AActivity::setZeitAnfang(QTime value)
 
 QTime AActivity::getZeitEnde()
 {
+    return zeitEnde;
+}
+
+QTime AActivity::getEnde(const Category kat) const
+{
+    if (abgesagt)
+        return QTime();
+    if (zeitenUnbekannt)
+        return QTime();
     return zeitEnde;
 }
 void AActivity::setZeitEnde(QTime value)
@@ -226,8 +244,8 @@ bool AActivity::removePerson(Einsatz *e)
 {
     personen.removeAll(e);
     bool ret = false;
-    if (e->person != nullptr) {
-        ret = e->person->removeActivity(e);
+    if (e->getPerson() != nullptr) {
+        ret = e->getPerson()->removeActivity(e);
     }
     emit changed(this);
     return ret;
@@ -254,7 +272,7 @@ Einsatz *AActivity::addPerson(Person *p, QString bemerkung, Category kat)
 
     // jetzt ist alles richtig und die person kann registiert werden.
 
-    Einsatz *e = new Einsatz{p, this, kat, QTime(0,0), QTime(0,0), bemerkung};
+    Einsatz *e = new Einsatz(p, this, kat, bemerkung);
 
     p->addActivity(e);
     personen.append(e);
@@ -320,13 +338,13 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
     QStringList l;
     QStringList l2;
     for(Einsatz *e: liste) {
-        l2.append(e->person->getName());
+        l2.append(e->getPerson()->getName());
 
-        if (e->bemerkung != "") {
-            l2.append(e->bemerkung);
+        if (e->getBemerkung() != "") {
+            l2.append(e->getBemerkung());
         }
-        if (aufgabe && (e->kategorie != Category::Sonstiges)) {
-            l2.append(getLocalizedStringFromCategory(e->kategorie));
+        if (aufgabe && (e->getKategorie() != Category::Sonstiges)) {
+            l2.append(getLocalizedStringFromCategory(e->getKategorie()));
         }
         l.append(prefix+l2.join("; ")+suffix);
         l2.clear();
@@ -468,35 +486,6 @@ QString AActivity::getListString()
     return s;
 }
 
-QList<Einsatz> AActivity::getIndividual(const Person * const person) const
-{
-    QList<Einsatz> liste;
-    if (person == nullptr)
-        return liste;
-    for(Einsatz *e: personen) {
-        if (e->person == person) {
-            Einsatz neu = Einsatz(*e);
-            if (zeitenUnbekannt) {
-                neu.beginn = QTime(0,0);
-                neu.ende = QTime(0,0);
-            } else {
-                if (neu.beginn == QTime(0,0)) {
-                    neu.beginn = zeitAnfang;
-                }
-                if (neu.ende == QTime(0,0)) {
-                    neu.ende = zeitEnde;
-                }
-            }
-            neu.anrechnen = !abgesagt;
-            if (datum > QDate::currentDate()) {
-                neu.anrechnen = false;
-            }
-            liste.append(neu);
-        }
-    }
-    return liste;
-}
-
 QString AActivity::getHtmlForSingleView()
 {
     QString required = "<font color='"+COLOR_REQUIRED+"'>%1</font>";
@@ -539,16 +528,16 @@ QString AActivity::getHtmlForSingleView()
     if (personen.count() > 0) {
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Name</th><th>Beginn*</th><th>Ende*</th><th>Aufgabe</th></tr></thead><tbody>";
         for(Einsatz *e: personen) {
-            html += "<tr><td>"+e->person->getName()+"</td><td>";
-            html += (e->beginn == QTime(0,0) ? "" : e->beginn.toString("hh:mm"));
+            html += "<tr><td>"+e->getPerson()->getName()+"</td><td>";
+            html += (e->getBeginnFiktiv() == QTime(0,0) ? "" : e->getBeginnFiktiv().toString("hh:mm"));
             html += "</td><td>";
-            html += (e->ende == QTime(0,0) ? "" : e->ende.toString("hh:mm"));
+            html += (e->getEndeFiktiv() == QTime(0,0) ? "" : e->getEndeFiktiv().toString("hh:mm"));
             html += "</td><td>";
-            if (e->kategorie != Category::Sonstiges) {
-                html += getLocalizedStringFromCategory(e->kategorie);
-                if (e->bemerkung != "") html += "<br/>";
+            if (e->getKategorie() != Category::Sonstiges) {
+                html += getLocalizedStringFromCategory(e->getKategorie());
+                if (e->getBemerkung() != "") html += "<br/>";
             }
-            html += e->bemerkung;
+            html += e->getBemerkung();
             html +="</td></tr>";
         }
         html += "</tbody></table><p>* Abweichend von obigen Zeiten!</p>";
@@ -607,7 +596,7 @@ QString AActivity::getHtmlForTableView()
 
     // Aufsplitten der Personen auf die Einzelnen Listen
     for(Einsatz *e: personen) {
-        switch (e->kategorie) {
+        switch (e->getKategorie()) {
         case Category::Tf:
         case Category::Tb: tf.append(e); break;
         case Category::Zf: zf.append(e); break;

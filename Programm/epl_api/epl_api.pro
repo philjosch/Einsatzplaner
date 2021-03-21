@@ -14,6 +14,7 @@ QT       += core printsupport network
 
 
 SOURCES += einstellungen.cpp \
+    einsatz.cpp \
     eplfile.cpp \
     networking.cpp \
     person.cpp \
@@ -31,6 +32,7 @@ SOURCES += einstellungen.cpp \
     filesettings.cpp
 
 HEADERS  += einstellungen.h \
+    einsatz.h \
     eplexception.h \
     eplfile.h \
     networking.h \

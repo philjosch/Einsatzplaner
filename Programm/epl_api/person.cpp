@@ -25,6 +25,48 @@ const QStringList Person::ANZEIGE_PERSONALDATEN = {"Vorname", "Nachname", "Gebur
                                                    "Mail Zustimmung", "Telefon Zustimmung",
                                                    "Bemerkung"};
 
+QString Person::getKopfTabelleListeHtml(QSet<QString> data)
+{
+    QString kopf = "<h3>%1 – Stand %2</h3>"
+                   "<table cellspacing='0' width='100%'><thead><tr>";
+    if (data.contains("Nummer")
+            || data.contains("Eintritt")
+            || data.contains("Austritt"))
+        kopf += "<th>Mitgliedsdaten</th>";
+    if (data.contains("Vorname")
+            || data.contains("Nachname")
+            || data.contains("Geburtsdatum")
+            || data.contains("Anrede")
+            || data.contains("Geschlecht")
+            || data.contains("Beruf"))
+        kopf += "<th>Persönliches</th>";
+    if (data.contains("Beitragsart")
+            || data.contains("IBAN")
+            || data.contains("Bank")
+            || data.contains("Kontoinhaber"))
+        kopf += "<th>Beitrag</th>";
+    if (data.contains("Straße")
+            || data.contains("PLZ")
+            || data.contains("Ort")
+            || data.contains("Strecke"))
+        kopf += "<th>Anschrift</th>";
+    if (data.contains("Mail")
+            || data.contains("Telefon")
+            || data.contains("Telefon2"))
+        kopf += "<th>Kontakt</th>";
+    if (data.contains("Tf")
+            || data.contains("Zf")
+            || data.contains("Rangierer")
+            || data.contains("Tauglichkeit")
+            || data.contains("Bemerkung Betrieb.")
+            || data.contains("Sonst. Ausbildung"))
+        kopf += "<th>Ausbildung</th>";
+    if (data.contains("Mail Zustimmung")
+            || data.contains("Telefon Zustimmung")
+            || data.contains("Bemerkung"))
+        kopf += "<th>Sonstiges</th>";
+    return kopf + "</tr></thead><tbody>";
+}
 
 QString Person::getStringVonGeschlecht(Person::Geschlecht g)
 {
@@ -62,11 +104,12 @@ QString Person::getStringVonBeitragsart(Person::Beitragsart b)
     }
 }
 
-Person::Person(QString name, ManagerPersonal *manager) : QObject()
+
+Person::Person(QString name, ManagerPersonal *man) : QObject()
 {
     name = ManagerPersonal::getGoodName(name);
-    QString vorname = "";
-    QString nachname = "";
+    vorname = "";
+    nachname = "";
     if (! name.contains(" ")) {
         nachname = name;
     } else {
@@ -79,7 +122,53 @@ Person::Person(QString name, ManagerPersonal *manager) : QObject()
         }
         nachname = liste.last();
     }
-    personConstructor(vorname, nachname, manager);
+
+    additional = QMap<Category, int>();
+    zeiten = QMap<Category, int>();
+    activities = QList<Einsatz*>();
+
+    valuesInvalid = true;
+    manager = man;
+
+    id = getRandomID();
+
+    if (manager == nullptr)
+        nummer = 1;
+    else
+        nummer = manager->getNextNummer();
+
+    geburtstag = QDate();
+    anrede = "";
+    geschlecht = Geschlecht::GeschlechtUnbekannt;
+    beruf = "";
+
+    eintritt = QDate::currentDate();
+    aktiv = true;
+    austritt = QDate();
+    beitragsart = Beitragsart::AktivenBeitrag;
+    iban = "";
+    bank = "";
+    kontoinhaber = "";
+
+    ausbildungTf = false;
+    ausbildungZf = false;
+    ausbildungRangierer = false;
+    tauglichkeit = QDate();
+    sonstigeBetrieblich = "";
+    sonstigeAusbildung = "";
+
+    strasse = "";
+    plz = "";
+    ort = "";
+    strecke = 0;
+    mail = "";
+    telefon = "";
+    telefon2 = "";
+
+    mailOK = true;
+    telefonOK = true;
+    // Sonstiges
+    bemerkungen = "";
 }
 
 Person::Person(QJsonObject o, ManagerPersonal *man) : QObject()
@@ -170,101 +259,6 @@ Person::Person(QJsonObject o, ManagerPersonal *man) : QObject()
         setAdditional(Anzahl, o.value("additionalAnzahl").toInt());
         setAdditional(Kilometer, o.value("additionalKilometer").toInt());
     }
-}
-
-QString Person::getKopfTabelleListeHtml(QSet<QString> data)
-{
-    QString kopf = "<h3>%1 – Stand %2</h3>"
-                   "<table cellspacing='0' width='100%'><thead><tr>";
-    if (data.contains("Nummer")
-            || data.contains("Eintritt")
-            || data.contains("Austritt"))
-        kopf += "<th>Mitgliedsdaten</th>";
-    if (data.contains("Vorname")
-            || data.contains("Nachname")
-            || data.contains("Geburtsdatum")
-            || data.contains("Anrede")
-            || data.contains("Geschlecht")
-            || data.contains("Beruf"))
-        kopf += "<th>Persönliches</th>";
-    if (data.contains("Beitragsart")
-            || data.contains("IBAN")
-            || data.contains("Bank")
-            || data.contains("Kontoinhaber"))
-        kopf += "<th>Beitrag</th>";
-    if (data.contains("Straße")
-            || data.contains("PLZ")
-            || data.contains("Ort")
-            || data.contains("Strecke"))
-        kopf += "<th>Anschrift</th>";
-    if (data.contains("Mail")
-            || data.contains("Telefon")
-            || data.contains("Telefon2"))
-        kopf += "<th>Kontakt</th>";
-    if (data.contains("Tf")
-            || data.contains("Zf")
-            || data.contains("Rangierer")
-            || data.contains("Tauglichkeit")
-            || data.contains("Bemerkung Betrieb.")
-            || data.contains("Sonst. Ausbildung"))
-        kopf += "<th>Ausbildung</th>";
-    if (data.contains("Mail Zustimmung")
-            || data.contains("Telefon Zustimmung")
-            || data.contains("Bemerkung"))
-        kopf += "<th>Sonstiges</th>";
-    return kopf + "</tr></thead><tbody>";
-
-}
-
-void Person::personConstructor(QString vn, QString nn, ManagerPersonal *man)
-{
-    additional = QMap<Category, int>();
-    zeiten = QMap<Category, int>();
-    activities = QList<Einsatz*>();
-
-    valuesInvalid = true;
-    manager = man;
-
-    id = getRandomID();
-
-    if (manager == nullptr)
-        nummer = 1;
-    else
-        nummer = manager->getNextNummer();
-    vorname = vn;
-    nachname = nn;
-    geburtstag = QDate();
-    anrede = "";
-    geschlecht = Geschlecht::GeschlechtUnbekannt;
-    beruf = "";
-
-    eintritt = QDate::currentDate();
-    aktiv = true;
-    austritt = QDate();
-    beitragsart = Beitragsart::AktivenBeitrag;
-    iban = "";
-    bank = "";
-    kontoinhaber = "";
-
-    ausbildungTf = false;
-    ausbildungZf = false;
-    ausbildungRangierer = false;
-    tauglichkeit = QDate();
-    sonstigeBetrieblich = "";
-    sonstigeAusbildung = "";
-
-    strasse = "";
-    plz = "";
-    ort = "";
-    strecke = 0;
-    mail = "";
-    telefon = "";
-    telefon2 = "";
-
-    mailOK = true;
-    telefonOK = true;
-    // Sonstiges
-    bemerkungen = "";
 }
 
 QString Person::getRandomID()
@@ -662,15 +656,14 @@ void Person::berechne()
 {
     zeiten.clear();
 
-    for(Einsatz ee: getActivities()) {
-            Einsatz *e = &(ee);
-            if (! e->anrechnen) continue;
+    for(Einsatz *e: getActivities()) {
+            if (! e->getAnrechnen()) continue;
 
             // Einsatzstunden
-            QTime start = e->beginn;
-            QTime ende = e->ende;
+            QTime start = e->getBeginnRichtig();
+            QTime ende = e->getEndeRichtig();
             int duration = (start.msecsTo(ende) / 60000); // in Minuten
-            switch (e->kategorie) {
+            switch (e->getKategorie()) {
             case Begleiter:
                 zeiten.insert(Zub, zeiten.value(Zub)+duration);
                 break;
@@ -678,12 +671,12 @@ void Person::berechne()
             case Kilometer: break;
             case Gesamt: break;
             default:
-                zeiten.insert(e->kategorie, zeiten.value(e->kategorie)+duration);
+                zeiten.insert(e->getKategorie(), zeiten.value(e->getKategorie())+duration);
                 break;
             }
             zeiten.insert(Anzahl, zeiten.value(Anzahl)+1);
             zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
-            if (e->kategorie != Category::Buero)
+            if (e->getKategorie() != Category::Buero)
                 zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);
     }
     for (Category cat: additional.keys()) {
@@ -702,6 +695,7 @@ void Person::berechne()
 bool Person::addActivity(Einsatz *e)
 {
     activities.append(e);
+    Einsatz::sort(&activities);
     return true;
 }
 
@@ -710,20 +704,10 @@ bool Person::removeActivity(Einsatz *e)
     return activities.removeAll(e);
 }
 
-QList<Einsatz> Person::getActivities()
+QList<Einsatz*> Person::getActivities()
 {
-    QSet<AActivity*> actis;
-    for(Einsatz *e: activities) {
-        actis.insert(e->activity);
-    }
-
-    QList<Einsatz> liste;
-    for(AActivity *activity: actis) {
-        liste.append(activity->getIndividual(this));
-    }
-    Einsatz::sort(&liste);
-
-    return liste;
+    Einsatz::sort(&activities);
+    return activities;
 }
 
 QString Person::getName() const
@@ -847,14 +831,14 @@ QString Person::getZeitenFuerEinzelAlsHTML()
     if (activities.size() > 0) {
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
-        for (Einsatz e: getActivities()) {
-                html += "<tr><td>"+e.activity->getDatum().toString("dd.MM.yyyy")+"<br/>"+e.activity->getKurzbeschreibung();
-                if (e.activity->getAnlass() != e.activity->getKurzbeschreibung() && e.activity->getAnlass() != "")
-                    html += "<br/>"+e.activity->getAnlass();
+        for (Einsatz *e: getActivities()) {
+                html += "<tr><td>"+e->getActivity()->getDatum().toString("dd.MM.yyyy")+"<br/>"+e->getActivity()->getKurzbeschreibung();
+                if (e->getActivity()->getAnlass() != e->getActivity()->getKurzbeschreibung() && e->getActivity()->getAnlass() != "")
+                    html += "<br/>"+e->getActivity()->getAnlass();
                 html +="</td><td>"
-                     + e.beginn.toString("HH:mm")+"-"+e.ende.toString("HH:mm")+"</td><td>"
-                     + getLocalizedStringFromCategory(e.kategorie) + "</td><td>"
-                     + e.bemerkung + "</td></tr>";
+                     + e->getBeginnRichtig().toString("HH:mm")+"-"+e->getEndeRichtig().toString("HH:mm")+"</td><td>"
+                     + getLocalizedStringFromCategory(e->getKategorie()) + "</td><td>"
+                     + e->getBemerkung() + "</td></tr>";
         }
         html += "</tbody></table>";
     } else {

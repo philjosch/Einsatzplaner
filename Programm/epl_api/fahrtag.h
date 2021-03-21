@@ -23,13 +23,12 @@ public:
     QString getHtmlForSingleView();
     QString getHtmlForTableView();
 
-    QList<Einsatz> getIndividual(const Person* const person) const;
-
     QString getHtmlFuerReservierungsuebersicht();
 
     void setArt(const Art &value);
     Art getArt() const;
 
+    QTime getAnfang(const Category kat) const;
     QTime getZeitTf();
     void setZeitTf(QTime value);
 

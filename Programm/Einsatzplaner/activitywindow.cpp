@@ -36,15 +36,15 @@ ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWind
 
         EinsatzTableWidgetItem *ptwi = dynamic_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(0, 0));
         ptwi->setEinsatz(e);
-        ptwi->setText(e->person->getName());
+        ptwi->setText(e->getPerson()->getName());
 
-        Category kat = e->kategorie;
+        Category kat = e->getKategorie();
         if (kat == Category::Begleiter)
             kat = Category::Zub;
         static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(getLocalizedStringFromCategory(kat));
-        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(e->beginn);
-        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(e->ende);
-        ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(e->bemerkung));
+        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(e->getBeginnFiktiv());
+        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(e->getEndeFiktiv());
+        ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(e->getBemerkung()));
     }
 
     updateWindowTitle();
@@ -187,10 +187,10 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int 
 
         try {
             Einsatz *e = activity->addPerson(name, bemerkung, kat);
-            e->beginn = beginn;
-            e->ende = ende;
+            e->setBeginnFiktiv(beginn);
+            e->setEndeFiktiv(ende);
             ptwi->setEinsatz(e);
-            if (! e->person->getAktiv()) {
+            if (! e->getPerson()->getAktiv()) {
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
             }
         }  catch (AActivityException &e) {

@@ -95,21 +95,6 @@ QString Fahrtag::getKurzbeschreibung()
     return getStringFromArt(art);
 }
 
-QList<Einsatz> Fahrtag::getIndividual(const Person * const person) const
-{
-    QList<Einsatz> neu;
-    for(Einsatz e: AActivity::getIndividual(person)) {
-        Einsatz e2 = e;
-        if (!zeitenUnbekannt) {
-            if ((e2.beginn == zeitAnfang) && (e2.kategorie == Tf)) {
-                e2.beginn = zeitTf;
-            }
-        }
-        neu.append(e2);
-    }
-    return neu;
-}
-
 QString Fahrtag::getHtmlForSingleView()
 {
     QString required = "<font color='"+COLOR_REQUIRED+"'>%1</font>";
@@ -151,7 +136,7 @@ QString Fahrtag::getHtmlForSingleView()
 
     // Aufsplitten der Personen auf die Einzelnen Listen
     for(Einsatz *e: personen) {
-        switch (e->kategorie) {
+        switch (e->getKategorie()) {
         case Tf:
         case Tb: tf.append(e); break;
         case Zf: zf.append(e); break;
@@ -287,7 +272,7 @@ QString Fahrtag::getHtmlForTableView()
 
     // Aufsplitten der Personen auf die Einzelnen Listen
     for(Einsatz *e: personen) {
-        switch (e->kategorie) {
+        switch (e->getKategorie()) {
         case Tf:
         case Tb: tf.append(e); break;
         case Zf: zf.append(e); break;
@@ -498,6 +483,15 @@ Art Fahrtag::getArt() const
 {
     return art;
 }
+
+QTime Fahrtag::getAnfang(const Category kat) const
+{
+    QTime zeit = AActivity::getAnfang(kat);
+    if (zeit.isValid() && kat == Tf)
+        return zeitTf;
+    return zeit;
+}
+
 void Fahrtag::setArt(const Art &value)
 {
     art = value;
