@@ -43,7 +43,7 @@ EplFile::EplFile(QString dateiPfad)
 
     // Nicht spezifizierte Versionen sind inkompatibel
     Version version = Version(generalJSON.value("version").toString());
-    if (version == Version {-1, -1, -1}) {
+    if (version == Version()) {
         throw FileVersionNotSupportedException(tr("Die Datei ist nicht mit dieser Version des Einsatzplaner kompatibel."));
     }
 

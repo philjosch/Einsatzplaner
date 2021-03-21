@@ -3,16 +3,12 @@
 
 #include "basics.h"
 #include "einsatz.h"
+#include "managerpersonal.h"
 
 #include <QTime>
 #include <QComboBox>
 #include <QTimeEdit>
 
-#ifndef PERSON_H
-class Person;
-#endif
-
-#include "managerpersonal.h"
 
 class AActivity: public QObject
 {
@@ -62,7 +58,6 @@ public:
     void setAbgesagt(bool value);
 
     QList<Einsatz*> getPersonen() const;
-    Einsatz *addPerson(Person *p, QString bemerkung, Category kat);
     Einsatz *addPerson(QString p, QString bemerkung, Category kat);
     bool removePerson(Einsatz *e);
 

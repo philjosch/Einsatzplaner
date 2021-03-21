@@ -251,50 +251,46 @@ bool AActivity::removePerson(Einsatz *e)
     return ret;
 }
 
-Einsatz *AActivity::addPerson(Person *p, QString bemerkung, Category kat)
+Einsatz *AActivity::addPerson(QString p, QString bemerkung, Category kat)
 {
-   /*
-    * Angaben fuer die Aufgabe pruefen
-    * pruefen ob die Person geeignet ist
-    * Person hinzufuegen oder Fehlermeldung zurueckgeben
-    */
-    if (p == nullptr)
+    Person *pers = personal->getPerson(p);
+    if (pers == nullptr) {
+        if (!isExtern(bemerkung)) {
+            throw PersonNichtGefundenException(p);
+        }
+        if (kat == Category::Zub) kat = Category::Begleiter;
+        pers = new Person(p, nullptr);
+        pers->setAusbildungTf(true);
+        pers->setAusbildungZf(true);
+        pers->setAusbildungRangierer(true);
+    }
+
+    /*
+     * Angaben fuer die Aufgabe pruefen
+     * pruefen ob die Person geeignet ist
+     * Person hinzufuegen oder Fehlermeldung zurueckgeben
+     */
+    if (pers == nullptr)
         throw AActivityException();
 
     if (kat == Tf && bemerkung.contains(getLocalizedStringFromCategory(Tb), Qt::CaseInsensitive))
         kat = Tb;
-    if (kat == Zub && !hasQualification(p, kat, bemerkung, datum)) {
+    if (kat == Zub && !hasQualification(pers, kat, bemerkung, datum)) {
         kat = Begleiter;
     }
 
-    if (! hasQualification(p, kat, bemerkung, datum))
-        throw FalscheQualifikationException(p->getName());
+    if (! hasQualification(pers, kat, bemerkung, datum))
+        throw FalscheQualifikationException(pers->getName());
 
     // jetzt ist alles richtig und die person kann registiert werden.
 
-    Einsatz *e = new Einsatz(p, this, kat, bemerkung);
+    Einsatz *e = new Einsatz(pers, this, kat, bemerkung);
 
-    p->addActivity(e);
+    pers->addActivity(e);
     personen.append(e);
 
     emit changed(this);
     return e;
-}
-Einsatz *AActivity::addPerson(QString p, QString bemerkung, Category kat)
-{
-    Person *pers = personal->getPerson(p);
-    if (pers != nullptr) {
-        return addPerson(pers, bemerkung, kat);
-    }
-    if (isExtern(bemerkung)) {
-        if (kat == Category::Zub) kat = Category::Begleiter;
-        Person *neuePerson = new Person(p, nullptr);
-        neuePerson->setAusbildungTf(true);
-        neuePerson->setAusbildungZf(true);
-        neuePerson->setAusbildungRangierer(true);
-        return addPerson(neuePerson, bemerkung, kat);
-    }
-    throw PersonNichtGefundenException(p);
 }
 
 bool AActivity::lesser(const AActivity *lhs, const AActivity *rhs)

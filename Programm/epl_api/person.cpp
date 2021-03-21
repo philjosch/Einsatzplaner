@@ -1,6 +1,7 @@
 #include "einstellungen.h"
 #include "managerpersonal.h"
 #include "person.h"
+#include "aactivity.h"
 
 #include <QJsonArray>
 #include <QRandomGenerator>
@@ -692,15 +693,16 @@ void Person::berechne()
     valuesInvalid = false;
 }
 
-bool Person::addActivity(Einsatz *e)
+void Person::addActivity(Einsatz *e)
 {
     activities.append(e);
     Einsatz::sort(&activities);
-    return true;
+    valuesInvalid = true;
 }
 
 bool Person::removeActivity(Einsatz *e)
 {
+    valuesInvalid = true;
     return activities.removeAll(e);
 }
 

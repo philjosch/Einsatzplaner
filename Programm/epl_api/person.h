@@ -1,7 +1,8 @@
 #ifndef PERSON_H
 #define PERSON_H
 
-#include "aactivity.h"
+#include "einsatz.h"
+#include "managerpersonal.h"
 
 #include <QMultiMap>
 
@@ -53,7 +54,7 @@ public:
 
     void berechne();
 
-    bool addActivity(Einsatz *e);
+    void addActivity(Einsatz *e);
     bool removeActivity(Einsatz *e);
 
     QList<Einsatz *> getActivities();
