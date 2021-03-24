@@ -18,39 +18,39 @@ public:
     ManagerPersonal(QJsonObject o);
     ~ManagerPersonal();
 
-    QJsonObject toJson();
-    QJsonObject personalToJson();
+    QJsonObject toJson() const;
+    QJsonObject personalToJson() const;
 
-    Person *getPersonFromID(QString id);
-    Person *getPerson(QString name);
-    bool personExists(QString name); // Prüft, ob die Person im System registriert ist
-    bool personExists(QString vorname, QString nachname); // Prüft, ob die Person im System registriert ist
+    Person *getPersonFromID(QString id) const;
+    Person *getPerson(QString name) const;
+    bool personExists(QString name) const; // Prüft, ob die Person im System registriert ist
+    bool personExists(QString vorname, QString nachname) const; // Prüft, ob die Person im System registriert ist
 
     Person *newPerson(); // Erstellt eine neue Person und gibt sie zurück
     bool removePerson(Person *p);
 
     void setMinimumHours(Category cat, int amount);
-    int getMinimumHours(Category cat);
+    int getMinimumHours(Category cat) const;
     static int getMinimumHoursDefault(Category kat);
 
-    QList<Person *> getPersonenSortiertNachNummer();
+    QList<Person *> getPersonenSortiertNachNummer() const;
 
     void berechne();
 
     static QString getGoodName(QString name); // Wandlet einen Namen in das Format Vorname Nachname um
 
-    int getNextNummer();
-    bool checkNummer(int neu);
+    int getNextNummer() const;
+    bool checkNummer(int neu) const;
 
-    QString getZeitenFuerEinzelListeAlsHTML(QList<Person*> liste, Mitglied filter);
+    QString getZeitenFuerEinzelListeAlsHTML(QList<Person*> liste, Mitglied filter) const;
     static QString getZeitenFuerListeAlsHTML(QList<Person *> personen, QSet<Category> spalten, Mitglied filter);
 
-    QString getMitgliederFuerEinzelListeAlsHTML(QList<Person*> liste, Mitglied filter);
+    QString getMitgliederFuerEinzelListeAlsHTML(QList<Person*> liste, Mitglied filter) const;
     static QString getMitgliederFuerListeAlsHtml(QList<Person *> liste, Mitglied filter, QSet<QString> data);
     static QString getMitgliederFuerListeAlsCSV(QList<Person *> liste);
 
-    int getAnzahlMitglieder(Mitglied filter);
-    QList<Person *> getPersonen(Mitglied filter);
+    int getAnzahlMitglieder(Mitglied filter) const;
+    QList<Person *> getPersonen(Mitglied filter) const;
 
 public slots:
     void personChangedNameHandler(Person *p, QString alt);

@@ -44,7 +44,7 @@ void ExportDialog::hardReload()
     ui->listAnzeige->clear();
     for(AActivity *a: manager->getActivities()) {
         QString farbe = a->getFarbe();
-        QListWidgetItem *item = new QListWidgetItem(a->getListString());
+        QListWidgetItem *item = new QListWidgetItem(a->getString());
         item->setBackground(QBrush(QColor(farbe)));
         item->setToolTip(a->getAnlass().replace("<br/>","\n"));
         ui->listAnzeige->insertItem(ui->listAnzeige->count(), item);

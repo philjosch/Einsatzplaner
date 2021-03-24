@@ -240,5 +240,5 @@ void ActivityWindow::setPredefinedValue(QString anlass)
 
 void ActivityWindow::updateWindowTitle()
 {
-    setWindowTitle(tr("%1 am %2").arg(activity->getKurzbeschreibung()).arg(activity->getDatum().toString("dddd dd.MM. yyyy")));
+    setWindowTitle(tr("%1 am %2").arg(activity->getStringShort()).arg(activity->getDatum().toString("dddd dd.MM. yyyy")));
 }

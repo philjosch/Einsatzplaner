@@ -68,7 +68,7 @@ void CoreMainWindow::loeschenPerson(Person *p)
 }
 void CoreMainWindow::loeschenAktivitaet(AActivity *a)
 {
-    if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie %1 am %2 wirklich unwiderruflich löschen?").arg(a->getKurzbeschreibung(), a->getDatum().toString(tr("dd.MM.yyyy")))) != QMessageBox::Yes) {
+    if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie %1 am %2 wirklich unwiderruflich löschen?").arg(a->getStringShort(), a->getDatum().toString(tr("dd.MM.yyyy")))) != QMessageBox::Yes) {
         return;
     }
 

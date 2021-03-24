@@ -22,26 +22,24 @@ public:
 
     virtual Art getArt() const;
 
-    virtual QJsonObject toJson();
+    virtual QJsonObject toJson() const;
 
-    QDate getDatum();
+    QDate getDatum() const;
     void setDatum(QDate value);
 
     QString getOrt() const;
     void setOrt(const QString &value);
 
-    QTime getZeitAnfang();
+    QTime getZeitAnfang() const;
     virtual QTime getAnfang(const Category kat) const;
     void setZeitAnfang(QTime value);
 
-    QTime getZeitEnde();
+    QTime getZeitEnde() const;
     virtual QTime getEnde(const Category kat) const;
     void setZeitEnde(QTime value);
 
     bool getZeitenUnbekannt() const;
     void setZeitenUnbekannt(bool value);
-
-    bool liegtInVergangenheit();
 
     QString getAnlass() const;
     void setAnlass(const QString &value);
@@ -58,6 +56,8 @@ public:
     bool getAbgesagt() const;
     void setAbgesagt(bool value);
 
+    bool check(Auswahl aus) const;
+
     QList<Einsatz*> getPersonen() const;
     Einsatz *addPerson(QString p, QString bemerkung, Category kat);
     bool removePerson(Einsatz *e);
@@ -69,33 +69,32 @@ public:
     friend bool operator<=(const AActivity &lhs, const AActivity &rhs) { return !(lhs > rhs);}
     friend bool operator>=(const AActivity &lhs, const AActivity &rhs) { return !(lhs < rhs);}
 
-    virtual QString getKurzbeschreibung();
-    virtual QString getListString();
-    virtual QString getListStringShort();
+    virtual QString getString() const;
+    virtual QString getStringShort() const;
 
-    virtual QString getHtmlForSingleView();
-    virtual QString getHtmlForTableView();
+    virtual QString getHtmlForSingleView() const;
+    virtual QString getHtmlForTableView() const;
 
     virtual QString getFarbe() const;
 
-    static const QStringList EXTERNAL_LIST;
-    static const QStringList QUALIFICATION_LIST;
     static const QString KOPF_LISTE_HTML;
     static const QString FUSS_LISTE_HTML;
 
-    static const QMap<Art, QString> FARBE_FAHRTAGE;
-
-    static bool hasQualification(Person *p, Category kat, QString bemerkung, QDate datum = QDate());
-    static bool isExtern(QString bemerkung);
-
     static void sort(QList<AActivity *> *list);
-
-    bool check(Auswahl aus);
 
 signals:
     void changed(AActivity *, QDate = QDate());
 
 protected:
+    static const QStringList EXTERNAL_LIST;
+    static const QStringList QUALIFICATION_LIST;
+
+    static const QString COLOR_REQUIRED;
+    static const QMap<Art, QString> FARBE_FAHRTAGE;
+
+    static bool hasQualification(Person *p, Category kat, QString bemerkung, QDate datum = QDate());
+    static bool isExtern(QString bemerkung);
+
     Art art;
     QDate datum;
     QString ort;
@@ -111,12 +110,10 @@ protected:
 
     ManagerPersonal *personal;
 
-    QString listToString(QString sep, QList<Einsatz*> liste, QString prefix="", QString suffix="", bool aufgabe=false);
+    QString listToString(QString sep, QList<Einsatz*> liste, QString prefix="", QString suffix="", bool aufgabe=false) const;
 
-    static const QString COLOR_REQUIRED;
-
-    QDateTime getAnfangGenau();
-    QDateTime getEndeGenau();
+    QDateTime getAnfangGenau() const;
+    QDateTime getEndeGenau() const;
 };
 
 #endif // AACTIVITY_H

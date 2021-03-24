@@ -46,11 +46,11 @@ Version::Version(int maj, int min, int pat)
     patch = pat;
 }
 
-QString Version::toString()
+QString Version::toString() const
 {
     return QString("%1.%2.%3").arg(major).arg(minor).arg(patch);
 }
-QString Version::toStringShort()
+QString Version::toStringShort() const
 {
     return QString("%1.%2").arg(major).arg(minor);
 }

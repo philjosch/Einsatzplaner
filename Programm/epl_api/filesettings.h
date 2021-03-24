@@ -15,7 +15,7 @@ public:
     FileSettings();
     FileSettings(QJsonObject json, QString pwd);
 
-    QJsonObject toJson();
+    QJsonObject toJson() const;
 
     bool getEnabled() const;
     void setEnabled(bool value);
@@ -44,12 +44,12 @@ signals:
     void changed();
 
 protected:
-    bool enabled = false;
-    bool autom = true;
+    bool enabled;
+    bool autom;
     Networking::Server server;
     Auswahl auswahl;
 
-    QString passwort = "";
+    QString passwort;
 };
 
 #endif // FILESETTINGS_H

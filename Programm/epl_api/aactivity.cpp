@@ -101,7 +101,7 @@ Art AActivity::getArt() const
     return Art::Arbeitseinsatz;
 }
 
-QJsonObject AActivity::toJson()
+QJsonObject AActivity::toJson() const
 {
     QJsonObject data;
     data.insert("art", static_cast<int>(Art::Arbeitseinsatz));
@@ -133,7 +133,7 @@ QJsonObject AActivity::toJson()
     return data;
 }
 
-QDate AActivity::getDatum()
+QDate AActivity::getDatum() const
 {
     return datum;
 }
@@ -154,7 +154,7 @@ void AActivity::setOrt(const QString &value)
     emit changed(this);
 }
 
-QTime AActivity::getZeitAnfang()
+QTime AActivity::getZeitAnfang() const
 {
     return zeitAnfang;
 }
@@ -173,7 +173,7 @@ void AActivity::setZeitAnfang(QTime value)
     emit changed(this);
 }
 
-QTime AActivity::getZeitEnde()
+QTime AActivity::getZeitEnde() const
 {
     return zeitEnde;
 }
@@ -331,7 +331,7 @@ bool AActivity::lesser(const AActivity *lhs, const AActivity *rhs)
     return false;
 }
 
-QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString prefix, QString suffix, bool aufgabe)
+QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString prefix, QString suffix, bool aufgabe) const
 {
     QStringList l;
     QStringList l2;
@@ -350,7 +350,7 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
     return l.join(sep);
 }
 
-QDateTime AActivity::getAnfangGenau()
+QDateTime AActivity::getAnfangGenau() const
 {
     if (zeitenUnbekannt)
         return QDateTime(datum, QTime(0, 0));
@@ -358,7 +358,7 @@ QDateTime AActivity::getAnfangGenau()
         return QDateTime(datum, zeitAnfang);
 }
 
-QDateTime AActivity::getEndeGenau()
+QDateTime AActivity::getEndeGenau() const
 {
     if (zeitenUnbekannt)
         return QDateTime(datum, QTime(23, 59, 59, 999));
@@ -399,20 +399,12 @@ void AActivity::setZeitenUnbekannt(bool value)
     emit changed(this);
 }
 
-bool AActivity::liegtInVergangenheit()
-{
-    if (datum < QDate::currentDate()) return true;
-    if (datum > QDate::currentDate()) return false;
-    if (zeitEnde <= QTime::currentTime()) return true;
-    return false;
-}
-
 void AActivity::sort(QList<AActivity *> *list)
 {
     std::sort(list->begin(), list->end(), AActivity::lesser);
 }
 
-bool AActivity::check(Auswahl aus)
+bool AActivity::check(Auswahl aus) const
 {
     if (getAnfangGenau() < aus.getAb())
         return false;
@@ -433,23 +425,18 @@ QList<Einsatz*> AActivity::getPersonen() const
     return personen;
 }
 
-QString AActivity::getKurzbeschreibung()
+QString AActivity::getStringShort() const
 {
-    if (anlass != "")
-        return anlass;
-    return getStringFromArt(Arbeitseinsatz);
-}
-
-QString AActivity::getListStringShort()
-{
-    QString s = getStringFromArt(art);
-    if (anlass != "")
+    QString s = "";
+    if (art == Arbeitseinsatz && anlass != "")
         s = anlass;
+    else
+        s = getStringFromArt(art);
     return s + (abgesagt ? " (Abg.)" : "")
             + (wichtig ? "!!" : "");
 }
 
-QString AActivity::getListString()
+QString AActivity::getString() const
 {
     QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – ";
     if (art == Arbeitseinsatz && anlass != "")
@@ -465,7 +452,7 @@ QString AActivity::getListString()
     return s;
 }
 
-QString AActivity::getHtmlForSingleView()
+QString AActivity::getHtmlForSingleView() const
 {
     QString required = "<font color='"+COLOR_REQUIRED+"'>%1</font>";
     QString html = "";
@@ -524,7 +511,7 @@ QString AActivity::getHtmlForSingleView()
     return html;
 }
 
-QString AActivity::getHtmlForTableView()
+QString AActivity::getHtmlForTableView() const
 {
     QString html = "<tr bgcolor='"+getFarbe()+"'>";
     // Datum, Anlass
@@ -546,7 +533,7 @@ QString AActivity::getHtmlForTableView()
 
     if (abgesagt) {
         html += "<td colspan='4'><b>Abgesagt!</b></td>";
-        html += "<td>"+bemerkungen.replace("\n", "<br/>")+"</td></tr>";
+        html += "<td>"+QString(bemerkungen).replace("\n", "<br/>")+"</td></tr>";
         return html;
     }
 
@@ -691,7 +678,7 @@ QString AActivity::getHtmlForTableView()
     // Bemerkungen
     if (bemerkungen != "") {
         if (zeilenUmbruch) html += "<br/>";
-        html += bemerkungen.replace("\n", "<br/>");
+        html += QString(bemerkungen).replace("\n", "<br/>");
     }
     html += "</td></tr>";
     return html;

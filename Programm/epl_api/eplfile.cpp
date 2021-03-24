@@ -72,7 +72,7 @@ bool EplFile::istSchreibgeschuetzt() const
 {
     return schreibgeschuetzt;
 }
-QStringList EplFile::getInfoSchreibschutz()
+QStringList EplFile::getInfoSchreibschutz() const
 {
     if (! schreibgeschuetzt) return QStringList();
     return FileIO::Schreibschutz::pruefen(pfad);
@@ -287,13 +287,13 @@ void EplFile::close()
 }
 
 
-QJsonObject EplFile::generiereJson()
+QJsonObject EplFile::generiereJson() const
 {
     QJsonObject json = generiereJsonPersonal();
     json.insert("activities", manager->toJson());
     return json;
 }
-QJsonObject EplFile::generiereJsonPersonal()
+QJsonObject EplFile::generiereJsonPersonal() const
 {
     QJsonObject viewJSON = geladen.value("view").toObject();
     viewJSON.insert("xMain", positionKalender.x);
@@ -320,7 +320,7 @@ QJsonObject EplFile::generiereJsonPersonal()
     return object;
 }
 
-bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj)
+bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj) const
 {
     QJsonObject zuschreibendesObjekt = obj;
 
@@ -350,11 +350,11 @@ bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj)
     return FileIO::saveJsonToFile(pfad, zuschreibendesObjekt);
 }
 
-QString EplFile::komprimiere(QJsonObject obj)
+QString EplFile::komprimiere(QJsonObject obj) const
 {
     return QString(qCompress(QJsonDocument(obj).toJson(QJsonDocument::JsonFormat::Compact)).toBase64());
 }
-QJsonObject EplFile::dekomprimiere(QString komprimiert)
+QJsonObject EplFile::dekomprimiere(QString komprimiert) const
 {
     return QJsonDocument::fromJson(
                 qUncompress(

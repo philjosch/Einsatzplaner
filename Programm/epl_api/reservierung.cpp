@@ -72,7 +72,7 @@ QMap<int, QList<int> > Reservierung::getPlaetzeFromString(QString plaetze)
     return map;
 }
 
-bool Reservierung::inZug(int zug)
+bool Reservierung::inZug(int zug) const
 {
     if (zuege.contains(zug)) return true;
     if (zuege.length() < 2) return false;
@@ -151,7 +151,7 @@ Reservierung::~Reservierung()
     removePlaetze();
 }
 
-QJsonObject Reservierung::toJson()
+QJsonObject Reservierung::toJson() const
 {
     QJsonObject o;
     o.insert("name", name);
@@ -265,7 +265,7 @@ void Reservierung::setSonstiges(const QString &value)
     emit changed();
 }
 
-QString Reservierung::getHtmlForTable()
+QString Reservierung::getHtmlForTable() const
 {
     QString html = "<tr><td>"+name+"<br/>"+telefon+"<br/>"+mail+"</td>";
     html += "<td>"+QString::number(anzahl)+" Plätze in ";
@@ -294,7 +294,7 @@ void Reservierung::removePlaetze()
     emit changed();
 }
 
-QString Reservierung::getHtmlForDetailTable()
+QString Reservierung::getHtmlForDetailTable() const
 {
     QString html = "<tr><td>"+name;
     if (telefon != "")
@@ -309,7 +309,8 @@ QString Reservierung::getHtmlForDetailTable()
         html += tr("Einstieg in ")+hps.at(0)+"<br/>";
     if (hps.at(1) != hps.at(0) && hps.at(1) != "-")
         html += tr("Ausstieg in ")+hps.at(1)+"<br/>";
-    html+=sonstiges.replace("\n", "<br/>")+"</td></tr>";
+    QString sonst = sonstiges;
+    html+=sonst.replace("\n", "<br/>")+"</td></tr>";
     return html;
 }
 

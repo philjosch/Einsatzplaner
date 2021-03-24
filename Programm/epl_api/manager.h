@@ -14,9 +14,9 @@ class Manager : public QObject
 public:
     Manager(ManagerPersonal *manPersonal);
     Manager(ManagerPersonal *manPersonal, QJsonArray array);
-    QJsonArray toJson();
+    QJsonArray toJson() const;
 
-    QList<AActivity *> getActivities();
+    QList<AActivity *> getActivities() const;
 
     static QString getHtmlFuerListenansicht(QList<AActivity *> liste);
     static QString getHtmlFuerEinzelansichten(QList<AActivity *> liste);
@@ -32,7 +32,7 @@ public slots:
 
     bool removeActivity(AActivity *a);
 
-    QList<AActivity*> filter(Auswahl auswahl);
+    QList<AActivity*> filter(Auswahl auswahl) const;
 
 protected:
     QList<AActivity *> activities;

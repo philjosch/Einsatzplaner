@@ -330,7 +330,7 @@ void Person::setTelefon2(const QString &value)
     emit changed();
 }
 
-QJsonObject Person::toJson()
+QJsonObject Person::toJson() const
 {
     QJsonObject o = personalToJson();
     // Zusätzliche Zeiten einfügen
@@ -347,7 +347,7 @@ QJsonObject Person::toJson()
     return o;
 }
 
-QJsonObject Person::personalToJson()
+QJsonObject Person::personalToJson() const
 {
     QJsonObject o;
     o.insert("id", id);
@@ -552,7 +552,7 @@ void Person::setStrasse(const QString &value)
     emit changed();
 }
 
-bool Person::isTauglich(Category cat, QDate datum)
+bool Person::isTauglich(Category cat, QDate datum) const
 {
     switch(cat) {
     case Tf:
@@ -574,7 +574,7 @@ bool Person::isTauglich(Category cat, QDate datum)
     return (tauglichkeit >= datum);
 }
 
-bool Person::isAusgetreten()
+bool Person::isAusgetreten() const
 {
     if (! austritt.isValid()) return false;
     return (austritt <= QDate::currentDate());
@@ -634,7 +634,7 @@ Mitglied Person::pruefeStunden(Category cat)
     else return Mitglied::AktivOhne;
 }
 
-int Person::getMinimumStunden(Category cat)
+int Person::getMinimumStunden(Category cat) const
 {
     if (isMinderjaehrig()) return 0;
     if (isAusgetreten()) return 0;
@@ -862,7 +862,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
     return html;
 }
 
-QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige)
+QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
 {
     if (anzeige.isEmpty())
         anzeige = QSet<QString>(ANZEIGE_PERSONALDATEN.begin(), ANZEIGE_PERSONALDATEN.end());
@@ -1062,7 +1062,7 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige)
     return "<tr>"+h+"</tr>";
 }
 
-QString Person::getPersonaldatenFuerEinzelAlsHTML()
+QString Person::getPersonaldatenFuerEinzelAlsHTML() const
 {
     QString h = "<h2>"+vorname+" "+nachname+"</h2>";
     QString absch = "";
@@ -1173,7 +1173,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML()
     return h;
 }
 
-QString Person::getPersonaldatenFuerListeAlsCSV()
+QString Person::getPersonaldatenFuerListeAlsCSV() const
 {
     return QString::number(nummer)
             +";"+nachname
@@ -1190,8 +1190,8 @@ QString Person::getPersonaldatenFuerListeAlsCSV()
             +";"+iban
             +";"+bank
             +";"+getKontoinhaberText()
-            +";"+sonstigeBetrieblich.replace("\n","<br/>")
-            +";"+sonstigeAusbildung.replace("\n","<br/>")
+            +";"+QString(sonstigeBetrieblich).replace("\n","<br/>")
+            +";"+QString(sonstigeAusbildung).replace("\n","<br/>")
 
             +";"+(ausbildungTf ? "WAHR":"FALSCH")
             +";"+(ausbildungZf ? "WAHR":"FALSCH")
@@ -1210,11 +1210,11 @@ QString Person::getPersonaldatenFuerListeAlsCSV()
             +";"+(mailOK ? "WAHR" : "FALSCH")
             +";"+(telefonOK ? "WAHR" : "FALSCH")
 
-            +";"+bemerkungen.replace("\n","<br/>")
+            +";"+QString(bemerkungen).replace("\n","<br/>")
             +"\n";
 }
 
-int Person::getAdditional(Category cat)
+int Person::getAdditional(Category cat) const
 {
     return additional.value(cat, 0);
 }
@@ -1240,7 +1240,7 @@ void Person::setGeburtstag(const QDate &value)
     emit changed();
 }
 
-bool Person::isMinderjaehrig()
+bool Person::isMinderjaehrig() const
 {
     if (geburtstag.isNull()) return false;
     return geburtstag.addYears(18) > QDate::currentDate();

@@ -635,7 +635,7 @@ void PersonalWindow::showPerson(Person *p)
             ui->tabelle->setItem(0, 1, new QTableWidgetItem(getLocalizedStringFromCategory(e->getKategorie())));
             QTime duration = QTime::fromMSecsSinceStartOfDay(e->getBeginnRichtig().msecsTo(e->getEndeRichtig()));
             ui->tabelle->setItem(0, 2, new QTableWidgetItem(duration.toString("hh:mm")));
-            ui->tabelle->setItem(0, 3, new QTableWidgetItem(e->getActivity()->getListStringShort()+(e->getBemerkung() != "" ? "\n"+e->getBemerkung() : "")));
+            ui->tabelle->setItem(0, 3, new QTableWidgetItem(e->getActivity()->getStringShort()+(e->getBemerkung() != "" ? "\n"+e->getBemerkung() : "")));
     }
     ui->tabelle->setSortingEnabled(sortingSaved);
     ui->tabelle->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
@@ -674,12 +674,9 @@ QList<Person*> PersonalWindow::getSortierteListe()
 {
     QList<Person*> liste = QList<Person*>();
     for(int i = 0; i < ui->tabelleGesamt->rowCount(); i++) {
-        QString name = ui->tabelleGesamt->item(i, 0)->text();
-        if (name != "") name += " ";
-        name += ui->tabelleGesamt->item(i, 1)->text();
-        Person *pers = manager->getPerson(name);
-        if (pers != nullptr)
-            liste.append(pers);
+        PersonTableWidgetItem *ptwi = static_cast<PersonTableWidgetItem*>(ui->tabelleGesamt->item(i, 0));
+        if (ptwi->getPerson() != nullptr)
+            liste.append(ptwi->getPerson());
     }
     return liste;
 }

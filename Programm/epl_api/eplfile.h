@@ -18,7 +18,7 @@ public:
     QString getPfad() const;
 
     bool istSchreibgeschuetzt() const;
-    QStringList getInfoSchreibschutz();
+    QStringList getInfoSchreibschutz() const;
 
     bool istPasswortGeschuetzt();
 
@@ -67,13 +67,13 @@ protected:
     FensterPosition positionKalender;
     FensterPosition positionPersonal;
 
-    QJsonObject generiereJson();
-    QJsonObject generiereJsonPersonal();
+    QJsonObject generiereJson() const;
+    QJsonObject generiereJsonPersonal() const;
 
-    bool schreibeJsonInDatei(QString pfad, QJsonObject obj);
+    bool schreibeJsonInDatei(QString pfad, QJsonObject obj) const;
 
-    QString komprimiere(QJsonObject obj);
-    QJsonObject dekomprimiere(QString komprimiert);
+    QString komprimiere(QJsonObject obj) const;
+    QJsonObject dekomprimiere(QString komprimiert) const;
 };
 
 #endif // EPLFILE_H

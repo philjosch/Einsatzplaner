@@ -53,7 +53,7 @@ ManagerPersonal::~ManagerPersonal()
 
 }
 
-QJsonObject ManagerPersonal::toJson()
+QJsonObject ManagerPersonal::toJson() const
 {
     // Personen
     QJsonArray array;
@@ -77,7 +77,7 @@ QJsonObject ManagerPersonal::toJson()
     return o;
 }
 
-QJsonObject ManagerPersonal::personalToJson()
+QJsonObject ManagerPersonal::personalToJson() const
 {
     // Personen
     QJsonArray array;
@@ -101,12 +101,12 @@ QJsonObject ManagerPersonal::personalToJson()
     return o;
 }
 
-Person *ManagerPersonal::getPersonFromID(QString id)
+Person *ManagerPersonal::getPersonFromID(QString id) const
 {
     return idToPerson.value(id);
 }
 
-Person *ManagerPersonal::getPerson(QString name)
+Person *ManagerPersonal::getPerson(QString name) const
 {
     name = getGoodName(name);
     if (personExists(name)) {
@@ -115,13 +115,13 @@ Person *ManagerPersonal::getPerson(QString name)
     return nullptr;
 }
 
-bool ManagerPersonal::personExists(QString name)
+bool ManagerPersonal::personExists(QString name) const
 {
     name = getGoodName(name);
     return personenSorted.contains(name);
 }
 
-bool ManagerPersonal::personExists(QString vorname, QString nachname)
+bool ManagerPersonal::personExists(QString vorname, QString nachname) const
 {
     while (vorname.endsWith(" ")) vorname.chop(1);
     while (vorname.startsWith(" ")) vorname = vorname.remove(0, 1);
@@ -165,7 +165,7 @@ void ManagerPersonal::setMinimumHours(Category cat, int amount)
     minimumHours.insert(cat, amount);
     emit changed();
 }
-int ManagerPersonal::getMinimumHours(Category cat)
+int ManagerPersonal::getMinimumHours(Category cat) const
 {
     return minimumHours.value(cat, 0);
 }
@@ -181,7 +181,7 @@ void ManagerPersonal::personChangedNameHandler(Person *p, QString alt)
     personenSorted.insert(p->getName(), p);
 }
 
-QList<Person *> ManagerPersonal::getPersonenSortiertNachNummer()
+QList<Person *> ManagerPersonal::getPersonenSortiertNachNummer() const
 {
     QList<Person *> l;
     int i = 0;
@@ -212,7 +212,7 @@ QString ManagerPersonal::getGoodName(QString name)
     return name;
 }
 
-int ManagerPersonal::getNextNummer()
+int ManagerPersonal::getNextNummer() const
 {
     int max = 0;
     for (Person *p: personen.values()) {
@@ -221,7 +221,7 @@ int ManagerPersonal::getNextNummer()
     return max+1;
 }
 
-bool ManagerPersonal::checkNummer(int neu)
+bool ManagerPersonal::checkNummer(int neu) const
 {
     for(Person *p: personen) {
         if (p->getNummer() == neu) return false;
@@ -229,7 +229,7 @@ bool ManagerPersonal::checkNummer(int neu)
     return true;
 }
 
-QString ManagerPersonal::getZeitenFuerEinzelListeAlsHTML(QList<Person *> liste, Mitglied filter)
+QString ManagerPersonal::getZeitenFuerEinzelListeAlsHTML(QList<Person *> liste, Mitglied filter) const
 {
     QString a = "";
     // Seite fuer jede Person einfuegen
@@ -312,7 +312,7 @@ QString ManagerPersonal::getZeitenFuerListeAlsHTML(QList<Person *> personen, QSe
     return a;
 }
 
-QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> liste, Mitglied filter)
+QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> liste, Mitglied filter) const
 {
     QString a = "";
     // Seite fuer jede Person einfuegen
@@ -391,7 +391,7 @@ QString ManagerPersonal::getMitgliederFuerListeAlsCSV(QList<Person *> liste)
     return t;
 }
 
-int ManagerPersonal::getAnzahlMitglieder(Mitglied filter)
+int ManagerPersonal::getAnzahlMitglieder(Mitglied filter) const
 {
     int i = 0;
     for(Person *akt: personen) {
@@ -401,7 +401,7 @@ int ManagerPersonal::getAnzahlMitglieder(Mitglied filter)
     return i;
 }
 
-QList<Person *> ManagerPersonal::getPersonen(Mitglied filter)
+QList<Person *> ManagerPersonal::getPersonen(Mitglied filter) const
 {
     QList<Person *> current = QList<Person*>();
     for(Person *p: getPersonenSortiertNachNummer()) {

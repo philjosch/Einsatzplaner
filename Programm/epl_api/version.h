@@ -22,12 +22,12 @@ public:
      * @brief Wandelt die Version in einen String um
      * @return String-Darstellung der Version
      */
-    QString toString();
+    QString toString() const;
     /**
      * @brief Wandelt die Version in einen verkuerzten String um, der nicht die Patch version enthaelt
      * @return Kurze String-Darstellung der Version
      */
-    QString toStringShort();
+    QString toStringShort() const;
 
     int getMajor() const;
     int getMinor() const;

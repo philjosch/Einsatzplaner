@@ -42,15 +42,16 @@ public:
     static const QString FUSS_TABELLE_LISTE_HTML;
     static const QStringList ANZEIGE_PERSONALDATEN;
 
-    QJsonObject toJson();
-    QJsonObject personalToJson();
+    QJsonObject toJson() const;
+    QJsonObject personalToJson() const;
 
     int getZeiten(Category cat);
     Mitglied pruefeStunden();
     Mitglied pruefeStunden(Category cat);
 
-    int getMinimumStunden(Category cat);
+    int getMinimumStunden(Category cat) const;
 
+    bool pruefeFilter(Mitglied filter);
 
     void berechne();
 
@@ -63,23 +64,15 @@ public:
     QString getZeitenFuerListeAlsHTML(QSet<Category> liste);
     QString getZeitenFuerEinzelAlsHTML();
 
-    QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige = QSet<QString>());
-    QString getPersonaldatenFuerListeAlsCSV();
-    QString getPersonaldatenFuerEinzelAlsHTML();
+    QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige = QSet<QString>()) const;
+    QString getPersonaldatenFuerListeAlsCSV() const;
+    QString getPersonaldatenFuerEinzelAlsHTML() const;
 
-
-    int getAdditional(Category cat);
+    int getAdditional(Category cat) const;
     void setAdditional(Category cat, int value);
 
-
+    // Stammdaten
     QString getId() const;
-
-    int getNummer() const;
-    bool setNummer(int value);
-    int setAutoNummer();
-
-    QString getName() const;
-    QString getNameSortierung() const;
 
     QString getVorname() const;
     bool setVorname(const QString &value);
@@ -87,9 +80,26 @@ public:
     QString getNachname() const;
     bool setNachname(const QString &value);
 
+    QString getName() const;
+    QString getNameSortierung() const;
+
     QDate getGeburtstag() const;
     void setGeburtstag(const QDate &value);
-    bool isMinderjaehrig();
+    bool isMinderjaehrig() const;
+
+    QString getAnrede() const;
+    void setAnrede(const QString &value);
+
+    Geschlecht getGeschlecht() const;
+    void setGeschlecht(const Geschlecht &value);
+
+    QString getBeruf() const;
+    void setBeruf(const QString &value);
+
+    // Mitgliedschaft
+    int getNummer() const;
+    bool setNummer(int value);
+    int setAutoNummer();
 
     QDate getEintritt() const;
     void setEintritt(const QDate &value);
@@ -99,62 +109,7 @@ public:
 
     QDate getAustritt() const;
     void setAustritt(const QDate &value);
-
-    bool getAusbildungTf() const;
-    void setAusbildungTf(bool value);
-
-    bool getAusbildungZf() const;
-    void setAusbildungZf(bool value);
-
-    bool getAusbildungRangierer() const;
-    void setAusbildungRangierer(bool value);
-
-    QDate getTauglichkeit() const;
-    void setTauglichkeit(const QDate &value);
-
-    QString getMail() const;
-    void setMail(const QString &value);
-
-    bool getMailOK() const;
-    void setMailOK(bool value);
-
-    QString getTelefon() const;
-    void setTelefon(const QString &value);
-
-    bool getTelefonOK() const;
-    void setTelefonOK(bool value);
-
-    int getStrecke() const;
-    void setStrecke(int value);
-
-    QString getBeruf() const;
-    void setBeruf(const QString &value);
-
-    QString getBemerkungen() const;
-    void setBemerkungen(const QString &value);
-
-    bool isAusgetreten();
-
-    QString getPLZ() const;
-    void setPLZ(const QString &value);
-
-    QString getOrt() const;
-    void setOrt(const QString &value);
-
-    QString getStrasse() const;
-    void setStrasse(const QString &value);
-
-    bool isTauglich(Category cat=Tf, QDate datum=QDate::currentDate());
-
-    bool pruefeFilter(Mitglied filter);
-
-    ManagerPersonal *getManager() const;
-
-    QString getAnrede() const;
-    void setAnrede(const QString &value);
-
-    Geschlecht getGeschlecht() const;
-    void setGeschlecht(const Geschlecht &value);
+    bool isAusgetreten() const;
 
     Beitragsart getBeitragsart() const;
     void setBeitragsart(const Beitragsart &value);
@@ -166,8 +121,21 @@ public:
     void setBank(const QString &value);
 
     QString getKontoinhaber() const;
-    QString getKontoinhaberText();
     void setKontoinhaber(const QString &value);
+
+    // Ausbildung
+    bool getAusbildungTf() const;
+    void setAusbildungTf(bool value);
+
+    bool getAusbildungZf() const;
+    void setAusbildungZf(bool value);
+
+    bool getAusbildungRangierer() const;
+    void setAusbildungRangierer(bool value);
+
+    QDate getTauglichkeit() const;
+    void setTauglichkeit(const QDate &value);
+    bool isTauglich(Category cat=Tf, QDate datum=QDate::currentDate()) const;
 
     QString getSonstigeBetrieblich() const;
     void setSonstigeBetrieblich(const QString &value);
@@ -175,8 +143,39 @@ public:
     QString getSonstigeAusbildung() const;
     void setSonstigeAusbildung(const QString &value);
 
+    // Adresse
+    QString getPLZ() const;
+    void setPLZ(const QString &value);
+
+    QString getOrt() const;
+    void setOrt(const QString &value);
+
+    QString getStrasse() const;
+    void setStrasse(const QString &value);
+
+    int getStrecke() const;
+    void setStrecke(int value);
+
+    // Kontakt
+    QString getMail() const;
+    void setMail(const QString &value);
+
+    QString getTelefon() const;
+    void setTelefon(const QString &value);
+
     QString getTelefon2() const;
     void setTelefon2(const QString &value);
+
+    // Datenschutz
+    bool getMailOK() const;
+    void setMailOK(bool value);
+
+    bool getTelefonOK() const;
+    void setTelefonOK(bool value);
+
+    // Sonstiges
+    QString getBemerkungen() const;
+    void setBemerkungen(const QString &value);
 
 protected:
     // Stammdaten

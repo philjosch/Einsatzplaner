@@ -6,12 +6,14 @@ using namespace Cryptography;
 
 FileSettings::FileSettings() : QObject()
 {
+    enabled = false;
+    autom = true;
     server = Networking::Server{"", "", ""};
-
     auswahl = Auswahl(Auswahl::AbJetzt, Auswahl::BisAlle, true);
+    passwort = "";
 }
 
-FileSettings::FileSettings(QJsonObject json, QString pwd)
+FileSettings::FileSettings(QJsonObject json, QString pwd) : QObject()
 {
     QJsonObject online = json.value("online").toObject();
     enabled = online.value("enabled").toBool();
@@ -25,7 +27,7 @@ FileSettings::FileSettings(QJsonObject json, QString pwd)
         passwort = Crypto::hash(pwd);
 }
 
-QJsonObject FileSettings::toJson()
+QJsonObject FileSettings::toJson() const
 {
     QJsonObject o;
     o.insert("enabled", enabled);

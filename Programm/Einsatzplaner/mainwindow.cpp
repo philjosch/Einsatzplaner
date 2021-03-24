@@ -303,7 +303,7 @@ void MainWindow::openAActivity(AActivity *a)
 void MainWindow::newAActivityHandler(AActivity *a)
 {
     // Einfügen in die Seitenliste
-    ui->listWidget->insertItem(ui->listWidget->count(), a->getListString());
+    ui->listWidget->insertItem(ui->listWidget->count(), a->getString());
     QListWidgetItem *i = ui->listWidget->item(ui->listWidget->count()-1);
     listitem.insert(a, i);
     itemToList.insert(i, a);
@@ -319,7 +319,7 @@ void MainWindow::onItemInListClicked(QListWidgetItem *item)
 void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
 {
     if (i == nullptr) return;
-    i->setText(a->getListString());
+    i->setText(a->getString());
     i->setToolTip(a->getAnlass().replace("<br/>","\n"));
     i->setWhatsThis(a->getAnlass().replace("<br/>","\n"));
     i->setBackground(QBrush(QColor(a->getFarbe())));

@@ -42,7 +42,7 @@ Manager::Manager(ManagerPersonal *manPersonal, QJsonArray array)
     connect(this, &Manager::changed, this, [=]() { AActivity::sort(&activities);});
 }
 
-QJsonArray Manager::toJson()
+QJsonArray Manager::toJson() const
 {
     QJsonArray array;
     // Fahrtage und Arbeitseinsätze speichern
@@ -82,7 +82,7 @@ bool Manager::removeActivity(AActivity *a)
     return ret;
 }
 
-QList<AActivity *> Manager::filter(Auswahl auswahl)
+QList<AActivity *> Manager::filter(Auswahl auswahl) const
 {
     QList<AActivity *> liste = QList<AActivity*>();
     for (AActivity *a: activities) {
@@ -92,7 +92,7 @@ QList<AActivity *> Manager::filter(Auswahl auswahl)
     return liste;
 }
 
-QList<AActivity *> Manager::getActivities()
+QList<AActivity *> Manager::getActivities() const
 {
     return activities;
 }

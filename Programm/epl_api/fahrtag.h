@@ -16,20 +16,18 @@ public:
     Fahrtag(QJsonObject o, ManagerPersonal *p);
     ~Fahrtag();
 
-    QJsonObject toJson();
+    QJsonObject toJson() const;
 
-    QString getKurzbeschreibung();
+    QString getHtmlForSingleView() const;
+    QString getHtmlForTableView() const;
 
-    QString getHtmlForSingleView();
-    QString getHtmlForTableView();
-
-    QString getHtmlFuerReservierungsuebersicht();
+    QString getHtmlFuerReservierungsuebersicht() const;
 
     void setArt(const Art &value);
     Art getArt() const;
 
     QTime getAnfang(const Category kat) const;
-    QTime getZeitTf();
+    QTime getZeitTf() const;
     void setZeitTf(QTime value);
 
     int getBenoetigeTf() const;
@@ -47,28 +45,28 @@ public:
     QString getWagenreihung() const;
     bool setWagenreihung(const QString &value);
 
-    int getBelegung(int klasse, int zug = 0); // zug == 0: Gesamt
-    int getKapazitaet(int klasse); //klasse == -1: Gesamt ; klasse == 0: 2.u 3.Klasse
+    int getBelegung(int klasse, int zug = 0) const; // zug == 0: Gesamt
+    int getKapazitaet(int klasse) const; //klasse == -1: Gesamt ; klasse == 0: 2.u 3.Klasse
 
-    int getAnzahlReservierungen();
+    int getAnzahlReservierungen() const;
 
-    QSet<Reservierung *> getReservierungen();
+    QSet<Reservierung *> getReservierungen() const;
 
     bool getCheckAll() const;
     void setCheckAll(bool value);
 
-    bool checkPlausibilitaet(QList<int> zuege, QList<int> haltepunkte);
+    bool checkPlausibilitaet(QList<int> zuege, QList<int> haltepunkte) const;
 
 public slots:
     QList<Mistake> verteileSitzplaetze();
-    bool checkPlaetze(QString p, Reservierung *r);
+    bool checkPlaetze(QString p, Reservierung *r) const;
 
     Reservierung *createReservierung();
     bool removeReservierung(Reservierung *res);
 
 
 protected:
-    bool checkPlaetze(QMap<int, QList<int> > p, Reservierung *r);
+    bool checkPlaetze(QMap<int, QList<int> > p, Reservierung *r) const;
 
     QTime zeitTf;
     int benoetigeTf;

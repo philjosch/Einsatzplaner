@@ -15,7 +15,7 @@ public:
     Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen);
     ~Reservierung();
 
-    QJsonObject toJson();
+    QJsonObject toJson() const;
 
     QString getName() const;
     void setName(const QString &value);
@@ -49,13 +49,13 @@ public:
     void setSonstiges(const QString &value);
 
 
-    QString getHtmlForTable();
-    QString getHtmlForDetailTable();
+    QString getHtmlForTable() const;
+    QString getHtmlForDetailTable() const;
 
     static QString getStringFromPlaetze(QMap<int, QList<int> > liste);
     static QMap<int, QList<int> > getPlaetzeFromString(QString plaetze);
 
-    bool inZug(int zug);
+    bool inZug(int zug) const;
 
 signals:
     void changed();

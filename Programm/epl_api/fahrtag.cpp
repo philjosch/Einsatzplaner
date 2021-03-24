@@ -70,7 +70,7 @@ Fahrtag::~Fahrtag()
     }
 }
 
-QJsonObject Fahrtag::toJson()
+QJsonObject Fahrtag::toJson() const
 {
     QJsonObject o = AActivity::toJson();
     o.insert("art", art);
@@ -89,13 +89,7 @@ QJsonObject Fahrtag::toJson()
     return o;
 }
 
-
-QString Fahrtag::getKurzbeschreibung()
-{
-    return getStringFromArt(art);
-}
-
-QString Fahrtag::getHtmlForSingleView()
+QString Fahrtag::getHtmlForSingleView() const
 {
     QString required = "<font color='"+COLOR_REQUIRED+"'>%1</font>";
     QString html = "";
@@ -188,7 +182,7 @@ QString Fahrtag::getHtmlForSingleView()
         html += ":</b><br/>"+listToString(" | ", sonstige, "", "", true) +"</p>";
     }
     if (bemerkungen != "") {
-        html += "<p><b>Bemerkungen:</b><br/>"+bemerkungen.replace("\n", "<br/>")+"</p>";
+        html += "<p><b>Bemerkungen:</b><br/>"+QString(bemerkungen).replace("\n", "<br/>")+"</p>";
     }
 
     // Reservierungen
@@ -222,7 +216,7 @@ QString Fahrtag::getHtmlForSingleView()
     return html;
 }
 
-QString Fahrtag::getHtmlForTableView()
+QString Fahrtag::getHtmlForTableView() const
 {
     QString html = "<tr bgcolor='"+getFarbe()+"'>";
     // Datum, Anlass
@@ -234,7 +228,7 @@ QString Fahrtag::getHtmlForTableView()
     html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>";
     html += getStringFromArt(art);
     if (anlass != "") {
-        html += ":<br/><i>"+anlass.replace("\n", "<br/>")+"</i>";
+        html += ":<br/><i>"+QString(anlass).replace("\n", "<br/>")+"</i>";
     }
     // Wagenreihung
     if (wagenreihung != "") {
@@ -244,7 +238,7 @@ QString Fahrtag::getHtmlForTableView()
 
     if (abgesagt) {
         html += "<td colspan='4'><b>Abgesagt!</b></td>";
-        html += "<td>"+bemerkungen.replace("\n", "<br/>")+"</td></tr>";
+        html += "<td>"+QString(bemerkungen).replace("\n", "<br/>")+"</td></tr>";
         return html;
     }
 
@@ -363,7 +357,7 @@ QString Fahrtag::getHtmlForTableView()
     // Bemerkungen
     if (bemerkungen != "") {
         if (zeilenUmbruch) html += "<br/>";
-        html += bemerkungen.replace("\n", "<br/>");
+        html += QString(bemerkungen).replace("\n", "<br/>");
     }
 
     html += "</td>";
@@ -371,7 +365,7 @@ QString Fahrtag::getHtmlForTableView()
     return html;
 }
 
-QString Fahrtag::getHtmlFuerReservierungsuebersicht()
+QString Fahrtag::getHtmlFuerReservierungsuebersicht() const
 {
     QString a = "<h3>";
     a += getStringFromArt(art)+" am "+datum.toString("dddd dd. MM. yyyy");
@@ -469,7 +463,7 @@ void Fahrtag::setBenoetigeTf(int value)
     emit changed(this);
 }
 
-QTime Fahrtag::getZeitTf()
+QTime Fahrtag::getZeitTf() const
 {
     return zeitTf;
 }
@@ -514,7 +508,7 @@ bool Fahrtag::setWagenreihung(const QString &value)
     return false;
 }
 
-int Fahrtag::getBelegung(int klasse, int zug)
+int Fahrtag::getBelegung(int klasse, int zug) const
 {
     int summe = 0;
     for(Reservierung *r: reservierungen) {
@@ -527,7 +521,7 @@ int Fahrtag::getBelegung(int klasse, int zug)
     return summe;
 }
 
-int Fahrtag::getKapazitaet(int klasse)
+int Fahrtag::getKapazitaet(int klasse) const
 {
     int summe = 0;
     for(Wagen *w: wagen) {
@@ -537,12 +531,12 @@ int Fahrtag::getKapazitaet(int klasse)
     return summe;
 }
 
-int Fahrtag::getAnzahlReservierungen()
+int Fahrtag::getAnzahlReservierungen() const
 {
     return reservierungen.size();
 }
 
-QSet<Reservierung *> Fahrtag::getReservierungen()
+QSet<Reservierung *> Fahrtag::getReservierungen() const
 {
     return reservierungen;
 }
@@ -600,7 +594,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     return {okAndere, okErste};
 }
 
-bool Fahrtag::checkPlaetze(QMap<int, QList<int>> p, Reservierung *r)
+bool Fahrtag::checkPlaetze(QMap<int, QList<int>> p, Reservierung *r) const
 {
     // Überprüft, ob die eingegebenen Sitzplätze frei sind, oder ob sie schon belegt wurden
     int summe = 0;
@@ -617,7 +611,7 @@ bool Fahrtag::checkPlaetze(QMap<int, QList<int>> p, Reservierung *r)
     return true;
 }
 
-bool Fahrtag::checkPlaetze(QString p, Reservierung *r)
+bool Fahrtag::checkPlaetze(QString p, Reservierung *r) const
 {
     return checkPlaetze(Reservierung::getPlaetzeFromString(p), r);
 }
@@ -686,7 +680,7 @@ void Fahrtag::setCheckAll(bool value)
     emit changed(this);
 }
 
-bool Fahrtag::checkPlausibilitaet(QList<int> zuege, QList<int> haltepunkte)
+bool Fahrtag::checkPlausibilitaet(QList<int> zuege, QList<int> haltepunkte) const
 {
     if (zuege.length() != haltepunkte.length()) return false;
     if (zuege.length() > 4) return false;

@@ -13,13 +13,13 @@ public:
         QString path;
         QString id;
 
-        QString getServerKomplett() {
+        QString getServerKomplett() const {
             return server + "/" + path;
         }
-        QString getServerKomplettFuerTest() {
+        QString getServerKomplettFuerTest() const {
             return server + "/" + path + "?id=" + id;
         }
-        void insertJson(QJsonObject *o) {
+        void insertJson(QJsonObject *o) const {
             o->insert("server", server);
             o->insert("path", path);
             o->insert("id", id);
