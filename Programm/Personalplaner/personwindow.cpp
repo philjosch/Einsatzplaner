@@ -364,24 +364,8 @@ void PersonWindow::on_lineBank_textChanged(const QString &arg1)
 
 void PersonWindow::on_lineKontoinhaber_textChanged(const QString &arg1)
 {
-    if (enabled) {
-        if (person->getBeitragsart() == Person::Beitragsart::FamilienBeitragNutzer) {
-            Person *zahler = person->getManager()->getPerson(arg1);
-            if (zahler != nullptr) {
-                if (zahler == person) {
-                    ui->statusbar->showMessage("Bitte geben Sie einen anderen Namen ein, als der der Person!");
-                } else {
-                    person->setKontoinhaber(zahler->getId());
-                    ui->statusbar->showMessage("Person wurde erfolgreich als Zahler hinterlegt!");
-                }
-            } else {
-                ui->statusbar->showMessage("Bitte geben Sie einen Namen für die Person ein, welche den Mitgliedbeitrag zahlt!");
-            }
-
-        } else {
-            person->setKontoinhaber(arg1);
-        }
-    }
+    if (enabled)
+        person->setKontoinhaber(arg1);
 }
 
 void PersonWindow::on_linePhone2_textChanged(const QString &arg1)

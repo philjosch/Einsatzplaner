@@ -275,11 +275,6 @@ void Person::anfuegen(QString *zelle, QString appendix, QString seperator)
     zelle->append(appendix);
 }
 
-ManagerPersonal *Person::getManager() const
-{
-    return manager;
-}
-
 QString Person::getAnrede() const
 {
     return anrede;
@@ -722,9 +717,10 @@ QString Person::getName() const
 
 QString Person::getNameSortierung() const
 {
-    if (Einstellungen::getReihenfolgeVorNach()) {
+    switch (Einstellungen::getReihenfolgeVorNach()) {
+    case Einstellungen::VornameNachname:
         return getName();
-    } else {
+    case Einstellungen::NachnameVorname:
         if (vorname != "" && nachname != "") return nachname + ", " + vorname;
         else if (vorname != "") return vorname;
         else return nachname;
@@ -834,8 +830,8 @@ QString Person::getZeitenFuerEinzelAlsHTML()
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
         for (Einsatz *e: getActivities()) {
-                html += "<tr><td>"+e->getActivity()->getDatum().toString("dd.MM.yyyy")+"<br/>"+e->getActivity()->getKurzbeschreibung();
-                if (e->getActivity()->getAnlass() != e->getActivity()->getKurzbeschreibung() && e->getActivity()->getAnlass() != "")
+                html += "<tr><td>"+e->getActivity()->getDatum().toString("dd.MM.yyyy")+"<br/>"+e->getActivity()->getStringShort();
+                if (!e->getActivity()->getStringShort().contains(e->getActivity()->getAnlass()) && e->getActivity()->getAnlass() != "")
                     html += "<br/>"+e->getActivity()->getAnlass();
                 html +="</td><td>"
                      + e->getBeginnRichtig().toString("HH:mm")+"-"+e->getEndeRichtig().toString("HH:mm")+"</td><td>"
@@ -955,7 +951,7 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     }
     if (anzeige.contains("Kontoinhaber")) {
         zelleNutzen = true;
-        anfuegen(&zelle, getKontoinhaberText());
+        anfuegen(&zelle, getKontoinhaber());
     }
     if (zelleNutzen) {
         h += "<td>"+zelle+"</td>";
@@ -1093,7 +1089,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
     }
     absch += help.arg("Beitragsart", getStringVonBeitragsart(beitragsart));
     if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
-        absch += help.arg("Zahler", getKontoinhaberText());
+        absch += help.arg("Zahler", getKontoinhaber());
     } else {
         absch += help.arg("Konto", "%2 bei %3").arg(iban, bank);
         absch += help.arg("Kontoinhaber", kontoinhaber);
@@ -1189,7 +1185,7 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+getStringVonBeitragsart(beitragsart)
             +";"+iban
             +";"+bank
-            +";"+getKontoinhaberText()
+            +";"+getKontoinhaber()
             +";"+QString(sonstigeBetrieblich).replace("\n","<br/>")
             +";"+QString(sonstigeAusbildung).replace("\n","<br/>")
 
@@ -1308,10 +1304,6 @@ void Person::setBank(const QString &value)
 
 QString Person::getKontoinhaber() const
 {
-    return kontoinhaber;
-}
-QString Person::getKontoinhaberText()
-{
     if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
         Person *pers = manager->getPersonFromID(kontoinhaber);
         if (pers != nullptr)
@@ -1321,7 +1313,13 @@ QString Person::getKontoinhaberText()
 }
 void Person::setKontoinhaber(const QString &value)
 {
-    kontoinhaber = value;
+    Person *zahler = manager->getPerson(value);
+    if (zahler != nullptr) {
+        kontoinhaber = zahler->getId();
+        qDebug() << "zahler hinterlegt";
+    } else {
+        kontoinhaber = value;
+    }
     emit changed();
 }
 

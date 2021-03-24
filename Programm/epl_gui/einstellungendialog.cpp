@@ -9,8 +9,8 @@
 EinstellungenDialog::EinstellungenDialog(QWidget *parent) : QDialog(parent), ui(new Ui::EinstellungenDialog)
 {
     ui->setupUi(this);
-    ui->buttonGroupSortierung->setId(ui->radioVorNach, 1);
-    ui->buttonGroupSortierung->setId(ui->radioNachVor, 0);
+    ui->buttonGroupSortierung->setId(ui->radioVorNach, Einstellungen::VornameNachname);
+    ui->buttonGroupSortierung->setId(ui->radioNachVor, Einstellungen::NachnameVorname);
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(closeDialogOk()));
     connect(ui->pushDownload, &QPushButton::clicked, this, [=]() { CoreApplication::oeffneDownloadSeite(); });
     ui->checkSearchAtStart->setChecked(Einstellungen::getAutoSearchUpdate());
@@ -25,7 +25,7 @@ EinstellungenDialog::EinstellungenDialog(QWidget *parent) : QDialog(parent), ui(
     } else if (index == 30) {
         ui->comboAutoSave->setCurrentIndex(3);
     }
-    ui->buttonGroupSortierung->button(Einstellungen::getReihenfolgeVorNach() ? 1 : 0)->click();
+    ui->buttonGroupSortierung->button(Einstellungen::getReihenfolgeVorNach())->click();
     setWindowFilePath("");
 }
 
@@ -74,7 +74,7 @@ void EinstellungenDialog::saveSettings()
     }
     Einstellungen::setAutoSave(value);
     Einstellungen::setUseAutoUpload(ui->checkAutoUpload->isChecked());
-    Einstellungen::setReihenfolgeVorNach(ui->buttonGroupSortierung->checkedId() == 1);
+    Einstellungen::setReihenfolgeVorNach((Einstellungen::ReihenfolgeSortierung)ui->buttonGroupSortierung->checkedId());
 }
 
 void EinstellungenDialog::on_pushNotes_clicked()

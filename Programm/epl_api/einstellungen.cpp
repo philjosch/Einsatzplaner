@@ -31,13 +31,23 @@ void Einstellungen::setAutoSave(int value)
     SETTINGS.setValue("io/autoSave", value);
 }
 
-bool Einstellungen::getReihenfolgeVorNach()
+Einstellungen::ReihenfolgeSortierung Einstellungen::getReihenfolgeVorNach()
 {
-    return SETTINGS.value("general/nameOrder", true).toBool();
+    if (SETTINGS.value("general/nameOrder", true).toBool())
+        return VornameNachname;
+    else
+        return NachnameVorname;
 }
-void Einstellungen::setReihenfolgeVorNach(bool value)
+void Einstellungen::setReihenfolgeVorNach(ReihenfolgeSortierung value)
 {
-    SETTINGS.setValue("general/nameOrder", value);
+    switch (value) {
+    case VornameNachname:
+        SETTINGS.setValue("general/nameOrder", true);
+        return;
+    case NachnameVorname:
+        SETTINGS.setValue("general/nameOrder", false);
+        return;
+    }
 }
 
 QString Einstellungen::getLastPath()

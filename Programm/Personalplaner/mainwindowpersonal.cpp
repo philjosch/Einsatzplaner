@@ -373,12 +373,9 @@ QList<Person*> MainWindowPersonal::getSortierteListe()
 {
     QList<Person*> liste = QList<Person*>();
     for(int i = 0; i < ui->tabelleMitglieder->rowCount(); i++) {
-        QString name = ui->tabelleMitglieder->item(i, 0)->text();
-        if (name != "") name += " ";
-        name += ui->tabelleMitglieder->item(i, 1)->text();
-        Person *pers = personal->getPerson(name);
-        if (pers != nullptr)
-            liste.append(pers);
+        PersonTableWidgetItem *ptwi = static_cast<PersonTableWidgetItem*>(ui->tabelleMitglieder->item(i, 0));
+        if (ptwi->getPerson() != nullptr)
+            liste.append(ptwi->getPerson());
     }
     return liste;
 }
