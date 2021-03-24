@@ -5,6 +5,8 @@
 #include <QJsonArray>
 #include <QLinkedList>
 
+using namespace EplException;
+
 const QStringList AActivity::EXTERNAL_LIST = QStringList() << "Extern" << "Führerstand" << "FS" << "Schnupperkurs" << "ELF" << "Ehrenlokführer" << "ELF-Kurs";
 const QStringList AActivity::QUALIFICATION_LIST = QStringList() << "Azubi" << "Ausbildung" << "Tf-Ausbildung" << "Zf-Ausbildung" << "Tf-Unterricht" << "Zf-Unterricht" << "Weiterbildung";
 const QString AActivity::COLOR_REQUIRED = "#ff3333";

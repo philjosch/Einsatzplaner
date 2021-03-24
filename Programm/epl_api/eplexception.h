@@ -6,7 +6,7 @@
 #include <QString>
 #include <QObject>
 
-
+namespace EplException {
 
 class EplException
 {
@@ -64,6 +64,7 @@ class PersonNichtGefundenException : public AActivityException {
 public: PersonNichtGefundenException(QString name) : AActivityException(QObject::tr("%1 konnte nicht gefunden werden!\nBitte überprüfen Sie Ihre Eingabe und legen die Person gegebenenfalls neu an.").arg(name)) {}
 };
 
+}
 
 
 #endif // EPLEXCEPTION_H

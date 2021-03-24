@@ -9,6 +9,8 @@
 #include <QTableWidgetItem>
 #include <eplexception.h>
 
+using namespace EplException;
+
 FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(parent), ui(new Ui::FahrtagWindow)
 {
     ui->setupUi(this);

@@ -6,6 +6,8 @@
 #include <QMessageBox>
 #include <eplexception.h>
 
+using namespace EplException;
+
 ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWindow(parent), ui(new Ui::ActivityWindow)
 {
     ui->setupUi(this);

@@ -2,6 +2,8 @@
 
 #include <crypto.h>
 
+using namespace Cryptography;
+
 FileSettings::FileSettings() : QObject()
 {
     server = Networking::Server{"", "", ""};

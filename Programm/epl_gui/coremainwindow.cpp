@@ -8,6 +8,8 @@
 #include <QInputDialog>
 #include <QMessageBox>
 
+using namespace EplException;
+
 CoreMainWindow::CoreMainWindow(QWidget *parent) : QMainWindow(parent)
 {
     datei = new EplFile();
