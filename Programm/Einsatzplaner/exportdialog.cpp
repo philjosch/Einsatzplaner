@@ -158,44 +158,46 @@ void ExportDialog::show()
 
 bool ExportDialog::testShow(AActivity *a)
 {
+    QDate abD = ui->dateVon->date();
+    Auswahl::AnfangBedingung ab = Auswahl::AbAlle;
     // Prüfen bei den Einträgen, ob das Datum stimmt
     switch (ui->comboVon->currentIndex()) {
     case 0: // Ab datum
-        if (a->getDatum() < ui->dateVon->date())
-            return false;
+        ab = Auswahl::AbDatum;
         break;
     case 1: // Ab heute
-        if (a->liegtInVergangenheit())
-            return false;
+        ab = Auswahl::AbHeute;
         break;
     case 2: // Ab beginn des Jahres
-        if (a->getDatum().year() < QDate::currentDate().year())
-            return false;
+        ab = Auswahl::AbAnfangDesJahres;
         break;
     case 3: // Ab egal
+        ab = Auswahl::AbAlle;
         break;
     default:
         break;
     }
 
+    QDate bisD = ui->dateBis->date();
+    Auswahl::EndeBedingung bis = Auswahl::BisEndeDesJahres;
     switch (ui->comboBis->currentIndex()) {
     case 0: // Bis datum
-        if (a->getDatum() > ui->dateBis->date())
-            return false;
+        bis = Auswahl::BisDatum;
         break;
     case 1: // Bis heute
-        if (a->getDatum() > QDate::currentDate())
-            return false;
+        bis = Auswahl::BisHeute;
         break;
     case 2: // Bis Ende des Jahres
-        if (a->getDatum().year() > QDate::currentDate().year())
-            return false;
+        bis = Auswahl::BisEndeDesJahres;
         break;
     case 3: // Bis egal
+        bis = Auswahl::BisAlle;
         break;
     default:
         break;
     }
+    if (! a->check(Auswahl(ab, abD, bis, bisD)))
+        return false;
 
     // Prüfen, ob die Art stimmt (Fahrtag, Arbeitseinsatz)
     if ((a->getArt() != Art::Arbeitseinsatz)) {

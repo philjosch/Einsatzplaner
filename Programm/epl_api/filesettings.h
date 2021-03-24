@@ -3,6 +3,7 @@
 
 #include "basics.h"
 #include "networking.h"
+#include "auswahl.h"
 
 #include <QJsonObject>
 

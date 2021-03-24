@@ -7,8 +7,8 @@ using namespace Cryptography;
 FileSettings::FileSettings() : QObject()
 {
     server = Networking::Server{"", "", ""};
-    auswahl = Auswahl();
 
+    auswahl = Auswahl(Auswahl::AbJetzt, Auswahl::BisAlle, true);
 }
 
 FileSettings::FileSettings(QJsonObject json, QString pwd)
@@ -17,7 +17,7 @@ FileSettings::FileSettings(QJsonObject json, QString pwd)
     enabled = online.value("enabled").toBool();
     autom = online.value("auto").toBool(true);
     server = Networking::Server::fromJson(online);
-    auswahl = Auswahl::fromJson(online);
+    auswahl = Auswahl(online);
 
     if (pwd == "")
         passwort = "";

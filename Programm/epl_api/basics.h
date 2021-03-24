@@ -64,38 +64,4 @@ QString getStringVonFilter(Mitglied filter);
 QString minutesToHourString(int min);
 QString minutesToHourStringShort(int min);
 
-
-struct Auswahl {
-    enum AnfangBedingung {
-        AbHeute,
-        AbJetzt,
-        AbDatum,
-        AbAnfangDesJahres,
-        AbAlle
-    };
-    enum EndeBedingung {
-        BisHeute,
-        BisJetzt,
-        BisDatum,
-        BisEndeDesJahres,
-        BisAlle,
-        BisEndeNaechsterWoche,
-        BisEndeNaechsterMonat
-    };
-
-    AnfangBedingung startdate = AbJetzt;
-    EndeBedingung enddate = BisAlle;
-    bool activities = true;
-
-    void insertJson(QJsonObject *o) const;
-    static Auswahl fromJson(QJsonObject o);
-
-    static AnfangBedingung anfangAusString(QString s);
-    static QString zuString(AnfangBedingung a);
-
-    static EndeBedingung endeAusString(QString s);
-    static QString zuString(EndeBedingung e);
-};
-
-
 #endif // BASICS_H

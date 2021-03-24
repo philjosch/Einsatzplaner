@@ -350,6 +350,22 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
     return l.join(sep);
 }
 
+QDateTime AActivity::getAnfangGenau()
+{
+    if (zeitenUnbekannt)
+        return QDateTime(datum, QTime(0, 0));
+    else
+        return QDateTime(datum, zeitAnfang);
+}
+
+QDateTime AActivity::getEndeGenau()
+{
+    if (zeitenUnbekannt)
+        return QDateTime(datum, QTime(23, 59, 59, 999));
+    else
+        return QDateTime(datum, zeitEnde);
+}
+
 bool AActivity::hasQualification(Person *p, Category kat, QString bemerkung, QDate datum)
 {
     if (p == nullptr) return false;
@@ -398,49 +414,14 @@ void AActivity::sort(QList<AActivity *> *list)
 
 bool AActivity::check(Auswahl aus)
 {
-    switch (aus.startdate) {
-    case Auswahl::AbJetzt:
-        if (liegtInVergangenheit()) {
-            return false;
-        }
-        break;
-    case Auswahl::AbAlle:
-        break;
-    case Auswahl::AbAnfangDesJahres:
-        if (getDatum().year() < QDate::currentDate().year()) {
-            return false;
-        }
-        break;
-    default:
-        break;
-    }
-    // Enddatum
-    QDate ref;
-    switch (aus.enddate) {
-    case Auswahl::BisAlle:
-        break;
-    case Auswahl::BisEndeNaechsterWoche:
-        ref = QDate::currentDate().addDays(7); // naechste Woche
-        ref = ref.addDays(7-ref.dayOfWeek()); // Ende der Woche
-        if (getDatum() > ref) {
-            return false;
-        }
-        break;
-    case Auswahl::BisEndeNaechsterMonat:
-        ref = QDate::currentDate().addMonths(1); // naechster Monat
-        ref = QDate(ref.year(), ref.month(), ref.daysInMonth()); // Ende des Monats
-        if (getDatum() > ref) {
-            return false;
-        }
-    case Auswahl::BisEndeDesJahres:
-        if (getDatum().year() > QDate::currentDate().year()) {
-            return false;
-        }
-    default:
-        break;
-    }
+    if (getAnfangGenau() < aus.getAb())
+        return false;
+
+    if (getEndeGenau() > aus.getBis())
+        return false;
+
     // Auch Aktivitaeten?
-    if (!aus.activities) {
+    if (!aus.getActivities()) {
         if (getArt() == Art::Arbeitseinsatz)
             return false;
     }

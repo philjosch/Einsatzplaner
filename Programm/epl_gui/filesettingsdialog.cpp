@@ -28,21 +28,21 @@ void FileSettingsDialog::saveSettings()
                        ui->lineID->text()}
                        );
 
-    Auswahl auswahl;
+    Auswahl::AnfangBedingung ab = Auswahl::AbJetzt;
     switch (ui->comboFrom->currentIndex()) {
-    case 0: auswahl.startdate = Auswahl::AnfangBedingung::AbJetzt; break;
-    case 1: auswahl.startdate = Auswahl::AnfangBedingung::AbAnfangDesJahres; break;
-    case 2: auswahl.startdate = Auswahl::AnfangBedingung::AbAlle; break;
-    default: auswahl.startdate = Auswahl::AnfangBedingung::AbJetzt; break;
+    case 0: ab = Auswahl::AnfangBedingung::AbJetzt; break;
+    case 1: ab = Auswahl::AnfangBedingung::AbAnfangDesJahres; break;
+    case 2: ab = Auswahl::AnfangBedingung::AbAlle; break;
+    default: ab = Auswahl::AnfangBedingung::AbJetzt; break;
     }
+    Auswahl::EndeBedingung bis = Auswahl::BisAlle;
     switch (ui->comboTo->currentIndex()) {
-    case 0: auswahl.enddate = Auswahl::EndeBedingung::BisEndeNaechsterWoche; break;
-    case 1: auswahl.enddate = Auswahl::EndeBedingung::BisEndeNaechsterMonat; break;
-    case 2: auswahl.enddate = Auswahl::EndeBedingung::BisEndeDesJahres; break;
-    default: auswahl.enddate = Auswahl::EndeBedingung::BisAlle; break;
+    case 0: bis = Auswahl::EndeBedingung::BisEndeNaechsterWoche; break;
+    case 1: bis = Auswahl::EndeBedingung::BisEndeNaechsterMonat; break;
+    case 2: bis = Auswahl::EndeBedingung::BisEndeDesJahres; break;
+    default: bis = Auswahl::EndeBedingung::BisAlle; break;
     }
-    auswahl.activities = ui->checkActivity->isChecked();
-    mngr->setAuswahl(auswahl);
+    mngr->setAuswahl(Auswahl(ab, bis, ui->checkActivity->isChecked()));
 }
 
 void FileSettingsDialog::on_checkEnable_clicked(bool checked)
@@ -94,7 +94,7 @@ void FileSettingsDialog::loadSettings()
     ui->linePath->setText(s.path);
     ui->lineID->setText(s.id);
     Auswahl a = mngr->getAuswahl();
-    switch (a.startdate) {
+    switch (a.getStartdate()) {
     case Auswahl::AnfangBedingung::AbJetzt:
         ui->comboFrom->setCurrentIndex(0);
         break;
@@ -107,7 +107,7 @@ void FileSettingsDialog::loadSettings()
     default:
         ui->comboFrom->setCurrentIndex(2);
     }
-    switch (a.enddate) {
+    switch (a.getEnddate()) {
     case Auswahl::EndeBedingung::BisEndeNaechsterWoche:
         ui->comboTo->setCurrentIndex(0);
         break;
@@ -123,7 +123,7 @@ void FileSettingsDialog::loadSettings()
     default:
         ui->comboTo->setCurrentIndex(3);
     }
-    ui->checkActivity->setChecked(a.activities);
+    ui->checkActivity->setChecked(a.getActivities());
     on_checkEnable_clicked(mngr->getEnabled());
 
     ui->linePwdAlt->setEnabled(mngr->getPasswort() != "");

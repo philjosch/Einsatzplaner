@@ -3,6 +3,7 @@
 
 #include "basics.h"
 #include "einsatz.h"
+#include "auswahl.h"
 #include "managerpersonal.h"
 
 #include <QTime>
@@ -113,6 +114,9 @@ protected:
     QString listToString(QString sep, QList<Einsatz*> liste, QString prefix="", QString suffix="", bool aufgabe=false);
 
     static const QString COLOR_REQUIRED;
+
+    QDateTime getAnfangGenau();
+    QDateTime getEndeGenau();
 };
 
 #endif // AACTIVITY_H
