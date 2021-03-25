@@ -275,7 +275,7 @@ Einsatz *AActivity::addPerson(QString p, QString bemerkung, Category kat)
     if (pers == nullptr)
         throw AActivityException();
 
-    if (kat == Tf && bemerkung.contains(getLocalizedStringFromCategory(Tb), Qt::CaseInsensitive))
+    if (kat == Tf && bemerkung.contains(toString(Tb), Qt::CaseInsensitive))
         kat = Tb;
     if (kat == Zub && !hasQualification(pers, kat, bemerkung, datum)) {
         kat = Begleiter;
@@ -342,7 +342,7 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
             l2.append(e->getBemerkung());
         }
         if (aufgabe && (e->getKategorie() != Category::Sonstiges)) {
-            l2.append(getLocalizedStringFromCategory(e->getKategorie()));
+            l2.append(toString(e->getKategorie()));
         }
         l.append(prefix+l2.join("; ")+suffix);
         l2.clear();
@@ -431,7 +431,7 @@ QString AActivity::getStringShort() const
     if (art == Arbeitseinsatz && anlass != "")
         s = anlass;
     else
-        s = getStringFromArt(art);
+        s = toString(art);
     return s + (abgesagt ? " (Abg.)" : "")
             + (wichtig ? "!!" : "");
 }
@@ -442,7 +442,7 @@ QString AActivity::getString() const
     if (art == Arbeitseinsatz && anlass != "")
         s += anlass;
     else
-        s += getStringFromArt(art);
+        s += toString(art);
     if (abgesagt) {
         s += " (Abgesagt)";
     }
@@ -500,7 +500,7 @@ QString AActivity::getHtmlForSingleView() const
             html += (e->getEndeFiktiv() == QTime(0,0) ? "" : e->getEndeFiktiv().toString("hh:mm"));
             html += "</td><td>";
             if (e->getKategorie() != Category::Sonstiges) {
-                html += getLocalizedStringFromCategory(e->getKategorie());
+                html += toString(e->getKategorie());
                 if (e->getBemerkung() != "") html += "<br/>";
             }
             html += e->getBemerkung();

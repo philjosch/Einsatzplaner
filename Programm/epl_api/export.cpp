@@ -39,12 +39,12 @@ bool Export::Personal::printZeitenEinzelEinzel(Person *p, QPrinter *printer)
     QString html = p->getZeitenFuerEinzelAlsHTML() + zeitStempel();
     return druckeHtmlAufDrucker(html, printer);
 }
-bool Export::Personal::printZeitenEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
+bool Export::Personal::printZeitenEinzelListe(QList<Person *> liste, ManagerPersonal *m, Status filter, QPrinter *printer)
 {
     QString html = m->getZeitenFuerEinzelListeAlsHTML(liste, filter);
     return druckeHtmlAufDrucker(html, printer);
 }
-bool Export::Personal::printZeitenListe(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer)
+bool Export::Personal::printZeitenListe(QList<Person *> personen, QSet<Category> data, Status filter, QPrinter *printer)
 {
     QString html = ManagerPersonal::getZeitenFuerListeAlsHTML(personen, data, filter);
     return druckeHtmlAufDrucker(html, printer);
@@ -55,12 +55,12 @@ bool Export::Mitglieder::printMitgliederEinzelEinzel(Person *p, QPrinter *printe
     QString html = p->getPersonaldatenFuerEinzelAlsHTML() + zeitStempel();
     return druckeHtmlAufDrucker(html, printer);
 }
-bool Export::Mitglieder::printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer)
+bool Export::Mitglieder::printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Status filter, QPrinter *printer)
 {
     QString html = m->getMitgliederFuerEinzelListeAlsHTML(liste, filter);
     return druckeHtmlAufDrucker(html, printer);
 }
-bool Export::Mitglieder::printMitgliederListe(QList<Person*> liste, Mitglied filter, QSet<QString> data, QPrinter *printer)
+bool Export::Mitglieder::printMitgliederListe(QList<Person*> liste, Status filter, QSet<QString> data, QPrinter *printer)
 {
     QString html = ManagerPersonal::getMitgliederFuerListeAlsHtml(liste, filter, data);
     return druckeHtmlAufDrucker(html, printer);

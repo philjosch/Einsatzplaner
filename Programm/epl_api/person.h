@@ -19,7 +19,7 @@ public:
         Weiblich            = 11,
         Divers              = 12
     };
-    static QString getStringVonGeschlecht(Geschlecht g);
+    static QString toString(Geschlecht g);
     enum Beitragsart {
         BeitragUnbekannt      = 0,
         Beitragsfrei          = 1,
@@ -29,10 +29,10 @@ public:
         FamilienBeitragNutzer = 5,
         Ermaessigt            = 6
     };
-    static QString getStringVonBeitragsart(Beitragsart b);
+    static QString toString(Beitragsart b);
 
     Person(QString name, ManagerPersonal *man);
-    Person(QJsonObject o, ManagerPersonal *man); // Laden aus einem JSON-Objekt
+    Person(QJsonObject o, ManagerPersonal *man);
 
     static const QString FARBE_FEHLENDE_STUNDEN;
     static const QString FARBE_GENUG_STUNDEN;
@@ -46,12 +46,12 @@ public:
     QJsonObject personalToJson() const;
 
     int getZeiten(Category cat);
-    Mitglied pruefeStunden();
-    Mitglied pruefeStunden(Category cat);
+    Status pruefeStunden();
+    Status pruefeStunden(Category cat);
 
     int getMinimumStunden(Category cat) const;
 
-    bool pruefeFilter(Mitglied filter);
+    bool pruefeFilter(Status filter);
 
     void berechne();
 

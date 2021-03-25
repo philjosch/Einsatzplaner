@@ -87,7 +87,7 @@ protected:
 
     //** Controller
     QList<Person*> current;
-    Mitglied filter;
+    Status filter;
     QSet<QString> anzeige;
 
 private slots:

@@ -52,10 +52,10 @@ protected:
     bool activities;
 
     static AnfangBedingung anfangAusString(QString s);
-    static QString zuString(AnfangBedingung a);
+    static QString toString(AnfangBedingung a);
 
     static EndeBedingung endeAusString(QString s);
-    static QString zuString(EndeBedingung e);
+    static QString toString(EndeBedingung e);
 };
 
 #endif // AUSWAHL_H

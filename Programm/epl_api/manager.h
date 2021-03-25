@@ -21,18 +21,16 @@ public:
     static QString getHtmlFuerListenansicht(QList<AActivity *> liste);
     static QString getHtmlFuerEinzelansichten(QList<AActivity *> liste);
 
-signals:
-    void changed();
-    void veraenderteAktivitaet(AActivity*, QDate);
-    void veraendertePerson(Person *p);
-
-public slots:
     Fahrtag *newFahrtag(QDate datum);
     AActivity *newActivity(QDate datum);
 
     bool removeActivity(AActivity *a);
 
     QList<AActivity*> filter(Auswahl auswahl) const;
+
+signals:
+    void changed();
+    void veraenderteAktivitaet(AActivity*, QDate);
 
 protected:
     QList<AActivity *> activities;

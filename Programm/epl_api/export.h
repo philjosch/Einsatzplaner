@@ -36,16 +36,16 @@ public:
     class Personal {
     public:
         static bool printZeitenEinzelEinzel(Person *p, QPrinter *printer);
-        static bool printZeitenEinzelListe(QList<Person*> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer);
-        static bool printZeitenListe(QList<Person *> personen, QSet<Category> data, Mitglied filter, QPrinter *printer);
+        static bool printZeitenEinzelListe(QList<Person*> liste, ManagerPersonal *m, Status filter, QPrinter *printer);
+        static bool printZeitenListe(QList<Person *> personen, QSet<Category> data, Status filter, QPrinter *printer);
     };
 
     // Mitgliederlisten
     class Mitglieder {
     public:
         static bool printMitgliederEinzelEinzel(Person *p, QPrinter *printer);
-        static bool printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Mitglied filter, QPrinter *printer);
-        static bool printMitgliederListe(QList<Person *> liste, Mitglied filter, QSet<QString> data, QPrinter *printer);
+        static bool printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Status filter, QPrinter *printer);
+        static bool printMitgliederListe(QList<Person *> liste, Status filter, QSet<QString> data, QPrinter *printer);
         static bool exportMitgliederAlsCSV(QList<Person *> liste, QString pfad);
     };
 

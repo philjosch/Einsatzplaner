@@ -69,7 +69,7 @@ QString Person::getKopfTabelleListeHtml(QSet<QString> data)
     return kopf + "</tr></thead><tbody>";
 }
 
-QString Person::getStringVonGeschlecht(Person::Geschlecht g)
+QString Person::toString(Person::Geschlecht g)
 {
     switch (g) {
     case GeschlechtUnbekannt:
@@ -85,7 +85,7 @@ QString Person::getStringVonGeschlecht(Person::Geschlecht g)
     }
 }
 
-QString Person::getStringVonBeitragsart(Person::Beitragsart b)
+QString Person::toString(Person::Beitragsart b)
 {
     switch (b) {
     case BeitragUnbekannt:
@@ -575,7 +575,7 @@ bool Person::isAusgetreten() const
     return (austritt <= QDate::currentDate());
 }
 
-bool Person::pruefeFilter(Mitglied filter)
+bool Person::pruefeFilter(Status filter)
 {
     switch (filter) {
     case AlleMitglieder:
@@ -599,34 +599,34 @@ bool Person::pruefeFilter(Mitglied filter)
     }
 }
 
-Mitglied Person::pruefeStunden()
+Status Person::pruefeStunden()
 {
-    if (isAusgetreten()) return Mitglied::Ausgetreten;
+    if (isAusgetreten()) return Status::Ausgetreten;
     if (! getAktiv()) {
         if (getZeiten(Gesamt) > 0)
-            return Mitglied::PassivMit;
-        else return Mitglied::Passiv;
+            return Status::PassivMit;
+        else return Status::Passiv;
     }
     for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
         if (pruefeStunden(cat) == AktivOhne) {
-            return Mitglied::AktivOhne;
+            return Status::AktivOhne;
         }
     }
-    return Mitglied::AktivMit;
+    return Status::AktivMit;
 }
 
-Mitglied Person::pruefeStunden(Category cat)
+Status Person::pruefeStunden(Category cat)
 {
-    if (isAusgetreten()) return Mitglied::Ausgetreten;
+    if (isAusgetreten()) return Status::Ausgetreten;
     if (! getAktiv()) {
         if (getZeiten(cat) > 0)
-            return Mitglied::PassivMit;
-        else return Mitglied::Passiv;
+            return Status::PassivMit;
+        else return Status::Passiv;
     }
 
     if (getZeiten(cat) >= getMinimumStunden(cat))
-        return Mitglied::AktivMit;
-    else return Mitglied::AktivOhne;
+        return Status::AktivMit;
+    else return Status::AktivOhne;
 }
 
 int Person::getMinimumStunden(Category cat) const
@@ -765,34 +765,35 @@ bool Person::setNachname(const QString &value)
 
 QString Person::getZeitenFuerListeAlsHTML(QSet<Category> liste)
 {
-    QString html = "<tr><td style='background-color:";
+    QString zelle = "<td style='background-color: %1'>%2</td>";
+    QString farbe = "";
     switch (pruefeStunden()) {
-    case AktivOhne:  html += FARBE_FEHLENDE_STUNDEN; break;
-    case PassivMit: html += FARBE_GENUG_STUNDEN; break;
-    default: html += FARBE_STANDARD;
+    case AktivOhne: farbe = FARBE_FEHLENDE_STUNDEN; break;
+    case PassivMit: farbe = FARBE_GENUG_STUNDEN; break;
+    default:        farbe = FARBE_STANDARD;
     }
-    html += "'>"+getName()+"</td>";
+    QString html = zelle.arg(farbe, getName());
 
+    zelle = "<td align='right' style='background-color: %1'>%2</td>";
     for(Category cat: ANZEIGEREIHENFOLGEGESAMT) {
         if (!liste.contains(cat)) continue;
-        html += "<td align='right' style='background-color: ";
+
         switch (pruefeStunden(cat)) {
-        case AktivOhne:  html += Person::FARBE_FEHLENDE_STUNDEN; break;
-        case PassivMit: html += Person::FARBE_GENUG_STUNDEN; break;
-        default: html += Person::FARBE_STANDARD;
+        case AktivOhne: farbe = Person::FARBE_FEHLENDE_STUNDEN; break;
+        case PassivMit: farbe = Person::FARBE_GENUG_STUNDEN; break;
+        default:        farbe = Person::FARBE_STANDARD;
         }
         if (getZeiten(cat) > 0) {
             if (cat == Kilometer || cat == Anzahl) {
-                html += QString("'>%1</td>").arg(getZeiten(cat));
+                html += zelle.arg(farbe, getZeiten(cat));
             } else {
-                html += QString("'>%1</td>").arg(minutesToHourStringShort(getZeiten(cat)));
+                html += zelle.arg(farbe, minutesToHourStringShort(getZeiten(cat)));
             }
         } else {
-            html += "'></td>";
+            html += zelle.arg(farbe, "");
         }
     }
-    html += "</tr>";
-    return html;
+    return "<tr>" + html + "</tr>";
 }
 
 QString Person::getZeitenFuerEinzelAlsHTML()
@@ -809,13 +810,13 @@ QString Person::getZeitenFuerEinzelAlsHTML()
     QString helpcurrent;
     for (Category cat: ANZEIGEREIHENFOLGE) {
         if (getZeiten(cat) > 0 || getMinimumStunden(cat) > 0) {
-            if (pruefeStunden(cat) != Mitglied::AktivOhne) helpcurrent = help.arg("", "");
+            if (pruefeStunden(cat) != Status::AktivOhne) helpcurrent = help.arg("", "");
             else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(getMinimumStunden(cat))+")");
-            html += helpcurrent.arg(getLocalizedStringFromCategory(cat), minutesToHourString(getZeiten(cat)));
+            html += helpcurrent.arg(::toString(cat), minutesToHourString(getZeiten(cat)));
         }
     }
     html += "</ul><br/><ul>";
-    if (pruefeStunden(Gesamt) != Mitglied::AktivOhne) helpcurrent = help.arg("", "");
+    if (pruefeStunden(Gesamt) != Status::AktivOhne) helpcurrent = help.arg("", "");
     else helpcurrent = help.arg("style=\"color: red;\"", " (mindestens "+minutesToHourString(getMinimumStunden(Gesamt))+")");
     html += helpcurrent.arg("Gesamte Stundenzahl", minutesToHourString(getZeiten(Gesamt)));
     html += "<li>Anzahl Aktivitäten: "+QString::number(getZeiten(Anzahl))+"</li>";
@@ -835,7 +836,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
                     html += "<br/>"+e->getActivity()->getAnlass();
                 html +="</td><td>"
                      + e->getBeginnRichtig().toString("HH:mm")+"-"+e->getEndeRichtig().toString("HH:mm")+"</td><td>"
-                     + getLocalizedStringFromCategory(e->getKategorie()) + "</td><td>"
+                     + ::toString(e->getKategorie()) + "</td><td>"
                      + e->getBemerkung() + "</td></tr>";
         }
         html += "</tbody></table>";
@@ -846,7 +847,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
     QString h2 = "";
     for (Category cat: ANZEIGEREIHENFOLGE) {
         if (getAdditional(cat) > 0)
-            h2 += help.arg(getLocalizedStringFromCategory(cat), minutesToHourString(getAdditional(cat)));
+            h2 += help.arg(::toString(cat), minutesToHourString(getAdditional(cat)));
     }
     help = "<li>%1: %2%3</li>";
     if (getAdditional(Anzahl) > 0)
@@ -916,7 +917,7 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     }
     if (anzeige.contains("Geschlecht")) {
         zelleNutzen = true;
-        anfuegen(&zelle, getStringVonGeschlecht(geschlecht));
+        anfuegen(&zelle, toString(geschlecht));
     }
     if (anzeige.contains("Geburtsdatum")) {
         zelleNutzen = true;
@@ -938,7 +939,7 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     if (anzeige.contains("Beitragsart")) {
         zelleNutzen = true;
         if (beitragsart != Person::Beitragsart::BeitragUnbekannt) {
-            anfuegen(&zelle, getStringVonBeitragsart(beitragsart));
+            anfuegen(&zelle, toString(beitragsart));
         }
     }
     if (anzeige.contains("IBAN")) {
@@ -1069,7 +1070,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
         absch += help.arg("Geburtstag", geburtstag.toString("dd.MM.yyyy"));
     if (anrede != "")
         absch += help.arg("Anrede", anrede);
-    absch += help.arg("Geschlecht", getStringVonGeschlecht(geschlecht));
+    absch += help.arg("Geschlecht", toString(geschlecht));
     if (beruf != "")
         absch += help.arg("Beruf").arg(beruf);
     if (absch != "")
@@ -1087,7 +1088,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
         if (austritt.isValid())
             absch += help.arg("Austritt zum", austritt.toString("dd.MM.yyyy"));
     }
-    absch += help.arg("Beitragsart", getStringVonBeitragsart(beitragsart));
+    absch += help.arg("Beitragsart", toString(beitragsart));
     if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
         absch += help.arg("Zahler", getKontoinhaber());
     } else {
@@ -1175,14 +1176,14 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+nachname
             +";"+vorname
             +";"+geburtstag.toString("dd.MM.yyyy")
-            +";"+getStringVonGeschlecht(geschlecht)
+            +";"+toString(geschlecht)
             +";"+anrede
             +";"+beruf
 
             +";"+eintritt.toString("dd.MM.yyyy")
             +";"+(aktiv?"Aktiv":"Passiv")
             +";"+austritt.toString("dd.MM.yyyy")
-            +";"+getStringVonBeitragsart(beitragsart)
+            +";"+toString(beitragsart)
             +";"+iban
             +";"+bank
             +";"+getKontoinhaber()

@@ -24,7 +24,7 @@ enum Category {
 };
 
 Category getCategoryFromLocalizedString(QString s);
-QString getLocalizedStringFromCategory(Category c);
+QString toString(Category c);
 
 
 const QList<Category> ANZEIGEREIHENFOLGE =                       {Tf, Zf, Zub, Service, ZugVorbereiten, Werkstatt, Buero, Ausbildung, Infrastruktur, Sonstiges};
@@ -43,10 +43,10 @@ enum Art {
     Arbeitseinsatz = 100
 };
 
-QString getStringFromArt(Art art);
+QString toString(Art art);
 
 
-enum Mitglied {
+enum Status {
     AlleMitglieder,
     Aktiv,
     AktivMit,
@@ -58,7 +58,7 @@ enum Mitglied {
     Registriert
 };
 
-QString getStringVonFilter(Mitglied filter);
+QString toString(Status filter);
 
 
 QString minutesToHourString(int min);

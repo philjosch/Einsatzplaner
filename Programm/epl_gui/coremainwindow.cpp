@@ -40,7 +40,7 @@ void CoreMainWindow::constructorCoreMainWindow()
 
     connect(manager, &Manager::veraenderteAktivitaet,
             this, &CoreMainWindow::onAktivitaetWurdeBearbeitet);
-    connect(personal, &ManagerPersonal::personChangedName,
+    connect(personal, &ManagerPersonal::personChanged,
             this, &CoreMainWindow::onPersonWurdeBearbeitet);
 }
 

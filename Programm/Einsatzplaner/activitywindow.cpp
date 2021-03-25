@@ -43,7 +43,7 @@ ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWind
         Category kat = e->getKategorie();
         if (kat == Category::Begleiter)
             kat = Category::Zub;
-        static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(getLocalizedStringFromCategory(kat));
+        static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(toString(kat));
         static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(e->getBeginnFiktiv());
         static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(e->getEndeFiktiv());
         ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(e->getBemerkung()));
@@ -135,7 +135,7 @@ void ActivityWindow::on_buttonInsert_clicked()
     ui->tablePersonen->setItem(0, 0, item);
 
     QComboBox *box = generateNewCategoryComboBox();
-    box->setCurrentText(getLocalizedStringFromCategory(predefinedValueForTable));
+    box->setCurrentText(toString(predefinedValueForTable));
     ui->tablePersonen->setCellWidget(0, 1, box);
 
     QTimeEdit *beginn = generateNewTimeEdit();

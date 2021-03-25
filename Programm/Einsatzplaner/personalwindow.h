@@ -153,7 +153,7 @@ private:
     Person *aktuellePerson;
 
     QList<Person*> current;
-    Mitglied filter;
+    Status filter;
 
     QHash<Person*, QListWidgetItem*> personToItem;
 

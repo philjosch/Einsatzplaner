@@ -33,7 +33,7 @@ void MainWindowPersonal::constructorMainWindowPersonal()
     recentlyUsedClear = ui->actionClear;
 
     current = QList<Person*>();
-    filter = Mitglied::AlleMitglieder;
+    filter = Status::AlleMitglieder;
     anzeige = QSet<QString>();
 
     fenster = QMap<Person*, PersonWindow*>();
@@ -126,7 +126,7 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
             ui->tabelleMitglieder->setItem(0, clmn++, i);
         }
         if (anzeige.contains("Geschlecht"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, Person::getStringVonGeschlecht(p->getGeschlecht())));
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, Person::toString(p->getGeschlecht())));
         if (anzeige.contains("Anrede"))
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getAnrede()));
         if (anzeige.contains("Beruf"))
@@ -160,13 +160,13 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
             }
         }
         if (anzeige.contains("Beitragsart"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, Person::getStringVonBeitragsart(p->getBeitragsart())));
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, Person::toString(p->getBeitragsart())));
         if (anzeige.contains("IBAN"))
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getIban()));
         if (anzeige.contains("Bank"))
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getBank()));
         if (anzeige.contains("Kontoinhaber"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getKontoinhaberText()));
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getKontoinhaber()));
 
 
         if (anzeige.contains("Straße"))
@@ -244,11 +244,11 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
     ui->tabelleMitglieder->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 
-    ui->labelMitgliederAnzMitglieder->setText(QString::number(personal->getAnzahlMitglieder(Mitglied::AlleMitglieder)));
-    ui->labelMitgliederAnzAktiv->setText(QString::number(personal->getAnzahlMitglieder(Mitglied::Aktiv)));
-    ui->labelMitgliederAnzPassiv->setText(QString::number(personal->getAnzahlMitglieder(Mitglied::Passiv)));
-    ui->labelMitgliederAnzAusgetreten->setText(QString::number(personal->getAnzahlMitglieder(Mitglied::Ausgetreten)));
-    ui->labelMitgliederAnzErfasst->setText(QString::number(personal->getAnzahlMitglieder(Mitglied::Registriert)));
+    ui->labelMitgliederAnzMitglieder->setText(QString::number(personal->getAnzahlMitglieder(Status::AlleMitglieder)));
+    ui->labelMitgliederAnzAktiv->setText(QString::number(personal->getAnzahlMitglieder(Status::Aktiv)));
+    ui->labelMitgliederAnzPassiv->setText(QString::number(personal->getAnzahlMitglieder(Status::Passiv)));
+    ui->labelMitgliederAnzAusgetreten->setText(QString::number(personal->getAnzahlMitglieder(Status::Ausgetreten)));
+    ui->labelMitgliederAnzErfasst->setText(QString::number(personal->getAnzahlMitglieder(Status::Registriert)));
 }
 void MainWindowPersonal::on_actionMindeststunden_triggered()
 {
@@ -268,11 +268,11 @@ void MainWindowPersonal::on_actionMailListe_triggered()
     }
     if (! mails.isEmpty()) {
         QString betreff = "&subject=[%1]";
-        if (filter == Mitglied::AlleMitglieder) {
+        if (filter == Status::AlleMitglieder) {
             betreff = betreff.arg(tr("AkO-Alle"));
-        } else if (filter == Mitglied::Aktiv) {
+        } else if (filter == Status::Aktiv) {
             betreff = betreff.arg(tr("AkO-Aktive"));
-        } else if (filter == Mitglied::Passiv) {
+        } else if (filter == Status::Passiv) {
             betreff = betreff.arg(tr("AkO-Passive"));
         } else {
             betreff = "";

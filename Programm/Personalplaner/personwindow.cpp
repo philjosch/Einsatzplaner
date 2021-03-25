@@ -47,7 +47,7 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
     ui->comboBeitragsart->setCurrentIndex(p->getBeitragsart());
     ui->lineIBAN->setText(p->getIban());
     ui->lineBank->setText(p->getBank());
-    ui->lineKontoinhaber->setText(p->getKontoinhaberText());
+    ui->lineKontoinhaber->setText(p->getKontoinhaber());
     if (p->getBeitragsart() == Person::Beitragsart::FamilienBeitragNutzer) {
         ui->labelKonto->setText("Zahler");
         ui->lineIBAN->setEnabled(false);

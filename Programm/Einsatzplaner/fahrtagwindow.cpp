@@ -461,7 +461,7 @@ FahrtagWindow::EinsatzTableWidgetItem *FahrtagWindow::fuegeInTabelleEin(Einsatz 
 
     etwi->setText(e->getPerson()->getName());
     static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->setCurrentText(
-                getLocalizedStringFromCategory((e->getKategorie() == Begleiter ? Zub : e->getKategorie()))
+                toString((e->getKategorie() == Begleiter ? Zub : e->getKategorie()))
                 );
     static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->setTime(e->getBeginnFiktiv());
     static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->setTime(e->getEndeFiktiv());
@@ -595,7 +595,7 @@ void FahrtagWindow::toggleFelderReservierung(bool enabled)
 
 void FahrtagWindow::updateWindowTitle()
 {
-    setWindowTitle(getStringFromArt(fahrtag->getArt())+" am "+fahrtag->getDatum().toString("dddd, dd.MM.yyyy"));
+    setWindowTitle(toString(fahrtag->getArt())+" am "+fahrtag->getDatum().toString("dddd, dd.MM.yyyy"));
 }
 
 int FahrtagWindow::getIndexVonZug(int zug)

@@ -78,8 +78,8 @@ QDateTime Auswahl::getAb() const
 
 void Auswahl::insertJson(QJsonObject *o) const
 {
-    o->insert("startdate", zuString(startdate));
-    o->insert("enddate", zuString(enddate));
+    o->insert("startdate", toString(startdate));
+    o->insert("enddate", toString(enddate));
     o->insert("activities", activities);
 }
 
@@ -96,7 +96,7 @@ Auswahl::AnfangBedingung Auswahl::anfangAusString(QString s)
     }
     return AbAlle;
 }
-QString Auswahl::zuString(Auswahl::AnfangBedingung a)
+QString Auswahl::toString(Auswahl::AnfangBedingung a)
 {
     switch (a) {
     case AbJetzt:
@@ -126,7 +126,7 @@ Auswahl::EndeBedingung Auswahl::endeAusString(QString s)
     }
     return BisAlle;
 }
-QString Auswahl::zuString(Auswahl::EndeBedingung e)
+QString Auswahl::toString(Auswahl::EndeBedingung e)
 {
     switch (e) {
     case BisEndeDesJahres:

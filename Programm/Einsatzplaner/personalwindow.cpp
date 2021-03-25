@@ -25,7 +25,7 @@ PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindo
     enabled = false;
 
     current = QList<Person*>();
-    filter = Mitglied::Aktiv;
+    filter = Status::Aktiv;
 
     anzeige = QSet<Category>();
     ui->checkShowGesamt->setChecked(true);
@@ -83,22 +83,17 @@ void PersonalWindow::refreshEinsatzzeiten()
         Category curr = ANZEIGEREIHENFOLGEGESAMT.at(i);
         if (! anzeige.contains(curr)) continue;
         ui->tabelleGesamt->insertColumn(2);
-        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(getLocalizedStringFromCategory(curr)));
-        if (origSortName == getLocalizedStringFromCategory(curr)) newSort = 2;
+        ui->tabelleGesamt->setHorizontalHeaderItem(2, new QTableWidgetItem(toString(curr)));
+        if (origSortName == toString(curr)) newSort = 2;
         else newSort++;
     }
     ui->tabelleGesamt->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
-
-    // Zeile für "Gesamt" einfuegen
-    manager->berechne();
-
-
 
     // Einzelne Personen einfuegen und Summe berechnen
     int pos;
     QMap<Category, int> sum;
     for (Person *p: current) {
+        p->berechne();
         QString farbe = Person::FARBE_STANDARD;
         switch (p->pruefeStunden()) {
         case AktivOhne:  farbe = Person::FARBE_FEHLENDE_STUNDEN; break;
@@ -282,11 +277,11 @@ void PersonalWindow::on_pushEmail_clicked()
     }
     if (! mails.isEmpty()) {
         QString betreff = "&subject=[%1]";
-        if (filter == Mitglied::AlleMitglieder) {
+        if (filter == Status::AlleMitglieder) {
             betreff = betreff.arg(tr("AkO-Alle"));
-        } else if (filter == Mitglied::Aktiv) {
+        } else if (filter == Status::Aktiv) {
             betreff = betreff.arg(tr("AkO-Aktive"));
-        } else if (filter == Mitglied::Passiv) {
+        } else if (filter == Status::Passiv) {
             betreff = betreff.arg(tr("AkO-Passive"));
         } else {
             betreff = "";
@@ -632,7 +627,7 @@ void PersonalWindow::showPerson(Person *p)
             i0->setData(Qt::EditRole, e->getActivity()->getDatum());
             ui->tabelle->setItem(0, 0, i0);
 
-            ui->tabelle->setItem(0, 1, new QTableWidgetItem(getLocalizedStringFromCategory(e->getKategorie())));
+            ui->tabelle->setItem(0, 1, new QTableWidgetItem(toString(e->getKategorie())));
             QTime duration = QTime::fromMSecsSinceStartOfDay(e->getBeginnRichtig().msecsTo(e->getEndeRichtig()));
             ui->tabelle->setItem(0, 2, new QTableWidgetItem(duration.toString("hh:mm")));
             ui->tabelle->setItem(0, 3, new QTableWidgetItem(e->getActivity()->getStringShort()+(e->getBemerkung() != "" ? "\n"+e->getBemerkung() : "")));

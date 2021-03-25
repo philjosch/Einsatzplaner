@@ -95,7 +95,7 @@ QString Fahrtag::getHtmlForSingleView() const
     QString html = "";
     // Überschrift
     html += "<h2 class='pb'>";
-    html += getStringFromArt(art);
+    html += toString(art);
     html += " am " + datum.toString("dddd, dd.MM.yyyy");
     if (abgesagt)
         html += required.arg(" ABGESAGT!");
@@ -226,7 +226,7 @@ QString Fahrtag::getHtmlForTableView() const
         html += "<td>";
     }
     html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>";
-    html += getStringFromArt(art);
+    html += toString(art);
     if (anlass != "") {
         html += ":<br/><i>"+QString(anlass).replace("\n", "<br/>")+"</i>";
     }
@@ -368,7 +368,7 @@ QString Fahrtag::getHtmlForTableView() const
 QString Fahrtag::getHtmlFuerReservierungsuebersicht() const
 {
     QString a = "<h3>";
-    a += getStringFromArt(art)+" am "+datum.toString("dddd dd. MM. yyyy");
+    a += toString(art)+" am "+datum.toString("dddd dd. MM. yyyy");
     a += " - Die Reservierungen</h3>";
     a += "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th> <th>Anzahl</th> <th>Sitzplätze</th> <th>Sonstiges</th></tr></thead><tbody>";
     // Sortieren der Daten nach Wagenreihung

@@ -3,17 +3,17 @@
 QComboBox *generateNewCategoryComboBox()
 {
     QComboBox *box = new QComboBox();
-    box->insertItems(0, QStringList({getLocalizedStringFromCategory(Tf),
-                                     getLocalizedStringFromCategory(Tb),
-                                     getLocalizedStringFromCategory(Zf),
-                                     getLocalizedStringFromCategory(Service),
-                                     getLocalizedStringFromCategory(Zub),
-                                     getLocalizedStringFromCategory(Buero),
-                                     getLocalizedStringFromCategory(Werkstatt),
-                                     getLocalizedStringFromCategory(ZugVorbereiten),
-                                     getLocalizedStringFromCategory(Ausbildung),
-                                     getLocalizedStringFromCategory(Infrastruktur),
-                                     getLocalizedStringFromCategory(Sonstiges)}));
+    box->insertItems(0, QStringList({toString(Tf),
+                                     toString(Tb),
+                                     toString(Zf),
+                                     toString(Service),
+                                     toString(Zub),
+                                     toString(Buero),
+                                     toString(Werkstatt),
+                                     toString(ZugVorbereiten),
+                                     toString(Ausbildung),
+                                     toString(Infrastruktur),
+                                     toString(Sonstiges)}));
     box->setCurrentIndex(10);
     return box;
 }

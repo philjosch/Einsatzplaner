@@ -37,7 +37,7 @@ Category getCategoryFromLocalizedString(QString s)
     return Sonstiges;
 }
 
-QString getLocalizedStringFromCategory(Category c)
+QString toString(Category c)
 {
     switch (c) {
     case Tf: return QObject::tr("Tf");
@@ -58,7 +58,7 @@ QString getLocalizedStringFromCategory(Category c)
     }
 }
 
-QString getStringFromArt(Art art)
+QString toString(Art art)
 {
     switch (art) {
     case Museumszug: return QObject::tr("Museumszug");
@@ -73,7 +73,7 @@ QString getStringFromArt(Art art)
     }
 }
 
-QString getStringVonFilter(Mitglied filter)
+QString toString(Status filter)
 {
     switch (filter) {
     case AlleMitglieder: return QObject::tr("Alle Mitglieder");
