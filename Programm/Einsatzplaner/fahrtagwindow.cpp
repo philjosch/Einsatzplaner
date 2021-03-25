@@ -4,10 +4,10 @@
 #include "export.h"
 #include "coreapplication.h"
 #include "guihelper.h"
+#include "eplexception.h"
 
 #include <QMessageBox>
 #include <QTableWidgetItem>
-#include <eplexception.h>
 
 using namespace EplException;
 
@@ -448,7 +448,7 @@ void FahrtagWindow::on_buttonRemovePerson_clicked()
     ui->buttonRemovePerson->setEnabled(ui->tablePersonen->rowCount() > 0);
 }
 
-FahrtagWindow::EinsatzTableWidgetItem *FahrtagWindow::fuegeInTabelleEin(Einsatz *e, bool block)
+EinsatzTableWidgetItem *FahrtagWindow::fuegeInTabelleEin(Einsatz *e, bool block)
 {
     if (e == nullptr)
         return nullptr;
@@ -629,7 +629,7 @@ QString FahrtagWindow::getBelegungVonKlasseUndZug(Fahrtag *f, int zug, int klass
     return d;
 }
 
-FahrtagWindow::EinsatzTableWidgetItem *FahrtagWindow::fuegeZeileInTabelleEin()
+EinsatzTableWidgetItem *FahrtagWindow::fuegeZeileInTabelleEin()
 {
     bool nehmeOld = nehme;
     nehme = false;

@@ -23,23 +23,6 @@ public:
 
     static bool open(QString path);
 
-    class PersonTableWidgetItem : public QTableWidgetItem {
-    public:
-        PersonTableWidgetItem(Person *p, QString s) : QTableWidgetItem(s)
-        {
-            person = p;
-        }
-        PersonTableWidgetItem(Person *p) : QTableWidgetItem() {
-            person = p;
-        }
-        Person *getPerson() const
-        {
-            return person;
-        }
-
-    protected: Person *person;
-    };
-
 private:
     void constructorMainWindowPersonal();
 

@@ -59,10 +59,10 @@ void PersonalWindow::refresh()
     }
     current = manager->getPersonen(filter);
     // Aktualisiere die Ansichten
-    refreshEinsatzzeiten();
+    refreshTabelle();
     refreshEinzel();
 }
-void PersonalWindow::refreshEinsatzzeiten()
+void PersonalWindow::refreshTabelle()
 {
     // Alte Spalte der Sortierung bestimen
     Qt::SortOrder sortOrder = ui->tabelleGesamt->horizontalHeader()->sortIndicatorOrder();
@@ -317,79 +317,79 @@ void PersonalWindow::on_checkShowGesamt_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Gesamt);
     else anzeige.remove(Category::Gesamt);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 void PersonalWindow::on_checkShowAnzahl_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Anzahl);
     else anzeige.remove(Category::Anzahl);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 void PersonalWindow::on_checkShowTf_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Tf);
     else anzeige.remove(Category::Tf);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 void PersonalWindow::on_checkShowZf_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Zf);
     else anzeige.remove(Category::Zf);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 void PersonalWindow::on_checkShowZub_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Zub);
     else anzeige.remove(Category::Zub);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 void PersonalWindow::on_checkShowService_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Service);
     else anzeige.remove(Category::Service);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 void PersonalWindow::on_checkShowVorbereiten_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::ZugVorbereiten);
     else anzeige.remove(Category::ZugVorbereiten);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 void PersonalWindow::on_checkShowWerkstatt_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Werkstatt);
     else anzeige.remove(Category::Werkstatt);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 void PersonalWindow::on_checkShowBuero_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Buero);
     else anzeige.remove(Category::Buero);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 void PersonalWindow::on_checkShowAusbildung_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Ausbildung);
     else anzeige.remove(Category::Ausbildung);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 void PersonalWindow::on_checkShowInfrastruktur_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Infrastruktur);
     else anzeige.remove(Category::Infrastruktur);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 void PersonalWindow::on_checkShowSonstiges_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Sonstiges);
     else anzeige.remove(Category::Sonstiges);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 void PersonalWindow::on_checkShowKilometer_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Kilometer);
     else anzeige.remove(Category::Kilometer);
-    refreshEinsatzzeiten();
+    refreshTabelle();
 }
 
 void PersonalWindow::on_actionPersonAdd_triggered()

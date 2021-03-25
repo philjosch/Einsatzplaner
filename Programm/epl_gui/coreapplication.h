@@ -16,14 +16,14 @@ public:
     ~CoreApplication();
     static CoreApplication* generateApp(int argc, char *argv[], QString name, QString vers, bool deploy, bool debug, QString hash);
 
-    bool generateWindow();
+    bool generateWindow() const;
 
     bool event(QEvent *event);
 
-    void checkVersion();
+    void checkVersion() const;
 
     void startAutoSave(int delay); // in Minuten
-    void stopAutoSave();
+    void stopAutoSave() const;
 
     void openUnopenedFiles();
 

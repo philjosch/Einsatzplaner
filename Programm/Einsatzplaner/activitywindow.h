@@ -3,9 +3,9 @@
 
 #include "aactivity.h"
 #include "coremainwindow.h"
+#include "guihelper.h"
 
 #include <QMainWindow>
-#include <QTableWidgetItem>
 
 namespace Ui {
 class ActivityWindow;
@@ -18,30 +18,6 @@ class ActivityWindow : public QMainWindow
 public:
     explicit ActivityWindow(CoreMainWindow *parent, AActivity *a);
     ~ActivityWindow();
-
-    class EinsatzTableWidgetItem : public QTableWidgetItem {
-    public:
-        EinsatzTableWidgetItem(QString s) : QTableWidgetItem(s)
-        {
-            einsatz = new Einsatz();
-        }
-        EinsatzTableWidgetItem(Einsatz *e) : QTableWidgetItem() {
-            einsatz = e;
-        }
-
-        Einsatz *getEinsatz() const
-        {
-            return einsatz;
-        }
-        void setEinsatz(Einsatz *value)
-        {
-            einsatz = value;
-        }
-
-    protected:
-        Einsatz *einsatz;
-    };
-
 
 private slots:
     void on_buttonInsert_clicked();

@@ -3,6 +3,7 @@
 
 #include "fahrtag.h"
 #include "coremainwindow.h"
+#include "guihelper.h"
 
 #include <QMainWindow>
 #include <QTableWidgetItem>
@@ -20,54 +21,6 @@ class FahrtagWindow : public QMainWindow
 public:
     explicit FahrtagWindow(CoreMainWindow *parent, Fahrtag *f);
     ~FahrtagWindow();
-
-    class EinsatzTableWidgetItem : public QTableWidgetItem {
-    public:
-        EinsatzTableWidgetItem(QString s) : QTableWidgetItem(s)
-        {
-            einsatz = new Einsatz();
-        }
-        EinsatzTableWidgetItem(Einsatz *e) : QTableWidgetItem()
-        {
-            einsatz = e;
-        }
-
-        Einsatz *getEinsatz() const
-        {
-            return einsatz;
-        }
-        void setEinsatz(Einsatz *value)
-        {
-            einsatz = value;
-        }
-
-    protected:
-        Einsatz *einsatz;
-    };
-    class TableListWidgetItem : public QListWidgetItem {
-    public:
-        TableListWidgetItem(QString s) : QListWidgetItem(s)
-        {
-            tableItem = nullptr;
-        }
-        TableListWidgetItem() : QListWidgetItem()
-        {
-            tableItem = nullptr;
-        }
-
-        EinsatzTableWidgetItem *getTableItem() const
-        {
-            return tableItem;
-        }
-        void setTableItem(EinsatzTableWidgetItem *value)
-        {
-            tableItem = value;
-        }
-
-    protected:
-        EinsatzTableWidgetItem *tableItem;
-    };
-
 
 private slots:
     // Allgemeine Daten

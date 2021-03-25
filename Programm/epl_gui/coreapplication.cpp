@@ -50,7 +50,7 @@ CoreApplication* CoreApplication::generateApp(int argc, char *argv[], QString na
     return a;
 }
 
-bool CoreApplication::generateWindow()
+bool CoreApplication::generateWindow() const
 {
     return (getCoreMainWindows().isEmpty());
 }
@@ -68,7 +68,7 @@ bool CoreApplication::event(QEvent *event)
     return QApplication::event(event);
 }
 
-void CoreApplication::checkVersion()
+void CoreApplication::checkVersion() const
 {
     if (Version::isUpdateVerfuegbar()) {
         Version v = Version::ladeNeusteVersion();
@@ -127,7 +127,7 @@ QList<CoreMainWindow *> CoreApplication::getCoreMainWindows()
     return l;
 }
 
-void CoreApplication::stopAutoSave()
+void CoreApplication::stopAutoSave() const
 {
     // Auto-Save Thread beenden, falls er gestartet wurde
     if (autoSaveTimer != nullptr) {

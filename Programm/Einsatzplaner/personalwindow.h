@@ -20,41 +20,11 @@ public:
     explicit PersonalWindow(QWidget *parent, ManagerPersonal *m);
     ~PersonalWindow();
 
-    class PersonTableWidgetItem : public QTableWidgetItem {
-    public:
-        PersonTableWidgetItem(Person *p, QString s) : QTableWidgetItem(s)
-        {
-            person = p;
-        }
-        PersonTableWidgetItem(Person *p) : QTableWidgetItem() {
-            person = p;
-        }
-        Person *getPerson() const
-        {
-            return person;
-        }
-
-    protected: Person *person;
-    };
-    class PersonListWidgetItem : public QListWidgetItem {
-    public:
-        PersonListWidgetItem(Person *p, QString s) : QListWidgetItem(s)
-        {
-            person = p;
-        }
-        Person *getPerson() const
-        {
-            return person;
-        }
-
-    protected: Person *person;
-    };
-
 public slots:
     void refresh();
 
 private slots:
-    void refreshEinsatzzeiten();
+    void refreshTabelle();
     void refreshEinzel();
 
     // Personalmanager
