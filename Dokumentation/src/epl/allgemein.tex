@@ -1,6 +1,7 @@
 \chapter{Allgemeines}\label{epl:allg}
 Das EPL-Programmpaket dient dazu die Verwaltungstätigkeiten einer Museumseisenbahn zu verbessern.
-Dazu können mit dem Programm \Einsatz Fahrtage und Arbeitseinsätze verwalten werden, sowie die Einsatzzeiten der Mitglieder berechnet werden.
+Dazu können mit dem Programm \Einsatz Fahrtage und Arbeitseinsätze verwalten werden,
+sowie die Einsatzzeiten der Mitglieder erfasst und berechnet werden.
 Fahrtage unterschieden sich von Arbeitseinsätzen dadurch, dass das Personal direkt bestimmten Aufgabengebieten zugeordnet werden kann.
 Ebenso können Reservierungen eingetragen werden.
 Mit dem Programm \Personal kann eine Verwaltung der Mitglieder und Speicherung der entsprechenden Daten durchgeführt werden.
@@ -41,14 +42,36 @@ Danach kann ein anderer Benutzer die Datei wieder uneingeschränkt öffnen.
 
 
 \begin{hinweis}
-  Die oben beschriebene Datei sollte unter normalen Umständen  nicht manuell gelöscht werden, da dies zu Datenverlusten führen kann.
+  Die oben beschriebene Datei sollte unter normalen Umständen nicht manuell gelöscht werden, da dies zu Datenverlusten führen kann.
   Löschen Sie die Datei nur, wenn Sie sicherstellen können, dass keine weiteren Benutzer auf die Datei zugreifen.
 \end{hinweis}
 
 
+\begin{neu}
+\subsection{Passwort-Schutz}\label{epl:allg:datei:passwort}
+Es besteht die Möglichkeit die EPL-Datei mit einem Passwort-Schutz zu speichern.
+Durch diesen können nur berechtigte Personen auf die Daten zugreifen.
+Die Datei wird in diesem Fall verschlüsselt gespeichert.
+
+\paragraph{Schutz einrichten und aufheben}
+Der Schutz kann über den Eintrag \aktion{Eigenschaften} im Menü \aktion{Datei} geändert werden (Siehe auch \cref{fig:einsatz:kalender:upload}).
+Das bisherige Passwort eingeben (sofern vorhanden) und das neue Passwort zweimal eingeben, um Tippfehler zu vermeiden.
+Dann über den Knopf \button{Passwort ändern} die Änderung vornehmen.
+Um einen vorhandenen Passwortschutz zu entfernen,
+die beiden Felder für das neue Passwort frei lassen und mit dem Knopf bestätigen.
+
+
+\begin{hinweis}
+  Ohne das Passwort kann die Datei nicht mehr geöffnet werden und die Daten sind verloren.
+  Stellen Sie deshalb sicher,
+  dass Sie sich das Passwort merken können oder speichern es in einem Passwort-Manager.
+\end{hinweis}
+
+\end{neu}
+
 \section{Installation}\label{epl:allg:installation}
 \subsection{macOS}
-Laden Sie das bereitgestellte Programm herunter und entpacken Sie die \datei{.dmg}-Datei durch einen Doppelklick.
+Laden Sie die bereitgestellte Datei herunter und entpacken Sie die \datei{.dmg}-Datei durch einen Doppelklick.
 Ziehen Sie den Ordner \datei{EPL} zum Installieren in Ihren Programmordner.
 Alternativ können Sie die beiden Programm im Ordner \datei{EPL} auch einzeln in den Programmordner Ihres Systems bewegen.
 
@@ -70,7 +93,7 @@ Alternativ können Sie die beiden Programm im Ordner \datei{EPL} auch einzeln in
 
 \section{Über das Dokument}\label{epl:allg:sonstiges}
 Die Bilder in dieser Dokumentation stammen von Bildern der Entwicklerversionen des Programms für Version
-XXX
+1.7.0
 und aus früheren Versionen.
 Dadurch können Programmobjekte und Funktionen leicht von denen in der veröffentlichten Version abweichen.
 

@@ -8,6 +8,11 @@
 \paragraph{Allgemein}
 Im oberen Bereich des Fensters können die grundlegenden Daten für einen Fahrtag eingegeben werden.
 Eine Markierung als \emph{wichtig} wird beim Export des Fahrtages durch eine optische Hervorhebung gekennzeichnet.
+\begin{neu}
+Ebenso kann die Veranstaltung abgesagt werden.
+In diesem Fall werden für die eingetragenen Personen keine Stunden angerechnet, sodass diese nicht entfernt werden müssen.
+Beim Export werden in diesem Fall nur noch die Rahmendaten und die Bemerkungen ausgegeben.
+\end{neu}
 
 Die Wagenreihung wirkt sich auf die Anzeige der Reservierungen aus und ist für die Personalplanung wichtig.
 Es stehen bereits einige häufige Kombinationen der Wagen zur Verfügung.
@@ -52,10 +57,15 @@ Auch hier gibt es wieder Ausnahmen, wenn einer der folgenden Begriffe in der Bem
 \end{itemize}
 Darüber hinaus können weitere Bemerkungen eingegeben werden, die auch durch Strichpunkte voneinander getrennt sein dürfen.
 
+\begin{neu}
 \begin{hinweis}
-  Wenn eine Person mehrfach eingetragen werden soll, muss sie für verschiedene Tätigkeiten (z.B.\ Tf und Zf) eingetragen werden.
-  Die Zeiten sollten dann für jede Tätigkeit angepasst werden, da diese sonst mehrfach angerechnet werden.
+  Seit Version 1.7 kann eine Person auch mehrfach für eine Aktivität eingetragen werden.
+  Zum Beispiel als Tf für das erste Zugpaar,
+  dann als Zub für das zweite Zugpaar und als Tf für das dritte Zugpaar.
+  Um eine mehrfache Anrechnung von Stunden zu vermeiden,
+  müssen die individuellen Zeiten der Person und der jeweiligen Aktivität manuell angepasst werden.
 \end{hinweis}
+\end{neu}
 
 
 
