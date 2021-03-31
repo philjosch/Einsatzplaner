@@ -11,9 +11,10 @@
 #include <cmath>
 #include <QDesktopServices>
 
-PersonalWindow::PersonalWindow(QWidget *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
+PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
 {
     ui->setupUi(this);
+    parentWindow = parent;
     connect(ui->comboAnzeige, SIGNAL(currentIndexChanged(int)), this, SLOT(refresh()));
     connect(ui->actionAktualisieren, SIGNAL(triggered()), this, SLOT(refresh()));
 
@@ -495,32 +496,33 @@ void PersonalWindow::on_checkDienst_clicked(bool checked)
 void PersonalWindow::on_plainBemerkung_textChanged()
 {
     if (enabled) {
-        aktuellePerson->setBemerkungen(ui->plainBemerkung->toPlainText());
+        aktuellePerson->setBemerkungen(ui->plainBemerkung->toPlainText().replace("\n","<br/>"));
     }
+}
+void PersonalWindow::on_plainAusbildung_textChanged()
+{
+    if (enabled)
+        aktuellePerson->setSonstigeAusbildung(ui->plainAusbildung->toPlainText().replace("\n","<br/>"));
+}
+void PersonalWindow::on_plainBetrieb_textChanged()
+{
+    if (enabled)
+        aktuellePerson->setSonstigeBetrieblich(ui->plainBetrieb->toPlainText().replace("\n","<br/>"));
 }
 
 void PersonalWindow::on_pushDelete_clicked()
 {
     if (enabled) {
-        if (aktuellePerson->getZeiten(Anzahl) > 0) {
-            QMessageBox::information(this, tr("Warnung"), tr("Die ausgewählte Person kann nicht gelöscht werden, da Sie noch bei Aktivitäten eingetragen ist.\nBitte lösen Sie diese Verbindung bevor Sie die Person löschen!"));
-            return;
-        }
-        if (QMessageBox::question(this, tr("Wirklich löschen"), tr("Möchten Sie die Person wirklich unwiderruflich löschen und aus dem System entfernen.\nFür ausgetretene Mitgleider können Sie auch ein Austrittsdatum angeben!")) != QMessageBox::Yes) {
+        if (!parentWindow->loeschenPerson(aktuellePerson)) {
             return;
         }
         enabled = false;
 
-        QListWidgetItem *i = personToItem.value(aktuellePerson);
-        ui->listWidget->takeItem(ui->listWidget->row(i));
-
+        ui->listWidget->takeItem(ui->listWidget->row(personToItem.value(aktuellePerson)));
         personToItem.remove(aktuellePerson);
-
-        manager->removePerson(aktuellePerson);
 
         delete aktuellePerson;
 
-        aktuellePerson = nullptr;
         toggleFields(false);
         refresh();
     }
@@ -614,6 +616,8 @@ void PersonalWindow::showPerson(Person *p)
 
     // Sonstiges
     ui->plainBemerkung->setPlainText(p->getBemerkungen().replace("<br/>","\n"));
+    ui->plainAusbildung->setPlainText(p->getSonstigeAusbildung().replace("<br/>","\n"));
+    ui->plainBetrieb->setPlainText(p->getSonstigeBetrieblich().replace("<br/>","\n"));
 
     // ** Aktivitaeten
     while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
@@ -693,6 +697,8 @@ void PersonalWindow::toggleFields(bool state)
 
     ui->spinKm->setEnabled(state);
     ui->plainBemerkung->setEnabled(state);
+    ui->plainAusbildung->setEnabled(state);
+    ui->plainBetrieb->setEnabled(state);
     ui->pushDelete->setEnabled(state);
 
     ui->tabelle->setEnabled(state);

@@ -10,23 +10,8 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 
-MainWindowPersonal::MainWindowPersonal(QWidget *parent) :
-    CoreMainWindow(parent), ui(new Ui::MainWindowPersonal)
-{
-    constructorMainWindowPersonal();
-}
-MainWindowPersonal::MainWindowPersonal(EplFile *file, QWidget *parent) :
-    CoreMainWindow(file, parent), ui(new Ui::MainWindowPersonal)
-{
-    constructorMainWindowPersonal();
-    updateWindowHeaders();
-    on_actionAktualisieren_triggered();
-}
-MainWindowPersonal::~MainWindowPersonal()
-{
-    delete ui;
-}
-void MainWindowPersonal::constructorMainWindowPersonal()
+MainWindowPersonal::MainWindowPersonal(EplFile *file) :
+    CoreMainWindow(file), ui(new Ui::MainWindowPersonal)
 {
     ui->setupUi(this);
 
@@ -43,6 +28,13 @@ void MainWindowPersonal::constructorMainWindowPersonal()
         if (ui->listAnzeige->item(i)->checkState() == Qt::CheckState::Checked)
             on_listAnzeige_itemChanged(ui->listAnzeige->item(i));
     }
+
+    updateWindowHeaders();
+    on_actionAktualisieren_triggered();
+}
+MainWindowPersonal::~MainWindowPersonal()
+{
+    delete ui;
 }
 
 bool MainWindowPersonal::open(QString path)
@@ -194,24 +186,12 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getTelefon2()));
 
 
-        if (anzeige.contains("Tf")) {
-            if (p->getAusbildungTf())
-                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Ja"));
-            else
-                clmn++;
-        }
-        if (anzeige.contains("Zf")) {
-            if (p->getAusbildungZf())
-                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Ja"));
-            else
-                clmn++;
-        }
-        if (anzeige.contains("Rangierer")) {
-            if (p->getAusbildungRangierer())
-                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Ja"));
-            else
-                clmn++;
-        }
+        if (anzeige.contains("Tf"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getAusbildungTf() ? "Ja" : ""));
+        if (anzeige.contains("Zf"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getAusbildungZf() ? "Ja" : ""));
+        if (anzeige.contains("Rangierer"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getAusbildungRangierer() ? "Ja" : ""));
         if (anzeige.contains("Tauglichkeit")) {
             i = new PersonTableWidgetItem(p);
             i->setData(0, p->getTauglichkeit());
@@ -223,18 +203,10 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getSonstigeAusbildung().replace("<br/>","\n")));
 
 
-        if (anzeige.contains("Mail Zustimmung")) {
-            if (p->getMailOK())
-                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Ja"));
-            else
-                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Nein"));
-        }
-        if (anzeige.contains("Telefon Zustimmung")) {
-            if (p->getTelefonOK())
-                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Ja"));
-            else
-                ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, "Nein"));
-        }
+        if (anzeige.contains("Mail Zustimmung"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getMailOK() ? "Ja": "Nein"));
+        if (anzeige.contains("Telefon Zustimmung"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getTelefonOK() ? "Ja" : "Nein"));
 
 
         if (anzeige.contains("Bemerkung"))

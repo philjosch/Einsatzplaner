@@ -10,29 +10,15 @@
 
 using namespace EplException;
 
-CoreMainWindow::CoreMainWindow(QWidget *parent) : QMainWindow(parent)
-{
-    datei = new EplFile();
-
-    constructorCoreMainWindow();
-}
-CoreMainWindow::CoreMainWindow(EplFile *datei, QWidget *parent) : QMainWindow(parent)
+CoreMainWindow::CoreMainWindow(EplFile *datei) : QMainWindow()
 {
     this->datei = datei;
 
-    constructorCoreMainWindow();
-}
-CoreMainWindow::~CoreMainWindow()
-{
-}
-void CoreMainWindow::constructorCoreMainWindow()
-{
     connect(datei, &EplFile::changed, this, &CoreMainWindow::onDateiWurdeVeraendert);
     // Views
 
     setWindowTitle(tr("Übersicht"));
     updateWindowHeaders();
-    setWindowIcon(QApplication::windowIcon());
     setAttribute(Qt::WA_DeleteOnClose, true);
 
     manager = datei->getManager();
@@ -43,6 +29,9 @@ void CoreMainWindow::constructorCoreMainWindow()
     connect(personal, &ManagerPersonal::personChanged,
             this, &CoreMainWindow::onPersonWurdeBearbeitet);
 }
+CoreMainWindow::~CoreMainWindow()
+{
+}
 
 
 void CoreMainWindow::autoSave()
@@ -50,21 +39,21 @@ void CoreMainWindow::autoSave()
     datei->autoSave();
 }
 
-void CoreMainWindow::loeschenPerson(Person *p)
+bool CoreMainWindow::loeschenPerson(Person *p)
 {
     if (p->getZeiten(Anzahl) > 0) {
         QMessageBox::information(this, tr("Warnung"),
                                  tr("%1 kann nicht gelöscht werden, da er/sie noch bei Aktivitäten eingetragen ist.\nBitte lösen Sie diese Verbindung und versuchen es erneut!").arg(p->getName()));
-        return;
+        return false;
     }
 
     if (QMessageBox::question(this, tr("Wirklich löschen"),
                               tr("Möchten Sie %1 wirklich unwiderruflich löschen und aus dem System entfernen?\nFür ausgetretene Mitglieder können Sie auch ein Austrittsdatum angeben!").arg(p->getName())) != QMessageBox::Yes) {
-        return;
+        return false;
     }
 
     onPersonWirdEntferntWerden(p);
-    personal->removePerson(p);
+    return personal->removePerson(p);
 }
 void CoreMainWindow::loeschenAktivitaet(AActivity *a)
 {

@@ -17,17 +17,13 @@ class CoreMainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    CoreMainWindow(QWidget *parent = nullptr);
-    CoreMainWindow(EplFile *datei, QWidget *parent = nullptr);
+    CoreMainWindow(EplFile *datei = new EplFile());
     ~CoreMainWindow();
-
-private:
-    void constructorCoreMainWindow();
 
 public slots:
     void autoSave();
 
-    void loeschenPerson(Person *p);
+    bool loeschenPerson(Person *p);
     void loeschenAktivitaet(AActivity *a);
 
 protected slots:

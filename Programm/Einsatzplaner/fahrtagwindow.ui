@@ -1849,7 +1849,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Name hinzufügen</string>
+           <string>Person hinzufügen</string>
           </property>
          </widget>
         </item>
@@ -1865,7 +1865,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Name entfernen</string>
+           <string>Person entfernen</string>
           </property>
          </widget>
         </item>

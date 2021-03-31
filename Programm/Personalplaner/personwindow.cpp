@@ -347,7 +347,6 @@ void PersonWindow::on_comboBeitragsart_currentIndexChanged(int index)
     ui->lineIBAN->setEnabled(ba != Person::Beitragsart::FamilienBeitragNutzer);
     ui->lineBank->setEnabled(ba != Person::Beitragsart::FamilienBeitragNutzer);
     ui->labelKonto->setText(ba != Person::Beitragsart::FamilienBeitragNutzer? "Kontoinhaber":"Zahler");
-
 }
 
 void PersonWindow::on_lineIBAN_textChanged(const QString &arg1)

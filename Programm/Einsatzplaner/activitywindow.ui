@@ -291,14 +291,14 @@ unbekannt</string>
        <bool>false</bool>
       </property>
       <property name="text">
-       <string>Name entfernen</string>
+       <string>Person entfernen</string>
       </property>
      </widget>
     </item>
     <item row="6" column="0" colspan="3">
      <widget class="QPushButton" name="buttonInsert">
       <property name="text">
-       <string>Name hinzufügen</string>
+       <string>Person hinzufügen</string>
       </property>
      </widget>
     </item>

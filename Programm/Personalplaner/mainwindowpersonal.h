@@ -17,16 +17,10 @@ class MainWindowPersonal : public CoreMainWindow
     Q_OBJECT
 
 public:
-    MainWindowPersonal(QWidget *parent = nullptr);
-    MainWindowPersonal(EplFile *file, QWidget *parent = nullptr);
+    MainWindowPersonal(EplFile *file = new EplFile());
     ~MainWindowPersonal();
 
     static bool open(QString path);
-
-private:
-    void constructorMainWindowPersonal();
-
-
 
 protected slots:
     //** Vererbte Methoden von CoreMainWindow

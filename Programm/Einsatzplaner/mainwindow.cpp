@@ -10,50 +10,7 @@
 #include <QMessageBox>
 #include <QJsonArray>
 
-MainWindow::MainWindow(QWidget *parent) :
-    CoreMainWindow(parent), ui(new Ui::MainWindow)
-{
-    constructorMainWindow();
-}
-MainWindow::MainWindow(EplFile *file, QWidget *parent) :
-    CoreMainWindow(file, parent), ui(new Ui::MainWindow)
-{
-    constructorMainWindow();
-
-    if (datei->istSchreibgeschuetzt()) {
-        setWindowTitle(tr("Übersicht - Schreibgeschützt"));
-    }
-
-
-    QDate currentDate = datei->getAnzeigeDatum();
-    // Alle aktivitäten in die seitenleiste eintragen
-    for(AActivity *a: manager->getActivities()) {
-        QListWidgetItem *i = new QListWidgetItem("");
-        setListItem(i, a);
-        ui->listWidget->insertItem(ui->listWidget->count(), i);
-        listitem.insert(a, i);
-        itemToList.insert(i, a);
-    }
-    // an das gespeicherte Datum gehen
-    ui->dateSelector->setDate(currentDate);
-    ui->dateSelector->repaint();
-    showDate(currentDate);
-
-    personalfenster->refresh();
-
-    //- Hier prüfen, ob Personalfenster angezeigt wurde und wiederherstellen der Fensterpositionen
-    EplFile::FensterPosition kalender = datei->getPositionKalender();
-    this->setGeometry(kalender.x, kalender.y, kalender.width, kalender.height);
-    // Personalfenster
-    EplFile::FensterPosition personal = datei->getPositionPersonal();
-    personalfenster->setGeometry(personal.x, personal.y, personal.width, personal.height);
-    personalfenster->hide();
-}
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-void MainWindow::constructorMainWindow()
+MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     // Modell
@@ -92,7 +49,38 @@ void MainWindow::constructorMainWindow()
         connect(c, SIGNAL(clickedItem(AActivity*)), this, SLOT(openAActivity(AActivity*)));
         connect(c, SIGNAL(addActivity(QDate)), this, SLOT(newActivity(QDate)));
     }
-    on_buttonToday_clicked();
+
+    if (datei->istSchreibgeschuetzt()) {
+        setWindowTitle(tr("Übersicht - Schreibgeschützt"));
+    }
+
+    QDate currentDate = datei->getAnzeigeDatum();
+    // Alle aktivitäten in die seitenleiste eintragen
+    for(AActivity *a: manager->getActivities()) {
+        QListWidgetItem *i = new QListWidgetItem("");
+        setListItem(i, a);
+        ui->listWidget->insertItem(ui->listWidget->count(), i);
+        listitem.insert(a, i);
+        itemToList.insert(i, a);
+    }
+    // an das gespeicherte Datum gehen
+    ui->dateSelector->setDate(currentDate);
+    ui->dateSelector->repaint();
+    showDate(currentDate);
+
+    personalfenster->refresh();
+
+    //- Hier prüfen, ob Personalfenster angezeigt wurde und wiederherstellen der Fensterpositionen
+    EplFile::FensterPosition kalender = datei->getPositionKalender();
+    this->setGeometry(kalender.x, kalender.y, kalender.width, kalender.height);
+    // Personalfenster
+    EplFile::FensterPosition personal = datei->getPositionPersonal();
+    personalfenster->setGeometry(personal.x, personal.y, personal.width, personal.height);
+    personalfenster->hide();
+}
+MainWindow::~MainWindow()
+{
+    delete ui;
 }
 
 bool MainWindow::open(QString path)

@@ -7,6 +7,7 @@
 #include <QListWidgetItem>
 #include <QPrinter>
 #include <QTableWidgetItem>
+#include <coremainwindow.h>
 
 namespace Ui {
 class PersonalWindow;
@@ -17,7 +18,7 @@ class PersonalWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit PersonalWindow(QWidget *parent, ManagerPersonal *m);
+    explicit PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m);
     ~PersonalWindow();
 
 public slots:
@@ -92,6 +93,8 @@ private slots:
     void on_checkDienst_clicked(bool checked);
 
     void on_plainBemerkung_textChanged();
+    void on_plainAusbildung_textChanged();
+    void on_plainBetrieb_textChanged();
 
     void on_pushDelete_clicked();
 
@@ -120,13 +123,11 @@ private:
     Ui::PersonalWindow *ui;
     ManagerPersonal *manager;
 
+    CoreMainWindow *parentWindow;
     Person *aktuellePerson;
-
     QList<Person*> current;
     Status filter;
-
     QHash<Person*, QListWidgetItem*> personToItem;
-
     QSet<Category> anzeige;
 
     bool enabled; // Gibt an, ob das Formular aktiviert ist oder nicht, und ob Änderungen übernommen werden

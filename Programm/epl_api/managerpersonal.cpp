@@ -145,7 +145,6 @@ Person *ManagerPersonal::newPerson()
 
 bool ManagerPersonal::removePerson(Person *p)
 {
-    // TODO: pruefen, ob Person wirklich geloescht werden kann/soll wg. Eintrag Aktivitaeten
     if (personen.contains(p)) {
         personen.removeAll(p);
         emit changed();

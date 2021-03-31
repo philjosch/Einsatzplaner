@@ -20,7 +20,7 @@ CoreApplication::CoreApplication(int &argc, char **argv) : QApplication(argc, ar
 
     autoSaveTimer = nullptr;
 
-    setAttribute(Qt::AA_UseHighDpiPixmaps);
+//    setAttribute(Qt::AA_UseHighDpiPixmaps);
 }
 
 CoreApplication::~CoreApplication()
