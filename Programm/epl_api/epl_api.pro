@@ -9,6 +9,9 @@ CONFIG += staticlib
 
 CONFIG += c++11
 CONFIG += console
+win32 {
+    CONFIG -= debug_and_release debug_and_release_target
+}
 
 QT       += core printsupport network
 

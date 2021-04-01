@@ -52,8 +52,8 @@ void Einstellungen::setReihenfolgeVorNach(ReihenfolgeSortierung value)
 
 QString Einstellungen::getLastPath()
 {
-    if (SETTINGS.contains("io/lastpath")) {
-        return SETTINGS.value("io/lastpath").toString();
+    if (QSettings().contains("io/lastpath")) {
+        return QSettings().value("io/lastpath").toString();
     } else {
         return QDir::homePath();
     }
@@ -65,8 +65,8 @@ void Einstellungen::setLastPath(QString value)
 
 QStringList Einstellungen::getLastUsed()
 {
-    if (SETTINGS.contains("io/lastused"))
-        return SETTINGS.value("io/lastused").toStringList();
+    if (QSettings().contains("io/lastused"))
+        return QSettings().value("io/lastused").toStringList();
     else
         return QStringList();
 }

@@ -65,6 +65,8 @@ PRE_TARGETDEPS +=  $$PWD/crypto $$PWD/epl_api $$PWD/epl_gui
 # PLATTFORM #
 #############
 win32 {
+    CONFIG -= debug_and_release debug_and_release_target
+
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
     QMAKE_TARGET_COMPANY = Philipp Schepper
     QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2021

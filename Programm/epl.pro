@@ -21,3 +21,7 @@ RESOURCES += $$PWD/resources.qrc \
     $$PWD/../Icon/appicon.qrc
 
 OTHER_FILES += Info.plist
+
+win32 {
+    CONFIG -= debug_and_release debug_and_release_target
+}
