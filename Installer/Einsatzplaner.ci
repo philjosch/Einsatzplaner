@@ -3,14 +3,14 @@
    <autoclose >0</>
    <compname >Philipp Schepper</>
    <produrl >http://epl.philipp-schepper.de</>
-   <ver >Version 1.6.2</>
+   <ver >Version 1.7.0</>
    <supurl ></>
    <updurl ></>
    <dlgfont >verdana</>
    <headlogo >default - 1</>
    <dlgfontsize >s8</>
    <output >C:\Users\philipp\Desktop</>
-   <exename >einsatzplaner-setup-v1-6-2.exe</>
+   <exename >epl-setup-v1-7-0.exe</>
    <beffile ></>
    <aftfile ></>
    <uninclude >1</>
@@ -23,7 +23,7 @@
    <volpattern >disk%i.pak</>
    <password ></>
    <progname >Einsatzplaner</>
-   <appname ></>
+   <appname >EPL-Programmpaket</>
    <bl ></>
    <blurl ></>
    <unpath >inst</>
@@ -63,6 +63,7 @@
                   <resvar >ischeck</>
                   <not >0</>
                   <msg ></>
+                  <if ></>
                </>
                <_ id = dlglang disabled = 1 >
                   <desc ></>
@@ -81,7 +82,7 @@
                   <desc ></>
                   <buttons >auto</>
                   <design >left</>
-                  <headlogo >C:\Users\philipp\Documents\GitHub\Einsatzplaner\Icon\keks.ico</>
+                  <headlogo >C:\Users\philipp\Documents\GitHub\Einsatzplaner\Icon\EPL.ico</>
                   <varlist >
                      <rows ></>
                   </>
@@ -151,7 +152,7 @@
                                  <comm ></>
                               </>
                               <_ >
-                                 <filename >C:\Users\philipp\Documents\GitHub\Einsatzplaner\Icon\keks.ico</>
+                                 <filename >C:\Users\philipp\Documents\GitHub\Einsatzplaner\Icon\EPL.ico</>
                                  <recurse >0</>
                                  <justfile >0</>
                                  <emptydir >0</>
@@ -159,8 +160,16 @@
                                  <comm ></>
                               </>
                               <_ >
-                                 <filename >C:\Users\philipp\Desktop\DLLS</>
-                                 <recurse >1</>
+                                 <filename >C:\Users\philipp\Documents\GitHub\Einsatzplaner\Icon\Einsatzplaner.ico</>
+                                 <recurse >0</>
+                                 <justfile >0</>
+                                 <emptydir >0</>
+                                 <exclude ></>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <filename >C:\Users\philipp\Documents\GitHub\Einsatzplaner\Icon\Personalplaner.ico</>
+                                 <recurse >0</>
                                  <justfile >0</>
                                  <emptydir >0</>
                                  <exclude ></>
@@ -178,7 +187,7 @@
                         <shfile >#lunname#</>
                         <path >inst</>
                         <file >uninstall.exe</>
-                        <icon >keks.ico</>
+                        <icon >EPL.ico</>
                         <cmdline ></>
                         <comment ></>
                         <work >sys</>
@@ -197,7 +206,19 @@
                                  <path >inst</>
                                  <file >Einsatzplaner.exe</>
                                  <cmdline ></>
-                                 <icon >keks.ico</>
+                                 <icon >Einsatzplaner.ico</>
+                                 <work >inst</>
+                                 <defwork ></>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <shpath >prog</>
+                                 <shfile >Personalplaner</>
+                                 <path >inst</>
+                                 <file >Personalplaner.exe</>
+                                 <cmdline ></>
+                                 <icon >Personalplaner.ico</>
                                  <work >inst</>
                                  <defwork ></>
                                  <if ></>
@@ -209,7 +230,19 @@
                                  <path >inst</>
                                  <file >Einsatzplaner.exe</>
                                  <cmdline ></>
-                                 <icon >keks.ico</>
+                                 <icon >Einsatzplaner.ico</>
+                                 <work >inst</>
+                                 <defwork ></>
+                                 <if ></>
+                                 <comm ></>
+                              </>
+                              <_ >
+                                 <shpath >qlaunch</>
+                                 <shfile >Personalplaner</>
+                                 <path >inst</>
+                                 <file >Personalplaner.exe</>
+                                 <cmdline ></>
+                                 <icon >Personalplaner.ico</>
                                  <work >inst</>
                                  <defwork ></>
                                  <if ></>
@@ -221,7 +254,7 @@
                                  <path >inst</>
                                  <file >Einsatzplaner.exe</>
                                  <cmdline ></>
-                                 <icon >keks.ico</>
+                                 <icon >Einsatzplaner.ico</>
                                  <work >inst</>
                                  <defwork ></>
                                  <if ></>
@@ -272,7 +305,7 @@
                   <if ></>
                </>
             </>
-            <icofile >C:\Users\philipp\Documents\GitHub\Einsatzplaner\Icon\keks.ico</>
+            <icofile >C:\Users\philipp\Documents\GitHub\Einsatzplaner\Icon\EPL.ico</>
             <resfile ></>
             <leftimg >disk-install</>
             <caption ></>

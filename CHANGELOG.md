@@ -1,5 +1,30 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 16. Oktober 2020
+Stand: 02. April 2021
+
+## Version 1.7.0 – 2021-04-02
+### Neu
+- Programm in Einsatzplaner und Personalplaner aufgeteilt und neue Icons eingeführt
+- Absagen von Fahrtagen und Arbeitseinsätzen
+- Verschiedene weitere Personaldaten eingeführt (u.a. Persönliche Daten, Mitgliedschaft)
+- Eine Person kann mehrfach in eine Aktivität eingetragen werden, auch bei gleicher Kategorie
+- Datei kann verschlüsselt und mit Passwortschutz gespeichert werden
+
+### Verbessert
+- Auch eine leere Liste mit Aktivitäten kann ausgegeben werden
+- Toolbar eingeführt, um auf wichtige Funktionen zuzugreifen
+- Arbeitseinsätze können auch als ``wichtig`` markiert werden
+- Export der Mitgliederdaten kann individualisiert werden (nur ausgewählte Daten werden ausgegeben)
+- Gleiche Einfärbung von Aktivitäten im Programm und für den Export
+- Datei wird komprimiert gespeichert, um Speicherplatz zu sparen
+- Diverse interne Verbesserungen und Optimierungen
+
+### Fehlerbehebungen
+- Das Programm konnte abstürzen, wenn eine Aktivität gelöscht wurde
+- Die Datei mit den Stammdaten konnte nicht geöffnet werden
+- Die hochgeladene Datei war unter Umständen leer bzw. fehlerhaft
+- Diverse kleinere Fehlerbehebungen
+
+---
 
 ## Version 1.6.2 – 2020-10-16
 ### Neu

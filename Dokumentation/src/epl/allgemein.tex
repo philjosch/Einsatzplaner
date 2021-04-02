@@ -1,0 +1,101 @@
+\chapter{Allgemeines}\label{epl:allg}
+Das EPL-Programmpaket dient dazu die Verwaltungstätigkeiten einer Museumseisenbahn zu verbessern.
+Dazu können mit dem Programm \Einsatz Fahrtage und Arbeitseinsätze verwalten werden,
+sowie die Einsatzzeiten der Mitglieder erfasst und berechnet werden.
+Fahrtage unterschieden sich von Arbeitseinsätzen dadurch, dass das Personal direkt bestimmten Aufgabengebieten zugeordnet werden kann.
+Ebenso können Reservierungen eingetragen werden.
+Mit dem Programm \Personal kann eine Verwaltung der Mitglieder und Speicherung der entsprechenden Daten durchgeführt werden.
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=\textwidth]{../../Icon/EPL.png}
+    \caption{Logo von \EPL}
+  \end{subfigure}
+
+  \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=\textwidth]{../../Icon/Einsatzplaner.png}
+    \caption{Logo des \Einsatz}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \includegraphics[width=\textwidth]{../../Icon/Personalplaner.png}
+    \caption{Logo des \Personal}
+  \end{subfigure}
+  \caption{Die Logos des Programmpakets}
+\end{figure}
+
+
+\section{Die EPL-Datei}\label{epl:allg:datei}
+
+\subsection{Schreibschutz}\label{epl:allg:datei:schreibschutz}
+Beim Öffnen einer Datei \datei{X.ako} wird automatisch eine neue Datei mit dem Namen \datei{X.ako.lock} erstellt.
+Durch diese Datei wird sichergestellt, dass nicht mehrere Personen gleichzeitig an der Datei \datei{X.ako} arbeiten.
+Wird eine bereits geöffnete Datei erneut geöffnet (vom gleichen oder fremden Benutzer),
+kann sie nur schreibgeschützt geöffnet werden und Änderungen können nicht gespeichert werden.
+Beim Schließen einer Datei bzw.\ beim Beenden des Programms wird die Datei \datei{X.ako.lock} automatisch wieder gelöscht.
+Danach kann ein anderer Benutzer die Datei wieder uneingeschränkt öffnen.
+
+\begin{hinweis}
+  Der Schreibschutz steht nur effektiv zur Verfügung, wenn alle Beteiligten Version 1.6.2 oder neuer des Einsatzplaners verwendet.
+  Wird eine frühere Version verwendet, kann die Datei allerdings weiterhin uneingeschränkt geöffnet und bearbeitet werden!
+\end{hinweis}
+
+
+\begin{hinweis}
+  Die oben beschriebene Datei sollte unter normalen Umständen nicht manuell gelöscht werden, da dies zu Datenverlusten führen kann.
+  Löschen Sie die Datei nur, wenn Sie sicherstellen können, dass keine weiteren Benutzer auf die Datei zugreifen.
+\end{hinweis}
+
+
+\begin{neu}
+\subsection{Passwort-Schutz}\label{epl:allg:datei:passwort}
+Es besteht die Möglichkeit die EPL-Datei mit einem Passwort-Schutz zu speichern.
+Durch diesen können nur berechtigte Personen auf die Daten zugreifen.
+Die Datei wird in diesem Fall verschlüsselt gespeichert.
+
+\paragraph{Schutz einrichten und aufheben}
+Der Schutz kann über den Eintrag \aktion{Eigenschaften} im Menü \aktion{Datei} geändert werden (Siehe auch \cref{fig:einsatz:kalender:upload}).
+Das bisherige Passwort eingeben (sofern vorhanden) und das neue Passwort zweimal eingeben, um Tippfehler zu vermeiden.
+Dann über den Knopf \button{Passwort ändern} die Änderung vornehmen.
+Um einen vorhandenen Passwortschutz zu entfernen,
+die beiden Felder für das neue Passwort frei lassen und mit dem Knopf bestätigen.
+
+
+\begin{hinweis}
+  Ohne das Passwort kann die Datei nicht mehr geöffnet werden und die Daten sind verloren.
+  Stellen Sie deshalb sicher,
+  dass Sie sich das Passwort merken können oder speichern es in einem Passwort-Manager.
+\end{hinweis}
+
+\end{neu}
+
+\section{Installation}\label{epl:allg:installation}
+\subsection{macOS}
+Laden Sie die bereitgestellte Datei herunter und entpacken Sie die \datei{.dmg}-Datei durch einen Doppelklick.
+Ziehen Sie den Ordner \datei{EPL} zum Installieren in Ihren Programmordner.
+Alternativ können Sie die beiden Programm im Ordner \datei{EPL} auch einzeln in den Programmordner Ihres Systems bewegen.
+
+\subsection{Windows}
+\begin{itemize}
+  \item Laden Sie den Installer für Windows herunter.
+  Öffnen Sie das Programm, und folgen dem Installationsprogramm.
+  \item Merken Sie sich den Pfad, an dem Sie den Einsatzplaner installieren, z.B.\ \datei{C:{\bslash}Program Files (x86){\bslash}Einsatzplaner}.
+  \item Wenn Sie den Einsatzplaner das erste Mal installieren,
+  bzw.\ beim Start eine Fehlermeldung erhalten,
+  navigieren Sie zu dem notierten Ordner.
+  \item Dort finden Sie eine Datei \datei{vc\_redist.x64}.
+  Öffnen Sie diese und führen die Installation von \enquote{Microsoft Visual C++ Redistributable} durch.
+  Hierdurch werden die fehlenden Dateien auf Ihrem Computer ergänzt.
+  \item Die Programme können jetzt verwendet werden.
+\end{itemize}
+
+
+
+\section{Über das Dokument}\label{epl:allg:sonstiges}
+Die Bilder in dieser Dokumentation stammen von Bildern der Entwicklerversionen des Programms für Version
+1.7.0
+und aus früheren Versionen.
+Dadurch können Programmobjekte und Funktionen leicht von denen in der veröffentlichten Version abweichen.
+
+Eine aktuelle Version des Programms und weitere Informationen finden Sie der Webseite \url{http://epl.philipp-schepper.de}
+oder im Repository unter \url{https://github.com/philjosch/Einsatzplaner}.

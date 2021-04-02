@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>at-symbol.svg</file>
+        <file>document.svg</file>
+        <file>minus-solid.svg</file>
+        <file>printer.svg</file>
+        <file>reload.svg</file>
+        <file>save-disk.svg</file>
+        <file>travel-train.svg</file>
+        <file>upload.svg</file>
+        <file>user-group.svg</file>
+        <file>wrench.svg</file>
+        <file>user-add.svg</file>
+    </qresource>
+</RCC>

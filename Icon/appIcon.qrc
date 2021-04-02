@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/appIcon">
+        <file>Einsatzplaner.icns</file>
+        <file>Einsatzplaner.ico</file>
+        <file>Einsatzplaner.png</file>
+        <file>EPL.icns</file>
+        <file>EPL.ico</file>
+        <file>EPL.png</file>
+        <file>EplDocIcon.icns</file>
+        <file>Personalplaner.icns</file>
+        <file>Personalplaner.ico</file>
+        <file>Personalplaner.png</file>
+    </qresource>
+</RCC>

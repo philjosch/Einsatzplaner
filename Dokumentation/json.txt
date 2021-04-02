@@ -8,29 +8,48 @@ personal/ (object)	-> hier werden die Personen gesichert
 	personen (array)	-> hier werden die Personen gelistet durch jeweils ein (object)
 		# Stammdaten
 		id (string)		-> Interne Nummer zur Repräsentation der Person, wird nicht als eigenes Datum ausgegeben
-		nummer (int)        	-> eindeutige Mitgliedsnummer
+
 		vorname (string)	-> Vorname der Person
 		nachname(string)	-> Nachname der Person
 		geburtstag (date) 	-> Geburtsdatum
+		anrede (string)		-> Anrede der Person (z.B. Herr, Frau, Sehr geehrte Damen und Herren); ab Version 1.7
+		geschlecht (int)	-> Geschlecht der Person (männlich, weiblich, divers, unbekannt/sonstiges, juristische Person); ab Version 1.7
+		beruf (string)		-> Erlernter Beruf
+
+		# Mitgliedschaft
+		nummer (int)		-> eindeutige Mitgliedsnummer
 		eintritt (date)		-> Eintrittsdatum
 		aktiv (bool)		-> Gibt an, ob die Person aktiv ist
 		austritt (date)		-> Austrittsdatum, bzw. leer (=''), wenn nicht ausgetreten
-		# Betriebsdienstausbildung
+		beitragsart (int)	-> Gibt an, welcher Beitrag bezahlt wird; ab Version 1.7
+		iban (string)		-> Gibt die IBAN an, von der der Mitgliedsbeitrag abgebucht wird; ab Version 1.7
+		bank (string)		-> Enthält den Namen der Bank, bei der der Mitgliedsbeitrag eingezogen wird; ab Version 1.7
+		kontoinhaber (string)	-> Enthält den Namen des Kontoinhabers, der Person, die den Beitrag leistet; ab Version 1.7
+					   Enthält die id des Zahlers bei einer mitgenutzten Familienmitgliedschaft; ab Version 1.7
+
+		# Ausbildung
 		ausTf (bool)		-> Ausbildung Lokführer
 		ausZf (bool)		-> Ausbildung Zugführer
 		ausRang (bool)		-> Ausbildung Rangierer
 		tauglichkeit (date)	-> Tag, bis zu dem die Betriebsdiensttauglichkeit gilt
-		# Kommunikationsdaten
+		sonstBetrieb (string)	-> Freitext für sonstige betriebliche Ausbildungen und Unterweisungen oder Bemerkungen; ab Version 1.7
+		sonstigeAusb (string)	-> Freitextfeld für nichtbetriebliche Ausbildungen, Unterweisungen oder Bemerkungen (z.B Hygienebescheinigung); ab Version 1.7
+
+		# Kontakt
 		plz (string)
 		ort (string)
 		strasse (string)	-> Enthält auch die Hausnummer
+		strecke	(int)		-> Strecke von Zuhause zum Bahnhof
 		mail (string)		-> Mail-Adresse des Mitglieds
-		mailOK (bool)		-> Einverständnis zum Veröffentlichen der Mail-Adresse
 		tel (string)		-> Telefonnummer
-		telOK (bool)		-> Einverständnis zum Veröffentlichen der Telefonnummer
+		tel2 (string)		-> Zweite Telefonnummer (z.B Mobil, Dienstlich oder Fax); ab Version 1.7
+
+		# Datenschutz
+		mailOK (bool)		-> Einverständnis zum Veröffentlichen der Mail-Adresse
+		telOK (bool)		-> Einverständnis zum Veröffentlichen der Telefonnummern
+#		bildOK (bool)		-> Einverständnis zum Veröffentlichen von Bildern (extern); ab Version 1.7
+		
 		# Sonstige Daten
-		strecke	(int)		-> strecke von zuhause zum Bahnhof
-		beruf (string)		-> Erlernter Beruf
 		bemerkung (string)	-> Optionale Bemerkung
 		additionalKeys (array)	-> Liste mit den Kategorien für zusätzliche Werte
 			(int)		-> Zugehörige Integer der Kategorie AActivity::Category
@@ -58,10 +77,11 @@ activities (array)	-> die einzelnen Aktivitäten, gespeichert in Objekten. Bis V
 		aufgabe (string)
 		bemerkung (string)
 	personalBenoetigt (bool)
+	wichtig (bool)			-> Wurde aus Fahrtag hierhin verschoben; ab Version 1.7
+	abgesagt (bool)			-> Wahr genau dann, wenn die Aktivität abgesagt wurde / worden ist; ab Version 1.7;
 
 	# Für Fahrtag kommt folgendes hinzu
 	zeitTf (time)
-	wichtig (bool)
 	benoetigeTf (int)		-> Bis Version <1.6 bool als Typ 
 	benoetigeZf (bool)
 	benoetigeZub (bool)
@@ -109,5 +129,13 @@ settings/			-> Speichert alle Einstellungen zur Datei
 
 general/ (object)
 	version (string)	-> Version die mindestens benötigt wird, um die Datei zu öffnen
+	komprimiert (bool)	-> Gibt an, ob die Daten komprimiert gespeichert wurden (ab Version 1.7)
+	encrypted (bool)	-> Gibt an, ob die Daten verschlüsselt wurden, muss dann auch komprimiert sein (ab Version 1.7)
 
+crypto (object)			-> Speichert alle Daten bezüglich einer Verschlüsselung der Datei, nur verwendet, wenn general/encrypted aus true gesetzt ist bzw. vorhanden ist (ab Version 1.7)
+	modus (string)		-> Das verwendete Verfahren als String: QtAES.
+	salt (string)		-> Gibt das Salt an, der für das Passwort verwendet wurde
+	iv (string)		-> Speichert den zufälligen Teil des Initialisierungvektors
+
+payload (string)		-> Speichert, sofern benutzt die Daten als Base64 kodiert, je nach Angabe unter general/... sind die Daten komprimiert oder zusätzlich noch verschlüsselt (ab Version 1.7)
 
