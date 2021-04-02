@@ -9,7 +9,7 @@
 # VERSION #
 ###########
 VERSION = 1.7.0
-DEPLOYED = false
+DEPLOYED = true
 
 ####################
 # QT EINSTELLUNGEN #
