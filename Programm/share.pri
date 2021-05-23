@@ -8,8 +8,8 @@
 ###########
 # VERSION #
 ###########
-VERSION = 1.7.0
-DEPLOYED = true
+VERSION = 1.7.1
+DEPLOYED = false
 
 ####################
 # QT EINSTELLUNGEN #

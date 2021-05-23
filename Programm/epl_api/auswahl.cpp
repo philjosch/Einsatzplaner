@@ -49,7 +49,7 @@ QDateTime Auswahl::getBis() const
     case BisEndeDesJahres:
         return QDate(ref.year(), 12, 31).endOfDay();
     case BisAlle:
-        return QDate(9999, 31, 12).endOfDay();
+        return QDate(9999, 12, 31).endOfDay();
     case BisEndeNaechsterWoche:
         ref = QDate::currentDate().addDays(7); // naechste Woche
         return ref.addDays(7-ref.dayOfWeek()).endOfDay(); // Ende der Woche
