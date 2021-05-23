@@ -35,7 +35,11 @@ AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
     datum = date;
     ort = "";
     zeitAnfang = QTime(10, 0);
-    zeitEnde = QTime(16, 0);
+    if (date.month() <= 3 || date.month() >= 11) {
+        zeitEnde = QTime(16, 0);
+    } else {
+        zeitEnde = QTime(18, 0);
+    }
     zeitenUnbekannt = false;
     anlass = "";
     bemerkungen = "";
