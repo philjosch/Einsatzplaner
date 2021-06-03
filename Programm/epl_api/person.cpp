@@ -32,39 +32,39 @@ QString Person::getKopfTabelleListeHtml(QSet<QString> data)
                    "<table cellspacing='0' width='100%'><thead><tr>";
     if (data.contains("Nummer")
             || data.contains("Eintritt")
-            || data.contains("Austritt"))
+            || data.contains("Austritt") || data.isEmpty())
         kopf += "<th>Mitgliedsdaten</th>";
     if (data.contains("Vorname")
             || data.contains("Nachname")
             || data.contains("Geburtsdatum")
             || data.contains("Anrede")
             || data.contains("Geschlecht")
-            || data.contains("Beruf"))
+            || data.contains("Beruf") || data.isEmpty())
         kopf += "<th>Persönliches</th>";
     if (data.contains("Beitragsart")
             || data.contains("IBAN")
             || data.contains("Bank")
-            || data.contains("Kontoinhaber"))
+            || data.contains("Kontoinhaber") || data.isEmpty())
         kopf += "<th>Beitrag</th>";
     if (data.contains("Straße")
             || data.contains("PLZ")
             || data.contains("Ort")
-            || data.contains("Strecke"))
+            || data.contains("Strecke") || data.isEmpty())
         kopf += "<th>Anschrift</th>";
     if (data.contains("Mail")
             || data.contains("Telefon")
-            || data.contains("Telefon2"))
+            || data.contains("Telefon2") || data.isEmpty())
         kopf += "<th>Kontakt</th>";
     if (data.contains("Tf")
             || data.contains("Zf")
             || data.contains("Rangierer")
             || data.contains("Tauglichkeit")
             || data.contains("Bemerkung Betrieb.")
-            || data.contains("Sonst. Ausbildung"))
+            || data.contains("Sonst. Ausbildung") || data.isEmpty())
         kopf += "<th>Ausbildung</th>";
     if (data.contains("Mail Zustimmung")
             || data.contains("Telefon Zustimmung")
-            || data.contains("Bemerkung"))
+            || data.contains("Bemerkung") || data.isEmpty())
         kopf += "<th>Sonstiges</th>";
     return kopf + "</tr></thead><tbody>";
 }
