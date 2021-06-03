@@ -1305,21 +1305,17 @@ void Person::setBank(const QString &value)
 
 QString Person::getKontoinhaber() const
 {
-    if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
-        Person *pers = manager->getPersonFromID(kontoinhaber);
-        if (pers != nullptr)
-            return pers->getName();
-    }
+    Person *pers = manager->getPersonFromID(kontoinhaber);
+    if (pers != nullptr)
+        return pers->getName();
     return kontoinhaber;
 }
 void Person::setKontoinhaber(const QString &value)
 {
+    kontoinhaber = value;
     Person *zahler = manager->getPerson(value);
     if (zahler != nullptr) {
         kontoinhaber = zahler->getId();
-        qDebug() << "zahler hinterlegt";
-    } else {
-        kontoinhaber = value;
     }
     emit changed();
 }
