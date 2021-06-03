@@ -62,6 +62,7 @@ private slots:
     void on_checkShowGesamt_clicked(bool checked);
     void on_checkShowAnzahl_clicked(bool checked);
     void on_checkShowTf_clicked(bool checked);
+    void on_checkShowTb_clicked(bool checked);
     void on_checkShowZf_clicked(bool checked);
     void on_checkShowZub_clicked(bool checked);
     void on_checkShowService_clicked(bool checked);

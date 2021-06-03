@@ -337,6 +337,12 @@ void PersonalWindow::on_checkShowTf_clicked(bool checked)
     else anzeige.remove(Category::Tf);
     refreshTabelle();
 }
+void PersonalWindow::on_checkShowTb_clicked(bool checked)
+{
+    if (checked) anzeige.insert(Category::Tb);
+    else anzeige.remove(Category::Tb);
+    refreshTabelle();
+}
 void PersonalWindow::on_checkShowZf_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Zf);

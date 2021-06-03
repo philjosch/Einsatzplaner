@@ -257,9 +257,6 @@ QString ManagerPersonal::getZeitenFuerListeAlsHTML(QList<Person *> personen, QSe
     for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
         if (! spalten.contains(cat)) continue;
         switch (cat) {
-        case Tf:
-        case Tb:
-            a += "<th>Tf/Tb</th>"; break;
         case Zub:
         case Begleiter:
             a += "<th>Zub/Begl.o.b.A.</th>"; break;
