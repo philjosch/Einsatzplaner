@@ -103,11 +103,11 @@ void PersonalWindow::refreshTabelle()
         }
         ui->tabelleGesamt->insertRow(0);
         PersonTableWidgetItem *i = new PersonTableWidgetItem(p, p->getVorname());
-        i->setBackground(QBrush(QColor(farbe)));
+        faerbeZelle(i, farbe);
         ui->tabelleGesamt->setItem(0, 0, i);
 
         i = new PersonTableWidgetItem(p, p->getNachname());
-        i->setBackground(QBrush(QColor(farbe)));
+        faerbeZelle(i, farbe);
         ui->tabelleGesamt->setItem(0, 1, i);
 
         pos = 2;
@@ -126,9 +126,12 @@ void PersonalWindow::refreshTabelle()
             }
 
             switch (p->pruefeStunden(cat)) {
-            case AktivOhne:  i->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN))); break;
-            case PassivMit: i->setBackground(QBrush(QColor(Person::FARBE_GENUG_STUNDEN))); break;
-            default: i->setBackground(QBrush(QColor(Person::FARBE_STANDARD)));
+            case AktivOhne:
+                faerbeZelle(i, Person::FARBE_FEHLENDE_STUNDEN); break;
+            case PassivMit:
+                faerbeZelle(i, Person::FARBE_GENUG_STUNDEN); break;
+            default:
+                faerbeZelle(i, Person::FARBE_STANDARD); break;
             }
             ui->tabelleGesamt->setItem(0, pos++, i);
         }
@@ -171,12 +174,14 @@ void PersonalWindow::refreshEinzel()
         switch (p->pruefeStunden()) {
         case AktivOhne:
             item->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN)));
+            item->setForeground(QBrush(QColor("black")));
             break;
         case PassivMit:
             item->setBackground(QBrush(QColor(Person::FARBE_GENUG_STUNDEN)));
+            item->setForeground(QBrush(QColor("black")));
             break;
         default:
-            item->setBackground(QBrush(QColor(Person::FARBE_STANDARD)));
+            break;
         }
         ui->listWidget->insertItem(0, item);
         personToItem.insert(p, item);
@@ -768,6 +773,14 @@ void PersonalWindow::updateZeiten()
                              .arg(minutesToHourString(aktuellePerson->getZeiten(Gesamt)))
                              .arg(minutesToHourString(aktuellePerson->getMinimumStunden(Gesamt))));
     ui->labelGesamt->repaint();
+}
+
+void PersonalWindow::faerbeZelle(QTableWidgetItem *item, QString hintergrund, QString vordergrund)
+{
+    if (hintergrund != Person::FARBE_STANDARD) {
+        item->setBackground(QBrush(QColor(hintergrund)));
+        item->setForeground(QBrush(QColor(vordergrund)));
+    }
 }
 
 void PersonalWindow::on_pushMailEinzel_clicked()

@@ -140,5 +140,6 @@ private:
     void setZeitenNachVeraenderung(Category cat, QString arg);
 
     void updateZeiten();
+    void faerbeZelle(QTableWidgetItem *item, QString hintergrund, QString vordergrund = "black");
 };
 #endif // PERSONALWINDOW_H

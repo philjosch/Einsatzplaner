@@ -24,7 +24,7 @@ void CalendarDay::show(QDate datum, bool gray)
     if (gray)
         ui->label->setStyleSheet("QLabel {color: #aaa;}");
     else
-        ui->label->setStyleSheet("QLabel {color: black;}");
+        ui->label->setStyleSheet("");
 }
 
 void CalendarDay::remove(AActivity *a)
@@ -44,6 +44,7 @@ void CalendarDay::insert(AActivity *a)
     }
     QListWidgetItem* item = new QListWidgetItem(a->getStringShort().replace("<br/>","\n"));
     item->setBackground(QBrush(QColor(a->getFarbe())));
+    item->setForeground(QBrush(QColor("black")));
     ui->listWidget->insertItem(ui->listWidget->count(), item);
     actToItem.insert(a, item);
 }

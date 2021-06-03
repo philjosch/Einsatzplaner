@@ -311,6 +311,7 @@ void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
     i->setToolTip(a->getAnlass().replace("<br/>","\n"));
     i->setWhatsThis(a->getAnlass().replace("<br/>","\n"));
     i->setBackground(QBrush(QColor(a->getFarbe())));
+    i->setForeground(QBrush(QColor("black")));
 }
 
 int MainWindow::getPosInCalendar(QDate date)
