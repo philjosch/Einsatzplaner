@@ -100,6 +100,7 @@ private slots:
 
 
     void on_lineTf_textChanged(const QString &arg1);
+    void on_lineTb_textChanged(const QString &arg1);
     void on_lineZf_textChanged(const QString &arg1);
     void on_lineZub_textChanged(const QString &arg1);
     void on_lineService_textChanged(const QString &arg1);

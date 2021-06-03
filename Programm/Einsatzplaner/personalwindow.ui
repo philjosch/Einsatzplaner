@@ -968,7 +968,56 @@
             <property name="verticalSpacing">
              <number>0</number>
             </property>
-            <item row="1" column="1" rowspan="2">
+            <item row="2" column="0">
+             <widget class="QLabel" name="labelTb">
+              <property name="text">
+               <string>Tb</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="lineTb">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLabel" name="labelTbSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QLabel" name="labelMinTb">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
              <widget class="QLineEdit" name="lineTf">
               <property name="enabled">
                <bool>false</bool>
@@ -990,7 +1039,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="3" rowspan="2">
+            <item row="0" column="3">
              <widget class="QLabel" name="labelMin">
               <property name="text">
                <string>Min</string>
@@ -1032,7 +1081,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="3">
+            <item row="1" column="3">
              <widget class="QLabel" name="labelMinTf">
               <property name="text">
                <string>0 h</string>
@@ -1341,7 +1390,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0" rowspan="2">
+            <item row="1" column="0">
              <widget class="QLabel" name="labelTf">
               <property name="text">
                <string>Tf/Tb</string>
@@ -1532,7 +1581,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="2">
+            <item row="1" column="2">
              <widget class="QLabel" name="labelTfSum">
               <property name="text">
                <string>0 h</string>

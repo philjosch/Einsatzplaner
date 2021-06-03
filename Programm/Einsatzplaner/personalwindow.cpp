@@ -532,6 +532,10 @@ void PersonalWindow::on_lineTf_textChanged(const QString &arg1)
 {
     setZeitenNachVeraenderung(Tf, arg1);
 }
+void PersonalWindow::on_lineTb_textChanged(const QString &arg1)
+{
+    setZeitenNachVeraenderung(Tb, arg1);
+}
 void PersonalWindow::on_lineZf_textChanged(const QString &arg1)
 {
     setZeitenNachVeraenderung(Zf, arg1);
@@ -643,6 +647,7 @@ void PersonalWindow::showPerson(Person *p)
     updateZeiten();
 
     ui->lineTf->setText(stringForDurationEditorFromMinutes(p->getAdditional(Tf)));
+    ui->lineTb->setText(stringForDurationEditorFromMinutes(p->getAdditional(Tb)));
     ui->lineZf->setText(stringForDurationEditorFromMinutes(p->getAdditional(Zf)));
     ui->lineZub->setText(stringForDurationEditorFromMinutes(p->getAdditional(Zub)));
     ui->lineService->setText(stringForDurationEditorFromMinutes(p->getAdditional(Service)));
@@ -656,6 +661,7 @@ void PersonalWindow::showPerson(Person *p)
     ui->doubleKilometer->setValue(p->getAdditional(Kilometer));
 
     ui->labelMinTf->setText(minutesToHourString(p->getMinimumStunden(Tf)));
+    ui->labelMinTb->setText(minutesToHourString(p->getMinimumStunden(Tb)));
     ui->labelMinZf->setText(minutesToHourString(p->getMinimumStunden(Zf)));
     ui->labelMinZub->setText(minutesToHourString(p->getMinimumStunden(Zub)));
     ui->labelMinService->setText(minutesToHourString(p->getMinimumStunden(Service)));
@@ -704,6 +710,7 @@ void PersonalWindow::toggleFields(bool state)
     ui->tabelle->setEnabled(state);
 
     ui->lineTf->setEnabled(state);
+    ui->lineTb->setEnabled(state);
     ui->lineZf->setEnabled(state);
     ui->lineZub->setEnabled(state);
     ui->lineService->setEnabled(state);
@@ -733,6 +740,8 @@ void PersonalWindow::updateZeiten()
 {
     ui->labelTfSum->setText(minutesToHourString(aktuellePerson->getZeiten(Tf)));
     ui->labelTfSum->repaint();
+    ui->labelTbSum->setText(minutesToHourString(aktuellePerson->getZeiten(Tb)));
+    ui->labelTbSum->repaint();
     ui->labelZfSum->setText(minutesToHourString(aktuellePerson->getZeiten(Zf)));
     ui->labelZfSum->repaint();
     ui->labelZubSum->setText(minutesToHourString(aktuellePerson->getZeiten(Zub)));
