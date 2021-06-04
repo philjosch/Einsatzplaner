@@ -139,8 +139,8 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
         if (anzeige.contains("Status")) {
             i = new PersonTableWidgetItem(p,
                         QString("%1%2")
-                        .arg(p->isAusgetreten() ? "Ehemals ": "")
-                        .arg(p->getAktiv() ? "Aktiv" : "Passiv"));
+                        .arg((p->isAusgetreten() ? "Ehemals ": ""),
+                             (p->getAktiv() ? "Aktiv" : "Passiv")));
             ui->tabelleMitglieder->setItem(0, clmn++, i);
         }
         if (anzeige.contains("Austritt")) {

@@ -776,8 +776,8 @@ void PersonalWindow::updateZeiten()
     ui->labelKilometerSum->setText(QString("%1 km").arg(aktuellePerson->getZeiten(Kilometer)));
     ui->labelKilometerSum->repaint();
     ui->labelGesamt->setText(QString("%1 (%2)")
-                             .arg(minutesToHourString(aktuellePerson->getZeiten(Gesamt)))
-                             .arg(minutesToHourString(aktuellePerson->getMinimumStunden(Gesamt))));
+                             .arg(minutesToHourString(aktuellePerson->getZeiten(Gesamt)),
+                                  minutesToHourString(aktuellePerson->getMinimumStunden(Gesamt))));
     ui->labelGesamt->repaint();
 }
 

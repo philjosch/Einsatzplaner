@@ -709,7 +709,6 @@ QList<Einsatz*> Person::getActivities()
 
 QString Person::getName() const
 {
-    QString nameKomplett;
     if (vorname != "" && nachname != "") return vorname + " " + nachname;
     else if (vorname != "") return vorname;
     else return nachname;
@@ -1072,7 +1071,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
         absch += help.arg("Anrede", anrede);
     absch += help.arg("Geschlecht", toString(geschlecht));
     if (beruf != "")
-        absch += help.arg("Beruf").arg(beruf);
+        absch += help.arg("Beruf", beruf);
     if (absch != "")
         h += "<h3>Persönliche Daten</h3><ul>"+ absch + "</ul>";
 
@@ -1130,27 +1129,20 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
     absch = "";
     if (tauglichkeit.isValid())
         absch += help.arg("Tauglichkeit bis", tauglichkeit.toString("dd.MM.yyyy"));
-    if (ausbildungTf || ausbildungZf || ausbildungRangierer) {
-        bool komma = false;
-        absch += help.arg("Ausbildung zum");
-        if (ausbildungTf) {
-            komma = true;
-            absch = absch.arg("Triebfahrzeugführer%1");
-        }
-        if (ausbildungZf) {
-            if (komma) absch = absch.arg(", %1");
-            komma = true;
-            absch = absch.arg("Zugführer%1");
-        }
-        if (ausbildungRangierer) {
-            if (komma) absch = absch.arg(" und %1");
-            absch = absch.arg("Rangierer");
-        }
+    QStringList ausbildungen;
+    if (ausbildungTf)
+        ausbildungen.append("Triebfahrzeugführer");
+    if (ausbildungZf)
+        ausbildungen.append("Zugführer");
+    if (ausbildungRangierer)
+        ausbildungen.append("Rangierer");
+    if (! ausbildungen.empty()) {
+        absch += help.arg("Ausbildung zum", ausbildungen.join(", "));
     }
     if (sonstigeBetrieblich != "")
-        absch += "<li>Sonstige Betriebliche Bemerkungen:<br/><i>" + sonstigeBetrieblich + "</i></li>";
+        absch += help.arg("Sonstige Betriebliche Bemerkungen", "<br/><i>" + sonstigeBetrieblich + "</i></li>");
     if (sonstigeAusbildung != "")
-        absch += "<li>Sonstige Ausbildungen:<br/><i>" + sonstigeAusbildung + "</i></li>";
+        absch += help.arg("Sonstige Ausbildungen", "<br/><i>" + sonstigeAusbildung + "</i></li>");
     if (absch != "")
         h += "<h3>Ausbildung</h3><ul>" + absch + "</ul>";
 
