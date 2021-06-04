@@ -74,7 +74,7 @@ void MainWindowPersonal::onPersonWirdEntferntWerden(Person *p)
 }
 void MainWindowPersonal::onPersonWurdeBearbeitet([[maybe_unused]] Person *p)
 {
-    on_actionAktualisieren_triggered();
+//    on_actionAktualisieren_triggered();
 }
 
 

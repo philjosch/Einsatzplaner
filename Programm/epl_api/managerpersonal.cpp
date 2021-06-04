@@ -357,7 +357,8 @@ QString ManagerPersonal::getMitgliederFuerListeAlsHtml(QList<Person*> liste, Sta
         a += akt->getPersonaldatenFuerListeAlsHTML(data);
     }
     a += Person::FUSS_TABELLE_LISTE_HTML;
-    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
+    a += QObject::tr("<p><small>%1 Personen ausgegeben.</small><br/>").arg(liste.length());
+    a += QObject::tr("<small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
     return a;
 }
 

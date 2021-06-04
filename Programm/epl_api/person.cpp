@@ -1079,7 +1079,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
     // Mitgliedsdaten
     absch = "";
     absch += help.arg("Mitgliedsnummer").arg(nummer);
-    absch += help.arg("Status", (isAusgetreten() ? "Ehemals %1" : "%1"), (aktiv ? "Aktiv":"Passiv"));
+    absch += help.arg("Status", (isAusgetreten() ? "Ehemals %1" : "%1")).arg((aktiv ? "Aktiv":"Passiv"));
     absch += help.arg("Eintritt", eintritt.toString("dd.MM.yyyy"));
     if (isAusgetreten()) {
         absch += help.arg("Austritt", austritt.toString("dd.MM.yyyy"));
@@ -1092,7 +1092,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
         absch += help.arg("Zahler", getKontoinhaber());
     } else {
         absch += help.arg("Konto", "%2 bei %3").arg(iban, bank);
-        absch += help.arg("Kontoinhaber", kontoinhaber);
+        absch += help.arg("Kontoinhaber", getKontoinhaber());
     }
     if (absch != "")
         h += "<h3>Mitgliedschaft</h3><ul>" + absch + "</ul>";
@@ -1305,9 +1305,11 @@ QString Person::getKontoinhaber() const
 void Person::setKontoinhaber(const QString &value)
 {
     kontoinhaber = value;
-    Person *zahler = manager->getPerson(value);
-    if (zahler != nullptr) {
-        kontoinhaber = zahler->getId();
+    if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
+        Person *zahler = manager->getPerson(value);
+        if (zahler != nullptr) {
+            kontoinhaber = zahler->getId();
+        }
     }
     emit changed();
 }
