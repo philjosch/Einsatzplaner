@@ -257,25 +257,7 @@ QString Fahrtag::getHtmlForTableView() const
         }
     }
 
-    QList<Einsatz*> tf;
-    QList<Einsatz*> zf;
-    QList<Einsatz*> zub;
-    QList<Einsatz*> begl;
-    QList<Einsatz*> service;
-    QList<Einsatz*> sonstige;
-
-    // Aufsplitten der Personen auf die Einzelnen Listen
-    for(Einsatz *e: personen) {
-        switch (e->getKategorie()) {
-        case Tf:
-        case Tb: tf.append(e); break;
-        case Zf: zf.append(e); break;
-        case Zub: zub.append(e); break;
-        case Begleiter: begl.append(e); break;
-        case Service: service.append(e); break;
-        default: sonstige.append(e); break;
-        }
-    }
+    QMap<Category, QList<Einsatz*>*> gruppen = splitNachKategorie();
 
     // Tf, Tb
     QString beginnZelleBenoetigt = "<td>";
@@ -289,8 +271,11 @@ QString Fahrtag::getHtmlForTableView() const
     } else {
         html += "<td>";
     }
-    if (tf.size() > 0) {
-        html += "<ul>" + listToString("", tf, "<li>", "</li>") + "</ul>";
+    if (gruppen.value(Tf)->size() + gruppen.value(Tb)->size() > 0) {
+        html += "<ul>" + listToString("", *gruppen.value(Tf), "<li>", "</li>");
+        html += listToString("", *gruppen.value(Tb), "<li><i>", "</i></li>") + "</ul>";
+        gruppen.remove(Tf);
+        gruppen.remove(Tb);
     }
     html += "</td>";
 
@@ -305,14 +290,17 @@ QString Fahrtag::getHtmlForTableView() const
         html += "<i>"+benoetigt.arg("Begleitpersonal benötigt!")+"</i>";
     }
     html += "<ul>";
-    if (zf.size() > 0) {
-        html += listToString("", zf, "<li><u>", "</u></li>");
+    if (gruppen.value(Zf)->size() > 0) {
+        html += listToString("", *gruppen.value(Zf), "<li><u>", "</u></li>");
+        gruppen.remove(Zf);
     }
-    if (zub.size() > 0) {
-        html += listToString("", zub, "<li>", "</li>");
+    if (gruppen.value(Zub)->size() > 0) {
+        html += listToString("", *gruppen.value(Zub), "<li>", "</li>");
+        gruppen.remove(Zub);
     }
-    if (begl.size() > 0) {
-        html += listToString("", begl, "<li><i>", "</i></li>");
+    if (gruppen.value(Begleiter)->size() > 0) {
+        html += listToString("", *gruppen.value(Begleiter), "<li><i>", "</i></li>");
+        gruppen.remove(Begleiter);
     }
     html += "</ul></td>";
 
@@ -323,8 +311,9 @@ QString Fahrtag::getHtmlForTableView() const
     } else {
         html += "<td>";
     }
-    if (service.size() > 0) {
-        html += "<ul>" + listToString("", service, "<li>", "</li>") + "</ul>";
+    if (gruppen.value(Service)->size() > 0) {
+        html += "<ul>" + listToString("", *gruppen.value(Service), "<li>", "</li>") + "</ul>";
+        gruppen.remove(Service);
     }
     html += "</td>";
 
@@ -337,9 +326,14 @@ QString Fahrtag::getHtmlForTableView() const
     } else {
         html += "<td>";
     }
-    if (sonstige.size() > 0) {
+
+    for(Category cat: gruppen.keys()) {
+        if (cat != Sonstiges)
+            gruppen.value(Sonstiges)->append(*gruppen.value(cat));
+    }
+    if (gruppen.value(Sonstiges)->size() > 0) {
         html += "<ul>";
-        html += listToString("", sonstige, "<li>", "</li>", true);
+        html += listToString("", *gruppen.value(Sonstiges), "<li>", "</li>", true);
         html += "</ul>";
         zeilenUmbruch = false;
     }
