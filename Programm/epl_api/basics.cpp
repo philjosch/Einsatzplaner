@@ -1,9 +1,5 @@
 #include "basics.h"
 
-#include "aactivity.h"
-
-#include <QObject>
-
 QString minutesToHourString(int min)
 {
     return minutesToHourStringShort(min)+" h";

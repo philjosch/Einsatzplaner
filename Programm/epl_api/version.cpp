@@ -6,38 +6,27 @@
 Version Version::VERSION = Version();
 bool Version::IS_DEPLOY_VERSION = false;
 bool Version::IS_DEBUG_BUILD = false;
-QString Version::BUILD_NUMBER = "???????";
+QString Version::BUILD_NUMBER = "";
 
 const QString Version::URL_VERSION = "http://epl.philipp-schepper.de/version.txt";
 const QString Version::URL_NOTES = "http://epl.philipp-schepper.de/version/v%1-%2/notes-v%1-%2-%3.txt";
 
 Version::Version(QString vers)
 {
+    major = -1;
+    minor = -1;
+    patch = -1;
     if (! vers.contains(".")) {
-        major = -1;
-        minor = -1;
-        patch = -1;
         return;
     }
     QStringList versList = vers.split(".");
     if (versList.length() < 2){
-        major = -1;
-        minor = -1;
-        patch = -1;
         return;
     }
     major = versList.at(0).toInt();
     minor = versList.at(1).toInt();
     if (versList.length() >= 3) // Dritte Stelle nur nehmen, wenn sie vorhanden ist
         patch = versList.at(2).toInt();
-    else
-        patch = -1;
-}
-Version::Version(int maj, int min)
-{
-    major = maj;
-    minor = min;
-    patch = -1;
 }
 Version::Version(int maj, int min, int pat)
 {

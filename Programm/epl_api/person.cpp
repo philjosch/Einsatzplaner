@@ -710,7 +710,7 @@ bool Person::removeActivity(Einsatz *e)
     return activities.removeAll(e);
 }
 
-QList<Einsatz*> Person::getActivities()
+const QList<Einsatz*> Person::getActivities()
 {
     Einsatz::sort(&activities);
     return activities;

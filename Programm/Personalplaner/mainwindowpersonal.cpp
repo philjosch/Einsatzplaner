@@ -317,11 +317,6 @@ void MainWindowPersonal::on_tabelleMitglieder_cellDoubleClicked(int row, [[maybe
     if (clicked != nullptr) {
         showPerson(clicked->getPerson());
     }
-//    QString name = ui->tabelleMitglieder->item(row, 0)->text() + " " + ui->tabelleMitglieder->item(row, 1)->text();
-//    Person * p = personal->getPerson(name);
-//    if (p != nullptr) {
-//        showPerson(p);
-//    }
 }
 
 

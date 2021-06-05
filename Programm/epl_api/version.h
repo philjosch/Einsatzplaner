@@ -15,7 +15,6 @@ public:
      * - 'Major.Minor': Die Patch Version wird auf -1 gesetzt.
      */
     Version(QString vers = "");
-    Version(int maj, int min);
     Version(int maj, int min, int pat);
 
     /**

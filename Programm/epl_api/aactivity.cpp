@@ -163,7 +163,7 @@ QTime AActivity::getZeitAnfang() const
     return zeitAnfang;
 }
 
-QTime AActivity::getAnfang(const Category kat) const
+QTime AActivity::getAnfang([[maybe_unused]] const Category kat) const
 {
     if (abgesagt)
         return QTime();
@@ -182,7 +182,7 @@ QTime AActivity::getZeitEnde() const
     return zeitEnde;
 }
 
-QTime AActivity::getEnde(const Category kat) const
+QTime AActivity::getEnde([[maybe_unused]] const Category kat) const
 {
     if (abgesagt)
         return QTime();
