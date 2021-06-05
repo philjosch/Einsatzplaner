@@ -652,6 +652,8 @@ void Person::berechne()
 {
     zeiten.clear();
 
+    AActivity *vorherige = nullptr;
+    QTime vorherigeEnde = QTime(0,0);
     for(Einsatz *e: getActivities()) {
             if (! e->getAnrechnen()) continue;
 
@@ -672,9 +674,16 @@ void Person::berechne()
             }
             zeiten.insert(Anzahl, zeiten.value(Anzahl)+1);
             zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
-            if (e->getKategorie() != Category::Buero)
-                zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);
+
+            if ((e->getActivity() == vorherige && e->getBeginnRichtig() != vorherigeEnde)
+                || e->getActivity() != vorherige) {
+                if (e->getKategorie() != Category::Buero)
+                    zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);
+            }
+            vorherige = e->getActivity();
+            vorherigeEnde = e->getEndeRichtig();
     }
+
     for (Category cat: additional.keys()) {
        zeiten.insert(cat, zeiten.value(cat)+additional.value(cat));
        switch (cat) {
