@@ -71,8 +71,7 @@ QDateTime Auswahl::getAb() const
     case AbAlle:
         return QDate(1900, 1, 1).startOfDay();
     case AbAnfangDesJahres:
-        QDate ref = QDate::currentDate();
-        return QDate(ref.year(), 12, 31).startOfDay();
+        return QDate(QDate::currentDate().year(), 1, 1).startOfDay();
     }
 }
 
