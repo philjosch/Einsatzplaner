@@ -2,13 +2,14 @@
 #include "version.h"
 
 #include <QCoreApplication>
+#include <QOperatingSystemVersion>
 
 Version Version::VERSION = Version();
 bool Version::IS_DEPLOY_VERSION = false;
 bool Version::IS_DEBUG_BUILD = false;
 QString Version::BUILD_NUMBER = "";
 
-const QString Version::URL_VERSION = "http://epl.philipp-schepper.de/version.txt";
+const QString Version::URL_VERSION = "http://epl.philipp-schepper.de/version%1.txt";
 const QString Version::URL_NOTES = "http://epl.philipp-schepper.de/version/v%1-%2/notes-v%1-%2-%3.txt";
 
 Version::Version(QString vers)
@@ -143,7 +144,12 @@ bool Version::isUpdateVerfuegbar()
 }
 Version Version::ladeNeusteVersion()
 {
-    return Version(Networking::ladeDatenVonURL(URL_VERSION));
+    if (QOperatingSystemVersion::currentType() == QOperatingSystemVersion::OSType::MacOS) {
+        QString version = Networking::ladeDatenVonURL(URL_VERSION.arg("_macOS"));
+        if (version!= "")
+            return Version(version);
+    }
+    return Version(Networking::ladeDatenVonURL(URL_VERSION.arg("")));
 }
 QString Version::loadNotes(Version v)
 {
