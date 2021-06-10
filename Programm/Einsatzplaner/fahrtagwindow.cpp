@@ -106,7 +106,7 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
             block = false;
             break;
         }
-        EinsatzTableWidgetItem *ptwi = fuegeInTabelleEin(e);
+        EinsatzTableWidgetItem *ptwi = fuegeInTabelleEin(e, block);
         ptwi->setEinsatz(e);
         item->setTableItem(ptwi);
     }
