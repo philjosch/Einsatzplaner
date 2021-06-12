@@ -1,5 +1,26 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 02. April 2021
+Stand: 12. Juni 2021
+
+## Version 1.7.1 – 2021-06-XX
+### Verbessert
+- Die End-Zeit für Arbeitseinsätze wird dynamisch bestimmt (18Uhr im Sommer, 16 Uhr im Winter)
+- Mehr Begriffe für die automatische Kategorieerkennung bei Arbeitseinsätzen
+- Diverse interne Verbesserungen und Optimierungen
+- Die Personaltabelle des Personalplaners wird nicht bei jeder Änderung aktualisiert
+- Ausgabe bei Personalisten, wie viele Personen ausgegeben wurden
+- Diverse kleinere Verbesserungen
+
+### Fehlerbehebungen
+- Die Exportfunktion gab keine Aktivitäten aus, wenn "Bis Ende des Jahres" oder "Ab Anfang des Jahres" ausgewählt wurde
+- Tb-Stunden wurden nicht ausgegeben
+- Büro-Tätigkeiten erscheinen nicht in der Listenansicht
+- Tabelle für das Personal hatte unter Umständen keine Überschrift
+- Gefahrene Strecke wurde falsch berechnet
+- Kontoinhaber falsch dargestellt, wenn nicht `Familienbeitrag (Nutzer)` ausgewählt war
+- Einträge in der Personaltabelle eines Fahrtags konnte unter Umständen unberechtigt geändert werden
+- Darstellung von Farben im Dunkelmodus wurden verbessert
+- Diverse kleinere Fehlerbehebungen
+
 
 ## Version 1.7.0 – 2021-04-02
 ### Neu
