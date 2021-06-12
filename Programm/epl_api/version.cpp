@@ -68,20 +68,17 @@ bool operator==(const Version &lhs, const Version rhs)
 }
 bool operator>(const Version &lhs, const Version rhs)
 {
-    if ((lhs.major > rhs.major) || (rhs.major == -1)) {
-        return true;
-    }
-    if ((lhs.major == rhs.major) && ((lhs.minor > rhs.minor) || (rhs.minor == -1))) {
-        return true;
-    }
-    if ((lhs.major == rhs.major) && (lhs.minor == rhs.minor) && ((lhs.patch > rhs.patch) || (lhs.patch != -1 && rhs.patch == -1))) {
-        return true;
-    }
-    return false;
+    return rhs < lhs;
 }
 bool operator<(const Version &lhs, const Version rhs)
 {
-    return rhs > lhs;
+    if (lhs.major < rhs.major)
+        return true;
+    if (lhs.major == rhs.major && lhs.minor < rhs.minor)
+        return true;
+    if (lhs.major == rhs.major && lhs.minor == rhs.minor && lhs.patch < rhs.patch)
+        return true;
+    return false;
 }
 bool operator>=(const Version &lhs, const Version rhs)
 {
