@@ -1244,7 +1244,7 @@
             <item row="1" column="0">
              <widget class="QLabel" name="labelTf">
               <property name="text">
-               <string>Tf/Tb</string>
+               <string>Tf</string>
               </property>
               <property name="buddy">
                <cstring>lineTf</cstring>
