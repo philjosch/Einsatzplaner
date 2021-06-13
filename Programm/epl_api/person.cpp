@@ -32,39 +32,39 @@ QString Person::getKopfTabelleListeHtml(QSet<QString> data)
                    "<table cellspacing='0' width='100%'><thead><tr>";
     if (data.contains("Nummer")
             || data.contains("Eintritt")
-            || data.contains("Austritt"))
+            || data.contains("Austritt") || data.isEmpty())
         kopf += "<th>Mitgliedsdaten</th>";
     if (data.contains("Vorname")
             || data.contains("Nachname")
             || data.contains("Geburtsdatum")
             || data.contains("Anrede")
             || data.contains("Geschlecht")
-            || data.contains("Beruf"))
+            || data.contains("Beruf") || data.isEmpty())
         kopf += "<th>Persönliches</th>";
     if (data.contains("Beitragsart")
             || data.contains("IBAN")
             || data.contains("Bank")
-            || data.contains("Kontoinhaber"))
+            || data.contains("Kontoinhaber") || data.isEmpty())
         kopf += "<th>Beitrag</th>";
     if (data.contains("Straße")
             || data.contains("PLZ")
             || data.contains("Ort")
-            || data.contains("Strecke"))
+            || data.contains("Strecke") || data.isEmpty())
         kopf += "<th>Anschrift</th>";
     if (data.contains("Mail")
             || data.contains("Telefon")
-            || data.contains("Telefon2"))
+            || data.contains("Telefon2") || data.isEmpty())
         kopf += "<th>Kontakt</th>";
     if (data.contains("Tf")
             || data.contains("Zf")
             || data.contains("Rangierer")
             || data.contains("Tauglichkeit")
             || data.contains("Bemerkung Betrieb.")
-            || data.contains("Sonst. Ausbildung"))
+            || data.contains("Sonst. Ausbildung") || data.isEmpty())
         kopf += "<th>Ausbildung</th>";
     if (data.contains("Mail Zustimmung")
             || data.contains("Telefon Zustimmung")
-            || data.contains("Bemerkung"))
+            || data.contains("Bemerkung") || data.isEmpty())
         kopf += "<th>Sonstiges</th>";
     return kopf + "</tr></thead><tbody>";
 }
@@ -652,6 +652,8 @@ void Person::berechne()
 {
     zeiten.clear();
 
+    AActivity *vorherige = nullptr;
+    QTime vorherigeEnde = QTime(0,0);
     for(Einsatz *e: getActivities()) {
             if (! e->getAnrechnen()) continue;
 
@@ -672,9 +674,16 @@ void Person::berechne()
             }
             zeiten.insert(Anzahl, zeiten.value(Anzahl)+1);
             zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
-            if (e->getKategorie() != Category::Buero)
-                zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);
+
+            if ((e->getActivity() == vorherige && e->getBeginnRichtig() != vorherigeEnde)
+                || e->getActivity() != vorherige) {
+                if (e->getKategorie() != Category::Buero)
+                    zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);
+            }
+            vorherige = e->getActivity();
+            vorherigeEnde = e->getEndeRichtig();
     }
+
     for (Category cat: additional.keys()) {
        zeiten.insert(cat, zeiten.value(cat)+additional.value(cat));
        switch (cat) {
@@ -701,7 +710,7 @@ bool Person::removeActivity(Einsatz *e)
     return activities.removeAll(e);
 }
 
-QList<Einsatz*> Person::getActivities()
+const QList<Einsatz*> Person::getActivities()
 {
     Einsatz::sort(&activities);
     return activities;
@@ -709,7 +718,6 @@ QList<Einsatz*> Person::getActivities()
 
 QString Person::getName() const
 {
-    QString nameKomplett;
     if (vorname != "" && nachname != "") return vorname + " " + nachname;
     else if (vorname != "") return vorname;
     else return nachname;
@@ -1072,7 +1080,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
         absch += help.arg("Anrede", anrede);
     absch += help.arg("Geschlecht", toString(geschlecht));
     if (beruf != "")
-        absch += help.arg("Beruf").arg(beruf);
+        absch += help.arg("Beruf", beruf);
     if (absch != "")
         h += "<h3>Persönliche Daten</h3><ul>"+ absch + "</ul>";
 
@@ -1080,7 +1088,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
     // Mitgliedsdaten
     absch = "";
     absch += help.arg("Mitgliedsnummer").arg(nummer);
-    absch += help.arg("Status", (isAusgetreten() ? "Ehemals %1" : "%1"), (aktiv ? "Aktiv":"Passiv"));
+    absch += help.arg("Status", (isAusgetreten() ? "Ehemals %1" : "%1")).arg((aktiv ? "Aktiv":"Passiv"));
     absch += help.arg("Eintritt", eintritt.toString("dd.MM.yyyy"));
     if (isAusgetreten()) {
         absch += help.arg("Austritt", austritt.toString("dd.MM.yyyy"));
@@ -1093,7 +1101,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
         absch += help.arg("Zahler", getKontoinhaber());
     } else {
         absch += help.arg("Konto", "%2 bei %3").arg(iban, bank);
-        absch += help.arg("Kontoinhaber", kontoinhaber);
+        absch += help.arg("Kontoinhaber", getKontoinhaber());
     }
     if (absch != "")
         h += "<h3>Mitgliedschaft</h3><ul>" + absch + "</ul>";
@@ -1130,27 +1138,20 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
     absch = "";
     if (tauglichkeit.isValid())
         absch += help.arg("Tauglichkeit bis", tauglichkeit.toString("dd.MM.yyyy"));
-    if (ausbildungTf || ausbildungZf || ausbildungRangierer) {
-        bool komma = false;
-        absch += help.arg("Ausbildung zum");
-        if (ausbildungTf) {
-            komma = true;
-            absch = absch.arg("Triebfahrzeugführer%1");
-        }
-        if (ausbildungZf) {
-            if (komma) absch = absch.arg(", %1");
-            komma = true;
-            absch = absch.arg("Zugführer%1");
-        }
-        if (ausbildungRangierer) {
-            if (komma) absch = absch.arg(" und %1");
-            absch = absch.arg("Rangierer");
-        }
+    QStringList ausbildungen;
+    if (ausbildungTf)
+        ausbildungen.append("Triebfahrzeugführer");
+    if (ausbildungZf)
+        ausbildungen.append("Zugführer");
+    if (ausbildungRangierer)
+        ausbildungen.append("Rangierer");
+    if (! ausbildungen.empty()) {
+        absch += help.arg("Ausbildung zum", ausbildungen.join(", "));
     }
     if (sonstigeBetrieblich != "")
-        absch += "<li>Sonstige Betriebliche Bemerkungen:<br/><i>" + sonstigeBetrieblich + "</i></li>";
+        absch += help.arg("Sonstige Betriebliche Bemerkungen", "<br/><i>" + sonstigeBetrieblich + "</i></li>");
     if (sonstigeAusbildung != "")
-        absch += "<li>Sonstige Ausbildungen:<br/><i>" + sonstigeAusbildung + "</i></li>";
+        absch += help.arg("Sonstige Ausbildungen", "<br/><i>" + sonstigeAusbildung + "</i></li>");
     if (absch != "")
         h += "<h3>Ausbildung</h3><ul>" + absch + "</ul>";
 
@@ -1305,21 +1306,19 @@ void Person::setBank(const QString &value)
 
 QString Person::getKontoinhaber() const
 {
-    if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
-        Person *pers = manager->getPersonFromID(kontoinhaber);
-        if (pers != nullptr)
-            return pers->getName();
-    }
+    Person *pers = manager->getPersonFromID(kontoinhaber);
+    if (pers != nullptr)
+        return pers->getName();
     return kontoinhaber;
 }
 void Person::setKontoinhaber(const QString &value)
 {
-    Person *zahler = manager->getPerson(value);
-    if (zahler != nullptr) {
-        kontoinhaber = zahler->getId();
-        qDebug() << "zahler hinterlegt";
-    } else {
-        kontoinhaber = value;
+    kontoinhaber = value;
+    if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
+        Person *zahler = manager->getPerson(value);
+        if (zahler != nullptr) {
+            kontoinhaber = zahler->getId();
+        }
     }
     emit changed();
 }

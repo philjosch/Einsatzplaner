@@ -62,6 +62,7 @@ private slots:
     void on_checkShowGesamt_clicked(bool checked);
     void on_checkShowAnzahl_clicked(bool checked);
     void on_checkShowTf_clicked(bool checked);
+    void on_checkShowTb_clicked(bool checked);
     void on_checkShowZf_clicked(bool checked);
     void on_checkShowZub_clicked(bool checked);
     void on_checkShowService_clicked(bool checked);
@@ -100,6 +101,7 @@ private slots:
 
 
     void on_lineTf_textChanged(const QString &arg1);
+    void on_lineTb_textChanged(const QString &arg1);
     void on_lineZf_textChanged(const QString &arg1);
     void on_lineZub_textChanged(const QString &arg1);
     void on_lineService_textChanged(const QString &arg1);
@@ -139,5 +141,6 @@ private:
     void setZeitenNachVeraenderung(Category cat, QString arg);
 
     void updateZeiten();
+    void faerbeZelle(QTableWidgetItem *item, QString hintergrund, QString vordergrund = "black");
 };
 #endif // PERSONALWINDOW_H

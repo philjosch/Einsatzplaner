@@ -58,7 +58,7 @@ public:
     void addActivity(Einsatz *e);
     bool removeActivity(Einsatz *e);
 
-    QList<Einsatz *> getActivities();
+    const QList<Einsatz *> getActivities();
 
 
     QString getZeitenFuerListeAlsHTML(QSet<Category> liste);

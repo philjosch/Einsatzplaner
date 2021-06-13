@@ -114,6 +114,8 @@ protected:
 
     QDateTime getAnfangGenau() const;
     QDateTime getEndeGenau() const;
+
+    QMap<Category, QList<Einsatz *> *> splitNachKategorie() const;
 };
 
 #endif // AACTIVITY_H

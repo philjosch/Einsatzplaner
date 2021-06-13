@@ -5,7 +5,7 @@ CalendarDay::CalendarDay(QWidget *parent) : QFrame(parent), ui(new Ui::CalendarD
 {
     ui->setupUi(this);
     actToItem = QMap<AActivity*, QListWidgetItem*>();
-    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(handler(QListWidgetItem*)));
+    connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) {emit clickedItem(actToItem.key(item)); });
     connect(ui->buttonAdd, &QToolButton::clicked, this, [=]() { emit addActivity(date); });
 }
 
@@ -21,10 +21,7 @@ void CalendarDay::show(QDate datum, bool gray)
     ui->listWidget->clear();
     actToItem.clear();
 
-    if (gray)
-        ui->label->setStyleSheet("QLabel {color: #aaa;}");
-    else
-        ui->label->setStyleSheet("QLabel {color: black;}");
+    ui->label->setEnabled(! gray);
 }
 
 void CalendarDay::remove(AActivity *a)
@@ -44,11 +41,7 @@ void CalendarDay::insert(AActivity *a)
     }
     QListWidgetItem* item = new QListWidgetItem(a->getStringShort().replace("<br/>","\n"));
     item->setBackground(QBrush(QColor(a->getFarbe())));
+    item->setForeground(QBrush(QColor("black")));
     ui->listWidget->insertItem(ui->listWidget->count(), item);
     actToItem.insert(a, item);
-}
-
-void CalendarDay::handler(QListWidgetItem *item)
-{
-    emit clickedItem(actToItem.key(item));
 }

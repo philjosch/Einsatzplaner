@@ -2,42 +2,32 @@
 #include "version.h"
 
 #include <QCoreApplication>
+#include <QOperatingSystemVersion>
 
 Version Version::VERSION = Version();
 bool Version::IS_DEPLOY_VERSION = false;
 bool Version::IS_DEBUG_BUILD = false;
-QString Version::BUILD_NUMBER = "???????";
+QString Version::BUILD_NUMBER = "";
 
-const QString Version::URL_VERSION = "http://epl.philipp-schepper.de/version.txt";
+const QString Version::URL_VERSION = "http://epl.philipp-schepper.de/version%1.txt";
 const QString Version::URL_NOTES = "http://epl.philipp-schepper.de/version/v%1-%2/notes-v%1-%2-%3.txt";
 
 Version::Version(QString vers)
 {
+    major = -1;
+    minor = -1;
+    patch = -1;
     if (! vers.contains(".")) {
-        major = -1;
-        minor = -1;
-        patch = -1;
         return;
     }
     QStringList versList = vers.split(".");
     if (versList.length() < 2){
-        major = -1;
-        minor = -1;
-        patch = -1;
         return;
     }
     major = versList.at(0).toInt();
     minor = versList.at(1).toInt();
     if (versList.length() >= 3) // Dritte Stelle nur nehmen, wenn sie vorhanden ist
         patch = versList.at(2).toInt();
-    else
-        patch = -1;
-}
-Version::Version(int maj, int min)
-{
-    major = maj;
-    minor = min;
-    patch = -1;
 }
 Version::Version(int maj, int min, int pat)
 {
@@ -78,20 +68,17 @@ bool operator==(const Version &lhs, const Version rhs)
 }
 bool operator>(const Version &lhs, const Version rhs)
 {
-    if ((lhs.major > rhs.major) || (rhs.major == -1)) {
-        return true;
-    }
-    if ((lhs.major == rhs.major) && ((lhs.minor > rhs.minor) || (rhs.minor == -1))) {
-        return true;
-    }
-    if ((lhs.major == rhs.major) && (lhs.minor == rhs.minor) && ((lhs.patch > rhs.patch) || (lhs.patch != -1 && rhs.patch == -1))) {
-        return true;
-    }
-    return false;
+    return rhs < lhs;
 }
 bool operator<(const Version &lhs, const Version rhs)
 {
-    return rhs > lhs;
+    if (lhs.major < rhs.major)
+        return true;
+    if (lhs.major == rhs.major && lhs.minor < rhs.minor)
+        return true;
+    if (lhs.major == rhs.major && lhs.minor == rhs.minor && lhs.patch < rhs.patch)
+        return true;
+    return false;
 }
 bool operator>=(const Version &lhs, const Version rhs)
 {
@@ -154,7 +141,12 @@ bool Version::isUpdateVerfuegbar()
 }
 Version Version::ladeNeusteVersion()
 {
-    return Version(Networking::ladeDatenVonURL(URL_VERSION));
+    if (QOperatingSystemVersion::currentType() == QOperatingSystemVersion::OSType::MacOS) {
+        QString version = Networking::ladeDatenVonURL(URL_VERSION.arg("_macOS"));
+        if (version!= "")
+            return Version(version);
+    }
+    return Version(Networking::ladeDatenVonURL(URL_VERSION.arg("")));
 }
 QString Version::loadNotes(Version v)
 {

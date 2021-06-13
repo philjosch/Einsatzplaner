@@ -14,7 +14,7 @@ class CalendarDay : public QFrame
     Q_OBJECT
 
 public:
-    explicit CalendarDay(QWidget *parent = nullptr);
+    explicit CalendarDay(QWidget *parent);
     ~CalendarDay();
     void show(QDate datum, bool gray);
     void remove(AActivity *a);
@@ -22,8 +22,6 @@ public:
 signals:
     void clickedItem(AActivity *);
     void addActivity(QDate);
-private slots:
-    void handler(QListWidgetItem *item);
 private:
     Ui::CalendarDay *ui;
     QDate date;

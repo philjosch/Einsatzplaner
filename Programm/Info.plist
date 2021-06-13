@@ -13,7 +13,7 @@
 	<key>CFBundleIconFile</key>
 	<string>@ICON@</string>
 	<key>CFBundleIdentifier</key>
-	<string>de.philipp-schepper.einsatzplaner</string>
+	<string>de.philipp-schepper.@EXECUTABLE@</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

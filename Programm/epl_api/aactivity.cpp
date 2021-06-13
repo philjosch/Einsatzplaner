@@ -14,7 +14,7 @@ const QString AActivity::COLOR_REQUIRED = "#ff3333";
 const QString AActivity::KOPF_LISTE_HTML = "<h3>Übersicht über die Aktivitäten</h3>"
                                          "<table cellspacing='0' width='100%'><thead><tr>"
                                          "<th>Datum, Anlass</th> <th>Dienstzeiten</th>"
-                                         "<th>Tf, Tb</th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th> <th>Service</th>"
+                                         "<th>Tf, <i>Tb</i></th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th> <th>Service</th>"
                                          "<th>Sonstiges</th> </tr></thead><tbody>";
 const QString AActivity::FUSS_LISTE_HTML = "</tbody></table>";
 
@@ -35,7 +35,11 @@ AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
     datum = date;
     ort = "";
     zeitAnfang = QTime(10, 0);
-    zeitEnde = QTime(16, 0);
+    if (date.month() <= 3 || date.month() >= 11) {
+        zeitEnde = QTime(16, 0);
+    } else {
+        zeitEnde = QTime(18, 0);
+    }
     zeitenUnbekannt = false;
     anlass = "";
     bemerkungen = "";
@@ -159,7 +163,7 @@ QTime AActivity::getZeitAnfang() const
     return zeitAnfang;
 }
 
-QTime AActivity::getAnfang(const Category kat) const
+QTime AActivity::getAnfang([[maybe_unused]] const Category kat) const
 {
     if (abgesagt)
         return QTime();
@@ -178,7 +182,7 @@ QTime AActivity::getZeitEnde() const
     return zeitEnde;
 }
 
-QTime AActivity::getEnde(const Category kat) const
+QTime AActivity::getEnde([[maybe_unused]] const Category kat) const
 {
     if (abgesagt)
         return QTime();
@@ -366,6 +370,35 @@ QDateTime AActivity::getEndeGenau() const
         return QDateTime(datum, zeitEnde);
 }
 
+QMap<Category, QList<Einsatz *>*> AActivity::splitNachKategorie() const
+{
+    QMap<Category, QList<Einsatz*>*> gruppen;
+    for(Category cat: ANZEIGEREIHENFOLGEGESAMT) {
+        switch (cat) {
+        case Category::Gesamt:
+        case Category::Kilometer:
+        case Category::Anzahl:
+            continue;
+        default:
+            gruppen.insert(cat, new QList<Einsatz*>());
+        }
+    }
+    gruppen.insert(Begleiter, new QList<Einsatz*>());
+
+    for(Einsatz *e: personen) {
+        switch (e->getKategorie()) {
+
+        case Category::Gesamt:
+        case Category::Kilometer:
+        case Category::Anzahl:
+            continue;
+        default:
+            gruppen.value(e->getKategorie())->append(e);
+        }
+    }
+    return gruppen;
+}
+
 bool AActivity::hasQualification(Person *p, Category kat, QString bemerkung, QDate datum)
 {
     if (p == nullptr) return false;
@@ -549,63 +582,39 @@ QString AActivity::getHtmlForTableView() const
         }
     }
 
-    QList<Einsatz*> tf;
-    QList<Einsatz*> zf;
-    QList<Einsatz*> zub;
-    QList<Einsatz*> begl;
-    QList<Einsatz*> service;
-    QList<Einsatz*> sonstige;
-    QList<Einsatz*> werkstatt;
-    QList<Einsatz*> zugvorbereitung;
-    QList<Einsatz*> ausbildung;
-    QList<Einsatz*> infrastruktur;
-
-    // Aufsplitten der Personen auf die Einzelnen Listen
-    for(Einsatz *e: personen) {
-        switch (e->getKategorie()) {
-        case Category::Tf:
-        case Category::Tb: tf.append(e); break;
-        case Category::Zf: zf.append(e); break;
-        case Category::Service: service.append(e); break;
-        case Category::Zub: zub.append(e); break;
-        case Category::Begleiter: begl.append(e); break;
-        case Category::Werkstatt: werkstatt.append(e); break;
-        case Category::ZugVorbereiten: zugvorbereitung.append(e); break;
-        case Category::Ausbildung: ausbildung.append(e); break;
-        case Category::Infrastruktur: infrastruktur.append(e); break;
-        case Category::Sonstiges: sonstige.append(e); break;
-        case Category::Buero:
-        case Category::Gesamt:
-        case Category::Kilometer:
-        case Category::Anzahl:
-            continue;
-        }
-    }
+    QMap<Category, QList<Einsatz*>*> gruppen = splitNachKategorie();
 
     // Tf, Tb
     html += "<td>";
-    if (tf.size() > 0) {
-        html += "<ul>" + listToString("", tf, "<li>", "</li>") + "</ul>";
+    if (gruppen.value(Tf)->size() + gruppen.value(Tb)->size() > 0) {
+        html += "<ul>" + listToString("", *gruppen.value(Tf), "<li>", "</li>");
+        html += listToString("", *gruppen.value(Tb), "<li><i>", "</i></li>") + "</ul>";
+        gruppen.remove(Tf);
+        gruppen.remove(Tb);
     }
     html += "</td>";
 
     // Zf, Zub, Begl.o.b.A.
     html += "<td><ul>";
-    if (zf.size() > 0) {
-        html += listToString("", zf, "<li><u>", "</u></li>");
+    if (gruppen.value(Zf)->size() > 0) {
+        html += listToString("", *gruppen.value(Zf), "<li><u>", "</u></li>");
+        gruppen.remove(Zf);
     }
-    if (zub.size() > 0) {
-        html += listToString("", zub, "<li>", "</li>");
+    if (gruppen.value(Zub)->size() > 0) {
+        html += listToString("", *gruppen.value(Zub), "<li>", "</li>");
+        gruppen.remove(Zub);
     }
-    if (begl.size() > 0) {
-        html += listToString("", begl, "<li><i>", "</i></li>");
+    if (gruppen.value(Begleiter)->size() > 0) {
+        html += listToString("", *gruppen.value(Begleiter), "<li><i>", "</i></li>");
+        gruppen.remove(Begleiter);
     }
     html += "</ul></td>";
 
     // Service
     html += "<td>";
-    if (service.size() > 0) {
-        html += "<ul>" + listToString("", service, "<li>", "</li>") + "</ul>";
+    if (gruppen.value(Service)->size() > 0) {
+        html += "<ul>" + listToString("", *gruppen.value(Service), "<li>", "</li>") + "</ul>";
+        gruppen.remove(Service);
     }
     html += "</td>";
 
@@ -623,54 +632,69 @@ QString AActivity::getHtmlForTableView() const
         html += "<td>";
     }
 
-    if (werkstatt.size() >= 2) {
+    if (gruppen.value(Werkstatt)->size() >= 2) {
         if (zeilenUmbruch) html += "<br/>";
         zeilenUmbruch = false;
         html += "<b>Werkstatt:</b><ul>";
-        html += listToString("", werkstatt, "<li>", "</li>");
+        html += listToString("", *gruppen.value(Werkstatt), "<li>", "</li>");
         html += "</ul>";
     } else {
-        sonstige.append(werkstatt);
-        werkstatt.clear();
+        gruppen.value(Sonstiges)->append(*gruppen.value(Werkstatt));
     }
-    if (ausbildung.size() >= 2) {
+    gruppen.remove(Werkstatt);
+    if (gruppen.value(Ausbildung)->size() >= 2) {
         if (zeilenUmbruch) html += "<br/>";
         zeilenUmbruch = false;
         html += "<b>Ausbildung:</b><ul>";
-        html += listToString("", ausbildung, "<li>", "</li>");
+        html += listToString("", *gruppen.value(Ausbildung), "<li>", "</li>");
         html += "</ul>";
     } else {
-        sonstige.append(ausbildung);
-        ausbildung.clear();
+        gruppen.value(Sonstiges)->append(*gruppen.value(Ausbildung));
     }
-    if (zugvorbereitung.size() >= 2) {
+    gruppen.remove(Ausbildung);
+    if (gruppen.value(ZugVorbereiten)->size() >= 2) {
         if (zeilenUmbruch) html += "<br/>";
         zeilenUmbruch = false;
         html += "<b>Zugvorbereitung:</b><ul>";
-        html += listToString("", zugvorbereitung, "<li>", "</li>");
+        html += listToString("", *gruppen.value(ZugVorbereiten), "<li>", "</li>");
         html += "</ul>";
     } else {
-        sonstige.append(zugvorbereitung);
-        zugvorbereitung.clear();
+        gruppen.value(Sonstiges)->append(*gruppen.value(ZugVorbereiten));
     }
-    if (infrastruktur.size() >= 2) {
+    gruppen.remove(ZugVorbereiten);
+    if (gruppen.value(Infrastruktur)->size() >= 2) {
         if (zeilenUmbruch) html += "<br/>";
         zeilenUmbruch = false;
         html += "<b>Infrastruktur:</b><ul>";
-        html += listToString("", infrastruktur, "<li>", "</li>");
+        html += listToString("", *gruppen.value(Infrastruktur), "<li>", "</li>");
         html += "</ul>";
     } else {
-        sonstige.append(infrastruktur);
-        infrastruktur.clear();
+        gruppen.value(Sonstiges)->append(*gruppen.value(Infrastruktur));
     }
-    if (sonstige.size() > 0) {
-        if (werkstatt.size() + ausbildung.size() + zugvorbereitung.size() + infrastruktur.size() > 0) {
+    gruppen.remove(Infrastruktur);
+    if (gruppen.value(Buero)->size() >= 2) {
+        if (zeilenUmbruch) html += "<br/>";
+        zeilenUmbruch = false;
+        html += "<b>Büro:</b><ul>";
+        html += listToString("", *gruppen.value(Buero), "<li>", "</li>");
+        html += "</ul>";
+    } else {
+        gruppen.value(Sonstiges)->append(*gruppen.value(Buero));
+    }
+    gruppen.remove(Buero);
+
+    for(Category cat: gruppen.keys()) {
+        if (cat != Sonstiges)
+            gruppen.value(Sonstiges)->append(*gruppen.value(cat));
+    }
+    if (! gruppen.value(Sonstiges)->isEmpty()) {
+        if (html.endsWith("</ul>")) {
             if (zeilenUmbruch) html += "<br/>";
             html += "<b>Sonstiges:</b><ul>";
         } else {
             html += "<ul>";
         }
-        html += listToString("", sonstige, "<li>", "</li>", true);
+        html += listToString("", *gruppen.value(Sonstiges), "<li>", "</li>", true);
         html += "</ul>";
         zeilenUmbruch = false;
     }

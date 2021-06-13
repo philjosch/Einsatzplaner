@@ -103,11 +103,11 @@ void PersonalWindow::refreshTabelle()
         }
         ui->tabelleGesamt->insertRow(0);
         PersonTableWidgetItem *i = new PersonTableWidgetItem(p, p->getVorname());
-        i->setBackground(QBrush(QColor(farbe)));
+        faerbeZelle(i, farbe);
         ui->tabelleGesamt->setItem(0, 0, i);
 
         i = new PersonTableWidgetItem(p, p->getNachname());
-        i->setBackground(QBrush(QColor(farbe)));
+        faerbeZelle(i, farbe);
         ui->tabelleGesamt->setItem(0, 1, i);
 
         pos = 2;
@@ -126,9 +126,12 @@ void PersonalWindow::refreshTabelle()
             }
 
             switch (p->pruefeStunden(cat)) {
-            case AktivOhne:  i->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN))); break;
-            case PassivMit: i->setBackground(QBrush(QColor(Person::FARBE_GENUG_STUNDEN))); break;
-            default: i->setBackground(QBrush(QColor(Person::FARBE_STANDARD)));
+            case AktivOhne:
+                faerbeZelle(i, Person::FARBE_FEHLENDE_STUNDEN); break;
+            case PassivMit:
+                faerbeZelle(i, Person::FARBE_GENUG_STUNDEN); break;
+            default:
+                faerbeZelle(i, Person::FARBE_STANDARD); break;
             }
             ui->tabelleGesamt->setItem(0, pos++, i);
         }
@@ -171,12 +174,14 @@ void PersonalWindow::refreshEinzel()
         switch (p->pruefeStunden()) {
         case AktivOhne:
             item->setBackground(QBrush(QColor(Person::FARBE_FEHLENDE_STUNDEN)));
+            item->setForeground(QBrush(QColor("black")));
             break;
         case PassivMit:
             item->setBackground(QBrush(QColor(Person::FARBE_GENUG_STUNDEN)));
+            item->setForeground(QBrush(QColor("black")));
             break;
         default:
-            item->setBackground(QBrush(QColor(Person::FARBE_STANDARD)));
+            break;
         }
         ui->listWidget->insertItem(0, item);
         personToItem.insert(p, item);
@@ -330,6 +335,12 @@ void PersonalWindow::on_checkShowTf_clicked(bool checked)
 {
     if (checked) anzeige.insert(Category::Tf);
     else anzeige.remove(Category::Tf);
+    refreshTabelle();
+}
+void PersonalWindow::on_checkShowTb_clicked(bool checked)
+{
+    if (checked) anzeige.insert(Category::Tb);
+    else anzeige.remove(Category::Tb);
     refreshTabelle();
 }
 void PersonalWindow::on_checkShowZf_clicked(bool checked)
@@ -532,6 +543,10 @@ void PersonalWindow::on_lineTf_textChanged(const QString &arg1)
 {
     setZeitenNachVeraenderung(Tf, arg1);
 }
+void PersonalWindow::on_lineTb_textChanged(const QString &arg1)
+{
+    setZeitenNachVeraenderung(Tb, arg1);
+}
 void PersonalWindow::on_lineZf_textChanged(const QString &arg1)
 {
     setZeitenNachVeraenderung(Zf, arg1);
@@ -643,6 +658,7 @@ void PersonalWindow::showPerson(Person *p)
     updateZeiten();
 
     ui->lineTf->setText(stringForDurationEditorFromMinutes(p->getAdditional(Tf)));
+    ui->lineTb->setText(stringForDurationEditorFromMinutes(p->getAdditional(Tb)));
     ui->lineZf->setText(stringForDurationEditorFromMinutes(p->getAdditional(Zf)));
     ui->lineZub->setText(stringForDurationEditorFromMinutes(p->getAdditional(Zub)));
     ui->lineService->setText(stringForDurationEditorFromMinutes(p->getAdditional(Service)));
@@ -656,6 +672,7 @@ void PersonalWindow::showPerson(Person *p)
     ui->doubleKilometer->setValue(p->getAdditional(Kilometer));
 
     ui->labelMinTf->setText(minutesToHourString(p->getMinimumStunden(Tf)));
+    ui->labelMinTb->setText(minutesToHourString(p->getMinimumStunden(Tb)));
     ui->labelMinZf->setText(minutesToHourString(p->getMinimumStunden(Zf)));
     ui->labelMinZub->setText(minutesToHourString(p->getMinimumStunden(Zub)));
     ui->labelMinService->setText(minutesToHourString(p->getMinimumStunden(Service)));
@@ -704,6 +721,7 @@ void PersonalWindow::toggleFields(bool state)
     ui->tabelle->setEnabled(state);
 
     ui->lineTf->setEnabled(state);
+    ui->lineTb->setEnabled(state);
     ui->lineZf->setEnabled(state);
     ui->lineZub->setEnabled(state);
     ui->lineService->setEnabled(state);
@@ -733,6 +751,8 @@ void PersonalWindow::updateZeiten()
 {
     ui->labelTfSum->setText(minutesToHourString(aktuellePerson->getZeiten(Tf)));
     ui->labelTfSum->repaint();
+    ui->labelTbSum->setText(minutesToHourString(aktuellePerson->getZeiten(Tb)));
+    ui->labelTbSum->repaint();
     ui->labelZfSum->setText(minutesToHourString(aktuellePerson->getZeiten(Zf)));
     ui->labelZfSum->repaint();
     ui->labelZubSum->setText(minutesToHourString(aktuellePerson->getZeiten(Zub)));
@@ -756,9 +776,17 @@ void PersonalWindow::updateZeiten()
     ui->labelKilometerSum->setText(QString("%1 km").arg(aktuellePerson->getZeiten(Kilometer)));
     ui->labelKilometerSum->repaint();
     ui->labelGesamt->setText(QString("%1 (%2)")
-                             .arg(minutesToHourString(aktuellePerson->getZeiten(Gesamt)))
-                             .arg(minutesToHourString(aktuellePerson->getMinimumStunden(Gesamt))));
+                             .arg(minutesToHourString(aktuellePerson->getZeiten(Gesamt)),
+                                  minutesToHourString(aktuellePerson->getMinimumStunden(Gesamt))));
     ui->labelGesamt->repaint();
+}
+
+void PersonalWindow::faerbeZelle(QTableWidgetItem *item, QString hintergrund, QString vordergrund)
+{
+    if (hintergrund != Person::FARBE_STANDARD) {
+        item->setBackground(QBrush(QColor(hintergrund)));
+        item->setForeground(QBrush(QColor(vordergrund)));
+    }
 }
 
 void PersonalWindow::on_pushMailEinzel_clicked()

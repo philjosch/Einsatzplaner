@@ -62,10 +62,10 @@ Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p)
 
 Fahrtag::~Fahrtag()
 {
-    for(Reservierung *r: reservierungen) {
+    for(Reservierung *r: qAsConst(reservierungen)) {
         delete r;
     }
-    for(Wagen *w: wagen) {
+    for(Wagen *w: qAsConst(wagen)) {
         delete w;
     }
 }
@@ -257,25 +257,7 @@ QString Fahrtag::getHtmlForTableView() const
         }
     }
 
-    QList<Einsatz*> tf;
-    QList<Einsatz*> zf;
-    QList<Einsatz*> zub;
-    QList<Einsatz*> begl;
-    QList<Einsatz*> service;
-    QList<Einsatz*> sonstige;
-
-    // Aufsplitten der Personen auf die Einzelnen Listen
-    for(Einsatz *e: personen) {
-        switch (e->getKategorie()) {
-        case Tf:
-        case Tb: tf.append(e); break;
-        case Zf: zf.append(e); break;
-        case Zub: zub.append(e); break;
-        case Begleiter: begl.append(e); break;
-        case Service: service.append(e); break;
-        default: sonstige.append(e); break;
-        }
-    }
+    QMap<Category, QList<Einsatz*>*> gruppen = splitNachKategorie();
 
     // Tf, Tb
     QString beginnZelleBenoetigt = "<td>";
@@ -289,8 +271,11 @@ QString Fahrtag::getHtmlForTableView() const
     } else {
         html += "<td>";
     }
-    if (tf.size() > 0) {
-        html += "<ul>" + listToString("", tf, "<li>", "</li>") + "</ul>";
+    if (gruppen.value(Tf)->size() + gruppen.value(Tb)->size() > 0) {
+        html += "<ul>" + listToString("", *gruppen.value(Tf), "<li>", "</li>");
+        html += listToString("", *gruppen.value(Tb), "<li><i>", "</i></li>") + "</ul>";
+        gruppen.remove(Tf);
+        gruppen.remove(Tb);
     }
     html += "</td>";
 
@@ -305,14 +290,17 @@ QString Fahrtag::getHtmlForTableView() const
         html += "<i>"+benoetigt.arg("Begleitpersonal benötigt!")+"</i>";
     }
     html += "<ul>";
-    if (zf.size() > 0) {
-        html += listToString("", zf, "<li><u>", "</u></li>");
+    if (gruppen.value(Zf)->size() > 0) {
+        html += listToString("", *gruppen.value(Zf), "<li><u>", "</u></li>");
+        gruppen.remove(Zf);
     }
-    if (zub.size() > 0) {
-        html += listToString("", zub, "<li>", "</li>");
+    if (gruppen.value(Zub)->size() > 0) {
+        html += listToString("", *gruppen.value(Zub), "<li>", "</li>");
+        gruppen.remove(Zub);
     }
-    if (begl.size() > 0) {
-        html += listToString("", begl, "<li><i>", "</i></li>");
+    if (gruppen.value(Begleiter)->size() > 0) {
+        html += listToString("", *gruppen.value(Begleiter), "<li><i>", "</i></li>");
+        gruppen.remove(Begleiter);
     }
     html += "</ul></td>";
 
@@ -323,8 +311,9 @@ QString Fahrtag::getHtmlForTableView() const
     } else {
         html += "<td>";
     }
-    if (service.size() > 0) {
-        html += "<ul>" + listToString("", service, "<li>", "</li>") + "</ul>";
+    if (gruppen.value(Service)->size() > 0) {
+        html += "<ul>" + listToString("", *gruppen.value(Service), "<li>", "</li>") + "</ul>";
+        gruppen.remove(Service);
     }
     html += "</td>";
 
@@ -337,9 +326,14 @@ QString Fahrtag::getHtmlForTableView() const
     } else {
         html += "<td>";
     }
-    if (sonstige.size() > 0) {
+
+    for(Category cat: gruppen.keys()) {
+        if (cat != Sonstiges)
+            gruppen.value(Sonstiges)->append(*gruppen.value(cat));
+    }
+    if (gruppen.value(Sonstiges)->size() > 0) {
         html += "<ul>";
-        html += listToString("", sonstige, "<li>", "</li>", true);
+        html += listToString("", *gruppen.value(Sonstiges), "<li>", "</li>", true);
         html += "</ul>";
         zeilenUmbruch = false;
     }
@@ -374,31 +368,31 @@ QString Fahrtag::getHtmlFuerReservierungsuebersicht() const
     // Sortieren der Daten nach Wagenreihung
     QStringList wagen = wagenreihung.split(QRegExp("\\s*,\\s*"));
     QList<int> wagenNummern;
-    for(const QString &s: wagen)
+    for(const QString &s: qAsConst(wagen))
         wagenNummern.append(s.toInt());
 
     // Sortieren der Reservierungen
-    QHash<int, QList<Reservierung*>*> wagenZuRes;
+    QHash<int, QList<Reservierung*>> wagenZuRes;
     for (Reservierung *r: reservierungen) {
         for(int i: r->getSitzplatz().keys()) {
             if (!wagenZuRes.contains(i))
-                wagenZuRes.insert(i, new QList<Reservierung*>());
+                wagenZuRes.insert(i, QList<Reservierung*>());
             int pos = 0;
-            QList<Reservierung*> *list= wagenZuRes.value(i);
-            list->insert(0, r);
-            while (pos+1 < list->length() && list->at(pos)->getName() > list->at(pos+1)->getName()) {
-                list->swapItemsAt(pos, pos+1);
+            QList<Reservierung*> list= wagenZuRes.value(i);
+            list.insert(0, r);
+            while (pos+1 < list.length() && list.at(pos)->getName() > list.at(pos+1)->getName()) {
+                list.swapItemsAt(pos, pos+1);
                 pos++;
             }
         }
         if (r->getSitzplatz().isEmpty()) {
             if (! wagenZuRes.contains(999))
-                wagenZuRes.insert(999, new QList<Reservierung*>());
+                wagenZuRes.insert(999, QList<Reservierung*>());
             int pos = 0;
-            QList<Reservierung*> *list= wagenZuRes.value(999);
-            list->insert(0, r);
-            while (pos+1 < list->length() && list->at(pos)->getName() > list->at(pos+1)->getName()) {
-                list->swapItemsAt(pos, pos+1);
+            QList<Reservierung*> list= wagenZuRes.value(999);
+            list.insert(0, r);
+            while (pos+1 < list.length() && list.at(pos)->getName() > list.at(pos+1)->getName()) {
+                list.swapItemsAt(pos, pos+1);
                 pos++;
             }
         }
@@ -407,14 +401,14 @@ QString Fahrtag::getHtmlFuerReservierungsuebersicht() const
     for(int wagenNr: wagenNummern) {
         if (wagenZuRes.contains(wagenNr)) {
             a += "<tr><td columnspan='4'><b>Wagen "+QString::number(wagenNr)+":</b></td></tr>";
-            for(Reservierung *r: *wagenZuRes.value(wagenNr)) {
+            for(Reservierung *r: wagenZuRes.value(wagenNr)) {
                 a += r->getHtmlForDetailTable();
             }
         }
     }
     if (wagenZuRes.contains(999)) {
         a += "<tr><td columnspan='4'><b>Reservierungen ohne Sitzplätze:</b></td></tr>";
-        for(Reservierung *r: *wagenZuRes.value(999)) {
+        for(Reservierung *r: wagenZuRes.value(999)) {
             a += r->getHtmlForDetailTable();
         }
     }
@@ -547,7 +541,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     QList<Wagen*> ersteKlasse = QList<Wagen*>();
     QList<Wagen*> andereKlasse = QList<Wagen*>();
     QStringList wagenR = wagenreihung.split(QRegExp("\\s*,\\s*"));
-    for(QString s: wagenR) {
+    for(const QString &s: qAsConst(wagenR)) {
         int nummer = s.toInt();
         switch (Wagen::klasse(nummer)) {
         case 1: ersteKlasse.append(new Wagen(nummer)); break;
@@ -559,7 +553,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     // Aufteilen der Resevierungen auf die beiden gruppen
     QSet<Reservierung*> resErste = QSet<Reservierung*>();
     QSet<Reservierung*> resAndere = QSet<Reservierung*>();
-    for(Reservierung *r: reservierungen) {
+    for(Reservierung *r: qAsConst(reservierungen)) {
         if (r->getKlasse() == 1)
             resErste.insert(r);
         else
@@ -636,13 +630,13 @@ bool Fahrtag::removeReservierung(Reservierung *res)
 bool Fahrtag::createWagen()
 {
     QHash<int,Wagen*> wagenNummer;
-    for(Wagen *w: wagen) {
+    for(Wagen *w: qAsConst(wagen)) {
         wagenNummer.insert(w->getNummer(), w);
     }
 
     QList<Wagen*> wagenNeu = QList<Wagen*>();
     QStringList wagenSplit = wagenreihung.split(QRegExp("\\s*,\\s*"));
-    for(QString s: wagenSplit) {
+    for(const QString &s: qAsConst(wagenSplit)) {
         int nummer = s.toInt();
         Wagen *w;
         if (wagenNummer.contains(nummer)) {
@@ -664,7 +658,7 @@ bool Fahrtag::createWagen()
     }
     wagen = wagenNeu;
     nummerToWagen.clear();
-    for(Wagen *w: wagen) {
+    for(Wagen *w: qAsConst(wagen)) {
         nummerToWagen.insert(w->getNummer(), w);
     }
     return true;

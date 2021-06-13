@@ -224,9 +224,11 @@ void ActivityWindow::setPredefinedValue(QString anlass)
             || anlass.contains(tr("Vorbereitung"), Qt::CaseInsensitive)
             || anlass.contains(tr("Reinig"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::ZugVorbereiten;
-    } else if (anlass.contains(tr("Werkstatt"), Qt::CaseInsensitive)) {
+    } else if (anlass.contains(tr("Werkstatt"), Qt::CaseInsensitive)
+               || anlass.contains(tr("Innenausbau"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Werkstatt;
-    } else if (anlass.contains(tr("Ausbildung"), Qt::CaseInsensitive)) {
+    } else if (anlass.contains(tr("Ausbildung"), Qt::CaseInsensitive)
+               || anlass.contains(tr("RFU"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Ausbildung;
     } else if (anlass.contains(tr("Büro"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Buero;
@@ -240,5 +242,5 @@ void ActivityWindow::setPredefinedValue(QString anlass)
 
 void ActivityWindow::updateWindowTitle()
 {
-    setWindowTitle(tr("%1 am %2").arg(activity->getStringShort()).arg(activity->getDatum().toString("dddd dd.MM. yyyy")));
+    setWindowTitle(tr("%1 am %2").arg(activity->getStringShort(), activity->getDatum().toString("dddd dd.MM. yyyy")));
 }

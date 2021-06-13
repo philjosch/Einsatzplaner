@@ -74,7 +74,7 @@ void MainWindowPersonal::onPersonWirdEntferntWerden(Person *p)
 }
 void MainWindowPersonal::onPersonWurdeBearbeitet([[maybe_unused]] Person *p)
 {
-    on_actionAktualisieren_triggered();
+//    on_actionAktualisieren_triggered();
 }
 
 
@@ -139,8 +139,8 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
         if (anzeige.contains("Status")) {
             i = new PersonTableWidgetItem(p,
                         QString("%1%2")
-                        .arg(p->isAusgetreten() ? "Ehemals ": "")
-                        .arg(p->getAktiv() ? "Aktiv" : "Passiv"));
+                        .arg((p->isAusgetreten() ? "Ehemals ": ""),
+                             (p->getAktiv() ? "Aktiv" : "Passiv")));
             ui->tabelleMitglieder->setItem(0, clmn++, i);
         }
         if (anzeige.contains("Austritt")) {
@@ -317,11 +317,6 @@ void MainWindowPersonal::on_tabelleMitglieder_cellDoubleClicked(int row, [[maybe
     if (clicked != nullptr) {
         showPerson(clicked->getPerson());
     }
-//    QString name = ui->tabelleMitglieder->item(row, 0)->text() + " " + ui->tabelleMitglieder->item(row, 1)->text();
-//    Person * p = personal->getPerson(name);
-//    if (p != nullptr) {
-//        showPerson(p);
-//    }
 }
 
 

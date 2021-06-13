@@ -161,7 +161,7 @@
        <attribute name="title">
         <string>Einsatzzeiten</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_5" rowstretch="1,0,0" columnstretch="1,1,2">
+       <layout class="QGridLayout" name="gridLayout_5" rowstretch="1,0,0" columnstretch="1,1">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -177,7 +177,7 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <item row="0" column="0" colspan="3">
+        <item row="0" column="0" colspan="2">
          <widget class="QTableWidget" name="tabelleGesamt">
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
@@ -209,25 +209,13 @@
           </column>
          </widget>
         </item>
-        <item row="1" column="0" colspan="3">
-         <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0,0,0,1">
+        <item row="1" column="0" colspan="2">
+         <layout class="QGridLayout" name="gridTabelleSpalten" columnstretch="0,0,0,0,0,0,0,1">
           <property name="horizontalSpacing">
            <number>12</number>
           </property>
-          <item row="1" column="3">
+          <item row="1" column="4">
            <widget class="QCheckBox" name="checkShowZub">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
             <property name="text">
              <string>Zub/Begl.o.b.A.</string>
             </property>
@@ -236,20 +224,8 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="4" colspan="2">
+          <item row="0" column="5" colspan="2">
            <widget class="QCheckBox" name="checkShowKilometer">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
             <property name="text">
              <string>Gefahrene Kilometer</string>
             </property>
@@ -258,20 +234,8 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
+          <item row="1" column="3">
            <widget class="QCheckBox" name="checkShowZf">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
             <property name="text">
              <string>Zf</string>
             </property>
@@ -282,12 +246,6 @@
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_31">
-            <property name="minimumSize">
-             <size>
-              <width>86</width>
-              <height>0</height>
-             </size>
-            </property>
             <property name="font">
              <font>
               <weight>75</weight>
@@ -299,20 +257,8 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="2" column="1" colspan="2">
            <widget class="QCheckBox" name="checkShowWerkstatt">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
             <property name="text">
              <string>Werkstatt</string>
             </property>
@@ -321,20 +267,8 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="5">
+          <item row="1" column="6">
            <widget class="QCheckBox" name="checkShowVorbereiten">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
             <property name="text">
              <string>Zug Vorbereiten</string>
             </property>
@@ -343,20 +277,8 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="0" column="1" colspan="2">
            <widget class="QCheckBox" name="checkShowGesamt">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
             <property name="text">
              <string>Gesamtstunden</string>
             </property>
@@ -365,20 +287,8 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="4">
+          <item row="1" column="5">
            <widget class="QCheckBox" name="checkShowService">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
             <property name="text">
              <string>Service</string>
             </property>
@@ -387,20 +297,8 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="2">
+          <item row="2" column="3">
            <widget class="QCheckBox" name="checkShowBuero">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
             <property name="text">
              <string>Büro</string>
             </property>
@@ -409,20 +307,8 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="3">
+          <item row="2" column="4">
            <widget class="QCheckBox" name="checkShowAusbildung">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
             <property name="text">
              <string>Ausbildung</string>
             </property>
@@ -443,12 +329,6 @@
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_30">
-            <property name="minimumSize">
-             <size>
-              <width>86</width>
-              <height>0</height>
-             </size>
-            </property>
             <property name="font">
              <font>
               <weight>75</weight>
@@ -460,20 +340,8 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="2" colspan="2">
+          <item row="0" column="3" colspan="2">
            <widget class="QCheckBox" name="checkShowAnzahl">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
             <property name="text">
              <string>Anzahl Einsätze</string>
             </property>
@@ -484,27 +352,15 @@
           </item>
           <item row="1" column="1">
            <widget class="QCheckBox" name="checkShowTf">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
             <property name="text">
-             <string>Tf/Tb</string>
+             <string>Tf</string>
             </property>
             <property name="checked">
              <bool>false</bool>
             </property>
            </widget>
           </item>
-          <item row="1" column="6">
+          <item row="1" column="7">
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -520,27 +376,15 @@
             </property>
            </spacer>
           </item>
-          <item row="2" column="4">
+          <item row="2" column="5">
            <widget class="QCheckBox" name="checkShowInfrastruktur">
             <property name="text">
              <string>Infrastruktur</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="5">
+          <item row="2" column="6">
            <widget class="QCheckBox" name="checkShowSonstiges">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>24</height>
-             </size>
-            </property>
             <property name="text">
              <string>Sonstiges</string>
             </property>
@@ -549,16 +393,23 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="checkShowTb">
+            <property name="text">
+             <string>Tb</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
-        <item row="2" column="2">
+        <item row="2" column="1">
          <widget class="QPushButton" name="pushZeitenDrucken">
           <property name="text">
            <string>Tabelle drucken …</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="0" colspan="2">
+        <item row="2" column="0">
          <widget class="QPushButton" name="pushZeitenPDF">
           <property name="text">
            <string>Tabelle als PDF speichern …</string>
@@ -968,7 +819,56 @@
             <property name="verticalSpacing">
              <number>0</number>
             </property>
-            <item row="1" column="1" rowspan="2">
+            <item row="2" column="0">
+             <widget class="QLabel" name="labelTb">
+              <property name="text">
+               <string>Tb</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="lineTb">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="inputMask">
+               <string>9999:99</string>
+              </property>
+              <property name="text">
+               <string>0000:00</string>
+              </property>
+              <property name="maxLength">
+               <number>7</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLabel" name="labelTbSum">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::PlainText</enum>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QLabel" name="labelMinTb">
+              <property name="text">
+               <string>0 h</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
              <widget class="QLineEdit" name="lineTf">
               <property name="enabled">
                <bool>false</bool>
@@ -990,7 +890,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="3" rowspan="2">
+            <item row="0" column="3">
              <widget class="QLabel" name="labelMin">
               <property name="text">
                <string>Min</string>
@@ -1032,7 +932,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="3">
+            <item row="1" column="3">
              <widget class="QLabel" name="labelMinTf">
               <property name="text">
                <string>0 h</string>
@@ -1341,10 +1241,10 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0" rowspan="2">
+            <item row="1" column="0">
              <widget class="QLabel" name="labelTf">
               <property name="text">
-               <string>Tf/Tb</string>
+               <string>Tf</string>
               </property>
               <property name="buddy">
                <cstring>lineTf</cstring>
@@ -1532,7 +1432,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="2">
+            <item row="1" column="2">
              <widget class="QLabel" name="labelTfSum">
               <property name="text">
                <string>0 h</string>
