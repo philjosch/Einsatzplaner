@@ -1,7 +1,7 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 12. Juni 2021
+Stand: 13. Juni 2021
 
-## Version 1.7.1 – 2021-06-XX
+## Version 1.7.1 – 2021-06-13
 ### Verbessert
 - Die End-Zeit für Arbeitseinsätze wird dynamisch bestimmt (18Uhr im Sommer, 16 Uhr im Winter)
 - Mehr Begriffe für die automatische Kategorieerkennung bei Arbeitseinsätzen
