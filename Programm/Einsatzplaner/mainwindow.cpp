@@ -125,6 +125,8 @@ void MainWindow::onDateiWurdeErfolgreichGespeichert()
             ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
         } catch (KeinAutoUploadException &e) {
 
+        } catch (UnsichereVerbindungException &e) {
+            QMessageBox::warning(this, tr("Fehler beim Hochladen"), tr("Die Listenansicht konnte nicht automatisch hochgeladen werden, da keine gesicherte Verbindung aufgebaut werden konnte. Ein manueller Upload über die Exportfunktion ist weiterhin möglich."));
         } catch (NetworkingException &e) {
             QMessageBox::warning(this, tr("Fehler beim Hochladen"), tr("Die Listenansicht konnte nicht automatisch hochgeladen werden. Bitte prüfen Sie Ihre Internetverbindung und die Einstellungen."));
         }

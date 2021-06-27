@@ -33,6 +33,9 @@ public:
                         o.value("path").toString(),
                         o.value("id").toString()};
         }
+        bool isSecure() {
+            return getServerKomplett().startsWith("https://");
+        }
     };
 
     static QString ladeDatenVonURL(QString url);

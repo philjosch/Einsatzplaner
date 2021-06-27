@@ -117,6 +117,9 @@ void Export::Upload::autoUploadToServer(QList<AActivity*> liste, Networking::Ser
     if (!Einstellungen::getUseAutoUpload()) {
         throw KeinAutoUploadException();
     }
+    if (! server.isSecure()) {
+        throw UnsichereVerbindungException();
+    }
 
     Upload::uploadToServer(liste, server);
 }
