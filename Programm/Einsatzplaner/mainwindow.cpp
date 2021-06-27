@@ -118,12 +118,13 @@ void MainWindow::onDateiWurdeErfolgreichGespeichert()
     CoreMainWindow::onDateiWurdeErfolgreichGespeichert();
     if (datei->getDateiEigenschaften()->getAutom()) {
         int result = Export::Upload::autoUploadToServer(manager->filter(datei->getDateiEigenschaften()->getAuswahl()), datei->getDateiEigenschaften()->getServer());
-        if (result == 0)
+        if (result == 0) {
             ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
-        else if (result > 0)
+            QMessageBox::warning(this, tr("Fehler beim Hochladen"), tr("Die Listenansicht konnte nicht hochgeladen werden. Bitte prüfen Sie Ihre Internetverbindung und die Einstellungen."));
+        } else if (result > 0) {
             ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
+        }
     }
-    return;
 }
 
 void MainWindow::onAktivitaetWirdEntferntWerden(AActivity *a)
