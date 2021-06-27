@@ -1188,14 +1188,13 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+iban
             +";"+bank
             +";"+getKontoinhaber()
-            +";"+QString(sonstigeBetrieblich).replace("\n","<br/>")
-            +";"+QString(sonstigeAusbildung).replace("\n","<br/>")
 
             +";"+(ausbildungTf ? "WAHR":"FALSCH")
             +";"+(ausbildungZf ? "WAHR":"FALSCH")
             +";"+(ausbildungRangierer ? "WAHR":"FALSCH")
             +";"+tauglichkeit.toString("dd.MM.yyyy")
-
+            +";"+QString(sonstigeBetrieblich).replace("\n","<br/>")
+            +";"+QString(sonstigeAusbildung).replace("\n","<br/>")
 
             +";"+strasse
             +";"+plz
