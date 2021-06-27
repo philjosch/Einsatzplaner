@@ -64,6 +64,16 @@ class PersonNichtGefundenException : public AActivityException {
 public: PersonNichtGefundenException(QString name) : AActivityException(QObject::tr("%1 konnte nicht gefunden werden!\nBitte überprüfen Sie Ihre Eingabe und legen die Person gegebenenfalls neu an.").arg(name)) {}
 };
 
+
+
+class NetworkingException : public EplException {
+public: NetworkingException(QString msg) : EplException(msg) {}
+    NetworkingException() : EplException("Es ist ein Fehler aufgetreten.\nPrüfen Sie Ihre Internetverbindung und versuchen es erneut!") {}
+};
+class KeinAutoUploadException : public EplException {
+public: KeinAutoUploadException() : EplException("Der Vorgang wurde abgebrochen, da kein automatischer Upload aktiviert wurde.") {}
+};
+
 }
 
 

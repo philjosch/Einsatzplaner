@@ -6,9 +6,12 @@
 #include "coreapplication.h"
 #include "fahrtagwindow.h"
 #include "activitywindow.h"
+#include "eplexception.h"
 
 #include <QMessageBox>
 #include <QJsonArray>
+
+using namespace EplException;
 
 MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWindow)
 {
@@ -117,12 +120,13 @@ void MainWindow::onDateiWurdeErfolgreichGespeichert()
 {
     CoreMainWindow::onDateiWurdeErfolgreichGespeichert();
     if (datei->getDateiEigenschaften()->getAutom()) {
-        int result = Export::Upload::autoUploadToServer(manager->filter(datei->getDateiEigenschaften()->getAuswahl()), datei->getDateiEigenschaften()->getServer());
-        if (result == 0) {
-            ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
-            QMessageBox::warning(this, tr("Fehler beim Hochladen"), tr("Die Listenansicht konnte nicht hochgeladen werden. Bitte prüfen Sie Ihre Internetverbindung und die Einstellungen."));
-        } else if (result > 0) {
+        try {
+            Export::Upload::autoUploadToServer(manager->filter(datei->getDateiEigenschaften()->getAuswahl()), datei->getDateiEigenschaften()->getServer());
             ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
+        } catch (KeinAutoUploadException &e) {
+
+        } catch (NetworkingException &e) {
+            QMessageBox::warning(this, tr("Fehler beim Hochladen"), tr("Die Listenansicht konnte nicht automatisch hochgeladen werden. Bitte prüfen Sie Ihre Internetverbindung und die Einstellungen."));
         }
     }
 }

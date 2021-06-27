@@ -2,9 +2,12 @@
 #include "export.h"
 #include "fileio.h"
 #include "networking.h"
+#include "eplexception.h"
 
 #include <QTemporaryFile>
 #include <QPrintDialog>
+
+using namespace EplException;
 
 const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td, p { font-size: 11px; font-weight: normal;}"
                             "table { border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
@@ -91,7 +94,7 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPrinter::Orienta
     return p;
 }
 
-bool Export::Upload::uploadToServer(QList<AActivity *> liste, Networking::Server server)
+void Export::Upload::uploadToServer(QList<AActivity *> liste, Networking::Server server)
 {
     /* ERSTELLEN DER DATEI */
     QTemporaryFile tempFile;
@@ -104,15 +107,18 @@ bool Export::Upload::uploadToServer(QList<AActivity *> liste, Networking::Server
 
     Aktivitaeten::printAktivitaetenListe(liste, p);
 
-    return Networking::ladeDateiHoch(server, &tempFile);
+    if (! Networking::ladeDateiHoch(server, &tempFile)) {
+        throw NetworkingException();
+    }
 }
 
-int Export::Upload::autoUploadToServer(QList<AActivity*> liste, Networking::Server server)
+void Export::Upload::autoUploadToServer(QList<AActivity*> liste, Networking::Server server)
 {
-    if (!Einstellungen::getUseAutoUpload()) return -1;
+    if (!Einstellungen::getUseAutoUpload()) {
+        throw KeinAutoUploadException();
+    }
 
-    if (Upload::uploadToServer(liste, server)) return 1;
-    return 0;
+    Upload::uploadToServer(liste, server);
 }
 
 bool Export::druckeHtmlAufDrucker(QString text, QPrinter *printer)
