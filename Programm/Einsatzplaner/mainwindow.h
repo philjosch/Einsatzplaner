@@ -50,7 +50,6 @@ protected slots:
     // Aktivitaeten
     void newFahrtag(QDate d = QDate::currentDate());
     void newActivity(QDate d = QDate::currentDate());
-    void openAActivity(AActivity *a);
     void newAActivityHandler(AActivity *a);
 
     // Liste der Aktivitäten
@@ -66,7 +65,6 @@ protected:
     //** View
     Ui::MainWindow *ui;
     QList<CalendarDay*> tage;
-    QMap<AActivity*, QMainWindow*> fenster;
 
     PersonalWindow *personalfenster;
     ExportDialog *exportDialog;

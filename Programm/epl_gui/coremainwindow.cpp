@@ -4,6 +4,8 @@
 #include "coreapplication.h"
 #include "einstellungendialog.h"
 #include "filesettingsdialog.h"
+#include "activitywindow.h"
+#include "fahrtagwindow.h"
 
 #include <QInputDialog>
 #include <QMessageBox>
@@ -28,6 +30,9 @@ CoreMainWindow::CoreMainWindow(EplFile *datei) : QMainWindow()
             this, &CoreMainWindow::onAktivitaetWurdeBearbeitet);
     connect(personal, &ManagerPersonal::personChanged,
             this, &CoreMainWindow::onPersonWurdeBearbeitet);
+
+    // Controller
+    fensterActivities = QMap<AActivity*, QMainWindow*>();
 }
 CoreMainWindow::~CoreMainWindow()
 {
@@ -194,6 +199,37 @@ void CoreMainWindow::onDateiWurdeErfolgreichGespeichert()
     updateWindowHeaders();
 }
 
+void CoreMainWindow::openAktivitaet(AActivity *a)
+{
+    if (a == nullptr) return;
+
+    if (fensterActivities.contains(a)) {
+        fensterActivities.value(a)->show();
+        fensterActivities.value(a)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+        fensterActivities.value(a)->raise();  // for MacOS
+        fensterActivities.value(a)->activateWindow(); // for Windows
+    } else {
+        QMainWindow *w;
+        if (a->getArt() == Art::Arbeitseinsatz) {
+            w = new ActivityWindow(this, a);
+        } else {
+            Fahrtag* f = dynamic_cast<Fahrtag*>(a);
+            w = new FahrtagWindow(this, f);
+        }
+        w->setWindowFilePath(datei->getPfad());
+        fensterActivities.insert(a, w);
+        w->show();
+    }
+}
+void CoreMainWindow::onAktivitaetWirdEntferntWerden(AActivity *a)
+{
+    if (fensterActivities.contains(a)) {
+        QMainWindow *w = fensterActivities.value(a);
+        fensterActivities.remove(a);
+        w->close();
+        delete w;
+    }
+}
 
 void CoreMainWindow::closeEvent(QCloseEvent *event)
 {

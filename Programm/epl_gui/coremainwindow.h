@@ -71,7 +71,8 @@ protected slots:
     virtual void onPersonWurdeBearbeitet([[maybe_unused]] Person *p) {};
 
     // Aktivitaeten bezogene Methoden
-    virtual void onAktivitaetWirdEntferntWerden([[maybe_unused]] AActivity *a) {};
+    virtual void openAktivitaet(AActivity *a);
+    virtual void onAktivitaetWirdEntferntWerden([[maybe_unused]] AActivity *a);
     virtual void onAktivitaetWurdeBearbeitet([[maybe_unused]] AActivity *a, [[maybe_unused]] QDate altesDatum = QDate()) {};
 
 protected:
@@ -90,6 +91,9 @@ protected:
     //** View
     QMenu *recentlyUsedMenu;
     QAction *recentlyUsedClear;
+
+    //** Controller
+    QMap<AActivity*, QMainWindow*> fensterActivities;
 };
 
 #endif // MAINWINDOW_H
