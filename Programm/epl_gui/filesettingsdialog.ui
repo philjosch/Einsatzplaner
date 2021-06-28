@@ -183,12 +183,6 @@
       </item>
       <item row="5" column="2">
        <widget class="QLabel" name="label_6">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>32</height>
-         </size>
-        </property>
         <property name="text">
          <string>–</string>
         </property>
