@@ -14,16 +14,13 @@ include(../share.pri)
 
 SOURCES += \
     main.cpp \
-    mainwindowpersonal.cpp \
-    personwindow.cpp
+    mainwindowpersonal.cpp
 
 HEADERS += \
-    mainwindowpersonal.h \
-    personwindow.h
+    mainwindowpersonal.h
 
 FORMS += \
-    mainwindowpersonal.ui \
-    personwindow.ui
+    mainwindowpersonal.ui
 
 
 #TRANSLATIONS += \

@@ -17,6 +17,9 @@ QT       += core printsupport network gui widgets
 
 
 SOURCES += \
+    activitywindow.cpp \
+    fahrtagwindow.cpp \
+    personwindow.cpp \
     guihelper.cpp \
     coremainwindow.cpp \
     einstellungendialog.cpp \
@@ -25,6 +28,9 @@ SOURCES += \
     coreapplication.cpp
 
 HEADERS += \
+    activitywindow.h \
+    fahrtagwindow.h \
+    personwindow.h \
     guihelper.h \
     coremainwindow.h \
     einstellungendialog.h \
@@ -33,6 +39,9 @@ HEADERS += \
     coreapplication.h
 
 FORMS += \
+    activitywindow.ui \
+    fahrtagwindow.ui \
+    personwindow.ui \
     minimumhourseditordialog.ui \
     filesettingsdialog.ui \
     einstellungendialog.ui
