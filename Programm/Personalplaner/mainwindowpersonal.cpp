@@ -56,17 +56,6 @@ void MainWindowPersonal::handlerOpen(QString path)
     open(path);
 }
 
-void MainWindowPersonal::onDateiWurdeVeraendert()
-{
-    CoreMainWindow::onDateiWurdeVeraendert();
-//    on_actionAktualisieren_triggered();
-}
-
-void MainWindowPersonal::onPersonWurdeBearbeitet([[maybe_unused]] Person *p)
-{
-//    on_actionAktualisieren_triggered();
-}
-
 
 void MainWindowPersonal::on_actionAddPerson_triggered()
 {

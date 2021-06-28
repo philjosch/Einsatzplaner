@@ -33,7 +33,7 @@ CoreMainWindow::CoreMainWindow(EplFile *datei) : QMainWindow()
             this, &CoreMainWindow::onPersonWurdeBearbeitet);
 
     // Controller
-    fensterActivities = QMap<AActivity*, QMainWindow*>();
+    fensterAktivitaeten = QMap<AActivity*, QMainWindow*>();
     fensterPersonen = QMap<Person*, QMainWindow*>();
 }
 CoreMainWindow::~CoreMainWindow()
@@ -181,14 +181,12 @@ bool CoreMainWindow::on_actionClose_triggered()
 
 void CoreMainWindow::handlerPreferenes()
 {
-    EinstellungenDialog *dialog = new EinstellungenDialog();
-    dialog->show();
+    EinstellungenDialog(this).exec();
 }
 
 void CoreMainWindow::handlerSettings()
 {
-    FileSettingsDialog s(this, datei->getDateiEigenschaften());
-    s.exec();
+    FileSettingsDialog(this, datei->getDateiEigenschaften()).exec();
 }
 
 void CoreMainWindow::onDateiWurdeVeraendert()
@@ -231,11 +229,11 @@ void CoreMainWindow::openAktivitaet(AActivity *a)
 {
     if (a == nullptr) return;
 
-    if (fensterActivities.contains(a)) {
-        fensterActivities.value(a)->show();
-        fensterActivities.value(a)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-        fensterActivities.value(a)->raise();  // for MacOS
-        fensterActivities.value(a)->activateWindow(); // for Windows
+    if (fensterAktivitaeten.contains(a)) {
+        fensterAktivitaeten.value(a)->show();
+        fensterAktivitaeten.value(a)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+        fensterAktivitaeten.value(a)->raise();  // for MacOS
+        fensterAktivitaeten.value(a)->activateWindow(); // for Windows
     } else {
         QMainWindow *w;
         if (a->getArt() == Art::Arbeitseinsatz) {
@@ -245,15 +243,15 @@ void CoreMainWindow::openAktivitaet(AActivity *a)
             w = new FahrtagWindow(this, f);
         }
         w->setWindowFilePath(datei->getPfad());
-        fensterActivities.insert(a, w);
+        fensterAktivitaeten.insert(a, w);
         w->show();
     }
 }
 void CoreMainWindow::onAktivitaetWirdEntferntWerden(AActivity *a)
 {
-    if (fensterActivities.contains(a)) {
-        QMainWindow *w = fensterActivities.value(a);
-        fensterActivities.remove(a);
+    if (fensterAktivitaeten.contains(a)) {
+        QMainWindow *w = fensterAktivitaeten.value(a);
+        fensterAktivitaeten.remove(a);
         w->close();
         delete w;
     }
@@ -357,14 +355,14 @@ void CoreMainWindow::updateWindowHeaders()
     bool mod = !datei->istGespeichert();
     setWindowModified(mod);
     QList<QMainWindow*> list = getChildWindows();
-    for(QMainWindow *m: list) {
+    for(QMainWindow *m: qAsConst(list)) {
         m->setWindowModified(mod);
     }
 
     QString path = datei->getPfad();
     if (path != "") {
         setWindowFilePath(path);
-        for(QMainWindow *mw: list) {
+        for(QMainWindow *mw: qAsConst(list)) {
             mw->setWindowFilePath(path);
         }
     }

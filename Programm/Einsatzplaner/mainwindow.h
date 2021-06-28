@@ -53,7 +53,6 @@ protected slots:
     void newAActivityHandler(AActivity *a);
 
     // Liste der Aktivitäten
-    void onItemInListClicked(QListWidgetItem *item);
     void setListItem(QListWidgetItem *i, AActivity *a);
 
 protected:

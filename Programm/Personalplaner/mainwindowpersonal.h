@@ -27,10 +27,6 @@ protected slots:
     CoreMainWindow *handlerNew();
     void handlerOpen(QString path);
 
-    void onDateiWurdeVeraendert();
-
-    void onPersonWurdeBearbeitet(Person *p);
-
     //** Menueleiste
     // Bearbeiten
     void on_actionAddPerson_triggered();

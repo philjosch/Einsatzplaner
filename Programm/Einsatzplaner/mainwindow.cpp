@@ -28,7 +28,7 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
     connect(ui->actionNeuArbeitseinsatz, SIGNAL(triggered(bool)), this, SLOT(newActivity()));
     connect(ui->actionNeuFahrtag, SIGNAL(triggered(bool)), this, SLOT(newFahrtag()));
     connect(ui->dateSelector, SIGNAL(dateChanged(QDate)), this, SLOT(showDate(QDate)));
-    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), SLOT(onItemInListClicked(QListWidgetItem*)));
+    connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) { openAktivitaet(itemToList.value(item)); });
 
     // Setup fuer die Darstellung des Kalenders
     tage = QList<CalendarDay*>();
@@ -104,6 +104,8 @@ void MainWindow::handlerOpen(QString path)
 
 void MainWindow::onDateiWirdGespeichertWerden()
 {
+    CoreMainWindow::onDateiWirdGespeichertWerden();
+
     datei->setPositionKalender(EplFile::FensterPosition {x(), y(), width(), height() });
     datei->setPositionPersonal(
                 EplFile::FensterPosition {personalfenster->x(),
@@ -115,6 +117,7 @@ void MainWindow::onDateiWirdGespeichertWerden()
 void MainWindow::onDateiWurdeErfolgreichGespeichert()
 {
     CoreMainWindow::onDateiWurdeErfolgreichGespeichert();
+
     if (datei->getDateiEigenschaften()->getAutom()) {
         int result = Export::Upload::autoUploadToServer(manager->filter(datei->getDateiEigenschaften()->getAuswahl()), datei->getDateiEigenschaften()->getServer());
         if (result == 0)
@@ -139,6 +142,8 @@ void MainWindow::onAktivitaetWirdEntferntWerden(AActivity *a)
 }
 void MainWindow::onAktivitaetWurdeBearbeitet(AActivity *a, QDate altesDatum)
 {
+    CoreMainWindow::onAktivitaetWurdeBearbeitet(a, altesDatum);
+
     int oldPos = -1;
     if (altesDatum.isValid())
         oldPos = getPosInCalendar(altesDatum);
@@ -274,10 +279,6 @@ void MainWindow::newAActivityHandler(AActivity *a)
 }
 
 
-void MainWindow::onItemInListClicked(QListWidgetItem *item)
-{
-    openAktivitaet(itemToList.value(item));
-}
 void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
 {
     if (i == nullptr) return;
