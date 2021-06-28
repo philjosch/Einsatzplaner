@@ -721,6 +721,13 @@
               </property>
              </widget>
             </item>
+            <item row="7" column="2" colspan="2">
+             <widget class="QPushButton" name="pushPersonKomplett">
+              <property name="text">
+               <string>Alle Daten bearbeiten</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
           <widget class="QWidget" name="tabAktivitaeten">

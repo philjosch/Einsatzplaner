@@ -539,6 +539,11 @@ void PersonalWindow::on_pushDelete_clicked()
     }
 }
 
+void PersonalWindow::on_pushPersonKomplett_clicked()
+{
+    parentWindow->openPerson(aktuellePerson);
+}
+
 void PersonalWindow::on_lineTf_textChanged(const QString &arg1)
 {
     setZeitenNachVeraenderung(Tf, arg1);

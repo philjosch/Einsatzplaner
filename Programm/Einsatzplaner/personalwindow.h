@@ -99,6 +99,7 @@ private slots:
 
     void on_pushDelete_clicked();
 
+    void on_pushPersonKomplett_clicked();
 
     void on_lineTf_textChanged(const QString &arg1);
     void on_lineTb_textChanged(const QString &arg1);
