@@ -22,7 +22,6 @@ MainWindowPersonal::MainWindowPersonal(EplFile *file) :
     filter = Status::AlleMitglieder;
     anzeige = QSet<QString>();
 
-    fenster = QMap<Person*, PersonWindow*>();
 
     for(int i = 0; i < ui->listAnzeige->count(); ++i) {
         if (ui->listAnzeige->item(i)->checkState() == Qt::CheckState::Checked)
@@ -63,15 +62,6 @@ void MainWindowPersonal::onDateiWurdeVeraendert()
 //    on_actionAktualisieren_triggered();
 }
 
-void MainWindowPersonal::onPersonWirdEntferntWerden(Person *p)
-{
-    if (fenster.contains(p)) {
-        PersonWindow *w = fenster.value(p);
-        fenster.remove(p);
-        w->close();
-        delete w;
-    }
-}
 void MainWindowPersonal::onPersonWurdeBearbeitet([[maybe_unused]] Person *p)
 {
 //    on_actionAktualisieren_triggered();
@@ -81,7 +71,7 @@ void MainWindowPersonal::onPersonWurdeBearbeitet([[maybe_unused]] Person *p)
 void MainWindowPersonal::on_actionAddPerson_triggered()
 {
     Person *neu = personal->newPerson();
-    showPerson(neu);
+    openPerson(neu);
     on_actionAktualisieren_triggered();
 }
 void MainWindowPersonal::on_actionAktualisieren_triggered()
@@ -315,27 +305,10 @@ void MainWindowPersonal::on_tabelleMitglieder_cellDoubleClicked(int row, [[maybe
 {
     PersonTableWidgetItem *clicked = dynamic_cast<PersonTableWidgetItem*>(ui->tabelleMitglieder->item(row, column));
     if (clicked != nullptr) {
-        showPerson(clicked->getPerson());
+        openPerson(clicked->getPerson());
     }
 }
 
-
-void MainWindowPersonal::showPerson(Person *p)
-{
-    if (p == nullptr) return;
-
-    if (fenster.contains(p)) {
-        fenster.value(p)->show();
-        fenster.value(p)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-        fenster.value(p)->raise();  // for MacOS
-        fenster.value(p)->activateWindow(); // for Windows
-    } else {
-        PersonWindow *w = new PersonWindow(this, p);
-        w->setWindowFilePath(datei->getPfad());
-        fenster.insert(p, w);
-        w->show();
-    }
-}
 
 QList<Person*> MainWindowPersonal::getSortierteListe()
 {

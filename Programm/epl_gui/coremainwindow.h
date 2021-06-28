@@ -67,7 +67,8 @@ protected slots:
     virtual void onDateiWurdeErfolgreichGespeichert();
 
     // Personen bezogene Methoden
-    virtual void onPersonWirdEntferntWerden([[maybe_unused]] Person *p) {};
+    virtual void openPerson(Person *p);
+    virtual void onPersonWirdEntferntWerden(Person *p);
     virtual void onPersonWurdeBearbeitet([[maybe_unused]] Person *p) {};
 
     // Aktivitaeten bezogene Methoden
@@ -94,6 +95,7 @@ protected:
 
     //** Controller
     QMap<AActivity*, QMainWindow*> fensterActivities;
+    QMap<Person*, QMainWindow*> fensterPersonen;
 };
 
 #endif // MAINWINDOW_H

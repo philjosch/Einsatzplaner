@@ -4,6 +4,7 @@
 #include "coreapplication.h"
 #include "einstellungendialog.h"
 #include "filesettingsdialog.h"
+#include "personwindow.h"
 #include "activitywindow.h"
 #include "fahrtagwindow.h"
 
@@ -33,6 +34,7 @@ CoreMainWindow::CoreMainWindow(EplFile *datei) : QMainWindow()
 
     // Controller
     fensterActivities = QMap<AActivity*, QMainWindow*>();
+    fensterPersonen = QMap<Person*, QMainWindow*>();
 }
 CoreMainWindow::~CoreMainWindow()
 {
@@ -197,6 +199,32 @@ void CoreMainWindow::onDateiWurdeErfolgreichGespeichert()
 {
     setWindowTitle(tr("Übersicht"));
     updateWindowHeaders();
+}
+
+void CoreMainWindow::openPerson(Person *p)
+{
+    if (p == nullptr) return;
+
+    if (fensterPersonen.contains(p)) {
+        fensterPersonen.value(p)->show();
+        fensterPersonen.value(p)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+        fensterPersonen.value(p)->raise();  // for MacOS
+        fensterPersonen.value(p)->activateWindow(); // for Windows
+    } else {
+        PersonWindow *w = new PersonWindow(this, p);
+        w->setWindowFilePath(datei->getPfad());
+        fensterPersonen.insert(p, w);
+        w->show();
+    }
+}
+void CoreMainWindow::onPersonWirdEntferntWerden(Person *p)
+{
+    if (fensterPersonen.contains(p)) {
+        QMainWindow *w = fensterPersonen.value(p);
+        fensterPersonen.remove(p);
+        w->close();
+        delete w;
+    }
 }
 
 void CoreMainWindow::openAktivitaet(AActivity *a)
