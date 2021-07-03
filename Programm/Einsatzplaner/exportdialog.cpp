@@ -115,7 +115,7 @@ void ExportDialog::on_comboVon_currentIndexChanged(int index)
     case 0: // Ab datum
         ui->dateVon->setEnabled(true);
         break;
-    case 1: // Ab heute
+    case 1: // Ab jetzt
     case 2: // Ab beginn des Jahres
     case 3: // Ab egal
         ui->dateVon->setEnabled(false);
@@ -165,8 +165,8 @@ bool ExportDialog::testShow(AActivity *a)
     case 0: // Ab datum
         ab = Auswahl::AbDatum;
         break;
-    case 1: // Ab heute
-        ab = Auswahl::AbHeute;
+    case 1: // Ab jetzt
+        ab = Auswahl::AbJetzt;
         break;
     case 2: // Ab beginn des Jahres
         ab = Auswahl::AbAnfangDesJahres;
