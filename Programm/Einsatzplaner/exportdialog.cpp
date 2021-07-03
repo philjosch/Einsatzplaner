@@ -46,6 +46,7 @@ void ExportDialog::hardReload()
         QString farbe = a->getFarbe();
         QListWidgetItem *item = new QListWidgetItem(a->getString());
         item->setBackground(QBrush(QColor(farbe)));
+        item->setForeground(QBrush(QColor("black")));
         item->setToolTip(a->getAnlass().replace("<br/>","\n"));
         ui->listAnzeige->insertItem(ui->listAnzeige->count(), item);
         actToList.insert(a, item);
