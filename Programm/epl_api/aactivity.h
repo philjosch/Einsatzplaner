@@ -90,7 +90,6 @@ protected:
     static const QStringList QUALIFICATION_LIST;
 
     static const QString COLOR_REQUIRED;
-    static const QMap<Art, QString> FARBE_FAHRTAGE;
 
     static bool hasQualification(Person *p, Category kat, QString bemerkung, QDate datum = QDate());
     static bool isExtern(QString bemerkung);

@@ -1,7 +1,6 @@
 #ifndef FILESETTINGS_H
 #define FILESETTINGS_H
 
-#include "basics.h"
 #include "networking.h"
 #include "auswahl.h"
 

@@ -228,7 +228,7 @@ private:
     bool valuesInvalid;
     /* Gibt an, ob die Werte verändert wurden und ob es bemerkt wurde,
      * kann auch sein, dass dies an der Person vorbei passiert ist,
-     * in dem eine Veranstalltung verändert wurde,
+     * in dem eine Veranstaltung verändert wurde,
      * dann muss manuell neuberechnet werden */
 
     ManagerPersonal *manager;
