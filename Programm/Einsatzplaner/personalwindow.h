@@ -84,8 +84,6 @@ private slots:
 
     void on_checkAktiv_clicked(bool checked);
 
-    void on_spinKm_valueChanged(int arg1);
-
     void on_checkTf_clicked(bool checked);
     void on_checkZf_clicked(bool checked);
     void on_checkRangierer_clicked(bool checked);
@@ -99,6 +97,7 @@ private slots:
 
     void on_pushDelete_clicked();
 
+    void on_pushPersonKomplett_clicked();
 
     void on_lineTf_textChanged(const QString &arg1);
     void on_lineTb_textChanged(const QString &arg1);

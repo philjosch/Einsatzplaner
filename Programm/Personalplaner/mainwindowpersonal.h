@@ -27,11 +27,6 @@ protected slots:
     CoreMainWindow *handlerNew();
     void handlerOpen(QString path);
 
-    void onDateiWurdeVeraendert();
-
-    void onPersonWirdEntferntWerden(Person *p);
-    void onPersonWurdeBearbeitet(Person *p);
-
     //** Menueleiste
     // Bearbeiten
     void on_actionAddPerson_triggered();
@@ -53,14 +48,12 @@ protected slots:
 
 protected:
     //** Hilfsmethoden
-    void showPerson(Person *p);
     QList<Person*> getSortierteListe();
 
     //** Modell
 
     //** View
     Ui::MainWindowPersonal *ui;
-    QMap<Person*, PersonWindow*> fenster;
 
     //** Controller
     QList<Person*> current;
