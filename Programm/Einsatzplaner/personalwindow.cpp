@@ -454,14 +454,6 @@ void PersonalWindow::on_checkAktiv_clicked(bool checked)
     }
 }
 
-void PersonalWindow::on_spinKm_valueChanged(int arg1)
-{
-    if (enabled) {
-        aktuellePerson->setStrecke(arg1);
-        ui->labelKilometerSum->setText(QString::number(aktuellePerson->getZeiten(Kilometer)));
-    }
-}
-
 void PersonalWindow::on_checkTf_clicked(bool checked)
 {
     if (enabled) {
@@ -616,14 +608,12 @@ void PersonalWindow::showPerson(Person *p)
     toggleFields(true);
 
     // ** Kopfzeile
-    ui->lineID->setText(QString::number(p->getNummer()));
     ui->lineVorname->setText(p->getVorname());
     ui->lineNachname->setText(p->getNachname());
 
     // ** Stammdaten
     // Allgemein
     ui->checkAktiv->setChecked(p->getAktiv());
-    ui->spinKm->setValue(p->getStrecke());
 
     // Betriebsdienst
     ui->checkTf->setChecked(p->getAusbildungTf());
@@ -687,6 +677,7 @@ void PersonalWindow::showPerson(Person *p)
     ui->labelMinAusbildung->setText(minutesToHourString(p->getMinimumStunden(Ausbildung)));
     ui->labelMinInfrastruktur->setText(minutesToHourString(p->getMinimumStunden(Infrastruktur)));
     ui->labelMinSonstiges->setText(minutesToHourString(p->getMinimumStunden(Sonstiges)));
+    ui->labelMinGesamt->setText(minutesToHourString(p->getMinimumStunden(Gesamt)));
 
     enabled = true;
 }
@@ -704,7 +695,6 @@ QList<Person*> PersonalWindow::getSortierteListe()
 
 void PersonalWindow::toggleFields(bool state)
 {
-    ui->lineID->setEnabled(state);
     ui->lineVorname->setEnabled(state);
     ui->lineNachname->setEnabled(state);
     ui->checkAktiv->setEnabled(state);
@@ -717,7 +707,6 @@ void PersonalWindow::toggleFields(bool state)
 
     ui->pushMailEinzel->setEnabled(state);
 
-    ui->spinKm->setEnabled(state);
     ui->plainBemerkung->setEnabled(state);
     ui->plainAusbildung->setEnabled(state);
     ui->plainBetrieb->setEnabled(state);
@@ -739,8 +728,9 @@ void PersonalWindow::toggleFields(bool state)
     ui->doubleAnzahl->setEnabled(state);
     ui->doubleKilometer->setEnabled(state);
 
-    ui->pushEinzelPDF->setEnabled(state);
     ui->pushEinzelDrucken->setEnabled(state);
+
+    ui->pushPersonKomplett->setEnabled(state);
 }
 
 void PersonalWindow::setZeitenNachVeraenderung(Category cat, QString arg)
@@ -780,10 +770,8 @@ void PersonalWindow::updateZeiten()
     ui->labelAnzahlSum->repaint();
     ui->labelKilometerSum->setText(QString("%1 km").arg(aktuellePerson->getZeiten(Kilometer)));
     ui->labelKilometerSum->repaint();
-    ui->labelGesamt->setText(QString("%1 (%2)")
-                             .arg(minutesToHourString(aktuellePerson->getZeiten(Gesamt)),
-                                  minutesToHourString(aktuellePerson->getMinimumStunden(Gesamt))));
-    ui->labelGesamt->repaint();
+    ui->labelGesamtSum->setText(minutesToHourString(aktuellePerson->getZeiten(Gesamt)));
+    ui->labelGesamtSum->repaint();
 }
 
 void PersonalWindow::faerbeZelle(QTableWidgetItem *item, QString hintergrund, QString vordergrund)
