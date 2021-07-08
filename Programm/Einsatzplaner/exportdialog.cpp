@@ -1,8 +1,11 @@
 #include "exportdialog.h"
 #include "ui_exportdialog.h"
 #include "export.h"
+#include "eplexception.h"
 
 #include <QMessageBox>
+
+using namespace EplException;
 
 ExportDialog::ExportDialog(Manager *m, FileSettings *settings, QWidget *parent) : QDialog(parent), ui(new Ui::ExportDialog)
 {
@@ -84,9 +87,10 @@ void ExportDialog::on_pushDrucken_clicked()
             break;
         case 2:
             if (settings->getEnabled()) {
-                if (Export::Upload::uploadToServer(liste, settings->getServer())) {
+                try {
+                    Export::Upload::uploadToServer(liste, settings->getServer());
                     QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
-                } else {
+                }  catch (NetworkingException &e) {
                     QMessageBox::information(parentWidget(), tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden!"));
                 }
             }

@@ -53,8 +53,8 @@ public:
     // Datei-Upload
     class Upload {
     public:
-        static bool uploadToServer(QList<AActivity *> liste, Networking::Server server);
-        static int autoUploadToServer(QList<AActivity*> liste, Networking::Server server);
+        static void uploadToServer(QList<AActivity *> liste, Networking::Server server);
+        static void autoUploadToServer(QList<AActivity*> liste, Networking::Server server);
     };
 
     // Allgemeines

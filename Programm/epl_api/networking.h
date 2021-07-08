@@ -14,10 +14,14 @@ public:
         QString id;
 
         QString getServerKomplett() const {
-            return server + "/" + path;
+            QString url = server + "/" + path;
+            if (server.startsWith("http://") || server.startsWith("https://")) {
+                return url;
+            }
+            return "https://"+url;
         }
         QString getServerKomplettFuerTest() const {
-            return server + "/" + path + "?id=" + id;
+            return getServerKomplett() + "?id=" + id;
         }
         void insertJson(QJsonObject *o) const {
             o->insert("server", server);
@@ -28,6 +32,9 @@ public:
             return Server {o.value("server").toString(),
                         o.value("path").toString(),
                         o.value("id").toString()};
+        }
+        bool isSecure() {
+            return getServerKomplett().startsWith("https://");
         }
     };
 
