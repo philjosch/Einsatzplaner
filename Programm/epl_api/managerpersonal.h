@@ -32,6 +32,9 @@ public:
     int getMinimumHours(Category cat) const;
     static int getMinimumHoursDefault(Category kat);
 
+    void setBeitrag(Person::Beitragsart art, int beitrag);
+    int getBeitrag(Person::Beitragsart art) const;
+
     QList<Person *> getPersonenSortiertNachNummer() const;
 
     static QString getGoodName(QString name); // Wandlet einen Namen in das Format Vorname Nachname um
@@ -57,8 +60,10 @@ private:
     QList<Person *> personen;
 
     QMap<Category, int> minimumHours;
+    QMap<Person::Beitragsart, int> beitraege;
 
     static const QMap<Category, int> MINIMUM_HOURS_DEFAULT;
+    static const QMap<Person::Beitragsart, int> BEITRAEGE_DEFAULT;
 };
 
 #endif // MANAGERPERSONAL_H
