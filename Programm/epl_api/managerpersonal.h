@@ -6,8 +6,7 @@
 #include <QSet>
 
 #include "basics.h"
-
-class Person;
+#include "person.h"
 
 class ManagerPersonal :  public QObject
 {
