@@ -358,7 +358,7 @@ QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> lis
         }
     }
 
-    QString help = "<li>%1: \t\t%2</li>";
+    QString help = "<li>%1: %2</li>";
     QString titelSeite = "<h1>"+QObject::tr("Mitgliederübersicht: %1").arg(toString(filter))+"</h1>";
     titelSeite += "<h2>"+QObject::tr("Statistik")+"</h2><ul>";
     switch (filter) {
@@ -396,6 +396,7 @@ QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> lis
         break;
     }
     titelSeite += "</ul><h2>" + QObject::tr("Mitgliedsbeiträge")+"</h2><ul>";
+    help = "<li>%1: %2€</li>";
     for(Person::Beitragsart art: beitraege.keys()) {
         if (beitraege.value(art) != 0)
             titelSeite += help.arg(Person::toString(art)).arg(beitraege.value(art)/100.f, 0, 'f', 2);
