@@ -24,6 +24,7 @@ ManagerPersonal::ManagerPersonal(QJsonObject o)
 {
     personen = QList<Person*>();
     minimumHours = QMap<Category, int>();
+    beitraege = QMap<Person::Beitragsart, int>();
 
     QJsonArray a = o.value("personen").toArray();
     for(int i = 0; i < a.size(); i++) {
@@ -50,7 +51,7 @@ ManagerPersonal::ManagerPersonal(QJsonObject o)
     }
     // Beitraege
     if (o.contains("beitraegeKeys") && o.contains("beitraegeValues")) {
-        QJsonArray keysBeitraege = o.value("beitrageKeys").toArray();
+        QJsonArray keysBeitraege = o.value("beitraegeKeys").toArray();
         QJsonArray valuesBeitraege = o.value("beitraegeValues").toArray();
         for (int i = 0; i < keysBeitraege.size() && i < valuesBeitraege.size() ; i++) {
             beitraege.insert(Person::Beitragsart(keysBeitraege.at(i).toInt()), valuesBeitraege.at(i).toInt());
