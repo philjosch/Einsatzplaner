@@ -93,7 +93,7 @@ void PersonalWindow::refreshTabelle()
     // Einzelne Personen einfuegen und Summe berechnen
     int pos;
     QMap<Category, int> sum;
-    for (Person *p: current) {
+    for (Person *p: qAsConst(current)) {
         p->berechne();
         QString farbe = Person::FARBE_STANDARD;
         switch (p->pruefeStunden()) {
@@ -169,7 +169,7 @@ void PersonalWindow::refreshEinzel()
 {
     ui->listWidget->clear();
     personToItem.clear();
-    for (Person *p: current) {
+    for (Person *p: qAsConst(current)) {
         QListWidgetItem *item = new PersonListWidgetItem(p, p->getNameSortierung());
         switch (p->pruefeStunden()) {
         case AktivOhne:
@@ -274,7 +274,7 @@ void PersonalWindow::on_pushEmail_clicked()
     if (current.isEmpty()) return;
     QSet<QString> mails;
     QList<Person*> keineMail;
-    for (Person *p: current) {
+    for (Person *p: qAsConst(current)) {
         if (p->getMail() != "") {
             mails.insert(p->getMail());
         } else {

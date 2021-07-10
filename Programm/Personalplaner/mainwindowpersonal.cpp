@@ -84,7 +84,7 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
     }
 
     QTableWidgetItem *i;
-    for (Person *p: current) {
+    for (Person *p: qAsConst(current)) {
         clmn = 0;
         ui->tabelleMitglieder->insertRow(0);
 
@@ -211,7 +211,7 @@ void MainWindowPersonal::on_actionMailListe_triggered()
     if (current.isEmpty()) return;
     QSet<QString> mails;
     QList<Person*> keineMail;
-    for (Person *p: current) {
+    for (Person *p: qAsConst(current)) {
         if (p->getMail() != "") {
             mails.insert(p->getMail());
         } else {

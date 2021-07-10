@@ -34,9 +34,9 @@ ManagerPersonal::ManagerPersonal(QJsonObject o)
         minimumHours.insert(Gesamt, int(o.value("minimumTotal").toDouble(0)*60));
         if (o.contains("minimumHours")) {
             QJsonObject o2 = o.value("minimumHours").toObject();
-            for (QString cat: o2.keys()) {
-                Category catt = getCategoryFromLocalizedString(cat);
-                minimumHours.insert(catt, int(o2.value(cat).toDouble(0)*60));
+            for(auto it = o2.constBegin(); it != o2.constEnd(); ++it) {
+                Category catt = getCategoryFromLocalizedString(it.key());
+                minimumHours.insert(catt, int(it.value().toDouble(0)*60));
             }
         }
     }
@@ -55,19 +55,19 @@ QJsonObject ManagerPersonal::toJson() const
         array.append(p->toJson());
     }
     // Mindesstunden
-    QJsonArray keys;
-    QJsonArray values;
-    for (Category cat: minimumHours.keys()) {
-        if (minimumHours.value(cat) > 0) {
-            keys.append(int(cat));
-            values.append(minimumHours.value(cat));
+    QJsonArray keysMinimum;
+    QJsonArray valuesMinimum;
+    for(auto it = minimumHours.cbegin(); it != minimumHours.cend(); ++it) {
+        if (it.key() > 0) {
+            keysMinimum.append(int(it.key()));
+            valuesMinimum.append(it.value());
         }
     }
 
     QJsonObject o;
     o.insert("personen", array);
-    o.insert("minimumKeys", keys);
-    o.insert("minimumValues", values);
+    o.insert("minimumKeys", keysMinimum);
+    o.insert("minimumValues", valuesMinimum);
     return o;
 }
 
@@ -81,10 +81,10 @@ QJsonObject ManagerPersonal::personalToJson() const
     // Mindesstunden
     QJsonArray keys;
     QJsonArray values;
-    for (Category cat: minimumHours.keys()) {
-        if (minimumHours.value(cat) > 0) {
-            keys.append(int(cat));
-            values.append(minimumHours.value(cat));
+    for (auto it = minimumHours.cbegin(); it != minimumHours.cend(); ++it) {
+        if (it.value() > 0) {
+            keys.append(int(it.key()));
+            values.append(it.value());
         }
     }
 
@@ -269,7 +269,7 @@ QString ManagerPersonal::getZeitenFuerListeAlsHTML(QList<Person *> personen, QSe
     QMap<Category, int> sum;
     for(Person *p: personen) {
         a += p->getZeitenFuerListeAlsHTML(spalten);
-        for (Category cat: spalten) {
+        for (Category cat: qAsConst(spalten)) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
     }

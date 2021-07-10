@@ -17,10 +17,10 @@ Mistake Verteiler::verteile()
 {
     // berechne untere Schranke für die Güte dees ergebnisses
     int puffer = 0;
-    for (Wagen *w: wagen) {
+    for (Wagen *w: qAsConst(wagen)) {
         puffer += w->getKapazitaet();
     }
-    for (Reservierung *r: reservierungen) {
+    for (Reservierung *r: qAsConst(reservierungen)) {
         puffer -= r->getAnzahl();
     }
     if (puffer < 0) return Mistake::KapazitaetUeberlauf;
@@ -94,7 +94,7 @@ Mistake Verteiler::verteile()
 
 void Verteiler::weisePlaetzeZu()
 {
-    for(Wagen *w: wagen) {
+    for(Wagen *w: qAsConst(wagen)) {
         w->weisePlaetzeZu();
     }
 }
@@ -102,7 +102,7 @@ void Verteiler::weisePlaetzeZu()
 double Verteiler::getMinBewertung(QSet<Reservierung *> liste)
 {
     double summe = 0.0;
-    for(Reservierung *r: liste.values()) {
+    for(Reservierung *r: liste) {
         double min = 1215752192;
         for(int i = aktWg; i < wagen.length(); ++i) {
             Wagen *w = wagen.at(i);

@@ -331,10 +331,10 @@ QJsonObject Person::toJson() const
     // Zusätzliche Zeiten einfügen
     QJsonArray keys;
     QJsonArray values;
-    for (Category cat: additional.keys()) {
-        if (additional.value(cat) > 0) {
-            keys.append(int(cat));
-            values.append(additional.value(cat));
+    for (auto it = additional.cbegin(); it != additional.cend(); ++it) {
+        if (it.value() > 0) {
+            keys.append(int(it.key()));
+            values.append(it.value());
         }
     }
     o.insert("additionalKeys", keys);
@@ -684,14 +684,14 @@ void Person::berechne()
             vorherigeEnde = e->getEndeRichtig();
     }
 
-    for (Category cat: additional.keys()) {
-       zeiten.insert(cat, zeiten.value(cat)+additional.value(cat));
-       switch (cat) {
+    for (auto it = additional.cbegin(); it != additional.cend(); ++it) {
+       zeiten.insert(it.key(), zeiten.value(it.key())+it.value());
+       switch (it.key()) {
        case Anzahl: break;
        case Gesamt: break;
        case Kilometer: break;
        default:
-           zeiten.insert(Gesamt, zeiten.value(Gesamt)+additional.value(cat));
+           zeiten.insert(Gesamt, zeiten.value(Gesamt)+it.value());
        }
     }
     valuesInvalid = false;
