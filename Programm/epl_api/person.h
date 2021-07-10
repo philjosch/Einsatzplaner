@@ -114,6 +114,7 @@ public:
 
     Beitragsart getBeitragsart() const;
     void setBeitragsart(const Beitragsart &value);
+    int getBeitrag() const;
 
     QString getIban() const;
     void setIban(const QString &value);

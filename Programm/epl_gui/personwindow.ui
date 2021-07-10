@@ -567,7 +567,7 @@
         <item row="7" column="0">
          <widget class="QLabel" name="labelBeitrag">
           <property name="text">
-           <string>Beitrag:</string>
+           <string>Beitrag</string>
           </property>
          </widget>
         </item>
