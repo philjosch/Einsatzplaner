@@ -741,6 +741,7 @@
     <addaction name="separator"/>
     <addaction name="actionMindeststunden"/>
     <addaction name="actionMailListe"/>
+    <addaction name="actionMitgliedsbeitraege"/>
    </widget>
    <widget class="QMenu" name="menuDatei">
     <property name="title">
@@ -1089,6 +1090,11 @@
    </property>
    <property name="text">
     <string>Toolbar anzeigen</string>
+   </property>
+  </action>
+  <action name="actionMitgliedsbeitraege">
+   <property name="text">
+    <string>Mitgliedsbeiträge</string>
    </property>
   </action>
  </widget>

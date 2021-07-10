@@ -13,13 +13,16 @@ include(../share.pri)
 
 
 SOURCES += \
+    beitraegeeditordialog.cpp \
     main.cpp \
     mainwindowpersonal.cpp
 
 HEADERS += \
+    beitraegeeditordialog.h \
     mainwindowpersonal.h
 
 FORMS += \
+    beitraegeeditordialog.ui \
     mainwindowpersonal.ui
 
 

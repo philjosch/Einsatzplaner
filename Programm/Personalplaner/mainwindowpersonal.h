@@ -33,6 +33,7 @@ protected slots:
     void on_actionAktualisieren_triggered();
     void on_actionMindeststunden_triggered();
     void on_actionMailListe_triggered();
+    void on_actionMitgliedsbeitraege_triggered();
 
     // Export
     void on_actionMitgliederEinzelListePDF_triggered();
