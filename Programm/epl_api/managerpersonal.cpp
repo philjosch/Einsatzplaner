@@ -85,10 +85,10 @@ QJsonObject ManagerPersonal::toJson() const
     // Beitraege
     QJsonArray keysBeitraege;
     QJsonArray valuesBeitraege;
-    for (Person::Beitragsart art: beitraege.keys()) {
-        if (beitraege.value(art) != 0) {
-            keysBeitraege.append(int(art));
-            valuesBeitraege.append(beitraege.value(art));
+    for (auto it = beitraege.cbegin(); it != beitraege.cend(); ++it) {
+        if (it.value() != 0) {
+            keysBeitraege.append(int(it.key()));
+            valuesBeitraege.append(it.value());
         }
     }
 
@@ -120,10 +120,10 @@ QJsonObject ManagerPersonal::personalToJson() const
     // Beitraege
     QJsonArray keysBeitraege;
     QJsonArray valuesBeitraege;
-    for (Person::Beitragsart art: beitraege.keys()) {
-        if (beitraege.value(art) > 0) {
-            keysBeitraege.append(int(art));
-            valuesBeitraege.append(beitraege.value(art));
+    for(auto it = beitraege.cbegin(); it != beitraege.cend(); ++it) {
+        if (it.value() != 0) {
+            keysBeitraege.append(int(it.key()));
+            valuesBeitraege.append(it.value());
         }
     }
 
@@ -398,9 +398,9 @@ QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> lis
     }
     titelSeite += "</ul><h2>" + QObject::tr("Mitgliedsbeiträge")+"</h2><ul>";
     help = "<li>%1: %2€</li>";
-    for(Person::Beitragsart art: beitraege.keys()) {
-        if (beitraege.value(art) != 0)
-            titelSeite += help.arg(Person::toString(art)).arg(beitraege.value(art)/100.f, 0, 'f', 2);
+    for(auto it = beitraege.cbegin(); it != beitraege.cend(); ++it) {
+        if (it.value() != 0)
+            titelSeite += help.arg(Person::toString(it.key())).arg(it.value()/100.f, 0, 'f', 2);
     }
     titelSeite += "</ul><div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
 
