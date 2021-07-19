@@ -26,7 +26,7 @@ private slots:
     // Allgemeine Daten
     void on_dateDate_dateChanged(const QDate &date);
     void on_comboArt_currentIndexChanged(int index);
-    void on_textAnlass_textChanged();
+    void on_lineAnlass_textChanged();
     void on_checkWichtig_clicked(bool checked);
     void on_checkAbgesagt_clicked(bool checked);
     void on_comboWagenreihung_currentTextChanged(const QString &arg1);

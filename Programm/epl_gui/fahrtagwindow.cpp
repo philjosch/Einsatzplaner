@@ -39,7 +39,7 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
 
     // Allgemeine Daten von AActivity
     ui->dateDate->setDate(fahrtag->getDatum());
-    ui->textAnlass->setPlainText(fahrtag->getAnlass().replace("<br/>","\n"));
+    ui->lineAnlass->setText(fahrtag->getAnlass().replace("<br/>","\n"));
     ui->timeEnde->setTime(fahrtag->getZeitEnde());
     ui->checkZeiten->setChecked(fahrtag->getZeitenUnbekannt());
     on_checkZeiten_clicked(fahrtag->getZeitenUnbekannt());
@@ -141,10 +141,10 @@ void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
     updateWindowTitle();
 }
 
-void FahrtagWindow::on_textAnlass_textChanged()
+void FahrtagWindow::on_lineAnlass_textChanged()
 {
     if (nehme)
-        fahrtag->setAnlass(ui->textAnlass->toPlainText().replace("\n","<br/>"));
+        fahrtag->setAnlass(ui->lineAnlass->text().replace("\n","<br/>"));
 }
 
 void FahrtagWindow::on_checkWichtig_clicked(bool checked)
