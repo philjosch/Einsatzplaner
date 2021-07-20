@@ -83,7 +83,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="labelDienstTf">
         <property name="text">
-         <string>Dienstbeginn Tf</string>
+         <string>Beginn Tf</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -123,7 +123,7 @@ unbekannt</string>
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>Dienstbeginn</string>
+         <string>Beginn</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -218,7 +218,7 @@ unbekannt</string>
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>Ende allgemein</string>
+         <string>Ende</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -558,7 +558,7 @@ unbekannt</string>
            <string>Zugbegleiter, Begleiter ohne betriebliche Aufgaben</string>
           </property>
           <property name="text">
-           <string>Zub, Zs, Begl.o.b.A.</string>
+           <string>Begleitpersonal (Zub, Zs, Begl.o.b.A.)</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -625,7 +625,7 @@ unbekannt</string>
         <item row="4" column="2" colspan="3">
          <widget class="QCheckBox" name="checkZub">
           <property name="text">
-           <string>Zugpersonal benötigt</string>
+           <string>Begleitpersonal benötigt</string>
           </property>
          </widget>
         </item>
