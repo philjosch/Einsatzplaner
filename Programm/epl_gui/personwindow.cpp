@@ -53,6 +53,7 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
         ui->lineIBAN->setEnabled(false);
         ui->lineBank->setEnabled(false);
     }
+    ui->lineBeitrag->setText(tr("%1 €").arg(p->getBeitrag()/100.f, 0, 'f', 2));
 
     // Kontakt
     ui->lineStrasse->setText(p->getStrasse());
@@ -347,6 +348,7 @@ void PersonWindow::on_comboBeitragsart_currentIndexChanged(int index)
     ui->lineIBAN->setEnabled(ba != Person::Beitragsart::FamilienBeitragNutzer);
     ui->lineBank->setEnabled(ba != Person::Beitragsart::FamilienBeitragNutzer);
     ui->labelKonto->setText(ba != Person::Beitragsart::FamilienBeitragNutzer? "Kontoinhaber":"Zahler");
+    ui->lineBeitrag->setText(tr("%1 €").arg(person->getBeitrag()/100.f, 0, 'f', 2));
 }
 
 void PersonWindow::on_lineIBAN_textChanged(const QString &arg1)

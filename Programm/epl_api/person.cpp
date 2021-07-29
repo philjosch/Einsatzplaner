@@ -1096,7 +1096,11 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
         if (austritt.isValid())
             absch += help.arg("Austritt zum", austritt.toString("dd.MM.yyyy"));
     }
-    absch += help.arg("Beitragsart", toString(beitragsart));
+    if (getBeitrag() != 0) {
+        absch += help.arg("Beitrag", "%1 (%2 €)").arg(toString(beitragsart)).arg(getBeitrag()/100.f, 0, 'f', 2);
+    } else {
+        absch += help.arg("Beitrag", toString(beitragsart));
+    }
     if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
         absch += help.arg("Zahler", getKontoinhaber());
     } else {
@@ -1281,6 +1285,10 @@ void Person::setBeitragsart(const Person::Beitragsart &value)
 {
     beitragsart = value;
     emit changed();
+}
+int Person::getBeitrag() const
+{
+    return manager->getBeitrag(beitragsart);
 }
 
 QString Person::getIban() const

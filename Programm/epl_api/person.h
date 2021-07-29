@@ -2,9 +2,10 @@
 #define PERSON_H
 
 #include "einsatz.h"
-#include "managerpersonal.h"
 
 #include <QMultiMap>
+
+class ManagerPersonal;
 
 class Person : public QObject
 {
@@ -113,6 +114,7 @@ public:
 
     Beitragsart getBeitragsart() const;
     void setBeitragsart(const Beitragsart &value);
+    int getBeitrag() const;
 
     QString getIban() const;
     void setIban(const QString &value);
