@@ -1101,7 +1101,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
         absch += help.arg("Zahler", getKontoinhaber());
     } else {
         absch += help.arg("Konto", "%2 bei %3").arg(iban, bank);
-        absch += help.arg("Kontoinhaber", getKontoinhaber());
+        absch += help.arg("Kontoinhaber", getKontoinhaberFinal());
     }
     if (absch != "")
         h += "<h3>Mitgliedschaft</h3><ul>" + absch + "</ul>";
@@ -1187,7 +1187,7 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+toString(beitragsart)
             +";"+iban
             +";"+bank
-            +";"+getKontoinhaber()
+            +";"+getKontoinhaberFinal()
 
             +";"+(ausbildungTf ? "WAHR":"FALSCH")
             +";"+(ausbildungZf ? "WAHR":"FALSCH")
@@ -1301,6 +1301,14 @@ void Person::setBank(const QString &value)
 {
     bank = value;
     emit changed();
+}
+
+QString Person::getKontoinhaberFinal() const
+{
+    QString kI = getKontoinhaber();
+    if (kI != "")
+        return kI;
+    return getName();
 }
 
 QString Person::getKontoinhaber() const

@@ -510,7 +510,14 @@
          <widget class="QLineEdit" name="lineBank"/>
         </item>
         <item row="6" column="1" colspan="2">
-         <widget class="QLineEdit" name="lineKontoinhaber"/>
+         <widget class="QLineEdit" name="lineKontoinhaber">
+          <property name="toolTip">
+           <string>Name des Kontoinhabers, sofern abweichend vom Namen der Person.</string>
+          </property>
+          <property name="statusTip">
+           <string>Abweichender Kontoinhaber</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
