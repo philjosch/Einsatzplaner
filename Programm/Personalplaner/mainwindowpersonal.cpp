@@ -6,6 +6,7 @@
 #include "export.h"
 #include "personwindow.h"
 #include "guihelper.h"
+#include "beitraegeeditordialog.h"
 
 #include <QDesktopServices>
 #include <QMessageBox>
@@ -245,7 +246,10 @@ void MainWindowPersonal::on_actionMailListe_triggered()
         FileIO::saveToFile(path, s);
     }
 }
-
+void MainWindowPersonal::on_actionMitgliedsbeitraege_triggered()
+{
+    BeitraegeEditorDialog(this, personal).exec();
+}
 
 void MainWindowPersonal::on_actionMitgliederEinzelListePDF_triggered()
 {

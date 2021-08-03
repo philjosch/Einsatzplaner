@@ -4,18 +4,27 @@
 #include <QJsonArray>
 
 const QMap<Category, int> ManagerPersonal::MINIMUM_HOURS_DEFAULT {{Category::Tf, 100*60}, {Gesamt, 10*60}};
-
+const QMap<Person::Beitragsart, int> ManagerPersonal::BEITRAEGE_DEFAULT {{Person::BeitragUnbekannt, 0},
+                                                                         {Person::Beitragsfrei, 0},
+                                                                         {Person::AktivenBeitrag, 3000},
+                                                                         {Person::FoerderBeitrag, 6000},
+                                                                         {Person::FamilienBeitragZahler, 3600},
+                                                                         {Person::FamilienBeitragNutzer, 0},
+                                                                         {Person::Ermaessigt, 1500},
+                                                                        };
 
 ManagerPersonal::ManagerPersonal()
 {
     personen = QList<Person*>();
     minimumHours = MINIMUM_HOURS_DEFAULT;
+    beitraege = BEITRAEGE_DEFAULT;
 }
 
 ManagerPersonal::ManagerPersonal(QJsonObject o)
 {
     personen = QList<Person*>();
     minimumHours = QMap<Category, int>();
+    beitraege = QMap<Person::Beitragsart, int>();
 
     QJsonArray a = o.value("personen").toArray();
     for(int i = 0; i < a.size(); i++) {
@@ -40,6 +49,16 @@ ManagerPersonal::ManagerPersonal(QJsonObject o)
             }
         }
     }
+    // Beitraege
+    if (o.contains("beitraegeKeys") && o.contains("beitraegeValues")) {
+        QJsonArray keysBeitraege = o.value("beitraegeKeys").toArray();
+        QJsonArray valuesBeitraege = o.value("beitraegeValues").toArray();
+        for (int i = 0; i < keysBeitraege.size() && i < valuesBeitraege.size() ; i++) {
+            beitraege.insert(Person::Beitragsart(keysBeitraege.at(i).toInt()), valuesBeitraege.at(i).toInt());
+        }
+    } else {
+        beitraege = BEITRAEGE_DEFAULT;
+    }
 }
 
 ManagerPersonal::~ManagerPersonal()
@@ -61,6 +80,13 @@ QJsonObject ManagerPersonal::toJson() const
         if (it.key() > 0) {
             keysMinimum.append(int(it.key()));
             valuesMinimum.append(it.value());
+    // Beitraege
+    QJsonArray keysBeitraege;
+    QJsonArray valuesBeitraege;
+    for (auto it = beitraege.cbegin(); it != beitraege.cend(); ++it) {
+        if (it.value() != 0) {
+            keysBeitraege.append(int(it.key()));
+            valuesBeitraege.append(it.value());
         }
     }
 
@@ -68,6 +94,8 @@ QJsonObject ManagerPersonal::toJson() const
     o.insert("personen", array);
     o.insert("minimumKeys", keysMinimum);
     o.insert("minimumValues", valuesMinimum);
+    o.insert("beitraegeKeys", keysBeitraege);
+    o.insert("beitraegeValues", valuesBeitraege);
     return o;
 }
 
@@ -87,11 +115,22 @@ QJsonObject ManagerPersonal::personalToJson() const
             values.append(it.value());
         }
     }
+    // Beitraege
+    QJsonArray keysBeitraege;
+    QJsonArray valuesBeitraege;
+    for(auto it = beitraege.cbegin(); it != beitraege.cend(); ++it) {
+        if (it.value() != 0) {
+            keysBeitraege.append(int(it.key()));
+            valuesBeitraege.append(it.value());
+        }
+    }
 
     QJsonObject o;
     o.insert("personen", array);
     o.insert("minimumKeys", keys);
     o.insert("minimumValues", values);
+    o.insert("beitraegeKeys", keysBeitraege);
+    o.insert("beitraegeValues", valuesBeitraege);
     return o;
 }
 
@@ -166,6 +205,16 @@ int ManagerPersonal::getMinimumHours(Category cat) const
 int ManagerPersonal::getMinimumHoursDefault(Category cat)
 {
     return MINIMUM_HOURS_DEFAULT.value(cat, 0);
+}
+
+void ManagerPersonal::setBeitrag(Person::Beitragsart art, int beitrag)
+{
+    beitraege.insert(art, beitrag);
+    emit changed();
+}
+int ManagerPersonal::getBeitrag(Person::Beitragsart art) const
+{
+    return beitraege.value(art, 0);
 }
 
 QList<Person *> ManagerPersonal::getPersonenSortiertNachNummer() const
@@ -309,7 +358,8 @@ QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> lis
     }
 
     QString help = "<li>%1: %2</li>";
-    QString titelSeite = QString("<h1>Mitgliederübersicht: %1</h1><ul>").arg(toString(filter));
+    QString titelSeite = "<h1>"+QObject::tr("Mitgliederübersicht: %1").arg(toString(filter))+"</h1>";
+    titelSeite += "<h2>"+QObject::tr("Statistik")+"</h2><ul>";
     switch (filter) {
     case Registriert:
         titelSeite += help.arg(toString(Registriert)).arg(getAnzahlMitglieder(Registriert));
@@ -320,7 +370,7 @@ QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> lis
     case Ausgetreten:
         titelSeite += help.arg(toString(Ausgetreten)).arg(getAnzahlMitglieder(Ausgetreten));
         if (filter == Ausgetreten) break;
-        titelSeite += "</ul><ul>";
+        titelSeite += "</ul><br/><ul>";
         [[fallthrough]];
     case Aktiv:
         titelSeite += help.arg(toString(Aktiv)).arg(getAnzahlMitglieder(Aktiv));
@@ -343,6 +393,12 @@ QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> lis
         [[fallthrough]];
     case PassivOhne:
         break;
+    }
+    titelSeite += "</ul><h2>" + QObject::tr("Mitgliedsbeiträge")+"</h2><ul>";
+    help = "<li>%1: %2€</li>";
+    for(auto it = beitraege.cbegin(); it != beitraege.cend(); ++it) {
+        if (it.value() != 0)
+            titelSeite += help.arg(Person::toString(it.key())).arg(it.value()/100.f, 0, 'f', 2);
     }
     titelSeite += "</ul><div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
 

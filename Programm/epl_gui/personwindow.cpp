@@ -49,6 +49,12 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
     ui->lineIBAN->setText(p->getIban());
     ui->lineBank->setText(p->getBank());
     ui->lineKontoinhaber->setText(p->getKontoinhaber());
+    if (p->getBeitragsart() == Person::Beitragsart::FamilienBeitragNutzer) {
+        ui->labelKonto->setText("Zahler");
+        ui->lineIBAN->setEnabled(false);
+        ui->lineBank->setEnabled(false);
+    }
+    ui->lineBeitrag->setText(tr("%1 €").arg(p->getBeitrag()/100.f, 0, 'f', 2));
 
     // Kontakt
     ui->lineStrasse->setText(p->getStrasse());
@@ -355,6 +361,7 @@ void PersonWindow::on_comboBeitragsart_currentIndexChanged(int index)
         ui->lineKontoinhaber->setToolTip(tr("Name des Kontoinhabers, sofern abweichend vom Namen der Person."));
         ui->lineKontoinhaber->setStatusTip(tr("Abweichender Kontoinhaber"));
     }
+    ui->lineBeitrag->setText(tr("%1 €").arg(person->getBeitrag()/100.f, 0, 'f', 2));
 }
 
 void PersonWindow::on_lineIBAN_textChanged(const QString &arg1)
