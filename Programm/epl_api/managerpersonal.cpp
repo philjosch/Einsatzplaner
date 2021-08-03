@@ -80,6 +80,8 @@ QJsonObject ManagerPersonal::toJson() const
         if (it.key() > 0) {
             keysMinimum.append(int(it.key()));
             valuesMinimum.append(it.value());
+        }
+    }
     // Beitraege
     QJsonArray keysBeitraege;
     QJsonArray valuesBeitraege;
