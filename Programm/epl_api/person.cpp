@@ -385,7 +385,7 @@ QJsonObject Person::personalToJson() const
     return o;
 }
 
-int Person::getZeiten(Category cat)
+int Person::getZeiten(Category cat) const
 {
     if (valuesInvalid) berechne();
     switch (cat) {
@@ -600,7 +600,7 @@ bool Person::pruefeFilter(Status filter)
     }
 }
 
-Status Person::pruefeStunden()
+Status Person::pruefeStunden() const
 {
     if (isAusgetreten()) return Status::Ausgetreten;
     if (! getAktiv()) {
@@ -616,7 +616,7 @@ Status Person::pruefeStunden()
     return Status::AktivMit;
 }
 
-Status Person::pruefeStunden(Category cat)
+Status Person::pruefeStunden(Category cat) const
 {
     if (isAusgetreten()) return Status::Ausgetreten;
     if (! getAktiv()) {
@@ -649,7 +649,7 @@ int Person::getMinimumStunden(Category cat) const
     }
 }
 
-void Person::berechne()
+void Person::berechne() const
 {
     zeiten.clear();
 
@@ -711,7 +711,7 @@ bool Person::removeActivity(Einsatz *e)
     return activities.removeAll(e);
 }
 
-const QList<Einsatz*> Person::getActivities()
+const QList<Einsatz*> Person::getActivities() const
 {
     Einsatz::sort(&activities);
     return activities;
