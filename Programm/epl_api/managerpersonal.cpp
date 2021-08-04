@@ -443,3 +443,19 @@ QList<Person *> ManagerPersonal::getPersonen(Status filter) const
     }
     return current;
 }
+
+QString ManagerPersonal::getBeitraegeRegulaerAlsCSV() const
+{
+    // Beitraege als CSV erstellen
+    QString csv = "Name;IBAN;Bank;Kontoinhaber;Betrag;Mitgliedsnummer\n";
+    for(Person *pers: personen) {
+        if (pers->getBeitrag() != 0) {
+            csv += QString("%1;%2;%3;%4;%5;%6\n")
+                    .arg(pers->getName(), pers->getIban(), pers->getBank(), pers->getKontoinhaberFinal())
+                    .arg(pers->getBeitrag()/100.f, 0, 'f', 2)
+                    .arg(pers->getNummer());
+        }
+    }
+    return csv;
+}
+

@@ -730,6 +730,8 @@
     <addaction name="actionMitgliederListeDrucken"/>
     <addaction name="actionMitgliederListePDF"/>
     <addaction name="actionMitgliederListeCSV"/>
+    <addaction name="separator"/>
+    <addaction name="actionBeitraegeRegulaerCSV"/>
    </widget>
    <widget class="QMenu" name="menuBearbeiten">
     <property name="title">
@@ -1095,6 +1097,11 @@
   <action name="actionMitgliedsbeitraege">
    <property name="text">
     <string>Mitgliedsbeiträge</string>
+   </property>
+  </action>
+  <action name="actionBeitraegeRegulaerCSV">
+   <property name="text">
+    <string>Export Jahresbeiträge</string>
    </property>
   </action>
  </widget>

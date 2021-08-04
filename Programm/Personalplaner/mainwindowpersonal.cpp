@@ -278,6 +278,12 @@ void MainWindowPersonal::on_actionMitgliederListeCSV_triggered()
                                    FileIO::getFilePathSave(this, "Mitglieder", FileIO::DateiTyp::CSV));
 }
 
+void MainWindowPersonal::on_actionBeitraegeRegulaerCSV_triggered()
+{
+    FileIO::saveToFile(FileIO::getFilePathSave(this, "Beitraege-Regulaer", FileIO::DateiTyp::CSV),
+                       personal->getBeitraegeRegulaerAlsCSV());
+}
+
 
 void MainWindowPersonal::on_comboAnzeige_currentIndexChanged(int index)
 {

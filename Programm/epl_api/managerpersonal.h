@@ -49,6 +49,8 @@ public:
     static QString getMitgliederFuerListeAlsHtml(QList<Person *> liste, Status filter, QSet<QString> data);
     static QString getMitgliederFuerListeAlsCSV(QList<Person *> liste);
 
+    QString getBeitraegeRegulaerAlsCSV() const;
+
     int getAnzahlMitglieder(Status filter) const;
     QList<Person *> getPersonen(Status filter) const;
 
