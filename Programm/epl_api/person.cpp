@@ -1338,6 +1338,25 @@ void Person::setKontoinhaber(const QString &value)
     emit changed();
 }
 
+int Person::getBeitragRegulaer() const
+{
+    // TODO
+    return getBeitrag();
+}
+
+int Person::getBeitragNachzahlung() const
+{
+    if (! getAktiv() || isAusgetreten()) {
+        return 0;
+    }
+    if (Status::AktivMit == pruefeStunden(Gesamt)) {
+        return 0;
+    }
+    double prozent = 1.f - getZeiten(Gesamt) / (double)getMinimumStunden(Gesamt);
+    int satz = (manager->getBeitrag(Beitragsart::FoerderBeitrag) - getBeitrag());
+    return (satz * prozent/100)*100;
+}
+
 QDate Person::getTauglichkeit() const
 {
     return tauglichkeit;

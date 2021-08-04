@@ -459,3 +459,17 @@ QString ManagerPersonal::getBeitraegeRegulaerAlsCSV() const
     return csv;
 }
 
+QString ManagerPersonal::getBeitraegeNachzahlungAlsCSV() const
+{
+    // Beitraege als CSV erstellen
+    QString csv = "Name;IBAN;Bank;Kontoinhaber;Betrag;Mitgliedsnummer\n";
+    for(Person *pers: personen) {
+        if (pers->getBeitragNachzahlung() != 0) {
+            csv += QString("%1;%2;%3;%4;%5;%6\n")
+                    .arg(pers->getName(), pers->getIban(), pers->getBank(), pers->getKontoinhaberFinal())
+                    .arg(pers->getBeitragNachzahlung()/100.f, 0, 'f', 2)
+                    .arg(pers->getNummer());
+        }
+    }
+    return csv;
+}

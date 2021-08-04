@@ -732,6 +732,7 @@
     <addaction name="actionMitgliederListeCSV"/>
     <addaction name="separator"/>
     <addaction name="actionBeitraegeRegulaerCSV"/>
+    <addaction name="actionBeitraegeNachzahlungCSV"/>
    </widget>
    <widget class="QMenu" name="menuBearbeiten">
     <property name="title">
@@ -1102,6 +1103,11 @@
   <action name="actionBeitraegeRegulaerCSV">
    <property name="text">
     <string>Export Jahresbeiträge</string>
+   </property>
+  </action>
+  <action name="actionBeitraegeNachzahlungCSV">
+   <property name="text">
+    <string>Export Nachzahlungen</string>
    </property>
   </action>
  </widget>

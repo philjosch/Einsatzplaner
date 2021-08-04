@@ -50,6 +50,7 @@ public:
     static QString getMitgliederFuerListeAlsCSV(QList<Person *> liste);
 
     QString getBeitraegeRegulaerAlsCSV() const;
+    QString getBeitraegeNachzahlungAlsCSV() const;
 
     int getAnzahlMitglieder(Status filter) const;
     QList<Person *> getPersonen(Status filter) const;

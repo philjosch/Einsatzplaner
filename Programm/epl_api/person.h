@@ -126,6 +126,9 @@ public:
     QString getKontoinhaber() const;
     void setKontoinhaber(const QString &value);
 
+    int getBeitragRegulaer() const;
+    int getBeitragNachzahlung() const;
+
     // Ausbildung
     bool getAusbildungTf() const;
     void setAusbildungTf(bool value);

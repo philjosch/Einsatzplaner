@@ -44,6 +44,7 @@ protected slots:
     void on_actionMitgliederListeCSV_triggered();
 
     void on_actionBeitraegeRegulaerCSV_triggered();
+    void on_actionBeitraegeNachzahlungCSV_triggered();
 
     //** Fenster
     void on_comboAnzeige_currentIndexChanged(int index);

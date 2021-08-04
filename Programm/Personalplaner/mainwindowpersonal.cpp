@@ -283,7 +283,11 @@ void MainWindowPersonal::on_actionBeitraegeRegulaerCSV_triggered()
     FileIO::saveToFile(FileIO::getFilePathSave(this, "Beitraege-Regulaer", FileIO::DateiTyp::CSV),
                        personal->getBeitraegeRegulaerAlsCSV());
 }
-
+void MainWindowPersonal::on_actionBeitraegeNachzahlungCSV_triggered()
+{
+    FileIO::saveToFile(FileIO::getFilePathSave(this, "Beitraege-Nachzahlung", FileIO::DateiTyp::CSV),
+                       personal->getBeitraegeNachzahlungAlsCSV());
+}
 
 void MainWindowPersonal::on_comboAnzeige_currentIndexChanged(int index)
 {
