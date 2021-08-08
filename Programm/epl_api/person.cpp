@@ -632,20 +632,22 @@ Status Person::pruefeStunden(Category cat) const
 
 int Person::getMinimumStunden(Category cat) const
 {
+    bool halb = (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 6);
+
     if (isMinderjaehrig()) return 0;
     if (isAusgetreten()) return 0;
     switch (cat) {
     case Tf:
         if (! isTauglich(Tf) ) return 0;
-        return manager->getMinimumHours(cat);
+        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
     case Zf:
         if (! isTauglich(Zf)) return 0;
-        return manager->getMinimumHours(cat);
+        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
     case Ausbildung:
         if ((! getAusbildungTf() && ! getAusbildungZf() && ! getAusbildungRangierer()) || !isTauglich()) return 0;
-        return manager->getMinimumHours(cat);
+        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
     default:
-        return manager->getMinimumHours(cat);
+        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
     }
 }
 
@@ -1304,6 +1306,9 @@ void Person::setBeitragsart(const Person::Beitragsart &value)
 }
 int Person::getBeitrag() const
 {
+    if (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 6) {
+        return manager->getBeitrag(beitragsart) / 2;
+    }
     return manager->getBeitrag(beitragsart);
 }
 
@@ -1358,7 +1363,7 @@ void Person::setKontoinhaber(const QString &value)
     emit changed();
 }
 
-int Person::getBeitragRegulaer() const
+int Person::getBeitragRegulaerIndividuell() const
 {
     if (beitragsart != Beitragsart::FamilienBeitragNutzer)
         return getBeitrag();
@@ -1392,7 +1397,11 @@ int Person::getBeitragNachzahlung() const
         return 0;
 
     double prozent = 1.f - getZeiten(Gesamt) / (double)getMinimumStunden(Gesamt);
-    int satz = (manager->getBeitrag(Beitragsart::FoerderBeitrag) - getBeitragRegulaer());
+    int satz = manager->getBeitrag(Beitragsart::FoerderBeitrag);
+//    if (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 6) {
+//        satz = satz / 2;
+//    }
+    satz = satz - getBeitragRegulaerIndividuell();
     return (satz * prozent/100)*100;
 }
 

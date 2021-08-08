@@ -130,7 +130,7 @@ public:
     Person *getKontoinhaberPerson() const;
     void setKontoinhaber(const QString &value);
 
-    int getBeitragRegulaer() const;
+    int getBeitragRegulaerIndividuell() const;
     int getBeitragNachzahlung() const;
 
     // Ausbildung
