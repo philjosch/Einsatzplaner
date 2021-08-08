@@ -794,7 +794,7 @@ QString Person::getZeitenFuerListeAlsHTML(QSet<Category> liste)
         }
         if (getZeiten(cat) > 0) {
             if (cat == Kilometer || cat == Anzahl) {
-                html += zelle.arg(farbe, getZeiten(cat));
+                html += zelle.arg(farbe).arg(getZeiten(cat));
             } else {
                 html += zelle.arg(farbe, minutesToHourStringShort(getZeiten(cat)));
             }
