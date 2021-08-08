@@ -1334,10 +1334,14 @@ QString Person::getKontoinhaberFinal() const
 
 QString Person::getKontoinhaber() const
 {
-    Person *pers = manager->getPersonFromID(kontoinhaber);
+    Person *pers = getKontoinhaberPerson();
     if (pers != nullptr)
         return pers->getName();
     return kontoinhaber;
+}
+Person* Person::getKontoinhaberPerson() const
+{
+    return manager->getPersonFromID(kontoinhaber);
 }
 void Person::setKontoinhaber(const QString &value)
 {
@@ -1353,8 +1357,26 @@ void Person::setKontoinhaber(const QString &value)
 
 int Person::getBeitragRegulaer() const
 {
-    // TODO
-    return getBeitrag();
+    if (beitragsart != Beitragsart::FamilienBeitragNutzer)
+        return getBeitrag();
+
+    Person *zahler = manager->getPersonFromID(kontoinhaber);
+    if (zahler == nullptr)
+        return 0;
+
+    int count = 1;
+    for(Person *pers: manager->getPersonen(Status::AlleMitglieder)) {
+        if (pers->getBeitragsart() != Person::Beitragsart::FamilienBeitragNutzer)
+            continue;
+
+        if (zahler != manager->getPersonFromID(pers->kontoinhaber))
+            continue;
+
+        if (pers->getMinimumStunden(Gesamt) != 0) {
+            count ++;
+        }
+    }
+    return zahler->getBeitrag() / count;
 }
 
 int Person::getBeitragNachzahlung() const
@@ -1365,8 +1387,9 @@ int Person::getBeitragNachzahlung() const
     if (Status::AktivMit == pruefeStunden(Gesamt)) {
         return 0;
     }
+
     double prozent = 1.f - getZeiten(Gesamt) / (double)getMinimumStunden(Gesamt);
-    int satz = (manager->getBeitrag(Beitragsart::FoerderBeitrag) - getBeitrag());
+    int satz = (manager->getBeitrag(Beitragsart::FoerderBeitrag) - getBeitragRegulaer());
     return (satz * prozent/100)*100;
 }
 

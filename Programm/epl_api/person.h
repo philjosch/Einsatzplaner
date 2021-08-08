@@ -127,6 +127,7 @@ public:
 
     QString getKontoinhaberFinal() const;
     QString getKontoinhaber() const;
+    Person *getKontoinhaberPerson() const;
     void setKontoinhaber(const QString &value);
 
     int getBeitragRegulaer() const;
