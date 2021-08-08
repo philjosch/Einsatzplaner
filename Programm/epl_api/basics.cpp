@@ -8,8 +8,6 @@ QString minutesToHourString(int min)
 QString minutesToHourStringShort(int min)
 {
     if (min <= 0) return "0";
-    if (min % 60 == 0)
-        return QString("%1").arg(int(min/60));
     return QString("%1:%2").arg(int(min/60)).arg(min % 60, 2, 10,QLatin1Char('0'));
 }
 
