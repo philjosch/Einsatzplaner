@@ -2,6 +2,7 @@
 #include "wagen.h"
 #include "verteiler.h"
 #include "basics.h"
+#include "export.h"
 
 #include <QJsonObject>
 #include <QJsonArray>
@@ -359,7 +360,7 @@ QString Fahrtag::getHtmlForTableView() const
     return html;
 }
 
-QString Fahrtag::getHtmlFuerReservierungsuebersicht() const
+bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
 {
     QString a = "<h3>";
     a += toString(art)+" am "+datum.toString("dddd dd. MM. yyyy");
@@ -414,7 +415,8 @@ QString Fahrtag::getHtmlFuerReservierungsuebersicht() const
     }
 
     a += "</tbody></table>";
-    return a;
+
+    return Export::druckeHtmlAufDrucker(a + Export::zeitStempel(), printer);
 }
 
 bool Fahrtag::getBenoetigeService() const

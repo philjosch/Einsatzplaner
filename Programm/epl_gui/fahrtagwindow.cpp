@@ -467,24 +467,20 @@ void FahrtagWindow::on_actionDelete_triggered()
 
 void FahrtagWindow::on_actionPrint_triggered()
 {
-    Export::Aktivitaeten::printAktivitaetenEinzel({fahrtag},
-                                    Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    fahrtag->print(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 void FahrtagWindow::on_actionPdf_triggered()
 {
-    Export::Aktivitaeten::printAktivitaetenEinzel({fahrtag},
-                                    Export::getPrinterPDF(this, windowTitle(), QPrinter::Orientation::Portrait));
+    fahrtag->print(Export::getPrinterPDF(this, windowTitle(), QPrinter::Orientation::Portrait));
 }
 
 void FahrtagWindow::on_actionResPrint_triggered()
 {
-    Export::Aktivitaeten::printReservierung(fahrtag,
-                              Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    fahrtag->printReservierungsuebersicht(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 void FahrtagWindow::on_actionResPdf_triggered()
 {
-    Export::Aktivitaeten::printReservierung(fahrtag,
-                              Export::getPrinterPDF(this, windowTitle()+"-Reservierungen", QPrinter::Orientation::Portrait));
+    fahrtag->printReservierungsuebersicht(Export::getPrinterPDF(this, windowTitle()+"-Reservierungen", QPrinter::Orientation::Portrait));
 }
 
 void FahrtagWindow::showReservierung(Reservierung *r)

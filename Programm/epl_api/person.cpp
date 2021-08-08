@@ -2,6 +2,7 @@
 #include "managerpersonal.h"
 #include "person.h"
 #include "aactivity.h"
+#include "export.h"
 
 #include <QJsonArray>
 #include <QRandomGenerator>
@@ -867,6 +868,12 @@ QString Person::getZeitenFuerEinzelAlsHTML()
     return html;
 }
 
+bool Person::printZeiten(QPrinter *printer)
+{
+    QString html = getZeitenFuerEinzelAlsHTML() + Export::zeitStempel(false);
+    return Export::druckeHtmlAufDrucker(html, printer);
+}
+
 QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
 {
     if (anzeige.isEmpty())
@@ -1173,6 +1180,12 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
         h += "<h3>Sonstiges</h3><p>" + absch + "</p>";
 
     return h;
+}
+
+bool Person::printPersonaldaten(QPrinter *printer) const
+{
+    QString html = getPersonaldatenFuerEinzelAlsHTML() + Export::zeitStempel();
+    return Export::druckeHtmlAufDrucker(html, printer);
 }
 
 QString Person::getPersonaldatenFuerListeAlsCSV() const

@@ -1,3 +1,5 @@
+#include "export.h"
+#include "fileio.h"
 #include "managerpersonal.h"
 #include "person.h"
 
@@ -262,18 +264,14 @@ bool ManagerPersonal::checkNummer(int neu) const
     return true;
 }
 
-QString ManagerPersonal::getZeitenFuerEinzelListeAlsHTML(QList<Person *> liste, Status filter) const
+bool ManagerPersonal::printZeitenEinzel(QList<Person *> liste, Status filter, QPrinter *printer) const
 {
     QString a = "";
     // Seite fuer jede Person einfuegen
     QMap<Category, int> sum;
     for(Person *p: liste) {
         a += p->getZeitenFuerEinzelAlsHTML();
-        QString help = "<p><small>Stand: %1</small></p>";
-        if (p != liste.last()) {
-            help = "<div style='page-break-after:always'>" + help + "</div>";
-        }
-        a += help.arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
+        a += Export::zeitStempel(p != liste.last());
         for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
@@ -295,12 +293,12 @@ QString ManagerPersonal::getZeitenFuerEinzelListeAlsHTML(QList<Person *> liste, 
     }
     titelSeite += "</ul>";
 
-    titelSeite += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+    titelSeite += Export::zeitStempel(true);
 
-    return titelSeite+a;
+    return Export::druckeHtmlAufDrucker(titelSeite+a, printer);
 }
 
-QString ManagerPersonal::getZeitenFuerListeAlsHTML(QList<Person *> personen, QSet<Category> spalten, Status filter)
+bool ManagerPersonal::printZeitenListe(QList<Person *> personen, QSet<Category> spalten, Status filter, QPrinter *printer)
 {
     QString a = "<h3>Einsatzzeiten: %1</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
@@ -338,22 +336,19 @@ QString ManagerPersonal::getZeitenFuerListeAlsHTML(QList<Person *> personen, QSe
         }
     }
     a += "</tr></tfoot></table>";
-    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
-    return a;
+    a += Export::zeitStempel(false);
+
+    return Export::druckeHtmlAufDrucker(a, printer);
 }
 
-QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> liste, Status filter) const
+bool ManagerPersonal::printMitgliederEinzel(QList<Person *> liste, Status filter, QPrinter *printer) const
 {
     QString a = "";
     // Seite fuer jede Person einfuegen
     QMap<Category, int> sum;
     for(Person *p: liste) {
         a += p->getPersonaldatenFuerEinzelAlsHTML();
-        QString help = "<p><small>Stand: %1</small></p>";
-        if (p != liste.last()) {
-            help = "<div style='page-break-after:always'>" + help + "</div>";
-        }
-        a += help.arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
+        a += Export::zeitStempel(p != liste.last());
         for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
@@ -402,12 +397,13 @@ QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> lis
         if (it.value() != 0)
             titelSeite += help.arg(Person::toString(it.key())).arg(it.value()/100.f, 0, 'f', 2);
     }
-    titelSeite += "</ul><div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+    titelSeite += "</ul>";
+    titelSeite += Export::zeitStempel(true);
 
-    return titelSeite+a;
+    return Export::druckeHtmlAufDrucker(titelSeite+a, printer);
 }
 
-QString ManagerPersonal::getMitgliederFuerListeAlsHtml(QList<Person*> liste, Status filter, QSet<QString> data)
+bool ManagerPersonal::printMitgliederListe(QList<Person*> liste, Status filter, QSet<QString> data, QPrinter *printer)
 {
     QString a = Person::getKopfTabelleListeHtml(data)
             .arg(toString(filter), QDateTime::currentDateTime().toString("d.M.yyyy"));
@@ -417,16 +413,17 @@ QString ManagerPersonal::getMitgliederFuerListeAlsHtml(QList<Person*> liste, Sta
     a += Person::FUSS_TABELLE_LISTE_HTML;
     a += QObject::tr("<p><small>%1 Personen ausgegeben.</small><br/>").arg(liste.length());
     a += QObject::tr("<small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
-    return a;
+
+    return Export::druckeHtmlAufDrucker(a, printer);
 }
 
-QString ManagerPersonal::getMitgliederFuerListeAlsCSV(QList<Person *> liste)
+bool ManagerPersonal::saveMitgliederListeAlsCSV(QList<Person *> liste, QString pfad)
 {
     QString t = Person::KOPF_TABELLE_LISTE_CSV;
     for(Person *akt: liste) {
         t += akt->getPersonaldatenFuerListeAlsCSV();
     }
-    return t;
+    return FileIO::saveToFile(pfad, t);
 }
 
 int ManagerPersonal::getAnzahlMitglieder(Status filter) const

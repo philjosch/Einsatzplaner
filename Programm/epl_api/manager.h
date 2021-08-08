@@ -18,8 +18,8 @@ public:
 
     QList<AActivity *> getActivities() const;
 
-    static QString getHtmlFuerListenansicht(QList<AActivity *> liste);
-    static QString getHtmlFuerEinzelansichten(QList<AActivity *> liste);
+    static bool printListenansicht(QList<AActivity *> liste, QPrinter *printer);
+    static bool printEinzelansichten(QList<AActivity *> liste, QPrinter *printer);
 
     Fahrtag *newFahrtag(QDate datum);
     AActivity *newActivity(QDate datum);

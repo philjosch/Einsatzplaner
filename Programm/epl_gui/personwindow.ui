@@ -935,6 +935,9 @@ Ausbildung</string>
    <property name="allowedAreas">
     <set>Qt::TopToolBarArea</set>
    </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
    <property name="iconSize">
     <size>
      <width>16</width>
