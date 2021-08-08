@@ -265,6 +265,15 @@ void PersonalWindow::on_actionMitgliederListeCSV_triggered()
                                   FileIO::getFilePathSave(this, "Mitglieder", FileIO::DateiTyp::CSV));
 }
 
+void PersonalWindow::on_actionBeitraegeRegulaerCSV_triggered()
+{
+    manager->saveBeitraegeRegulaerAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Regulaer", FileIO::DateiTyp::CSV));
+}
+void PersonalWindow::on_actionBeitraegeNachzahlungCSV_triggered()
+{
+    manager->saveBeitraegeNachzahlungAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Nachzahlung", FileIO::DateiTyp::CSV));
+}
+
 void PersonalWindow::on_pushEmail_clicked()
 {
     if (current.isEmpty()) return;

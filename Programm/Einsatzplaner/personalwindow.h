@@ -54,6 +54,9 @@ private slots:
     void on_actionMitgliederListeCSV_triggered();
 
 
+    void on_actionBeitraegeRegulaerCSV_triggered();
+    void on_actionBeitraegeNachzahlungCSV_triggered();
+
     // Fenster - Gesamt
     void on_pushEmail_clicked();
 

@@ -1102,12 +1102,12 @@
   </action>
   <action name="actionBeitraegeRegulaerCSV">
    <property name="text">
-    <string>Export Jahresbeiträge</string>
+    <string>Export Jahresbeiträge …</string>
    </property>
   </action>
   <action name="actionBeitraegeNachzahlungCSV">
    <property name="text">
-    <string>Export Nachzahlungen</string>
+    <string>Export Nachzahlungen …</string>
    </property>
   </action>
  </widget>
