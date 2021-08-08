@@ -444,7 +444,7 @@ QList<Person *> ManagerPersonal::getPersonen(Status filter) const
 bool ManagerPersonal::saveBeitraegeRegulaerAlsCSV(QString pfad) const
 {
     QString csv = "Name;Mitgliedsnummer;IBAN;Bank;Kontoinhaber;Betrag\n";
-    for(Person *pers: personen) {
+    for(Person *pers: getPersonen(Status::AlleMitglieder)) {
         if (pers->getBeitrag() != 0) {
             csv += QString("%1;%6;%2;%3;%4;%5\n")
                     .arg(pers->getName(), pers->getIban(), pers->getBank(), pers->getKontoinhaberFinal())
@@ -458,7 +458,7 @@ bool ManagerPersonal::saveBeitraegeRegulaerAlsCSV(QString pfad) const
 bool ManagerPersonal::saveBeitraegeNachzahlungAlsCSV(QString pfad) const
 {
     QString csv = "Name;Mitgliedsnummer;IBAN;Bank;Kontoinhaber;Betrag\n";
-    for(Person *pers: personen) {
+    for(Person *pers: getPersonen(Status::AlleMitglieder)) {
         if (pers->getBeitragNachzahlung() != 0) {
             Person *zahler = nullptr;
             if (pers->getBeitragsart() == Person::Beitragsart::FamilienBeitragNutzer)
