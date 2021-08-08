@@ -1108,6 +1108,9 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
     } else {
         absch += help.arg("Beitrag", toString(beitragsart));
     }
+    if (getBeitragNachzahlung() != 0) {
+        absch += help.arg("Aktuelle Nachzahlung", "%1 €").arg(getBeitragNachzahlung()/100.f, 0, 'f', 2);
+    }
     if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
         absch += help.arg("Zahler", getKontoinhaber());
     } else {
@@ -1381,12 +1384,12 @@ int Person::getBeitragRegulaer() const
 
 int Person::getBeitragNachzahlung() const
 {
-    if (! getAktiv() || isAusgetreten()) {
+    if (! getAktiv() || isAusgetreten())
         return 0;
-    }
-    if (Status::AktivMit == pruefeStunden(Gesamt)) {
+    if (beitragsart == Beitragsart::Beitragsfrei)
         return 0;
-    }
+    if (Status::AktivMit == pruefeStunden(Gesamt))
+        return 0;
 
     double prozent = 1.f - getZeiten(Gesamt) / (double)getMinimumStunden(Gesamt);
     int satz = (manager->getBeitrag(Beitragsart::FoerderBeitrag) - getBeitragRegulaer());

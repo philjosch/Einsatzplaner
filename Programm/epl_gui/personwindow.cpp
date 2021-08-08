@@ -55,6 +55,10 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
         ui->lineBank->setEnabled(false);
     }
     ui->lineBeitrag->setText(tr("%1 €").arg(p->getBeitrag()/100.f, 0, 'f', 2));
+    if (person->getBeitragNachzahlung() != 0)
+        ui->lineBeitrag->setText(tr("%1 € (+ %2 €)")
+                                 .arg(person->getBeitrag()/100.f, 0, 'f', 2)
+                                 .arg(person->getBeitragNachzahlung()/100.f, 0, 'f', 2));
 
     // Kontakt
     ui->lineStrasse->setText(p->getStrasse());
@@ -360,6 +364,10 @@ void PersonWindow::on_comboBeitragsart_currentIndexChanged(int index)
         ui->lineKontoinhaber->setStatusTip(tr("Abweichender Kontoinhaber"));
     }
     ui->lineBeitrag->setText(tr("%1 €").arg(person->getBeitrag()/100.f, 0, 'f', 2));
+    if (person->getBeitragNachzahlung() != 0)
+        ui->lineBeitrag->setText(tr("%1 € (+ %2 €)")
+                                 .arg(person->getBeitrag()/100.f, 0, 'f', 2)
+                                 .arg(person->getBeitragNachzahlung()/100.f, 0, 'f', 2));
 }
 
 void PersonWindow::on_lineIBAN_textChanged(const QString &arg1)
