@@ -21,7 +21,7 @@ const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsd
 const QString Person::FUSS_TABELLE_LISTE_HTML = "</tbody></table>";
 
 const QStringList Person::ANZEIGE_PERSONALDATEN = {"Vorname", "Nachname", "Geburtsdatum", "Geschlecht", "Anrede", "Beruf",
-                                                   "Nummer", "Eintritt", "Status", "Austritt", "Beitragsart", "IBAN", "Bank", "Kontoinhaber",
+                                                   "Nummer", "Eintritt", "Status", "Austritt", "Beitragsart", "IBAN", "Bank", "Kontoinhaber", "Beitrag", "Beitrag (Nachzahlung)",
                                                    "Straße", "PLZ", "Ort", "Strecke", "Mail", "Telefon", "Telefon2",
                                                    "Tf", "Zf", "Rangierer", "Tauglichkeit", "Bemerkung Betrieb.", "Sonst. Ausbildung",
                                                    "Mail Zustimmung", "Telefon Zustimmung",
@@ -1210,6 +1210,8 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+iban
             +";"+bank
             +";"+getKontoinhaberFinal()
+            +";"+(int)getBeitrag()/100
+            +";"+(int)getBeitragNachzahlung()/100
 
             +";"+(ausbildungTf ? "WAHR":"FALSCH")
             +";"+(ausbildungZf ? "WAHR":"FALSCH")

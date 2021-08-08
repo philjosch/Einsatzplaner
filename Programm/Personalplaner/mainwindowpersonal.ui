@@ -181,6 +181,22 @@
        </item>
        <item>
         <property name="text">
+         <string>Beitrag</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Beitrag (Nachzahlung)</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Adresse</string>
         </property>
         <property name="flags">
