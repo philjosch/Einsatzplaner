@@ -5,6 +5,7 @@
 #include "managerpersonal.h"
 
 #include <QMultiMap>
+#include <QPrinter>
 
 class Person : public QObject
 {
@@ -63,10 +64,12 @@ public:
 
     QString getZeitenFuerListeAlsHTML(QSet<Category> liste);
     QString getZeitenFuerEinzelAlsHTML();
+    bool printZeiten(QPrinter *printer);
 
     QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige = QSet<QString>()) const;
     QString getPersonaldatenFuerListeAlsCSV() const;
     QString getPersonaldatenFuerEinzelAlsHTML() const;
+    bool printPersonaldaten(QPrinter *printer) const;
 
     int getAdditional(Category cat) const;
     void setAdditional(Category cat, int value);

@@ -249,28 +249,28 @@ void MainWindowPersonal::on_actionMailListe_triggered()
 
 void MainWindowPersonal::on_actionMitgliederEinzelListePDF_triggered()
 {
-    Export::Mitglieder::printMitgliederEinzelListe(getSortierteListe(), personal, filter,
+    personal->printMitgliederEinzel(getSortierteListe(), filter,
                         Export::getPrinterPDF(this, "Stammdatenblaetter", QPrinter::Orientation::Portrait));
 }
 void MainWindowPersonal::on_actionMitgliederEinzelListeDrucken_triggered()
 {
-    Export::Mitglieder::printMitgliederEinzelListe(getSortierteListe(), personal, filter,
+    personal->printMitgliederEinzel(getSortierteListe(), filter,
                         Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 
 void MainWindowPersonal::on_actionMitgliederListePDF_triggered()
 {
-    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter, anzeige,
+    personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
                             Export::getPrinterPDF(this, "Mitgliederliste", QPrinter::Orientation::Portrait));
 }
 void MainWindowPersonal::on_actionMitgliederListeDrucken_triggered()
 {
-    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter, anzeige,
+    personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
                             Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
 }
 void MainWindowPersonal::on_actionMitgliederListeCSV_triggered()
 {
-    Export::Mitglieder::exportMitgliederAlsCSV(current,
+    personal->saveMitgliederListeAlsCSV(current,
                                    FileIO::getFilePathSave(this, "Mitglieder", FileIO::DateiTyp::CSV));
 }
 

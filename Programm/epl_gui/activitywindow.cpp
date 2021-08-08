@@ -2,6 +2,7 @@
 #include "ui_activitywindow.h"
 #include "export.h"
 #include "guihelper.h"
+#include "person.h"
 
 #include <QMessageBox>
 #include <eplexception.h>
@@ -204,13 +205,11 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int 
 
 void ActivityWindow::on_actionPrint_triggered()
 {
-    Export::Aktivitaeten::printAktivitaetenEinzel({activity},
-                                    Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    activity->print(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 void ActivityWindow::on_actionPdf_triggered()
 {
-    Export::Aktivitaeten::printAktivitaetenEinzel({activity},
-                                    Export::getPrinterPDF(this, windowTitle(), QPrinter::Orientation::Portrait));
+    activity->print(Export::getPrinterPDF(this, windowTitle(), QPrinter::Orientation::Portrait));
 }
 
 void ActivityWindow::on_actionDelete_triggered()
