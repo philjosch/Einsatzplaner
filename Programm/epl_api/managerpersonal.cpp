@@ -441,7 +441,7 @@ QList<Person *> ManagerPersonal::getPersonen(Status filter) const
     return current;
 }
 
-QString ManagerPersonal::getBeitraegeRegulaerAlsCSV() const
+bool ManagerPersonal::saveBeitraegeRegulaerAlsCSV(QString pfad) const
 {
     // Beitraege als CSV erstellen
     QString csv = "Name;IBAN;Bank;Kontoinhaber;Betrag;Mitgliedsnummer\n";
@@ -453,10 +453,10 @@ QString ManagerPersonal::getBeitraegeRegulaerAlsCSV() const
                     .arg(pers->getNummer());
         }
     }
-    return csv;
+    return FileIO::saveToFile(pfad, csv);
 }
 
-QString ManagerPersonal::getBeitraegeNachzahlungAlsCSV() const
+bool ManagerPersonal::saveBeitraegeNachzahlungAlsCSV(QString pfad) const
 {
     // Beitraege als CSV erstellen
     QString csv = "Name;IBAN;Bank;Kontoinhaber;Betrag;Mitgliedsnummer\n";
@@ -468,5 +468,5 @@ QString ManagerPersonal::getBeitraegeNachzahlungAlsCSV() const
                     .arg(pers->getNummer());
         }
     }
-    return csv;
+    return FileIO::saveToFile(pfad, csv);
 }

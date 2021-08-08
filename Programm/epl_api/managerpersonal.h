@@ -50,8 +50,8 @@ public:
     static bool printMitgliederListe(QList<Person *> liste, Status filter, QSet<QString> data, QPrinter *printer);
     static bool saveMitgliederListeAlsCSV(QList<Person *> liste, QString pfad);
 
-    QString getBeitraegeRegulaerAlsCSV() const;
-    QString getBeitraegeNachzahlungAlsCSV() const;
+    bool saveBeitraegeRegulaerAlsCSV(QString pfad) const;
+    bool saveBeitraegeNachzahlungAlsCSV(QString pfad) const;
 
     int getAnzahlMitglieder(Status filter) const;
     QList<Person *> getPersonen(Status filter) const;
