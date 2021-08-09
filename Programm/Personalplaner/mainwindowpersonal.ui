@@ -181,6 +181,22 @@
        </item>
        <item>
         <property name="text">
+         <string>Beitrag</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Beitrag (Nachzahlung)</string>
+        </property>
+        <property name="checkState">
+         <enum>Unchecked</enum>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Adresse</string>
         </property>
         <property name="flags">
@@ -730,6 +746,9 @@
     <addaction name="actionMitgliederListeDrucken"/>
     <addaction name="actionMitgliederListePDF"/>
     <addaction name="actionMitgliederListeCSV"/>
+    <addaction name="separator"/>
+    <addaction name="actionBeitraegeRegulaerCSV"/>
+    <addaction name="actionBeitraegeNachzahlungCSV"/>
    </widget>
    <widget class="QMenu" name="menuBearbeiten">
     <property name="title">
@@ -1095,6 +1114,16 @@
   <action name="actionMitgliedsbeitraege">
    <property name="text">
     <string>Mitgliedsbeiträge</string>
+   </property>
+  </action>
+  <action name="actionBeitraegeRegulaerCSV">
+   <property name="text">
+    <string>Export Jahresbeiträge …</string>
+   </property>
+  </action>
+  <action name="actionBeitraegeNachzahlungCSV">
+   <property name="text">
+    <string>Export Nachzahlungen …</string>
    </property>
   </action>
  </widget>

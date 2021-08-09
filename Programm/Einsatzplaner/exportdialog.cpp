@@ -98,7 +98,7 @@ void ExportDialog::on_pushDrucken_clicked()
         default:
             return;
         }
-        Export::Aktivitaeten::printAktivitaetenListe(liste, printer);
+        manager->printListenansicht(liste, printer);
     } else {
         switch (ui->buttonGroupExportFormat->checkedId()) {
         case 0:
@@ -110,7 +110,7 @@ void ExportDialog::on_pushDrucken_clicked()
         default:
             return;
         }
-        Export::Aktivitaeten::printAktivitaetenEinzel(liste, printer);
+        manager->printEinzelansichten(liste, printer);
     }
 }
 

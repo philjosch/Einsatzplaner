@@ -529,13 +529,13 @@
            </attribute>
            <layout class="QGridLayout" name="gridLayout_9" rowstretch="0,0,0,0,1,1,1,0" columnstretch="0,0,0,0,1">
             <property name="leftMargin">
-             <number>0</number>
+             <number>6</number>
             </property>
             <property name="topMargin">
              <number>6</number>
             </property>
             <property name="rightMargin">
-             <number>0</number>
+             <number>6</number>
             </property>
             <property name="bottomMargin">
              <number>0</number>
@@ -764,13 +764,13 @@
            </attribute>
            <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,0,0,0">
             <property name="leftMargin">
-             <number>0</number>
+             <number>6</number>
             </property>
             <property name="topMargin">
              <number>6</number>
             </property>
             <property name="rightMargin">
-             <number>0</number>
+             <number>6</number>
             </property>
             <property name="bottomMargin">
              <number>0</number>
@@ -1651,6 +1651,13 @@
      <addaction name="actionMitgliederListePDF"/>
      <addaction name="actionMitgliederListeCSV"/>
     </widget>
+    <widget class="QMenu" name="menuBeitraege">
+     <property name="title">
+      <string>Beiträge</string>
+     </property>
+     <addaction name="actionBeitraegeRegulaerCSV"/>
+     <addaction name="actionBeitraegeNachzahlungCSV"/>
+    </widget>
     <action name=""/>
     <addaction name="menuEinzelansichten"/>
     <addaction name="separator"/>
@@ -1659,6 +1666,8 @@
     <addaction name="separator"/>
     <addaction name="menuMitgliederEinzel"/>
     <addaction name="menuMitgliederListe"/>
+    <addaction name="separator"/>
+    <addaction name="menuBeitraege"/>
    </widget>
    <addaction name="menuPersonalmanagement"/>
    <addaction name="menuDrucken"/>
@@ -1762,6 +1771,16 @@
   <action name="actionMitgliederListeCSV">
    <property name="text">
     <string>Als CSV-Datei speichern …</string>
+   </property>
+  </action>
+  <action name="actionBeitraegeRegulaerCSV">
+   <property name="text">
+    <string>Export Jahresbeiträge …</string>
+   </property>
+  </action>
+  <action name="actionBeitraegeNachzahlungCSV">
+   <property name="text">
+    <string>Export Nachzahlungen …</string>
    </property>
   </action>
  </widget>

@@ -39,9 +39,8 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
 
     // Allgemeine Daten von AActivity
     ui->dateDate->setDate(fahrtag->getDatum());
-    ui->textAnlass->setPlainText(fahrtag->getAnlass().replace("<br/>","\n"));
-    ui->comboTimeEndeH->setCurrentText(fahrtag->getZeitEnde().toString("HH"));
-    ui->comboTimeEndeM->setCurrentText(fahrtag->getZeitEnde().toString("mm"));
+    ui->lineAnlass->setText(fahrtag->getAnlass().replace("<br/>","\n"));
+    ui->timeEnde->setTime(fahrtag->getZeitEnde());
     ui->checkZeiten->setChecked(fahrtag->getZeitenUnbekannt());
     on_checkZeiten_clicked(fahrtag->getZeitenUnbekannt());
     ui->checkBoxBenoetigt->setChecked(fahrtag->getPersonalBenoetigt());
@@ -50,10 +49,8 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
     // Daten von Fahrtag
     ui->comboArt->setCurrentIndex(fahrtag->getArt());
     on_comboArt_currentIndexChanged(fahrtag->getArt());
-    ui->comboTimeTfH->setCurrentText(fahrtag->getZeitTf().toString("HH"));
-    ui->comboTimeTfM->setCurrentText(fahrtag->getZeitTf().toString("mm"));
-    ui->comboTimeZH->setCurrentText(fahrtag->getZeitAnfang().toString("HH"));
-    ui->comboTimeZM->setCurrentText(fahrtag->getZeitAnfang().toString("mm"));
+    ui->timeBeginnTf->setTime(fahrtag->getZeitTf());
+    ui->timeBeginn->setTime(fahrtag->getZeitAnfang());
     ui->checkWichtig->setChecked(fahrtag->getWichtig());
     ui->checkAbgesagt->setChecked(fahrtag->getAbgesagt());
 
@@ -144,10 +141,10 @@ void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
     updateWindowTitle();
 }
 
-void FahrtagWindow::on_textAnlass_textChanged()
+void FahrtagWindow::on_lineAnlass_textChanged()
 {
     if (nehme)
-        fahrtag->setAnlass(ui->textAnlass->toPlainText().replace("\n","<br/>"));
+        fahrtag->setAnlass(ui->lineAnlass->text().replace("\n","<br/>"));
 }
 
 void FahrtagWindow::on_checkWichtig_clicked(bool checked)
@@ -177,26 +174,16 @@ void FahrtagWindow::on_comboWagenreihung_currentTextChanged(const QString &arg1)
     }
 }
 
-void FahrtagWindow::on_comboTimeTfH_currentTextChanged(const QString &arg1)
+void FahrtagWindow::on_timeBeginnTf_timeChanged(const QTime &time)
 {
     if (nehme)
-        fahrtag->setZeitTf(QTime(arg1.toInt(), fahrtag->getZeitTf().minute()));
-}
-void FahrtagWindow::on_comboTimeTfM_currentTextChanged(const QString &arg1)
-{
-    if (nehme)
-        fahrtag->setZeitTf(QTime(fahrtag->getZeitTf().hour(), arg1.toInt()));
+        fahrtag->setZeitTf(time);
 }
 
-void FahrtagWindow::on_comboTimeZH_currentTextChanged(const QString &arg1)
+void FahrtagWindow::on_timeBeginn_timeChanged(const QTime &time)
 {
     if (nehme)
-        fahrtag->setZeitAnfang(QTime(arg1.toInt(), fahrtag->getZeitAnfang().minute()));
-}
-void FahrtagWindow::on_comboTimeZM_currentTextChanged(const QString &arg1)
-{
-    if (nehme)
-        fahrtag->setZeitAnfang(QTime(fahrtag->getZeitAnfang().hour(), arg1.toInt()));
+        fahrtag->setZeitAnfang(time);
 }
 
 void FahrtagWindow::on_textBemerkungen_textChanged()
@@ -205,27 +192,19 @@ void FahrtagWindow::on_textBemerkungen_textChanged()
         fahrtag->setBemerkungen(ui->textBemerkungen->toPlainText().replace("\n","<br/>"));
 }
 
-void FahrtagWindow::on_comboTimeEndeH_currentTextChanged(const QString &arg1)
+void FahrtagWindow::on_timeEnde_timeChanged(const QTime &time)
 {
     if (nehme)
-        fahrtag->setZeitEnde(QTime(arg1.toInt(), fahrtag->getZeitEnde().minute()));
-}
-void FahrtagWindow::on_comboTimeEndeM_currentTextChanged(const QString &arg1)
-{
-    if (nehme)
-        fahrtag->setZeitEnde(QTime(fahrtag->getZeitEnde().hour(), arg1.toInt()));
+        fahrtag->setZeitEnde(time);
 }
 
 void FahrtagWindow::on_checkZeiten_clicked(bool checked)
 {
     if (nehme)
         fahrtag->setZeitenUnbekannt(checked);
-    ui->comboTimeTfH->setEnabled(!checked);
-    ui->comboTimeTfM->setEnabled(!checked);
-    ui->comboTimeZH->setEnabled(!checked);
-    ui->comboTimeZM->setEnabled(!checked);
-    ui->comboTimeEndeH->setEnabled(!checked);
-    ui->comboTimeEndeM->setEnabled(!checked);
+    ui->timeBeginnTf->setEnabled(!checked);
+    ui->timeBeginn->setEnabled(!checked);
+    ui->timeEnde->setEnabled(!checked);
 }
 
 void FahrtagWindow::addItemTolist(QListWidget *l, QPushButton *b)
@@ -488,24 +467,20 @@ void FahrtagWindow::on_actionDelete_triggered()
 
 void FahrtagWindow::on_actionPrint_triggered()
 {
-    Export::Aktivitaeten::printAktivitaetenEinzel({fahrtag},
-                                    Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    fahrtag->print(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 void FahrtagWindow::on_actionPdf_triggered()
 {
-    Export::Aktivitaeten::printAktivitaetenEinzel({fahrtag},
-                                    Export::getPrinterPDF(this, windowTitle(), QPrinter::Orientation::Portrait));
+    fahrtag->print(Export::getPrinterPDF(this, windowTitle(), QPrinter::Orientation::Portrait));
 }
 
 void FahrtagWindow::on_actionResPrint_triggered()
 {
-    Export::Aktivitaeten::printReservierung(fahrtag,
-                              Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    fahrtag->printReservierungsuebersicht(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 void FahrtagWindow::on_actionResPdf_triggered()
 {
-    Export::Aktivitaeten::printReservierung(fahrtag,
-                              Export::getPrinterPDF(this, windowTitle()+"-Reservierungen", QPrinter::Orientation::Portrait));
+    fahrtag->printReservierungsuebersicht(Export::getPrinterPDF(this, windowTitle()+"-Reservierungen", QPrinter::Orientation::Portrait));
 }
 
 void FahrtagWindow::showReservierung(Reservierung *r)

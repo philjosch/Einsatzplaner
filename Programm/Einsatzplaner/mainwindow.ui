@@ -787,7 +787,7 @@
     <addaction name="separator"/>
     <addaction name="actionClose"/>
     <addaction name="separator"/>
-    <addaction name="actionPrint"/>
+    <addaction name="actionExport"/>
    </widget>
    <widget class="QMenu" name="menuAnsicht">
     <property name="title">
@@ -944,17 +944,6 @@
     <enum>Qt::WindowShortcut</enum>
    </property>
   </action>
-  <action name="actionPrint">
-   <property name="text">
-    <string>Exportieren …</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+P</string>
-   </property>
-   <property name="shortcutContext">
-    <enum>Qt::WindowShortcut</enum>
-   </property>
-  </action>
   <action name="actionPersonal">
    <property name="checkable">
     <bool>false</bool>
@@ -977,14 +966,14 @@
    </property>
   </action>
   <action name="actionExport">
-   <property name="checkable">
-    <bool>false</bool>
-   </property>
    <property name="icon">
     <iconset resource="../icons/icons_rc.qrc">
      <normaloff>:/icon/upload.svg</normaloff>:/icon/upload.svg</iconset>
    </property>
    <property name="text">
+    <string>Export …</string>
+   </property>
+   <property name="toolTip">
     <string>Export</string>
    </property>
    <property name="shortcut">

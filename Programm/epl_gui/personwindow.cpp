@@ -45,6 +45,7 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
     ui->dateAustritt->setDate(p->getAustritt());
 
     ui->comboBeitragsart->setCurrentIndex(p->getBeitragsart());
+    on_comboBeitragsart_currentIndexChanged(ui->comboBeitragsart->currentIndex());
     ui->lineIBAN->setText(p->getIban());
     ui->lineBank->setText(p->getBank());
     ui->lineKontoinhaber->setText(p->getKontoinhaber());
@@ -54,6 +55,10 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
         ui->lineBank->setEnabled(false);
     }
     ui->lineBeitrag->setText(tr("%1 €").arg(p->getBeitrag()/100.f, 0, 'f', 2));
+    if (person->getBeitragNachzahlung() != 0)
+        ui->lineBeitrag->setText(tr("%1 € (+ %2 €)")
+                                 .arg(person->getBeitrag()/100.f, 0, 'f', 2)
+                                 .arg(person->getBeitragNachzahlung()/100.f, 0, 'f', 2));
 
     // Kontakt
     ui->lineStrasse->setText(p->getStrasse());
@@ -107,23 +112,20 @@ void PersonWindow::on_actionLoeschen_triggered()
 
 void PersonWindow::on_actionEinzelPDF_triggered()
 {
-    Export::Mitglieder::printMitgliederEinzelEinzel(person,
-                        Export::getPrinterPDF(this, "Stammdatenblatt", QPrinter::Orientation::Portrait));
+    person->printPersonaldaten(Export::getPrinterPDF(this, "Stammdatenblatt", QPrinter::Orientation::Portrait));
 }
 void PersonWindow::on_actionEinzelDrucken_triggered()
 {
-    Export::Mitglieder::printMitgliederEinzelEinzel(person,
-                        Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    person->printPersonaldaten(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 
 
 void PersonWindow::on_lineVorname_textChanged(const QString &arg1)
 {
     if (enabled) {
-        // test, ob Person vorhanden ist
         if (person->setVorname(arg1)) {
             setWindowTitle(person->getName());
-            // Nichts zu tun
+            ui->lineKontoinhaber->setPlaceholderText(person->getName());
         } else {
             QMessageBox::information(this, tr("Name doppelt vergeben"), tr("Der eingegebene Namen ist bereits im System registriert.\nSomit kann keine zweite Personen den gleichen Namen haben!"));
         }
@@ -134,7 +136,7 @@ void PersonWindow::on_lineNachname_textChanged(const QString &arg1)
     if (enabled) {
         if (person->setNachname(arg1)) {
             setWindowTitle(person->getName());
-            // Nicht zu tun
+            ui->lineKontoinhaber->setPlaceholderText(person->getName());
         } else {
             QMessageBox::information(this, tr("Name doppelt vergeben"), tr("Der eingegebene Namen ist bereits im System registriert.\nSomit kann keine zweite Personen den gleichen Namen haben!"));
         }
@@ -345,10 +347,27 @@ void PersonWindow::on_comboBeitragsart_currentIndexChanged(int index)
     Person::Beitragsart ba = static_cast<Person::Beitragsart>(index);
     if (enabled)
         person->setBeitragsart(ba);
-    ui->lineIBAN->setEnabled(ba != Person::Beitragsart::FamilienBeitragNutzer);
-    ui->lineBank->setEnabled(ba != Person::Beitragsart::FamilienBeitragNutzer);
-    ui->labelKonto->setText(ba != Person::Beitragsart::FamilienBeitragNutzer? "Kontoinhaber":"Zahler");
+
+    if (ba == Person::Beitragsart::FamilienBeitragNutzer) {
+        ui->lineIBAN->setEnabled(false);
+        ui->lineBank->setEnabled(false);
+        ui->labelKonto->setText(tr("Zahler"));
+        ui->lineKontoinhaber->setPlaceholderText("");
+        ui->lineKontoinhaber->setToolTip("");
+        ui->lineKontoinhaber->setStatusTip(tr("Name der Person, die den Beitrag bezahlt."));
+    } else {
+        ui->lineIBAN->setEnabled(true);
+        ui->lineBank->setEnabled(true);
+        ui->labelKonto->setText(tr("Kontoinhaber"));
+        ui->lineKontoinhaber->setPlaceholderText(person->getName());
+        ui->lineKontoinhaber->setToolTip(tr("Name des Kontoinhabers, sofern abweichend vom Namen der Person."));
+        ui->lineKontoinhaber->setStatusTip(tr("Abweichender Kontoinhaber"));
+    }
     ui->lineBeitrag->setText(tr("%1 €").arg(person->getBeitrag()/100.f, 0, 'f', 2));
+    if (person->getBeitragNachzahlung() != 0)
+        ui->lineBeitrag->setText(tr("%1 € (+ %2 €)")
+                                 .arg(person->getBeitrag()/100.f, 0, 'f', 2)
+                                 .arg(person->getBeitragNachzahlung()/100.f, 0, 'f', 2));
 }
 
 void PersonWindow::on_lineIBAN_textChanged(const QString &arg1)

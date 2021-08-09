@@ -43,6 +43,9 @@ protected slots:
     void on_actionMitgliederListeDrucken_triggered();
     void on_actionMitgliederListeCSV_triggered();
 
+    void on_actionBeitraegeRegulaerCSV_triggered();
+    void on_actionBeitraegeNachzahlungCSV_triggered();
+
     //** Fenster
     void on_comboAnzeige_currentIndexChanged(int index);
     void on_tabelleMitglieder_cellDoubleClicked(int row, int column);

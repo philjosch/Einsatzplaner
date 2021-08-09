@@ -1,6 +1,7 @@
 #include "aactivity.h"
 #include "person.h"
 #include "eplexception.h"
+#include "export.h"
 
 #include <QJsonArray>
 #include <QLinkedList>
@@ -695,6 +696,11 @@ QString AActivity::getHtmlForTableView() const
     }
     html += "</td></tr>";
     return html;
+}
+
+bool AActivity::print(QPrinter *printer)
+{
+    return Export::druckeHtmlAufDrucker(getHtmlForSingleView() + Export::zeitStempel(false), printer);
 }
 
 QString AActivity::getFarbe() const

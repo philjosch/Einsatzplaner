@@ -212,7 +212,7 @@ bool Wagen::besetzePlaetze(Reservierung *r, QList<int> plaetze)
     // Umrechnen in interne Darstellung
     QList<int> intern = extToInt(plaetze);
     if (! test(intern, r)) return false;
-    for (int pos: intern) {
+    for (int pos: qAsConst(intern)) {
         if (pos < 0 || pos > size)
             return false;
         verteilung.insert(pos, r);
@@ -284,21 +284,21 @@ bool Wagen::isEmpty()
 
 void Wagen::weisePlaetzeZu()
 {
-    QMap<Reservierung*, QList<int>> intern; // Plaetze in interner Darstellung
+    QHash<Reservierung *, QList<int> > intern; // Plaetze in interner Darstellung
     Reservierung *r;
-    for(int i: verteilung.keys()) {
-        r = verteilung.value(i);
+    for (auto it = verteilung.cbegin(); it != verteilung.cend(); ++it) {
+        r = it.value();
         if (!intern.contains(r))
             intern.insert(r, QList<int>());
         QList<int> help = intern.value(r);
-        help.append(i);
+        help.append(it.key());
         intern.insert(r, help);
     }
 
-    for(Reservierung *r: intern.keys()) {
+    for (auto it = intern.cbegin(); it != intern.cend(); ++it) {
         QMap<int, QList<int>> plaetze = QMap<int, QList<int>>();
-        plaetze.insert(nummer, intToExt(intern.value(r)));
-        r->setSitzplatz(plaetze);
+        plaetze.insert(nummer, intToExt(it.value()));
+        it.key()->setSitzplatz(plaetze);
     }
 }
 

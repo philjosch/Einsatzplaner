@@ -47,7 +47,7 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
     tage.append(ui->day5_5);    tage.append(ui->day6_5);    tage.append(ui->day7_5);
     tage.append(ui->day1_6);    tage.append(ui->day2_6);    tage.append(ui->day3_6);    tage.append(ui->day4_6);
     tage.append(ui->day5_6);    tage.append(ui->day6_6);    tage.append(ui->day7_6);
-    for(CalendarDay *c: tage) {
+    for(CalendarDay *c: qAsConst(tage)) {
         connect(c, &CalendarDay::clickedItem, this, &MainWindow::openAktivitaet);
         connect(c, SIGNAL(addActivity(QDate)), this, SLOT(newActivity(QDate)));
     }
@@ -204,7 +204,7 @@ void MainWindow::on_actionLoeschen_triggered()
 {
     QList<QListWidgetItem*> selected = ui->listWidget->selectedItems();
     if (! selected.isEmpty()) {
-        for(QListWidgetItem *item: selected) {
+        for(QListWidgetItem *item: qAsConst(selected)) {
             loeschenAktivitaet(itemToList.value(item));
         }
     }

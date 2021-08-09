@@ -2,6 +2,7 @@
 #include "managerpersonal.h"
 #include "person.h"
 #include "aactivity.h"
+#include "export.h"
 
 #include <QJsonArray>
 #include <QRandomGenerator>
@@ -20,7 +21,7 @@ const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsd
 const QString Person::FUSS_TABELLE_LISTE_HTML = "</tbody></table>";
 
 const QStringList Person::ANZEIGE_PERSONALDATEN = {"Vorname", "Nachname", "Geburtsdatum", "Geschlecht", "Anrede", "Beruf",
-                                                   "Nummer", "Eintritt", "Status", "Austritt", "Beitragsart", "IBAN", "Bank", "Kontoinhaber",
+                                                   "Nummer", "Eintritt", "Status", "Austritt", "Beitragsart", "IBAN", "Bank", "Kontoinhaber", "Beitrag", "Beitrag (Nachzahlung)",
                                                    "Straße", "PLZ", "Ort", "Strecke", "Mail", "Telefon", "Telefon2",
                                                    "Tf", "Zf", "Rangierer", "Tauglichkeit", "Bemerkung Betrieb.", "Sonst. Ausbildung",
                                                    "Mail Zustimmung", "Telefon Zustimmung",
@@ -331,10 +332,10 @@ QJsonObject Person::toJson() const
     // Zusätzliche Zeiten einfügen
     QJsonArray keys;
     QJsonArray values;
-    for (Category cat: additional.keys()) {
-        if (additional.value(cat) > 0) {
-            keys.append(int(cat));
-            values.append(additional.value(cat));
+    for (auto it = additional.cbegin(); it != additional.cend(); ++it) {
+        if (it.value() > 0) {
+            keys.append(int(it.key()));
+            values.append(it.value());
         }
     }
     o.insert("additionalKeys", keys);
@@ -384,7 +385,7 @@ QJsonObject Person::personalToJson() const
     return o;
 }
 
-int Person::getZeiten(Category cat)
+int Person::getZeiten(Category cat) const
 {
     if (valuesInvalid) berechne();
     switch (cat) {
@@ -599,7 +600,7 @@ bool Person::pruefeFilter(Status filter)
     }
 }
 
-Status Person::pruefeStunden()
+Status Person::pruefeStunden() const
 {
     if (isAusgetreten()) return Status::Ausgetreten;
     if (! getAktiv()) {
@@ -615,7 +616,7 @@ Status Person::pruefeStunden()
     return Status::AktivMit;
 }
 
-Status Person::pruefeStunden(Category cat)
+Status Person::pruefeStunden(Category cat) const
 {
     if (isAusgetreten()) return Status::Ausgetreten;
     if (! getAktiv()) {
@@ -631,24 +632,26 @@ Status Person::pruefeStunden(Category cat)
 
 int Person::getMinimumStunden(Category cat) const
 {
+    bool halb = (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 6);
+
     if (isMinderjaehrig()) return 0;
     if (isAusgetreten()) return 0;
     switch (cat) {
     case Tf:
         if (! isTauglich(Tf) ) return 0;
-        return manager->getMinimumHours(cat);
+        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
     case Zf:
         if (! isTauglich(Zf)) return 0;
-        return manager->getMinimumHours(cat);
+        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
     case Ausbildung:
         if ((! getAusbildungTf() && ! getAusbildungZf() && ! getAusbildungRangierer()) || !isTauglich()) return 0;
-        return manager->getMinimumHours(cat);
+        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
     default:
-        return manager->getMinimumHours(cat);
+        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
     }
 }
 
-void Person::berechne()
+void Person::berechne() const
 {
     zeiten.clear();
 
@@ -684,14 +687,14 @@ void Person::berechne()
             vorherigeEnde = e->getEndeRichtig();
     }
 
-    for (Category cat: additional.keys()) {
-       zeiten.insert(cat, zeiten.value(cat)+additional.value(cat));
-       switch (cat) {
+    for (auto it = additional.cbegin(); it != additional.cend(); ++it) {
+       zeiten.insert(it.key(), zeiten.value(it.key())+it.value());
+       switch (it.key()) {
        case Anzahl: break;
        case Gesamt: break;
        case Kilometer: break;
        default:
-           zeiten.insert(Gesamt, zeiten.value(Gesamt)+additional.value(cat));
+           zeiten.insert(Gesamt, zeiten.value(Gesamt)+it.value());
        }
     }
     valuesInvalid = false;
@@ -710,7 +713,7 @@ bool Person::removeActivity(Einsatz *e)
     return activities.removeAll(e);
 }
 
-const QList<Einsatz*> Person::getActivities()
+const QList<Einsatz*> Person::getActivities() const
 {
     Einsatz::sort(&activities);
     return activities;
@@ -865,6 +868,12 @@ QString Person::getZeitenFuerEinzelAlsHTML()
     if (h2 != "")
         html+= "<h3>Zusätzliche nicht in der Tabelle erfassten Stunden</h3><ul>"+h2+"</ul>";
     return html;
+}
+
+bool Person::printZeiten(QPrinter *printer)
+{
+    QString html = getZeitenFuerEinzelAlsHTML() + Export::zeitStempel(false);
+    return Export::druckeHtmlAufDrucker(html, printer);
 }
 
 QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
@@ -1101,11 +1110,14 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
     } else {
         absch += help.arg("Beitrag", toString(beitragsart));
     }
+    if (getBeitragNachzahlung() != 0) {
+        absch += help.arg("Aktuelle Nachzahlung", "%1 €").arg(getBeitragNachzahlung()/100.f, 0, 'f', 2);
+    }
     if (beitragsart == Person::Beitragsart::FamilienBeitragNutzer) {
         absch += help.arg("Zahler", getKontoinhaber());
     } else {
         absch += help.arg("Konto", "%2 bei %3").arg(iban, bank);
-        absch += help.arg("Kontoinhaber", getKontoinhaber());
+        absch += help.arg("Kontoinhaber", getKontoinhaberFinal());
     }
     if (absch != "")
         h += "<h3>Mitgliedschaft</h3><ul>" + absch + "</ul>";
@@ -1175,6 +1187,12 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
     return h;
 }
 
+bool Person::printPersonaldaten(QPrinter *printer) const
+{
+    QString html = getPersonaldatenFuerEinzelAlsHTML() + Export::zeitStempel();
+    return Export::druckeHtmlAufDrucker(html, printer);
+}
+
 QString Person::getPersonaldatenFuerListeAlsCSV() const
 {
     return QString::number(nummer)
@@ -1191,7 +1209,9 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+toString(beitragsart)
             +";"+iban
             +";"+bank
-            +";"+getKontoinhaber()
+            +";"+getKontoinhaberFinal()
+            +";"+(int)getBeitrag()/100
+            +";"+(int)getBeitragNachzahlung()/100
 
             +";"+(ausbildungTf ? "WAHR":"FALSCH")
             +";"+(ausbildungZf ? "WAHR":"FALSCH")
@@ -1288,6 +1308,9 @@ void Person::setBeitragsart(const Person::Beitragsart &value)
 }
 int Person::getBeitrag() const
 {
+    if (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 6) {
+        return manager->getBeitrag(beitragsart) / 2;
+    }
     return manager->getBeitrag(beitragsart);
 }
 
@@ -1311,12 +1334,24 @@ void Person::setBank(const QString &value)
     emit changed();
 }
 
+QString Person::getKontoinhaberFinal() const
+{
+    QString kI = getKontoinhaber();
+    if (kI != "")
+        return kI;
+    return getName();
+}
+
 QString Person::getKontoinhaber() const
 {
-    Person *pers = manager->getPersonFromID(kontoinhaber);
+    Person *pers = getKontoinhaberPerson();
     if (pers != nullptr)
         return pers->getName();
     return kontoinhaber;
+}
+Person* Person::getKontoinhaberPerson() const
+{
+    return manager->getPersonFromID(kontoinhaber);
 }
 void Person::setKontoinhaber(const QString &value)
 {
@@ -1328,6 +1363,48 @@ void Person::setKontoinhaber(const QString &value)
         }
     }
     emit changed();
+}
+
+int Person::getBeitragRegulaerIndividuell() const
+{
+    if (beitragsart != Beitragsart::FamilienBeitragNutzer)
+        return getBeitrag();
+
+    Person *zahler = manager->getPersonFromID(kontoinhaber);
+    if (zahler == nullptr)
+        return 0;
+
+    int count = 1;
+    for(Person *pers: manager->getPersonen(Status::AlleMitglieder)) {
+        if (pers->getBeitragsart() != Person::Beitragsart::FamilienBeitragNutzer)
+            continue;
+
+        if (zahler != manager->getPersonFromID(pers->kontoinhaber))
+            continue;
+
+        if (pers->getMinimumStunden(Gesamt) != 0) {
+            count ++;
+        }
+    }
+    return zahler->getBeitrag() / count;
+}
+
+int Person::getBeitragNachzahlung() const
+{
+    if (! getAktiv() || isAusgetreten())
+        return 0;
+    if (beitragsart == Beitragsart::Beitragsfrei)
+        return 0;
+    if (Status::AktivMit == pruefeStunden(Gesamt))
+        return 0;
+
+    double prozent = 1.f - getZeiten(Gesamt) / (double)getMinimumStunden(Gesamt);
+    int satz = manager->getBeitrag(Beitragsart::FoerderBeitrag);
+//    if (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 6) {
+//        satz = satz / 2;
+//    }
+    satz = satz - getBeitragRegulaerIndividuell();
+    return (satz * prozent/100)*100;
 }
 
 QDate Person::getTauglichkeit() const

@@ -1,3 +1,4 @@
+#include "export.h"
 #include "manager.h"
 
 #include <QJsonArray>
@@ -97,25 +98,23 @@ QList<AActivity *> Manager::getActivities() const
     return activities;
 }
 
-QString Manager::getHtmlFuerListenansicht(QList<AActivity *> liste)
+bool Manager::printListenansicht(QList<AActivity *> liste, QPrinter *printer)
 {
     QString a = AActivity::KOPF_LISTE_HTML;
     for(AActivity *akt: liste) {
         a += akt->getHtmlForTableView();
     }
     a += AActivity::FUSS_LISTE_HTML;
-    return a;
+
+    return Export::druckeHtmlAufDrucker(a + Export::zeitStempel(), printer);
 }
 
-QString Manager::getHtmlFuerEinzelansichten(QList<AActivity *> liste)
+bool Manager::printEinzelansichten(QList<AActivity *> liste, QPrinter *printer)
 {
     QString html = "";
     for(AActivity *a: liste) {
         html += a->getHtmlForSingleView();
-        if(liste.last() != a)
-            html += "<p class='last'><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
-        else
-            html += "<p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy H:mm")+"</small></p>";
+        html += Export::zeitStempel(liste.last() != a);
     }
-    return html;
+    return Export::druckeHtmlAufDrucker(html, printer);
 }

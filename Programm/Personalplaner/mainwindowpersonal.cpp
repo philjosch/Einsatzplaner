@@ -85,7 +85,7 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
     }
 
     QTableWidgetItem *i;
-    for (Person *p: current) {
+    for (Person *p: qAsConst(current)) {
         clmn = 0;
         ui->tabelleMitglieder->insertRow(0);
 
@@ -140,6 +140,18 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getBank()));
         if (anzeige.contains("Kontoinhaber"))
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getKontoinhaber()));
+        if (anzeige.contains("Beitrag")) {
+            i = new PersonTableWidgetItem(p);
+            if (p->getBeitrag() != 0)
+                i->setData(0, p->getBeitrag()/100);
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
+        }
+        if (anzeige.contains("Beitrag (Nachzahlung)")) {
+            i = new PersonTableWidgetItem(p);
+            if (p->getBeitragNachzahlung() != 0)
+                i->setData(0, p->getBeitragNachzahlung()/100);
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
+        }
 
 
         if (anzeige.contains("Straße"))
@@ -212,7 +224,7 @@ void MainWindowPersonal::on_actionMailListe_triggered()
     if (current.isEmpty()) return;
     QSet<QString> mails;
     QList<Person*> keineMail;
-    for (Person *p: current) {
+    for (Person *p: qAsConst(current)) {
         if (p->getMail() != "") {
             mails.insert(p->getMail());
         } else {
@@ -253,31 +265,39 @@ void MainWindowPersonal::on_actionMitgliedsbeitraege_triggered()
 
 void MainWindowPersonal::on_actionMitgliederEinzelListePDF_triggered()
 {
-    Export::Mitglieder::printMitgliederEinzelListe(getSortierteListe(), personal, filter,
+    personal->printMitgliederEinzel(getSortierteListe(), filter,
                         Export::getPrinterPDF(this, "Stammdatenblaetter", QPrinter::Orientation::Portrait));
 }
 void MainWindowPersonal::on_actionMitgliederEinzelListeDrucken_triggered()
 {
-    Export::Mitglieder::printMitgliederEinzelListe(getSortierteListe(), personal, filter,
+    personal->printMitgliederEinzel(getSortierteListe(), filter,
                         Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 
 void MainWindowPersonal::on_actionMitgliederListePDF_triggered()
 {
-    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter, anzeige,
+    personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
                             Export::getPrinterPDF(this, "Mitgliederliste", QPrinter::Orientation::Portrait));
 }
 void MainWindowPersonal::on_actionMitgliederListeDrucken_triggered()
 {
-    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter, anzeige,
+    personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
                             Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
 }
 void MainWindowPersonal::on_actionMitgliederListeCSV_triggered()
 {
-    Export::Mitglieder::exportMitgliederAlsCSV(current,
+    personal->saveMitgliederListeAlsCSV(current,
                                    FileIO::getFilePathSave(this, "Mitglieder", FileIO::DateiTyp::CSV));
 }
 
+void MainWindowPersonal::on_actionBeitraegeRegulaerCSV_triggered()
+{
+    personal->saveBeitraegeRegulaerAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Regulaer", FileIO::DateiTyp::CSV));
+}
+void MainWindowPersonal::on_actionBeitraegeNachzahlungCSV_triggered()
+{
+    personal->saveBeitraegeNachzahlungAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Nachzahlung", FileIO::DateiTyp::CSV));
+}
 
 void MainWindowPersonal::on_comboAnzeige_currentIndexChanged(int index)
 {

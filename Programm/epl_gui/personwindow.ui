@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>452</width>
-    <height>469</height>
+    <width>403</width>
+    <height>451</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,23 +18,8 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,1">
-    <property name="leftMargin">
-     <number>6</number>
-    </property>
-    <property name="topMargin">
-     <number>6</number>
-    </property>
-    <property name="rightMargin">
-     <number>6</number>
-    </property>
-    <property name="bottomMargin">
-     <number>0</number>
-    </property>
-    <property name="spacing">
-     <number>6</number>
-    </property>
     <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,0,0,0">
+     <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,1,0,0">
       <item row="0" column="2">
        <widget class="QLabel" name="label_26">
         <property name="text">
@@ -54,18 +39,6 @@
       </item>
       <item row="0" column="1">
        <widget class="QLineEdit" name="lineVorname">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="placeholderText">
          <string>Vorname</string>
         </property>
@@ -82,14 +55,7 @@
        </widget>
       </item>
       <item row="0" column="3">
-       <widget class="QLineEdit" name="lineID">
-        <property name="maximumSize">
-         <size>
-          <width>75</width>
-          <height>16777215</height>
-         </size>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="lineID"/>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
@@ -127,16 +93,13 @@
          <number>6</number>
         </property>
         <property name="topMargin">
-         <number>0</number>
+         <number>6</number>
         </property>
         <property name="rightMargin">
          <number>6</number>
         </property>
         <property name="bottomMargin">
          <number>0</number>
-        </property>
-        <property name="spacing">
-         <number>6</number>
         </property>
         <item row="0" column="0">
          <widget class="QLabel" name="labelGeburtstag">
@@ -152,12 +115,6 @@
          <widget class="QDateEdit" name="dateGeburtstag">
           <property name="enabled">
            <bool>false</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -311,12 +268,12 @@
        <attribute name="title">
         <string>Mitgliedschaft</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout">
+       <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,1" columnstretch="0,0,0,1">
         <property name="leftMargin">
          <number>6</number>
         </property>
         <property name="topMargin">
-         <number>0</number>
+         <number>6</number>
         </property>
         <property name="rightMargin">
          <number>6</number>
@@ -382,12 +339,6 @@
         </item>
         <item row="2" column="2">
          <widget class="QDateEdit" name="dateAustritt">
-          <property name="minimumSize">
-           <size>
-            <width>150</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
@@ -562,7 +513,14 @@
          <widget class="QLineEdit" name="lineBank"/>
         </item>
         <item row="6" column="1" colspan="2">
-         <widget class="QLineEdit" name="lineKontoinhaber"/>
+         <widget class="QLineEdit" name="lineKontoinhaber">
+          <property name="toolTip">
+           <string>Name des Kontoinhabers, sofern abweichend vom Namen der Person.</string>
+          </property>
+          <property name="statusTip">
+           <string>Abweichender Kontoinhaber</string>
+          </property>
+         </widget>
         </item>
         <item row="7" column="0">
          <widget class="QLabel" name="labelBeitrag">
@@ -584,21 +542,18 @@
        <attribute name="title">
         <string>Kontakt</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,1" rowminimumheight="0,0,0,0,0,0,0,1">
+       <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0,0,0,0,0,1" columnstretch="0,0,1">
         <property name="leftMargin">
          <number>6</number>
         </property>
         <property name="topMargin">
-         <number>0</number>
+         <number>6</number>
         </property>
         <property name="rightMargin">
          <number>6</number>
         </property>
         <property name="bottomMargin">
          <number>0</number>
-        </property>
-        <property name="spacing">
-         <number>6</number>
         </property>
         <item row="0" column="0">
          <widget class="QLabel" name="labelAdress">
@@ -741,12 +696,12 @@
        <attribute name="title">
         <string>Ausbildung</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_12">
+       <layout class="QGridLayout" name="gridLayout_6" rowstretch="0,0,1,1" columnstretch="0,0,0,0,1">
         <property name="leftMargin">
          <number>6</number>
         </property>
         <property name="topMargin">
-         <number>0</number>
+         <number>6</number>
         </property>
         <property name="rightMargin">
          <number>6</number>
@@ -754,9 +709,13 @@
         <property name="bottomMargin">
          <number>0</number>
         </property>
-        <property name="spacing">
-         <number>6</number>
-        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="labelAusbildung">
+          <property name="text">
+           <string>Ausbildung</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="1">
          <widget class="QCheckBox" name="checkTf">
           <property name="text">
@@ -764,21 +723,42 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
+        <item row="0" column="2">
+         <widget class="QCheckBox" name="checkZf">
+          <property name="text">
+           <string>Zugführer</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
          <widget class="QCheckBox" name="checkRangierer">
           <property name="text">
            <string>Rangierer</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
-         <widget class="QDateEdit" name="dateDienst">
-          <property name="minimumSize">
+        <item row="0" column="4">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
            <size>
-            <width>100</width>
-            <height>0</height>
+            <width>228</width>
+            <height>20</height>
            </size>
           </property>
+         </spacer>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="labelDienst">
+          <property name="text">
+           <string>Tauglichkeit</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QDateEdit" name="dateDienst">
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
@@ -804,55 +784,35 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="labelAusbildung">
-          <property name="text">
-           <string>Ausbildung</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="checkZf">
-          <property name="text">
-           <string>Zugführer</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="labelDienst">
-          <property name="text">
-           <string>Tauglichkeit</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
+        <item row="1" column="2">
          <widget class="QCheckBox" name="checkDienst">
           <property name="text">
            <string>Unbekannt</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="3">
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+        <item row="2" column="0">
+         <widget class="QLabel" name="labelBetrieb">
+          <property name="text">
+           <string>Sonstige
+Betriebliche</string>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>228</width>
-            <height>20</height>
-           </size>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
           </property>
-         </spacer>
-        </item>
-        <item row="5" column="1" colspan="3">
-         <widget class="QPlainTextEdit" name="plainAusbildung">
-          <property name="placeholderText">
-           <string>Ausbildungen, Unterweisungen, Lehrgänge, ...</string>
+          <property name="buddy">
+           <cstring>plainBetrieb</cstring>
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
+        <item row="2" column="1" colspan="4">
+         <widget class="QPlainTextEdit" name="plainBetrieb">
+          <property name="placeholderText">
+           <string>Sonstige Betriebliche Ausbildungen, Unterweisungen oder Bemerkungen</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
          <widget class="QLabel" name="labelAusbildungSonst">
           <property name="text">
            <string>Sonstige
@@ -866,24 +826,10 @@ Ausbildung</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="1" colspan="3">
-         <widget class="QPlainTextEdit" name="plainBetrieb">
+        <item row="3" column="1" colspan="4">
+         <widget class="QPlainTextEdit" name="plainAusbildung">
           <property name="placeholderText">
-           <string>Sonstige Betriebliche Ausbildungen, Unterweisungen oder Bemerkungen</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="labelBetrieb">
-          <property name="text">
-           <string>Sonstige
-Betriebliche</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-          </property>
-          <property name="buddy">
-           <cstring>plainBetrieb</cstring>
+           <string>Ausbildungen, Unterweisungen, Lehrgänge, ...</string>
           </property>
          </widget>
         </item>
@@ -898,16 +844,13 @@ Betriebliche</string>
          <number>6</number>
         </property>
         <property name="topMargin">
-         <number>0</number>
+         <number>6</number>
         </property>
         <property name="rightMargin">
          <number>6</number>
         </property>
         <property name="bottomMargin">
          <number>0</number>
-        </property>
-        <property name="spacing">
-         <number>6</number>
         </property>
         <item row="0" column="0">
          <widget class="QLabel" name="labelDatenschutz">
@@ -957,7 +900,7 @@ Betriebliche</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>452</width>
+     <width>403</width>
      <height>22</height>
     </rect>
    </property>
@@ -991,6 +934,9 @@ Betriebliche</string>
    </property>
    <property name="allowedAreas">
     <set>Qt::TopToolBarArea</set>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
    </property>
    <property name="iconSize">
     <size>
@@ -1064,7 +1010,7 @@ Betriebliche</string>
      <normaloff>:/icon/at-symbol.svg</normaloff>:/icon/at-symbol.svg</iconset>
    </property>
    <property name="text">
-    <string>Mail-Senden</string>
+    <string>Mail senden</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>

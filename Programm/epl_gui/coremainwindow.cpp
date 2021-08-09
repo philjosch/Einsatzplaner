@@ -114,7 +114,7 @@ void CoreMainWindow::on_menuRecentlyused_aboutToShow()
             recentlyUsedMenu->removeAction(actions[i]);
         }
         recentlyUsedClear->setEnabled(true);
-        for (const QString &entry: list) {
+        for (const QString &entry: qAsConst(list)) {
             QAction *a = new QAction(entry, this);
             connect(a, &QAction::triggered, this, [=]() { handlerOpen(entry); });
             recentlyUsedMenu->insertAction(nullptr, a);

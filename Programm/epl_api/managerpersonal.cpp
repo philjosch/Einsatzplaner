@@ -1,3 +1,5 @@
+#include "export.h"
+#include "fileio.h"
 #include "managerpersonal.h"
 #include "person.h"
 
@@ -43,9 +45,9 @@ ManagerPersonal::ManagerPersonal(QJsonObject o)
         minimumHours.insert(Gesamt, int(o.value("minimumTotal").toDouble(0)*60));
         if (o.contains("minimumHours")) {
             QJsonObject o2 = o.value("minimumHours").toObject();
-            for (QString cat: o2.keys()) {
-                Category catt = getCategoryFromLocalizedString(cat);
-                minimumHours.insert(catt, int(o2.value(cat).toDouble(0)*60));
+            for(auto it = o2.constBegin(); it != o2.constEnd(); ++it) {
+                Category catt = getCategoryFromLocalizedString(it.key());
+                minimumHours.insert(catt, int(it.value().toDouble(0)*60));
             }
         }
     }
@@ -76,10 +78,10 @@ QJsonObject ManagerPersonal::toJson() const
     // Mindesstunden
     QJsonArray keysMinimum;
     QJsonArray valuesMinimum;
-    for (Category cat: minimumHours.keys()) {
-        if (minimumHours.value(cat) > 0) {
-            keysMinimum.append(int(cat));
-            valuesMinimum.append(minimumHours.value(cat));
+    for(auto it = minimumHours.cbegin(); it != minimumHours.cend(); ++it) {
+        if (it.key() > 0) {
+            keysMinimum.append(int(it.key()));
+            valuesMinimum.append(it.value());
         }
     }
     // Beitraege
@@ -111,10 +113,10 @@ QJsonObject ManagerPersonal::personalToJson() const
     // Mindesstunden
     QJsonArray keys;
     QJsonArray values;
-    for (Category cat: minimumHours.keys()) {
-        if (minimumHours.value(cat) > 0) {
-            keys.append(int(cat));
-            values.append(minimumHours.value(cat));
+    for (auto it = minimumHours.cbegin(); it != minimumHours.cend(); ++it) {
+        if (it.value() > 0) {
+            keys.append(int(it.key()));
+            values.append(it.value());
         }
     }
     // Beitraege
@@ -262,18 +264,14 @@ bool ManagerPersonal::checkNummer(int neu) const
     return true;
 }
 
-QString ManagerPersonal::getZeitenFuerEinzelListeAlsHTML(QList<Person *> liste, Status filter) const
+bool ManagerPersonal::printZeitenEinzel(QList<Person *> liste, Status filter, QPrinter *printer) const
 {
     QString a = "";
     // Seite fuer jede Person einfuegen
     QMap<Category, int> sum;
     for(Person *p: liste) {
         a += p->getZeitenFuerEinzelAlsHTML();
-        QString help = "<p><small>Stand: %1</small></p>";
-        if (p != liste.last()) {
-            help = "<div style='page-break-after:always'>" + help + "</div>";
-        }
-        a += help.arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
+        a += Export::zeitStempel(p != liste.last());
         for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
@@ -295,12 +293,12 @@ QString ManagerPersonal::getZeitenFuerEinzelListeAlsHTML(QList<Person *> liste, 
     }
     titelSeite += "</ul>";
 
-    titelSeite += "<div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+    titelSeite += Export::zeitStempel(true);
 
-    return titelSeite+a;
+    return Export::druckeHtmlAufDrucker(titelSeite+a, printer);
 }
 
-QString ManagerPersonal::getZeitenFuerListeAlsHTML(QList<Person *> personen, QSet<Category> spalten, Status filter)
+bool ManagerPersonal::printZeitenListe(QList<Person *> personen, QSet<Category> spalten, Status filter, QPrinter *printer)
 {
     QString a = "<h3>Einsatzzeiten: %1</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
@@ -320,7 +318,7 @@ QString ManagerPersonal::getZeitenFuerListeAlsHTML(QList<Person *> personen, QSe
     QMap<Category, int> sum;
     for(Person *p: personen) {
         a += p->getZeitenFuerListeAlsHTML(spalten);
-        for (Category cat: spalten) {
+        for (Category cat: qAsConst(spalten)) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
     }
@@ -338,22 +336,19 @@ QString ManagerPersonal::getZeitenFuerListeAlsHTML(QList<Person *> personen, QSe
         }
     }
     a += "</tr></tfoot></table>";
-    a += QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
-    return a;
+    a += Export::zeitStempel(false);
+
+    return Export::druckeHtmlAufDrucker(a, printer);
 }
 
-QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> liste, Status filter) const
+bool ManagerPersonal::printMitgliederEinzel(QList<Person *> liste, Status filter, QPrinter *printer) const
 {
     QString a = "";
     // Seite fuer jede Person einfuegen
     QMap<Category, int> sum;
     for(Person *p: liste) {
         a += p->getPersonaldatenFuerEinzelAlsHTML();
-        QString help = "<p><small>Stand: %1</small></p>";
-        if (p != liste.last()) {
-            help = "<div style='page-break-after:always'>" + help + "</div>";
-        }
-        a += help.arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
+        a += Export::zeitStempel(p != liste.last());
         for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
@@ -402,12 +397,13 @@ QString ManagerPersonal::getMitgliederFuerEinzelListeAlsHTML(QList<Person *> lis
         if (it.value() != 0)
             titelSeite += help.arg(Person::toString(it.key())).arg(it.value()/100.f, 0, 'f', 2);
     }
-    titelSeite += "</ul><div style='page-break-after:always'><p><small>Erstellt am: "+QDateTime::currentDateTime().toString("d.M.yyyy HH:mm")+"</small></p></div>";
+    titelSeite += "</ul>";
+    titelSeite += Export::zeitStempel(true);
 
-    return titelSeite+a;
+    return Export::druckeHtmlAufDrucker(titelSeite+a, printer);
 }
 
-QString ManagerPersonal::getMitgliederFuerListeAlsHtml(QList<Person*> liste, Status filter, QSet<QString> data)
+bool ManagerPersonal::printMitgliederListe(QList<Person*> liste, Status filter, QSet<QString> data, QPrinter *printer)
 {
     QString a = Person::getKopfTabelleListeHtml(data)
             .arg(toString(filter), QDateTime::currentDateTime().toString("d.M.yyyy"));
@@ -417,16 +413,17 @@ QString ManagerPersonal::getMitgliederFuerListeAlsHtml(QList<Person*> liste, Sta
     a += Person::FUSS_TABELLE_LISTE_HTML;
     a += QObject::tr("<p><small>%1 Personen ausgegeben.</small><br/>").arg(liste.length());
     a += QObject::tr("<small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
-    return a;
+
+    return Export::druckeHtmlAufDrucker(a, printer);
 }
 
-QString ManagerPersonal::getMitgliederFuerListeAlsCSV(QList<Person *> liste)
+bool ManagerPersonal::saveMitgliederListeAlsCSV(QList<Person *> liste, QString pfad)
 {
     QString t = Person::KOPF_TABELLE_LISTE_CSV;
     for(Person *akt: liste) {
         t += akt->getPersonaldatenFuerListeAlsCSV();
     }
-    return t;
+    return FileIO::saveToFile(pfad, t);
 }
 
 int ManagerPersonal::getAnzahlMitglieder(Status filter) const
@@ -442,4 +439,37 @@ QList<Person *> ManagerPersonal::getPersonen(Status filter) const
             current.append(p);
     }
     return current;
+}
+
+bool ManagerPersonal::saveBeitraegeRegulaerAlsCSV(QString pfad) const
+{
+    QString csv = "Name;Mitgliedsnummer;IBAN;Bank;Kontoinhaber;Betrag\n";
+    for(Person *pers: getPersonen(Status::AlleMitglieder)) {
+        if (pers->getBeitrag() != 0) {
+            csv += QString("%1;%6;%2;%3;%4;%5\n")
+                    .arg(pers->getName(), pers->getIban(), pers->getBank(), pers->getKontoinhaberFinal())
+                    .arg(pers->getBeitrag()/100.f, 0, 'f', 2)
+                    .arg(pers->getNummer());
+        }
+    }
+    return FileIO::saveToFile(pfad, csv);
+}
+
+bool ManagerPersonal::saveBeitraegeNachzahlungAlsCSV(QString pfad) const
+{
+    QString csv = "Name;Mitgliedsnummer;IBAN;Bank;Kontoinhaber;Betrag\n";
+    for(Person *pers: getPersonen(Status::AlleMitglieder)) {
+        if (pers->getBeitragNachzahlung() != 0) {
+            Person *zahler = nullptr;
+            if (pers->getBeitragsart() == Person::Beitragsart::FamilienBeitragNutzer)
+                zahler = pers->getKontoinhaberPerson();
+            if (zahler == nullptr)
+                zahler = pers;
+            csv += QString("%1;%6;%2;%3;%4;%5\n")
+                    .arg(pers->getName(), zahler->getIban(), zahler->getBank(), zahler->getKontoinhaberFinal())
+                    .arg(pers->getBeitragNachzahlung()/100.f, 0, 'f', 2)
+                    .arg(pers->getNummer());
+        }
+    }
+    return FileIO::saveToFile(pfad, csv);
 }

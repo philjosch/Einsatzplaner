@@ -2,11 +2,7 @@
 #define EXPORT_H
 
 #include "aactivity.h"
-#include "fahrtag.h"
-#include "person.h"
-#include "managerpersonal.h"
 #include "filesettings.h"
-#include "manager.h"
 
 #include <QTextDocument>
 #include <QPrinter>
@@ -20,36 +16,6 @@
 class Export
 {
 public:
-
-    // Aktivitaeten und Zubehoer
-    class Aktivitaeten {
-    public:
-        // Drucken von Fahrtagen und Aktivitäten
-        static bool printAktivitaetenEinzel(QList<AActivity*> liste, QPrinter *printer);
-        static bool printAktivitaetenListe(QList<AActivity *> liste, QPrinter *printer);
-
-        // Reservierungen
-        static bool printReservierung(Fahrtag *f, QPrinter *printer); // Gibt nur die Reservierungen aus sortiert nach Wagen und dann nach Name
-    };
-
-    // Drucken von Personen mit Einsatzzeiten
-    class Personal {
-    public:
-        static bool printZeitenEinzelEinzel(Person *p, QPrinter *printer);
-        static bool printZeitenEinzelListe(QList<Person*> liste, ManagerPersonal *m, Status filter, QPrinter *printer);
-        static bool printZeitenListe(QList<Person *> personen, QSet<Category> data, Status filter, QPrinter *printer);
-    };
-
-    // Mitgliederlisten
-    class Mitglieder {
-    public:
-        static bool printMitgliederEinzelEinzel(Person *p, QPrinter *printer);
-        static bool printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Status filter, QPrinter *printer);
-        static bool printMitgliederListe(QList<Person *> liste, Status filter, QSet<QString> data, QPrinter *printer);
-        static bool exportMitgliederAlsCSV(QList<Person *> liste, QString pfad);
-    };
-
-
     // Datei-Upload
     class Upload {
     public:
@@ -64,10 +30,10 @@ public:
     // Helfer-Methoden, die auch Extern verwendet werden koennen
     static bool druckeHtmlAufDrucker(QString text, QPrinter *printer);
 
+    static QString zeitStempel(bool seitenUmbruch = false);
+
 private:
     static void preparePrinter(QPrinter *p, QPrinter::Orientation orientation);
-
-    static QString zeitStempel();
 
     static QTextDocument *newDefaultDocument();
 
