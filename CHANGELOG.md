@@ -1,8 +1,11 @@
 # Einsatzplaner - Veränderungshistorie
 Stand: 9. August 2021
 
-## Version 1.7.2
+## Version 1.8.0
 ### Neu
+- Einstellen der Mitgliedsbeiträge für einzelne Beitragsarten
+- Ausgabe der Mitgliedsbeiträge (Regulär und Nachzahlung) in Benutzeroberfläche und Export
+- Export der Beiträge für Einzugsverfahren
 - Als Kontoinhaber wird standardmäßig der Name der Person gewählt 
 - Dienstzeiten bei Fahrtagen können minutengenau angegeben werden
 - Heutiger Tag wird im Kalender markiert
@@ -17,11 +20,12 @@ Stand: 9. August 2021
 - Diverse Verbesserungen und Fehlerbehebungen
 
 ### Fehlerbehebungen
-- Beim Export der Einsatzzeiten wurden die Anzahl und die KIlometer nicht ausgegeben
+- Beim Export der Einsatzzeiten wurde die Anzahl der Einsätze und die Kilometer nicht ausgegeben
 - Der Export von Aktivitäten war nicht über das Menü im Kalender möglich
 - Bei der Exportfunktion wurden auch vergangene Aktivitäten ausgegeben, obwohl "ab jetzt" gewählt war
 - Überschrift in der erstellten CSV-Datei war teilweise falsch
 
+---
 
 ## Version 1.7.1 – 2021-06-13
 ### Verbessert
