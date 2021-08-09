@@ -385,6 +385,7 @@ bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
                 list.swapItemsAt(pos, pos+1);
                 pos++;
             }
+            wagenZuRes.insert(i, list);
         }
         if (r->getSitzplatz().isEmpty()) {
             if (! wagenZuRes.contains(999))

@@ -21,6 +21,7 @@ Stand: 9. August 2021
 - Der Export von Aktivitäten war nicht über das Menü im Kalender möglich
 - Bei der Exportfunktion wurden auch vergangene Aktivitäten ausgegeben, obwohl "ab jetzt" gewählt war
 - Überschrift in der erstellten CSV-Datei war teilweise falsch
+- Export von Reservierungen eines Fahrtages war fehlerhaft 
 
 
 ## Version 1.7.1 – 2021-06-13
