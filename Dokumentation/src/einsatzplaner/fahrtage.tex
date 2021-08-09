@@ -7,23 +7,22 @@
 \end{figure}
 \paragraph{Allgemein}
 Im oberen Bereich des Fensters können die grundlegenden Daten für einen Fahrtag eingegeben werden.
-Eine Markierung als \emph{wichtig} wird beim Export des Fahrtages durch eine optische Hervorhebung gekennzeichnet.
-\begin{neu}
-Ebenso kann die Veranstaltung abgesagt werden.
-In diesem Fall werden für die eingetragenen Personen keine Stunden angerechnet, sodass diese nicht entfernt werden müssen.
-Beim Export werden in diesem Fall nur noch die Rahmendaten und die Bemerkungen ausgegeben.
-\end{neu}
+Dies umfasst zum einen den Tag und die Dienstzeiten.
+Sind die Zeiten für den Fahrtag noch unbekannt, können Sie das mit dem entsprechenden Häkchen kenntlich machen.
 
+Ebenso kann die Art und der Anlass der Fahrt angegeben werden.
 Die Wagenreihung wirkt sich auf die Anzeige der Reservierungen aus und ist für die Personalplanung wichtig.
-Es stehen bereits einige häufige Kombinationen der Wagen zur Verfügung.
+Es stehen bereits einige häufige Kombinationen zur Verfügung.
 Diese können aber auch beliebig verändert werden.
 Dabei müssen die Wagen durch Kommata voneinander getrennt werden.
 
-Sind die Zeiten für den Fahrtag noch unbekannt, können Sie das mit dem entsprechenden Häkchen kenntlich machen.
-Ansonsten sind die Dienstzeiten anzugeben.
+Eine Markierung als \emph{wichtig} wird beim Export des Fahrtages durch eine optische Hervorhebung gekennzeichnet.
+Ebenso kann die Veranstaltung abgesagt werden.
+In diesem Fall werden für die eingetragenen Personen keine Stunden angerechnet, sodass diese nicht entfernt werden müssen.
+Beim Export werden in diesem Fall nur noch die Rahmendaten und die Bemerkungen ausgegeben.
 
-Der Anlass eines Fahrtages wird in der Kalenderansicht angezeigt.
-Sodass bei einem Sonderzug schnell der Grund erkennbar ist.
+Darüber hinaus können auch allgemeine Bemerkungen für die Fahrt angegeben werden.
+
 
 \paragraph{Personal}
 In den vier Listen können Tf, Zf, Zub und Begl.o.b.A.\ und Service-Personal eingetragen werden.
@@ -57,7 +56,6 @@ Auch hier gibt es wieder Ausnahmen, wenn einer der folgenden Begriffe in der Bem
 \end{itemize}
 Darüber hinaus können weitere Bemerkungen eingegeben werden, die auch durch Strichpunkte voneinander getrennt sein dürfen.
 
-\begin{neu}
 \begin{hinweis}
   Seit Version 1.7 kann eine Person auch mehrfach für eine Aktivität eingetragen werden.
   Zum Beispiel als Tf für das erste Zugpaar,
@@ -65,7 +63,6 @@ Darüber hinaus können weitere Bemerkungen eingegeben werden, die auch durch St
   Um eine mehrfache Anrechnung von Stunden zu vermeiden,
   müssen die individuellen Zeiten der Person und der jeweiligen Aktivität manuell angepasst werden.
 \end{hinweis}
-\end{neu}
 
 
 
@@ -84,7 +81,7 @@ Die Sitzplätze müssen in folgendem Format angegeben werden:
 Zuerst der Wagen und dann die Sitzplätze durch Kommata getrennt.
 Aufeinanderfolgende Sitzplatznummern können Sie durch das Format Von-Bis schreiben (Beispiel: \texttt{208: 6-12}).
 Wenn Sie Plätze in mehreren Wagen angeben möchten,
-müssen Sie die Plätze durch einen Strickpunkt voneinander trennen
+müssen Sie die Plätze durch einen Strichpunkt voneinander trennen
 (Beispiel: \texttt{204: 1-40; 217: 1-30}).
 
 
@@ -125,11 +122,12 @@ Strecke 2  (2204 SOTW-SSWN) (Fürth)
 
 
 \paragraph{Auswertung der Reservierungen}
-Im unteren Teil des Fensters wird angezeigt,
+Im linken unteren Teil des Fensters wird angezeigt,
 wie viele Sitzplätze in den einzelnen Zügen bereits reserviert sind.
 Diese Auslastung ist jeweils noch nach der ausgewählten Klasse (1.\ oder 2./3.~Klasse) unterteilt.
 Ebenso wird die Summe der reservierten Sitzplätze für den jeweiligen Fahrtag angegeben.
-In diese Summe geht jede Reservierung nur einmal ein, unabhängig von der angegebenen Fahrstrecke bzw.\ auch wenn keine angegeben ist.
+In diese Gesamtsumme geht jede Reservierung nur einmal ein,
+unabhängig von der angegebenen Fahrstrecke bzw.\ auch wenn keine angegeben ist.
 
 
 \paragraph{Automatische Sitzplatzverteilung}
@@ -143,17 +141,6 @@ Wir arbeiten ständig an einer Verbesserung des Algorithmus zur Verteilung der S
   Aktivieren Sie das Feld \button{Alle Kombinationen berechnen} nur, wenn Sie wenige Reservierungen angegeben haben (maximal 5-7),
   denn durch diese Auswahl wird der Rechenaufwand erheblich vergrößert!
 \end{hinweis}
-
-
-\paragraph{Reservierungen exportieren}
-Beim Export von \enquote{normalen} Fahrtagen werden die Reservierungen mit ausgegeben.
-Da bei Nikolausfahrten sehr viele Reservierungen vorliegen, werden Sie nicht bei der Einzelansicht des Fahrtags angegeben.
-Stattdessen können Sie, wie bei allen anderen Fahrtagen auch,
-die Funktion \aktion{Reservierungen drucken \dots} und \aktion{Reservierungen als PDF sichern \dots} im Menü Fahrtag nutzen.
-Bei dieser Funktion werden dann die Reservierungen nach Wagen geordnet ausgegeben.
-Auch die Information über einen anderen als den Standard-Zustieg wird ausgegeben.
-
-Eine grafische Ansicht der Sitzplatzverteilung ist aktuell noch nicht möglich.
 
 
 
@@ -177,7 +164,7 @@ Diese Personen müssen in den entsprechenden Listen gelöscht werden.
 
 Die Spalten "`Beginn"' und "`Ende"' dienen dazu, Uhrzeiten anzugeben, wenn Personen nicht für den kompletten angegebenen Zeitraum geholfen haben.
 So kann man eine frühere Endzeit eingeben, wenn zum Beispiel eine Person nur am Vormittag half.
-Die Zeit der Lokführer wird automatisch anhand von "`Dienstbeginn Tf"' berechnet,
+Die Zeit der Lokführer wird automatisch anhand von "`Beginn Tf"' berechnet,
 sodass hier kein manueller Eintrag vorgenommen werden muss.
 
 
@@ -189,12 +176,11 @@ Ebenso können die Reservierungen ausgegeben werden oder der Fahrtag nach einer 
 
 
 \section{Export der Reservierungen}
-Ein Fahrtag bietet noch eine weitere Methode Informationen zu exportieren.
-Diese Funktion wird vor allem bei Nikolausfahrten benötigt.
-Denn bei diesem Ausgabeformat werden viele Reservierungen übersichtlich nach Wagen sortiert ausgegeben.
-Diese Funktion ist insbesondere bei Nikolausfahrten wichtig, da dort keine Reservierungen in der Einzelansicht ausgegeben werden.
-
-Diese Funktion ist für jeden Fahrtag über das Menü \aktion{Fahrtag} erreichbar.
-Es gibt die Möglichkeit das Dokument entweder als PDF zu speichern oder auf einem Drucker zu drucken.
+Beim Export von \enquote{normalen} Fahrtagen werden die Reservierungen mit ausgegeben.
+Da bei Nikolausfahrten sehr viele Reservierungen vorliegen, werden Sie nicht bei der Einzelansicht des Fahrtags angegeben.
+Stattdessen können Sie, wie bei allen anderen Fahrtagen auch,
+die Funktion \aktion{Reservierungen drucken \dots} und \aktion{Reservierungen als PDF sichern \dots} im Menü \aktion{Fahrtag} nutzen.
 
 Das exportierte Dokument enthält folgende Informationen zu einer Reservierung: Name, Anzahl Sitzplätze, Sitzplätze, Kommentare/Bemerkungen sowie den Zustieg, sofern er verschieden von Ottweiler ist.
+
+Eine grafische Ansicht der Sitzplatzverteilung ist aktuell noch nicht möglich.
