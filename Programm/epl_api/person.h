@@ -123,6 +123,7 @@ public:
     QString getBank() const;
     void setBank(const QString &value);
 
+    QString getKontoinhaberFinal() const;
     QString getKontoinhaber() const;
     void setKontoinhaber(const QString &value);
 
