@@ -1,5 +1,27 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 13. Juni 2021
+Stand: 9. August 2021
+
+## Version 1.7.2
+### Neu
+- Als Kontoinhaber wird standardmäßig der Name der Person gewählt 
+- Dienstzeiten bei Fahrtagen können minutengenau angegeben werden
+- Heutiger Tag wird im Kalender markiert
+- Zugriff auf alle Personaldaten im Einsatzplaner
+
+### Verbessert
+- Export von Daten verbessert (Zeiten enthalten immer Minuten)
+- Diverse Fenster (Person, Fahrtag, Personal, Einstellungen, Dateieigenschaften...) verbessert
+- Der automatische Upload funktioniert nur über eine verschlüsselte Verbindung
+- Warnung bei Upload-Fehler
+- Dunkelmodus für Exportdialog
+- Diverse Verbesserungen und Fehlerbehebungen
+
+### Fehlerbehebungen
+- Beim Export der Einsatzzeiten wurden die Anzahl und die KIlometer nicht ausgegeben
+- Der Export von Aktivitäten war nicht über das Menü im Kalender möglich
+- Bei der Exportfunktion wurden auch vergangene Aktivitäten ausgegeben, obwohl "ab jetzt" gewählt war
+- Überschrift in der erstellten CSV-Datei war teilweise falsch
+
 
 ## Version 1.7.1 – 2021-06-13
 ### Verbessert
