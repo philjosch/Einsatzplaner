@@ -1386,7 +1386,7 @@ int Person::getBeitragRegulaerIndividuell() const
             count ++;
         }
     }
-    return zahler->getBeitrag() / count;
+    return zahler->getBeitrag() / count + getBeitrag();
 }
 
 int Person::getBeitragNachzahlung() const
