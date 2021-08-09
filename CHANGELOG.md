@@ -7,23 +7,24 @@ Stand: 9. August 2021
 - Ausgabe der Mitgliedsbeiträge (Regulär und Nachzahlung) in Benutzeroberfläche und Export
 - Export der Beiträge für Einzugsverfahren
 - Als Kontoinhaber wird standardmäßig der Name der Person gewählt 
-- Dienstzeiten bei Fahrtagen können minutengenau angegeben werden
-- Heutiger Tag wird im Kalender markiert
 - Zugriff auf alle Personaldaten im Einsatzplaner
+- Heutiger Tag wird im Kalender markiert
 
 ### Verbessert
+- Dienstzeiten bei Fahrtagen können minutengenau angegeben werden
 - Export von Daten verbessert (Zeiten enthalten immer Minuten)
 - Diverse Fenster (Person, Fahrtag, Personal, Einstellungen, Dateieigenschaften...) verbessert
 - Der automatische Upload funktioniert nur über eine verschlüsselte Verbindung
 - Warnung bei Upload-Fehler
-- Dunkelmodus für Exportdialog
-- Diverse Verbesserungen und Fehlerbehebungen
+- Dunkelmodus für Exportdialog verbessert
+- Diverse kleinere Verbesserungen
 
 ### Fehlerbehebungen
 - Beim Export der Einsatzzeiten wurde die Anzahl der Einsätze und die Kilometer nicht ausgegeben
 - Der Export von Aktivitäten war nicht über das Menü im Kalender möglich
 - Bei der Exportfunktion wurden auch vergangene Aktivitäten ausgegeben, obwohl "ab jetzt" gewählt war
 - Überschrift in der erstellten CSV-Datei war teilweise falsch
+- Diverse kleinere Fehlerbehebungen
 
 ---
 
