@@ -1367,14 +1367,17 @@ void Person::setKontoinhaber(const QString &value)
 
 int Person::getBeitragRegulaerIndividuell() const
 {
-    if (beitragsart != Beitragsart::FamilienBeitragNutzer)
+    if (beitragsart != Beitragsart::FamilienBeitragNutzer && beitragsart != Beitragsart::FamilienBeitragZahler)
         return getBeitrag();
 
-    Person *zahler = manager->getPersonFromID(kontoinhaber);
+    Person const *zahler = manager->getPersonFromID(kontoinhaber);
+    if (beitragsart == Beitragsart::FamilienBeitragZahler)
+        zahler = this;
     if (zahler == nullptr)
         return 0;
 
     int count = 1;
+    int betrag = zahler->getBeitrag();
     for(Person *pers: manager->getPersonen(Status::AlleMitglieder)) {
         if (pers->getBeitragsart() != Person::Beitragsart::FamilienBeitragNutzer)
             continue;
@@ -1384,9 +1387,10 @@ int Person::getBeitragRegulaerIndividuell() const
 
         if (pers->getMinimumStunden(Gesamt) != 0) {
             count ++;
+            betrag += pers->getBeitrag();
         }
     }
-    return zahler->getBeitrag() / count + getBeitrag();
+    return betrag / count;
 }
 
 int Person::getBeitragNachzahlung() const
