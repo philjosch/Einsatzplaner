@@ -281,11 +281,13 @@ QString Fahrtag::getHtmlForTableView() const
     html += "</td>";
 
     // Zf, Zub, Begl.o.b.A.
-    if (benoetigeZf && (art != Schnupperkurs)) {
+    if ((benoetigeZf || benoetigeZub) && (art != Schnupperkurs)) {
         html += beginnZelleBenoetigt;
-        html += "<u>"+benoetigt.arg("Zugführer benötigt!")+"</u><br/>";
     } else {
         html += "<td>";
+    }
+    if (benoetigeZf && (art != Schnupperkurs)) {
+        html += "<u>"+benoetigt.arg("Zugführer benötigt!")+"</u><br/>";
     }
     if (benoetigeZub && (art != Schnupperkurs)) {
         html += "<i>"+benoetigt.arg("Begleitpersonal benötigt!")+"</i>";
