@@ -142,7 +142,7 @@ void FileSettingsDialog::on_pushPwdChange_clicked()
         return;
     }
     if (! mngr->setPasswort(neu1, alt)) {
-        QMessageBox::information(this, tr("Fehler"), tr("Das Passwort konnte nciht geöndert werden, überprüfen Sie Ihre Eingabe."));
+        QMessageBox::information(this, tr("Fehler"), tr("Das Passwort konnte nicht geöndert werden, überprüfen Sie Ihre Eingabe."));
         return;
     }
     QMessageBox::information(this, tr("Geändert"), tr("Das Passwort wurde erfolgreich geändert."));

@@ -292,20 +292,17 @@ QString Fahrtag::getHtmlForTableView() const
     if (benoetigeZub && (art != Schnupperkurs)) {
         html += "<i>"+benoetigt.arg("Begleitpersonal benötigt!")+"</i>";
     }
-    html += "<ul>";
-    if (gruppen.value(Zf)->size() > 0) {
+    if (gruppen.value(Zf)->size() + gruppen.value(Zub)->size() + gruppen.value(Begleiter)->size() > 0) {
+        html += "<ul>";
         html += listToString("", *gruppen.value(Zf), "<li><u>", "</u></li>");
-        gruppen.remove(Zf);
-    }
-    if (gruppen.value(Zub)->size() > 0) {
         html += listToString("", *gruppen.value(Zub), "<li>", "</li>");
-        gruppen.remove(Zub);
-    }
-    if (gruppen.value(Begleiter)->size() > 0) {
         html += listToString("", *gruppen.value(Begleiter), "<li><i>", "</i></li>");
+        html += "</ul>";
+        gruppen.remove(Zf);
+        gruppen.remove(Zub);
         gruppen.remove(Begleiter);
     }
-    html += "</ul></td>";
+    html += "</td>";
 
     // Service
     if (benoetigeService && (art != Schnupperkurs)) {

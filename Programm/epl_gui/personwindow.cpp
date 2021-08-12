@@ -176,7 +176,7 @@ void PersonWindow::on_checkGeburtstag_clicked(bool checked)
             person->setGeburtstag(QDate());
         } else {
             ui->dateGeburtstag->setDate(QDate::currentDate());
-            person->setGeburtstag(QDate::currentDate());
+            person->setGeburtstag(ui->dateGeburtstag->date());
         }
     }
 }
@@ -195,7 +195,7 @@ void PersonWindow::on_checkEintritt_clicked(bool checked)
             person->setEintritt(QDate());
         } else {
             ui->dateEintritt->setDate(QDate::currentDate());
-            person->setEintritt(QDate::currentDate());
+            person->setEintritt(ui->dateEintritt->date());
         }
     }
 }
@@ -299,7 +299,7 @@ void PersonWindow::on_checkDienst_clicked(bool checked)
             person->setTauglichkeit(QDate());
         } else {
             ui->dateDienst->setDate(QDate::currentDate());
-            person->setTauglichkeit(QDate::currentDate());
+            person->setTauglichkeit(ui->dateDienst->date());
         }
     }
 }
@@ -323,7 +323,7 @@ void PersonWindow::on_checkAustritt_clicked(bool checked)
         ui->dateAustritt->setEnabled(checked);
         if (checked) {
             ui->dateAustritt->setDate(QDate::currentDate());
-            person->setAustritt(QDate::currentDate());
+            person->setAustritt(ui->dateAustritt->date());
         } else {
             person->setAustritt(QDate());
         }
