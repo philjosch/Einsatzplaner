@@ -26,6 +26,9 @@ Mit dem Programm \Personal kann eine Verwaltung der Mitglieder und Speicherung d
 
 
 \section{Die EPL-Datei}\label{epl:allg:datei}
+Die Daten der Programme werden in einer gemeinsamen Datei mit der Endung \datei{.ako} gespeichert.
+In ihr sind alle Personaldaten und alle Daten zu den Aktivitäten gespeichert.
+Sowohl \Personal als auch \Einsatz können somit auf den gleichen Datenbestand zurückgreifen.
 
 \subsection{Schreibschutz}\label{epl:allg:datei:schreibschutz}
 Beim Öffnen einer Datei \datei{X.ako} wird automatisch eine neue Datei mit dem Namen \datei{X.ako.lock} erstellt.
@@ -33,7 +36,7 @@ Durch diese Datei wird sichergestellt, dass nicht mehrere Personen gleichzeitig 
 Wird eine bereits geöffnete Datei erneut geöffnet (vom gleichen oder fremden Benutzer),
 kann sie nur schreibgeschützt geöffnet werden und Änderungen können nicht gespeichert werden.
 Beim Schließen einer Datei bzw.\ beim Beenden des Programms wird die Datei \datei{X.ako.lock} automatisch wieder gelöscht.
-Danach kann ein anderer Benutzer die Datei wieder uneingeschränkt öffnen.
+Danach kann ein anderer Benutzer die Datei \datei{X.ako} wieder uneingeschränkt öffnen.
 
 \begin{hinweis}
   Der Schreibschutz steht nur effektiv zur Verfügung, wenn alle Beteiligten Version 1.6.2 oder neuer des Einsatzplaners verwendet.
@@ -47,7 +50,6 @@ Danach kann ein anderer Benutzer die Datei wieder uneingeschränkt öffnen.
 \end{hinweis}
 
 
-\begin{neu}
 \subsection{Passwort-Schutz}\label{epl:allg:datei:passwort}
 Es besteht die Möglichkeit die EPL-Datei mit einem Passwort-Schutz zu speichern.
 Durch diesen können nur berechtigte Personen auf die Daten zugreifen.
@@ -67,7 +69,6 @@ die beiden Felder für das neue Passwort frei lassen und mit dem Knopf bestätig
   dass Sie sich das Passwort merken können oder speichern es in einem Passwort-Manager.
 \end{hinweis}
 
-\end{neu}
 
 \section{Installation}\label{epl:allg:installation}
 \subsection{macOS}
@@ -93,7 +94,7 @@ Alternativ können Sie die beiden Programm im Ordner \datei{EPL} auch einzeln in
 
 \section{Über das Dokument}\label{epl:allg:sonstiges}
 Die Bilder in dieser Dokumentation stammen von Bildern der Entwicklerversionen des Programms für Version
-1.7.1
+1.8.0
 und aus früheren Versionen.
 Dadurch können Programmobjekte und Funktionen leicht von denen in der veröffentlichten Version abweichen.
 

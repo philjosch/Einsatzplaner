@@ -1,5 +1,34 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 13. Juni 2021
+Stand: 13. August 2021
+
+## Version 1.8.0 – 2021-08-13
+### Neu
+- Einstellen der Mitgliedsbeiträge für einzelne Beitragsarten
+- Ausgabe der Mitgliedsbeiträge (Regulär und Nachzahlung) in Benutzeroberfläche und Export
+- Export der Beiträge für Einzugsverfahren
+- Als Kontoinhaber wird standardmäßig der Name der Person gewählt 
+- Zugriff auf alle Personaldaten im Einsatzplaner
+- Heutiger Tag wird im Kalender markiert
+
+### Verbessert
+- Dienstzeiten bei Fahrtagen können minutengenau angegeben werden
+- Export von Daten verbessert (Zeiten enthalten immer Minuten)
+- Diverse Fenster (Person, Fahrtag, Personal, Einstellungen, Dateieigenschaften...) verbessert
+- Der automatische Upload funktioniert nur über eine verschlüsselte Verbindung
+- Warnung bei Upload-Fehler
+- Dunkelmodus für Exportdialog verbessert
+- Diverse kleinere Verbesserungen
+
+### Fehlerbehebungen
+- Beim Export der Einsatzzeiten wurde die Anzahl der Einsätze und die Kilometer nicht ausgegeben
+- Der Export von Aktivitäten war nicht über das Menü im Kalender möglich
+- In der Listenansicht wurde benötigtes Begleitpersonal nie farblich hervorgehoben
+- Bei der Exportfunktion wurden auch vergangene Aktivitäten ausgegeben, obwohl "ab jetzt" gewählt war
+- Überschrift in der erstellten CSV-Datei war teilweise falsch
+- Export von Reservierungen eines Fahrtages war fehlerhaft 
+- Diverse kleinere Fehlerbehebungen
+
+---
 
 ## Version 1.7.1 – 2021-06-13
 ### Verbessert

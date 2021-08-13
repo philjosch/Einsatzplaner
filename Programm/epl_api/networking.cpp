@@ -23,9 +23,6 @@ bool Networking::ladeDateiHoch(Networking::Server server, QFile *datei)
             return false;
     }
     QString url = server.getServerKomplett();
-    if (!url.startsWith("http")) {
-        url = "https://"+url;
-    }
 
     QNetworkRequest request(url);
 

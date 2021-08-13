@@ -20,7 +20,7 @@ FileSettingsDialog::~FileSettingsDialog()
 
 void FileSettingsDialog::saveSettings()
 {
-    mngr->setEnabled(ui->checkEnable->isChecked());
+    mngr->setEnabled(ui->groupUpload->isChecked());
     mngr->setAutom(ui->checkAuto->isChecked());
     mngr->setServer(Networking::Server{
                        ui->lineServer->text(),
@@ -45,7 +45,7 @@ void FileSettingsDialog::saveSettings()
     mngr->setAuswahl(Auswahl(ab, bis, ui->checkActivity->isChecked()));
 }
 
-void FileSettingsDialog::on_checkEnable_clicked(bool checked)
+void FileSettingsDialog::on_groupUpload_clicked(bool checked)
 {
     if (Einstellungen::getUseAutoUpload() && checked)
         ui->checkAuto->setEnabled(true);
@@ -86,7 +86,7 @@ void FileSettingsDialog::on_pushCheck_clicked()
 
 void FileSettingsDialog::loadSettings()
 {
-    ui->checkEnable->setChecked(mngr->getEnabled());
+    ui->groupUpload->setChecked(mngr->getEnabled());
     ui->checkAuto->setChecked(mngr->getAutom());
     Networking::Server s = mngr->getServer();
     ui->lineServer->setText(s.server);
@@ -123,7 +123,7 @@ void FileSettingsDialog::loadSettings()
         ui->comboTo->setCurrentIndex(3);
     }
     ui->checkActivity->setChecked(a.getActivities());
-    on_checkEnable_clicked(mngr->getEnabled());
+    on_groupUpload_clicked(mngr->getEnabled());
 
     ui->linePwdAlt->setEnabled(mngr->getPasswort() != "");
 }
@@ -142,7 +142,7 @@ void FileSettingsDialog::on_pushPwdChange_clicked()
         return;
     }
     if (! mngr->setPasswort(neu1, alt)) {
-        QMessageBox::information(this, tr("Fehler"), tr("Das Passwort konnte nciht geöndert werden, überprüfen Sie Ihre Eingabe."));
+        QMessageBox::information(this, tr("Fehler"), tr("Das Passwort konnte nicht geöndert werden, überprüfen Sie Ihre Eingabe."));
         return;
     }
     QMessageBox::information(this, tr("Geändert"), tr("Das Passwort wurde erfolgreich geändert."));

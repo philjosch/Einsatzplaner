@@ -1,8 +1,11 @@
 #include "exportdialog.h"
 #include "ui_exportdialog.h"
 #include "export.h"
+#include "eplexception.h"
 
 #include <QMessageBox>
+
+using namespace EplException;
 
 ExportDialog::ExportDialog(Manager *m, FileSettings *settings, QWidget *parent) : QDialog(parent), ui(new Ui::ExportDialog)
 {
@@ -46,6 +49,7 @@ void ExportDialog::hardReload()
         QString farbe = a->getFarbe();
         QListWidgetItem *item = new QListWidgetItem(a->getString());
         item->setBackground(QBrush(QColor(farbe)));
+        item->setForeground(QBrush(QColor("black")));
         item->setToolTip(a->getAnlass().replace("<br/>","\n"));
         ui->listAnzeige->insertItem(ui->listAnzeige->count(), item);
         actToList.insert(a, item);
@@ -83,9 +87,10 @@ void ExportDialog::on_pushDrucken_clicked()
             break;
         case 2:
             if (settings->getEnabled()) {
-                if (Export::Upload::uploadToServer(liste, settings->getServer())) {
+                try {
+                    Export::Upload::uploadToServer(liste, settings->getServer());
                     QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
-                } else {
+                }  catch (NetworkingException &e) {
                     QMessageBox::information(parentWidget(), tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden!"));
                 }
             }
@@ -93,7 +98,7 @@ void ExportDialog::on_pushDrucken_clicked()
         default:
             return;
         }
-        Export::Aktivitaeten::printAktivitaetenListe(liste, printer);
+        manager->printListenansicht(liste, printer);
     } else {
         switch (ui->buttonGroupExportFormat->checkedId()) {
         case 0:
@@ -105,7 +110,7 @@ void ExportDialog::on_pushDrucken_clicked()
         default:
             return;
         }
-        Export::Aktivitaeten::printAktivitaetenEinzel(liste, printer);
+        manager->printEinzelansichten(liste, printer);
     }
 }
 
@@ -115,7 +120,7 @@ void ExportDialog::on_comboVon_currentIndexChanged(int index)
     case 0: // Ab datum
         ui->dateVon->setEnabled(true);
         break;
-    case 1: // Ab heute
+    case 1: // Ab jetzt
     case 2: // Ab beginn des Jahres
     case 3: // Ab egal
         ui->dateVon->setEnabled(false);
@@ -165,8 +170,8 @@ bool ExportDialog::testShow(AActivity *a)
     case 0: // Ab datum
         ab = Auswahl::AbDatum;
         break;
-    case 1: // Ab heute
-        ab = Auswahl::AbHeute;
+    case 1: // Ab jetzt
+        ab = Auswahl::AbJetzt;
         break;
     case 2: // Ab beginn des Jahres
         ab = Auswahl::AbAnfangDesJahres;

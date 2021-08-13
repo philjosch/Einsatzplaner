@@ -27,17 +27,13 @@ protected slots:
     CoreMainWindow *handlerNew();
     void handlerOpen(QString path);
 
-    void onDateiWurdeVeraendert();
-
-    void onPersonWirdEntferntWerden(Person *p);
-    void onPersonWurdeBearbeitet(Person *p);
-
     //** Menueleiste
     // Bearbeiten
     void on_actionAddPerson_triggered();
     void on_actionAktualisieren_triggered();
     void on_actionMindeststunden_triggered();
     void on_actionMailListe_triggered();
+    void on_actionMitgliedsbeitraege_triggered();
 
     // Export
     void on_actionMitgliederEinzelListePDF_triggered();
@@ -47,20 +43,21 @@ protected slots:
     void on_actionMitgliederListeDrucken_triggered();
     void on_actionMitgliederListeCSV_triggered();
 
+    void on_actionBeitraegeRegulaerCSV_triggered();
+    void on_actionBeitraegeNachzahlungCSV_triggered();
+
     //** Fenster
     void on_comboAnzeige_currentIndexChanged(int index);
     void on_tabelleMitglieder_cellDoubleClicked(int row, int column);
 
 protected:
     //** Hilfsmethoden
-    void showPerson(Person *p);
     QList<Person*> getSortierteListe();
 
     //** Modell
 
     //** View
     Ui::MainWindowPersonal *ui;
-    QMap<Person*, PersonWindow*> fenster;
 
     //** Controller
     QList<Person*> current;

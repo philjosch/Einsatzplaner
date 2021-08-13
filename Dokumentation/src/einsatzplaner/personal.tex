@@ -62,22 +62,29 @@ Die Mindeststunden für Ausbildung werden nur für Personal mit einer betrieblic
 Das Fenster mit geöffneter Einzelansicht ist in \cref{fig:einsatz:personal:einzel:stammdaten} zu sehen.
 In der Liste sind alle Personen gelistet, die nach der Kopfzeile des Fenster angezeigt werden sollen.
 Die farbliche Hervorhebung erfolgt analog zur Gesamtübersicht.
-Im oberen Teil können der Name und die Mitgliedsnummer der Person verändert werden.
-Alternativ zur manuellen Eingabe der Nummer,
-kann auch eine solche automatisch zugewiesen werden.
-Dabei wird die nächst größere Zahl der aktuell höchsten Mitgliedsnummer verwendet.
-Naturgemäß kann eine Nummer nicht doppelt vergeben werden.
+Im oberen Teil können der Name
+\begin{neu}
+und der Status der Person (aktiv oder passiv) verändert werden.
+Ebenso kann per Knopfdruck eine Mail an die Person gesendet werden.
+\end{neu}
 
-Mit den Knöpfen \button{Als PDF speichern \dots} und \button{Drucken\dots} kann eine Übersicht der aktuellen Person ausgegeben werden.
+\begin{neu}
+Mit dem Knopf \button{Einzelübersicht drucken \dots} kann die Stundenübersicht der aktuellen Person ausgegeben werden.
+\end{neu}
 Dort werden dann die Aktivitäten einzeln mit den jeweiligen Zeiten aufgelistet.
 Diese Ansicht enthält nur wenige persönliche Informationen.
 
 
 \paragraph{Stammdaten}
-Es können nur die Daten bezüglich Betriebsdienstausbildung, Entfernung zum Bahnhof und die Bemerkungen bearbeitet werden.
-Weitere Daten können über das Programm \Personal bearbeitet werden.
+\begin{neu}
+Es können nur die betrieblichen Daten und die Bemerkungen bearbeitet werden.
+\end{neu}
+Über den Knopf \button{Alle Daten bearbeiten} kann der vollständige Datensatz einer Person bearbeitet werden.
+Dazu wird das Fenster aus dem \Personal geöffnet.
+Siehe \cref{personal:person} für weitere Informationen.
 Ebenso kann die Person gelöscht werden.
-Allerdings kann die Person im Programm \Personal auch als ausgetreten markiert werden, sodass sie nicht gelöscht werden muss.
+Allerdings kann die Person auch als ausgetreten markiert werden,
+sodass sie nicht gelöscht werden muss.
 
 \hinweis{Eine Person kann erst dann gelöscht werden, wenn Sie in keinen Aktivitäten mehr eingetragen ist.
 Siehe nächster Absatz.}
@@ -145,4 +152,13 @@ die alle über das Menü \aktion{Exportieren} im Fenster des Mitgliederverwaltun
   die im Programm verwaltet werden.
   Einsatzzeiten und geleistete Stunden sind in diesen Ansichten nicht enthalten.
 
+  \item[Beiträge]
+  \begin{neu}
+  Hier können CSV-Dateien für den Beitragseinzug erstellt werden.
+  Zum einen kann der reguläre Beitrag eingezogen werden (jährlich).
+  Zum anderen kann auch der Betrag für Nachzahlungen exportiert werden.
+  Dies ist zum Beispiel für Mitglieder relevant,
+  die ihre Pflichtstunden nicht erbracht haben
+  und somit einen höheren Beitrag zahlen müssen.
+  \end{neu}
 \end{description}

@@ -13,17 +13,17 @@ include(../share.pri)
 
 
 SOURCES += \
+    beitraegeeditordialog.cpp \
     main.cpp \
-    mainwindowpersonal.cpp \
-    personwindow.cpp
+    mainwindowpersonal.cpp
 
 HEADERS += \
-    mainwindowpersonal.h \
-    personwindow.h
+    beitraegeeditordialog.h \
+    mainwindowpersonal.h
 
 FORMS += \
-    mainwindowpersonal.ui \
-    personwindow.ui
+    beitraegeeditordialog.ui \
+    mainwindowpersonal.ui
 
 
 #TRANSLATIONS += \

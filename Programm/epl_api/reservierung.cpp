@@ -7,25 +7,25 @@
 QString Reservierung::getStringFromPlaetze(QMap<int, QList<int> > liste)
 {
     QString s = "";
-    for(int i: liste.keys()) {
-        s += QString::number(i)+": ";
+    for(auto it = liste.cbegin(); it != liste.cend(); ++it) {
+        s += QString::number(it.key())+": ";
         int old = -1;
         bool strich = false;
-        for (int j : liste.value(i)) {
+        for (int j : it.value()) {
             if (old+1 == j) {
-                if ((strich && (j == liste.value(i).last()))) {
+                if ((strich && (j == it.value().last()))) {
                     s += QString::number(j);
                 } else if (! strich) {
                     s += "-";
                     strich = true;
-                    if (j == liste.value(i).last()) {
+                    if (j == it.value().last()) {
                         s += QString::number(j);
                     }
                 }
             } else {
                 if (strich)
                     s += QString::number(old);
-                if (j != liste.value(i).first()) s += ", ";
+                if (j != it.value().first()) s += ", ";
                 s += QString::number(j);
                 strich = false;
             }
@@ -48,13 +48,13 @@ QMap<int, QList<int> > Reservierung::getPlaetzeFromString(QString plaetze)
     }
     QStringList l1;
     l1 = plaetze.split(QRegExp("\\s*;\\s*"));
-    for (QString s1: l1) {
+    for (const QString &s1: qAsConst(l1)) {
         QStringList l2a = s1.split(QRegExp("\\s*:\\s*"));
         int wagen = l2a.at(0).toInt();
         if (l2a.length() > 1) {
             QStringList l2 = l2a.at(1).split(QRegExp("\\s*,\\s*"));
             QList<int> l = *new QList<int>();
-            for (QString s2: l2) {
+            for (const QString &s2: qAsConst(l2)) {
                 if (s2.contains(QRegExp("\\s*-\\s*"))) {
                     QStringList l3 = s2.split(QRegExp("\\s*-\\s*"));
                     for (int i = l3.at(0).toInt(); i <= l3.at(1).toInt(); i++) {
@@ -122,7 +122,7 @@ Reservierung::Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen)
     klasse = o.value("klasse").toInt();
     zuege = QList<int>();
     QJsonArray zuegeA = o.value("zuege").toArray();
-    for(QJsonValue val: zuegeA) {
+    for(const QJsonValue &val: qAsConst(zuegeA)) {
         if (! val.isString()) {
             zuege.append(val.toInt());
         } else {
@@ -136,7 +136,7 @@ Reservierung::Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen)
     }
     hps = QList<QString>();
     QJsonArray hpsA = o.value("hps").toArray();
-    for(QJsonValue val: hpsA) {
+    for(const QJsonValue &val: qAsConst(hpsA)) {
         hps.append(val.toString());
     }
     this->wagen = wagen;
@@ -165,7 +165,7 @@ QJsonObject Reservierung::toJson() const
     }
     o.insert("zuege", zuegeA);
     QJsonArray hpsA;
-    for(QString s: hps) {
+    for(const QString &s: hps) {
         hpsA.append(s);
     }
     o.insert("hps", hpsA);
@@ -287,9 +287,9 @@ void Reservierung::removePlaetze()
 {
     // Die alten Sitzplätze freigeben
     if (wagen == nullptr) return;
-    for(int w: sitzplatz.keys()) {
-        if (wagen->contains(w))
-            wagen->value(w)->verlassePlaetze(sitzplatz.value(w));
+    for(auto it = sitzplatz.cbegin(); it != sitzplatz.cend(); ++it) {
+        if (wagen->contains(it.key()))
+            wagen->value(it.key())->verlassePlaetze(it.value());
     }
     emit changed();
 }
@@ -329,9 +329,9 @@ void Reservierung::setSitzplatz(QMap<int, QList<int> > value)
     removePlaetze();
     // die neuen belegen, wenn möglich
     if (wagen == nullptr) return;
-    for(int w: value.keys()) {
-        if (wagen->contains(w))
-            wagen->value(w)->besetzePlaetze(this, value.value(w));
+    for (auto it = value.cbegin(); it != value.cend(); ++it) {
+        if (wagen->contains(it.key()))
+            wagen->value(it.key())->besetzePlaetze(this, it.value());
     }
     sitzplatz = value;
     emit changed();

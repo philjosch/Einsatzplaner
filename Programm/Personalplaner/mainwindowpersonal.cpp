@@ -6,6 +6,7 @@
 #include "export.h"
 #include "personwindow.h"
 #include "guihelper.h"
+#include "beitraegeeditordialog.h"
 
 #include <QDesktopServices>
 #include <QMessageBox>
@@ -22,7 +23,6 @@ MainWindowPersonal::MainWindowPersonal(EplFile *file) :
     filter = Status::AlleMitglieder;
     anzeige = QSet<QString>();
 
-    fenster = QMap<Person*, PersonWindow*>();
 
     for(int i = 0; i < ui->listAnzeige->count(); ++i) {
         if (ui->listAnzeige->item(i)->checkState() == Qt::CheckState::Checked)
@@ -57,31 +57,11 @@ void MainWindowPersonal::handlerOpen(QString path)
     open(path);
 }
 
-void MainWindowPersonal::onDateiWurdeVeraendert()
-{
-    CoreMainWindow::onDateiWurdeVeraendert();
-//    on_actionAktualisieren_triggered();
-}
-
-void MainWindowPersonal::onPersonWirdEntferntWerden(Person *p)
-{
-    if (fenster.contains(p)) {
-        PersonWindow *w = fenster.value(p);
-        fenster.remove(p);
-        w->close();
-        delete w;
-    }
-}
-void MainWindowPersonal::onPersonWurdeBearbeitet([[maybe_unused]] Person *p)
-{
-//    on_actionAktualisieren_triggered();
-}
-
 
 void MainWindowPersonal::on_actionAddPerson_triggered()
 {
     Person *neu = personal->newPerson();
-    showPerson(neu);
+    openPerson(neu);
     on_actionAktualisieren_triggered();
 }
 void MainWindowPersonal::on_actionAktualisieren_triggered()
@@ -105,7 +85,7 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
     }
 
     QTableWidgetItem *i;
-    for (Person *p: current) {
+    for (Person *p: qAsConst(current)) {
         clmn = 0;
         ui->tabelleMitglieder->insertRow(0);
 
@@ -160,6 +140,18 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getBank()));
         if (anzeige.contains("Kontoinhaber"))
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getKontoinhaber()));
+        if (anzeige.contains("Beitrag")) {
+            i = new PersonTableWidgetItem(p);
+            if (p->getBeitrag() != 0)
+                i->setData(0, p->getBeitrag()/100);
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
+        }
+        if (anzeige.contains("Beitrag (Nachzahlung)")) {
+            i = new PersonTableWidgetItem(p);
+            if (p->getBeitragNachzahlung() != 0)
+                i->setData(0, p->getBeitragNachzahlung()/100);
+            ui->tabelleMitglieder->setItem(0, clmn++, i);
+        }
 
 
         if (anzeige.contains("Straße"))
@@ -232,7 +224,7 @@ void MainWindowPersonal::on_actionMailListe_triggered()
     if (current.isEmpty()) return;
     QSet<QString> mails;
     QList<Person*> keineMail;
-    for (Person *p: current) {
+    for (Person *p: qAsConst(current)) {
         if (p->getMail() != "") {
             mails.insert(p->getMail());
         } else {
@@ -266,35 +258,46 @@ void MainWindowPersonal::on_actionMailListe_triggered()
         FileIO::saveToFile(path, s);
     }
 }
-
+void MainWindowPersonal::on_actionMitgliedsbeitraege_triggered()
+{
+    BeitraegeEditorDialog(this, personal).exec();
+}
 
 void MainWindowPersonal::on_actionMitgliederEinzelListePDF_triggered()
 {
-    Export::Mitglieder::printMitgliederEinzelListe(getSortierteListe(), personal, filter,
+    personal->printMitgliederEinzel(getSortierteListe(), filter,
                         Export::getPrinterPDF(this, "Stammdatenblaetter", QPrinter::Orientation::Portrait));
 }
 void MainWindowPersonal::on_actionMitgliederEinzelListeDrucken_triggered()
 {
-    Export::Mitglieder::printMitgliederEinzelListe(getSortierteListe(), personal, filter,
+    personal->printMitgliederEinzel(getSortierteListe(), filter,
                         Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
 }
 
 void MainWindowPersonal::on_actionMitgliederListePDF_triggered()
 {
-    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter, anzeige,
+    personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
                             Export::getPrinterPDF(this, "Mitgliederliste", QPrinter::Orientation::Portrait));
 }
 void MainWindowPersonal::on_actionMitgliederListeDrucken_triggered()
 {
-    Export::Mitglieder::printMitgliederListe(getSortierteListe(), filter, anzeige,
+    personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
                             Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
 }
 void MainWindowPersonal::on_actionMitgliederListeCSV_triggered()
 {
-    Export::Mitglieder::exportMitgliederAlsCSV(current,
+    personal->saveMitgliederListeAlsCSV(current,
                                    FileIO::getFilePathSave(this, "Mitglieder", FileIO::DateiTyp::CSV));
 }
 
+void MainWindowPersonal::on_actionBeitraegeRegulaerCSV_triggered()
+{
+    personal->saveBeitraegeRegulaerAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Regulaer", FileIO::DateiTyp::CSV));
+}
+void MainWindowPersonal::on_actionBeitraegeNachzahlungCSV_triggered()
+{
+    personal->saveBeitraegeNachzahlungAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Nachzahlung", FileIO::DateiTyp::CSV));
+}
 
 void MainWindowPersonal::on_comboAnzeige_currentIndexChanged(int index)
 {
@@ -315,27 +318,10 @@ void MainWindowPersonal::on_tabelleMitglieder_cellDoubleClicked(int row, [[maybe
 {
     PersonTableWidgetItem *clicked = dynamic_cast<PersonTableWidgetItem*>(ui->tabelleMitglieder->item(row, column));
     if (clicked != nullptr) {
-        showPerson(clicked->getPerson());
+        openPerson(clicked->getPerson());
     }
 }
 
-
-void MainWindowPersonal::showPerson(Person *p)
-{
-    if (p == nullptr) return;
-
-    if (fenster.contains(p)) {
-        fenster.value(p)->show();
-        fenster.value(p)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-        fenster.value(p)->raise();  // for MacOS
-        fenster.value(p)->activateWindow(); // for Windows
-    } else {
-        PersonWindow *w = new PersonWindow(this, p);
-        w->setWindowFilePath(datei->getPfad());
-        fenster.insert(p, w);
-        w->show();
-    }
-}
 
 QList<Person*> MainWindowPersonal::getSortierteListe()
 {

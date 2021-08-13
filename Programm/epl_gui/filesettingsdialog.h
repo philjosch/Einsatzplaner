@@ -21,7 +21,7 @@ public:
     void saveSettings();
 
 private slots:
-    void on_checkEnable_clicked(bool checked);
+    void on_groupUpload_clicked(bool checked);
 
     void on_buttonBox_clicked(QAbstractButton *button);
 

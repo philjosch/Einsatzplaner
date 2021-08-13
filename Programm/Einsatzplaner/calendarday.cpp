@@ -22,6 +22,19 @@ void CalendarDay::show(QDate datum, bool gray)
     actToItem.clear();
 
     ui->label->setEnabled(! gray);
+
+    if (datum == QDate::currentDate()) {
+        if (gray) {
+            ui->buttonAdd->setStyleSheet("border: none; background-color: rgba(255,128,128,0.5);");
+            ui->label->setStyleSheet("background-color: rgba(255,128,128,0.5);");
+        } else {
+            ui->buttonAdd->setStyleSheet("border: none; background-color: #f00;");
+            ui->label->setStyleSheet("background-color: #f00;");
+        }
+    } else {
+        ui->buttonAdd->setStyleSheet("border: none;");
+        ui->label->setStyleSheet("");
+    }
 }
 
 void CalendarDay::remove(AActivity *a)

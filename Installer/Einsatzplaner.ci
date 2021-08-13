@@ -1,16 +1,16 @@
-﻿<project version = 9 civer = 8.7.0 winver = "2.12/6.2.9200" >
+<project version = 9 civer = 8.7.0 winver = "2.12/6.2.9200" >
    <autorun >1</>
    <autoclose >0</>
    <compname >Philipp Schepper</>
    <produrl >http://epl.philipp-schepper.de</>
-   <ver >Version 1.7.0</>
+   <ver >Version 1.8.0</>
    <supurl ></>
    <updurl ></>
    <dlgfont >verdana</>
    <headlogo >default - 1</>
    <dlgfontsize >s8</>
    <output >C:\Users\philipp\Desktop</>
-   <exename >epl-setup-v1-7-0.exe</>
+   <exename >epl-setup-v1-8-0.exe</>
    <beffile ></>
    <aftfile ></>
    <uninclude >1</>

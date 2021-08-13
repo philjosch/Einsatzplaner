@@ -1,6 +1,7 @@
 #include "aactivity.h"
 #include "person.h"
 #include "eplexception.h"
+#include "export.h"
 
 #include <QJsonArray>
 #include <QLinkedList>
@@ -17,17 +18,6 @@ const QString AActivity::KOPF_LISTE_HTML = "<h3>Übersicht über die Aktivitäte
                                          "<th>Tf, <i>Tb</i></th> <th><u>Zf</u>, Zub, <i>Begl.o.b.A</i></th> <th>Service</th>"
                                          "<th>Sonstiges</th> </tr></thead><tbody>";
 const QString AActivity::FUSS_LISTE_HTML = "</tbody></table>";
-
-const QMap<Art, QString> AActivity::FARBE_FAHRTAGE = {{Museumszug, "#ffffff"},
-                                          {Sonderzug, "#ffcccc"},
-                                          {Gesellschaftssonderzug, "#FFDA91"},//ffcc66"},
-                                          {Nikolauszug, "#ffccff"},
-                                          {ELFundMuseumszug, "#e7e7fd"},
-                                          {Schnupperkurs, "#918fe3"},
-                                          {Bahnhofsfest, "#80e3b1"},
-                                          {SonstigerFahrtag, "#ffeb90"},
-                                          {Arbeitseinsatz, "#CCBEBE"}
-                                         };
 
 AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
 {
@@ -708,10 +698,34 @@ QString AActivity::getHtmlForTableView() const
     return html;
 }
 
+bool AActivity::print(QPrinter *printer)
+{
+    return Export::druckeHtmlAufDrucker(getHtmlForSingleView() + Export::zeitStempel(false), printer);
+}
+
 QString AActivity::getFarbe() const
 {
     if (anlass.contains("vlexx", Qt::CaseSensitivity::CaseInsensitive)) {
         return "#DCF57E";//a3c526'>";
     }
-    return FARBE_FAHRTAGE.value(art);
+    switch (art) {
+    case Museumszug:
+        return "#ffffff";
+    case Sonderzug:
+        return "#ffcccc";
+    case Gesellschaftssonderzug:
+        return "#FFDA91"; //ffcc66
+    case Nikolauszug:
+        return "#ffccff";
+    case ELFundMuseumszug:
+        return "#e7e7fd";
+    case Schnupperkurs:
+        return "#918fe3";
+    case Bahnhofsfest:
+        return "#80e3b1";
+    case SonstigerFahrtag:
+        return "#ffeb90";
+    case Arbeitseinsatz:
+        return "#CCBEBE";
+    }
 }

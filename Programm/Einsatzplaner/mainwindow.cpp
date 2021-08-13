@@ -6,9 +6,12 @@
 #include "coreapplication.h"
 #include "fahrtagwindow.h"
 #include "activitywindow.h"
+#include "eplexception.h"
 
 #include <QMessageBox>
 #include <QJsonArray>
+
+using namespace EplException;
 
 MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWindow)
 {
@@ -24,12 +27,11 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
     // Controller
     listitem = QMap<AActivity*, QListWidgetItem*>();
     itemToList = QMap<QListWidgetItem*, AActivity*>();
-    fenster = QMap<AActivity*, QMainWindow*>();
 
     connect(ui->actionNeuArbeitseinsatz, SIGNAL(triggered(bool)), this, SLOT(newActivity()));
     connect(ui->actionNeuFahrtag, SIGNAL(triggered(bool)), this, SLOT(newFahrtag()));
     connect(ui->dateSelector, SIGNAL(dateChanged(QDate)), this, SLOT(showDate(QDate)));
-    connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), SLOT(onItemInListClicked(QListWidgetItem*)));
+    connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) { openAktivitaet(itemToList.value(item)); });
 
     // Setup fuer die Darstellung des Kalenders
     tage = QList<CalendarDay*>();
@@ -45,8 +47,8 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
     tage.append(ui->day5_5);    tage.append(ui->day6_5);    tage.append(ui->day7_5);
     tage.append(ui->day1_6);    tage.append(ui->day2_6);    tage.append(ui->day3_6);    tage.append(ui->day4_6);
     tage.append(ui->day5_6);    tage.append(ui->day6_6);    tage.append(ui->day7_6);
-    for(CalendarDay *c: tage) {
-        connect(c, SIGNAL(clickedItem(AActivity*)), this, SLOT(openAActivity(AActivity*)));
+    for(CalendarDay *c: qAsConst(tage)) {
+        connect(c, &CalendarDay::clickedItem, this, &MainWindow::openAktivitaet);
         connect(c, SIGNAL(addActivity(QDate)), this, SLOT(newActivity(QDate)));
     }
 
@@ -105,6 +107,8 @@ void MainWindow::handlerOpen(QString path)
 
 void MainWindow::onDateiWirdGespeichertWerden()
 {
+    CoreMainWindow::onDateiWirdGespeichertWerden();
+
     datei->setPositionKalender(EplFile::FensterPosition {x(), y(), width(), height() });
     datei->setPositionPersonal(
                 EplFile::FensterPosition {personalfenster->x(),
@@ -116,33 +120,37 @@ void MainWindow::onDateiWirdGespeichertWerden()
 void MainWindow::onDateiWurdeErfolgreichGespeichert()
 {
     CoreMainWindow::onDateiWurdeErfolgreichGespeichert();
+
     if (datei->getDateiEigenschaften()->getAutom()) {
-        int result = Export::Upload::autoUploadToServer(manager->filter(datei->getDateiEigenschaften()->getAuswahl()), datei->getDateiEigenschaften()->getServer());
-        if (result == 0)
-            ui->statusBar->showMessage(tr("Datei konnte nicht hochgeladen werden!"), 5000);
-        else if (result > 0)
+        try {
+            Export::Upload::autoUploadToServer(manager->filter(datei->getDateiEigenschaften()->getAuswahl()), datei->getDateiEigenschaften()->getServer());
             ui->statusBar->showMessage(tr("Datei wurde erfolgreich hochgeladen!"), 5000);
+        } catch (KeinAutoUploadException &e) {
+
+        } catch (UnsichereVerbindungException &e) {
+            QMessageBox::warning(this, tr("Fehler beim Hochladen"), tr("Die Listenansicht konnte nicht automatisch hochgeladen werden, da keine gesicherte Verbindung aufgebaut werden konnte. Ein manueller Upload über die Exportfunktion ist weiterhin möglich."));
+        } catch (NetworkingException &e) {
+            QMessageBox::warning(this, tr("Fehler beim Hochladen"), tr("Die Listenansicht konnte nicht automatisch hochgeladen werden. Bitte prüfen Sie Ihre Internetverbindung und die Einstellungen."));
+        }
     }
-    return;
 }
 
 void MainWindow::onAktivitaetWirdEntferntWerden(AActivity *a)
 {
+    CoreMainWindow::onAktivitaetWirdEntferntWerden(a);
+
     ui->listWidget->takeItem(ui->listWidget->row(listitem.value(a)));
     itemToList.remove(listitem.value(a));
     listitem.remove(a);
     int pos = getPosInCalendar(a->getDatum());
     if (pos >= 0)
         tage.at(pos)->remove(a);
-    if (fenster.contains(a)) {
-        QMainWindow *w = fenster.value(a);
-        fenster.remove(a);
-        w->close();
-        delete w;
-    }
+
 }
 void MainWindow::onAktivitaetWurdeBearbeitet(AActivity *a, QDate altesDatum)
 {
+    CoreMainWindow::onAktivitaetWurdeBearbeitet(a, altesDatum);
+
     int oldPos = -1;
     if (altesDatum.isValid())
         oldPos = getPosInCalendar(altesDatum);
@@ -196,7 +204,7 @@ void MainWindow::on_actionLoeschen_triggered()
 {
     QList<QListWidgetItem*> selected = ui->listWidget->selectedItems();
     if (! selected.isEmpty()) {
-        for(QListWidgetItem *item: selected) {
+        for(QListWidgetItem *item: qAsConst(selected)) {
             loeschenAktivitaet(itemToList.value(item));
         }
     }
@@ -258,35 +266,13 @@ void MainWindow::newFahrtag(QDate d)
 {
     Fahrtag *f = manager->newFahrtag(d);
     newAActivityHandler(f);
-    openAActivity(f);
+    openAktivitaet(f);
 }
 void MainWindow::newActivity(QDate d)
 {
     AActivity *a = manager->newActivity(d);
     newAActivityHandler(a);
-    openAActivity(a);
-}
-void MainWindow::openAActivity(AActivity *a)
-{
-    if (a == nullptr) return;
-
-    if (fenster.contains(a)) {
-        fenster.value(a)->show();
-        fenster.value(a)->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-        fenster.value(a)->raise();  // for MacOS
-        fenster.value(a)->activateWindow(); // for Windows
-    } else {
-        QMainWindow *w;
-        if (a->getArt() == Art::Arbeitseinsatz) {
-            w = new ActivityWindow(this, a);
-        } else {
-            Fahrtag* f = dynamic_cast<Fahrtag*>(a);
-            w = new FahrtagWindow(this, f);
-        }
-        w->setWindowFilePath(datei->getPfad());
-        fenster.insert(a, w);
-        w->show();
-    }
+    openAktivitaet(a);
 }
 void MainWindow::newAActivityHandler(AActivity *a)
 {
@@ -300,10 +286,6 @@ void MainWindow::newAActivityHandler(AActivity *a)
 }
 
 
-void MainWindow::onItemInListClicked(QListWidgetItem *item)
-{
-    openAActivity(itemToList.value(item));
-}
 void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
 {
     if (i == nullptr) return;

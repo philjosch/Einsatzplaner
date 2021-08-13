@@ -5,6 +5,10 @@ personal/ (object)	-> hier werden die Personen gesichert
 		(int)		-> Zugehörige Integer der Kategorie AActivity::Category
 	minimumValues(array)	-> Liste mit den zusätzlichen Mindeststunden, entsprechend der Liste minimumKeys
 		(int)		-> Zeiten in Minuten
+    beitraegeKeys (array)   -> Liste mit den Beitragsarten
+        (int)               -> Integer der Beitragsart
+    beitraegeValues (array) -> Liste mit den Beiträgen
+        (int)               -> Beiträge in Cent (nicht Euro)
 	personen (array)	-> hier werden die Personen gelistet durch jeweils ein (object)
 		# Stammdaten
 		id (string)		-> Interne Nummer zur Repräsentation der Person, wird nicht als eigenes Datum ausgegeben

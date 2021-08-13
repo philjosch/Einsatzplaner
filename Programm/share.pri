@@ -8,7 +8,7 @@
 ###########
 # VERSION #
 ###########
-VERSION = 1.7.1
+VERSION = 1.8.0
 DEPLOYED = true
 
 ####################
@@ -46,7 +46,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 #################
 win32: LCONVERT=$$[QT_INSTALL_BINS]\lconvert.exe
 else:  LCONVERT=$$[QT_INSTALL_BINS]/lconvert
-system(\"$$LCONVERT\" -o \"$$_PRO_FILE_PWD_/qt_de.qm\" \"$$[QT_INSTALL_TRANSLATIONS]/qtbase_de.qm\")
+system(\"$$LCONVERT\" -o \"$$_PRO_FILE_PWD_/../qt_de.qm\" \"$$[QT_INSTALL_TRANSLATIONS]/qtbase_de.qm\")
 
 #OTHER_FILES += qt_de.qm
 

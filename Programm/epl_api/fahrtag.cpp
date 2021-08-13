@@ -2,6 +2,7 @@
 #include "wagen.h"
 #include "verteiler.h"
 #include "basics.h"
+#include "export.h"
 
 #include <QJsonObject>
 #include <QJsonArray>
@@ -280,29 +281,28 @@ QString Fahrtag::getHtmlForTableView() const
     html += "</td>";
 
     // Zf, Zub, Begl.o.b.A.
-    if (benoetigeZf && (art != Schnupperkurs)) {
+    if ((benoetigeZf || benoetigeZub) && (art != Schnupperkurs)) {
         html += beginnZelleBenoetigt;
-        html += "<u>"+benoetigt.arg("Zugführer benötigt!")+"</u><br/>";
     } else {
         html += "<td>";
+    }
+    if (benoetigeZf && (art != Schnupperkurs)) {
+        html += "<u>"+benoetigt.arg("Zugführer benötigt!")+"</u><br/>";
     }
     if (benoetigeZub && (art != Schnupperkurs)) {
         html += "<i>"+benoetigt.arg("Begleitpersonal benötigt!")+"</i>";
     }
-    html += "<ul>";
-    if (gruppen.value(Zf)->size() > 0) {
+    if (gruppen.value(Zf)->size() + gruppen.value(Zub)->size() + gruppen.value(Begleiter)->size() > 0) {
+        html += "<ul>";
         html += listToString("", *gruppen.value(Zf), "<li><u>", "</u></li>");
-        gruppen.remove(Zf);
-    }
-    if (gruppen.value(Zub)->size() > 0) {
         html += listToString("", *gruppen.value(Zub), "<li>", "</li>");
-        gruppen.remove(Zub);
-    }
-    if (gruppen.value(Begleiter)->size() > 0) {
         html += listToString("", *gruppen.value(Begleiter), "<li><i>", "</i></li>");
+        html += "</ul>";
+        gruppen.remove(Zf);
+        gruppen.remove(Zub);
         gruppen.remove(Begleiter);
     }
-    html += "</ul></td>";
+    html += "</td>";
 
     // Service
     if (benoetigeService && (art != Schnupperkurs)) {
@@ -327,9 +327,9 @@ QString Fahrtag::getHtmlForTableView() const
         html += "<td>";
     }
 
-    for(Category cat: gruppen.keys()) {
-        if (cat != Sonstiges)
-            gruppen.value(Sonstiges)->append(*gruppen.value(cat));
+    for(auto it = gruppen.cbegin(); it != gruppen.cend(); ++it) {
+        if (it.key() != Sonstiges)
+            gruppen.value(Sonstiges)->append(*it.value());
     }
     if (gruppen.value(Sonstiges)->size() > 0) {
         html += "<ul>";
@@ -359,7 +359,7 @@ QString Fahrtag::getHtmlForTableView() const
     return html;
 }
 
-QString Fahrtag::getHtmlFuerReservierungsuebersicht() const
+bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
 {
     QString a = "<h3>";
     a += toString(art)+" am "+datum.toString("dddd dd. MM. yyyy");
@@ -384,6 +384,7 @@ QString Fahrtag::getHtmlFuerReservierungsuebersicht() const
                 list.swapItemsAt(pos, pos+1);
                 pos++;
             }
+            wagenZuRes.insert(i, list);
         }
         if (r->getSitzplatz().isEmpty()) {
             if (! wagenZuRes.contains(999))
@@ -414,7 +415,8 @@ QString Fahrtag::getHtmlFuerReservierungsuebersicht() const
     }
 
     a += "</tbody></table>";
-    return a;
+
+    return Export::druckeHtmlAufDrucker(a + Export::zeitStempel(), printer);
 }
 
 bool Fahrtag::getBenoetigeService() const
@@ -581,7 +583,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     }
 
     // Die Sitzplätze zuweisen, sodass sie in den Wagen erscheinen.
-    for(Reservierung *r: reservierungen.values()) {
+    for(Reservierung *r: qAsConst(reservierungen)) {
         r->setSitzplatz(r->getSitzplatz());
     }
 
@@ -592,14 +594,14 @@ bool Fahrtag::checkPlaetze(QMap<int, QList<int>> p, Reservierung *r) const
 {
     // Überprüft, ob die eingegebenen Sitzplätze frei sind, oder ob sie schon belegt wurden
     int summe = 0;
-    for(int w: p.keys()) {
-        if (! nummerToWagen.contains(w)) return false;
-        if (r->getKlasse() == 1 && nummerToWagen.value(w)->klasse() != 1) return false;
-        if (r->getKlasse() == 0 && (nummerToWagen.value(w)->klasse() != 2 &&
-                                    nummerToWagen.value(w)->klasse() != 3)) return false;
-        summe += p.value(w).length();
+    for (auto it = p.cbegin(); it != p.cend(); ++it) {
+        if (! nummerToWagen.contains(it.key())) return false;
+        if (r->getKlasse() == 1 && nummerToWagen.value(it.key())->klasse() != 1) return false;
+        if (r->getKlasse() == 0 && (nummerToWagen.value(it.key())->klasse() != 2 &&
+                                    nummerToWagen.value(it.key())->klasse() != 3)) return false;
+        summe += it.value().length();
         // für jeden Wagen prüfen, ob die Plätze belegt sind
-        if (! nummerToWagen.value(w)->testPlaetze(p.value(w), r)) return false;
+        if (! nummerToWagen.value(it.key())->testPlaetze(it.value(), r)) return false;
     }
     if (summe != r->getAnzahl()) return false;
     return true;
@@ -650,8 +652,8 @@ bool Fahrtag::createWagen()
     }
     if (! wagenNummer.isEmpty()) {
         // Prüfe ob die nicht gelöschten Wagen leer sind
-        for(int nummer: wagenNummer.keys()) {
-            if (! wagenNummer.value(nummer)->isEmpty())
+        for(Wagen *wagen: wagenNummer) {
+            if (! wagen->isEmpty())
                 return false;
         }
         // Wenn test für alle Wagen überstanden ist, können sie gelöscht werden

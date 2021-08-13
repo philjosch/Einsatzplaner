@@ -2,9 +2,11 @@
 #define PERSON_H
 
 #include "einsatz.h"
-#include "managerpersonal.h"
 
 #include <QMultiMap>
+#include <QPrinter>
+
+class ManagerPersonal;
 
 class Person : public QObject
 {
@@ -45,28 +47,30 @@ public:
     QJsonObject toJson() const;
     QJsonObject personalToJson() const;
 
-    int getZeiten(Category cat);
-    Status pruefeStunden();
-    Status pruefeStunden(Category cat);
+    int getZeiten(Category cat) const;
+    Status pruefeStunden() const;
+    Status pruefeStunden(Category cat) const;
 
     int getMinimumStunden(Category cat) const;
 
     bool pruefeFilter(Status filter);
 
-    void berechne();
+    void berechne() const;
 
     void addActivity(Einsatz *e);
     bool removeActivity(Einsatz *e);
 
-    const QList<Einsatz *> getActivities();
+    const QList<Einsatz *> getActivities() const;
 
 
     QString getZeitenFuerListeAlsHTML(QSet<Category> liste);
     QString getZeitenFuerEinzelAlsHTML();
+    bool printZeiten(QPrinter *printer);
 
     QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige = QSet<QString>()) const;
     QString getPersonaldatenFuerListeAlsCSV() const;
     QString getPersonaldatenFuerEinzelAlsHTML() const;
+    bool printPersonaldaten(QPrinter *printer) const;
 
     int getAdditional(Category cat) const;
     void setAdditional(Category cat, int value);
@@ -113,6 +117,7 @@ public:
 
     Beitragsart getBeitragsart() const;
     void setBeitragsart(const Beitragsart &value);
+    int getBeitrag() const;
 
     QString getIban() const;
     void setIban(const QString &value);
@@ -120,8 +125,13 @@ public:
     QString getBank() const;
     void setBank(const QString &value);
 
+    QString getKontoinhaberFinal() const;
     QString getKontoinhaber() const;
+    Person *getKontoinhaberPerson() const;
     void setKontoinhaber(const QString &value);
+
+    int getBeitragRegulaerIndividuell() const;
+    int getBeitragNachzahlung() const;
 
     // Ausbildung
     bool getAusbildungTf() const;
@@ -221,14 +231,14 @@ protected:
     // Zusätzliche Stunden
     QMap<Category, int> additional;
 
-    QMap<Category, int> zeiten;
-    QList<Einsatz*> activities;
+    mutable QMap<Category, int> zeiten;
+    mutable QList<Einsatz*> activities;
 
 private:
-    bool valuesInvalid;
+    mutable bool valuesInvalid;
     /* Gibt an, ob die Werte verändert wurden und ob es bemerkt wurde,
      * kann auch sein, dass dies an der Person vorbei passiert ist,
-     * in dem eine Veranstalltung verändert wurde,
+     * in dem eine Veranstaltung verändert wurde,
      * dann muss manuell neuberechnet werden */
 
     ManagerPersonal *manager;

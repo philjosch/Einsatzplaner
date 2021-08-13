@@ -9,6 +9,10 @@ Jeder Eintrag kann durch einen Doppelklick geöffnet werden.
 Fahrtage und Arbeitseinsätze werden,
 um einen schnelleren Überblick zu bekommen,
 in verschiedenen Farben eingefärbt.
+\begin{neu}
+Das aktuelle Datum wird farblich hervorgehoben,
+um eine schnellere Navigation zu erlauben.
+\end{neu}
 
 \begin{figure}[h]
   \includegraphics[width=\textwidth]{img/kalender}
@@ -85,7 +89,7 @@ Im Datei-Menü stehen Ihnen folgende Funktionen zur Verfügung:
   Bei ungesicherten Veränderungen wird vor dem Schließen nachgefragt, ob die Änderungen gespeichert werden sollen.
   Wenn kein Fenster mehr geöffnet ist, wird das Programm beendet.
 
-  \item[Exportieren \dots]
+  \item[Export \dots]
   Ruft die Exportfunktion auf.
   Weitere Funktionen in \cref{einsatz:kalender:export}.
 \end{description}
@@ -126,11 +130,9 @@ Die Einzelansicht kann für jede Aktivität auch im entsprechenden Fenster direk
 \section{Upload-Tool}\label{einsatz:kalender:upload}
 Dieses Tool gibt ihnen die Möglichkeit die Listenansicht des Einsatzplans als PDF-Datei auf einen Webserver hochzuladen.
 Dies kann manuell oder automatisch bei jedem Speichern geschehen.
-Zur Konfiguration befindet sich im Datei-Menü ein Punkt \aktion{Eigenschaften}.
+Zur Konfiguration befindet sich im \aktion{Datei}-Menü ein Punkt \aktion{Eigenschaften}.
 Durch diesen öffnet sich der Abschnitt in \cref{fig:einsatz:kalender:upload}.
-\begin{neu}
 Relevant ist hier der obere Teil.
-\end{neu}
 \begin{figure}[!h]
   \centering
 	\includegraphics[width=0.5\textwidth]{img/eigenschaften}
@@ -142,10 +144,10 @@ Relevant ist hier der obere Teil.
   Mit dem ersten Haken wird das Tool aktiviert.
   \item
   Der zweite dient dazu einzustellen, ob die Datei automatisch hochgeladen wird, wenn die lokale Datei gespeichert wird.
-  Diese Funktion ist nur verfügbar, wenn sie in den Programmeinstellungen aktiviert wurde (siehe \cref{epl:allg:einstellungen}.
+  Diese Funktion ist nur verfügbar, wenn sie in den Programmeinstellungen aktiviert wurde (siehe \cref{epl:allg:einstellungen}).
   \item
   Unter Server, Pfad und ID geben Sie die Daten an, die Ihnen von Ihrem Webmaster mitgeteilt wurden.
-  Bei Server ist das Protokoll mit anzugeben, sofern es sich nicht um \texttt{https} handelt, also \texttt{http} verwendet wird.
+  Standardmäßig wird HTTPS als Protokoll verwendet.
   \item
   Mit dem Knopf können Sie testen, ob die Eingaben korrekt sind und eine Verbindung zum Server aufgebaut werden kann.
   Dabei werden keine Daten der Aktivitäten übermittelt.
@@ -157,3 +159,11 @@ Ebenso können Sie auswählen, ob Arbeitseinsätze auch ausgegeben werden sollen
 \begin{hinweis}
   Beim Verwenden der Export-Funktion aus \cref{einsatz:kalender:export} können Sie Beschränkungen festlegen, die unabhängig von diesen Einstellungen sind.
 \end{hinweis}
+
+\begin{neu}
+\begin{hinweis}
+  Bei einer unsicheren Serververbindung (d.h.\ Sie verwenden HTTP als Protokoll und nicht HTTPS),
+  wird der automatische Upload aus Sicherheitsgründen deaktiviert.
+  Der manuelle Upload bleibt aber weiterhin möglich.
+\end{hinweis}
+\end{neu}

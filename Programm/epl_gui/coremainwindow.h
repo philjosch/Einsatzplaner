@@ -26,6 +26,9 @@ public slots:
     bool loeschenPerson(Person *p);
     void loeschenAktivitaet(AActivity *a);
 
+    virtual void openPerson(Person *p);
+    virtual void openAktivitaet(AActivity *a);
+
 protected slots:
     //** Datei Menue
     // Einsatzplaner
@@ -67,11 +70,11 @@ protected slots:
     virtual void onDateiWurdeErfolgreichGespeichert();
 
     // Personen bezogene Methoden
-    virtual void onPersonWirdEntferntWerden([[maybe_unused]] Person *p) {};
+    virtual void onPersonWirdEntferntWerden(Person *p);
     virtual void onPersonWurdeBearbeitet([[maybe_unused]] Person *p) {};
 
     // Aktivitaeten bezogene Methoden
-    virtual void onAktivitaetWirdEntferntWerden([[maybe_unused]] AActivity *a) {};
+    virtual void onAktivitaetWirdEntferntWerden(AActivity *a);
     virtual void onAktivitaetWurdeBearbeitet([[maybe_unused]] AActivity *a, [[maybe_unused]] QDate altesDatum = QDate()) {};
 
 protected:
@@ -90,6 +93,10 @@ protected:
     //** View
     QMenu *recentlyUsedMenu;
     QAction *recentlyUsedClear;
+
+    //** Controller
+    QMap<AActivity*, QMainWindow*> fensterAktivitaeten;
+    QMap<Person*, QMainWindow*> fensterPersonen;
 };
 
 #endif // MAINWINDOW_H

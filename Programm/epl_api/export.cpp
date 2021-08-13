@@ -2,9 +2,13 @@
 #include "export.h"
 #include "fileio.h"
 #include "networking.h"
+#include "eplexception.h"
+#include "manager.h"
 
 #include <QTemporaryFile>
 #include <QPrintDialog>
+
+using namespace EplException;
 
 const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td, p { font-size: 11px; font-weight: normal;}"
                             "table { border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
@@ -13,63 +17,8 @@ const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td
                             "table tfoot tr, table tfoot td { border-width: 1px; }"
                             "ul { -qt-list-indent: 0; margin-top: 0px !important; margin-bottom: 0px !important }"
                             "li { text-indent: 6px; margin-top: 0px !important; margin-bottom: 0px !important; }"
-                            "p.last { page-break-after: always; }";
+                            "p.break { page-break-after: always; }";
 const QFont Export::DEFAULT_FONT = QFont("Arial", 11, QFont::Normal);
-
-bool Export::Aktivitaeten::printAktivitaetenEinzel(QList<AActivity *> liste, QPrinter *printer)
-{
-    QString html = Manager::getHtmlFuerEinzelansichten(liste);
-    return druckeHtmlAufDrucker(html, printer);
-}
-
-bool Export::Aktivitaeten::printAktivitaetenListe(QList<AActivity *> liste, QPrinter *printer)
-{
-    QString html = Manager::getHtmlFuerListenansicht(liste) + zeitStempel();
-    return druckeHtmlAufDrucker(html, printer);
-}
-
-bool Export::Aktivitaeten::printReservierung(Fahrtag *f, QPrinter *printer)
-{
-    QString html = f->getHtmlFuerReservierungsuebersicht() + zeitStempel();
-    return druckeHtmlAufDrucker(html, printer);
-}
-
-bool Export::Personal::printZeitenEinzelEinzel(Person *p, QPrinter *printer)
-{
-    QString html = p->getZeitenFuerEinzelAlsHTML() + zeitStempel();
-    return druckeHtmlAufDrucker(html, printer);
-}
-bool Export::Personal::printZeitenEinzelListe(QList<Person *> liste, ManagerPersonal *m, Status filter, QPrinter *printer)
-{
-    QString html = m->getZeitenFuerEinzelListeAlsHTML(liste, filter);
-    return druckeHtmlAufDrucker(html, printer);
-}
-bool Export::Personal::printZeitenListe(QList<Person *> personen, QSet<Category> data, Status filter, QPrinter *printer)
-{
-    QString html = ManagerPersonal::getZeitenFuerListeAlsHTML(personen, data, filter);
-    return druckeHtmlAufDrucker(html, printer);
-}
-
-bool Export::Mitglieder::printMitgliederEinzelEinzel(Person *p, QPrinter *printer)
-{
-    QString html = p->getPersonaldatenFuerEinzelAlsHTML() + zeitStempel();
-    return druckeHtmlAufDrucker(html, printer);
-}
-bool Export::Mitglieder::printMitgliederEinzelListe(QList<Person *> liste, ManagerPersonal *m, Status filter, QPrinter *printer)
-{
-    QString html = m->getMitgliederFuerEinzelListeAlsHTML(liste, filter);
-    return druckeHtmlAufDrucker(html, printer);
-}
-bool Export::Mitglieder::printMitgliederListe(QList<Person*> liste, Status filter, QSet<QString> data, QPrinter *printer)
-{
-    QString html = ManagerPersonal::getMitgliederFuerListeAlsHtml(liste, filter, data);
-    return druckeHtmlAufDrucker(html, printer);
-}
-
-bool Export::Mitglieder::exportMitgliederAlsCSV(QList<Person *> liste, QString pfad)
-{
-    return FileIO::saveToFile(pfad, ManagerPersonal::getMitgliederFuerListeAlsCSV(liste));
-}
 
 QPrinter *Export::getPrinterPaper(QWidget *parent, QPrinter::Orientation orientation)
 {
@@ -91,7 +40,7 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPrinter::Orienta
     return p;
 }
 
-bool Export::Upload::uploadToServer(QList<AActivity *> liste, Networking::Server server)
+void Export::Upload::uploadToServer(QList<AActivity *> liste, Networking::Server server)
 {
     /* ERSTELLEN DER DATEI */
     QTemporaryFile tempFile;
@@ -102,17 +51,23 @@ bool Export::Upload::uploadToServer(QList<AActivity *> liste, Networking::Server
     p->setOutputFileName(localFile);
     preparePrinter(p, QPrinter::Landscape);
 
-    Aktivitaeten::printAktivitaetenListe(liste, p);
+    Manager::printListenansicht(liste, p);
 
-    return Networking::ladeDateiHoch(server, &tempFile);
+    if (! Networking::ladeDateiHoch(server, &tempFile)) {
+        throw NetworkingException();
+    }
 }
 
-int Export::Upload::autoUploadToServer(QList<AActivity*> liste, Networking::Server server)
+void Export::Upload::autoUploadToServer(QList<AActivity*> liste, Networking::Server server)
 {
-    if (!Einstellungen::getUseAutoUpload()) return -1;
+    if (!Einstellungen::getUseAutoUpload()) {
+        throw KeinAutoUploadException();
+    }
+    if (! server.isSecure()) {
+        throw UnsichereVerbindungException();
+    }
 
-    if (Upload::uploadToServer(liste, server)) return 1;
-    return 0;
+    Upload::uploadToServer(liste, server);
 }
 
 bool Export::druckeHtmlAufDrucker(QString text, QPrinter *printer)
@@ -140,9 +95,14 @@ void Export::preparePrinter(QPrinter *p, QPrinter::Orientation orientation)
     }
 }
 
-QString Export::zeitStempel()
+QString Export::zeitStempel(bool seitenUmbruch)
 {
-    return QObject::tr("<p><small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString(QObject::tr("d.M.yyyy HH:mm")));
+    QString s = QObject::tr("Erstellt am: %1").arg(QDateTime::currentDateTime().toString(QObject::tr("d.M.yyyy HH:mm")))+"</small></p>";
+    if (seitenUmbruch) {
+        return "<p class='break'><small>"+s;
+     } else {
+        return "<p><small>"+s;
+    }
 }
 
 QTextDocument *Export::newDefaultDocument()
