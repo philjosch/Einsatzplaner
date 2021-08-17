@@ -88,7 +88,7 @@
        <attribute name="title">
         <string>Persönliches</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0,0,1" columnstretch="0,0,0,1">
+       <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,1">
         <property name="leftMargin">
          <number>6</number>
         </property>
@@ -124,84 +124,33 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2" colspan="2">
-         <widget class="QCheckBox" name="checkGeburtstag">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
+        <item row="7" column="0">
+         <widget class="QLabel" name="labelBeruf">
           <property name="text">
-           <string>Unbekannt</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="labelGeschlecht">
-          <property name="text">
-           <string>Geschlecht</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QRadioButton" name="radioMaennlich">
-          <property name="text">
-           <string>Männlich</string>
-          </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGeschlecht</string>
-          </attribute>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QRadioButton" name="radioWeiblich">
-          <property name="text">
-           <string>Weiblich</string>
-          </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGeschlecht</string>
-          </attribute>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QRadioButton" name="radioDivers">
-          <property name="text">
-           <string>Divers</string>
-          </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGeschlecht</string>
-          </attribute>
-         </widget>
-        </item>
-        <item row="2" column="1" colspan="2">
-         <widget class="QRadioButton" name="radioJuristisch">
-          <property name="text">
-           <string>Juristische Person</string>
-          </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGeschlecht</string>
-          </attribute>
-         </widget>
-        </item>
-        <item row="2" column="3">
-         <widget class="QRadioButton" name="radioUnbekannt">
-          <property name="text">
-           <string>Unbekannt</string>
-          </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGeschlecht</string>
-          </attribute>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="labelAnrede">
-          <property name="text">
-           <string>Anrede</string>
+           <string>Beruf</string>
           </property>
           <property name="buddy">
-           <cstring>comboAnrede</cstring>
+           <cstring>lineJob</cstring>
           </property>
          </widget>
         </item>
-        <item row="3" column="1" colspan="3">
+        <item row="8" column="1">
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>142</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="7" column="1" colspan="3">
+         <widget class="QLineEdit" name="lineJob"/>
+        </item>
+        <item row="6" column="1" colspan="3">
          <widget class="QComboBox" name="comboAnrede">
           <property name="editable">
            <bool>true</bool>
@@ -236,31 +185,82 @@
           </item>
          </widget>
         </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="labelBeruf">
+        <item row="6" column="0">
+         <widget class="QLabel" name="labelAnrede">
           <property name="text">
-           <string>Beruf</string>
+           <string>Anrede</string>
           </property>
           <property name="buddy">
-           <cstring>lineJob</cstring>
+           <cstring>comboAnrede</cstring>
           </property>
          </widget>
         </item>
-        <item row="4" column="1" colspan="3">
-         <widget class="QLineEdit" name="lineJob"/>
+        <item row="0" column="2">
+         <widget class="QCheckBox" name="checkGeburtstag">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Unbekannt</string>
+          </property>
+         </widget>
         </item>
         <item row="5" column="1">
-         <spacer name="verticalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
+         <widget class="QRadioButton" name="radioUnbekannt">
+          <property name="text">
+           <string>Unbekannt</string>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>142</height>
-           </size>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGeschlecht</string>
+          </attribute>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QRadioButton" name="radioJuristisch">
+          <property name="text">
+           <string>Juristische Person</string>
           </property>
-         </spacer>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGeschlecht</string>
+          </attribute>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QRadioButton" name="radioDivers">
+          <property name="text">
+           <string>Divers</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGeschlecht</string>
+          </attribute>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QRadioButton" name="radioWeiblich">
+          <property name="text">
+           <string>Weiblich</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGeschlecht</string>
+          </attribute>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QRadioButton" name="radioMaennlich">
+          <property name="text">
+           <string>Männlich</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">buttonGeschlecht</string>
+          </attribute>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="labelGeschlecht">
+          <property name="text">
+           <string>Geschlecht</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -268,7 +268,7 @@
        <attribute name="title">
         <string>Mitgliedschaft</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,1" columnstretch="0,0,0,1">
+       <layout class="QGridLayout" name="gridLayout">
         <property name="leftMargin">
          <number>6</number>
         </property>
@@ -280,9 +280,6 @@
         </property>
         <property name="bottomMargin">
          <number>0</number>
-        </property>
-        <property name="spacing">
-         <number>6</number>
         </property>
         <item row="8" column="1">
          <spacer name="verticalSpacer">
@@ -529,7 +526,7 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="1">
+        <item row="7" column="1" colspan="2">
          <widget class="QLineEdit" name="lineBeitrag">
           <property name="readOnly">
            <bool>true</bool>
@@ -542,7 +539,7 @@
        <attribute name="title">
         <string>Kontakt</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0,0,0,0,0,1" columnstretch="0,0,1">
+       <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,1">
         <property name="leftMargin">
          <number>6</number>
         </property>
@@ -647,7 +644,7 @@
         <item row="5" column="0">
          <widget class="QLabel" name="labelPhone2">
           <property name="text">
-           <string>Telefon2</string>
+           <string>2. Telefon</string>
           </property>
           <property name="buddy">
            <cstring>linePhone2</cstring>
@@ -696,7 +693,7 @@
        <attribute name="title">
         <string>Ausbildung</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_6" rowstretch="0,0,1,1" columnstretch="0,0,0,0,1">
+       <layout class="QGridLayout" name="gridLayout_6" rowstretch="0,0,1,1">
         <property name="leftMargin">
          <number>6</number>
         </property>
@@ -839,7 +836,7 @@ Ausbildung</string>
        <attribute name="title">
         <string>Sonstiges</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_5" rowstretch="0,0,1" columnstretch="0,1">
+       <layout class="QGridLayout" name="gridLayout_5">
         <property name="leftMargin">
          <number>6</number>
         </property>
