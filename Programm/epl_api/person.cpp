@@ -14,6 +14,7 @@ const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";
 const QString Person::FARBE_STANDARD = "#ffffff";
 const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsdatum;Geschlecht;Anrede;Beruf;"
                                                "Eintritt;Status;Austritt;Beiragsart;IBAN;Bank;Kontoinhaber;"
+                                               "Beitrag;Nachzahlung"
                                                "Tf;Zf;Rangierer;Tauglichkeit;BemerkungBetrieb;AusbildungSonst;"
                                                "Straße;PLZ;Ort;Strecke;Mail;Telefon;Telefon2;"
                                                "Zustimmung Mail;Zustimmung Telefon;"
@@ -1106,7 +1107,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
             absch += help.arg("Austritt zum", austritt.toString("dd.MM.yyyy"));
     }
     if (getBeitrag() != 0) {
-        absch += help.arg("Beitrag", "%1 (%2 €)").arg(toString(beitragsart)).arg(getBeitrag()/100.f, 0, 'f', 2);
+        absch += help.arg("Beitrag", "%L1 (%L2 €)").arg(toString(beitragsart)).arg(getBeitrag()/100.f, 0, 'f', 2);
     } else {
         absch += help.arg("Beitrag", toString(beitragsart));
     }
@@ -1201,7 +1202,7 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+geburtstag.toString("dd.MM.yyyy")
             +";"+toString(geschlecht)
             +";"+anrede
-            +";"+beruf
+            +";"+QString(beruf).replace(";", ",")
 
             +";"+eintritt.toString("dd.MM.yyyy")
             +";"+(aktiv?"Aktiv":"Passiv")
@@ -1210,15 +1211,15 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+iban
             +";"+bank
             +";"+getKontoinhaberFinal()
-            +";"+(int)getBeitrag()/100
-            +";"+(int)getBeitragNachzahlung()/100
+            +";"+QString::number(getBeitrag()/100.f, 'f', 2).replace(".", ",")
+            +";"+QString::number(getBeitragNachzahlung()/100.f, 'f', 2).replace(".", ",")
 
             +";"+(ausbildungTf ? "WAHR":"FALSCH")
             +";"+(ausbildungZf ? "WAHR":"FALSCH")
             +";"+(ausbildungRangierer ? "WAHR":"FALSCH")
             +";"+tauglichkeit.toString("dd.MM.yyyy")
-            +";"+QString(sonstigeBetrieblich).replace("\n","<br/>")
-            +";"+QString(sonstigeAusbildung).replace("\n","<br/>")
+            +";"+QString(sonstigeBetrieblich).replace("\n","<br/>").replace(";", ",")
+            +";"+QString(sonstigeAusbildung).replace("\n","<br/>").replace(";", ",")
 
             +";"+strasse
             +";"+plz
@@ -1231,7 +1232,7 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+(mailOK ? "WAHR" : "FALSCH")
             +";"+(telefonOK ? "WAHR" : "FALSCH")
 
-            +";"+QString(bemerkungen).replace("\n","<br/>")
+            +";"+QString(bemerkungen).replace("\n","<br/>").replace(";", ",")
             +"\n";
 }
 

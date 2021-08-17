@@ -2,7 +2,7 @@
 \section{Version 1.8}\label{version:1:8}
 \subsection{Version 1.8.0}
 \label{version:1:8:0}
-Veröffentlicht am xx.08.2021
+Veröffentlicht am 13.08.2021
 \subsubsection{Neu}
 \begin{itemize}
   \item
@@ -54,5 +54,34 @@ Veröffentlicht am xx.08.2021
   Export von Reservierungen eines Fahrtages war fehlerhaft
   \item
   Diverse kleinere Fehlerbehebungen
+\end{itemize}
+
+\subsection{Version 1.8.1}
+\label{version:1:8:1}
+Veröffentlicht am 17.08.2021
+\subsubsection{Verbessert}
+\begin{itemize}
+  \item
+  Kodierung der (CSV-)Datei geändert, um die Kompatibilität mit Windows zu erhöhen
+  \item
+  Beim Export der Beiträge wird die IBAN ohne Leerzeichen ausgegeben
+  \item
+  Beiträge werden jetzt mit Komma (als Dezimaltrenner) ausgegeben
+  \item
+  Beim Export der Beiträge wird die Beitragsart mit ausgegeben
+\end{itemize}
+
+\subsubsection{Fehlerbehebungen}
+\begin{itemize}
+  \item
+  Im Kopf der CSV-Datei fehlten teilweise Felder
+  \item
+  In der Personaltabelle wurde der Beitrag nur gerundet angezeigt
+  \item
+  Der Beitrag in einer CSV-Datei war unter Umständen als Symbol dargestellt
+  \item
+  Zugriff auf gemeinsame Datei-Historie wiederhergestellt
+  \item
+  Behebt einen Fehler, durch den eine ausgegebene CSV-Datei fehlerhaft wurde
 \end{itemize}
 \end{neu}

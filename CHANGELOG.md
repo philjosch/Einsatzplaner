@@ -1,5 +1,20 @@
 # Einsatzplaner - Veränderungshistorie
-Stand: 13. August 2021
+Stand: 17. August 2021
+
+## Version 1.8.1 – 2021-08-17
+### Verbessert
+- Kodierung der (CSV-)Datei geändert, um die Kompatibilität mit Windows zu erhöhen
+- Beim Export der Beiträge wird die IBAN ohne Leerzeichen ausgegeben
+- Beiträge werden jetzt mit Komma (als Dezimaltrenner) ausgegeben
+- Beim Export der Beiträge wird die Beitragsart mit ausgegeben
+
+### Fehlerbehebungen
+- Im Kopf der CSV-Datei fehlten teilweise Felder
+- In der Personaltabelle wurde der Beitrag nur gerundet angezeigt
+- Der Beitrag in einer CSV-Datei war unter Umständen als Symbol dargestellt
+- Zugriff auf gemeinsame Datei-Historie wiederhergestellt
+- Behebt einen Fehler, durch den eine ausgegebene CSV-Datei fehlerhaft wurde
+
 
 ## Version 1.8.0 – 2021-08-13
 ### Neu

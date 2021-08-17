@@ -9,15 +9,6 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
-QString FileIO::currentPath = Einstellungen::getLastPath();
-QStringList FileIO::lastUsed = Einstellungen::getLastUsed();
-
-void FileIO::saveSettings()
-{
-    Einstellungen::setLastPath(currentPath);
-    Einstellungen::setLastUsed(lastUsed);
-}
-
 QString FileIO::getFilterVonTyp(FileIO::DateiTyp typ)
 {
     switch (typ) {
@@ -48,17 +39,16 @@ QString FileIO::getSuffixVonTyp(FileIO::DateiTyp typ)
 
 QString FileIO::getFilePathOpen(QWidget *parent, DateiTyp typ)
 {
-    QString path = QFileDialog::getOpenFileName(parent, QObject::tr("Datei öffnen ..."), currentPath, getFilterVonTyp(typ));
+    QString path = QFileDialog::getOpenFileName(parent, QObject::tr("Datei öffnen ..."), Einstellungen::getLastPath(), getFilterVonTyp(typ));
     if (path == "") return "";
     QFileInfo info(path);
-    currentPath = info.absolutePath();
-    saveSettings();
+    Einstellungen::setLastPath(info.absolutePath());
     return path;
 }
 
 QString FileIO::getFilePathSave(QWidget *parent, QString filename, DateiTyp typ)
 {
-    QString path = QFileDialog::getSaveFileName(parent, QObject::tr("Datei speichern ..."), currentPath+"/"+filename+getSuffixVonTyp(typ), getFilterVonTyp(typ));
+    QString path = QFileDialog::getSaveFileName(parent, QObject::tr("Datei speichern ..."), Einstellungen::getLastPath()+"/"+filename+getSuffixVonTyp(typ), getFilterVonTyp(typ));
     if (path == "") return "";
 
     if (!Schreibschutz::pruefen(path).isEmpty()) {
@@ -67,8 +57,7 @@ QString FileIO::getFilePathSave(QWidget *parent, QString filename, DateiTyp typ)
     }
 
     QFileInfo info(path);
-    currentPath = info.absolutePath();
-    saveSettings();
+    Einstellungen::setLastPath(info.absolutePath());
     return path;
 }
 
@@ -99,8 +88,7 @@ QStringList FileIO::History::get()
 
 void FileIO::History::clear()
 {
-    lastUsed = QStringList();
-    saveSettings();
+    Einstellungen::setLastUsed(QStringList());
 }
 
 bool FileIO::saveToFile(QString path, QString content)
@@ -109,7 +97,7 @@ bool FileIO::saveToFile(QString path, QString content)
     if (!datei.open(QIODevice::WriteOnly)) {
         return false;
     }
-    datei.write(content.toUtf8());
+    datei.write(content.toLatin1());
     datei.close();
     return true;
 }
@@ -154,12 +142,13 @@ bool FileIO::Schreibschutz::freigeben(QString dateipfad)
 
 void FileIO::History::insert(QString filepath)
 {
+    QStringList lastused = Einstellungen::getLastUsed();
     if (filepath.endsWith(getSuffixVonTyp(EPL), Qt::CaseInsensitive)) {
-        if (lastUsed.contains(filepath))
-            lastUsed.removeOne(filepath);
-        else if (lastUsed.length() >= 5)
-            lastUsed.removeLast();
-        lastUsed.insert(0, filepath);
-        saveSettings();
+        if (lastused.contains(filepath))
+            lastused.removeOne(filepath);
+        else if (lastused.length() >= 5)
+            lastused.removeLast();
+        lastused.insert(0, filepath);
+        Einstellungen::setLastUsed(lastused);
     }
 }

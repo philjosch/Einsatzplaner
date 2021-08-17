@@ -143,13 +143,13 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
         if (anzeige.contains("Beitrag")) {
             i = new PersonTableWidgetItem(p);
             if (p->getBeitrag() != 0)
-                i->setData(0, p->getBeitrag()/100);
+                i->setData(0, p->getBeitrag()/100.f);
             ui->tabelleMitglieder->setItem(0, clmn++, i);
         }
         if (anzeige.contains("Beitrag (Nachzahlung)")) {
             i = new PersonTableWidgetItem(p);
             if (p->getBeitragNachzahlung() != 0)
-                i->setData(0, p->getBeitragNachzahlung()/100);
+                i->setData(0, p->getBeitragNachzahlung()/100.f);
             ui->tabelleMitglieder->setItem(0, clmn++, i);
         }
 
