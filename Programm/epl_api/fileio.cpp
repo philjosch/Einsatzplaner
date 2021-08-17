@@ -97,7 +97,7 @@ bool FileIO::saveToFile(QString path, QString content)
     if (!datei.open(QIODevice::WriteOnly)) {
         return false;
     }
-    datei.write(content.toUtf8());
+    datei.write(content.toLatin1());
     datei.close();
     return true;
 }
