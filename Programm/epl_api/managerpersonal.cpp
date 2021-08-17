@@ -447,7 +447,7 @@ bool ManagerPersonal::saveBeitraegeRegulaerAlsCSV(QString pfad) const
     for(Person *pers: getPersonen(Status::AlleMitglieder)) {
         if (pers->getBeitrag() != 0) {
             csv += QString("%1;%6;%2;%3;%4;%5\n")
-                    .arg(pers->getName(), pers->getIban(), pers->getBank(), pers->getKontoinhaberFinal())
+                    .arg(pers->getName(), pers->getIban().replace(" ", ""), pers->getBank(), pers->getKontoinhaberFinal())
                     .arg(QString::number(pers->getBeitrag()/100.f, 'f', 2).replace(".", ","))
                     .arg(pers->getNummer());
         }
@@ -466,7 +466,7 @@ bool ManagerPersonal::saveBeitraegeNachzahlungAlsCSV(QString pfad) const
             if (zahler == nullptr)
                 zahler = pers;
             csv += QString("%1;%6;%2;%3;%4;%5\n")
-                    .arg(pers->getName(), zahler->getIban(), zahler->getBank(), zahler->getKontoinhaberFinal())
+                    .arg(pers->getName(), zahler->getIban().replace(" ", ""), zahler->getBank(), zahler->getKontoinhaberFinal())
                     .arg(QString::number(pers->getBeitragNachzahlung()/100.f, 'f', 2).replace(".", ","))
                     .arg(pers->getNummer());
         }
