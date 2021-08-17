@@ -6,6 +6,7 @@ Stand: 17. August 2021
 - Kodierung der (CSV-)Datei geändert, um die Kompatibilität mit Windows zu erhöhen
 - Beim Export der Beiträge wird die IBAN ohne Leerzeichen ausgegeben
 - Beiträge werden jetzt mit Komma (als Dezimaltrenner) ausgegeben
+- Beim Export der Beiträge wird die Beitragsart mit ausgegeben
 
 ### Fehlerbehebungen
 - Im Kopf der CSV-Datei fehlten teilweise Felder

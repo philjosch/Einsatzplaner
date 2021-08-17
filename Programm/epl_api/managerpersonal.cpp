@@ -443,13 +443,14 @@ QList<Person *> ManagerPersonal::getPersonen(Status filter) const
 
 bool ManagerPersonal::saveBeitraegeRegulaerAlsCSV(QString pfad) const
 {
-    QString csv = "Name;Mitgliedsnummer;IBAN;Bank;Kontoinhaber;Betrag\n";
+    QString csv = "Name;Mitgliedsnummer;IBAN;Bank;Kontoinhaber;Beitragsart;Betrag\n";
     for(Person *pers: getPersonen(Status::AlleMitglieder)) {
         if (pers->getBeitrag() != 0) {
-            csv += QString("%1;%6;%2;%3;%4;%5\n")
+            csv += QString("%1;%6;%2;%3;%4;%7;%5\n")
                     .arg(pers->getName(), pers->getIban().replace(" ", ""), pers->getBank(), pers->getKontoinhaberFinal())
                     .arg(QString::number(pers->getBeitrag()/100.f, 'f', 2).replace(".", ","))
-                    .arg(pers->getNummer());
+                    .arg(pers->getNummer())
+                    .arg(Person::toString(pers->getBeitragsart()));
         }
     }
     return FileIO::saveToFile(pfad, csv);
@@ -457,7 +458,7 @@ bool ManagerPersonal::saveBeitraegeRegulaerAlsCSV(QString pfad) const
 
 bool ManagerPersonal::saveBeitraegeNachzahlungAlsCSV(QString pfad) const
 {
-    QString csv = "Name;Mitgliedsnummer;IBAN;Bank;Kontoinhaber;Betrag\n";
+    QString csv = "Name;Mitgliedsnummer;IBAN;Bank;Kontoinhaber;Beitragsart;Betrag\n";
     for(Person *pers: getPersonen(Status::AlleMitglieder)) {
         if (pers->getBeitragNachzahlung() != 0) {
             Person *zahler = nullptr;
@@ -465,10 +466,11 @@ bool ManagerPersonal::saveBeitraegeNachzahlungAlsCSV(QString pfad) const
                 zahler = pers->getKontoinhaberPerson();
             if (zahler == nullptr)
                 zahler = pers;
-            csv += QString("%1;%6;%2;%3;%4;%5\n")
+            csv += QString("%1;%6;%2;%3;%4;%7;%5\n")
                     .arg(pers->getName(), zahler->getIban().replace(" ", ""), zahler->getBank(), zahler->getKontoinhaberFinal())
                     .arg(QString::number(pers->getBeitragNachzahlung()/100.f, 'f', 2).replace(".", ","))
-                    .arg(pers->getNummer());
+                    .arg(pers->getNummer())
+                    .arg(Person::toString(pers->getBeitragsart()));
         }
     }
     return FileIO::saveToFile(pfad, csv);
