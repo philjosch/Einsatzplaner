@@ -1202,7 +1202,7 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+geburtstag.toString("dd.MM.yyyy")
             +";"+toString(geschlecht)
             +";"+anrede
-            +";"+beruf
+            +";"+QString(beruf).replace(";", ",")
 
             +";"+eintritt.toString("dd.MM.yyyy")
             +";"+(aktiv?"Aktiv":"Passiv")
@@ -1218,8 +1218,8 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+(ausbildungZf ? "WAHR":"FALSCH")
             +";"+(ausbildungRangierer ? "WAHR":"FALSCH")
             +";"+tauglichkeit.toString("dd.MM.yyyy")
-            +";"+QString(sonstigeBetrieblich).replace("\n","<br/>")
-            +";"+QString(sonstigeAusbildung).replace("\n","<br/>")
+            +";"+QString(sonstigeBetrieblich).replace("\n","<br/>").replace(";", ",")
+            +";"+QString(sonstigeAusbildung).replace("\n","<br/>").replace(";", ",")
 
             +";"+strasse
             +";"+plz
@@ -1232,7 +1232,7 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+(mailOK ? "WAHR" : "FALSCH")
             +";"+(telefonOK ? "WAHR" : "FALSCH")
 
-            +";"+QString(bemerkungen).replace("\n","<br/>")
+            +";"+QString(bemerkungen).replace("\n","<br/>").replace(";", ",")
             +"\n";
 }
 

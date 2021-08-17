@@ -12,6 +12,7 @@ Stand: 17. August 2021
 - In der Personaltabelle wurde der Beitrag nur gerundet angezeigt
 - Der Beitrag in einer CSV-Datei war unter Umständen als Symbol dargestellt
 - Zugriff auf gemeinsame Datei-Historie wiederhergestellt
+- Behebt einen Fehler, durch den eine ausgegebene CSV-Datei fehlerhaft wurde
 
 
 ## Version 1.8.0 – 2021-08-13
