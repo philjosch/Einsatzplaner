@@ -54,9 +54,9 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
         ui->lineIBAN->setEnabled(false);
         ui->lineBank->setEnabled(false);
     }
-    ui->lineBeitrag->setText(tr("%1 €").arg(p->getBeitrag()/100.f, 0, 'f', 2));
+    ui->lineBeitrag->setText(tr("%L1 €").arg(p->getBeitrag()/100.f, 0, 'f', 2));
     if (person->getBeitragNachzahlung() != 0)
-        ui->lineBeitrag->setText(tr("%1 € (+ %2 €)")
+        ui->lineBeitrag->setText(tr("%L1 € (+ %L2 €)")
                                  .arg(person->getBeitrag()/100.f, 0, 'f', 2)
                                  .arg(person->getBeitragNachzahlung()/100.f, 0, 'f', 2));
 

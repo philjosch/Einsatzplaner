@@ -1106,7 +1106,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
             absch += help.arg("Austritt zum", austritt.toString("dd.MM.yyyy"));
     }
     if (getBeitrag() != 0) {
-        absch += help.arg("Beitrag", "%1 (%2 €)").arg(toString(beitragsart)).arg(getBeitrag()/100.f, 0, 'f', 2);
+        absch += help.arg("Beitrag", "%L1 (%L2 €)").arg(toString(beitragsart)).arg(getBeitrag()/100.f, 0, 'f', 2);
     } else {
         absch += help.arg("Beitrag", toString(beitragsart));
     }
