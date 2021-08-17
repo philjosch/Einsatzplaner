@@ -14,6 +14,7 @@ const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";
 const QString Person::FARBE_STANDARD = "#ffffff";
 const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsdatum;Geschlecht;Anrede;Beruf;"
                                                "Eintritt;Status;Austritt;Beiragsart;IBAN;Bank;Kontoinhaber;"
+                                               "Beitrag;Nachzahlung"
                                                "Tf;Zf;Rangierer;Tauglichkeit;BemerkungBetrieb;AusbildungSonst;"
                                                "Straße;PLZ;Ort;Strecke;Mail;Telefon;Telefon2;"
                                                "Zustimmung Mail;Zustimmung Telefon;"
