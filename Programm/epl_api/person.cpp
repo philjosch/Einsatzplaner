@@ -1210,8 +1210,8 @@ QString Person::getPersonaldatenFuerListeAlsCSV() const
             +";"+iban
             +";"+bank
             +";"+getKontoinhaberFinal()
-            +";"+(int)getBeitrag()/100
-            +";"+(int)getBeitragNachzahlung()/100
+            +";"+QString::number(getBeitrag()/100.f, 'f', 2).replace(".", ",")
+            +";"+QString::number(getBeitragNachzahlung()/100.f, 'f', 2).replace(".", ",")
 
             +";"+(ausbildungTf ? "WAHR":"FALSCH")
             +";"+(ausbildungZf ? "WAHR":"FALSCH")
