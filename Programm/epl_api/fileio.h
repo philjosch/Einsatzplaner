@@ -39,11 +39,6 @@ public:
     static QString getSuffixVonTyp(DateiTyp typ);
 
 private:
-    static QString currentPath;
-    static QStringList lastUsed;
-
-    static void saveSettings();
-
     static QString getFilterVonTyp(DateiTyp typ);
 
 };
