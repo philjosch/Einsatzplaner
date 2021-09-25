@@ -219,6 +219,8 @@ QString Fahrtag::getHtmlForSingleView() const
 
 QString Fahrtag::getHtmlForTableView() const
 {
+    bool zeilenUmbruch = false;
+
     QString html = "<tr bgcolor='"+getFarbe()+"'>";
     // Datum, Anlass
     if (wichtig) {
@@ -268,7 +270,11 @@ QString Fahrtag::getHtmlForTableView() const
     QString benoetigt = "<b>%1</b>";
     if (benoetigeTf > 0) {
         html += beginnZelleBenoetigt;
-        html += benoetigt.arg("%2 Lokführer benötigt!").arg(benoetigeTf);
+        if (gruppen.value(Tf)->size() > 0)
+            html += benoetigt.arg("Noch %2 Lokführer benötigt!").arg(benoetigeTf);
+        else
+            html += benoetigt.arg("%2 Lokführer benötigt!").arg(benoetigeTf);
+
     } else {
         html += "<td>";
     }
@@ -287,9 +293,11 @@ QString Fahrtag::getHtmlForTableView() const
         html += "<td>";
     }
     if (benoetigeZf && (art != Schnupperkurs)) {
-        html += "<u>"+benoetigt.arg("Zugführer benötigt!")+"</u><br/>";
+        html += "<u>"+benoetigt.arg("Zugführer benötigt!")+"</u>";
+        zeilenUmbruch = true;
     }
     if (benoetigeZub && (art != Schnupperkurs)) {
+        if(zeilenUmbruch) html += "<br/>";
         html += "<i>"+benoetigt.arg("Begleitpersonal benötigt!")+"</i>";
     }
     if (gruppen.value(Zf)->size() + gruppen.value(Zub)->size() + gruppen.value(Begleiter)->size() > 0) {
@@ -318,7 +326,7 @@ QString Fahrtag::getHtmlForTableView() const
     html += "</td>";
 
     // Sonstiges
-    bool zeilenUmbruch = false;
+    zeilenUmbruch = false;
     if (personalBenoetigt) {
         html += beginnZelleBenoetigt;
         html += benoetigt.arg("Sonstiges Personal wird benötigt!");
