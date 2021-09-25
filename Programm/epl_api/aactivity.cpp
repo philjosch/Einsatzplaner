@@ -332,6 +332,20 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
     for(Einsatz *e: liste) {
         l2.append(e->getPerson()->getName());
 
+        if (e->getBeginnFiktiv() == e->getBeginnRichtig() ) {
+            if (e->getEndeFiktiv() == e->getEndeRichtig() ) {
+                l2.append(tr("%1 bis %2").arg(
+                          e->getBeginnFiktiv().toString("HH:mm"),
+                          e->getEndeFiktiv().toString("HH:mm")));
+            } else {
+                l2.append(tr("ab %1").arg(e->getBeginnFiktiv().toString("HH:mm")));
+            }
+        } else {
+            if (e->getEndeFiktiv() == e->getEndeRichtig() ) {
+                l2.append(tr("bis %2").arg(e->getEndeFiktiv().toString("HH:mm")));
+            }
+        }
+
         if (e->getBemerkung() != "") {
             l2.append(e->getBemerkung());
         }
