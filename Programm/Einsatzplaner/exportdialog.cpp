@@ -83,7 +83,7 @@ void ExportDialog::on_pushDrucken_clicked()
             printer = Export::getPrinterPaper(parentWidget(), QPrinter::Orientation::Landscape);
             break;
         case 1:
-            printer = Export::getPrinterPDF(parentWidget(), "Listenansicht", QPrinter::Orientation::Landscape);
+            printer = Export::getPrinterPDF(parentWidget(), tr("Listenansicht-%1").arg(QDate::currentDate().toString("YYYY-MM-dd")), QPrinter::Orientation::Landscape);
             break;
         case 2:
             if (settings->getEnabled()) {
@@ -105,7 +105,7 @@ void ExportDialog::on_pushDrucken_clicked()
             printer = Export::getPrinterPaper(parentWidget(), QPrinter::Orientation::Portrait);
             break;
         case 1:
-            printer = Export::getPrinterPDF(parentWidget(), "Einzelansicht", QPrinter::Orientation::Portrait);
+            printer = Export::getPrinterPDF(parentWidget(), tr("Einzelansicht-%1").arg(QDate::currentDate().toString("YYYY-MM-dd")), QPrinter::Orientation::Portrait);
             break;
         default:
             return;
