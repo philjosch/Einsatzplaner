@@ -113,3 +113,10 @@ bool Einsatz::getAnrechnen() const
 {
     return (activity->getDatum() <= QDate::currentDate() && !activity->getAbgesagt());
 }
+
+int Einsatz::getDauer() const
+{
+    QTime start = getBeginn();
+    QTime ende = getEnde();
+    return (start.msecsTo(ende) / 60000);
+}

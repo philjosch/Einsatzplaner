@@ -662,9 +662,7 @@ void Person::berechne() const
             if (! e->getAnrechnen()) continue;
 
             // Einsatzstunden
-            QTime start = e->getBeginn();
-            QTime ende = e->getEnde();
-            int duration = (start.msecsTo(ende) / 60000); // in Minuten
+            int duration = e->getDauer();
             switch (e->getKategorie()) {
             case Begleiter:
                 zeiten.insert(Zub, zeiten.value(Zub)+duration);

@@ -104,6 +104,12 @@ public:
      */
     bool getAnrechnen() const;
 
+    /**
+     * @brief Gibt die Dauer des Einsatzes zurück
+     * @return Die Dauer des Einsatzes in Minuten.
+     */
+    int getDauer() const;
+
 protected:
     static bool lesserEinsatz(const Einsatz * const &lhs, const Einsatz * const &rhs) { return (*lhs) < (*rhs); }
 
