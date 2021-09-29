@@ -656,7 +656,7 @@ void Person::berechne() const
 {
     zeiten.clear();
 
-    AActivity *vorherige = nullptr;
+    QDate vorherigeDatum = QDate(1900, 1, 1);
     QTime vorherigeEnde = QTime(0,0);
     for(Einsatz *e: getActivities()) {
             if (! e->getAnrechnen()) continue;
@@ -679,12 +679,11 @@ void Person::berechne() const
             zeiten.insert(Anzahl, zeiten.value(Anzahl)+1);
             zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
 
-            if ((e->getActivity() == vorherige && e->getBeginn() != vorherigeEnde)
-                || e->getActivity() != vorherige) {
+            if (e->getActivity()->getDatum() != vorherigeDatum || e->getBeginn() != vorherigeEnde) {
                 if (e->getKategorie() != Category::Buero)
                     zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);
             }
-            vorherige = e->getActivity();
+            vorherigeDatum = e->getActivity()->getDatum();
             vorherigeEnde = e->getEnde();
     }
 
