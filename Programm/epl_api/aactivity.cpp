@@ -114,8 +114,8 @@ QJsonObject AActivity::toJson() const
         } else {
             persJson.insert("name", e->getPerson()->getName());
         }
-        persJson.insert("beginn", e->getBeginnFiktiv().toString("hh:mm"));
-        persJson.insert("ende", e->getEndeFiktiv().toString("hh:mm"));
+        persJson.insert("beginn", e->getBeginnAbweichend().toString("hh:mm"));
+        persJson.insert("ende", e->getEndeAbweichend().toString("hh:mm"));
         persJson.insert("kat", e->getKategorie());
         persJson.insert("bemerkung", e->getBemerkung());
         personenJSON.append(persJson);
@@ -332,17 +332,17 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
     for(Einsatz *e: liste) {
         l2.append(e->getPerson()->getName());
 
-        if (e->getBeginnFiktiv() == e->getBeginnRichtig() ) {
-            if (e->getEndeFiktiv() == e->getEndeRichtig() ) {
+        if (e->getBeginnAbweichend() == e->getBeginn() ) {
+            if (e->getEndeAbweichend() == e->getEnde() ) {
                 l2.append(tr("%1 bis %2").arg(
-                          e->getBeginnFiktiv().toString("HH:mm"),
-                          e->getEndeFiktiv().toString("HH:mm")));
+                          e->getBeginnAbweichend().toString("HH:mm"),
+                          e->getEndeAbweichend().toString("HH:mm")));
             } else {
-                l2.append(tr("ab %1").arg(e->getBeginnFiktiv().toString("HH:mm")));
+                l2.append(tr("ab %1").arg(e->getBeginnAbweichend().toString("HH:mm")));
             }
         } else {
-            if (e->getEndeFiktiv() == e->getEndeRichtig() ) {
-                l2.append(tr("bis %2").arg(e->getEndeFiktiv().toString("HH:mm")));
+            if (e->getEndeAbweichend() == e->getEnde() ) {
+                l2.append(tr("bis %2").arg(e->getEndeAbweichend().toString("HH:mm")));
             }
         }
 
@@ -532,9 +532,9 @@ QString AActivity::getHtmlForSingleView() const
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Name</th><th>Beginn*</th><th>Ende*</th><th>Aufgabe</th></tr></thead><tbody>";
         for(Einsatz *e: personen) {
             html += "<tr><td>"+e->getPerson()->getName()+"</td><td>";
-            html += (e->getBeginnFiktiv() == QTime(0,0) ? "" : e->getBeginnFiktiv().toString("hh:mm"));
+            html += (e->getBeginnAbweichend() == QTime(0,0) ? "" : e->getBeginnAbweichend().toString("hh:mm"));
             html += "</td><td>";
-            html += (e->getEndeFiktiv() == QTime(0,0) ? "" : e->getEndeFiktiv().toString("hh:mm"));
+            html += (e->getEndeAbweichend() == QTime(0,0) ? "" : e->getEndeAbweichend().toString("hh:mm"));
             html += "</td><td>";
             if (e->getKategorie() != Category::Sonstiges) {
                 html += toString(e->getKategorie());

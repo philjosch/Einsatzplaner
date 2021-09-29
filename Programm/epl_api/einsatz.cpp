@@ -70,7 +70,7 @@ void Einsatz::setBemerkung(const QString &value)
     bemerkung = value;
 }
 
-QTime Einsatz::getBeginnRichtig() const
+QTime Einsatz::getBeginn() const
 {
     QTime zeit = activity->getAnfang(kategorie);
     if (zeit.isValid() && beginn != QTime(0,0)) {
@@ -78,16 +78,16 @@ QTime Einsatz::getBeginnRichtig() const
     }
     return zeit;
 }
-QTime Einsatz::getBeginnFiktiv() const
+QTime Einsatz::getBeginnAbweichend() const
 {
     return beginn;
 }
-void Einsatz::setBeginnFiktiv(const QTime &value)
+void Einsatz::setBeginnAbweichend(const QTime &value)
 {
     beginn = value;
 }
 
-QTime Einsatz::getEndeRichtig() const
+QTime Einsatz::getEnde() const
 {
     QTime zeit = activity->getEnde(kategorie);
     if (zeit.isValid() && ende != QTime(0,0)) {
@@ -95,11 +95,11 @@ QTime Einsatz::getEndeRichtig() const
     }
     return zeit;
 }
-QTime Einsatz::getEndeFiktiv() const
+QTime Einsatz::getEndeAbweichend() const
 {
     return ende;
 }
-void Einsatz::setEndeFiktiv(const QTime &value)
+void Einsatz::setEndeAbweichend(const QTime &value)
 {
     ende = value;
 }

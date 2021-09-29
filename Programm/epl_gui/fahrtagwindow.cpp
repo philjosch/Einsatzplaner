@@ -397,8 +397,8 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int c
 
         try {
             Einsatz *e = fahrtag->addPerson(name, bemerkung, kat);
-            e->setBeginnFiktiv(beginn);
-            e->setEndeFiktiv(ende);
+            e->setBeginnAbweichend(beginn);
+            e->setEndeAbweichend(ende);
             ptwi->setEinsatz(e);
             if (! e->getPerson()->getAktiv())
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
@@ -442,8 +442,8 @@ EinsatzTableWidgetItem *FahrtagWindow::fuegeInTabelleEin(Einsatz *e, bool block)
     static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->setCurrentText(
                 toString((e->getKategorie() == Begleiter ? Zub : e->getKategorie()))
                 );
-    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->setTime(e->getBeginnFiktiv());
-    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->setTime(e->getEndeFiktiv());
+    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->setTime(e->getBeginnAbweichend());
+    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->setTime(e->getEndeAbweichend());
     if (ui->tablePersonen->item(row, 4) == nullptr) {
         ui->tablePersonen->setItem(row, 4, new QTableWidgetItem(""));
     }

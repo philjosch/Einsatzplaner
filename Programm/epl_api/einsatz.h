@@ -70,33 +70,33 @@ public:
      * @brief Abfragen der tatsaechlichen Zeit, an der die Person fuer diesen Einsatz taetig wurde
      * @return Die Zeit, ab der die Person fuer diesen Einsatz tatsaechlich taetig wurde
      */
-    QTime getBeginnRichtig() const;
+    QTime getBeginn() const;
     /**
-     * @brief Abfragen der fiktiven Anfangszeit, d.h. die abweichende Zeit, wenn eine persoenliche Anfangszeit vorliegt
-     * @return Die Zeit, wann diese Person fuer diesen Einsatz taetig wurde
+     * @brief Abfragen der abweichenden Anfangszeit, wenn eine persoenliche Anfangszeit vorliegt
+     * @return Die von der Aktivitaet abweichende Zeit, wann diese Person fuer diesen Einsatz taetig wurde
      */
-    QTime getBeginnFiktiv() const;
+    QTime getBeginnAbweichend() const;
     /**
-     * @brief Aendern der fiktiven Anfangszeit, d.h. die angepasste Zeit fuer diese Person, falls es nicht die Anfangszeit der Aktivitaet ist
-     * @param value: Die zu speichernde fiktive Anfangszeit
+     * @brief Aendern der abweichenden Anfangszeit, falls es nicht die Anfangszeit der Aktivitaet ist
+     * @param value: Die zu speichernde abweichende Anfangszeit
      */
-    void setBeginnFiktiv(const QTime &value);
+    void setBeginnAbweichend(const QTime &value);
 
     /**
      * @brief Abfragen der tatsaechlichen Zeit, an der die Person die Arbeit fuer diesen Einsatz beendete
      * @return Die Zeit, dis zu der die Person fuer diesen Einsatz tatsaechlich taetig war
      */
-    QTime getEndeRichtig() const;
+    QTime getEnde() const;
     /**
-     * @brief Abfragen der fiktiven Endezeit, d.h. die abweichende Zeit, wenn eine persoenliche Endezeitzeit vorliegt
+     * @brief Abfragen der abweichenden Endezeit, wenn eine persoenliche Endezeitzeit vorliegt
      * @return Die Zeit, wann die Person die Arbeit fuer diesen Einsatz beendete
      */
-    QTime getEndeFiktiv() const;
+    QTime getEndeAbweichend() const;
     /**
-     * @brief Aendern der fiktiven Endezeit, d.h. die angepasste Zeit fuer diese Person, falls es nicht die Endezeit der Aktivitaet ist
+     * @brief Aendern der abweichenden Endezeit, falls es nicht die Endezeit der Aktivitaet ist
      * @param value: Die zu speichernde fiktive Endezeit
      */
-    void setEndeFiktiv(const QTime &value);
+    void setEndeAbweichend(const QTime &value);
 
     /**
      * @brief Abfragen, ob die Zeiten angerechnet werden sollen
@@ -125,11 +125,11 @@ protected:
     QString bemerkung;
 
     /**
-     * @brief Die gespeicherte fiktive Anfangszeit
+     * @brief Die gespeicherte abweichende Anfangszeit
      */
     QTime beginn;
     /**
-     * @brief Die gespeicherte fiktive Endzeit
+     * @brief Die gespeicherte abweichende Endzeit
      */
     QTime ende;
 };

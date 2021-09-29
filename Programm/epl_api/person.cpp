@@ -662,8 +662,8 @@ void Person::berechne() const
             if (! e->getAnrechnen()) continue;
 
             // Einsatzstunden
-            QTime start = e->getBeginnRichtig();
-            QTime ende = e->getEndeRichtig();
+            QTime start = e->getBeginn();
+            QTime ende = e->getEnde();
             int duration = (start.msecsTo(ende) / 60000); // in Minuten
             switch (e->getKategorie()) {
             case Begleiter:
@@ -679,13 +679,13 @@ void Person::berechne() const
             zeiten.insert(Anzahl, zeiten.value(Anzahl)+1);
             zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
 
-            if ((e->getActivity() == vorherige && e->getBeginnRichtig() != vorherigeEnde)
+            if ((e->getActivity() == vorherige && e->getBeginn() != vorherigeEnde)
                 || e->getActivity() != vorherige) {
                 if (e->getKategorie() != Category::Buero)
                     zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);
             }
             vorherige = e->getActivity();
-            vorherigeEnde = e->getEndeRichtig();
+            vorherigeEnde = e->getEnde();
     }
 
     for (auto it = additional.cbegin(); it != additional.cend(); ++it) {
@@ -847,7 +847,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
                 if (!e->getActivity()->getStringShort().contains(e->getActivity()->getAnlass()) && e->getActivity()->getAnlass() != "")
                     html += "<br/>"+e->getActivity()->getAnlass();
                 html +="</td><td>"
-                     + e->getBeginnRichtig().toString("HH:mm")+"-"+e->getEndeRichtig().toString("HH:mm")+"</td><td>"
+                     + e->getBeginn().toString("HH:mm")+"-"+e->getEnde().toString("HH:mm")+"</td><td>"
                      + ::toString(e->getKategorie()) + "</td><td>"
                      + e->getBemerkung() + "</td></tr>";
         }
