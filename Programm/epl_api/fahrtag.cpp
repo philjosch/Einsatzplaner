@@ -113,11 +113,11 @@ QString Fahrtag::getHtmlForSingleView() const
     if (zeitenUnbekannt) {
         html += "<p><b>Dienstzeiten werden noch bekannt gegeben!</b></p>";
     } else {
-        html += "<p><b>Dienstzeiten</b>:<br/>Beginn Tf: "+zeitTf.toString("hh:mm")+"<br/>Beginn Sonstige: "+zeitAnfang.toString("hh:mm")+"<br/>";
+        html += "<p><b>Dienstzeiten</b>:<br/>Beginn Tf: "+zeitTf.toString("hh:mm")+"<br/>Beginn allg.: "+zeitAnfang.toString("hh:mm")+"<br/>";
         if (datum < QDate::currentDate()) {
             html += "Ende: "+zeitEnde.toString("hh:mm")+"</p>";
         } else {
-            html += "Ungefähres Dienstende: "+zeitEnde.toString("hh:mm")+"</p>";
+            html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
         }
     }
 
@@ -251,7 +251,7 @@ QString Fahrtag::getHtmlForTableView() const
     } else {
         html += "<td>Beginn Tf: "+zeitTf.toString("hh:mm") + "<br/>";
         if (art != Schnupperkurs) {
-            html += "Sonstige: "+zeitAnfang.toString("hh:mm") + "<br/>";
+            html += "Beginn allg.: "+zeitAnfang.toString("hh:mm") + "<br/>";
         }
         if (datum < QDate::currentDate()) {
             html += "Ende: "+zeitEnde.toString("hh:mm") + "</td>";
