@@ -112,9 +112,6 @@ protected:
 
     QString listToString(QString sep, QList<Einsatz*> liste, QString prefix="", QString suffix="", bool aufgabe=false) const;
 
-    QDateTime getAnfangGenau() const;
-    QDateTime getEndeGenau() const;
-
     QMap<Category, QList<Einsatz *> *> splitNachKategorie() const;
 };
 

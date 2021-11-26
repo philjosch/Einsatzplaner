@@ -114,8 +114,8 @@ QString Fahrtag::getHtmlForSingleView() const
         html += "<p><b>Dienstzeiten werden noch bekannt gegeben!</b></p>";
     } else {
         html += "<p><b>Dienstzeiten</b>:<br/>Beginn Tf: "+zeitTf.toString("hh:mm")+"<br/>Beginn allg.: "+zeitAnfang.toString("hh:mm")+"<br/>";
-        if (datum < QDate::currentDate()) {
             html += "Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+        if (getBis() <= QDateTime::currentDateTime()) {
         } else {
             html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
         }

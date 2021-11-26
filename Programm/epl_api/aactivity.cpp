@@ -348,22 +348,6 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
     return l.join(sep);
 }
 
-QDateTime AActivity::getAnfangGenau() const
-{
-    if (zeitenUnbekannt)
-        return QDateTime(datum, QTime(0, 0));
-    else
-        return QDateTime(datum, zeitAnfang);
-}
-
-QDateTime AActivity::getEndeGenau() const
-{
-    if (zeitenUnbekannt)
-        return QDateTime(datum, QTime(23, 59, 59, 999));
-    else
-        return QDateTime(datum, zeitEnde);
-}
-
 QMap<Category, QList<Einsatz *>*> AActivity::splitNachKategorie() const
 {
     QMap<Category, QList<Einsatz*>*> gruppen;
@@ -433,10 +417,10 @@ void AActivity::sort(QList<AActivity *> *list)
 
 bool AActivity::check(Auswahl aus) const
 {
-    if (getAnfangGenau() < aus.getAb())
+    if (getVon() < aus.getAb())
         return false;
 
-    if (getEndeGenau() > aus.getBis())
+    if (getBis() > aus.getBis())
         return false;
 
     // Auch Aktivitaeten?

@@ -25,7 +25,7 @@ public:
     Einsatz(Person *p, AActivity *a, Category kat, QString bem, QTime von = QTime(0,0), QTime bis = QTime(0,0));
 
     /**
-     * @brief Sortiert eien Liste mit Objekten des Typs Einsatz
+     * @brief Sortiert eine Liste mit Objekten des Typs Einsatz
      * @param liste: Ein Pointer auf die zu sortierende Liste
      */
     static void sort(QList<Einsatz*> *liste);

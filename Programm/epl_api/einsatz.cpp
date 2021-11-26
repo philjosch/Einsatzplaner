@@ -28,19 +28,14 @@ void Einsatz::sort(QList<Einsatz *> *liste)
 
 bool operator<(const Einsatz &lhs, const Einsatz &rhs)
 {
-    if (lhs.activity->getDatum() < rhs.activity->getDatum())
+    if (lhs.getVon() < rhs.getVon())
         return true;
-    if (lhs.activity->getDatum() > rhs.activity->getDatum())
+    if (lhs.getVon() > rhs.getVon())
         return false;
 
-    if (lhs.beginn < rhs.beginn)
+    if (lhs.getBis() < rhs.getBis())
         return true;
-    if (lhs.beginn > rhs.beginn)
-        return false;
-
-    if (lhs.ende < rhs.ende)
-        return true;
-    if (lhs.ende > rhs.ende)
+    if (lhs.getBis() > rhs.getBis())
         return false;
 
     if (AActivity::lesser(lhs.activity,rhs.activity))
