@@ -30,12 +30,12 @@ public:
     QString getOrt() const;
     void setOrt(const QString &value);
 
+    virtual QDateTime getVon(const Category kat = Sonstiges) const;
     QTime getZeitAnfang() const;
-    virtual QTime getAnfang(const Category kat) const;
     void setZeitAnfang(QTime value);
 
+    virtual QDateTime getBis(const Category kat = Sonstiges) const;
     QTime getZeitEnde() const;
-    virtual QTime getEnde(const Category kat) const;
     void setZeitEnde(QTime value);
 
     bool getZeitenUnbekannt() const;

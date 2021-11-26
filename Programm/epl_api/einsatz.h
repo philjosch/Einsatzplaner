@@ -67,10 +67,10 @@ public:
     void setBemerkung(const QString &value);
 
     /**
-     * @brief Abfragen der tatsaechlichen Zeit, an der die Person fuer diesen Einsatz taetig wurde
-     * @return Die Zeit, ab der die Person fuer diesen Einsatz tatsaechlich taetig wurde
+     * @brief Abfragen des Beginns des Einsatz
+     * @return Die genaue Zeit mit Datum und Uhrzeit, wann der Einsatz begonnen hat
      */
-    QTime getBeginn() const;
+    QDateTime getVon() const;
     /**
      * @brief Abfragen der abweichenden Anfangszeit, wenn eine persoenliche Anfangszeit vorliegt
      * @return Die von der Aktivitaet abweichende Zeit, wann diese Person fuer diesen Einsatz taetig wurde
@@ -83,10 +83,10 @@ public:
     void setBeginnAbweichend(const QTime &value);
 
     /**
-     * @brief Abfragen der tatsaechlichen Zeit, an der die Person die Arbeit fuer diesen Einsatz beendete
-     * @return Die Zeit, dis zu der die Person fuer diesen Einsatz tatsaechlich taetig war
+     * @brief Abfragen des Endes des Einsatz
+     * @return Die genaue Zeit mit Datum und Uhrzeit, bis wann der Einsatz ging
      */
-    QTime getEnde() const;
+    QDateTime getBis() const;
     /**
      * @brief Abfragen der abweichenden Endezeit, wenn eine persoenliche Endezeitzeit vorliegt
      * @return Die Zeit, wann die Person die Arbeit fuer diesen Einsatz beendete

@@ -26,7 +26,7 @@ public:
     void setArt(const Art &value);
     Art getArt() const;
 
-    QTime getAnfang(const Category kat) const;
+    QDateTime getVon(const Category kat = Sonstiges) const;
     QTime getZeitTf() const;
     void setZeitTf(QTime value);
 

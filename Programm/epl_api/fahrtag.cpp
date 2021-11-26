@@ -482,11 +482,11 @@ Art Fahrtag::getArt() const
     return art;
 }
 
-QTime Fahrtag::getAnfang(const Category kat) const
+QDateTime Fahrtag::getVon(const Category kat) const
 {
-    QTime zeit = AActivity::getAnfang(kat);
-    if (zeit.isValid() && kat == Tf)
-        return zeitTf;
+    QDateTime zeit = AActivity::getVon(kat);
+    if (kat == Tf)
+        zeit.setTime(zeitTf);
     return zeit;
 }
 

@@ -75,14 +75,15 @@ void Einsatz::setBemerkung(const QString &value)
     bemerkung = value;
 }
 
-QTime Einsatz::getBeginn() const
+QDateTime Einsatz::getVon() const
 {
-    QTime zeit = activity->getAnfang(kategorie);
-    if (zeit.isValid() && beginn != QTime(0,0)) {
-        return beginn;
+    QDateTime zeit = activity->getVon(kategorie);
+    if (beginn != QTime(0,0)) {
+        zeit.setTime(beginn);
     }
     return zeit;
 }
+
 QTime Einsatz::getBeginnAbweichend() const
 {
     return beginn;
@@ -92,14 +93,15 @@ void Einsatz::setBeginnAbweichend(const QTime &value)
     beginn = value;
 }
 
-QTime Einsatz::getEnde() const
+QDateTime Einsatz::getBis() const
 {
-    QTime zeit = activity->getEnde(kategorie);
-    if (zeit.isValid() && ende != QTime(0,0)) {
-        return ende;
+    QDateTime zeit = activity->getBis(kategorie);
+    if (ende != QTime(0,0)) {
+        zeit.setTime(ende);
     }
     return zeit;
 }
+
 QTime Einsatz::getEndeAbweichend() const
 {
     return ende;
@@ -116,7 +118,5 @@ bool Einsatz::getAnrechnen() const
 
 int Einsatz::getDauer() const
 {
-    QTime start = getBeginn();
-    QTime ende = getEnde();
-    return (start.msecsTo(ende) / 60000);
+    return (getVon().secsTo(getBis()) / 60);
 }

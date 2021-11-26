@@ -656,8 +656,7 @@ void Person::berechne() const
 {
     zeiten.clear();
 
-    QDate vorherigeDatum = QDate(1900, 1, 1);
-    QTime vorherigeEnde = QTime(0,0);
+    QDateTime vorherigeEnde = QDateTime(QDate(1900, 1, 1), QTime(0,0));
     for(Einsatz *e: getActivities()) {
             if (! e->getAnrechnen()) continue;
 
@@ -677,12 +676,11 @@ void Person::berechne() const
             zeiten.insert(Anzahl, zeiten.value(Anzahl)+1);
             zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
 
-            if (e->getActivity()->getDatum() != vorherigeDatum || e->getBeginn() != vorherigeEnde) {
+            if (e->getVon() != vorherigeEnde) {
                 if (e->getKategorie() != Category::Buero)
                     zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);
             }
-            vorherigeDatum = e->getActivity()->getDatum();
-            vorherigeEnde = e->getEnde();
+            vorherigeEnde = e->getBis();
     }
 
     for (auto it = additional.cbegin(); it != additional.cend(); ++it) {
@@ -844,7 +842,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
                 if (!e->getActivity()->getStringShort().contains(e->getActivity()->getAnlass()) && e->getActivity()->getAnlass() != "")
                     html += "<br/>"+e->getActivity()->getAnlass();
                 html +="</td><td>"
-                     + e->getBeginn().toString("HH:mm")+"-"+e->getEnde().toString("HH:mm")+"</td><td>"
+                     + e->getVon().toString("HH:mm")+"-"+e->getBis().toString("HH:mm")+"</td><td>"
                      + ::toString(e->getKategorie()) + "</td><td>"
                      + e->getBemerkung() + "</td></tr>";
         }

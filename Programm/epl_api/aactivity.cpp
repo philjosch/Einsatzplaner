@@ -148,17 +148,18 @@ void AActivity::setOrt(const QString &value)
     emit changed(this);
 }
 
-QTime AActivity::getZeitAnfang() const
+QDateTime AActivity::getVon([[maybe_unused]] const Category kat) const
 {
-    return zeitAnfang;
+    QDateTime zeit = QDateTime(datum, zeitAnfang);
+    if (abgesagt)
+        zeit.setTime(QTime(0,0));
+    if (zeitenUnbekannt)
+        zeit.setTime(QTime(0,0));
+    return zeit;
 }
 
-QTime AActivity::getAnfang([[maybe_unused]] const Category kat) const
+QTime AActivity::getZeitAnfang() const
 {
-    if (abgesagt)
-        return QTime();
-    if (zeitenUnbekannt)
-        return QTime();
     return zeitAnfang;
 }
 void AActivity::setZeitAnfang(QTime value)
@@ -167,17 +168,18 @@ void AActivity::setZeitAnfang(QTime value)
     emit changed(this);
 }
 
-QTime AActivity::getZeitEnde() const
+QDateTime AActivity::getBis([[maybe_unused]] const Category kat) const
 {
-    return zeitEnde;
+    QDateTime zeit = QDateTime(datum, zeitEnde);
+    if (abgesagt)
+        zeit.setTime(QTime(0,0));
+    if (zeitenUnbekannt)
+        zeit.setTime(QTime(0,0));
+    return zeit;
 }
 
-QTime AActivity::getEnde([[maybe_unused]] const Category kat) const
+QTime AActivity::getZeitEnde() const
 {
-    if (abgesagt)
-        return QTime();
-    if (zeitenUnbekannt)
-        return QTime();
     return zeitEnde;
 }
 void AActivity::setZeitEnde(QTime value)
@@ -291,32 +293,20 @@ Einsatz *AActivity::addPerson(QString p, QString bemerkung, Category kat)
 
 bool AActivity::lesser(const AActivity *lhs, const AActivity *rhs)
 {
-    // Datum
-    if (lhs->datum < rhs->datum)
+    // Datum&Zeit
+    if (lhs->getVon() < rhs->getVon())
         return true;
-    if (lhs->datum > rhs->datum)
+    if (lhs->getVon() > rhs->getVon())
         return false;
-    // Zeiten?
-    if (lhs->zeitenUnbekannt && !rhs->zeitenUnbekannt)
+    if (lhs->getBis() < rhs->getBis())
         return true;
-    if (!lhs->zeitenUnbekannt && rhs->zeitenUnbekannt)
+    if (lhs->getBis() > rhs->getBis())
         return false;
 
-    if (!lhs->zeitenUnbekannt) {
-        // Beginn
-        if (lhs->zeitAnfang < rhs->zeitAnfang)
-            return true;
-        if (lhs->zeitAnfang > rhs->zeitAnfang)
-            return false;
-        // Ende
-        if (lhs->zeitEnde < rhs->zeitEnde)
-            return true;
-        if (lhs->zeitEnde > rhs->zeitEnde)
-            return false;
-    }
     // Folgender Teil zerstoert die Irreflexivitaet der Operation
     // Dieser Fall muss also extra abgefangen werden.
     if (lhs == rhs) return false;
+
     // Art und beliebig, bei gleicher Art
     if (lhs->getArt() != Art::Arbeitseinsatz)
         return true;
@@ -332,8 +322,8 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
     for(Einsatz *e: liste) {
         l2.append(e->getPerson()->getName());
 
-        if (e->getBeginnAbweichend() == e->getBeginn() ) {
-            if (e->getEndeAbweichend() == e->getEnde() ) {
+        if (e->getBeginnAbweichend() == e->getVon().time() ) {
+            if (e->getEndeAbweichend() == e->getBis().time() ) {
                 l2.append(tr("%1 bis %2").arg(
                           e->getBeginnAbweichend().toString("HH:mm"),
                           e->getEndeAbweichend().toString("HH:mm")));
@@ -341,7 +331,7 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
                 l2.append(tr("ab %1").arg(e->getBeginnAbweichend().toString("HH:mm")));
             }
         } else {
-            if (e->getEndeAbweichend() == e->getEnde() ) {
+            if (e->getEndeAbweichend() == e->getBis().time() ) {
                 l2.append(tr("bis %2").arg(e->getEndeAbweichend().toString("HH:mm")));
             }
         }
