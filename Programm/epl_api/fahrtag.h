@@ -26,10 +26,6 @@ public:
     void setArt(const Art &value);
     Art getArt() const;
 
-    QDateTime getVon(const Category kat = Sonstiges) const;
-    QTime getZeitTf() const;
-    void setZeitTf(QTime value);
-
     int getBenoetigeTf() const;
     void setBenoetigeTf(int value);
 
@@ -68,7 +64,6 @@ public slots:
 protected:
     bool checkPlaetze(QMap<int, QList<int> > p, Reservierung *r) const;
 
-    QTime zeitTf;
     int benoetigeTf;
     bool benoetigeZf;
     bool benoetigeZub;

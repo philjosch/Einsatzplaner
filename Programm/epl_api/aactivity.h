@@ -30,13 +30,13 @@ public:
     QString getOrt() const;
     void setOrt(const QString &value);
 
-    virtual QDateTime getVon(const Category kat = Sonstiges) const;
-    QTime getZeitAnfang() const;
-    void setZeitAnfang(QTime value);
+    virtual QDateTime getVon(const Category kat = Gesamt) const;
+    QTime getZeitAnfang(const Category kat = Gesamt) const;
+    void setZeitAnfang(QTime value, const Category kat = Gesamt);
 
-    virtual QDateTime getBis(const Category kat = Sonstiges) const;
-    QTime getZeitEnde() const;
-    void setZeitEnde(QTime value);
+    virtual QDateTime getBis(const Category kat = Gesamt) const;
+    QTime getZeitEnde(const Category kat = Gesamt) const;
+    void setZeitEnde(QTime value, const Category kat = Gesamt);
 
     bool getZeitenUnbekannt() const;
     void setZeitenUnbekannt(bool value);
@@ -98,8 +98,8 @@ protected:
     Art art;
     QDate datum;
     QString ort;
-    QTime zeitAnfang;
-    QTime zeitEnde;
+    QMap<Category,QTime> anfang;
+    QMap<Category,QTime> ende;
     bool zeitenUnbekannt;
     QString anlass;
     QString bemerkungen;

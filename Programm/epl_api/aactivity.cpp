@@ -24,11 +24,13 @@ AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
     art = Arbeitseinsatz;
     datum = date;
     ort = "";
-    zeitAnfang = QTime(10, 0);
+    anfang = QMap<Category,QTime>();
+    ende = QMap<Category,QTime>();
+    setZeitAnfang(QTime(10, 0));
     if (date.month() <= 3 || date.month() >= 11) {
-        zeitEnde = QTime(16, 0);
+        setZeitEnde(QTime(16, 0));
     } else {
-        zeitEnde = QTime(18, 0);
+        setZeitEnde(QTime(18, 0));
     }
     zeitenUnbekannt = false;
     anlass = "";
@@ -48,8 +50,10 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
     art = Arbeitseinsatz;
     datum = QDate::fromString(o.value("datum").toString(), "yyyy-MM-dd");
     ort = o.value("ort").toString();
-    zeitAnfang = QTime::fromString(o.value("zeitAnfang").toString(), "hh:mm");
-    zeitEnde = QTime::fromString(o.value("zeitEnde").toString(), "hh:mm");
+    anfang = QMap<Category,QTime>();
+    ende = QMap<Category,QTime>();
+    setZeitAnfang(QTime::fromString(o.value("zeitAnfang").toString(), "hh:mm"));
+    setZeitEnde(QTime::fromString(o.value("zeitEnde").toString(), "hh:mm"));
     zeitenUnbekannt = o.value("zeitenUnbekannt").toBool();
     anlass = o.value("anlass").toString();
     bemerkungen = o.value("bemerkungen").toString();
@@ -101,8 +105,8 @@ QJsonObject AActivity::toJson() const
     data.insert("art", static_cast<int>(Art::Arbeitseinsatz));
     data.insert("datum", datum.toString("yyyy-MM-dd"));
     data.insert("ort", ort);
-    data.insert("zeitAnfang", zeitAnfang.toString("hh:mm"));
-    data.insert("zeitEnde", zeitEnde.toString("hh:mm"));
+    data.insert("zeitAnfang", getZeitAnfang().toString("hh:mm"));
+    data.insert("zeitEnde", getZeitEnde().toString("hh:mm"));
     data.insert("zeitenUnbekannt", zeitenUnbekannt);
     data.insert("anlass", anlass);
     data.insert("bemerkungen", bemerkungen);
@@ -150,7 +154,7 @@ void AActivity::setOrt(const QString &value)
 
 QDateTime AActivity::getVon([[maybe_unused]] const Category kat) const
 {
-    QDateTime zeit = QDateTime(datum, zeitAnfang);
+    QDateTime zeit = QDateTime(datum, getZeitAnfang(kat));
     if (abgesagt)
         zeit.setTime(QTime(0,0));
     if (zeitenUnbekannt)
@@ -158,19 +162,19 @@ QDateTime AActivity::getVon([[maybe_unused]] const Category kat) const
     return zeit;
 }
 
-QTime AActivity::getZeitAnfang() const
+QTime AActivity::getZeitAnfang(const Category kat) const
 {
-    return zeitAnfang;
+    return anfang.value(kat, anfang.value(Gesamt));
 }
-void AActivity::setZeitAnfang(QTime value)
+void AActivity::setZeitAnfang(QTime value, const Category kat)
 {
-    zeitAnfang = value;
+    anfang.insert(kat, value);
     emit changed(this);
 }
 
 QDateTime AActivity::getBis([[maybe_unused]] const Category kat) const
 {
-    QDateTime zeit = QDateTime(datum, zeitEnde);
+    QDateTime zeit = QDateTime(datum, getZeitEnde(kat));
     if (abgesagt)
         zeit.setTime(QTime(0,0));
     if (zeitenUnbekannt)
@@ -178,13 +182,13 @@ QDateTime AActivity::getBis([[maybe_unused]] const Category kat) const
     return zeit;
 }
 
-QTime AActivity::getZeitEnde() const
+QTime AActivity::getZeitEnde(const Category kat) const
 {
-    return zeitEnde;
+    return ende.value(kat, ende.value(Gesamt));
 }
-void AActivity::setZeitEnde(QTime value)
+void AActivity::setZeitEnde(QTime value, const Category kat)
 {
-    zeitEnde = value;
+    ende.insert(kat, value);
     emit changed(this);
 }
 
@@ -491,11 +495,11 @@ QString AActivity::getHtmlForSingleView() const
     if (zeitenUnbekannt) {
         html += "<p><b>Zeiten werden noch bekannt gegeben!</b></p>";
     } else {
-        html += "<p><b>Zeiten</b>:<br/>Beginn: "+zeitAnfang.toString("hh:mm")+"<br/>";
+        html += "<p><b>Zeiten</b>:<br/>Beginn: "+getZeitAnfang().toString("hh:mm")+"<br/>";
         if (datum < QDate::currentDate()) {
-            html += "Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+            html += "Ende: "+getZeitEnde().toString("hh:mm")+"</p>";
         } else {
-            html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+            html += "Geplantes Ende: "+getZeitEnde().toString("hh:mm")+"</p>";
         }
     }
     // Personal
@@ -552,11 +556,11 @@ QString AActivity::getHtmlForTableView() const
     if (zeitenUnbekannt) {
         html += "<td>Zeiten werden noch bekannt gegeben!</td>";
     } else {
-        html += "<td>Beginn: "+zeitAnfang.toString("hh:mm") + "<br/>";
+        html += "<td>Beginn: "+getZeitAnfang().toString("hh:mm") + "<br/>";
         if (datum < QDate::currentDate()) {
-            html += "Ende: "+zeitEnde.toString("hh:mm") + "</td>";
+            html += "Ende: "+getZeitEnde().toString("hh:mm") + "</td>";
         } else {
-            html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+            html += "Ende: ~"+getZeitEnde().toString("hh:mm") + "</td>";
         }
     }
 

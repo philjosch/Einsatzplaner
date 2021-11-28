@@ -49,7 +49,7 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
     // Daten von Fahrtag
     ui->comboArt->setCurrentIndex(fahrtag->getArt());
     on_comboArt_currentIndexChanged(fahrtag->getArt());
-    ui->timeBeginnTf->setTime(fahrtag->getZeitTf());
+    ui->timeBeginnTf->setTime(fahrtag->getZeitAnfang(Tf));
     ui->timeBeginn->setTime(fahrtag->getZeitAnfang());
     ui->checkWichtig->setChecked(fahrtag->getWichtig());
     ui->checkAbgesagt->setChecked(fahrtag->getAbgesagt());
@@ -177,7 +177,7 @@ void FahrtagWindow::on_comboWagenreihung_currentTextChanged(const QString &arg1)
 void FahrtagWindow::on_timeBeginnTf_timeChanged(const QTime &time)
 {
     if (nehme)
-        fahrtag->setZeitTf(time);
+        fahrtag->setZeitAnfang(time, Tf);
 }
 
 void FahrtagWindow::on_timeBeginn_timeChanged(const QTime &time)

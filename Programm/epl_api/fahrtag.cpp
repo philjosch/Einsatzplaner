@@ -10,9 +10,9 @@
 Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p)
 {
     art = Museumszug;
-    zeitTf = QTime(8, 15);
-    zeitAnfang = QTime(8, 45);
-    zeitEnde = QTime(18, 45);
+    setZeitAnfang(QTime(8, 45));
+    setZeitAnfang(QTime(8, 15), Tf);
+    setZeitEnde(QTime(18, 45));
     benoetigeTf = 1;
     benoetigeZf = true;
     benoetigeZub = true;
@@ -31,7 +31,7 @@ Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p)
 {
     // Daten für Fahrtag extrahieren
     art = static_cast<Art>(o.value("art").toInt());
-    zeitTf = QTime::fromString(o.value("zeitTf").toString(), "hh:mm");
+    setZeitAnfang(QTime::fromString(o.value("zeitTf").toString(), "hh:mm"), Tf);
     if (! o.value("benoetigeTf").isBool()) {
         benoetigeTf = o.value("benoetigeTf").toInt(1);
     } else {
@@ -75,7 +75,7 @@ QJsonObject Fahrtag::toJson() const
 {
     QJsonObject o = AActivity::toJson();
     o.insert("art", art);
-    o.insert("zeitTf", zeitTf.toString("hh:mm"));
+    o.insert("zeitTf", getZeitAnfang(Tf).toString("hh:mm"));
     o.insert("benoetigeTf", benoetigeTf);
     o.insert("benoetigeZf", benoetigeZf);
     o.insert("benoetigeZub", benoetigeZub);
@@ -113,11 +113,11 @@ QString Fahrtag::getHtmlForSingleView() const
     if (zeitenUnbekannt) {
         html += "<p><b>Dienstzeiten werden noch bekannt gegeben!</b></p>";
     } else {
-        html += "<p><b>Dienstzeiten</b>:<br/>Beginn Tf: "+zeitTf.toString("hh:mm")+"<br/>Beginn allg.: "+zeitAnfang.toString("hh:mm")+"<br/>";
-            html += "Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+        html += "<p><b>Dienstzeiten</b>:<br/>Beginn Tf: "+getZeitAnfang(Tf).toString("hh:mm")+"<br/>Beginn allg.: "+getZeitAnfang().toString("hh:mm")+"<br/>";
         if (getBis() <= QDateTime::currentDateTime()) {
+            html += "Ende: "+getZeitEnde().toString("hh:mm")+"</p>";
         } else {
-            html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+            html += "Geplantes Ende: "+getZeitEnde().toString("hh:mm")+"</p>";
         }
     }
 
@@ -249,14 +249,14 @@ QString Fahrtag::getHtmlForTableView() const
     if (zeitenUnbekannt) {
         html += "<td>Dienstzeiten werden noch bekannt gegeben!</td>";
     } else {
-        html += "<td>Beginn Tf: "+zeitTf.toString("hh:mm") + "<br/>";
+        html += "<td>Beginn Tf: "+getZeitAnfang(Tf).toString("hh:mm") + "<br/>";
         if (art != Schnupperkurs) {
-            html += "Beginn allg.: "+zeitAnfang.toString("hh:mm") + "<br/>";
+            html += "Beginn allg.: "+getZeitAnfang().toString("hh:mm") + "<br/>";
         }
         if (datum < QDate::currentDate()) {
-            html += "Ende: "+zeitEnde.toString("hh:mm") + "</td>";
+            html += "Ende: "+getZeitEnde().toString("hh:mm") + "</td>";
         } else {
-            html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+            html += "Ende: ~"+getZeitEnde().toString("hh:mm") + "</td>";
         }
     }
 
@@ -467,29 +467,10 @@ void Fahrtag::setBenoetigeTf(int value)
     emit changed(this);
 }
 
-QTime Fahrtag::getZeitTf() const
-{
-    return zeitTf;
-}
-void Fahrtag::setZeitTf(QTime value)
-{
-    zeitTf = value;
-    emit changed(this);
-}
-
 Art Fahrtag::getArt() const
 {
     return art;
 }
-
-QDateTime Fahrtag::getVon(const Category kat) const
-{
-    QDateTime zeit = AActivity::getVon(kat);
-    if (kat == Tf)
-        zeit.setTime(zeitTf);
-    return zeit;
-}
-
 void Fahrtag::setArt(const Art &value)
 {
     art = value;
