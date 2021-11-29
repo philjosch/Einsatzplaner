@@ -674,9 +674,18 @@ void Person::berechne() const
                 break;
             }
             zeiten.insert(Anzahl, zeiten.value(Anzahl)+1);
-            zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
-
-            if (e->getVon() != vorherigeEnde) {
+            if (vorherigeEnde > e->getVon()) {
+                // Einsaetze ueberlappen:
+                // -> nur reduzierte Zeit anrechen, keine Strecke anrechnen
+                zeiten.insert(Gesamt, zeiten.value(Gesamt)+(vorherigeEnde.secsTo(e->getBis()) / 60));
+            } else if (vorherigeEnde == e->getVon()) {
+                // Einsaetze gehen nahtlos ineinander ueber:
+                // -> Keine Strecke aber gesamte Zeit anrechnen
+                zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
+            } else {
+                // Luecke zwischen den Einsaetzen:
+                // -> Strecke und gesamte Zeit anrechnen
+                zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
                 if (e->getKategorie() != Category::Buero)
                     zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);
             }

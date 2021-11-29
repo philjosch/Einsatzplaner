@@ -15,6 +15,7 @@ win32 {
 
 QT       += core printsupport network
 
+!versionAtLeast(QT_VERSION, 5.14.0):error("Qt version 5.14 is required for this project")
 
 SOURCES += einstellungen.cpp \
     auswahl.cpp \
