@@ -47,16 +47,16 @@ QMap<int, QList<int> > Reservierung::getPlaetzeFromString(QString plaetze)
         return map;
     }
     QStringList l1;
-    l1 = plaetze.split(QRegExp("\\s*;\\s*"));
+    l1 = plaetze.split(QRegularExpression("\\s*;\\s*"));
     for (const QString &s1: qAsConst(l1)) {
-        QStringList l2a = s1.split(QRegExp("\\s*:\\s*"));
+        QStringList l2a = s1.split(QRegularExpression("\\s*:\\s*"));
         int wagen = l2a.at(0).toInt();
         if (l2a.length() > 1) {
-            QStringList l2 = l2a.at(1).split(QRegExp("\\s*,\\s*"));
+            QStringList l2 = l2a.at(1).split(QRegularExpression("\\s*,\\s*"));
             QList<int> l = *new QList<int>();
             for (const QString &s2: qAsConst(l2)) {
-                if (s2.contains(QRegExp("\\s*-\\s*"))) {
-                    QStringList l3 = s2.split(QRegExp("\\s*-\\s*"));
+                if (s2.contains(QRegularExpression("\\s*-\\s*"))) {
+                    QStringList l3 = s2.split(QRegularExpression("\\s*-\\s*"));
                     for (int i = l3.at(0).toInt(); i <= l3.at(1).toInt(); i++) {
                         l.append(i);
                     }

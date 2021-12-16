@@ -205,11 +205,11 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int 
 
 void ActivityWindow::on_actionPrint_triggered()
 {
-    activity->print(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    activity->print(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 void ActivityWindow::on_actionPdf_triggered()
 {
-    activity->print(Export::getPrinterPDF(this, windowTitle(), QPrinter::Orientation::Portrait));
+    activity->print(Export::getPrinterPDF(this, windowTitle(), QPageLayout::Orientation::Portrait));
 }
 
 void ActivityWindow::on_actionDelete_triggered()

@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+//    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     CoreApplication *a = CoreApplication::generateApp(argc, argv, APP_NAME, APP_VERSION, APP_DEPLOY, APP_DEBUG, GIT_CURRENT_SHA1);
     QObject::connect(a, &CoreApplication::triggerOpen, MainWindowPersonal::open);

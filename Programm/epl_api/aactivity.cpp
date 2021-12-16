@@ -4,7 +4,6 @@
 #include "export.h"
 
 #include <QJsonArray>
-#include <QLinkedList>
 
 using namespace EplException;
 

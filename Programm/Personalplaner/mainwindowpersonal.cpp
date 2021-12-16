@@ -266,23 +266,23 @@ void MainWindowPersonal::on_actionMitgliedsbeitraege_triggered()
 void MainWindowPersonal::on_actionMitgliederEinzelListePDF_triggered()
 {
     personal->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPDF(this, "Stammdatenblaetter", QPrinter::Orientation::Portrait));
+                        Export::getPrinterPDF(this, "Stammdatenblaetter", QPageLayout::Orientation::Portrait));
 }
 void MainWindowPersonal::on_actionMitgliederEinzelListeDrucken_triggered()
 {
     personal->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+                        Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 void MainWindowPersonal::on_actionMitgliederListePDF_triggered()
 {
     personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
-                            Export::getPrinterPDF(this, "Mitgliederliste", QPrinter::Orientation::Portrait));
+                            Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Portrait));
 }
 void MainWindowPersonal::on_actionMitgliederListeDrucken_triggered()
 {
     personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
-                            Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
+                            Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape));
 }
 void MainWindowPersonal::on_actionMitgliederListeCSV_triggered()
 {

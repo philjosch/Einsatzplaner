@@ -239,7 +239,7 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
 {
     /* item: Das Item das Verändert wurde */
     /* kat: Die Kategorie, auf die gebucht wird */
-    QStringList liste = item->text().split(QRegExp("\\s*;\\s*"));
+    QStringList liste = item->text().split(QRegularExpression("\\s*;\\s*"));
     QString name = liste.at(0);
     liste.removeFirst();
     QString bemerkung = liste.join("; ");
@@ -467,20 +467,20 @@ void FahrtagWindow::on_actionDelete_triggered()
 
 void FahrtagWindow::on_actionPrint_triggered()
 {
-    fahrtag->print(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    fahrtag->print(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 void FahrtagWindow::on_actionPdf_triggered()
 {
-    fahrtag->print(Export::getPrinterPDF(this, windowTitle(), QPrinter::Orientation::Portrait));
+    fahrtag->print(Export::getPrinterPDF(this, windowTitle(), QPageLayout::Orientation::Portrait));
 }
 
 void FahrtagWindow::on_actionResPrint_triggered()
 {
-    fahrtag->printReservierungsuebersicht(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    fahrtag->printReservierungsuebersicht(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 void FahrtagWindow::on_actionResPdf_triggered()
 {
-    fahrtag->printReservierungsuebersicht(Export::getPrinterPDF(this, windowTitle()+"-Reservierungen", QPrinter::Orientation::Portrait));
+    fahrtag->printReservierungsuebersicht(Export::getPrinterPDF(this, windowTitle()+"-Reservierungen", QPageLayout::Orientation::Portrait));
 }
 
 void FahrtagWindow::showReservierung(Reservierung *r)

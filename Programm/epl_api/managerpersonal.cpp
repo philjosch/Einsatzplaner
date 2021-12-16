@@ -240,8 +240,8 @@ QString ManagerPersonal::getGoodName(QString name)
 {
     while (name.endsWith(" ")) name.chop(1);
     while (name.startsWith(" ")) name = name.remove(0, 1);
-    if (name.contains(QRegExp("\\s*,\\s*"))) {
-        QStringList liste = name.split(QRegExp("\\s*,\\s*"));
+    if (name.contains(QRegularExpression("\\s*,\\s*"))) {
+        QStringList liste = name.split(QRegularExpression("\\s*,\\s*"));
         name = liste.at(1) + " " + liste.at(0);
     }
     return name;

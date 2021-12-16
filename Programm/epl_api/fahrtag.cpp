@@ -374,7 +374,7 @@ bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
     a += " - Die Reservierungen</h3>";
     a += "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th> <th>Anzahl</th> <th>Sitzplätze</th> <th>Sonstiges</th></tr></thead><tbody>";
     // Sortieren der Daten nach Wagenreihung
-    QStringList wagen = wagenreihung.split(QRegExp("\\s*,\\s*"));
+    QStringList wagen = wagenreihung.split(QRegularExpression("\\s*,\\s*"));
     QList<int> wagenNummern;
     for(const QString &s: qAsConst(wagen))
         wagenNummern.append(s.toInt());
@@ -531,7 +531,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     // aufteilen der Wagen auf die beiden Gruppen
     QList<Wagen*> ersteKlasse = QList<Wagen*>();
     QList<Wagen*> andereKlasse = QList<Wagen*>();
-    QStringList wagenR = wagenreihung.split(QRegExp("\\s*,\\s*"));
+    QStringList wagenR = wagenreihung.split(QRegularExpression("\\s*,\\s*"));
     for(const QString &s: qAsConst(wagenR)) {
         int nummer = s.toInt();
         switch (Wagen::klasse(nummer)) {
@@ -626,7 +626,7 @@ bool Fahrtag::createWagen()
     }
 
     QList<Wagen*> wagenNeu = QList<Wagen*>();
-    QStringList wagenSplit = wagenreihung.split(QRegExp("\\s*,\\s*"));
+    QStringList wagenSplit = wagenreihung.split(QRegularExpression("\\s*,\\s*"));
     for(const QString &s: qAsConst(wagenSplit)) {
         int nummer = s.toInt();
         Wagen *w;
