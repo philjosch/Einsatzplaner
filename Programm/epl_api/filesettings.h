@@ -11,8 +11,8 @@ class FileSettings : public QObject
     Q_OBJECT
 
 public:
-    FileSettings();
-    FileSettings(QJsonObject json, QString pwd);
+    explicit FileSettings();
+    explicit FileSettings(QJsonObject json, QString pwd);
 
     QJsonObject toJson() const;
 
@@ -35,9 +35,15 @@ public:
     QString getPasswort() const;
     /**
      * @brief Setzen des Passworts, das den Zugriff auf die Datei schuetzt
-     * @param value: Das ungehashte Passwort
+     * @param neu: Das neue ungehashte Passwort
+     * @param alt: Das alte ungehashte Passwort
      */
     bool setPasswort(const QString &neu, const QString &alt = "");
+    /**
+     * @brief Prueft, ob ein Passwort gesetzt ist
+     * @return Wahr genau dann, wenn ein Passwort gesetzt ist
+     */
+    bool hatPasswort() const;
 
 signals:
     void changed();
@@ -48,6 +54,9 @@ protected:
     Networking::Server server;
     Auswahl auswahl;
 
+    /**
+     * @brief Speichert das aktuelle gehashte Passwort. Ist leer, wenn kein Passwort gesetzt ist.
+     */
     QString passwort;
 };
 

@@ -332,7 +332,7 @@ bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj) const
 
     zuschreibendesObjekt = QJsonObject();
 
-    if (dateiEigenschaften->getPasswort() != "") {
+    if (dateiEigenschaften->hatPasswort()) {
         generalJson.insert("encrypted", true);
 
         EncryptedData eD = Crypto::encrypt(payload, dateiEigenschaften->getPasswort());

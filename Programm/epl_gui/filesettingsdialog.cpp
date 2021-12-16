@@ -125,7 +125,7 @@ void FileSettingsDialog::loadSettings()
     ui->checkActivity->setChecked(a.getActivities());
     on_groupUpload_clicked(mngr->getEnabled());
 
-    ui->linePwdAlt->setEnabled(mngr->getPasswort() != "");
+    ui->linePwdAlt->setEnabled(mngr->hatPasswort());
 }
 
 void FileSettingsDialog::on_pushPwdChange_clicked()
@@ -147,5 +147,5 @@ void FileSettingsDialog::on_pushPwdChange_clicked()
     }
     QMessageBox::information(this, tr("Geändert"), tr("Das Passwort wurde erfolgreich geändert."));
 
-    ui->linePwdAlt->setEnabled(mngr->getPasswort() != "");
+    ui->linePwdAlt->setEnabled(mngr->hatPasswort());
 }

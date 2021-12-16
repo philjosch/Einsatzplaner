@@ -93,6 +93,11 @@ bool FileSettings::setPasswort(const QString &neu, const QString &alt)
     return true;
 }
 
+bool FileSettings::hatPasswort() const
+{
+    return passwort != "";
+}
+
 Networking::Server FileSettings::getServer() const
 {
     return server;
