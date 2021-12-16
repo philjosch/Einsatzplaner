@@ -233,17 +233,18 @@ QString Fahrtag::getHtmlForTableView() const
     if (anlass != "") {
         html += ":<br/><i>"+QString(anlass).replace("\n", "<br/>")+"</i>";
     }
+
+    if (abgesagt) {
+        html += "</td><td colspan='4'><b>Abgesagt!</b></td>";
+        html += "<td>"+QString(bemerkungen).replace("\n", "<br/>")+"</td></tr>";
+        return html;
+    }
+
     // Wagenreihung
     if (wagenreihung != "") {
         html += "<br/>"+ wagenreihung;
     }
     html += "</td>";
-
-    if (abgesagt) {
-        html += "<td colspan='4'><b>Abgesagt!</b></td>";
-        html += "<td>"+QString(bemerkungen).replace("\n", "<br/>")+"</td></tr>";
-        return html;
-    }
 
     // Dienstzeiten
     if (zeitenUnbekannt) {
