@@ -877,8 +877,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
 
 bool Person::printZeiten(QPrinter *printer)
 {
-    QString html = getZeitenFuerEinzelAlsHTML() + Export::zeitStempel(false);
-    return Export::druckeHtmlAufDrucker(html, printer);
+    return Export::druckeHtmlAufDrucker(getZeitenFuerEinzelAlsHTML() + Export::zeitStempel(false), printer);
 }
 
 QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
@@ -1194,8 +1193,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
 
 bool Person::printPersonaldaten(QPrinter *printer) const
 {
-    QString html = getPersonaldatenFuerEinzelAlsHTML() + Export::zeitStempel();
-    return Export::druckeHtmlAufDrucker(html, printer);
+    return Export::druckeHtmlAufDrucker(getPersonaldatenFuerEinzelAlsHTML() + Export::zeitStempel(), printer);
 }
 
 QString Person::getPersonaldatenFuerListeAlsCSV() const
