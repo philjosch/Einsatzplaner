@@ -88,7 +88,7 @@ void ExportDialog::on_pushDrucken_clicked()
         case 2:
             if (settings->getEnabled()) {
                 try {
-                    Export::Upload::uploadToServer(liste, settings->getServer());
+                    Export::uploadToServer(liste, settings->getServer());
                     QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
                 }  catch (NetworkingException &e) {
                     QMessageBox::information(parentWidget(), tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden!"));

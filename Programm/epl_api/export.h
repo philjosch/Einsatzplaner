@@ -17,11 +17,12 @@ class Export
 {
 public:
     // Datei-Upload
-    class Upload {
-    public:
-        static void uploadToServer(QList<AActivity *> liste, Networking::Server server);
-        static void autoUploadToServer(QList<AActivity*> liste, Networking::Server server);
-    };
+    /**
+     * @brief uploadToServer laedt die Listenansicht auf den angegebenen Server
+     * @param liste: Die Liste der Aktivitaeten
+     * @param server: Der EPL-Server, auf den die Datei hochgeladen werden soll
+     */
+    static void uploadToServer(QList<AActivity *> liste, Networking::Server server);
 
     // Allgemeines
 

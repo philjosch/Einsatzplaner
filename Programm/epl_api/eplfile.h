@@ -46,6 +46,8 @@ public slots:
     void speichernPersonal(QString pfad);
     void autoSave();
 
+    void autoUpload();
+
     void open(QString passw = "");
     void close();
 

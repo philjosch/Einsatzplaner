@@ -3,6 +3,8 @@
 #include "fileio.h"
 #include "crypto.h"
 #include "basics.h"
+#include "einstellungen.h"
+#include "export.h"
 
 #include <QJsonArray>
 #include <QJsonObject>
@@ -194,6 +196,21 @@ void EplFile::autoSave()
     if (pfad == "") return;
     if (gespeichert) return;
     schreibeJsonInDatei(pfad+FileIO::getSuffixVonTyp(FileIO::DateiTyp::EPLAutoSave), generiereJson());
+}
+
+void EplFile::autoUpload()
+{
+    if (! dateiEigenschaften->getAutom()) {
+        throw KeinAutoUploadException();
+    }
+    if (!Einstellungen::getUseAutoUpload()) {
+        throw KeinAutoUploadException();
+    }
+    if (! dateiEigenschaften->getServer().isSecure()) {
+        throw UnsichereVerbindungException();
+    }
+    Export::uploadToServer(manager->filter(dateiEigenschaften->getAuswahl()),
+                           dateiEigenschaften->getServer());
 }
 
 void EplFile::open(QString passw)

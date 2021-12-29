@@ -40,7 +40,7 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPageLayout::Orie
     return p;
 }
 
-void Export::Upload::uploadToServer(QList<AActivity *> liste, Networking::Server server)
+void Export::uploadToServer(QList<AActivity *> liste, Networking::Server server)
 {
     /* ERSTELLEN DER DATEI */
     QTemporaryFile tempFile;
@@ -56,18 +56,6 @@ void Export::Upload::uploadToServer(QList<AActivity *> liste, Networking::Server
     if (! Networking::ladeDateiHoch(server, &tempFile)) {
         throw NetworkingException();
     }
-}
-
-void Export::Upload::autoUploadToServer(QList<AActivity*> liste, Networking::Server server)
-{
-    if (!Einstellungen::getUseAutoUpload()) {
-        throw KeinAutoUploadException();
-    }
-    if (! server.isSecure()) {
-        throw UnsichereVerbindungException();
-    }
-
-    Upload::uploadToServer(liste, server);
 }
 
 bool Export::druckeHtmlAufDrucker(QString text, QPrinter *printer)
