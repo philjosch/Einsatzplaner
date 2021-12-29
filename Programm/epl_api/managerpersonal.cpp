@@ -295,7 +295,7 @@ bool ManagerPersonal::printZeitenEinzel(QList<Person *> liste, Status filter, QP
 
     titelSeite += Export::zeitStempel(true);
 
-    return Export::druckeHtmlAufDrucker(titelSeite+a, printer);
+    return Export::druckeHtml(titelSeite+a, printer);
 }
 
 bool ManagerPersonal::printZeitenListe(QList<Person *> personen, QSet<Category> spalten, Status filter, QPrinter *printer)
@@ -338,7 +338,7 @@ bool ManagerPersonal::printZeitenListe(QList<Person *> personen, QSet<Category> 
     a += "</tr></tfoot></table>";
     a += Export::zeitStempel(false);
 
-    return Export::druckeHtmlAufDrucker(a, printer);
+    return Export::druckeHtml(a, printer);
 }
 
 bool ManagerPersonal::printMitgliederEinzel(QList<Person *> liste, Status filter, QPrinter *printer) const
@@ -400,7 +400,7 @@ bool ManagerPersonal::printMitgliederEinzel(QList<Person *> liste, Status filter
     titelSeite += "</ul>";
     titelSeite += Export::zeitStempel(true);
 
-    return Export::druckeHtmlAufDrucker(titelSeite+a, printer);
+    return Export::druckeHtml(titelSeite+a, printer);
 }
 
 bool ManagerPersonal::printMitgliederListe(QList<Person*> liste, Status filter, QSet<QString> data, QPrinter *printer)
@@ -414,7 +414,7 @@ bool ManagerPersonal::printMitgliederListe(QList<Person*> liste, Status filter, 
     a += QObject::tr("<p><small>%1 Personen ausgegeben.</small><br/>").arg(liste.length());
     a += QObject::tr("<small>Erstellt am: %1</small></p>").arg(QDateTime::currentDateTime().toString("d.M.yyyy HH:mm"));
 
-    return Export::druckeHtmlAufDrucker(a, printer);
+    return Export::druckeHtml(a, printer);
 }
 
 bool ManagerPersonal::saveMitgliederListeAlsCSV(QList<Person *> liste, QString pfad)

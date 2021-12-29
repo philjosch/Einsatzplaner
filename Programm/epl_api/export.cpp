@@ -58,7 +58,7 @@ void Export::uploadToServer(QList<AActivity *> liste, Networking::Server server)
     }
 }
 
-bool Export::druckeHtmlAufDrucker(QString text, QPrinter *printer)
+bool Export::druckeHtml(QString text, QPrinter *printer)
 {
     if (printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
@@ -74,13 +74,12 @@ void Export::preparePrinter(QPrinter *p, QPageLayout::Orientation orientation)
     switch (orientation) {
     case QPageLayout::Orientation::Portrait:
         p->setPageMargins(QMarginsF(20, 15, 15, 15), QPageLayout::Millimeter);
-        p->setPageOrientation(QPageLayout::Portrait);
         break;
     case QPageLayout::Orientation::Landscape:
         p->setPageMargins(QMarginsF(15, 20, 15, 15), QPageLayout::Millimeter);
-        p->setPageOrientation(QPageLayout::Landscape);
         break;
     }
+    p->setPageOrientation(orientation);
 }
 
 QString Export::zeitStempel(bool seitenUmbruch)

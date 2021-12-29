@@ -425,7 +425,7 @@ bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
 
     a += "</tbody></table>";
 
-    return Export::druckeHtmlAufDrucker(a + Export::zeitStempel(), printer);
+    return Export::druckeHtml(a + Export::zeitStempel(), printer);
 }
 
 bool Fahrtag::getBenoetigeService() const

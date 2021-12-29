@@ -16,7 +16,6 @@
 class Export
 {
 public:
-    // Datei-Upload
     /**
      * @brief uploadToServer laedt die Listenansicht auf den angegebenen Server
      * @param liste: Die Liste der Aktivitaeten
@@ -24,13 +23,29 @@ public:
      */
     static void uploadToServer(QList<AActivity *> liste, Networking::Server server);
 
-    // Allgemeines
-
+    /**
+     * @brief getPrinterPaper erzeugt mit Hilfe eines Dialogs einen echten Drucker fuer Papierausdrucke
+     * @param parent: Das Parentfenster fuer die benoetigten Dialoge
+     * @param orientation: Die vorlaeufige Ausrichtung der Seite
+     * @return Der fertig konfigurierte Drucker
+     */
     static QPrinter *getPrinterPaper(QWidget *parent, QPageLayout::Orientation orientation);
+    /**
+     * @brief getPrinterPDF erzeugt mit Hilfe eines Dialogs einen virtuellen Drucker, der in eine PDF-Datei druckt
+     * @param parent: Das Parentfensters fuer die benoetigten Dialoge
+     * @param path: Der vorgeschlagene Dateiname der PDF-Datei
+     * @param orientation: Die vorlaeufige Ausrichtung der Seite
+     * @return Der fertig konfigurierte PDF-Drucker
+     */
     static QPrinter *getPrinterPDF(QWidget *parent, QString path, QPageLayout::Orientation orientation);
 
-    // Helfer-Methoden, die auch Extern verwendet werden koennen
-    static bool druckeHtmlAufDrucker(QString text, QPrinter *printer);
+    /**
+     * @brief druckeHtml druckt den angegebenen HTML-Quelltext unter zuhilfename des Standard Stylesheets
+     * @param text: Der Quelltext fuer den Body
+     * @param printer: Der Drucker auf dem gedruckt werden soll
+     * @return WAHR genau dann, wenn der Druck erfolgreich war
+     */
+    static bool druckeHtml(QString text, QPrinter *printer);
 
     /**
      * @brief Erzeugt ein HTML-Schnipsel, das die aktuelle Zeit enthaelt
@@ -40,11 +55,26 @@ public:
     static QString zeitStempel(bool seitenUmbruch = false);
 
 private:
+    /**
+     * @brief preparePrinter setzt die Raender des Druckers auf die Standardwerte bzw. anhand der Ausrichtung
+     * @param p: Der Drucker
+     * @param orientation: DIe Ausrichtung der Seiten
+     */
     static void preparePrinter(QPrinter *p, QPageLayout::Orientation orientation);
 
+    /**
+     * @brief newDefaultDocument Erzeugt ein neues Textdocument mit dem standard Stylesheet
+     * @return Das neue Dokument
+     */
     static QTextDocument *newDefaultDocument();
 
+    /**
+     * @brief DEFAULT_STYLESHEET Speichert das standard Stylesheet
+     */
     static const QString DEFAULT_STYLESHEET;
+    /**
+     * @brief DEFAULT_FONT Speichert die standard Schriftart, die fuer den Ausdruck verwendet wird
+     */
     static const QFont DEFAULT_FONT;
 };
 
