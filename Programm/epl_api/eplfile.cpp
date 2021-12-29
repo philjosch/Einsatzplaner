@@ -231,6 +231,11 @@ void EplFile::open(QString passw)
         if (! payload.endsWith("-ZIP-"))
             throw FileWrongPasswordException();
     }
+    if (passw == "")
+        passwort = "";
+    else
+        passwort = Crypto::hash(passw);
+
     // Payload entpacken
     if (payload != "" || generalJSON.value("komprimiert").toBool(false)) {
         if (! payload.endsWith("-ZIP-"))
@@ -264,7 +269,7 @@ void EplFile::open(QString passw)
         break;
     }
 
-    dateiEigenschaften = new FileSettings(geladen.value("settings").toObject(), passw);
+    dateiEigenschaften = new FileSettings(geladen.value("settings").toObject());
 
     QJsonObject viewJSON = geladen.value("view").toObject();
     int x = viewJSON.value("xMain").toInt();
@@ -349,10 +354,10 @@ bool EplFile::schreibeJsonInDatei(QString pfad, QJsonObject obj) const
 
     zuschreibendesObjekt = QJsonObject();
 
-    if (dateiEigenschaften->hatPasswort()) {
+    if (hatPasswort()) {
         generalJson.insert("encrypted", true);
 
-        EncryptedData eD = Crypto::encrypt(payload, dateiEigenschaften->getPasswort());
+        EncryptedData eD = Crypto::encrypt(payload, passwort);
         QJsonObject crypto;
         crypto.insert("modus", eD.typ);
         crypto.insert("salt", eD.salt);
@@ -379,4 +384,32 @@ QJsonObject EplFile::dekomprimiere(QString komprimiert) const
                         )
                     )
                 ).object();
+}
+
+QString EplFile::getPasswort() const
+{
+    return passwort;
+}
+bool EplFile::setPasswort(const QString &neu, const QString &alt)
+{
+    if (passwort == "") {
+        if (alt != "") {
+            return false;
+        }
+    } else {
+        if (Crypto::hash(alt) != passwort) {
+            return false;
+        }
+    }
+    if (neu == "") {
+        passwort = "";
+    } else {
+        passwort = Crypto::hash(neu);
+    }
+    emit changed();
+    return true;
+}
+bool EplFile::hatPasswort() const
+{
+    return passwort != "";
 }

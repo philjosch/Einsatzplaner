@@ -186,7 +186,7 @@ void CoreMainWindow::handlerPreferenes()
 
 void CoreMainWindow::handlerSettings()
 {
-    FileSettingsDialog(this, datei->getDateiEigenschaften()).exec();
+    FileSettingsDialog(this, datei).exec();
 }
 
 void CoreMainWindow::onDateiWurdeVeraendert()

@@ -2,6 +2,7 @@
 #define FILESETTINGSDIALOG_H
 
 #include "filesettings.h"
+#include "eplfile.h"
 
 #include <QAbstractButton>
 #include <QDialog>
@@ -15,7 +16,7 @@ class FileSettingsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit FileSettingsDialog(QWidget *parent, FileSettings *manager);
+    explicit FileSettingsDialog(QWidget *parent, EplFile *dat);
     ~FileSettingsDialog();
 
     void saveSettings();
@@ -31,7 +32,7 @@ private slots:
 
 private:
     Ui::FileSettingsDialog *ui;
-    FileSettings *mngr;
+    EplFile *datei;
 
     void loadSettings();
 };

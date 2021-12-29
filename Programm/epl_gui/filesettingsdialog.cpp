@@ -1,14 +1,14 @@
 #include "filesettingsdialog.h"
 #include "export.h"
 #include "ui_filesettingsdialog.h"
-#include "einstellungen.h"
 #include "networking.h"
+#include "eplfile.h"
 
 #include <QMessageBox>
 
-FileSettingsDialog::FileSettingsDialog(QWidget *parent, FileSettings *manager) : QDialog(parent), ui(new Ui::FileSettingsDialog)
+FileSettingsDialog::FileSettingsDialog(QWidget *parent, EplFile *dat) : QDialog(parent), ui(new Ui::FileSettingsDialog)
 {
-    mngr = manager;
+    datei = dat;
     ui->setupUi(this);
     loadSettings();
 }
@@ -20,6 +20,7 @@ FileSettingsDialog::~FileSettingsDialog()
 
 void FileSettingsDialog::saveSettings()
 {
+    FileSettings *mngr = datei->getDateiEigenschaften();
     mngr->setEnabled(ui->groupUpload->isChecked());
     mngr->setAutom(ui->checkAuto->isChecked());
     mngr->setServer(Networking::Server{
@@ -47,11 +48,7 @@ void FileSettingsDialog::saveSettings()
 
 void FileSettingsDialog::on_groupUpload_clicked(bool checked)
 {
-    if (Einstellungen::getUseAutoUpload() && checked)
-        ui->checkAuto->setEnabled(true);
-    else
-        ui->checkAuto->setEnabled(false);
-
+    ui->checkAuto->setEnabled(checked);
     ui->lineServer->setEnabled(checked);
     ui->linePath->setEnabled(checked);
     ui->lineID->setEnabled(checked);
@@ -86,6 +83,7 @@ void FileSettingsDialog::on_pushCheck_clicked()
 
 void FileSettingsDialog::loadSettings()
 {
+    FileSettings *mngr = datei->getDateiEigenschaften();
     ui->groupUpload->setChecked(mngr->getEnabled());
     ui->checkAuto->setChecked(mngr->getAutom());
     Networking::Server s = mngr->getServer();
@@ -125,7 +123,7 @@ void FileSettingsDialog::loadSettings()
     ui->checkActivity->setChecked(a.getActivities());
     on_groupUpload_clicked(mngr->getEnabled());
 
-    ui->linePwdAlt->setEnabled(mngr->hatPasswort());
+    ui->linePwdAlt->setEnabled(datei->hatPasswort());
 }
 
 void FileSettingsDialog::on_pushPwdChange_clicked()
@@ -141,11 +139,11 @@ void FileSettingsDialog::on_pushPwdChange_clicked()
         QMessageBox::information(this, tr("Fehler"), tr("Die beiden neuen Passwörter stimmen nicht überein!"));
         return;
     }
-    if (! mngr->setPasswort(neu1, alt)) {
+    if (! datei->setPasswort(neu1, alt)) {
         QMessageBox::information(this, tr("Fehler"), tr("Das Passwort konnte nicht geöndert werden, überprüfen Sie Ihre Eingabe."));
         return;
     }
     QMessageBox::information(this, tr("Geändert"), tr("Das Passwort wurde erfolgreich geändert."));
 
-    ui->linePwdAlt->setEnabled(mngr->hatPasswort());
+    ui->linePwdAlt->setEnabled(datei->hatPasswort());
 }

@@ -10,10 +10,9 @@ FileSettings::FileSettings() : QObject()
     autom = true;
     server = Networking::Server{"", "", ""};
     auswahl = Auswahl(Auswahl::AbJetzt, Auswahl::BisAlle, true);
-    passwort = "";
 }
 
-FileSettings::FileSettings(QJsonObject json, QString pwd) : QObject()
+FileSettings::FileSettings(QJsonObject json) : QObject()
 {
     QJsonObject online = json.value("online").toObject();
     enabled = online.value("enabled").toBool();
@@ -21,10 +20,6 @@ FileSettings::FileSettings(QJsonObject json, QString pwd) : QObject()
     server = Networking::Server::fromJson(online);
     auswahl = Auswahl(online);
 
-    if (pwd == "")
-        passwort = "";
-    else
-        passwort = Crypto::hash(pwd);
 }
 
 QJsonObject FileSettings::toJson() const
@@ -67,35 +62,6 @@ void FileSettings::setAuswahl(const Auswahl &value)
 {
     auswahl = value;
     emit changed();
-}
-
-QString FileSettings::getPasswort() const
-{
-    return passwort;
-}
-bool FileSettings::setPasswort(const QString &neu, const QString &alt)
-{
-    if (passwort == "") {
-        if (alt != "") {
-            return false;
-        }
-    } else {
-        if (Crypto::hash(alt) != passwort) {
-            return false;
-        }
-    }
-    if (neu == "") {
-        passwort = "";
-    } else {
-        passwort = Crypto::hash(neu);
-    }
-    emit changed();
-    return true;
-}
-
-bool FileSettings::hatPasswort() const
-{
-    return passwort != "";
 }
 
 Networking::Server FileSettings::getServer() const

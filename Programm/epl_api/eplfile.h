@@ -39,6 +39,22 @@ public:
     FensterPosition getPositionPersonal();
     void setPositionPersonal(const FensterPosition &value);
 
+    /**
+     * @brief Gibt das gehashte Passwort zurueck, mit dem der Zugriff auf die Datei gesichert wird
+     * @return Das gehashte Passwort
+     */
+    QString getPasswort() const;
+    /**
+     * @brief Setzen des Passworts, das den Zugriff auf die Datei schuetzt
+     * @param neu: Das neue ungehashte Passwort
+     * @param alt: Das alte ungehashte Passwort
+     */
+    bool setPasswort(const QString &neu, const QString &alt = "");
+    /**
+     * @brief Prueft, ob ein Passwort gesetzt ist
+     * @return Wahr genau dann, wenn ein Passwort gesetzt ist
+     */
+    bool hatPasswort() const;
 
 public slots:
     void speichern();
@@ -58,6 +74,11 @@ protected:
     QString pfad;
     bool schreibgeschuetzt;
     bool gespeichert;
+
+    /**
+     * @brief Speichert das aktuelle gehashte Passwort. Ist leer, wenn kein Passwort gesetzt ist.
+     */
+    QString passwort;
 
     QJsonObject geladen;
 
