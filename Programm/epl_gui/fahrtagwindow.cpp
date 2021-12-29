@@ -54,10 +54,10 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
     ui->checkWichtig->setChecked(fahrtag->getWichtig());
     ui->checkAbgesagt->setChecked(fahrtag->getAbgesagt());
 
-    ui->buttonGroupTf->button(fahrtag->getBenoetigeTf())->click();
-    ui->checkZf->setChecked(fahrtag->getBenoetigeZf());
-    ui->checkZub->setChecked(fahrtag->getBenoetigeZub());
-    ui->checkService->setChecked(fahrtag->getBenoetigeService());
+    ui->buttonGroupTf->button(fahrtag->getPersonalBenoetigt(Tf))->click();
+    ui->checkZf->setChecked(fahrtag->getPersonalBenoetigt(Zf));
+    ui->checkZub->setChecked(fahrtag->getPersonalBenoetigt(Zub));
+    ui->checkService->setChecked(fahrtag->getPersonalBenoetigt(Service));
 
     // Daten von Manager_Reservierungen
     itemToRes = QMap<QListWidgetItem*, Reservierung*>();
@@ -311,7 +311,7 @@ void FahrtagWindow::on_buttonTfDelete_clicked()
 void FahrtagWindow::on_buttonGroupTf_buttonClicked(int button)
 {
     if (nehme)
-        fahrtag->setBenoetigeTf(button);
+        fahrtag->setPersonalBenoetigt(button, Tf);
 }
 
 void FahrtagWindow::on_listZf_itemChanged(QListWidgetItem *item)
@@ -333,7 +333,7 @@ void FahrtagWindow::on_buttonZfDelete_clicked()
 void FahrtagWindow::on_checkZf_clicked(bool checked)
 {
     if (nehme)
-        fahrtag->setBenoetigeZf(checked);
+        fahrtag->setPersonalBenoetigt(checked?1:0, Zf);
 }
 
 void FahrtagWindow::on_listZub_itemChanged(QListWidgetItem *item)
@@ -355,7 +355,7 @@ void FahrtagWindow::on_buttonZubDelete_clicked()
 void FahrtagWindow::on_checkZub_clicked(bool checked)
 {
     if (nehme)
-        fahrtag->setBenoetigeZub(checked);
+        fahrtag->setPersonalBenoetigt(checked?-1:0, Zub);
 }
 
 void FahrtagWindow::on_listService_itemChanged(QListWidgetItem *item)
@@ -377,7 +377,7 @@ void FahrtagWindow::on_buttonServiceDelete_clicked()
 void FahrtagWindow::on_checkService_clicked(bool checked)
 {
     if (nehme)
-        fahrtag->setBenoetigeService(checked);
+        fahrtag->setPersonalBenoetigt(checked?-1:0, Service);
 }
 
 void FahrtagWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int column)
@@ -828,7 +828,7 @@ void FahrtagWindow::updateAuswertungReservierungen()
 void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)
 {
     if (nehme) {
-        fahrtag->setPersonalBenoetigt(checked);
+        fahrtag->setPersonalBenoetigt(checked?-1:0);
     }
 }
 

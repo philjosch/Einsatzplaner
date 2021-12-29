@@ -35,7 +35,8 @@ AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
     anlass = "";
     bemerkungen = "";
     personen = QList<Einsatz*>();
-    personalBenoetigt = true;
+    personalBenoetigt = QMap<Category, int>();
+    setPersonalBenoetigt(-1);
     wichtig = false;
     abgesagt = false;
     personal = p;
@@ -81,7 +82,8 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
         person->addActivity(e);
         personen.append(e);
     }
-    personalBenoetigt = o.value("personalBenoetigt").toBool(true);
+    personalBenoetigt = QMap<Category, int>();
+    setPersonalBenoetigt(o.value("personalBenoetigt").toBool(true));
     wichtig = o.value("wichtig").toBool(false);
     abgesagt = o.value("abgesagt").toBool(false);
 }
@@ -124,7 +126,7 @@ QJsonObject AActivity::toJson() const
         personenJSON.append(persJson);
     }
     data.insert("personen", personenJSON);
-    data.insert("personalBenoetigt", personalBenoetigt);
+    data.insert("personalBenoetigt", getPersonalBenoetigt() != 0);
     data.insert("wichtig", wichtig);
     data.insert("abgesagt", abgesagt);
     return data;
@@ -211,13 +213,13 @@ void AActivity::setBemerkungen(const QString &value)
     emit changed(this);
 }
 
-bool AActivity::getPersonalBenoetigt() const
+bool AActivity::getPersonalBenoetigt(const Category kat) const
 {
-    return personalBenoetigt;
+    return personalBenoetigt.value(kat, 0);
 }
-void AActivity::setPersonalBenoetigt(bool value)
+void AActivity::setPersonalBenoetigt(int anzahl, const Category kat)
 {
-    personalBenoetigt = value;
+    personalBenoetigt.insert(kat, anzahl);
     emit changed(this);
 }
 
@@ -503,7 +505,7 @@ QString AActivity::getHtmlForSingleView() const
     }
     // Personal
     html += "<p><b>Helfer";
-    html += (personalBenoetigt ? required.arg(" benötigt"):"");
+    html += (getPersonalBenoetigt() ? required.arg(" benötigt"):"");
     html += ":</b></p>";
     if (personen.count() > 0) {
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Name</th><th>Beginn*</th><th>Ende*</th><th>Aufgabe</th></tr></thead><tbody>";
@@ -601,7 +603,7 @@ QString AActivity::getHtmlForTableView() const
 
     // Sonstiges
     bool zeilenUmbruch = false;
-    if (personalBenoetigt) {
+    if (getPersonalBenoetigt()) {
         if (QDate::currentDate().addDays(10) >= datum && datum >= QDate::currentDate()) {
             html += "<td bgcolor='#ff8888'>";
         } else {

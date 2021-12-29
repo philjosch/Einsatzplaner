@@ -13,11 +13,11 @@ Fahrtag::Fahrtag(QDate date, ManagerPersonal *p): AActivity(date, p)
     setZeitAnfang(QTime(8, 45));
     setZeitAnfang(QTime(8, 15), Tf);
     setZeitEnde(QTime(18, 45));
-    benoetigeTf = 1;
-    benoetigeZf = true;
-    benoetigeZub = true;
-    benoetigeService = true;
-    personalBenoetigt = false;
+    setPersonalBenoetigt(1, Tf);
+    setPersonalBenoetigt(1, Zf);
+    setPersonalBenoetigt(-1, Zub);
+    setPersonalBenoetigt(-1, Service);
+    setPersonalBenoetigt(0);
     wagenreihung = "221, 217, 208, 309";
     reservierungen = QSet<Reservierung*>();
     checkAll = false;
@@ -33,17 +33,17 @@ Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p)
     art = static_cast<Art>(o.value("art").toInt());
     setZeitAnfang(QTime::fromString(o.value("zeitTf").toString(), "hh:mm"), Tf);
     if (! o.value("benoetigeTf").isBool()) {
-        benoetigeTf = o.value("benoetigeTf").toInt(1);
+        setPersonalBenoetigt(o.value("benoetigeTf").toInt(1), Tf);
     } else {
         if (o.value("benoetigeTf").toBool(true)) {
-            benoetigeTf = 1;
+            setPersonalBenoetigt(1, Tf);
         } else {
-            benoetigeTf = 0;
+            setPersonalBenoetigt(0, Tf);
         }
     }
-    benoetigeZf = o.value("benoetigeZf").toBool(true);
-    benoetigeZub = o.value("benoetigeZub").toBool(true);
-    benoetigeService = o.value("benoetigeService").toBool(true);
+    setPersonalBenoetigt(o.value("benoetigeZf").toBool(true)?1:0, Zf);
+    setPersonalBenoetigt(o.value("benoetigeZub").toBool(true)?-1:0, Zub);
+    setPersonalBenoetigt(o.value("benoetigeService").toBool(true)?-1:0, Service);
 
     wagenreihung = o.value("wagenreihung").toString();
     reservierungen = QSet<Reservierung*>();
@@ -76,10 +76,10 @@ QJsonObject Fahrtag::toJson() const
     QJsonObject o = AActivity::toJson();
     o.insert("art", art);
     o.insert("zeitTf", getZeitAnfang(Tf).toString("hh:mm"));
-    o.insert("benoetigeTf", benoetigeTf);
-    o.insert("benoetigeZf", benoetigeZf);
-    o.insert("benoetigeZub", benoetigeZub);
-    o.insert("benoetigeService", benoetigeService);
+    o.insert("benoetigeTf", getPersonalBenoetigt(Tf));
+    o.insert("benoetigeZf", getPersonalBenoetigt(Zf) != 0);
+    o.insert("benoetigeZub", getPersonalBenoetigt(Zub) != 0);
+    o.insert("benoetigeService", getPersonalBenoetigt(Service) != 0);
     o.insert("wagenreihung", wagenreihung);
     QJsonArray array;
     for(Reservierung *r: reservierungen.values()) {
@@ -142,10 +142,10 @@ QString Fahrtag::getHtmlForSingleView() const
         }
     }
     // *Tf/Tb
-    if (benoetigeTf || tf.size() > 0) {
+    if (getPersonalBenoetigt(Tf) || tf.size() > 0) {
         html += "<p><b>";
-        if (benoetigeTf) {
-            html += required.arg("Noch "+QString::number(benoetigeTf))
+        if (getPersonalBenoetigt(Tf)) {
+            html += required.arg("Noch "+QString::number(getPersonalBenoetigt(Tf)))
                     +" Triebfahrzeugführer (Tf) "
                     +required.arg("benötigt");
         } else {
@@ -154,15 +154,15 @@ QString Fahrtag::getHtmlForSingleView() const
         html += ":</b><br/>"+listToString(" | ", tf)+"</p>";
     }
     // *Zf
-    if ((benoetigeZf && (art != Schnupperkurs)) || zf.size() > 0) {
+    if ((getPersonalBenoetigt(Zf) && (art != Schnupperkurs)) || zf.size() > 0) {
         html += "<p><b>Zugführer";
-        html += (benoetigeZf && (art != Schnupperkurs) ? required.arg(" wird benötigt"):"");
+        html += (getPersonalBenoetigt(Zf) && (art != Schnupperkurs) ? required.arg(" wird benötigt"):"");
         html += ":</b><br/>"+listToString(" | ", zf)+"</p>";
     }
     // *Zub, Begl.o.b.A
-    if ((benoetigeZub && (art != Schnupperkurs)) || (zub.size() > 0 || begl.size() > 0)) {
+    if ((getPersonalBenoetigt(Zub) && (art != Schnupperkurs)) || (zub.size() > 0 || begl.size() > 0)) {
         html += "<p><b>Zugbegleiter und <i><b>Begleiter ohne betriebliche Ausbildung</b></i>";
-        html += (benoetigeZub && (art != Schnupperkurs) ? required.arg(" werden benötigt"):"");
+        html += (getPersonalBenoetigt(Zub) && (art != Schnupperkurs) ? required.arg(" werden benötigt"):"");
         html += ":</b><br/>";
         html += listToString(" | ", zub);
         // Begl. o.b.A
@@ -171,15 +171,15 @@ QString Fahrtag::getHtmlForSingleView() const
         html += "<i>" + listToString(" | ", begl) + "</i></p>";
     }
     // *Service
-    if ((benoetigeService && (art != Schnupperkurs)) || service.size() > 0) {
+    if ((getPersonalBenoetigt(Service) && (art != Schnupperkurs)) || service.size() > 0) {
         html += "<p><b>Service-Personal";
-        html += (benoetigeService && (art != Schnupperkurs) ? required.arg(" wird benötigt"):"");
+        html += (getPersonalBenoetigt(Service) && (art != Schnupperkurs) ? required.arg(" wird benötigt"):"");
         html += ":</b><br/>"+listToString(" | ", service) +"</p>";
     }
     // *Sonstiges personal
     if (sonstige.size() > 0) {
         html += "<p><b>Sonstiges Personal";
-        html += (personalBenoetigt ? required.arg(" wird benötigt"):"");
+        html += (getPersonalBenoetigt() ? required.arg(" wird benötigt"):"");
         html += ":</b><br/>"+listToString(" | ", sonstige, "", "", true) +"</p>";
     }
     if (bemerkungen != "") {
@@ -269,12 +269,12 @@ QString Fahrtag::getHtmlForTableView() const
         beginnZelleBenoetigt = "<td bgcolor='#ff8888'>";
     }
     QString benoetigt = "<b>%1</b>";
-    if (benoetigeTf > 0) {
+    if (getPersonalBenoetigt(Tf)) {
         html += beginnZelleBenoetigt;
         if (gruppen.value(Tf)->size() > 0)
-            html += benoetigt.arg("Noch %2 Lokführer benötigt!").arg(benoetigeTf);
+            html += benoetigt.arg("Noch %2 Lokführer benötigt!").arg(getPersonalBenoetigt(Tf));
         else
-            html += benoetigt.arg("%2 Lokführer benötigt!").arg(benoetigeTf);
+            html += benoetigt.arg("%2 Lokführer benötigt!").arg(getPersonalBenoetigt(Tf));
 
     } else {
         html += "<td>";
@@ -288,16 +288,16 @@ QString Fahrtag::getHtmlForTableView() const
     html += "</td>";
 
     // Zf, Zub, Begl.o.b.A.
-    if ((benoetigeZf || benoetigeZub) && (art != Schnupperkurs)) {
+    if ((getPersonalBenoetigt(Zf) || getPersonalBenoetigt(Zub)) && (art != Schnupperkurs)) {
         html += beginnZelleBenoetigt;
     } else {
         html += "<td>";
     }
-    if (benoetigeZf && (art != Schnupperkurs)) {
+    if (getPersonalBenoetigt(Zf) && (art != Schnupperkurs)) {
         html += "<u>"+benoetigt.arg("Zugführer benötigt!")+"</u>";
         zeilenUmbruch = true;
     }
-    if (benoetigeZub && (art != Schnupperkurs)) {
+    if (getPersonalBenoetigt(Zub) && (art != Schnupperkurs)) {
         if(zeilenUmbruch) html += "<br/>";
         html += "<i>"+benoetigt.arg("Begleitpersonal benötigt!")+"</i>";
     }
@@ -314,7 +314,7 @@ QString Fahrtag::getHtmlForTableView() const
     html += "</td>";
 
     // Service
-    if (benoetigeService && (art != Schnupperkurs)) {
+    if (getPersonalBenoetigt(Service) && (art != Schnupperkurs)) {
         html += beginnZelleBenoetigt;
         html += benoetigt.arg("Service-Personal benötigt!");
     } else {
@@ -328,7 +328,7 @@ QString Fahrtag::getHtmlForTableView() const
 
     // Sonstiges
     zeilenUmbruch = false;
-    if (personalBenoetigt) {
+    if (getPersonalBenoetigt()) {
         html += beginnZelleBenoetigt;
         html += benoetigt.arg("Sonstiges Personal wird benötigt!");
         zeilenUmbruch = true;
@@ -426,46 +426,6 @@ bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
     a += "</tbody></table>";
 
     return Export::druckeHtml(a + Export::zeitStempel(), printer);
-}
-
-bool Fahrtag::getBenoetigeService() const
-{
-    return benoetigeService;
-}
-void Fahrtag::setBenoetigeService(bool value)
-{
-    benoetigeService = value;
-    emit changed(this);
-}
-
-bool Fahrtag::getBenoetigeZub() const
-{
-    return benoetigeZub;
-}
-void Fahrtag::setBenoetigeZub(bool value)
-{
-    benoetigeZub = value;
-    emit changed(this);
-}
-
-bool Fahrtag::getBenoetigeZf() const
-{
-    return benoetigeZf;
-}
-void Fahrtag::setBenoetigeZf(bool value)
-{
-    benoetigeZf = value;
-    emit changed(this);
-}
-
-int Fahrtag::getBenoetigeTf() const
-{
-    return benoetigeTf;
-}
-void Fahrtag::setBenoetigeTf(int value)
-{
-    benoetigeTf = value;
-    emit changed(this);
 }
 
 Art Fahrtag::getArt() const

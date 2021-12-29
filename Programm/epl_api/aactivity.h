@@ -47,8 +47,8 @@ public:
     QString getBemerkungen() const;
     void setBemerkungen(const QString &value);
 
-    bool getPersonalBenoetigt() const;
-    void setPersonalBenoetigt(bool value);
+    bool getPersonalBenoetigt(const Category kat = Gesamt) const;
+    void setPersonalBenoetigt(int anzahl, const Category kat = Gesamt);
 
     bool getWichtig() const;
     void setWichtig(bool value);
@@ -104,7 +104,7 @@ protected:
     QString anlass;
     QString bemerkungen;
     QList<Einsatz*> personen;
-    bool personalBenoetigt;
+    QMap<Category, int> personalBenoetigt;
     bool wichtig;
     bool abgesagt;
 
