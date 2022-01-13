@@ -266,7 +266,7 @@ void MainWindowPersonal::on_actionMitgliedsbeitraege_triggered()
 void MainWindowPersonal::on_actionMitgliederEinzelListePDF_triggered()
 {
     personal->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPDF(this, "Stammdatenblaetter", QPageLayout::Orientation::Portrait));
+                        Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait));
 }
 void MainWindowPersonal::on_actionMitgliederEinzelListeDrucken_triggered()
 {
@@ -287,7 +287,7 @@ void MainWindowPersonal::on_actionMitgliederListeDrucken_triggered()
 void MainWindowPersonal::on_actionMitgliederListeCSV_triggered()
 {
     personal->saveMitgliederListeAlsCSV(current,
-                                   FileIO::getFilePathSave(this, "Mitglieder", FileIO::DateiTyp::CSV));
+                                   FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV));
 }
 
 void MainWindowPersonal::on_actionBeitraegeRegulaerCSV_triggered()

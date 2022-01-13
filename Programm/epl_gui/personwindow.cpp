@@ -112,7 +112,7 @@ void PersonWindow::on_actionLoeschen_triggered()
 
 void PersonWindow::on_actionEinzelPDF_triggered()
 {
-    person->printPersonaldaten(Export::getPrinterPDF(this, "Stammdatenblatt", QPageLayout::Orientation::Portrait));
+    person->printPersonaldaten(Export::getPrinterPDF(this, "Stammdaten-"+person->getName(), QPageLayout::Orientation::Portrait));
 }
 void PersonWindow::on_actionEinzelDrucken_triggered()
 {
