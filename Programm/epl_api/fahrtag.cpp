@@ -428,10 +428,6 @@ bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
     return Export::druckeHtml(a + Export::zeitStempel(), printer);
 }
 
-Art Fahrtag::getArt() const
-{
-    return art;
-}
 void Fahrtag::setArt(const Art &value)
 {
     art = value;

@@ -97,7 +97,7 @@ AActivity::~AActivity()
 
 Art AActivity::getArt() const
 {
-    return Art::Arbeitseinsatz;
+    return art;
 }
 
 QJsonObject AActivity::toJson() const

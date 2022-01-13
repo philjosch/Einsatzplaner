@@ -24,8 +24,6 @@ public:
     bool printReservierungsuebersicht(QPrinter *printer) const;
 
     void setArt(const Art &value);
-    Art getArt() const;
-
 
     QString getWagenreihung() const;
     bool setWagenreihung(const QString &value);
@@ -42,7 +40,6 @@ public:
 
     bool checkPlausibilitaet(QList<int> zuege, QList<int> haltepunkte) const;
 
-public slots:
     QList<Mistake> verteileSitzplaetze();
     bool checkPlaetze(QString p, Reservierung *r) const;
 
