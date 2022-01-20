@@ -1,11 +1,11 @@
 # EPL - Veränderungshistorie
-Stand: 13. Januar 2022
+Stand: 20. Januar 2022
 
-## Version 1.8.2 – 2022-0x-xx
+## Version 1.8.2 – 2022-01-xx
 ### Verbessert
 - Ausgabe individuelle Zeiten in Listenansicht
 - Dateinamen für den Export werden automatisch bestimmt
-- Berechnung Strecke und Zeiten verbessern
+- Berechnung Strecke und Zeiten verbessert
 - Verschiedene Verbesserungen beim Export
 - Weitere kleinere Verbesserungen
 
