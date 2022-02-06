@@ -1,7 +1,7 @@
 # EPL - Veränderungshistorie
 Stand: 06. Februar 2022
 
-## Version 1.8.2 – 2022-01-xx
+## Version 1.8.2 – 2022-02-06
 ### Verbessert
 - Ausgabe individuelle Zeiten in Listenansicht
 - Dateinamen für den Export werden automatisch bestimmt
