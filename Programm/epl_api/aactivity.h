@@ -47,7 +47,7 @@ public:
     QString getBemerkungen() const;
     void setBemerkungen(const QString &value);
 
-    bool getPersonalBenoetigt(const Category kat = Gesamt) const;
+    int getPersonalBenoetigt(const Category kat = Gesamt) const;
     void setPersonalBenoetigt(int anzahl, const Category kat = Gesamt);
 
     bool getWichtig() const;

@@ -213,7 +213,7 @@ void AActivity::setBemerkungen(const QString &value)
     emit changed(this);
 }
 
-bool AActivity::getPersonalBenoetigt(const Category kat) const
+int AActivity::getPersonalBenoetigt(const Category kat) const
 {
     return personalBenoetigt.value(kat, 0);
 }
