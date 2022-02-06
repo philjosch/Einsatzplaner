@@ -1,5 +1,5 @@
 # EPL - Veränderungshistorie
-Stand: 20. Januar 2022
+Stand: 06. Februar 2022
 
 ## Version 1.8.2 – 2022-01-xx
 ### Verbessert
@@ -11,6 +11,7 @@ Stand: 20. Januar 2022
 
 ### Fehlerbehebung
 - Die Wagenreihung wurde bei abgesagten Fahrtagen noch angezeigt
+- Veränderungen beim Geschlecht oder bei der Anzahl der Lokführer wurden unter Umständen nicht übernommen
 - Diverse kleinere Fehlerbehebungen
 
 
