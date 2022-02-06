@@ -108,6 +108,8 @@ macx {
 #################
 win32: COMMIT_HASH = $$system(git.exe -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)
 else:  COMMIT_HASH = $$system(git -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)
+#win32: REVISION = $$system(git.exe -C \""$$_PRO_FILE_PWD_"\" rev-list  $$system(git.exe -C \""$$_PRO_FILE_PWD_"\" rev-list --tags --no-walk --max-count=1)..HEAD --count)
+#else:  REVISION = $$system(git -C \""$$_PRO_FILE_PWD_"\" rev-list  $$system(git -C \""$$_PRO_FILE_PWD_"\" rev-list --tags --no-walk --max-count=1)..HEAD --count)
 DEFINES += GIT_CURRENT_SHA1="\"\\\"$${COMMIT_HASH}\\\"\""
 DEFINES += APP_NAME="\"\\\"$${TARGET}\\\"\""
 DEFINES += APP_VERSION="\"\\\"$${VERSION}\\\"\""
