@@ -198,71 +198,71 @@ void PersonalWindow::on_actionMindeststunden_triggered()
 
 void PersonalWindow::on_actionZeitenEinzelEinzelPDF_triggered()
 {
-    aktuellePerson->printZeiten(Export::getPrinterPDF(this, "Einsatzzeiten-Einzelansicht", QPrinter::Orientation::Portrait));
+    aktuellePerson->printZeiten(Export::getPrinterPDF(this, "Zeiten-"+aktuellePerson->getName(), QPageLayout::Orientation::Portrait));
 }
 void PersonalWindow::on_actionZeitenEinzelEinzelDrucken_triggered()
 {
-    aktuellePerson->printZeiten(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    aktuellePerson->printZeiten(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 void PersonalWindow::on_actionZeitenEinzelListePDF_triggered()
 {
     manager->printZeitenEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPDF(this, "Einsatzzeiten-Einzelansichten", QPrinter::Orientation::Portrait));
+                        Export::getPrinterPDF(this, "Zeiten", QPageLayout::Orientation::Portrait));
 }
 void PersonalWindow::on_actionZeitenEinzelListeDrucken_triggered()
 {
     manager->printZeitenEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+                        Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 void PersonalWindow::on_actionZeitenListePDF_triggered()
 {
     manager->printZeitenListe(
                 getSortierteListe(), anzeige, filter,
-                Export::getPrinterPDF(this, "Einsatzzeiten-Gesamt", QPrinter::Orientation::Landscape));
+                Export::getPrinterPDF(this, "Einsatzzeiten", QPageLayout::Orientation::Landscape));
 }
 void PersonalWindow::on_actionZeitenListeDrucken_triggered()
 {
     manager->printZeitenListe(
                 getSortierteListe(), anzeige, filter,
-                Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
+                Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape));
 }
 
 void PersonalWindow::on_actionMitgliederEinzelEinzelPDF_triggered()
 {
-    aktuellePerson->printPersonaldaten(Export::getPrinterPDF(this, "Stammdatenblatt", QPrinter::Orientation::Portrait));
+    aktuellePerson->printPersonaldaten(Export::getPrinterPDF(this, "Stammdaten-"+aktuellePerson->getName(), QPageLayout::Orientation::Portrait));
 }
 void PersonalWindow::on_actionMitgliederEinzelEinzelDrucken_triggered()
 {
-    aktuellePerson->printPersonaldaten(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    aktuellePerson->printPersonaldaten(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 void PersonalWindow::on_actionMitgliederEinzelListePDF_triggered()
 {
     manager->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPDF(this, "Stammdatenblaetter", QPrinter::Orientation::Portrait));
+                        Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait));
 }
 void PersonalWindow::on_actionMitgliederEinzelListeDrucken_triggered()
 {
     manager->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+                        Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 void PersonalWindow::on_actionMitgliederListePDF_triggered()
 {
     manager->printMitgliederListe(getSortierteListe(), filter, QSet<QString>(),
-                            Export::getPrinterPDF(this, "Mitgliederliste", QPrinter::Orientation::Portrait));
+                            Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Portrait));
 }
 void PersonalWindow::on_actionMitgliederListeDrucken_triggered()
 {
     manager->printMitgliederListe(getSortierteListe(), filter, QSet<QString>(),
-                            Export::getPrinterPaper(this, QPrinter::Orientation::Landscape));
+                            Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape));
 }
 void PersonalWindow::on_actionMitgliederListeCSV_triggered()
 {
     manager->saveMitgliederListeAlsCSV(current,
-                                  FileIO::getFilePathSave(this, "Mitglieder", FileIO::DateiTyp::CSV));
+                                  FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV));
 }
 
 void PersonalWindow::on_actionBeitraegeRegulaerCSV_triggered()
@@ -647,8 +647,7 @@ void PersonalWindow::showPerson(Person *p)
             ui->tabelle->setItem(0, 0, i0);
 
             ui->tabelle->setItem(0, 1, new QTableWidgetItem(toString(e->getKategorie())));
-            QTime duration = QTime::fromMSecsSinceStartOfDay(e->getBeginnRichtig().msecsTo(e->getEndeRichtig()));
-            ui->tabelle->setItem(0, 2, new QTableWidgetItem(duration.toString("hh:mm")));
+            ui->tabelle->setItem(0, 2, new QTableWidgetItem(QTime::fromMSecsSinceStartOfDay(e->getDauer() * 60000).toString("HH:mm")));
             ui->tabelle->setItem(0, 3, new QTableWidgetItem(e->getActivity()->getStringShort()+(e->getBemerkung() != "" ? "\n"+e->getBemerkung() : "")));
     }
     ui->tabelle->setSortingEnabled(sortingSaved);

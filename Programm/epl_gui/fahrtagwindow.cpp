@@ -49,15 +49,15 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
     // Daten von Fahrtag
     ui->comboArt->setCurrentIndex(fahrtag->getArt());
     on_comboArt_currentIndexChanged(fahrtag->getArt());
-    ui->timeBeginnTf->setTime(fahrtag->getZeitTf());
+    ui->timeBeginnTf->setTime(fahrtag->getZeitAnfang(Tf));
     ui->timeBeginn->setTime(fahrtag->getZeitAnfang());
     ui->checkWichtig->setChecked(fahrtag->getWichtig());
     ui->checkAbgesagt->setChecked(fahrtag->getAbgesagt());
 
-    ui->buttonGroupTf->button(fahrtag->getBenoetigeTf())->click();
-    ui->checkZf->setChecked(fahrtag->getBenoetigeZf());
-    ui->checkZub->setChecked(fahrtag->getBenoetigeZub());
-    ui->checkService->setChecked(fahrtag->getBenoetigeService());
+    ui->buttonGroupTf->button(fahrtag->getPersonalBenoetigt(Tf))->click();
+    ui->checkZf->setChecked(fahrtag->getPersonalBenoetigt(Zf));
+    ui->checkZub->setChecked(fahrtag->getPersonalBenoetigt(Zub));
+    ui->checkService->setChecked(fahrtag->getPersonalBenoetigt(Service));
 
     // Daten von Manager_Reservierungen
     itemToRes = QMap<QListWidgetItem*, Reservierung*>();
@@ -177,7 +177,7 @@ void FahrtagWindow::on_comboWagenreihung_currentTextChanged(const QString &arg1)
 void FahrtagWindow::on_timeBeginnTf_timeChanged(const QTime &time)
 {
     if (nehme)
-        fahrtag->setZeitTf(time);
+        fahrtag->setZeitAnfang(time, Tf);
 }
 
 void FahrtagWindow::on_timeBeginn_timeChanged(const QTime &time)
@@ -239,7 +239,7 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
 {
     /* item: Das Item das Verändert wurde */
     /* kat: Die Kategorie, auf die gebucht wird */
-    QStringList liste = item->text().split(QRegExp("\\s*;\\s*"));
+    QStringList liste = item->text().split(QRegularExpression("\\s*;\\s*"));
     QString name = liste.at(0);
     liste.removeFirst();
     QString bemerkung = liste.join("; ");
@@ -308,10 +308,10 @@ void FahrtagWindow::on_buttonTfDelete_clicked()
 {
     deleteItemFromList(ui->listTf, ui->buttonTfDelete);
 }
-void FahrtagWindow::on_buttonGroupTf_buttonClicked(int button)
+void FahrtagWindow::on_buttonGroupTf_idClicked(int button)
 {
     if (nehme)
-        fahrtag->setBenoetigeTf(button);
+        fahrtag->setPersonalBenoetigt(button, Tf);
 }
 
 void FahrtagWindow::on_listZf_itemChanged(QListWidgetItem *item)
@@ -333,7 +333,7 @@ void FahrtagWindow::on_buttonZfDelete_clicked()
 void FahrtagWindow::on_checkZf_clicked(bool checked)
 {
     if (nehme)
-        fahrtag->setBenoetigeZf(checked);
+        fahrtag->setPersonalBenoetigt(checked?1:0, Zf);
 }
 
 void FahrtagWindow::on_listZub_itemChanged(QListWidgetItem *item)
@@ -355,7 +355,7 @@ void FahrtagWindow::on_buttonZubDelete_clicked()
 void FahrtagWindow::on_checkZub_clicked(bool checked)
 {
     if (nehme)
-        fahrtag->setBenoetigeZub(checked);
+        fahrtag->setPersonalBenoetigt(checked?-1:0, Zub);
 }
 
 void FahrtagWindow::on_listService_itemChanged(QListWidgetItem *item)
@@ -377,7 +377,7 @@ void FahrtagWindow::on_buttonServiceDelete_clicked()
 void FahrtagWindow::on_checkService_clicked(bool checked)
 {
     if (nehme)
-        fahrtag->setBenoetigeService(checked);
+        fahrtag->setPersonalBenoetigt(checked?-1:0, Service);
 }
 
 void FahrtagWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int column)
@@ -397,8 +397,8 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int c
 
         try {
             Einsatz *e = fahrtag->addPerson(name, bemerkung, kat);
-            e->setBeginnFiktiv(beginn);
-            e->setEndeFiktiv(ende);
+            e->setBeginnAbweichend(beginn);
+            e->setEndeAbweichend(ende);
             ptwi->setEinsatz(e);
             if (! e->getPerson()->getAktiv())
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
@@ -442,8 +442,8 @@ EinsatzTableWidgetItem *FahrtagWindow::fuegeInTabelleEin(Einsatz *e, bool block)
     static_cast<QComboBox*>(ui->tablePersonen->cellWidget(row, 1))->setCurrentText(
                 toString((e->getKategorie() == Begleiter ? Zub : e->getKategorie()))
                 );
-    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->setTime(e->getBeginnFiktiv());
-    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->setTime(e->getEndeFiktiv());
+    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 2))->setTime(e->getBeginnAbweichend());
+    static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(row, 3))->setTime(e->getEndeAbweichend());
     if (ui->tablePersonen->item(row, 4) == nullptr) {
         ui->tablePersonen->setItem(row, 4, new QTableWidgetItem(""));
     }
@@ -467,20 +467,20 @@ void FahrtagWindow::on_actionDelete_triggered()
 
 void FahrtagWindow::on_actionPrint_triggered()
 {
-    fahrtag->print(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    fahrtag->print(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 void FahrtagWindow::on_actionPdf_triggered()
 {
-    fahrtag->print(Export::getPrinterPDF(this, windowTitle(), QPrinter::Orientation::Portrait));
+    fahrtag->print(Export::getPrinterPDF(this, windowTitle(), QPageLayout::Orientation::Portrait));
 }
 
 void FahrtagWindow::on_actionResPrint_triggered()
 {
-    fahrtag->printReservierungsuebersicht(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    fahrtag->printReservierungsuebersicht(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 void FahrtagWindow::on_actionResPdf_triggered()
 {
-    fahrtag->printReservierungsuebersicht(Export::getPrinterPDF(this, windowTitle()+"-Reservierungen", QPrinter::Orientation::Portrait));
+    fahrtag->printReservierungsuebersicht(Export::getPrinterPDF(this, windowTitle()+"-Reservierungen", QPageLayout::Orientation::Portrait));
 }
 
 void FahrtagWindow::showReservierung(Reservierung *r)
@@ -828,7 +828,7 @@ void FahrtagWindow::updateAuswertungReservierungen()
 void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)
 {
     if (nehme) {
-        fahrtag->setPersonalBenoetigt(checked);
+        fahrtag->setPersonalBenoetigt(checked?-1:0);
     }
 }
 

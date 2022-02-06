@@ -656,15 +656,12 @@ void Person::berechne() const
 {
     zeiten.clear();
 
-    AActivity *vorherige = nullptr;
-    QTime vorherigeEnde = QTime(0,0);
+    QDateTime vorherigeEnde = QDateTime(QDate(1900, 1, 1), QTime(0,0));
     for(Einsatz *e: getActivities()) {
             if (! e->getAnrechnen()) continue;
 
             // Einsatzstunden
-            QTime start = e->getBeginnRichtig();
-            QTime ende = e->getEndeRichtig();
-            int duration = (start.msecsTo(ende) / 60000); // in Minuten
+            int duration = e->getDauer();
             switch (e->getKategorie()) {
             case Begleiter:
                 zeiten.insert(Zub, zeiten.value(Zub)+duration);
@@ -677,15 +674,22 @@ void Person::berechne() const
                 break;
             }
             zeiten.insert(Anzahl, zeiten.value(Anzahl)+1);
-            zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
-
-            if ((e->getActivity() == vorherige && e->getBeginnRichtig() != vorherigeEnde)
-                || e->getActivity() != vorherige) {
+            if (vorherigeEnde > e->getVon()) {
+                // Einsaetze ueberlappen:
+                // -> nur reduzierte Zeit anrechen, keine Strecke anrechnen
+                zeiten.insert(Gesamt, zeiten.value(Gesamt)+(vorherigeEnde.secsTo(e->getBis()) / 60));
+            } else if (vorherigeEnde == e->getVon()) {
+                // Einsaetze gehen nahtlos ineinander ueber:
+                // -> Keine Strecke aber gesamte Zeit anrechnen
+                zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
+            } else {
+                // Luecke zwischen den Einsaetzen:
+                // -> Strecke und gesamte Zeit anrechnen
+                zeiten.insert(Gesamt, zeiten.value(Gesamt)+duration);
                 if (e->getKategorie() != Category::Buero)
                     zeiten.insert(Kilometer, zeiten.value(Kilometer)+2*strecke);
             }
-            vorherige = e->getActivity();
-            vorherigeEnde = e->getEndeRichtig();
+            vorherigeEnde = e->getBis();
     }
 
     for (auto it = additional.cbegin(); it != additional.cend(); ++it) {
@@ -847,7 +851,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
                 if (!e->getActivity()->getStringShort().contains(e->getActivity()->getAnlass()) && e->getActivity()->getAnlass() != "")
                     html += "<br/>"+e->getActivity()->getAnlass();
                 html +="</td><td>"
-                     + e->getBeginnRichtig().toString("HH:mm")+"-"+e->getEndeRichtig().toString("HH:mm")+"</td><td>"
+                     + e->getVon().toString("HH:mm")+"-"+e->getBis().toString("HH:mm")+"</td><td>"
                      + ::toString(e->getKategorie()) + "</td><td>"
                      + e->getBemerkung() + "</td></tr>";
         }
@@ -873,8 +877,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
 
 bool Person::printZeiten(QPrinter *printer)
 {
-    QString html = getZeitenFuerEinzelAlsHTML() + Export::zeitStempel(false);
-    return Export::druckeHtmlAufDrucker(html, printer);
+    return Export::druckeHtml(getZeitenFuerEinzelAlsHTML() + Export::zeitStempel(false), printer);
 }
 
 QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
@@ -1190,8 +1193,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
 
 bool Person::printPersonaldaten(QPrinter *printer) const
 {
-    QString html = getPersonaldatenFuerEinzelAlsHTML() + Export::zeitStempel();
-    return Export::druckeHtmlAufDrucker(html, printer);
+    return Export::druckeHtml(getPersonaldatenFuerEinzelAlsHTML() + Export::zeitStempel(), printer);
 }
 
 QString Person::getPersonaldatenFuerListeAlsCSV() const

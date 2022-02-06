@@ -4,7 +4,6 @@
 #include "export.h"
 
 #include <QJsonArray>
-#include <QLinkedList>
 
 using namespace EplException;
 
@@ -24,17 +23,20 @@ AActivity::AActivity(QDate date, ManagerPersonal *p) : QObject()
     art = Arbeitseinsatz;
     datum = date;
     ort = "";
-    zeitAnfang = QTime(10, 0);
+    anfang = QMap<Category,QTime>();
+    ende = QMap<Category,QTime>();
+    setZeitAnfang(QTime(10, 0));
     if (date.month() <= 3 || date.month() >= 11) {
-        zeitEnde = QTime(16, 0);
+        setZeitEnde(QTime(16, 0));
     } else {
-        zeitEnde = QTime(18, 0);
+        setZeitEnde(QTime(18, 0));
     }
     zeitenUnbekannt = false;
     anlass = "";
     bemerkungen = "";
     personen = QList<Einsatz*>();
-    personalBenoetigt = true;
+    personalBenoetigt = QMap<Category, int>();
+    setPersonalBenoetigt(-1);
     wichtig = false;
     abgesagt = false;
     personal = p;
@@ -48,8 +50,10 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
     art = Arbeitseinsatz;
     datum = QDate::fromString(o.value("datum").toString(), "yyyy-MM-dd");
     ort = o.value("ort").toString();
-    zeitAnfang = QTime::fromString(o.value("zeitAnfang").toString(), "hh:mm");
-    zeitEnde = QTime::fromString(o.value("zeitEnde").toString(), "hh:mm");
+    anfang = QMap<Category,QTime>();
+    ende = QMap<Category,QTime>();
+    setZeitAnfang(QTime::fromString(o.value("zeitAnfang").toString(), "hh:mm"));
+    setZeitEnde(QTime::fromString(o.value("zeitEnde").toString(), "hh:mm"));
     zeitenUnbekannt = o.value("zeitenUnbekannt").toBool();
     anlass = o.value("anlass").toString();
     bemerkungen = o.value("bemerkungen").toString();
@@ -78,7 +82,8 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
         person->addActivity(e);
         personen.append(e);
     }
-    personalBenoetigt = o.value("personalBenoetigt").toBool(true);
+    personalBenoetigt = QMap<Category, int>();
+    setPersonalBenoetigt(o.value("personalBenoetigt").toBool(true));
     wichtig = o.value("wichtig").toBool(false);
     abgesagt = o.value("abgesagt").toBool(false);
 }
@@ -92,7 +97,7 @@ AActivity::~AActivity()
 
 Art AActivity::getArt() const
 {
-    return Art::Arbeitseinsatz;
+    return art;
 }
 
 QJsonObject AActivity::toJson() const
@@ -101,8 +106,8 @@ QJsonObject AActivity::toJson() const
     data.insert("art", static_cast<int>(Art::Arbeitseinsatz));
     data.insert("datum", datum.toString("yyyy-MM-dd"));
     data.insert("ort", ort);
-    data.insert("zeitAnfang", zeitAnfang.toString("hh:mm"));
-    data.insert("zeitEnde", zeitEnde.toString("hh:mm"));
+    data.insert("zeitAnfang", getZeitAnfang().toString("hh:mm"));
+    data.insert("zeitEnde", getZeitEnde().toString("hh:mm"));
     data.insert("zeitenUnbekannt", zeitenUnbekannt);
     data.insert("anlass", anlass);
     data.insert("bemerkungen", bemerkungen);
@@ -114,14 +119,14 @@ QJsonObject AActivity::toJson() const
         } else {
             persJson.insert("name", e->getPerson()->getName());
         }
-        persJson.insert("beginn", e->getBeginnFiktiv().toString("hh:mm"));
-        persJson.insert("ende", e->getEndeFiktiv().toString("hh:mm"));
+        persJson.insert("beginn", e->getBeginnAbweichend().toString("hh:mm"));
+        persJson.insert("ende", e->getEndeAbweichend().toString("hh:mm"));
         persJson.insert("kat", e->getKategorie());
         persJson.insert("bemerkung", e->getBemerkung());
         personenJSON.append(persJson);
     }
     data.insert("personen", personenJSON);
-    data.insert("personalBenoetigt", personalBenoetigt);
+    data.insert("personalBenoetigt", getPersonalBenoetigt() != 0);
     data.insert("wichtig", wichtig);
     data.insert("abgesagt", abgesagt);
     return data;
@@ -148,41 +153,43 @@ void AActivity::setOrt(const QString &value)
     emit changed(this);
 }
 
-QTime AActivity::getZeitAnfang() const
+QDateTime AActivity::getVon([[maybe_unused]] const Category kat) const
 {
-    return zeitAnfang;
+    QDateTime zeit = QDateTime(datum, getZeitAnfang(kat));
+    if (abgesagt)
+        zeit.setTime(QTime(0,0));
+    if (zeitenUnbekannt)
+        zeit.setTime(QTime(0,0));
+    return zeit;
 }
 
-QTime AActivity::getAnfang([[maybe_unused]] const Category kat) const
+QTime AActivity::getZeitAnfang(const Category kat) const
 {
-    if (abgesagt)
-        return QTime();
-    if (zeitenUnbekannt)
-        return QTime();
-    return zeitAnfang;
+    return anfang.value(kat, anfang.value(Gesamt));
 }
-void AActivity::setZeitAnfang(QTime value)
+void AActivity::setZeitAnfang(QTime value, const Category kat)
 {
-    zeitAnfang = value;
+    anfang.insert(kat, value);
     emit changed(this);
 }
 
-QTime AActivity::getZeitEnde() const
+QDateTime AActivity::getBis([[maybe_unused]] const Category kat) const
 {
-    return zeitEnde;
+    QDateTime zeit = QDateTime(datum, getZeitEnde(kat));
+    if (abgesagt)
+        zeit.setTime(QTime(0,0));
+    if (zeitenUnbekannt)
+        zeit.setTime(QTime(0,0));
+    return zeit;
 }
 
-QTime AActivity::getEnde([[maybe_unused]] const Category kat) const
+QTime AActivity::getZeitEnde(const Category kat) const
 {
-    if (abgesagt)
-        return QTime();
-    if (zeitenUnbekannt)
-        return QTime();
-    return zeitEnde;
+    return ende.value(kat, ende.value(Gesamt));
 }
-void AActivity::setZeitEnde(QTime value)
+void AActivity::setZeitEnde(QTime value, const Category kat)
 {
-    zeitEnde = value;
+    ende.insert(kat, value);
     emit changed(this);
 }
 
@@ -206,13 +213,13 @@ void AActivity::setBemerkungen(const QString &value)
     emit changed(this);
 }
 
-bool AActivity::getPersonalBenoetigt() const
+int AActivity::getPersonalBenoetigt(const Category kat) const
 {
-    return personalBenoetigt;
+    return personalBenoetigt.value(kat, 0);
 }
-void AActivity::setPersonalBenoetigt(bool value)
+void AActivity::setPersonalBenoetigt(int anzahl, const Category kat)
 {
-    personalBenoetigt = value;
+    personalBenoetigt.insert(kat, anzahl);
     emit changed(this);
 }
 
@@ -291,32 +298,20 @@ Einsatz *AActivity::addPerson(QString p, QString bemerkung, Category kat)
 
 bool AActivity::lesser(const AActivity *lhs, const AActivity *rhs)
 {
-    // Datum
-    if (lhs->datum < rhs->datum)
+    // Datum&Zeit
+    if (lhs->getVon() < rhs->getVon())
         return true;
-    if (lhs->datum > rhs->datum)
+    if (lhs->getVon() > rhs->getVon())
         return false;
-    // Zeiten?
-    if (lhs->zeitenUnbekannt && !rhs->zeitenUnbekannt)
+    if (lhs->getBis() < rhs->getBis())
         return true;
-    if (!lhs->zeitenUnbekannt && rhs->zeitenUnbekannt)
+    if (lhs->getBis() > rhs->getBis())
         return false;
 
-    if (!lhs->zeitenUnbekannt) {
-        // Beginn
-        if (lhs->zeitAnfang < rhs->zeitAnfang)
-            return true;
-        if (lhs->zeitAnfang > rhs->zeitAnfang)
-            return false;
-        // Ende
-        if (lhs->zeitEnde < rhs->zeitEnde)
-            return true;
-        if (lhs->zeitEnde > rhs->zeitEnde)
-            return false;
-    }
     // Folgender Teil zerstoert die Irreflexivitaet der Operation
     // Dieser Fall muss also extra abgefangen werden.
     if (lhs == rhs) return false;
+
     // Art und beliebig, bei gleicher Art
     if (lhs->getArt() != Art::Arbeitseinsatz)
         return true;
@@ -332,6 +327,20 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
     for(Einsatz *e: liste) {
         l2.append(e->getPerson()->getName());
 
+        if (e->getBeginnAbweichend() == e->getVon().time() ) {
+            if (e->getEndeAbweichend() == e->getBis().time() ) {
+                l2.append(tr("%1 bis %2").arg(
+                          e->getBeginnAbweichend().toString("HH:mm"),
+                          e->getEndeAbweichend().toString("HH:mm")));
+            } else {
+                l2.append(tr("ab %1").arg(e->getBeginnAbweichend().toString("HH:mm")));
+            }
+        } else {
+            if (e->getEndeAbweichend() == e->getBis().time() ) {
+                l2.append(tr("bis %2").arg(e->getEndeAbweichend().toString("HH:mm")));
+            }
+        }
+
         if (e->getBemerkung() != "") {
             l2.append(e->getBemerkung());
         }
@@ -342,22 +351,6 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
         l2.clear();
     }
     return l.join(sep);
-}
-
-QDateTime AActivity::getAnfangGenau() const
-{
-    if (zeitenUnbekannt)
-        return QDateTime(datum, QTime(0, 0));
-    else
-        return QDateTime(datum, zeitAnfang);
-}
-
-QDateTime AActivity::getEndeGenau() const
-{
-    if (zeitenUnbekannt)
-        return QDateTime(datum, QTime(23, 59, 59, 999));
-    else
-        return QDateTime(datum, zeitEnde);
 }
 
 QMap<Category, QList<Einsatz *>*> AActivity::splitNachKategorie() const
@@ -429,10 +422,10 @@ void AActivity::sort(QList<AActivity *> *list)
 
 bool AActivity::check(Auswahl aus) const
 {
-    if (getAnfangGenau() < aus.getAb())
+    if (getVon() < aus.getAb())
         return false;
 
-    if (getEndeGenau() > aus.getBis())
+    if (getBis() > aus.getBis())
         return false;
 
     // Auch Aktivitaeten?
@@ -503,24 +496,24 @@ QString AActivity::getHtmlForSingleView() const
     if (zeitenUnbekannt) {
         html += "<p><b>Zeiten werden noch bekannt gegeben!</b></p>";
     } else {
-        html += "<p><b>Zeiten</b>:<br/>Beginn: "+zeitAnfang.toString("hh:mm")+"<br/>";
+        html += "<p><b>Zeiten</b>:<br/>Beginn: "+getZeitAnfang().toString("hh:mm")+"<br/>";
         if (datum < QDate::currentDate()) {
-            html += "Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+            html += "Ende: "+getZeitEnde().toString("hh:mm")+"</p>";
         } else {
-            html += "Geplantes Ende: "+zeitEnde.toString("hh:mm")+"</p>";
+            html += "Geplantes Ende: "+getZeitEnde().toString("hh:mm")+"</p>";
         }
     }
     // Personal
     html += "<p><b>Helfer";
-    html += (personalBenoetigt ? required.arg(" benötigt"):"");
+    html += (getPersonalBenoetigt() ? required.arg(" benötigt"):"");
     html += ":</b></p>";
     if (personen.count() > 0) {
         html += "<table cellspacing='0' width='100%'><thead><tr><th>Name</th><th>Beginn*</th><th>Ende*</th><th>Aufgabe</th></tr></thead><tbody>";
         for(Einsatz *e: personen) {
             html += "<tr><td>"+e->getPerson()->getName()+"</td><td>";
-            html += (e->getBeginnFiktiv() == QTime(0,0) ? "" : e->getBeginnFiktiv().toString("hh:mm"));
+            html += (e->getBeginnAbweichend() == QTime(0,0) ? "" : e->getBeginnAbweichend().toString("hh:mm"));
             html += "</td><td>";
-            html += (e->getEndeFiktiv() == QTime(0,0) ? "" : e->getEndeFiktiv().toString("hh:mm"));
+            html += (e->getEndeAbweichend() == QTime(0,0) ? "" : e->getEndeAbweichend().toString("hh:mm"));
             html += "</td><td>";
             if (e->getKategorie() != Category::Sonstiges) {
                 html += toString(e->getKategorie());
@@ -564,11 +557,11 @@ QString AActivity::getHtmlForTableView() const
     if (zeitenUnbekannt) {
         html += "<td>Zeiten werden noch bekannt gegeben!</td>";
     } else {
-        html += "<td>Beginn: "+zeitAnfang.toString("hh:mm") + "<br/>";
+        html += "<td>Beginn: "+getZeitAnfang().toString("hh:mm") + "<br/>";
         if (datum < QDate::currentDate()) {
-            html += "Ende: "+zeitEnde.toString("hh:mm") + "</td>";
+            html += "Ende: "+getZeitEnde().toString("hh:mm") + "</td>";
         } else {
-            html += "Ende: ~"+zeitEnde.toString("hh:mm") + "</td>";
+            html += "Ende: ~"+getZeitEnde().toString("hh:mm") + "</td>";
         }
     }
 
@@ -610,7 +603,7 @@ QString AActivity::getHtmlForTableView() const
 
     // Sonstiges
     bool zeilenUmbruch = false;
-    if (personalBenoetigt) {
+    if (getPersonalBenoetigt()) {
         if (QDate::currentDate().addDays(10) >= datum && datum >= QDate::currentDate()) {
             html += "<td bgcolor='#ff8888'>";
         } else {
@@ -700,7 +693,7 @@ QString AActivity::getHtmlForTableView() const
 
 bool AActivity::print(QPrinter *printer)
 {
-    return Export::druckeHtmlAufDrucker(getHtmlForSingleView() + Export::zeitStempel(false), printer);
+    return Export::druckeHtml(getHtmlForSingleView() + Export::zeitStempel(false), printer);
 }
 
 QString AActivity::getFarbe() const

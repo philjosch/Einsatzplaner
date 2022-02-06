@@ -28,19 +28,19 @@ void Einsatz::sort(QList<Einsatz *> *liste)
 
 bool operator<(const Einsatz &lhs, const Einsatz &rhs)
 {
+    if (lhs.getVon() < rhs.getVon())
+        return true;
+    if (lhs.getVon() > rhs.getVon())
+        return false;
+
+    if (lhs.getBis() < rhs.getBis())
+        return true;
+    if (lhs.getBis() > rhs.getBis())
+        return false;
+
     if (AActivity::lesser(lhs.activity,rhs.activity))
         return true;
     if (AActivity::lesser(rhs.activity,lhs.activity))
-        return false;
-
-    if (lhs.beginn < rhs.beginn)
-        return true;
-    if (lhs.beginn > rhs.beginn)
-        return false;
-
-    if (lhs.ende < rhs.ende)
-        return true;
-    if (lhs.ende > rhs.ende)
         return false;
 
     return false;
@@ -70,36 +70,38 @@ void Einsatz::setBemerkung(const QString &value)
     bemerkung = value;
 }
 
-QTime Einsatz::getBeginnRichtig() const
+QDateTime Einsatz::getVon() const
 {
-    QTime zeit = activity->getAnfang(kategorie);
-    if (zeit.isValid() && beginn != QTime(0,0)) {
-        return beginn;
+    QDateTime zeit = activity->getVon(kategorie);
+    if (beginn != QTime(0,0)) {
+        zeit.setTime(beginn);
     }
     return zeit;
 }
-QTime Einsatz::getBeginnFiktiv() const
+
+QTime Einsatz::getBeginnAbweichend() const
 {
     return beginn;
 }
-void Einsatz::setBeginnFiktiv(const QTime &value)
+void Einsatz::setBeginnAbweichend(const QTime &value)
 {
     beginn = value;
 }
 
-QTime Einsatz::getEndeRichtig() const
+QDateTime Einsatz::getBis() const
 {
-    QTime zeit = activity->getEnde(kategorie);
-    if (zeit.isValid() && ende != QTime(0,0)) {
-        return ende;
+    QDateTime zeit = activity->getBis(kategorie);
+    if (ende != QTime(0,0)) {
+        zeit.setTime(ende);
     }
     return zeit;
 }
-QTime Einsatz::getEndeFiktiv() const
+
+QTime Einsatz::getEndeAbweichend() const
 {
     return ende;
 }
-void Einsatz::setEndeFiktiv(const QTime &value)
+void Einsatz::setEndeAbweichend(const QTime &value)
 {
     ende = value;
 }
@@ -107,4 +109,9 @@ void Einsatz::setEndeFiktiv(const QTime &value)
 bool Einsatz::getAnrechnen() const
 {
     return (activity->getDatum() <= QDate::currentDate() && !activity->getAbgesagt());
+}
+
+int Einsatz::getDauer() const
+{
+    return (getVon().secsTo(getBis()) / 60);
 }

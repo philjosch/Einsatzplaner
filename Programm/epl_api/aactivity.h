@@ -30,13 +30,13 @@ public:
     QString getOrt() const;
     void setOrt(const QString &value);
 
-    QTime getZeitAnfang() const;
-    virtual QTime getAnfang(const Category kat) const;
-    void setZeitAnfang(QTime value);
+    virtual QDateTime getVon(const Category kat = Gesamt) const;
+    QTime getZeitAnfang(const Category kat = Gesamt) const;
+    void setZeitAnfang(QTime value, const Category kat = Gesamt);
 
-    QTime getZeitEnde() const;
-    virtual QTime getEnde(const Category kat) const;
-    void setZeitEnde(QTime value);
+    virtual QDateTime getBis(const Category kat = Gesamt) const;
+    QTime getZeitEnde(const Category kat = Gesamt) const;
+    void setZeitEnde(QTime value, const Category kat = Gesamt);
 
     bool getZeitenUnbekannt() const;
     void setZeitenUnbekannt(bool value);
@@ -47,8 +47,8 @@ public:
     QString getBemerkungen() const;
     void setBemerkungen(const QString &value);
 
-    bool getPersonalBenoetigt() const;
-    void setPersonalBenoetigt(bool value);
+    int getPersonalBenoetigt(const Category kat = Gesamt) const;
+    void setPersonalBenoetigt(int anzahl, const Category kat = Gesamt);
 
     bool getWichtig() const;
     void setWichtig(bool value);
@@ -98,22 +98,19 @@ protected:
     Art art;
     QDate datum;
     QString ort;
-    QTime zeitAnfang;
-    QTime zeitEnde;
+    QMap<Category,QTime> anfang;
+    QMap<Category,QTime> ende;
     bool zeitenUnbekannt;
     QString anlass;
     QString bemerkungen;
     QList<Einsatz*> personen;
-    bool personalBenoetigt;
+    QMap<Category, int> personalBenoetigt;
     bool wichtig;
     bool abgesagt;
 
     ManagerPersonal *personal;
 
     QString listToString(QString sep, QList<Einsatz*> liste, QString prefix="", QString suffix="", bool aufgabe=false) const;
-
-    QDateTime getAnfangGenau() const;
-    QDateTime getEndeGenau() const;
 
     QMap<Category, QList<Einsatz *> *> splitNachKategorie() const;
 };

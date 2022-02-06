@@ -80,15 +80,15 @@ void ExportDialog::on_pushDrucken_clicked()
     if (ui->buttonGroupExportArt->checkedId() == 0) {
         switch (ui->buttonGroupExportFormat->checkedId()) {
         case 0:
-            printer = Export::getPrinterPaper(parentWidget(), QPrinter::Orientation::Landscape);
+            printer = Export::getPrinterPaper(parentWidget(), QPageLayout::Orientation::Landscape);
             break;
         case 1:
-            printer = Export::getPrinterPDF(parentWidget(), "Listenansicht", QPrinter::Orientation::Landscape);
+            printer = Export::getPrinterPDF(parentWidget(), tr("Listenansicht-%1").arg(QDate::currentDate().toString("YYYY-MM-dd")), QPageLayout::Orientation::Landscape);
             break;
         case 2:
             if (settings->getEnabled()) {
                 try {
-                    Export::Upload::uploadToServer(liste, settings->getServer());
+                    Export::uploadToServer(liste, settings->getServer());
                     QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
                 }  catch (NetworkingException &e) {
                     QMessageBox::information(parentWidget(), tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden!"));
@@ -102,10 +102,10 @@ void ExportDialog::on_pushDrucken_clicked()
     } else {
         switch (ui->buttonGroupExportFormat->checkedId()) {
         case 0:
-            printer = Export::getPrinterPaper(parentWidget(), QPrinter::Orientation::Portrait);
+            printer = Export::getPrinterPaper(parentWidget(), QPageLayout::Orientation::Portrait);
             break;
         case 1:
-            printer = Export::getPrinterPDF(parentWidget(), "Einzelansicht", QPrinter::Orientation::Portrait);
+            printer = Export::getPrinterPDF(parentWidget(), tr("Einzelansicht-%1").arg(QDate::currentDate().toString("YYYY-MM-dd")), QPageLayout::Orientation::Portrait);
             break;
         default:
             return;

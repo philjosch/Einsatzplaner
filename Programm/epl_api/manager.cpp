@@ -106,7 +106,7 @@ bool Manager::printListenansicht(QList<AActivity *> liste, QPrinter *printer)
     }
     a += AActivity::FUSS_LISTE_HTML;
 
-    return Export::druckeHtmlAufDrucker(a + Export::zeitStempel(), printer);
+    return Export::druckeHtml(a + Export::zeitStempel(), printer);
 }
 
 bool Manager::printEinzelansichten(QList<AActivity *> liste, QPrinter *printer)
@@ -116,5 +116,5 @@ bool Manager::printEinzelansichten(QList<AActivity *> liste, QPrinter *printer)
         html += a->getHtmlForSingleView();
         html += Export::zeitStempel(liste.last() != a);
     }
-    return Export::druckeHtmlAufDrucker(html, printer);
+    return Export::druckeHtml(html, printer);
 }

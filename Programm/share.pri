@@ -1,20 +1,20 @@
 #-------------------------------------------------
 #
 # Developers:
-# 2016-2021: Philipp Schepper
+# 2016-2022: Philipp Schepper
 #
 #-------------------------------------------------
 
 ###########
 # VERSION #
 ###########
-VERSION = 1.8.1
+VERSION = 1.8.2
 DEPLOYED = true
 
 ####################
 # QT EINSTELLUNGEN #
 ####################
-!versionAtLeast(QT_VERSION, 5.13.0):error("Qt version 5.13 is required for this project")
+!versionAtLeast(QT_VERSION, 6.2.0):error("Qt version 6.2.0 is required for this project")
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -69,7 +69,7 @@ win32 {
 
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
     QMAKE_TARGET_COMPANY = Philipp Schepper
-    QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2021
+    QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2022
 
     QMAKE_TARGET_PRODUCT = $${TARGET}
     RC_ICONS = $$PWD/../Icon/$${TARGET}.ico
@@ -108,6 +108,8 @@ macx {
 #################
 win32: COMMIT_HASH = $$system(git.exe -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)
 else:  COMMIT_HASH = $$system(git -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)
+#win32: REVISION = $$system(git.exe -C \""$$_PRO_FILE_PWD_"\" rev-list  $$system(git.exe -C \""$$_PRO_FILE_PWD_"\" rev-list --tags --no-walk --max-count=1)..HEAD --count)
+#else:  REVISION = $$system(git -C \""$$_PRO_FILE_PWD_"\" rev-list  $$system(git -C \""$$_PRO_FILE_PWD_"\" rev-list --tags --no-walk --max-count=1)..HEAD --count)
 DEFINES += GIT_CURRENT_SHA1="\"\\\"$${COMMIT_HASH}\\\"\""
 DEFINES += APP_NAME="\"\\\"$${TARGET}\\\"\""
 DEFINES += APP_VERSION="\"\\\"$${VERSION}\\\"\""

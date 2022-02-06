@@ -24,23 +24,6 @@ public:
     bool printReservierungsuebersicht(QPrinter *printer) const;
 
     void setArt(const Art &value);
-    Art getArt() const;
-
-    QTime getAnfang(const Category kat) const;
-    QTime getZeitTf() const;
-    void setZeitTf(QTime value);
-
-    int getBenoetigeTf() const;
-    void setBenoetigeTf(int value);
-
-    bool getBenoetigeZf() const;
-    void setBenoetigeZf(bool value);
-
-    bool getBenoetigeZub() const;
-    void setBenoetigeZub(bool value);
-
-    bool getBenoetigeService() const;
-    void setBenoetigeService(bool value);
 
     QString getWagenreihung() const;
     bool setWagenreihung(const QString &value);
@@ -57,7 +40,6 @@ public:
 
     bool checkPlausibilitaet(QList<int> zuege, QList<int> haltepunkte) const;
 
-public slots:
     QList<Mistake> verteileSitzplaetze();
     bool checkPlaetze(QString p, Reservierung *r) const;
 
@@ -68,11 +50,6 @@ public slots:
 protected:
     bool checkPlaetze(QMap<int, QList<int> > p, Reservierung *r) const;
 
-    QTime zeitTf;
-    int benoetigeTf;
-    bool benoetigeZf;
-    bool benoetigeZub;
-    bool benoetigeService;
     QString wagenreihung;
     QSet<Reservierung *> reservierungen;
     bool checkAll;

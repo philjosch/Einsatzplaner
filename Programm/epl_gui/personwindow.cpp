@@ -112,11 +112,11 @@ void PersonWindow::on_actionLoeschen_triggered()
 
 void PersonWindow::on_actionEinzelPDF_triggered()
 {
-    person->printPersonaldaten(Export::getPrinterPDF(this, "Stammdatenblatt", QPrinter::Orientation::Portrait));
+    person->printPersonaldaten(Export::getPrinterPDF(this, "Stammdaten-"+person->getName(), QPageLayout::Orientation::Portrait));
 }
 void PersonWindow::on_actionEinzelDrucken_triggered()
 {
-    person->printPersonaldaten(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    person->printPersonaldaten(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 
@@ -336,7 +336,7 @@ void PersonWindow::on_comboAnrede_currentTextChanged(const QString &arg1)
         person->setAnrede(arg1);
 }
 
-void PersonWindow::on_buttonGeschlecht_buttonClicked(int button)
+void PersonWindow::on_buttonGeschlecht_idClicked(int button)
 {
     if (enabled)
         person->setGeschlecht(static_cast<Person::Geschlecht>(button));

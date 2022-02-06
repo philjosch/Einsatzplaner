@@ -25,7 +25,7 @@ public:
     Einsatz(Person *p, AActivity *a, Category kat, QString bem, QTime von = QTime(0,0), QTime bis = QTime(0,0));
 
     /**
-     * @brief Sortiert eien Liste mit Objekten des Typs Einsatz
+     * @brief Sortiert eine Liste mit Objekten des Typs Einsatz
      * @param liste: Ein Pointer auf die zu sortierende Liste
      */
     static void sort(QList<Einsatz*> *liste);
@@ -67,42 +67,48 @@ public:
     void setBemerkung(const QString &value);
 
     /**
-     * @brief Abfragen der tatsaechlichen Zeit, an der die Person fuer diesen Einsatz taetig wurde
-     * @return Die Zeit, ab der die Person fuer diesen Einsatz tatsaechlich taetig wurde
+     * @brief Abfragen des Beginns des Einsatz
+     * @return Die genaue Zeit mit Datum und Uhrzeit, wann der Einsatz begonnen hat
      */
-    QTime getBeginnRichtig() const;
+    QDateTime getVon() const;
     /**
-     * @brief Abfragen der fiktiven Anfangszeit, d.h. die abweichende Zeit, wenn eine persoenliche Anfangszeit vorliegt
-     * @return Die Zeit, wann diese Person fuer diesen Einsatz taetig wurde
+     * @brief Abfragen der abweichenden Anfangszeit, wenn eine persoenliche Anfangszeit vorliegt
+     * @return Die von der Aktivitaet abweichende Zeit, wann diese Person fuer diesen Einsatz taetig wurde
      */
-    QTime getBeginnFiktiv() const;
+    QTime getBeginnAbweichend() const;
     /**
-     * @brief Aendern der fiktiven Anfangszeit, d.h. die angepasste Zeit fuer diese Person, falls es nicht die Anfangszeit der Aktivitaet ist
-     * @param value: Die zu speichernde fiktive Anfangszeit
+     * @brief Aendern der abweichenden Anfangszeit, falls es nicht die Anfangszeit der Aktivitaet ist
+     * @param value: Die zu speichernde abweichende Anfangszeit
      */
-    void setBeginnFiktiv(const QTime &value);
+    void setBeginnAbweichend(const QTime &value);
 
     /**
-     * @brief Abfragen der tatsaechlichen Zeit, an der die Person die Arbeit fuer diesen Einsatz beendete
-     * @return Die Zeit, dis zu der die Person fuer diesen Einsatz tatsaechlich taetig war
+     * @brief Abfragen des Endes des Einsatz
+     * @return Die genaue Zeit mit Datum und Uhrzeit, bis wann der Einsatz ging
      */
-    QTime getEndeRichtig() const;
+    QDateTime getBis() const;
     /**
-     * @brief Abfragen der fiktiven Endezeit, d.h. die abweichende Zeit, wenn eine persoenliche Endezeitzeit vorliegt
+     * @brief Abfragen der abweichenden Endezeit, wenn eine persoenliche Endezeitzeit vorliegt
      * @return Die Zeit, wann die Person die Arbeit fuer diesen Einsatz beendete
      */
-    QTime getEndeFiktiv() const;
+    QTime getEndeAbweichend() const;
     /**
-     * @brief Aendern der fiktiven Endezeit, d.h. die angepasste Zeit fuer diese Person, falls es nicht die Endezeit der Aktivitaet ist
+     * @brief Aendern der abweichenden Endezeit, falls es nicht die Endezeit der Aktivitaet ist
      * @param value: Die zu speichernde fiktive Endezeit
      */
-    void setEndeFiktiv(const QTime &value);
+    void setEndeAbweichend(const QTime &value);
 
     /**
      * @brief Abfragen, ob die Zeiten angerechnet werden sollen
      * @return true genau dann, wenn die Zeiten angerechnet werden sollen
      */
     bool getAnrechnen() const;
+
+    /**
+     * @brief Gibt die Dauer des Einsatzes zurück
+     * @return Die Dauer des Einsatzes in Minuten.
+     */
+    int getDauer() const;
 
 protected:
     static bool lesserEinsatz(const Einsatz * const &lhs, const Einsatz * const &rhs) { return (*lhs) < (*rhs); }
@@ -125,11 +131,11 @@ protected:
     QString bemerkung;
 
     /**
-     * @brief Die gespeicherte fiktive Anfangszeit
+     * @brief Die gespeicherte abweichende Anfangszeit
      */
     QTime beginn;
     /**
-     * @brief Die gespeicherte fiktive Endzeit
+     * @brief Die gespeicherte abweichende Endzeit
      */
     QTime ende;
 };

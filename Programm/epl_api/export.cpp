@@ -20,7 +20,7 @@ const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td
                             "p.break { page-break-after: always; }";
 const QFont Export::DEFAULT_FONT = QFont("Arial", 11, QFont::Normal);
 
-QPrinter *Export::getPrinterPaper(QWidget *parent, QPrinter::Orientation orientation)
+QPrinter *Export::getPrinterPaper(QWidget *parent, QPageLayout::Orientation orientation)
 {
     QPrinter *p = new QPrinter();
     preparePrinter(p, orientation);
@@ -29,7 +29,7 @@ QPrinter *Export::getPrinterPaper(QWidget *parent, QPrinter::Orientation orienta
     return nullptr;
 }
 
-QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPrinter::Orientation orientation)
+QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPageLayout::Orientation orientation)
 {
     QString filePath = FileIO::getFilePathSave(parent, path, FileIO::DateiTyp::PDF);
     if (filePath == "") return nullptr;
@@ -40,7 +40,7 @@ QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPrinter::Orienta
     return p;
 }
 
-void Export::Upload::uploadToServer(QList<AActivity *> liste, Networking::Server server)
+void Export::uploadToServer(QList<AActivity *> liste, Networking::Server server)
 {
     /* ERSTELLEN DER DATEI */
     QTemporaryFile tempFile;
@@ -49,7 +49,7 @@ void Export::Upload::uploadToServer(QList<AActivity *> liste, Networking::Server
     QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
     p->setOutputFormat(QPrinter::PdfFormat);
     p->setOutputFileName(localFile);
-    preparePrinter(p, QPrinter::Landscape);
+    preparePrinter(p, QPageLayout::Orientation::Landscape);
 
     Manager::printListenansicht(liste, p);
 
@@ -58,19 +58,7 @@ void Export::Upload::uploadToServer(QList<AActivity *> liste, Networking::Server
     }
 }
 
-void Export::Upload::autoUploadToServer(QList<AActivity*> liste, Networking::Server server)
-{
-    if (!Einstellungen::getUseAutoUpload()) {
-        throw KeinAutoUploadException();
-    }
-    if (! server.isSecure()) {
-        throw UnsichereVerbindungException();
-    }
-
-    Upload::uploadToServer(liste, server);
-}
-
-bool Export::druckeHtmlAufDrucker(QString text, QPrinter *printer)
+bool Export::druckeHtml(QString text, QPrinter *printer)
 {
     if (printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
@@ -79,29 +67,28 @@ bool Export::druckeHtmlAufDrucker(QString text, QPrinter *printer)
     return true;
 }
 
-void Export::preparePrinter(QPrinter *p, QPrinter::Orientation orientation)
+void Export::preparePrinter(QPrinter *p, QPageLayout::Orientation orientation)
 {
     if (p == nullptr) return;
     p->setFullPage(true);
     switch (orientation) {
-    case QPrinter::Portrait:
+    case QPageLayout::Orientation::Portrait:
         p->setPageMargins(QMarginsF(20, 15, 15, 15), QPageLayout::Millimeter);
-        p->setPageOrientation(QPageLayout::Portrait);
         break;
-    case QPrinter::Landscape:
+    case QPageLayout::Orientation::Landscape:
         p->setPageMargins(QMarginsF(15, 20, 15, 15), QPageLayout::Millimeter);
-        p->setPageOrientation(QPageLayout::Landscape);
         break;
     }
+    p->setPageOrientation(orientation);
 }
 
 QString Export::zeitStempel(bool seitenUmbruch)
 {
-    QString s = QObject::tr("Erstellt am: %1").arg(QDateTime::currentDateTime().toString(QObject::tr("d.M.yyyy HH:mm")))+"</small></p>";
+    QString s = QObject::tr("Erstellt am: %1").arg(QDateTime::currentDateTime().toString(QObject::tr("d.M.yyyy HH:mm")));
     if (seitenUmbruch) {
-        return "<p class='break'><small>"+s;
+        return "<p class='break'><small>"+s+"</small></p>";
      } else {
-        return "<p><small>"+s;
+        return "<p><small>"+s+"</small></p>";
     }
 }
 

@@ -45,8 +45,8 @@ ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWind
         if (kat == Category::Begleiter)
             kat = Category::Zub;
         static_cast<QComboBox*>(ui->tablePersonen->cellWidget(0, 1))->setCurrentText(toString(kat));
-        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(e->getBeginnFiktiv());
-        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(e->getEndeFiktiv());
+        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 2))->setTime(e->getBeginnAbweichend());
+        static_cast<QTimeEdit*>(ui->tablePersonen->cellWidget(0, 3))->setTime(e->getEndeAbweichend());
         ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(e->getBemerkung()));
     }
 
@@ -190,8 +190,8 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int 
 
         try {
             Einsatz *e = activity->addPerson(name, bemerkung, kat);
-            e->setBeginnFiktiv(beginn);
-            e->setEndeFiktiv(ende);
+            e->setBeginnAbweichend(beginn);
+            e->setEndeAbweichend(ende);
             ptwi->setEinsatz(e);
             if (! e->getPerson()->getAktiv()) {
                 QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
@@ -205,11 +205,11 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int 
 
 void ActivityWindow::on_actionPrint_triggered()
 {
-    activity->print(Export::getPrinterPaper(this, QPrinter::Orientation::Portrait));
+    activity->print(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 void ActivityWindow::on_actionPdf_triggered()
 {
-    activity->print(Export::getPrinterPDF(this, windowTitle(), QPrinter::Orientation::Portrait));
+    activity->print(Export::getPrinterPDF(this, windowTitle(), QPageLayout::Orientation::Portrait));
 }
 
 void ActivityWindow::on_actionDelete_triggered()
