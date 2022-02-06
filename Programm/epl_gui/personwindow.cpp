@@ -336,7 +336,7 @@ void PersonWindow::on_comboAnrede_currentTextChanged(const QString &arg1)
         person->setAnrede(arg1);
 }
 
-void PersonWindow::on_buttonGeschlecht_buttonClicked(int button)
+void PersonWindow::on_buttonGeschlecht_idClicked(int button)
 {
     if (enabled)
         person->setGeschlecht(static_cast<Person::Geschlecht>(button));

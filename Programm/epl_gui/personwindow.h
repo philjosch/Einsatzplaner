@@ -70,7 +70,7 @@ private slots:
     void on_dateAustritt_dateChanged(const QDate &date);
 
     void on_comboAnrede_currentTextChanged(const QString &arg1);
-    void on_buttonGeschlecht_buttonClicked(int button);
+    void on_buttonGeschlecht_idClicked(int button);
 
     void on_comboBeitragsart_currentIndexChanged(int index);
     void on_lineIBAN_textChanged(const QString &arg1);

@@ -308,7 +308,7 @@ void FahrtagWindow::on_buttonTfDelete_clicked()
 {
     deleteItemFromList(ui->listTf, ui->buttonTfDelete);
 }
-void FahrtagWindow::on_buttonGroupTf_buttonClicked(int button)
+void FahrtagWindow::on_buttonGroupTf_idClicked(int button)
 {
     if (nehme)
         fahrtag->setPersonalBenoetigt(button, Tf);
