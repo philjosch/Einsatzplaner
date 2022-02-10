@@ -847,7 +847,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
         for (Einsatz *e: getActivities()) {
-                html += "<tr><td>"+e->getActivity()->getDatum().toString("dd.MM.yyyy")+"<br/>"+e->getActivity()->getStringShort();
+                html += "<tr><td>"+QLocale().toString(e->getActivity()->getDatum(), "dd.MM.yyyy")+"<br/>"+e->getActivity()->getStringShort();
                 if (!e->getActivity()->getStringShort().contains(e->getActivity()->getAnlass()) && e->getActivity()->getAnlass() != "")
                     html += "<br/>"+e->getActivity()->getAnlass();
                 html +="</td><td>"

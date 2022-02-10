@@ -241,5 +241,5 @@ void ActivityWindow::setPredefinedValue(QString anlass)
 
 void ActivityWindow::updateWindowTitle()
 {
-    setWindowTitle(tr("%1 am %2").arg(activity->getStringShort(), activity->getDatum().toString("dddd dd.MM. yyyy")));
+    setWindowTitle(tr("%1 am %2").arg(activity->getStringShort(), QLocale().toString(activity->getDatum(), "dddd dd.MM. yyyy")));
 }
