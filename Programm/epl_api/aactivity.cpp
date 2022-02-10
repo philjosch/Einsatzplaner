@@ -454,7 +454,7 @@ QString AActivity::getStringShort() const
 
 QString AActivity::getString() const
 {
-    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – ";
+    QString s = QLocale().toString(datum, QObject::tr("dddd dd.MM.yyyy"))+" – ";
     if (art == Arbeitseinsatz && anlass != "")
         s += anlass;
     else
@@ -478,7 +478,7 @@ QString AActivity::getHtmlForSingleView() const
         html += anlass;
     else
         html += "Arbeitseinsatz";
-    html += " am " + datum.toString("dddd, dd.MM.yyyy");
+    html += " am " + QLocale().toString(datum, "dddd, dd.MM.yyyy");
     if (abgesagt)
         html += required.arg(" ABGESAGT!");
     if (wichtig)
@@ -536,7 +536,7 @@ QString AActivity::getHtmlForTableView() const
     } else {
         html += "<td>";
     }
-    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br</>";
+    html += "<b>"+QLocale().toString(datum, QObject::tr("dddd d.M.yyyy"))+"</b><br</>";
     if (anlass != "") {
         html += anlass;
     } else {

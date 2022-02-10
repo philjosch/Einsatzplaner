@@ -570,7 +570,7 @@ void FahrtagWindow::toggleFelderReservierung(bool enabled)
 
 void FahrtagWindow::updateWindowTitle()
 {
-    setWindowTitle(toString(fahrtag->getArt())+" am "+fahrtag->getDatum().toString("dddd, dd.MM.yyyy"));
+    setWindowTitle(toString(fahrtag->getArt())+" am "+QLocale().toString(fahrtag->getDatum(), "dddd, dd.MM.yyyy"));
 }
 
 int FahrtagWindow::getIndexVonZug(int zug)
