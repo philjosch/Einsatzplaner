@@ -20,7 +20,7 @@ public:
 
 private slots:
     void setDefault();
-    void on_buttonBox_clicked(QAbstractButton *button);
+    void dialogButtonClicked(QAbstractButton *button);
     void save();
 
 private:

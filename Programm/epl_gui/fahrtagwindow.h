@@ -24,80 +24,80 @@ public:
 
 private slots:
     // Allgemeine Daten
-    void on_dateDate_dateChanged(const QDate &date);
-    void on_comboArt_currentIndexChanged(int index);
-    void on_lineAnlass_textChanged();
-    void on_checkWichtig_clicked(bool checked);
-    void on_checkAbgesagt_clicked(bool checked);
-    void on_comboWagenreihung_currentTextChanged(const QString &arg1);
-    void on_timeBeginnTf_timeChanged(const QTime &time);
-    void on_timeBeginn_timeChanged(const QTime &time);
-    void on_timeEnde_timeChanged(const QTime &time);
-    void on_checkZeiten_clicked(bool checked);
+    void changedDate(const QDate &date);
+    void changedType(int index);
+    void changedPurpose();
+    void changedImportant(bool checked);
+    void changedCancelled(bool checked);
+    void changedCarOrder(const QString &arg1);
+    void changedTimeStartTf(const QTime &time);
+    void changedTimeStart(const QTime &time);
+    void changedTimeEnd(const QTime &time);
+    void changedTimeStatus(bool checked);
 
     // Personaltab
-    void on_listTf_itemChanged(QListWidgetItem *item);
-    void on_buttonTfAdd_clicked();
-    void on_buttonTfDelete_clicked();
-    void on_buttonGroupTf_idClicked(int button);
+    void changedTf(QListWidgetItem *item);
+    void addTf();
+    void deleteTf();
+    void changedRequireTf(int button);
 
-    void on_listZub_itemChanged(QListWidgetItem *item);
-    void on_buttonZfAdd_clicked();
-    void on_buttonZfDelete_clicked();
-    void on_checkZf_clicked(bool checked);
+    void changedZf(QListWidgetItem *item);
+    void addZf();
+    void deleteZf();
+    void changedRequireZf(bool checked);
 
-    void on_listZf_itemChanged(QListWidgetItem *item);
-    void on_buttonZubAdd_clicked();
-    void on_buttonZubDelete_clicked();
-    void on_checkZub_clicked(bool checked);
+    void changedZub(QListWidgetItem *item);
+    void addZub();
+    void deleteZub();
+    void changedRequireZub(bool checked);
 
-    void on_listService_itemChanged(QListWidgetItem *item);
-    void on_buttonServiceAdd_clicked();
-    void on_buttonServiceDelete_clicked();
-    void on_checkService_clicked(bool checked);
+    void changedService(QListWidgetItem *item);
+    void addService();
+    void deleteService();
+    void changedRequireService(bool checked);
 
-    void on_textBemerkungen_textChanged();
+    void changedDescription();
 
     // Reservierungen
-    void on_buttonAddReservierung_clicked();
-    void on_buttonDeleteReservierung_clicked();
+    void resAdd();
+    void resDelete();
 
-    void on_comboAuswahlRes_currentIndexChanged(int index);
+    void resChangedFilter(int index);
 
-    void on_checkBoxAll_clicked(bool checked);
-    void on_buttonVerteile_clicked();
+    void resChangedCheckAll(bool checked);
+    void resDistribute();
 
-    void on_lineName_textChanged(const QString &arg1);
-    void on_lineMail_textChanged(const QString &arg1);
-    void on_lineTelefon_textChanged(const QString &arg1);
+    void resNameChanged(const QString &arg1);
+    void resMailChanged(const QString &arg1);
+    void resTelefonChanged(const QString &arg1);
 
-    void on_spinAnzahl_valueChanged(int arg1);
-    void on_comboKlasse_currentIndexChanged(int index);
-    void on_lineSitze_textChanged(const QString &arg1);
-    void on_lineSitze_returnPressed();
-    void on_checkFahrrad_clicked(bool checked);
+    void resChangedNumber(int arg1);
+    void resChangedClass(int index);
+    void resChangedSeats(const QString &arg1);
+    void resChangedSeatsCheck();
+    void resChangedBike(bool checked);
 
     void handlerFahrtChanged();
 
-    void on_plainSonstiges_textChanged();
-    void on_listRes_itemClicked(QListWidgetItem *item);
+    void resChangedComment();
+    void resItemClicked(QListWidgetItem *item);
 
-    void updateAuswertungReservierungen(); // Aktualisiert die Anzeige, wieviele Sitzplätze belegt sind
+    void resUpdateStatistics(); // Aktualisiert die Anzeige, wieviele Sitzplätze belegt sind
 
     // Einsatzzeiten
-    void on_checkBoxBenoetigt_clicked(bool checked);
-    void on_tablePersonen_cellChanged(int row, int column);
+    void changedRequired(bool checked);
+    void changedTableCell(int row, int column);
 
-    void on_buttonRemovePerson_clicked();
-    EinsatzTableWidgetItem *fuegeZeileInTabelleEin();
-    EinsatzTableWidgetItem *fuegeInTabelleEin(Einsatz *e=nullptr, bool block=false);
+    void removePersonTabelle();
+    EinsatzTableWidgetItem *addRowToTable();
+    EinsatzTableWidgetItem *addToTable(Einsatz *e=nullptr, bool block=false);
 
     // Menue
-    void on_actionDelete_triggered();
-    void on_actionPrint_triggered();
-    void on_actionPdf_triggered();
-    void on_actionResPdf_triggered();
-    void on_actionResPrint_triggered();
+    void deleteTriggered();
+    void exportPrint();
+    void exportPdf();
+    void exportReservationPdf();
+    void exportReservationPrint();
 
     // Hilfe
 

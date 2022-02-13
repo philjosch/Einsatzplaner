@@ -20,6 +20,60 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
 
     connect(this, &FahrtagWindow::loeschen, parent, &CoreMainWindow::loeschenAktivitaet);
 
+    // Allgemeine Daten
+    connect(ui->dateDate, &QDateEdit::dateChanged, this, &FahrtagWindow::changedDate);
+    connect(ui->comboArt, &QComboBox::currentIndexChanged, this, &FahrtagWindow::changedType);
+    connect(ui->lineAnlass, &QLineEdit::textChanged, this, &FahrtagWindow::changedPurpose);
+    connect(ui->checkWichtig, &QCheckBox::clicked, this, &FahrtagWindow::changedImportant);
+    connect(ui->checkAbgesagt, &QCheckBox::clicked, this, &FahrtagWindow::changedCancelled);
+    connect(ui->comboWagenreihung, &QComboBox::currentTextChanged, this, &FahrtagWindow::changedCarOrder);
+    connect(ui->timeBeginnTf, &QTimeEdit::timeChanged, this, &FahrtagWindow::changedTimeStartTf);
+    connect(ui->timeBeginn, &QTimeEdit::timeChanged, this, &FahrtagWindow::changedTimeStart);
+    connect(ui->timeEnde, &QTimeEdit::timeChanged, this, &FahrtagWindow::changedTimeEnd);
+    connect(ui->checkZeiten, &QCheckBox::clicked, this, &FahrtagWindow::changedTimeStatus);
+
+    // Personaltab
+    connect(ui->listTf, &QListWidget::itemChanged, this, &FahrtagWindow::changedTf);
+    connect(ui->buttonTfAdd, &QPushButton::clicked, this, &FahrtagWindow::addTf);
+    connect(ui->buttonTfDelete, &QPushButton::clicked, this, &FahrtagWindow::deleteTf);
+    connect(ui->buttonGroupTf, &QButtonGroup::idClicked, this, &FahrtagWindow::changedRequireTf);
+
+    connect(ui->listZf, &QListWidget::itemChanged, this, &FahrtagWindow::changedZf);
+    connect(ui->buttonZfAdd, &QPushButton::clicked, this, &FahrtagWindow::addZf);
+    connect(ui->buttonZfDelete, &QPushButton::clicked, this, &FahrtagWindow::deleteZf);
+    connect(ui->checkZf, &QCheckBox::clicked, this, &FahrtagWindow::changedRequireZf);
+
+    connect(ui->listZub, &QListWidget::itemChanged, this, &FahrtagWindow::changedZub);
+    connect(ui->buttonZubAdd, &QPushButton::clicked, this, &FahrtagWindow::addZub);
+    connect(ui->buttonZubDelete, &QPushButton::clicked, this, &FahrtagWindow::deleteZub);
+    connect(ui->checkZub, &QCheckBox::clicked, this, &FahrtagWindow::changedRequireZub);
+
+    connect(ui->listService, &QListWidget::itemChanged, this, &FahrtagWindow::changedService);
+    connect(ui->buttonServiceAdd, &QPushButton::clicked, this, &FahrtagWindow::addService);
+    connect(ui->buttonServiceDelete, &QPushButton::clicked, this, &FahrtagWindow::deleteService);
+    connect(ui->checkService, &QCheckBox::clicked, this, &FahrtagWindow::changedRequireService);
+
+    connect(ui->textBemerkungen, &QPlainTextEdit::textChanged, this, &FahrtagWindow::changedDescription);
+
+    // Reservierungen
+    connect(ui->buttonAddReservierung, &QPushButton::clicked, this, &FahrtagWindow::resAdd);
+    connect(ui->buttonDeleteReservierung, &QPushButton::clicked, this, &FahrtagWindow::resDelete);
+
+    connect(ui->comboAuswahlRes, &QComboBox::currentIndexChanged, this, &FahrtagWindow::resChangedFilter);
+
+    connect(ui->checkBoxAll, &QCheckBox::clicked, this, &FahrtagWindow::resChangedCheckAll);
+    connect(ui->buttonVerteile, &QPushButton::clicked, this, &FahrtagWindow::resDistribute);
+
+    connect(ui->lineName, &QLineEdit::textChanged, this, &FahrtagWindow::resNameChanged);
+    connect(ui->lineMail, &QLineEdit::textChanged, this, &FahrtagWindow::resMailChanged);
+    connect(ui->lineTelefon, &QLineEdit::textChanged, this, &FahrtagWindow::resTelefonChanged);
+
+    connect(ui->spinAnzahl, &QSpinBox::valueChanged, this, &FahrtagWindow::resChangedNumber);
+    connect(ui->comboKlasse, &QComboBox::currentIndexChanged, this, &FahrtagWindow::resChangedClass);
+    connect(ui->lineSitze, &QLineEdit::textChanged, this, &FahrtagWindow::resChangedSeats);
+    connect(ui->lineSitze, &QLineEdit::returnPressed, this, &FahrtagWindow::resChangedSeatsCheck);
+    connect(ui->checkFahrrad, &QCheckBox::clicked, this, &FahrtagWindow::resChangedBike);
+
     connect(ui->comboStart1Zug, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
     connect(ui->comboStart1Hp, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
     connect(ui->comboEnde1Zug, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
@@ -28,7 +82,23 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
     connect(ui->comboStart2Hp, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
     connect(ui->comboEnde2Zug, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
     connect(ui->comboEnde2Hp, SIGNAL(currentIndexChanged(int)), this, SLOT(handlerFahrtChanged()));
-    connect(ui->buttonAddPerson, SIGNAL(clicked()), this, SLOT(fuegeZeileInTabelleEin()));
+
+    connect(ui->plainSonstiges, &QPlainTextEdit::textChanged, this, &FahrtagWindow::resChangedComment);
+    connect(ui->listRes, &QListWidget::itemClicked, this, &FahrtagWindow::resItemClicked);
+
+    // Einsatzzeiten
+    connect(ui->checkBoxBenoetigt, &QCheckBox::clicked, this, &FahrtagWindow::changedRequired);
+    connect(ui->tablePersonen, &QTableWidget::cellChanged, this, &FahrtagWindow::changedTableCell);
+
+    connect(ui->buttonAddPerson, &QPushButton::clicked, this, &FahrtagWindow::addRowToTable);
+    connect(ui->buttonRemovePerson, &QPushButton::clicked, this, &FahrtagWindow::removePersonTabelle);
+
+    // Menue
+    connect(ui->actionDelete, &QAction::triggered, this, &FahrtagWindow::deleteTriggered);
+    connect(ui->actionPrint, &QAction::triggered, this, &FahrtagWindow::exportPrint);
+    connect(ui->actionPdf, &QAction::triggered, this, &FahrtagWindow::exportPdf);
+    connect(ui->actionResPdf, &QAction::triggered, this, &FahrtagWindow::exportReservationPdf);
+    connect(ui->actionResPrint, &QAction::triggered, this, &FahrtagWindow::exportReservationPrint);
 
     fahrtag = f;
 
@@ -42,13 +112,13 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
     ui->lineAnlass->setText(fahrtag->getAnlass().replace("<br/>","\n"));
     ui->timeEnde->setTime(fahrtag->getZeitEnde());
     ui->checkZeiten->setChecked(fahrtag->getZeitenUnbekannt());
-    on_checkZeiten_clicked(fahrtag->getZeitenUnbekannt());
+    changedTimeStatus(fahrtag->getZeitenUnbekannt());
     ui->checkBoxBenoetigt->setChecked(fahrtag->getPersonalBenoetigt());
     ui->textBemerkungen->setPlainText(fahrtag->getBemerkungen().replace("<br/>","\n"));
 
     // Daten von Fahrtag
     ui->comboArt->setCurrentIndex(fahrtag->getArt());
-    on_comboArt_currentIndexChanged(fahrtag->getArt());
+    changedType(fahrtag->getArt());
     ui->timeBeginnTf->setTime(fahrtag->getZeitAnfang(Tf));
     ui->timeBeginn->setTime(fahrtag->getZeitAnfang());
     ui->checkWichtig->setChecked(fahrtag->getWichtig());
@@ -103,13 +173,13 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
             block = false;
             break;
         }
-        EinsatzTableWidgetItem *ptwi = fuegeInTabelleEin(e, block);
+        EinsatzTableWidgetItem *ptwi = addToTable(e, block);
         ptwi->setEinsatz(e);
         item->setTableItem(ptwi);
     }
     nehme = true;
 
-    updateAuswertungReservierungen();
+    resUpdateStatistics();
 }
 
 FahrtagWindow::~FahrtagWindow()
@@ -117,14 +187,14 @@ FahrtagWindow::~FahrtagWindow()
     delete ui;
 }
 
-void FahrtagWindow::on_dateDate_dateChanged(const QDate &date)
+void FahrtagWindow::changedDate(const QDate &date)
 {
     if (nehme)
         fahrtag->setDatum(date);
     updateWindowTitle();
 }
 
-void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
+void FahrtagWindow::changedType(int index)
 {
     Art art = static_cast<Art>(index);
     if (nehme) {
@@ -141,30 +211,30 @@ void FahrtagWindow::on_comboArt_currentIndexChanged(int index)
     updateWindowTitle();
 }
 
-void FahrtagWindow::on_lineAnlass_textChanged()
+void FahrtagWindow::changedPurpose()
 {
     if (nehme)
         fahrtag->setAnlass(ui->lineAnlass->text().replace("\n","<br/>"));
 }
 
-void FahrtagWindow::on_checkWichtig_clicked(bool checked)
+void FahrtagWindow::changedImportant(bool checked)
 {
     if (nehme)
         fahrtag->setWichtig(checked);
 }
 
-void FahrtagWindow::on_checkAbgesagt_clicked(bool checked)
+void FahrtagWindow::changedCancelled(bool checked)
 {
     if (nehme)
         fahrtag->setAbgesagt(checked);
 }
 
-void FahrtagWindow::on_comboWagenreihung_currentTextChanged(const QString &arg1)
+void FahrtagWindow::changedCarOrder(const QString &arg1)
 {
     if (nehme) {
         QString alt = fahrtag->getWagenreihung();
         if (fahrtag->setWagenreihung(arg1)) {
-            updateAuswertungReservierungen();
+            resUpdateStatistics();
         } else {
             QMessageBox::information(this, tr("Fehler"), tr("Die Wagenreihung konnte nicht geändert werden, da es Reservierungen in den wegfallenden Waggons gibt!"));
             nehme = false;
@@ -174,31 +244,31 @@ void FahrtagWindow::on_comboWagenreihung_currentTextChanged(const QString &arg1)
     }
 }
 
-void FahrtagWindow::on_timeBeginnTf_timeChanged(const QTime &time)
+void FahrtagWindow::changedTimeStartTf(const QTime &time)
 {
     if (nehme)
         fahrtag->setZeitAnfang(time, Tf);
 }
 
-void FahrtagWindow::on_timeBeginn_timeChanged(const QTime &time)
+void FahrtagWindow::changedTimeStart(const QTime &time)
 {
     if (nehme)
         fahrtag->setZeitAnfang(time);
 }
 
-void FahrtagWindow::on_textBemerkungen_textChanged()
+void FahrtagWindow::changedDescription()
 {
     if (nehme)
         fahrtag->setBemerkungen(ui->textBemerkungen->toPlainText().replace("\n","<br/>"));
 }
 
-void FahrtagWindow::on_timeEnde_timeChanged(const QTime &time)
+void FahrtagWindow::changedTimeEnd(const QTime &time)
 {
     if (nehme)
         fahrtag->setZeitEnde(time);
 }
 
-void FahrtagWindow::on_checkZeiten_clicked(bool checked)
+void FahrtagWindow::changedTimeStatus(bool checked)
 {
     if (nehme)
         fahrtag->setZeitenUnbekannt(checked);
@@ -267,7 +337,7 @@ void FahrtagWindow::itemInListChanged(QListWidgetItem *item , Category kat)
             QMessageBox::information(this, tr("Information"), tr("Die Person wird als passives Mitglied geführt. Sie wurde aber dennoch eingetragen!"));
 
         // Zeile für die Person in die Tabelle einfügen
-        EinsatzTableWidgetItem *ptwi = fuegeInTabelleEin(einsatz, true);
+        EinsatzTableWidgetItem *ptwi = addToTable(einsatz, true);
         ptwi->setEinsatz(einsatz);
         tlwi->setTableItem(ptwi);
     }  catch (AActivityException &e) {
@@ -292,7 +362,7 @@ void FahrtagWindow::plausibilityCheck()
     }
 }
 
-void FahrtagWindow::on_listTf_itemChanged(QListWidgetItem *item)
+void FahrtagWindow::changedTf(QListWidgetItem *item)
 {
     if (nehme) {
         nehme = false;
@@ -300,21 +370,21 @@ void FahrtagWindow::on_listTf_itemChanged(QListWidgetItem *item)
         nehme = true;
     }
 }
-void FahrtagWindow::on_buttonTfAdd_clicked()
+void FahrtagWindow::addTf()
 {
     addItemTolist(ui->listTf, ui->buttonTfDelete);
 }
-void FahrtagWindow::on_buttonTfDelete_clicked()
+void FahrtagWindow::deleteTf()
 {
     deleteItemFromList(ui->listTf, ui->buttonTfDelete);
 }
-void FahrtagWindow::on_buttonGroupTf_idClicked(int button)
+void FahrtagWindow::changedRequireTf(int button)
 {
     if (nehme)
         fahrtag->setPersonalBenoetigt(button, Tf);
 }
 
-void FahrtagWindow::on_listZf_itemChanged(QListWidgetItem *item)
+void FahrtagWindow::changedZf(QListWidgetItem *item)
 {
     if (nehme) {
         nehme = false;
@@ -322,21 +392,21 @@ void FahrtagWindow::on_listZf_itemChanged(QListWidgetItem *item)
         nehme = true;
     }
 }
-void FahrtagWindow::on_buttonZfAdd_clicked()
+void FahrtagWindow::addZf()
 {
     addItemTolist(ui->listZf, ui->buttonZfDelete);
 }
-void FahrtagWindow::on_buttonZfDelete_clicked()
+void FahrtagWindow::deleteZf()
 {
     deleteItemFromList(ui->listZf, ui->buttonZfDelete);
 }
-void FahrtagWindow::on_checkZf_clicked(bool checked)
+void FahrtagWindow::changedRequireZf(bool checked)
 {
     if (nehme)
         fahrtag->setPersonalBenoetigt(checked?1:0, Zf);
 }
 
-void FahrtagWindow::on_listZub_itemChanged(QListWidgetItem *item)
+void FahrtagWindow::changedZub(QListWidgetItem *item)
 {
     if (nehme) {
         nehme = false;
@@ -344,21 +414,21 @@ void FahrtagWindow::on_listZub_itemChanged(QListWidgetItem *item)
         nehme = true;
     }
 }
-void FahrtagWindow::on_buttonZubAdd_clicked()
+void FahrtagWindow::addZub()
 {
     addItemTolist(ui->listZub, ui->buttonZubDelete);
 }
-void FahrtagWindow::on_buttonZubDelete_clicked()
+void FahrtagWindow::deleteZub()
 {
     deleteItemFromList(ui->listZub, ui->buttonZubDelete);
 }
-void FahrtagWindow::on_checkZub_clicked(bool checked)
+void FahrtagWindow::changedRequireZub(bool checked)
 {
     if (nehme)
         fahrtag->setPersonalBenoetigt(checked?-1:0, Zub);
 }
 
-void FahrtagWindow::on_listService_itemChanged(QListWidgetItem *item)
+void FahrtagWindow::changedService(QListWidgetItem *item)
 {
     if (nehme) {
         nehme = false;
@@ -366,21 +436,21 @@ void FahrtagWindow::on_listService_itemChanged(QListWidgetItem *item)
         nehme = true;
     }
 }
-void FahrtagWindow::on_buttonServiceAdd_clicked()
+void FahrtagWindow::addService()
 {
     addItemTolist(ui->listService, ui->buttonServiceDelete);
 }
-void FahrtagWindow::on_buttonServiceDelete_clicked()
+void FahrtagWindow::deleteService()
 {
     deleteItemFromList(ui->listService, ui->buttonServiceDelete);
 }
-void FahrtagWindow::on_checkService_clicked(bool checked)
+void FahrtagWindow::changedRequireService(bool checked)
 {
     if (nehme)
         fahrtag->setPersonalBenoetigt(checked?-1:0, Service);
 }
 
-void FahrtagWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int column)
+void FahrtagWindow::changedTableCell(int row, [[maybe_unused]] int column)
 {
     ui->tablePersonen->resizeColumnsToContents();
     if (nehme) {
@@ -410,7 +480,7 @@ void FahrtagWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int c
 }
 
 
-void FahrtagWindow::on_buttonRemovePerson_clicked()
+void FahrtagWindow::removePersonTabelle()
 {
     // Prüfen, ob die Zeile wirklich gelöscht werden darf, ansonsten einfach nicht löschen, bzw HInweis in entsprechender Liste löschen
     int i = ui->tablePersonen->currentRow();
@@ -427,14 +497,14 @@ void FahrtagWindow::on_buttonRemovePerson_clicked()
     ui->buttonRemovePerson->setEnabled(ui->tablePersonen->rowCount() > 0);
 }
 
-EinsatzTableWidgetItem *FahrtagWindow::fuegeInTabelleEin(Einsatz *e, bool block)
+EinsatzTableWidgetItem *FahrtagWindow::addToTable(Einsatz *e, bool block)
 {
     if (e == nullptr)
         return nullptr;
 
     bool nehmeOld = nehme;
     nehme = false;
-    EinsatzTableWidgetItem *etwi = fuegeZeileInTabelleEin();
+    EinsatzTableWidgetItem *etwi = addRowToTable();
 
     int row = ui->tablePersonen->row(etwi);
 
@@ -460,25 +530,25 @@ EinsatzTableWidgetItem *FahrtagWindow::fuegeInTabelleEin(Einsatz *e, bool block)
     return etwi;
 }
 
-void FahrtagWindow::on_actionDelete_triggered()
+void FahrtagWindow::deleteTriggered()
 {
     emit loeschen(fahrtag);
 }
 
-void FahrtagWindow::on_actionPrint_triggered()
+void FahrtagWindow::exportPrint()
 {
     fahrtag->print(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
-void FahrtagWindow::on_actionPdf_triggered()
+void FahrtagWindow::exportPdf()
 {
     fahrtag->print(Export::getPrinterPDF(this, windowTitle(), QPageLayout::Orientation::Portrait));
 }
 
-void FahrtagWindow::on_actionResPrint_triggered()
+void FahrtagWindow::exportReservationPrint()
 {
     fahrtag->printReservierungsuebersicht(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
-void FahrtagWindow::on_actionResPdf_triggered()
+void FahrtagWindow::exportReservationPdf()
 {
     fahrtag->printReservierungsuebersicht(Export::getPrinterPDF(this, windowTitle()+"-Reservierungen", QPageLayout::Orientation::Portrait));
 }
@@ -542,7 +612,7 @@ void FahrtagWindow::saveResFahrt()
     aktuelleRes->setZuege(z);
     aktuelleRes->setHps(h);
 
-    updateAuswertungReservierungen();
+    resUpdateStatistics();
 }
 
 void FahrtagWindow::toggleFelderReservierung(bool enabled)
@@ -604,7 +674,7 @@ QString FahrtagWindow::getBelegungVonKlasseUndZug(Fahrtag *f, int zug, int klass
     return d;
 }
 
-EinsatzTableWidgetItem *FahrtagWindow::fuegeZeileInTabelleEin()
+EinsatzTableWidgetItem *FahrtagWindow::addRowToTable()
 {
     bool nehmeOld = nehme;
     nehme = false;
@@ -625,16 +695,16 @@ EinsatzTableWidgetItem *FahrtagWindow::fuegeZeileInTabelleEin()
     QTableWidgetItem *bem = new QTableWidgetItem();
     ui->tablePersonen->setItem(0, 4, bem);
 
-    connect(box, &QComboBox::currentTextChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 1); });
-    connect(beginnEdit, &QTimeEdit::timeChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 2); });
-    connect(endeEdit, &QTimeEdit::timeChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 3); });
+    connect(box, &QComboBox::currentTextChanged, this, [=]() { if (nehme) changedTableCell(ui->tablePersonen->row(item), 1); });
+    connect(beginnEdit, &QTimeEdit::timeChanged, this, [=]() { if (nehme) changedTableCell(ui->tablePersonen->row(item), 2); });
+    connect(endeEdit, &QTimeEdit::timeChanged, this, [=]() { if (nehme) changedTableCell(ui->tablePersonen->row(item), 3); });
 
     ui->buttonRemovePerson->setEnabled(true);
     nehme = nehmeOld;
     return item;
 }
 
-void FahrtagWindow::on_buttonAddReservierung_clicked()
+void FahrtagWindow::resAdd()
 {
     Reservierung *r = fahrtag->createReservierung();
     QListWidgetItem *i = new QListWidgetItem(r->getName());
@@ -644,7 +714,7 @@ void FahrtagWindow::on_buttonAddReservierung_clicked()
     showReservierung(r);
 }
 
-void FahrtagWindow::on_buttonDeleteReservierung_clicked()
+void FahrtagWindow::resDelete()
 {
     if (QMessageBox::question(this, tr("Wirklich löschen?"), tr("Möchten Sie die ausgewählte Reservierung unwiderruflich löschen?")) == QMessageBox::Yes) {
         QListWidgetItem *i = ui->listRes->takeItem(ui->listRes->currentRow());
@@ -657,11 +727,11 @@ void FahrtagWindow::on_buttonDeleteReservierung_clicked()
         ui->buttonDeleteReservierung->setEnabled(ui->listRes->count());
         toggleFelderReservierung(false);
 
-        updateAuswertungReservierungen();
+        resUpdateStatistics();
     }
 }
 
-void FahrtagWindow::on_buttonVerteile_clicked()
+void FahrtagWindow::resDistribute()
 {
     // Informationen, wie lange es gedauert hat
     QTime start = QTime::currentTime();
@@ -688,11 +758,11 @@ void FahrtagWindow::on_buttonVerteile_clicked()
         if (Version::isDeveloperVersion()) {
             QMessageBox::information(this, tr("Fertig"), "mSek: "+QString::number(start.msecsTo(ende)));
         }
-        updateAuswertungReservierungen();
+        resUpdateStatistics();
     }
 }
 
-void FahrtagWindow::on_lineName_textChanged(const QString &arg1)
+void FahrtagWindow::resNameChanged(const QString &arg1)
 {
     if (nehmeRes) {
         aktuelleRes->setName(arg1);
@@ -701,42 +771,42 @@ void FahrtagWindow::on_lineName_textChanged(const QString &arg1)
     }
 }
 
-void FahrtagWindow::on_lineMail_textChanged(const QString &arg1)
+void FahrtagWindow::resMailChanged(const QString &arg1)
 {
     if (nehmeRes) {
         aktuelleRes->setMail(arg1);
     }
 }
 
-void FahrtagWindow::on_lineTelefon_textChanged(const QString &arg1)
+void FahrtagWindow::resTelefonChanged(const QString &arg1)
 {
     if (nehmeRes) {
         aktuelleRes->setTelefon(arg1);
     }
 }
 
-void FahrtagWindow::on_spinAnzahl_valueChanged(int arg1)
+void FahrtagWindow::resChangedNumber(int arg1)
 {
     if (nehmeRes) {
         aktuelleRes->setAnzahl(arg1);
-        updateAuswertungReservierungen();
+        resUpdateStatistics();
     }
 }
 
-void FahrtagWindow::on_comboKlasse_currentIndexChanged(int index)
+void FahrtagWindow::resChangedClass(int index)
 {
     if (nehmeRes) {
         aktuelleRes->setKlasse(index);
-        updateAuswertungReservierungen();
+        resUpdateStatistics();
     }
 }
 
-void FahrtagWindow::on_lineSitze_textChanged(const QString &arg1)
+void FahrtagWindow::resChangedSeats(const QString &arg1)
 {
     if (nehmeRes) {
         bool ok = fahrtag->checkPlaetze(arg1, aktuelleRes);
         aktuelleRes->setSitzplatz(arg1);
-        updateAuswertungReservierungen();
+        resUpdateStatistics();
         // Prüfe, ob die Sitzplätze valide sind und zeige dies visuell an
         if (ok) {
             ui->lineSitze->setStyleSheet("background-color: #b9ceac");
@@ -747,14 +817,14 @@ void FahrtagWindow::on_lineSitze_textChanged(const QString &arg1)
     }
 }
 
-void FahrtagWindow::on_lineSitze_returnPressed()
+void FahrtagWindow::resChangedSeatsCheck()
 {
     // prüfe, ob die sitzplätze valide sidn und speichere sie
     if (nehmeRes) {
         QString arg1 = ui->lineSitze->text();
         bool ok = fahrtag->checkPlaetze(arg1, aktuelleRes);
         aktuelleRes->setSitzplatz(arg1);
-        updateAuswertungReservierungen();
+        resUpdateStatistics();
         // Prüfe, ob die Sitzplätze valide sind und zeige dies visuell an
         if (ok) {
             ui->lineSitze->setStyleSheet("background-color: #b9ceac");
@@ -766,7 +836,7 @@ void FahrtagWindow::on_lineSitze_returnPressed()
     }
 }
 
-void FahrtagWindow::on_checkFahrrad_clicked(bool checked)
+void FahrtagWindow::resChangedBike(bool checked)
 {
     if (nehmeRes) {
         aktuelleRes->setFahrrad(checked);
@@ -781,19 +851,19 @@ void FahrtagWindow::handlerFahrtChanged()
     }
 }
 
-void FahrtagWindow::on_plainSonstiges_textChanged()
+void FahrtagWindow::resChangedComment()
 {
     if (nehmeRes) {
         aktuelleRes->setSonstiges(ui->plainSonstiges->toPlainText());
     }
 }
 
-void FahrtagWindow::on_listRes_itemClicked(QListWidgetItem *item)
+void FahrtagWindow::resItemClicked(QListWidgetItem *item)
 {
     showReservierung(itemToRes.value(item));
 }
 
-void FahrtagWindow::updateAuswertungReservierungen()
+void FahrtagWindow::resUpdateStatistics()
 {
     ui->labelKapErste->setNum(fahrtag->getKapazitaet(1));
     ui->label2201Erste->setText(getBelegungVonKlasseUndZug(fahrtag, 2201, 1));
@@ -822,17 +892,17 @@ void FahrtagWindow::updateAuswertungReservierungen()
     ui->label2206Sum->setText(getBelegungVonKlasseUndZug(fahrtag, 2206, -1));
     ui->labelGesamtSum->setNum(fahrtag->getBelegung(-1));
 
-    on_comboAuswahlRes_currentIndexChanged(ui->comboAuswahlRes->currentIndex());
+    resChangedFilter(ui->comboAuswahlRes->currentIndex());
 }
 
-void FahrtagWindow::on_checkBoxBenoetigt_clicked(bool checked)
+void FahrtagWindow::changedRequired(bool checked)
 {
     if (nehme) {
         fahrtag->setPersonalBenoetigt(checked?-1:0);
     }
 }
 
-void FahrtagWindow::on_checkBoxAll_clicked(bool checked)
+void FahrtagWindow::resChangedCheckAll(bool checked)
 {
     if (nehme){
         if (checked) QMessageBox::information(this, tr("Hinweis"), tr("Es kann unter Umständen sehr lange dauern, bis die 'optimale' Verteilung berechnet wird.\nIhr Computer reagiert in dieser Zeit vielleicht nicht!\nDiese Funktion sollten Sie nur für eine kleine Anzahl an Reservierungen benutzen."));
@@ -840,7 +910,7 @@ void FahrtagWindow::on_checkBoxAll_clicked(bool checked)
     }
 }
 
-void FahrtagWindow::on_comboAuswahlRes_currentIndexChanged(int index)
+void FahrtagWindow::resChangedFilter(int index)
 {
     QListWidgetItem *item;
     for(int i = 0; i < ui->listRes->count(); ++i) {

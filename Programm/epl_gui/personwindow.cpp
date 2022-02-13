@@ -18,7 +18,62 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
 
     person = p;
 
-    connect(this, &PersonWindow::loeschen, parent, &CoreMainWindow::loeschenPerson);    
+    connect(this, &PersonWindow::loeschen, parent, &CoreMainWindow::loeschenPerson);
+    connect(ui->actionMail, &QAction::triggered, this, &PersonWindow::sendMail);
+    connect(ui->actionLoeschen, &QAction::triggered, this, &PersonWindow::deleteTriggered);
+    connect(ui->actionEinzelPDF, &QAction::triggered, this, &PersonWindow::exportSinglePdf);
+    connect(ui->actionEinzelDrucken, &QAction::triggered, this, &PersonWindow::exportSinglePrint);
+
+    connect(ui->lineVorname, &QLineEdit::textChanged, this, &PersonWindow::changedFirstname);
+    connect(ui->lineNachname, &QLineEdit::textChanged, this, &PersonWindow::changedFamilyname);
+
+    connect(ui->lineID, &QLineEdit::textChanged, this, &PersonWindow::changedID);
+    connect(ui->pushAutoID, &QPushButton::clicked, this, &PersonWindow::autoID);
+
+    connect(ui->dateGeburtstag, &QDateEdit::dateChanged, this, &PersonWindow::changedBirthday);
+    connect(ui->checkGeburtstag, &QCheckBox::clicked, this, &PersonWindow::changedBirthdayStatus);
+
+    connect(ui->dateEintritt, &QDateEdit::dateChanged, this, &PersonWindow::changedJoiningDate);
+    connect(ui->checkEintritt, &QCheckBox::clicked, this, &PersonWindow::changedJoiningStatus);
+
+    connect(ui->checkAktiv, &QCheckBox::clicked, this, &PersonWindow::changedMembershipStatus);
+
+    connect(ui->spinKm, &QSpinBox::valueChanged, this, &PersonWindow::changedDistance);
+
+    connect(ui->lineJob, &QLineEdit::textChanged, this, &PersonWindow::changedJob);
+    connect(ui->lineStrasse, &QLineEdit::textChanged, this, &PersonWindow::changedStreet);
+    connect(ui->linePLZ, &QLineEdit::textChanged, this, &PersonWindow::changedPostalCode);
+    connect(ui->lineOrt, &QLineEdit::textChanged, this, &PersonWindow::changedPlace);
+
+    connect(ui->linePhone, &QLineEdit::textChanged, this, &PersonWindow::changedPhoneFirst);
+    connect(ui->linePhone2, &QLineEdit::textChanged, this, &PersonWindow::changedPhoneSecond);
+    connect(ui->checkPhone, &QCheckBox::clicked, this, &PersonWindow::changedPhoneStatus);
+
+    connect(ui->lineMail, &QLineEdit::textChanged, this, &PersonWindow::changedMail);
+    connect(ui->checkMail, &QCheckBox::clicked, this, &PersonWindow::changedMailStatus);
+
+    connect(ui->checkTf, &QCheckBox::clicked, this, &PersonWindow::changedTfStatus);
+    connect(ui->checkZf, &QCheckBox::clicked, this, &PersonWindow::changedZfStatus);
+    connect(ui->checkRangierer, &QCheckBox::clicked, this, &PersonWindow::changedRangiererStatus);
+
+    connect(ui->dateDienst, &QDateEdit::dateChanged, this, &PersonWindow::changedFitnessDate);
+    connect(ui->checkDienst, &QCheckBox::clicked, this, &PersonWindow::changedFitnessStatus);
+
+    connect(ui->plainBemerkung, &QPlainTextEdit::textChanged, this, &PersonWindow::changedCommentsGeneral);
+
+    connect(ui->checkAustritt, &QCheckBox::clicked, this, &PersonWindow::changedResignationStatus);
+    connect(ui->dateAustritt, &QDateEdit::dateChanged, this, &PersonWindow::changedResignationDate);
+
+    connect(ui->comboAnrede, &QComboBox::currentTextChanged, this, &PersonWindow::changedTitle);
+    connect(ui->buttonGeschlecht, &QButtonGroup::idClicked, this, &PersonWindow::changedGender);
+
+    connect(ui->comboBeitragsart, &QComboBox::currentIndexChanged, this, &PersonWindow::changedContributionType);
+    connect(ui->lineIBAN, &QLineEdit::textChanged, this, &PersonWindow::changedIBAN);
+    connect(ui->lineBank, &QLineEdit::textChanged, this, &PersonWindow::changedBank);
+    connect(ui->lineKontoinhaber, &QLineEdit::textChanged, this, &PersonWindow::changedDepositor);
+
+    connect(ui->plainBetrieb, &QPlainTextEdit::textChanged, this, &PersonWindow::changedCommentsOperation);
+    connect(ui->plainAusbildung, &QPlainTextEdit::textChanged, this, &PersonWindow::changedCommentsEducation);
 
     enabled = false;
 
@@ -45,7 +100,7 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
     ui->dateAustritt->setDate(p->getAustritt());
 
     ui->comboBeitragsart->setCurrentIndex(p->getBeitragsart());
-    on_comboBeitragsart_currentIndexChanged(ui->comboBeitragsart->currentIndex());
+    changedContributionType(ui->comboBeitragsart->currentIndex());
     ui->lineIBAN->setText(p->getIban());
     ui->lineBank->setText(p->getBank());
     ui->lineKontoinhaber->setText(p->getKontoinhaber());
@@ -98,29 +153,29 @@ PersonWindow::~PersonWindow()
     delete ui;
 }
 
-void PersonWindow::on_actionMail_triggered()
+void PersonWindow::sendMail()
 {
     if (person->getMail() != "") {
         QDesktopServices::openUrl(QUrl("mailto:"+person->getMail()));
     }
 }
 
-void PersonWindow::on_actionLoeschen_triggered()
+void PersonWindow::deleteTriggered()
 {
     emit loeschen(person);
 }
 
-void PersonWindow::on_actionEinzelPDF_triggered()
+void PersonWindow::exportSinglePdf()
 {
     person->printPersonaldaten(Export::getPrinterPDF(this, "Stammdaten-"+person->getName(), QPageLayout::Orientation::Portrait));
 }
-void PersonWindow::on_actionEinzelDrucken_triggered()
+void PersonWindow::exportSinglePrint()
 {
     person->printPersonaldaten(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 
-void PersonWindow::on_lineVorname_textChanged(const QString &arg1)
+void PersonWindow::changedFirstname(const QString &arg1)
 {
     if (enabled) {
         if (person->setVorname(arg1)) {
@@ -131,7 +186,7 @@ void PersonWindow::on_lineVorname_textChanged(const QString &arg1)
         }
     }
 }
-void PersonWindow::on_lineNachname_textChanged(const QString &arg1)
+void PersonWindow::changedFamilyname(const QString &arg1)
 {
     if (enabled) {
         if (person->setNachname(arg1)) {
@@ -143,7 +198,7 @@ void PersonWindow::on_lineNachname_textChanged(const QString &arg1)
     }
 }
 
-void PersonWindow::on_lineID_textChanged(const QString &arg1)
+void PersonWindow::changedID(const QString &arg1)
 {
     if (enabled) {
         if (arg1.toInt() > 0) {
@@ -153,7 +208,7 @@ void PersonWindow::on_lineID_textChanged(const QString &arg1)
         }
     }
 }
-void PersonWindow::on_pushAutoID_clicked()
+void PersonWindow::autoID()
 {
     if (enabled) {
         enabled=false;
@@ -162,13 +217,13 @@ void PersonWindow::on_pushAutoID_clicked()
     }
 }
 
-void PersonWindow::on_dateGeburtstag_dateChanged(const QDate &date)
+void PersonWindow::changedBirthday(const QDate &date)
 {
     if (enabled) {
         person->setGeburtstag(date);
     }
 }
-void PersonWindow::on_checkGeburtstag_clicked(bool checked)
+void PersonWindow::changedBirthdayStatus(bool checked)
 {
     if (enabled) {
         ui->dateGeburtstag->setEnabled(!checked);
@@ -181,13 +236,13 @@ void PersonWindow::on_checkGeburtstag_clicked(bool checked)
     }
 }
 
-void PersonWindow::on_dateEintritt_dateChanged(const QDate &date)
+void PersonWindow::changedJoiningDate(const QDate &date)
 {
     if (enabled) {
         person->setEintritt(date);
     }
 }
-void PersonWindow::on_checkEintritt_clicked(bool checked)
+void PersonWindow::changedJoiningStatus(bool checked)
 {
     if (enabled) {
         ui->dateEintritt->setEnabled(!checked);
@@ -200,98 +255,98 @@ void PersonWindow::on_checkEintritt_clicked(bool checked)
     }
 }
 
-void PersonWindow::on_checkAktiv_clicked(bool checked)
+void PersonWindow::changedMembershipStatus(bool checked)
 {
     if (enabled) {
         person->setAktiv(checked);
     }
 }
 
-void PersonWindow::on_spinKm_valueChanged(int arg1)
+void PersonWindow::changedDistance(int arg1)
 {
     if (enabled) {
         person->setStrecke(arg1);
     }
 }
 
-void PersonWindow::on_lineJob_textChanged(const QString &arg1)
+void PersonWindow::changedJob(const QString &arg1)
 {
     if (enabled) {
         person->setBeruf(arg1);
     }
 }
 
-void PersonWindow::on_lineStrasse_textChanged(const QString &arg1)
+void PersonWindow::changedStreet(const QString &arg1)
 {
     if (enabled) {
         person->setStrasse(arg1);
     }
 }
-void PersonWindow::on_linePLZ_textChanged(const QString &arg1)
+void PersonWindow::changedPostalCode(const QString &arg1)
 {
     if (enabled) {
         person->setPLZ(arg1);
     }
 }
-void PersonWindow::on_lineOrt_textChanged(const QString &arg1)
+void PersonWindow::changedPlace(const QString &arg1)
 {
     if (enabled) {
         person->setOrt(arg1);
     }
 }
 
-void PersonWindow::on_linePhone_textChanged(const QString &arg1)
+void PersonWindow::changedPhoneFirst(const QString &arg1)
 {
     if (enabled) {
         person->setTelefon(arg1);
     }
 }
-void PersonWindow::on_checkPhone_clicked(bool checked)
+void PersonWindow::changedPhoneStatus(bool checked)
 {
     if (enabled) {
         person->setTelefonOK(checked);
     }
 }
 
-void PersonWindow::on_lineMail_textChanged(const QString &arg1)
+void PersonWindow::changedMail(const QString &arg1)
 {
     if (enabled) {
         person->setMail(arg1);
     }
 }
-void PersonWindow::on_checkMail_clicked(bool checked)
+void PersonWindow::changedMailStatus(bool checked)
 {
     if (enabled) {
         person->setMailOK(checked);
     }
 }
 
-void PersonWindow::on_checkTf_clicked(bool checked)
+void PersonWindow::changedTfStatus(bool checked)
 {
     if (enabled) {
         person->setAusbildungTf(checked);
     }
 }
-void PersonWindow::on_checkZf_clicked(bool checked)
+void PersonWindow::changedZfStatus(bool checked)
 {
     if (enabled) {
         person->setAusbildungZf(checked);
     }
 }
-void PersonWindow::on_checkRangierer_clicked(bool checked)
+void PersonWindow::changedRangiererStatus(bool checked)
 {
     if (enabled) {
         person->setAusbildungRangierer(checked);
     }
 }
 
-void PersonWindow::on_dateDienst_dateChanged(const QDate &date)
+void PersonWindow::changedFitnessDate(const QDate &date)
 {
     if (enabled) {
         person->setTauglichkeit(date);
     }
 }
-void PersonWindow::on_checkDienst_clicked(bool checked)
+void PersonWindow::changedFitnessStatus(bool checked)
 {
     if (enabled) {
         ui->dateDienst->setEnabled(!checked);
@@ -304,20 +359,20 @@ void PersonWindow::on_checkDienst_clicked(bool checked)
     }
 }
 
-void PersonWindow::on_plainBemerkung_textChanged()
+void PersonWindow::changedCommentsGeneral()
 {
     if (enabled) {
         person->setBemerkungen(ui->plainBemerkung->toPlainText().replace("\n","<br/>"));
     }
 }
 
-void PersonWindow::on_dateAustritt_dateChanged(const QDate &date)
+void PersonWindow::changedResignationDate(const QDate &date)
 {
     if (enabled) {
         person->setAustritt(date);
     }
 }
-void PersonWindow::on_checkAustritt_clicked(bool checked)
+void PersonWindow::changedResignationStatus(bool checked)
 {
     if (enabled) {
         ui->dateAustritt->setEnabled(checked);
@@ -330,19 +385,19 @@ void PersonWindow::on_checkAustritt_clicked(bool checked)
     }
 }
 
-void PersonWindow::on_comboAnrede_currentTextChanged(const QString &arg1)
+void PersonWindow::changedTitle(const QString &arg1)
 {
     if (enabled)
         person->setAnrede(arg1);
 }
 
-void PersonWindow::on_buttonGeschlecht_idClicked(int button)
+void PersonWindow::changedGender(int button)
 {
     if (enabled)
         person->setGeschlecht(static_cast<Person::Geschlecht>(button));
 }
 
-void PersonWindow::on_comboBeitragsart_currentIndexChanged(int index)
+void PersonWindow::changedContributionType(int index)
 {
     Person::Beitragsart ba = static_cast<Person::Beitragsart>(index);
     if (enabled)
@@ -370,37 +425,37 @@ void PersonWindow::on_comboBeitragsart_currentIndexChanged(int index)
                                  .arg(person->getBeitragNachzahlung()/100.f, 0, 'f', 2));
 }
 
-void PersonWindow::on_lineIBAN_textChanged(const QString &arg1)
+void PersonWindow::changedIBAN(const QString &arg1)
 {
     if (enabled)
         person->setIban(arg1);
 }
 
-void PersonWindow::on_lineBank_textChanged(const QString &arg1)
+void PersonWindow::changedBank(const QString &arg1)
 {
     if (enabled)
         person->setBank(arg1);
 }
 
-void PersonWindow::on_lineKontoinhaber_textChanged(const QString &arg1)
+void PersonWindow::changedDepositor(const QString &arg1)
 {
     if (enabled)
         person->setKontoinhaber(arg1);
 }
 
-void PersonWindow::on_linePhone2_textChanged(const QString &arg1)
+void PersonWindow::changedPhoneSecond(const QString &arg1)
 {
     if (enabled)
         person->setTelefon2(arg1);
 }
 
-void PersonWindow::on_plainBetrieb_textChanged()
+void PersonWindow::changedCommentsOperation()
 {
     if (enabled)
         person->setSonstigeBetrieblich(ui->plainBetrieb->toPlainText().replace("\n","<br/>"));
 }
 
-void PersonWindow::on_plainAusbildung_textChanged()
+void PersonWindow::changedCommentsEducation()
 {
     if (enabled)
         person->setSonstigeAusbildung(ui->plainAusbildung->toPlainText().replace("\n","<br/>"));

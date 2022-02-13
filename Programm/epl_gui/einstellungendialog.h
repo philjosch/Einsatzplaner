@@ -18,11 +18,11 @@ public:
     ~EinstellungenDialog();
 
 private slots:
-    void on_pushSearch_clicked();
+    void searchUpdate();
 
     void closeDialogOk();
 
-    void on_pushNotes_clicked();
+    void showNotes();
 
 private:
     void saveSettings();

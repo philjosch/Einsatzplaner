@@ -8,7 +8,8 @@ MinimumHoursEditorDialog::MinimumHoursEditorDialog(ManagerPersonal *manager, QWi
     ui(new Ui::MinimumHoursEditorDialog)
 {
     ui->setupUi(this);
-    QDialog::setWindowModality(Qt::WindowModal);
+    connect(ui->buttonBox, &QDialogButtonBox::clicked, this, &MinimumHoursEditorDialog::dialogButtonClicked);
+
     this->manager = manager;
 
     ui->lineTf->setText(stringForDurationEditorFromMinutes(manager->getMinimumHours(Category::Tf)));
@@ -45,7 +46,7 @@ void MinimumHoursEditorDialog::setDefault()
     update();
 }
 
-void MinimumHoursEditorDialog::on_buttonBox_clicked(QAbstractButton *button)
+void MinimumHoursEditorDialog::dialogButtonClicked(QAbstractButton *button)
 {
     if (ui->buttonBox->buttonRole(button) == QDialogButtonBox::ButtonRole::ResetRole) {
         setDefault();
