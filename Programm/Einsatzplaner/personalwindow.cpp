@@ -18,6 +18,90 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
     connect(ui->comboAnzeige, SIGNAL(currentIndexChanged(int)), this, SLOT(refresh()));
     connect(ui->actionAktualisieren, SIGNAL(triggered()), this, SLOT(refresh()));
 
+    connect(ui->actionPersonAdd, &QAction::triggered, this, &PersonalWindow::addPerson);
+    connect(ui->actionMindeststunden, &QAction::triggered, this, &PersonalWindow::editMinimumhours);
+
+    connect(ui->actionZeitenEinzelEinzelPDF, &QAction::triggered, this, &PersonalWindow::exportTimesDetailOnePdf);
+    connect(ui->actionZeitenEinzelEinzelDrucken, &QAction::triggered, this, &PersonalWindow::exportTimesDetailOnePrint);
+
+    connect(ui->actionZeitenEinzelListePDF, &QAction::triggered, this, &PersonalWindow::exportTimesDetailMultiplePdf);
+    connect(ui->actionZeitenEinzelListeDrucken, &QAction::triggered, this, &PersonalWindow::exportTimesDetailMultiplePrint);
+
+    connect(ui->actionZeitenListePDF, &QAction::triggered, this, &PersonalWindow::exportTimesListPdf);
+    connect(ui->actionZeitenListeDrucken, &QAction::triggered, this, &PersonalWindow::exportTimesListPrint);
+
+
+    connect(ui->actionMitgliederEinzelEinzelPDF, &QAction::triggered, this, &PersonalWindow::exportMemberDetailOnePdf);
+    connect(ui->actionMitgliederEinzelEinzelDrucken, &QAction::triggered, this, &PersonalWindow::exportMemberDetailOnePrint);
+
+    connect(ui->actionMitgliederEinzelListePDF, &QAction::triggered, this, &PersonalWindow::exportMemberDetailMultiplePdf);
+    connect(ui->actionMitgliederEinzelListeDrucken, &QAction::triggered, this, &PersonalWindow::exportMemberDetailMultiplePrint);
+
+    connect(ui->actionMitgliederListePDF, &QAction::triggered, this, &PersonalWindow::exportMemberListPdf);
+    connect(ui->actionMitgliederListeDrucken, &QAction::triggered, this, &PersonalWindow::exportMemberListPrint);
+    connect(ui->actionMitgliederListeCSV, &QAction::triggered, this, &PersonalWindow::exportMemberListCsv);
+
+    connect(ui->actionBeitraegeRegulaerCSV, &QAction::triggered, this, &PersonalWindow::exportDuesRegularCsv);
+    connect(ui->actionBeitraegeNachzahlungCSV, &QAction::triggered, this, &PersonalWindow::exportDuesAdditionalCsv);
+
+
+    connect(ui->pushEmail, &QPushButton::clicked, this, &PersonalWindow::sendMailList);
+
+    connect(ui->tabelleGesamt, &QTableWidget::cellDoubleClicked, this, &PersonalWindow::persShowFromTable);
+
+    connect(ui->checkShowGesamt, &QCheckBox::clicked, this, &PersonalWindow::viewShowGesamt);
+    connect(ui->checkShowAnzahl, &QCheckBox::clicked, this, &PersonalWindow::viewShowAnzahl);
+    connect(ui->checkShowTf, &QCheckBox::clicked, this, &PersonalWindow::viewShowTf);
+    connect(ui->checkShowTb, &QCheckBox::clicked, this, &PersonalWindow::viewShowTb);
+    connect(ui->checkShowZf, &QCheckBox::clicked, this, &PersonalWindow::viewShowZf);
+    connect(ui->checkShowZub, &QCheckBox::clicked, this, &PersonalWindow::viewShowZub);
+    connect(ui->checkShowService, &QCheckBox::clicked, this, &PersonalWindow::viewShowService);
+    connect(ui->checkShowVorbereiten, &QCheckBox::clicked, this, &PersonalWindow::viewShowVorbereiten);
+    connect(ui->checkShowWerkstatt, &QCheckBox::clicked, this, &PersonalWindow::viewShowWerkstatt);
+    connect(ui->checkShowBuero, &QCheckBox::clicked, this, &PersonalWindow::viewShowBuero);
+    connect(ui->checkShowAusbildung, &QCheckBox::clicked, this, &PersonalWindow::viewShowAusbildung);
+    connect(ui->checkShowInfrastruktur, &QCheckBox::clicked, this, &PersonalWindow::viewShowInfrastruktur);
+    connect(ui->checkShowSonstiges, &QCheckBox::clicked, this, &PersonalWindow::viewShowSonstiges);
+    connect(ui->checkShowKilometer, &QCheckBox::clicked, this, &PersonalWindow::viewShowKilometer);
+
+    connect(ui->listWidget, &QListWidget::itemClicked, this, &PersonalWindow::persShowFromList);
+
+    connect(ui->lineVorname, &QLineEdit::textChanged, this, &PersonalWindow::persSetVorname);
+    connect(ui->lineNachname, &QLineEdit::textChanged, this, &PersonalWindow::persSetNachname);
+
+    connect(ui->checkAktiv, &QCheckBox::clicked, this, &PersonalWindow::persSetAktiv);
+
+    connect(ui->checkTf, &QCheckBox::clicked, this, &PersonalWindow::persSetTf);
+    connect(ui->checkZf, &QCheckBox::clicked, this, &PersonalWindow::persSetZf);
+    connect(ui->checkRangierer, &QCheckBox::clicked, this, &PersonalWindow::persSetRangierer);
+
+    connect(ui->dateDienst, &QDateEdit::dateChanged, this, &PersonalWindow::persSetDienst);
+    connect(ui->checkDienst, &QCheckBox::clicked, this, &PersonalWindow::persSetDienstUnkown);
+
+    connect(ui->plainBemerkung, &QPlainTextEdit::textChanged, this, &PersonalWindow::persSetBemerkung);
+    connect(ui->plainAusbildung, &QPlainTextEdit::textChanged, this, &PersonalWindow::persSetAusbildung);
+    connect(ui->plainBetrieb, &QPlainTextEdit::textChanged, this, &PersonalWindow::persSetBetrieb);
+
+    connect(ui->pushDelete, &QPushButton::clicked, this, &PersonalWindow::persDelete);
+
+    connect(ui->pushPersonKomplett, &QPushButton::clicked, this, &PersonalWindow::persShowDetails);
+
+    connect(ui->lineTf, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalTf);
+    connect(ui->lineTb, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalTb);
+    connect(ui->lineZf, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalZf);
+    connect(ui->lineZub, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalZub);
+    connect(ui->lineService, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalService);
+    connect(ui->lineZugVorbereiten, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalVorbereiten);
+    connect(ui->lineWerkstatt, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalWerkstatt);
+    connect(ui->lineBuero, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalBuero);
+    connect(ui->lineAusbildung, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalAusbildung);
+    connect(ui->lineInfrastruktur, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalInfrastruktur);
+    connect(ui->lineSonstiges, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalSonstiges);
+    connect(ui->doubleAnzahl, &QDoubleSpinBox::valueChanged, this, &PersonalWindow::persSetAdditionalAnzahl);
+    connect(ui->doubleKilometer, &QDoubleSpinBox::valueChanged, this, &PersonalWindow::persSetAdditionalKilometer);
+
+    connect(ui->pushMailEinzel , &QPushButton::clicked, this, &PersonalWindow::sendMailCurrent);
+
     // Initalisieren der Statischen variablen
     manager = m;
     setWindowTitle(tr("Mitgliederverwaltung"));
@@ -32,9 +116,9 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
     ui->checkShowGesamt->setChecked(true);
     ui->checkShowAnzahl->setChecked(true);
     ui->checkShowKilometer->setChecked(true);
-    on_checkShowGesamt_clicked(true);
-    on_checkShowAnzahl_clicked(true);
-    on_checkShowKilometer_clicked(true);
+    viewShowGesamt(true);
+    viewShowAnzahl(true);
+    viewShowKilometer(true);
     ui->comboAnzeige->setCurrentIndex(1);
     ui->tabelleGesamt->sortItems(1);
     aktuellePerson = nullptr;
@@ -189,92 +273,92 @@ void PersonalWindow::refreshEinzel()
     ui->listWidget->sortItems();
 }
 
-void PersonalWindow::on_actionMindeststunden_triggered()
+void PersonalWindow::editMinimumhours()
 {
    if (MinimumHoursEditorDialog(manager, this).exec() == QDialog::Accepted) {
        refresh();
    }
 }
 
-void PersonalWindow::on_actionZeitenEinzelEinzelPDF_triggered()
+void PersonalWindow::exportTimesDetailOnePdf()
 {
     aktuellePerson->printZeiten(Export::getPrinterPDF(this, "Zeiten-"+aktuellePerson->getName(), QPageLayout::Orientation::Portrait));
 }
-void PersonalWindow::on_actionZeitenEinzelEinzelDrucken_triggered()
+void PersonalWindow::exportTimesDetailOnePrint()
 {
     aktuellePerson->printZeiten(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
-void PersonalWindow::on_actionZeitenEinzelListePDF_triggered()
+void PersonalWindow::exportTimesDetailMultiplePdf()
 {
     manager->printZeitenEinzel(getSortierteListe(), filter,
                         Export::getPrinterPDF(this, "Zeiten", QPageLayout::Orientation::Portrait));
 }
-void PersonalWindow::on_actionZeitenEinzelListeDrucken_triggered()
+void PersonalWindow::exportTimesDetailMultiplePrint()
 {
     manager->printZeitenEinzel(getSortierteListe(), filter,
                         Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
-void PersonalWindow::on_actionZeitenListePDF_triggered()
+void PersonalWindow::exportTimesListPdf()
 {
     manager->printZeitenListe(
                 getSortierteListe(), anzeige, filter,
                 Export::getPrinterPDF(this, "Einsatzzeiten", QPageLayout::Orientation::Landscape));
 }
-void PersonalWindow::on_actionZeitenListeDrucken_triggered()
+void PersonalWindow::exportTimesListPrint()
 {
     manager->printZeitenListe(
                 getSortierteListe(), anzeige, filter,
                 Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape));
 }
 
-void PersonalWindow::on_actionMitgliederEinzelEinzelPDF_triggered()
+void PersonalWindow::exportMemberDetailOnePdf()
 {
     aktuellePerson->printPersonaldaten(Export::getPrinterPDF(this, "Stammdaten-"+aktuellePerson->getName(), QPageLayout::Orientation::Portrait));
 }
-void PersonalWindow::on_actionMitgliederEinzelEinzelDrucken_triggered()
+void PersonalWindow::exportMemberDetailOnePrint()
 {
     aktuellePerson->printPersonaldaten(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
-void PersonalWindow::on_actionMitgliederEinzelListePDF_triggered()
+void PersonalWindow::exportMemberDetailMultiplePdf()
 {
     manager->printMitgliederEinzel(getSortierteListe(), filter,
                         Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait));
 }
-void PersonalWindow::on_actionMitgliederEinzelListeDrucken_triggered()
+void PersonalWindow::exportMemberDetailMultiplePrint()
 {
     manager->printMitgliederEinzel(getSortierteListe(), filter,
                         Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
-void PersonalWindow::on_actionMitgliederListePDF_triggered()
+void PersonalWindow::exportMemberListPdf()
 {
     manager->printMitgliederListe(getSortierteListe(), filter, QSet<QString>(),
                             Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Portrait));
 }
-void PersonalWindow::on_actionMitgliederListeDrucken_triggered()
+void PersonalWindow::exportMemberListPrint()
 {
     manager->printMitgliederListe(getSortierteListe(), filter, QSet<QString>(),
                             Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape));
 }
-void PersonalWindow::on_actionMitgliederListeCSV_triggered()
+void PersonalWindow::exportMemberListCsv()
 {
     manager->saveMitgliederListeAlsCSV(current,
                                   FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV));
 }
 
-void PersonalWindow::on_actionBeitraegeRegulaerCSV_triggered()
+void PersonalWindow::exportDuesRegularCsv()
 {
     manager->saveBeitraegeRegulaerAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Regulaer", FileIO::DateiTyp::CSV));
 }
-void PersonalWindow::on_actionBeitraegeNachzahlungCSV_triggered()
+void PersonalWindow::exportDuesAdditionalCsv()
 {
     manager->saveBeitraegeNachzahlungAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Nachzahlung", FileIO::DateiTyp::CSV));
 }
 
-void PersonalWindow::on_pushEmail_clicked()
+void PersonalWindow::sendMailList()
 {
     if (current.isEmpty()) return;
     QSet<QString> mails;
@@ -314,7 +398,7 @@ void PersonalWindow::on_pushEmail_clicked()
     }
 }
 
-void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, int column)
+void PersonalWindow::persShowFromTable(int row, int column)
 {
     PersonTableWidgetItem *ptwi = static_cast<PersonTableWidgetItem*>(ui->tabelleGesamt->item(row, column));
     if (ptwi->getPerson() == nullptr)
@@ -324,92 +408,92 @@ void PersonalWindow::on_tabelleGesamt_cellDoubleClicked(int row, int column)
     ui->tabWidgetMain->setCurrentIndex(1);
 }
 
-void PersonalWindow::on_checkShowGesamt_clicked(bool checked)
+void PersonalWindow::viewShowGesamt(bool checked)
 {
     if (checked) anzeige.insert(Category::Gesamt);
     else anzeige.remove(Category::Gesamt);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowAnzahl_clicked(bool checked)
+void PersonalWindow::viewShowAnzahl(bool checked)
 {
     if (checked) anzeige.insert(Category::Anzahl);
     else anzeige.remove(Category::Anzahl);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowTf_clicked(bool checked)
+void PersonalWindow::viewShowTf(bool checked)
 {
     if (checked) anzeige.insert(Category::Tf);
     else anzeige.remove(Category::Tf);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowTb_clicked(bool checked)
+void PersonalWindow::viewShowTb(bool checked)
 {
     if (checked) anzeige.insert(Category::Tb);
     else anzeige.remove(Category::Tb);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowZf_clicked(bool checked)
+void PersonalWindow::viewShowZf(bool checked)
 {
     if (checked) anzeige.insert(Category::Zf);
     else anzeige.remove(Category::Zf);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowZub_clicked(bool checked)
+void PersonalWindow::viewShowZub(bool checked)
 {
     if (checked) anzeige.insert(Category::Zub);
     else anzeige.remove(Category::Zub);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowService_clicked(bool checked)
+void PersonalWindow::viewShowService(bool checked)
 {
     if (checked) anzeige.insert(Category::Service);
     else anzeige.remove(Category::Service);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowVorbereiten_clicked(bool checked)
+void PersonalWindow::viewShowVorbereiten(bool checked)
 {
     if (checked) anzeige.insert(Category::ZugVorbereiten);
     else anzeige.remove(Category::ZugVorbereiten);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowWerkstatt_clicked(bool checked)
+void PersonalWindow::viewShowWerkstatt(bool checked)
 {
     if (checked) anzeige.insert(Category::Werkstatt);
     else anzeige.remove(Category::Werkstatt);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowBuero_clicked(bool checked)
+void PersonalWindow::viewShowBuero(bool checked)
 {
     if (checked) anzeige.insert(Category::Buero);
     else anzeige.remove(Category::Buero);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowAusbildung_clicked(bool checked)
+void PersonalWindow::viewShowAusbildung(bool checked)
 {
     if (checked) anzeige.insert(Category::Ausbildung);
     else anzeige.remove(Category::Ausbildung);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowInfrastruktur_clicked(bool checked)
+void PersonalWindow::viewShowInfrastruktur(bool checked)
 {
     if (checked) anzeige.insert(Category::Infrastruktur);
     else anzeige.remove(Category::Infrastruktur);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowSonstiges_clicked(bool checked)
+void PersonalWindow::viewShowSonstiges(bool checked)
 {
     if (checked) anzeige.insert(Category::Sonstiges);
     else anzeige.remove(Category::Sonstiges);
     refreshTabelle();
 }
-void PersonalWindow::on_checkShowKilometer_clicked(bool checked)
+void PersonalWindow::viewShowKilometer(bool checked)
 {
     if (checked) anzeige.insert(Category::Kilometer);
     else anzeige.remove(Category::Kilometer);
     refreshTabelle();
 }
 
-void PersonalWindow::on_actionPersonAdd_triggered()
+void PersonalWindow::addPerson()
 {
     Person *p = manager->newPerson();
     if (p == nullptr)
@@ -419,12 +503,12 @@ void PersonalWindow::on_actionPersonAdd_triggered()
     showPerson(p);
 }
 
-void PersonalWindow::on_listWidget_itemClicked(QListWidgetItem *item)
+void PersonalWindow::persShowFromList(QListWidgetItem *item)
 {
     showPerson(static_cast<PersonListWidgetItem*>(item)->getPerson());
 }
 
-void PersonalWindow::on_lineVorname_textChanged(const QString &arg1)
+void PersonalWindow::persSetVorname(const QString &arg1)
 {
     if (enabled) {
         if (aktuellePerson->setVorname(arg1)) {
@@ -437,7 +521,7 @@ void PersonalWindow::on_lineVorname_textChanged(const QString &arg1)
         }
     }
 }
-void PersonalWindow::on_lineNachname_textChanged(const QString &arg1)
+void PersonalWindow::persSetNachname(const QString &arg1)
 {
     if (enabled) {
         if (aktuellePerson->setNachname(arg1)) {
@@ -451,7 +535,7 @@ void PersonalWindow::on_lineNachname_textChanged(const QString &arg1)
     }
 }
 
-void PersonalWindow::on_checkAktiv_clicked(bool checked)
+void PersonalWindow::persSetAktiv(bool checked)
 {
     if (enabled) {
         aktuellePerson->setAktiv(checked);
@@ -459,21 +543,21 @@ void PersonalWindow::on_checkAktiv_clicked(bool checked)
     }
 }
 
-void PersonalWindow::on_checkTf_clicked(bool checked)
+void PersonalWindow::persSetTf(bool checked)
 {
     if (enabled) {
         aktuellePerson->setAusbildungTf(checked);
         refresh();
     }
 }
-void PersonalWindow::on_checkZf_clicked(bool checked)
+void PersonalWindow::persSetZf(bool checked)
 {
     if (enabled) {
         aktuellePerson->setAusbildungZf(checked);
         refresh();
     }
 }
-void PersonalWindow::on_checkRangierer_clicked(bool checked)
+void PersonalWindow::persSetRangierer(bool checked)
 {
     if (enabled) {
         aktuellePerson->setAusbildungRangierer(checked);
@@ -481,14 +565,14 @@ void PersonalWindow::on_checkRangierer_clicked(bool checked)
     }
 }
 
-void PersonalWindow::on_dateDienst_dateChanged(const QDate &date)
+void PersonalWindow::persSetDienst(const QDate &date)
 {
     if (enabled) {
         aktuellePerson->setTauglichkeit(date);
         refresh();
     }
 }
-void PersonalWindow::on_checkDienst_clicked(bool checked)
+void PersonalWindow::persSetDienstUnkown(bool checked)
 {
     if (enabled) {
         ui->dateDienst->setEnabled(!checked);
@@ -501,24 +585,24 @@ void PersonalWindow::on_checkDienst_clicked(bool checked)
     }
 }
 
-void PersonalWindow::on_plainBemerkung_textChanged()
+void PersonalWindow::persSetBemerkung()
 {
     if (enabled) {
         aktuellePerson->setBemerkungen(ui->plainBemerkung->toPlainText().replace("\n","<br/>"));
     }
 }
-void PersonalWindow::on_plainAusbildung_textChanged()
+void PersonalWindow::persSetAusbildung()
 {
     if (enabled)
         aktuellePerson->setSonstigeAusbildung(ui->plainAusbildung->toPlainText().replace("\n","<br/>"));
 }
-void PersonalWindow::on_plainBetrieb_textChanged()
+void PersonalWindow::persSetBetrieb()
 {
     if (enabled)
         aktuellePerson->setSonstigeBetrieblich(ui->plainBetrieb->toPlainText().replace("\n","<br/>"));
 }
 
-void PersonalWindow::on_pushDelete_clicked()
+void PersonalWindow::persDelete()
 {
     if (enabled) {
         if (!parentWindow->loeschenPerson(aktuellePerson)) {
@@ -536,57 +620,57 @@ void PersonalWindow::on_pushDelete_clicked()
     }
 }
 
-void PersonalWindow::on_pushPersonKomplett_clicked()
+void PersonalWindow::persShowDetails()
 {
     parentWindow->openPerson(aktuellePerson);
 }
 
-void PersonalWindow::on_lineTf_textChanged(const QString &arg1)
+void PersonalWindow::persSetAdditionalTf(const QString &arg1)
 {
     setZeitenNachVeraenderung(Tf, arg1);
 }
-void PersonalWindow::on_lineTb_textChanged(const QString &arg1)
+void PersonalWindow::persSetAdditionalTb(const QString &arg1)
 {
     setZeitenNachVeraenderung(Tb, arg1);
 }
-void PersonalWindow::on_lineZf_textChanged(const QString &arg1)
+void PersonalWindow::persSetAdditionalZf(const QString &arg1)
 {
     setZeitenNachVeraenderung(Zf, arg1);
 }
-void PersonalWindow::on_lineZub_textChanged(const QString &arg1)
+void PersonalWindow::persSetAdditionalZub(const QString &arg1)
 {
     setZeitenNachVeraenderung(Zub, arg1);
 }
-void PersonalWindow::on_lineService_textChanged(const QString &arg1)
+void PersonalWindow::persSetAdditionalService(const QString &arg1)
 {
     setZeitenNachVeraenderung(Service, arg1);
 }
-void PersonalWindow::on_lineZugVorbereiten_textChanged(const QString &arg1)
+void PersonalWindow::persSetAdditionalVorbereiten(const QString &arg1)
 {
     setZeitenNachVeraenderung(ZugVorbereiten, arg1);
 }
-void PersonalWindow::on_lineWerkstatt_textChanged(const QString &arg1)
+void PersonalWindow::persSetAdditionalWerkstatt(const QString &arg1)
 {
     setZeitenNachVeraenderung(Werkstatt, arg1);
 }
-void PersonalWindow::on_lineBuero_textChanged(const QString &arg1)
+void PersonalWindow::persSetAdditionalBuero(const QString &arg1)
 {
     setZeitenNachVeraenderung(Buero, arg1);
 }
-void PersonalWindow::on_lineAusbildung_textChanged(const QString &arg1)
+void PersonalWindow::persSetAdditionalAusbildung(const QString &arg1)
 {
     setZeitenNachVeraenderung(Ausbildung, arg1);
 }
-void PersonalWindow::on_lineInfrastruktur_textChanged(const QString &arg1)
+void PersonalWindow::persSetAdditionalInfrastruktur(const QString &arg1)
 {
     setZeitenNachVeraenderung(Infrastruktur, arg1);
 }
-void PersonalWindow::on_lineSonstiges_textChanged(const QString &arg1)
+void PersonalWindow::persSetAdditionalSonstiges(const QString &arg1)
 {
     setZeitenNachVeraenderung(Sonstiges, arg1);
 }
 
-void PersonalWindow::on_doubleAnzahl_valueChanged(double arg1)
+void PersonalWindow::persSetAdditionalAnzahl(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditional(Anzahl, int(arg1));
@@ -594,7 +678,7 @@ void PersonalWindow::on_doubleAnzahl_valueChanged(double arg1)
         refresh();
     }
 }
-void PersonalWindow::on_doubleKilometer_valueChanged(double arg1)
+void PersonalWindow::persSetAdditionalKilometer(double arg1)
 {
     if (enabled) {
         aktuellePerson->setAdditional(Kilometer, int(arg1));
@@ -788,7 +872,7 @@ void PersonalWindow::faerbeZelle(QTableWidgetItem *item, QString hintergrund, QS
     }
 }
 
-void PersonalWindow::on_pushMailEinzel_clicked()
+void PersonalWindow::sendMailCurrent()
 {
     if (aktuellePerson->getMail() != "") {
         QDesktopServices::openUrl(QUrl("mailto:"+aktuellePerson->getMail()));
