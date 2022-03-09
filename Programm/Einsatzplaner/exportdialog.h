@@ -22,11 +22,11 @@ public:
     void hardReload();
 
 private slots:
-    void on_pushDrucken_clicked();
+    void perfomExport();
 
-    void on_comboVon_currentIndexChanged(int index);
+    void changedVon(int index);
 
-    void on_comboBis_currentIndexChanged(int index);
+    void changedBis(int index);
 
     void show();
 

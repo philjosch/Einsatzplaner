@@ -28,6 +28,14 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
     listitem = QMap<AActivity*, QListWidgetItem*>();
     itemToList = QMap<QListWidgetItem*, AActivity*>();
 
+    connect(ui->actionExport, &QAction::triggered, this, &MainWindow::showExportDialog);
+    connect(ui->actionLoeschen, &QAction::triggered, this, &MainWindow::deleteSelectedInList);
+    connect(ui->actionPersonal, &QAction::triggered, this, &MainWindow::showPersonal);
+
+    connect(ui->buttonPrev, &QPushButton::clicked, this, &MainWindow::showPreviousMonth);
+    connect(ui->buttonToday, &QPushButton::clicked, this, &MainWindow::showCurrentMonth);
+    connect(ui->buttonNext, &QPushButton::clicked, this, &MainWindow::showNextMonth);
+
     connect(ui->actionNeuArbeitseinsatz, SIGNAL(triggered(bool)), this, SLOT(newActivity()));
     connect(ui->actionNeuFahrtag, SIGNAL(triggered(bool)), this, SLOT(newFahrtag()));
     connect(ui->dateSelector, SIGNAL(dateChanged(QDate)), this, SLOT(showDate(QDate)));
@@ -189,13 +197,13 @@ void MainWindow::onAktivitaetWurdeBearbeitet(AActivity *a, QDate altesDatum)
 }
 
 
-void MainWindow::on_actionExport_triggered()
+void MainWindow::showExportDialog()
 {
     exportDialog->hardReload();
     exportDialog->exec();
 }
 
-void MainWindow::on_actionLoeschen_triggered()
+void MainWindow::deleteSelectedInList()
 {
     QList<QListWidgetItem*> selected = ui->listWidget->selectedItems();
     if (! selected.isEmpty()) {
@@ -205,7 +213,7 @@ void MainWindow::on_actionLoeschen_triggered()
     }
 }
 
-void MainWindow::on_actionPersonal_triggered()
+void MainWindow::showPersonal()
 {
     personalfenster->show();
     personalfenster->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
@@ -214,17 +222,17 @@ void MainWindow::on_actionPersonal_triggered()
 }
 
 
-void MainWindow::on_buttonPrev_clicked()
+void MainWindow::showPreviousMonth()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addMonths(-1));
     ui->dateSelector->repaint();
 }
-void MainWindow::on_buttonNext_clicked()
+void MainWindow::showNextMonth()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addMonths(1));
     ui->dateSelector->repaint();
 }
-void MainWindow::on_buttonToday_clicked()
+void MainWindow::showCurrentMonth()
 {
     ui->dateSelector->setDate(QDate::currentDate());
     ui->dateSelector->repaint();

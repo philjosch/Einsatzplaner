@@ -34,17 +34,17 @@ protected slots:
 
     //** Menueleiste
     // Datei
-    void on_actionExport_triggered();
+    void showExportDialog();
     // Bearbeiten
-    void on_actionLoeschen_triggered();
+    void deleteSelectedInList();
     // Ansicht
-    void on_actionPersonal_triggered();
+    void showPersonal();
 
     //** Fenster
     // Kalender
-    void on_buttonPrev_clicked();
-    void on_buttonToday_clicked();
-    void on_buttonNext_clicked();
+    void showPreviousMonth();
+    void showCurrentMonth();
+    void showNextMonth();
     void showDate(QDate date);
 
     // Aktivitaeten
