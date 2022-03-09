@@ -38,7 +38,7 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
 
     connect(ui->checkAktiv, &QCheckBox::clicked, this, &PersonWindow::changedMembershipStatus);
 
-    connect(ui->spinKm, &QSpinBox::valueChanged, this, &PersonWindow::changedDistance);
+    connect(ui->spinKm, QOverload<int>::of(&QSpinBox::valueChanged), this, &PersonWindow::changedDistance);
 
     connect(ui->lineJob, &QLineEdit::textChanged, this, &PersonWindow::changedJob);
     connect(ui->lineStrasse, &QLineEdit::textChanged, this, &PersonWindow::changedStreet);
@@ -67,7 +67,7 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
     connect(ui->comboAnrede, &QComboBox::currentTextChanged, this, &PersonWindow::changedTitle);
     connect(ui->buttonGeschlecht, &QButtonGroup::idClicked, this, &PersonWindow::changedGender);
 
-    connect(ui->comboBeitragsart, &QComboBox::currentIndexChanged, this, &PersonWindow::changedContributionType);
+    connect(ui->comboBeitragsart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PersonWindow::changedContributionType);
     connect(ui->lineIBAN, &QLineEdit::textChanged, this, &PersonWindow::changedIBAN);
     connect(ui->lineBank, &QLineEdit::textChanged, this, &PersonWindow::changedBank);
     connect(ui->lineKontoinhaber, &QLineEdit::textChanged, this, &PersonWindow::changedDepositor);

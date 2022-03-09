@@ -22,7 +22,7 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
 
     // Allgemeine Daten
     connect(ui->dateDate, &QDateEdit::dateChanged, this, &FahrtagWindow::changedDate);
-    connect(ui->comboArt, &QComboBox::currentIndexChanged, this, &FahrtagWindow::changedType);
+    connect(ui->comboArt, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &FahrtagWindow::changedType);
     connect(ui->lineAnlass, &QLineEdit::textChanged, this, &FahrtagWindow::changedPurpose);
     connect(ui->checkWichtig, &QCheckBox::clicked, this, &FahrtagWindow::changedImportant);
     connect(ui->checkAbgesagt, &QCheckBox::clicked, this, &FahrtagWindow::changedCancelled);
@@ -59,7 +59,7 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
     connect(ui->buttonAddReservierung, &QPushButton::clicked, this, &FahrtagWindow::resAdd);
     connect(ui->buttonDeleteReservierung, &QPushButton::clicked, this, &FahrtagWindow::resDelete);
 
-    connect(ui->comboAuswahlRes, &QComboBox::currentIndexChanged, this, &FahrtagWindow::resChangedFilter);
+    connect(ui->comboAuswahlRes, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &FahrtagWindow::resChangedFilter);
 
     connect(ui->checkBoxAll, &QCheckBox::clicked, this, &FahrtagWindow::resChangedCheckAll);
     connect(ui->buttonVerteile, &QPushButton::clicked, this, &FahrtagWindow::resDistribute);
@@ -68,8 +68,8 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
     connect(ui->lineMail, &QLineEdit::textChanged, this, &FahrtagWindow::resMailChanged);
     connect(ui->lineTelefon, &QLineEdit::textChanged, this, &FahrtagWindow::resTelefonChanged);
 
-    connect(ui->spinAnzahl, &QSpinBox::valueChanged, this, &FahrtagWindow::resChangedNumber);
-    connect(ui->comboKlasse, &QComboBox::currentIndexChanged, this, &FahrtagWindow::resChangedClass);
+    connect(ui->spinAnzahl, QOverload<int>::of(&QSpinBox::valueChanged), this, &FahrtagWindow::resChangedNumber);
+    connect(ui->comboKlasse, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &FahrtagWindow::resChangedClass);
     connect(ui->lineSitze, &QLineEdit::textChanged, this, &FahrtagWindow::resChangedSeats);
     connect(ui->lineSitze, &QLineEdit::returnPressed, this, &FahrtagWindow::resChangedSeatsCheck);
     connect(ui->checkFahrrad, &QCheckBox::clicked, this, &FahrtagWindow::resChangedBike);
