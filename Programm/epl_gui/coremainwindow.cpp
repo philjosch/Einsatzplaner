@@ -73,38 +73,38 @@ void CoreMainWindow::loeschenAktivitaet(AActivity *a)
 }
 
 
-void CoreMainWindow::on_actionPreferences_triggered()
+void CoreMainWindow::showPreferences()
 {
     handlerPreferenes();
 }
-void CoreMainWindow::on_actionAboutQt_triggered()
+void CoreMainWindow::showAboutQt()
 {
     QMessageBox::aboutQt(this);
 }
-void CoreMainWindow::on_actionAboutApp_triggered()
+void CoreMainWindow::showAboutApp()
 {
     QMessageBox::about(this,
                        tr("Über %1").arg(QCoreApplication::applicationName()),
                        tr("<h1>%1</h1><p>Ein Programm der EPL-Familie<br/>Version %2<br/>2016-2022 Philipp Schepper</p>")
                        .arg(QCoreApplication::applicationName(), QCoreApplication::applicationVersion()));
 }
-void CoreMainWindow::on_actionQuit_triggered()
+void CoreMainWindow::closeApp()
 {
     CoreApplication::closeAllWindows();
 }
 
 
-void CoreMainWindow::on_actionNew_triggered()
+void CoreMainWindow::fileNew()
 {
     CoreMainWindow *mw = handlerNew();
     if (mw != nullptr) mw->show();
 }
-void CoreMainWindow::on_actionOpen_triggered()
+void CoreMainWindow::fileOpen()
 {
     handlerOpen(FileIO::getFilePathOpen(this, FileIO::DateiTyp::EPL));
 }
 
-void CoreMainWindow::on_menuRecentlyused_aboutToShow()
+void CoreMainWindow::updateRecentlyused()
 {
     QStringList list = FileIO::History::get();
 
@@ -121,7 +121,7 @@ void CoreMainWindow::on_menuRecentlyused_aboutToShow()
         }
     }
 }
-void CoreMainWindow::on_actionClear_triggered()
+void CoreMainWindow::clearRecentlyUsed()
 {
     FileIO::History::clear();
     QList<QAction*> actions = recentlyUsedMenu->actions();
@@ -131,19 +131,19 @@ void CoreMainWindow::on_actionClear_triggered()
     recentlyUsedClear->setEnabled(false);
 }
 
-void CoreMainWindow::on_actionSave_triggered()
+void CoreMainWindow::fileSave()
 {
     try {
         onDateiWirdGespeichertWerden();
         datei->speichern();
         onDateiWurdeErfolgreichGespeichert();
     } catch (FilePathInvalidException& e) {
-        on_actionSaveas_triggered();
+        fileSaveAs();
     } catch (FileException& e) {
         QMessageBox::warning(this, tr("Fehler beim Speichern"), e.getError());
     }
 }
-void CoreMainWindow::on_actionSaveas_triggered()
+void CoreMainWindow::fileSaveAs()
 {
     QString newPath = FileIO::getFilePathSave(this, tr("Einsatzplan"), FileIO::DateiTyp::EPL);
     if (newPath == "") return;
@@ -156,7 +156,7 @@ void CoreMainWindow::on_actionSaveas_triggered()
         QMessageBox::warning(this, tr("Fehler beim Speichern"), e.getError());
     }
 }
-void CoreMainWindow::on_actionSavePersonal_triggered()
+void CoreMainWindow::fileSavePersonal()
 {
     QString path = FileIO::getFilePathSave(this, tr("Einsatzplan"), FileIO::DateiTyp::EPL);
     if (path == "") return;
@@ -169,11 +169,11 @@ void CoreMainWindow::on_actionSavePersonal_triggered()
     }
 }
 
-void CoreMainWindow::on_actionSettings_triggered()
+void CoreMainWindow::showFileSettings()
 {
     handlerSettings();
 }
-bool CoreMainWindow::on_actionClose_triggered()
+bool CoreMainWindow::fileClose()
 {
     return close();
 }
@@ -265,7 +265,7 @@ void CoreMainWindow::closeEvent(QCloseEvent *event)
                                                                  tr("Möchten Sie die Datei wirklich schließen?\nIhre ungesicherten Änderungen gehen dann verloren!"),
                                                                  QMessageBox::Close|QMessageBox::Cancel|QMessageBox::Save, QMessageBox::Save);
         if (answ == QMessageBox::Save) {
-            on_actionSave_triggered();
+            fileSave();
             if (datei->istGespeichert()) {
                 toClose = true;
             }

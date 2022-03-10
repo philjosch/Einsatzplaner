@@ -28,6 +28,25 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
     listitem = QMap<AActivity*, QListWidgetItem*>();
     itemToList = QMap<QListWidgetItem*, AActivity*>();
 
+    connect(ui->actionPreferences, &QAction::triggered, this, &MainWindow::showPreferences);
+    connect(ui->actionAboutQt, &QAction::triggered, this, &MainWindow::showAboutQt);
+    connect(ui->actionAboutApp, &QAction::triggered, this, &MainWindow::showAboutApp);
+    connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::closeApp);
+
+    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::fileNew);
+    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::fileOpen);
+
+    connect(ui->menuRecentlyused, &QMenu::aboutToShow, this, &MainWindow::updateRecentlyused);
+    connect(ui->actionClear, &QAction::triggered, this, &MainWindow::clearRecentlyUsed);
+
+    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::fileSave);
+    connect(ui->actionSaveas, &QAction::triggered, this, &MainWindow::fileSaveAs);
+    connect(ui->actionSavePersonal, &QAction::triggered, this, &MainWindow::fileSavePersonal);
+
+    connect(ui->actionSettings, &QAction::triggered, this, &MainWindow::showFileSettings);
+    connect(ui->actionClose, &QAction::triggered, this, &MainWindow::fileClose);
+
+
     connect(ui->actionExport, &QAction::triggered, this, &MainWindow::showExportDialog);
     connect(ui->actionLoeschen, &QAction::triggered, this, &MainWindow::deleteSelectedInList);
     connect(ui->actionPersonal, &QAction::triggered, this, &MainWindow::showPersonal);

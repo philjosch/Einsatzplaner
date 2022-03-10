@@ -16,6 +16,25 @@ MainWindowPersonal::MainWindowPersonal(EplFile *file) :
 {
     ui->setupUi(this);
 
+    connect(ui->actionPreferences, &QAction::triggered, this, &MainWindowPersonal::showPreferences);
+    connect(ui->actionAboutQt, &QAction::triggered, this, &MainWindowPersonal::showAboutQt);
+    connect(ui->actionAboutApp, &QAction::triggered, this, &MainWindowPersonal::showAboutApp);
+    connect(ui->actionQuit, &QAction::triggered, this, &MainWindowPersonal::closeApp);
+
+    connect(ui->actionNew, &QAction::triggered, this, &MainWindowPersonal::fileNew);
+    connect(ui->actionOpen, &QAction::triggered, this, &MainWindowPersonal::fileOpen);
+
+    connect(ui->menuRecentlyused, &QMenu::aboutToShow, this, &MainWindowPersonal::updateRecentlyused);
+    connect(ui->actionClear, &QAction::triggered, this, &MainWindowPersonal::clearRecentlyUsed);
+
+    connect(ui->actionSave, &QAction::triggered, this, &MainWindowPersonal::fileSave);
+    connect(ui->actionSaveas, &QAction::triggered, this, &MainWindowPersonal::fileSaveAs);
+    connect(ui->actionSavePersonal, &QAction::triggered, this, &MainWindowPersonal::fileSavePersonal);
+
+    connect(ui->actionSettings, &QAction::triggered, this, &MainWindowPersonal::showFileSettings);
+    connect(ui->actionClose, &QAction::triggered, this, &MainWindowPersonal::fileClose);
+
+
     connect(ui->actionAddPerson, &QAction::triggered, this, &MainWindowPersonal::addPerson);
     connect(ui->actionAktualisieren, &QAction::triggered, this, &MainWindowPersonal::refresh);
     connect(ui->actionMindeststunden, &QAction::triggered, this, &MainWindowPersonal::editMinimumhours);
