@@ -247,6 +247,7 @@ void ActivityWindow::setPredefinedValue(QString anlass)
             || anlass.contains(tr("Reinig"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::ZugVorbereiten;
     } else if (anlass.contains(tr("Werkstatt"), Qt::CaseInsensitive)
+               || anlass.contains(tr("Waggonarbeiten"), Qt::CaseInsensitive)
                || anlass.contains(tr("Innenausbau"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Werkstatt;
     } else if (anlass.contains(tr("Ausbildung"), Qt::CaseInsensitive)
