@@ -62,22 +62,6 @@ private slots:
 
     void persShowFromTable(int row, int column);
 
-    void viewShowGesamt(bool checked);
-    void viewShowAnzahl(bool checked);
-    void viewShowTf(bool checked);
-    void viewShowTb(bool checked);
-    void viewShowZf(bool checked);
-    void viewShowZub(bool checked);
-    void viewShowService(bool checked);
-    void viewShowVorbereiten(bool checked);
-    void viewShowWerkstatt(bool checked);
-    void viewShowBuero(bool checked);
-    void viewShowAusbildung(bool checked);
-    void viewShowInfrastruktur(bool checked);
-    void viewShowSonstiges(bool checked);
-    void viewShowKilometer(bool checked);
-
-
     // Fenster - Einzel
 
     void persShowFromList(QListWidgetItem *item);
@@ -102,17 +86,6 @@ private slots:
 
     void persShowDetails();
 
-    void persSetAdditionalTf(const QString &arg1);
-    void persSetAdditionalTb(const QString &arg1);
-    void persSetAdditionalZf(const QString &arg1);
-    void persSetAdditionalZub(const QString &arg1);
-    void persSetAdditionalService(const QString &arg1);
-    void persSetAdditionalVorbereiten(const QString &arg1);
-    void persSetAdditionalWerkstatt(const QString &arg1);
-    void persSetAdditionalBuero(const QString &arg1);
-    void persSetAdditionalAusbildung(const QString &arg1);
-    void persSetAdditionalInfrastruktur(const QString &arg1);
-    void persSetAdditionalSonstiges(const QString &arg1);
     void persSetAdditionalAnzahl(double arg1);
     void persSetAdditionalKilometer(double arg1);
 
@@ -138,6 +111,7 @@ private:
     QList<Person*> getSortierteListe();
 
     void toggleFields(bool state);
+    void toggleShowCategory(Category cat, bool show);
 
     void setZeitenNachVeraenderung(Category cat, QString arg);
 

@@ -49,20 +49,20 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
 
     connect(ui->tabelleGesamt, &QTableWidget::cellDoubleClicked, this, &PersonalWindow::persShowFromTable);
 
-    connect(ui->checkShowGesamt, &QCheckBox::clicked, this, &PersonalWindow::viewShowGesamt);
-    connect(ui->checkShowAnzahl, &QCheckBox::clicked, this, &PersonalWindow::viewShowAnzahl);
-    connect(ui->checkShowTf, &QCheckBox::clicked, this, &PersonalWindow::viewShowTf);
-    connect(ui->checkShowTb, &QCheckBox::clicked, this, &PersonalWindow::viewShowTb);
-    connect(ui->checkShowZf, &QCheckBox::clicked, this, &PersonalWindow::viewShowZf);
-    connect(ui->checkShowZub, &QCheckBox::clicked, this, &PersonalWindow::viewShowZub);
-    connect(ui->checkShowService, &QCheckBox::clicked, this, &PersonalWindow::viewShowService);
-    connect(ui->checkShowVorbereiten, &QCheckBox::clicked, this, &PersonalWindow::viewShowVorbereiten);
-    connect(ui->checkShowWerkstatt, &QCheckBox::clicked, this, &PersonalWindow::viewShowWerkstatt);
-    connect(ui->checkShowBuero, &QCheckBox::clicked, this, &PersonalWindow::viewShowBuero);
-    connect(ui->checkShowAusbildung, &QCheckBox::clicked, this, &PersonalWindow::viewShowAusbildung);
-    connect(ui->checkShowInfrastruktur, &QCheckBox::clicked, this, &PersonalWindow::viewShowInfrastruktur);
-    connect(ui->checkShowSonstiges, &QCheckBox::clicked, this, &PersonalWindow::viewShowSonstiges);
-    connect(ui->checkShowKilometer, &QCheckBox::clicked, this, &PersonalWindow::viewShowKilometer);
+    connect(ui->checkShowGesamt,        &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Gesamt,         b); });
+    connect(ui->checkShowAnzahl,        &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Anzahl,         b); });
+    connect(ui->checkShowTf,            &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Tf,             b); });
+    connect(ui->checkShowTb,            &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Tb,             b); });
+    connect(ui->checkShowZf,            &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Zf,             b); });
+    connect(ui->checkShowZub,           &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Zub,            b); });
+    connect(ui->checkShowService,       &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Service,        b); });
+    connect(ui->checkShowVorbereiten,   &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(ZugVorbereiten, b); });
+    connect(ui->checkShowWerkstatt,     &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Werkstatt,      b); });
+    connect(ui->checkShowBuero,         &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Buero,          b); });
+    connect(ui->checkShowAusbildung,    &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Ausbildung,     b); });
+    connect(ui->checkShowInfrastruktur, &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Infrastruktur,  b); });
+    connect(ui->checkShowSonstiges,     &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Sonstiges,      b); });
+    connect(ui->checkShowKilometer,     &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Kilometer,      b); });
 
     connect(ui->listWidget, &QListWidget::itemClicked, this, &PersonalWindow::persShowFromList);
 
@@ -86,19 +86,19 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
 
     connect(ui->pushPersonKomplett, &QPushButton::clicked, this, &PersonalWindow::persShowDetails);
 
-    connect(ui->lineTf, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalTf);
-    connect(ui->lineTb, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalTb);
-    connect(ui->lineZf, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalZf);
-    connect(ui->lineZub, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalZub);
-    connect(ui->lineService, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalService);
-    connect(ui->lineZugVorbereiten, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalVorbereiten);
-    connect(ui->lineWerkstatt, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalWerkstatt);
-    connect(ui->lineBuero, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalBuero);
-    connect(ui->lineAusbildung, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalAusbildung);
-    connect(ui->lineInfrastruktur, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalInfrastruktur);
-    connect(ui->lineSonstiges, &QLineEdit::textChanged, this, &PersonalWindow::persSetAdditionalSonstiges);
-    connect(ui->doubleAnzahl, &QDoubleSpinBox::valueChanged, this, &PersonalWindow::persSetAdditionalAnzahl);
-    connect(ui->doubleKilometer, &QDoubleSpinBox::valueChanged, this, &PersonalWindow::persSetAdditionalKilometer);
+    connect(ui->lineTf,             &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Tf,             arg1); });
+    connect(ui->lineTb,             &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Tb,             arg1); });
+    connect(ui->lineZf,             &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Zf,             arg1); });
+    connect(ui->lineZub,            &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Zub,            arg1); });
+    connect(ui->lineService,        &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Service,        arg1); });
+    connect(ui->lineZugVorbereiten, &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(ZugVorbereiten, arg1); });
+    connect(ui->lineWerkstatt,      &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Werkstatt,      arg1); });
+    connect(ui->lineBuero,          &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Buero,          arg1); });
+    connect(ui->lineAusbildung,     &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Ausbildung,     arg1); });
+    connect(ui->lineInfrastruktur,  &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Infrastruktur,  arg1); });
+    connect(ui->lineSonstiges,      &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Sonstiges,      arg1); });
+    connect(ui->doubleAnzahl,       &QDoubleSpinBox::valueChanged, this, &PersonalWindow::persSetAdditionalAnzahl);
+    connect(ui->doubleKilometer,    &QDoubleSpinBox::valueChanged, this, &PersonalWindow::persSetAdditionalKilometer);
 
     connect(ui->pushMailEinzel , &QPushButton::clicked, this, &PersonalWindow::sendMailCurrent);
 
@@ -116,9 +116,9 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
     ui->checkShowGesamt->setChecked(true);
     ui->checkShowAnzahl->setChecked(true);
     ui->checkShowKilometer->setChecked(true);
-    viewShowGesamt(true);
-    viewShowAnzahl(true);
-    viewShowKilometer(true);
+    toggleShowCategory(Gesamt, true);
+    toggleShowCategory(Anzahl, true);
+    toggleShowCategory(Kilometer, true);
     ui->comboAnzeige->setCurrentIndex(1);
     ui->tabelleGesamt->sortItems(1);
     aktuellePerson = nullptr;
@@ -408,91 +408,6 @@ void PersonalWindow::persShowFromTable(int row, int column)
     ui->tabWidgetMain->setCurrentIndex(1);
 }
 
-void PersonalWindow::viewShowGesamt(bool checked)
-{
-    if (checked) anzeige.insert(Category::Gesamt);
-    else anzeige.remove(Category::Gesamt);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowAnzahl(bool checked)
-{
-    if (checked) anzeige.insert(Category::Anzahl);
-    else anzeige.remove(Category::Anzahl);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowTf(bool checked)
-{
-    if (checked) anzeige.insert(Category::Tf);
-    else anzeige.remove(Category::Tf);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowTb(bool checked)
-{
-    if (checked) anzeige.insert(Category::Tb);
-    else anzeige.remove(Category::Tb);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowZf(bool checked)
-{
-    if (checked) anzeige.insert(Category::Zf);
-    else anzeige.remove(Category::Zf);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowZub(bool checked)
-{
-    if (checked) anzeige.insert(Category::Zub);
-    else anzeige.remove(Category::Zub);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowService(bool checked)
-{
-    if (checked) anzeige.insert(Category::Service);
-    else anzeige.remove(Category::Service);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowVorbereiten(bool checked)
-{
-    if (checked) anzeige.insert(Category::ZugVorbereiten);
-    else anzeige.remove(Category::ZugVorbereiten);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowWerkstatt(bool checked)
-{
-    if (checked) anzeige.insert(Category::Werkstatt);
-    else anzeige.remove(Category::Werkstatt);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowBuero(bool checked)
-{
-    if (checked) anzeige.insert(Category::Buero);
-    else anzeige.remove(Category::Buero);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowAusbildung(bool checked)
-{
-    if (checked) anzeige.insert(Category::Ausbildung);
-    else anzeige.remove(Category::Ausbildung);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowInfrastruktur(bool checked)
-{
-    if (checked) anzeige.insert(Category::Infrastruktur);
-    else anzeige.remove(Category::Infrastruktur);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowSonstiges(bool checked)
-{
-    if (checked) anzeige.insert(Category::Sonstiges);
-    else anzeige.remove(Category::Sonstiges);
-    refreshTabelle();
-}
-void PersonalWindow::viewShowKilometer(bool checked)
-{
-    if (checked) anzeige.insert(Category::Kilometer);
-    else anzeige.remove(Category::Kilometer);
-    refreshTabelle();
-}
-
 void PersonalWindow::addPerson()
 {
     Person *p = manager->newPerson();
@@ -625,51 +540,6 @@ void PersonalWindow::persShowDetails()
     parentWindow->openPerson(aktuellePerson);
 }
 
-void PersonalWindow::persSetAdditionalTf(const QString &arg1)
-{
-    setZeitenNachVeraenderung(Tf, arg1);
-}
-void PersonalWindow::persSetAdditionalTb(const QString &arg1)
-{
-    setZeitenNachVeraenderung(Tb, arg1);
-}
-void PersonalWindow::persSetAdditionalZf(const QString &arg1)
-{
-    setZeitenNachVeraenderung(Zf, arg1);
-}
-void PersonalWindow::persSetAdditionalZub(const QString &arg1)
-{
-    setZeitenNachVeraenderung(Zub, arg1);
-}
-void PersonalWindow::persSetAdditionalService(const QString &arg1)
-{
-    setZeitenNachVeraenderung(Service, arg1);
-}
-void PersonalWindow::persSetAdditionalVorbereiten(const QString &arg1)
-{
-    setZeitenNachVeraenderung(ZugVorbereiten, arg1);
-}
-void PersonalWindow::persSetAdditionalWerkstatt(const QString &arg1)
-{
-    setZeitenNachVeraenderung(Werkstatt, arg1);
-}
-void PersonalWindow::persSetAdditionalBuero(const QString &arg1)
-{
-    setZeitenNachVeraenderung(Buero, arg1);
-}
-void PersonalWindow::persSetAdditionalAusbildung(const QString &arg1)
-{
-    setZeitenNachVeraenderung(Ausbildung, arg1);
-}
-void PersonalWindow::persSetAdditionalInfrastruktur(const QString &arg1)
-{
-    setZeitenNachVeraenderung(Infrastruktur, arg1);
-}
-void PersonalWindow::persSetAdditionalSonstiges(const QString &arg1)
-{
-    setZeitenNachVeraenderung(Sonstiges, arg1);
-}
-
 void PersonalWindow::persSetAdditionalAnzahl(double arg1)
 {
     if (enabled) {
@@ -788,39 +658,20 @@ void PersonalWindow::toggleFields(bool state)
     ui->lineVorname->setEnabled(state);
     ui->lineNachname->setEnabled(state);
     ui->checkAktiv->setEnabled(state);
-
-    ui->checkRangierer->setEnabled(state);
-    ui->checkTf->setEnabled(state);
-    ui->checkZf->setEnabled(state);
-    ui->checkDienst->setEnabled(state);
-    ui->dateDienst->setEnabled(false);
-
     ui->pushMailEinzel->setEnabled(state);
 
-    ui->plainBemerkung->setEnabled(state);
-    ui->plainAusbildung->setEnabled(state);
-    ui->plainBetrieb->setEnabled(state);
-    ui->pushDelete->setEnabled(state);
-
-    ui->tabelle->setEnabled(state);
-
-    ui->lineTf->setEnabled(state);
-    ui->lineTb->setEnabled(state);
-    ui->lineZf->setEnabled(state);
-    ui->lineZub->setEnabled(state);
-    ui->lineService->setEnabled(state);
-    ui->lineZugVorbereiten->setEnabled(state);
-    ui->lineWerkstatt->setEnabled(state);
-    ui->lineBuero->setEnabled(state);
-    ui->lineAusbildung->setEnabled(state);
-    ui->lineInfrastruktur->setEnabled(state);
-    ui->lineSonstiges->setEnabled(state);
-    ui->doubleAnzahl->setEnabled(state);
-    ui->doubleKilometer->setEnabled(state);
+    ui->tabWidgetEinzel->setEnabled(state);
+    ui->dateDienst->setEnabled(false);
 
     ui->pushEinzelDrucken->setEnabled(state);
-
     ui->pushPersonKomplett->setEnabled(state);
+}
+
+void PersonalWindow::toggleShowCategory(Category cat, bool show)
+{
+    if (show) anzeige += cat;
+    else anzeige -= cat;
+    refreshTabelle();
 }
 
 void PersonalWindow::setZeitenNachVeraenderung(Category cat, QString arg)

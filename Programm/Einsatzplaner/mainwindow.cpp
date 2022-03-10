@@ -57,26 +57,20 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
 
     connect(ui->actionNeuArbeitseinsatz, SIGNAL(triggered(bool)), this, SLOT(newActivity()));
     connect(ui->actionNeuFahrtag, SIGNAL(triggered(bool)), this, SLOT(newFahrtag()));
-    connect(ui->dateSelector, SIGNAL(dateChanged(QDate)), this, SLOT(showDate(QDate)));
+    connect(ui->dateSelector, &QDateEdit::dateChanged, this, &MainWindow::showDate);
     connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) { openAktivitaet(itemToList.value(item)); });
 
     // Setup fuer die Darstellung des Kalenders
     tage = QList<CalendarDay*>();
-    tage.append(ui->day1_1);    tage.append(ui->day2_1);    tage.append(ui->day3_1);    tage.append(ui->day4_1);
-    tage.append(ui->day5_1);    tage.append(ui->day6_1);    tage.append(ui->day7_1);
-    tage.append(ui->day1_2);    tage.append(ui->day2_2);    tage.append(ui->day3_2);    tage.append(ui->day4_2);
-    tage.append(ui->day5_2);    tage.append(ui->day6_2);    tage.append(ui->day7_2);
-    tage.append(ui->day1_3);    tage.append(ui->day2_3);    tage.append(ui->day3_3);    tage.append(ui->day4_3);
-    tage.append(ui->day5_3);    tage.append(ui->day6_3);    tage.append(ui->day7_3);
-    tage.append(ui->day1_4);    tage.append(ui->day2_4);    tage.append(ui->day3_4);    tage.append(ui->day4_4);
-    tage.append(ui->day5_4);    tage.append(ui->day6_4);    tage.append(ui->day7_4);
-    tage.append(ui->day1_5);    tage.append(ui->day2_5);    tage.append(ui->day3_5);    tage.append(ui->day4_5);
-    tage.append(ui->day5_5);    tage.append(ui->day6_5);    tage.append(ui->day7_5);
-    tage.append(ui->day1_6);    tage.append(ui->day2_6);    tage.append(ui->day3_6);    tage.append(ui->day4_6);
-    tage.append(ui->day5_6);    tage.append(ui->day6_6);    tage.append(ui->day7_6);
+    tage << ui->day1_1 << ui->day2_1 << ui->day3_1 << ui->day4_1 << ui->day5_1 << ui->day6_1 << ui->day7_1;
+    tage << ui->day1_2 << ui->day2_2 << ui->day3_2 << ui->day4_2 << ui->day5_2 << ui->day6_2 << ui->day7_2;
+    tage << ui->day1_3 << ui->day2_3 << ui->day3_3 << ui->day4_3 << ui->day5_3 << ui->day6_3 << ui->day7_3;
+    tage << ui->day1_4 << ui->day2_4 << ui->day3_4 << ui->day4_4 << ui->day5_4 << ui->day6_4 << ui->day7_4;
+    tage << ui->day1_5 << ui->day2_5 << ui->day3_5 << ui->day4_5 << ui->day5_5 << ui->day6_5 << ui->day7_5;
+    tage << ui->day1_6 << ui->day2_6 << ui->day3_6 << ui->day4_6 << ui->day5_6 << ui->day6_6 << ui->day7_6;
     for(CalendarDay *c: qAsConst(tage)) {
         connect(c, &CalendarDay::clickedItem, this, &MainWindow::openAktivitaet);
-        connect(c, SIGNAL(addActivity(QDate)), this, SLOT(newActivity(QDate)));
+        connect(c, &CalendarDay::addActivity, this, &MainWindow::newActivity);
     }
 
     if (datei->istSchreibgeschuetzt()) {

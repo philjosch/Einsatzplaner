@@ -33,8 +33,8 @@ ExportDialog::ExportDialog(Manager *m, FileSettings *settings, QWidget *parent) 
         ui->checkEinzel->setEnabled(! ui->listAnzeige->selectedItems().isEmpty()); });
 
     connect(ui->pushDrucken, &QPushButton::clicked, this, &ExportDialog::perfomExport);
-    connect(ui->comboVon, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::changedVon);
-    connect(ui->comboBis, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::changedBis);
+    connect(ui->comboVon, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::changedFrom);
+    connect(ui->comboBis, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::changedTill);
 
     hardReload();
 }
@@ -118,7 +118,7 @@ void ExportDialog::perfomExport()
     }
 }
 
-void ExportDialog::changedVon(int index)
+void ExportDialog::changedFrom(int index)
 {
     switch (index) {
     case 0: // Ab datum
@@ -135,7 +135,7 @@ void ExportDialog::changedVon(int index)
     show();
 }
 
-void ExportDialog::changedBis(int index)
+void ExportDialog::changedTill(int index)
 {
     switch (index) {
     case 0: // Bis datum

@@ -24,9 +24,9 @@ public:
 private slots:
     void perfomExport();
 
-    void changedVon(int index);
+    void changedFrom(int index);
 
-    void changedBis(int index);
+    void changedTill(int index);
 
     void show();
 

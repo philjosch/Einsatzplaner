@@ -248,7 +248,6 @@
            <widget class="QLabel" name="label_31">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -318,7 +317,6 @@
            <widget class="QLabel" name="label_29">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -331,7 +329,6 @@
            <widget class="QLabel" name="label_30">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -508,6 +505,9 @@
         </item>
         <item row="1" column="1" colspan="2">
          <widget class="QTabWidget" name="tabWidgetEinzel">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>400</width>
@@ -545,9 +545,6 @@
             </property>
             <item row="5" column="0" colspan="5">
              <widget class="QPlainTextEdit" name="plainBetrieb">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="placeholderText">
                <string>Betriebliche Bemerkungen</string>
               </property>
@@ -555,9 +552,6 @@
             </item>
             <item row="0" column="1">
              <widget class="QCheckBox" name="checkTf">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="text">
                <string>Lokführer</string>
               </property>
@@ -572,9 +566,6 @@
             </item>
             <item row="1" column="1">
              <widget class="QDateEdit" name="dateDienst">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -602,9 +593,6 @@
             </item>
             <item row="7" column="0">
              <widget class="QPushButton" name="pushDelete">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="statusTip">
                <string>Aktuelle Person löschen</string>
               </property>
@@ -615,9 +603,6 @@
             </item>
             <item row="4" column="0" colspan="5">
              <widget class="QPlainTextEdit" name="plainBemerkung">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="placeholderText">
                <string>Bemerkungen</string>
               </property>
@@ -625,9 +610,6 @@
             </item>
             <item row="1" column="2">
              <widget class="QCheckBox" name="checkDienst">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="text">
                <string>Unbekannt</string>
               </property>
@@ -635,9 +617,6 @@
             </item>
             <item row="0" column="2">
              <widget class="QCheckBox" name="checkZf">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="text">
                <string>Zugführer</string>
               </property>
@@ -658,9 +637,6 @@
             </item>
             <item row="6" column="0" colspan="5">
              <widget class="QPlainTextEdit" name="plainAusbildung">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="placeholderText">
                <string>Sonstige Ausbildungen</string>
               </property>
@@ -675,9 +651,6 @@
             </item>
             <item row="0" column="3">
              <widget class="QCheckBox" name="checkRangierer">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="text">
                <string>Rangierer</string>
               </property>
@@ -707,9 +680,6 @@
             </property>
             <item row="0" column="0">
              <widget class="QTableWidget" name="tabelle">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="frameShadow">
                <enum>QFrame::Plain</enum>
               </property>
@@ -783,9 +753,6 @@
             </property>
             <item row="8" column="1">
              <widget class="QLineEdit" name="lineBuero">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="inputMask">
                <string>9999:99</string>
               </property>
@@ -832,9 +799,6 @@
             </item>
             <item row="3" column="1">
              <widget class="QLineEdit" name="lineZf">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="inputMask">
                <string>9999:99</string>
               </property>
@@ -877,9 +841,6 @@
             </item>
             <item row="2" column="1">
              <widget class="QLineEdit" name="lineTb">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="inputMask">
                <string>9999:99</string>
               </property>
@@ -919,9 +880,6 @@
             </item>
             <item row="7" column="1">
              <widget class="QLineEdit" name="lineWerkstatt">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="inputMask">
                <string>9999:99</string>
               </property>
@@ -941,9 +899,6 @@
             </item>
             <item row="6" column="1">
              <widget class="QLineEdit" name="lineZugVorbereiten">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="inputMask">
                <string>9999:99</string>
               </property>
@@ -996,9 +951,6 @@
             </item>
             <item row="10" column="1">
              <widget class="QLineEdit" name="lineInfrastruktur">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="inputMask">
                <string>9999:99</string>
               </property>
@@ -1213,9 +1165,6 @@
             </item>
             <item row="9" column="1">
              <widget class="QLineEdit" name="lineAusbildung">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="inputMask">
                <string>9999:99</string>
               </property>
@@ -1248,9 +1197,6 @@
             </item>
             <item row="11" column="1">
              <widget class="QLineEdit" name="lineSonstiges">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="inputMask">
                <string>9999:99</string>
               </property>
@@ -1326,9 +1272,6 @@
             </item>
             <item row="13" column="1">
              <widget class="QDoubleSpinBox" name="doubleAnzahl">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -1362,9 +1305,6 @@
             </item>
             <item row="5" column="1">
              <widget class="QLineEdit" name="lineService">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="inputMask">
                <string>9999:99</string>
               </property>
@@ -1384,9 +1324,6 @@
             </item>
             <item row="4" column="1">
              <widget class="QLineEdit" name="lineZub">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="inputMask">
                <string>9999:99</string>
               </property>
@@ -1462,9 +1399,6 @@
             </item>
             <item row="14" column="1">
              <widget class="QDoubleSpinBox" name="doubleKilometer">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -1481,9 +1415,6 @@
             </item>
             <item row="12" column="0" colspan="5">
              <widget class="Line" name="line_4">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -1517,9 +1448,6 @@
             </item>
             <item row="1" column="1">
              <widget class="QLineEdit" name="lineTf">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
               <property name="inputMask">
                <string>9999:99</string>
               </property>
