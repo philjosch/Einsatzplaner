@@ -306,8 +306,7 @@ void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
 {
     if (i == nullptr) return;
     i->setText(a->getString());
-    i->setToolTip(a->getAnlass().replace("<br/>","\n"));
-    i->setWhatsThis(a->getAnlass().replace("<br/>","\n"));
+    i->setToolTip(toString(a->getArt()));
     i->setBackground(QBrush(QColor(a->getFarbe())));
     i->setForeground(QBrush(QColor("black")));
 }

@@ -444,7 +444,7 @@ QList<Einsatz*> AActivity::getPersonen() const
 QString AActivity::getStringShort() const
 {
     QString s = "";
-    if (art == Arbeitseinsatz && anlass != "")
+    if (anlass != "")
         s = anlass;
     else
         s = toString(art);
@@ -455,7 +455,7 @@ QString AActivity::getStringShort() const
 QString AActivity::getString() const
 {
     QString s = QLocale().toString(datum, QObject::tr("dddd dd.MM.yyyy"))+" – ";
-    if (art == Arbeitseinsatz && anlass != "")
+    if (anlass != "")
         s += anlass;
     else
         s += toString(art);
