@@ -388,7 +388,10 @@ void PersonalWindow::sendMailList()
     }
     if (keineMail.isEmpty()) return;
 
-    if (QMessageBox::question(this, tr("Personen ohne E-Mail gefunden"), tr("Für %1 Personen ist keine E-Mail-Adresse hinterlegt.\nMöchten Sie die Liste der Personen speichern?").arg(keineMail.size())) == QMessageBox::Yes) {
+    if (QMessageBox::question(this,
+                              tr("Personen ohne E-Mail gefunden"),
+                              tr("Für %1 %2 ist keine E-Mail-Adresse hinterlegt.\nMöchten Sie die Adressen dieser Personen speichern?").arg(keineMail.size()).arg(toString(filter)))
+            == QMessageBox::Yes) {
         QString s = "Name;Straße;PLZ;Ort\n";
         for(Person *p: keineMail) {
             s += p->getName() + ";"+p->getStrasse()+";"+p->getPLZ()+";"+p->getOrt()+"\n";

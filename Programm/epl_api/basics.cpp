@@ -70,7 +70,7 @@ QString toString(Art art)
 QString toString(Status filter)
 {
     switch (filter) {
-    case AlleMitglieder: return QObject::tr("Alle Mitglieder");
+    case AlleMitglieder: return QObject::tr("Mitglieder (Alle)");
     case Aktiv: return QObject::tr("Aktive Mitglieder");
     case AktivMit: return QObject::tr("Aktive Mitglieder mit erbrachten Stunden");
     case AktivOhne: return QObject::tr("Aktive Mitglieder mit fehlenden Stunden");
