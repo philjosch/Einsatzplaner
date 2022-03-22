@@ -383,16 +383,10 @@ unbekannt</string>
         <item row="1" column="0">
          <widget class="QPushButton" name="buttonTfAdd">
           <property name="toolTip">
-           <string>Name hinzufügen</string>
+           <string>Person hinzufügen</string>
           </property>
           <property name="statusTip">
-           <string>Name hinzufügen</string>
-          </property>
-          <property name="whatsThis">
-           <string>Name hinzufügen</string>
-          </property>
-          <property name="accessibleDescription">
-           <string>Name hinzufügen</string>
+           <string>Person hinzufügen</string>
           </property>
           <property name="text">
            <string>+</string>
@@ -405,16 +399,10 @@ unbekannt</string>
            <bool>false</bool>
           </property>
           <property name="toolTip">
-           <string>Ausgewählten Namen löschen</string>
+           <string>Ausgewählte Person entfernen</string>
           </property>
           <property name="statusTip">
-           <string>Ausgewählten Namen löschen</string>
-          </property>
-          <property name="whatsThis">
-           <string>Ausgewählten Namen löschen</string>
-          </property>
-          <property name="accessibleDescription">
-           <string>Ausgewählten Namen löschen</string>
+           <string>Ausgewählte Person entfernen</string>
           </property>
           <property name="text">
            <string>-</string>
@@ -463,16 +451,10 @@ unbekannt</string>
         <item row="1" column="5">
          <widget class="QPushButton" name="buttonZfAdd">
           <property name="toolTip">
-           <string>Name hinzufügen</string>
+           <string>Person hinzufügen</string>
           </property>
           <property name="statusTip">
-           <string>Name hinzufügen</string>
-          </property>
-          <property name="whatsThis">
-           <string>Name hinzufügen</string>
-          </property>
-          <property name="accessibleDescription">
-           <string>Name hinzufügen</string>
+           <string>Person hinzufügen</string>
           </property>
           <property name="text">
            <string>+</string>
@@ -485,16 +467,10 @@ unbekannt</string>
            <bool>false</bool>
           </property>
           <property name="toolTip">
-           <string>Ausgewählten Namen löschen</string>
+           <string>Ausgewählte Person entfernen</string>
           </property>
           <property name="statusTip">
-           <string>Ausgewählten Namen löschen</string>
-          </property>
-          <property name="whatsThis">
-           <string>Ausgewählten Namen löschen</string>
-          </property>
-          <property name="accessibleDescription">
-           <string>Ausgewählten Namen löschen</string>
+           <string>Ausgewählte Person entfernen</string>
           </property>
           <property name="text">
            <string>-</string>
@@ -584,16 +560,10 @@ unbekannt</string>
         <item row="4" column="0">
          <widget class="QPushButton" name="buttonZubAdd">
           <property name="toolTip">
-           <string>Name hinzufügen</string>
+           <string>Person hinzufügen</string>
           </property>
           <property name="statusTip">
-           <string>Name hinzufügen</string>
-          </property>
-          <property name="whatsThis">
-           <string>Name hinzufügen</string>
-          </property>
-          <property name="accessibleDescription">
-           <string>Name hinzufügen</string>
+           <string>Person hinzufügen</string>
           </property>
           <property name="text">
            <string>+</string>
@@ -606,16 +576,10 @@ unbekannt</string>
            <bool>false</bool>
           </property>
           <property name="toolTip">
-           <string>Ausgewählten Namen löschen</string>
+           <string>Ausgewählte Person entfernen</string>
           </property>
           <property name="statusTip">
-           <string>Ausgewählten Namen löschen</string>
-          </property>
-          <property name="whatsThis">
-           <string>Ausgewählten Namen löschen</string>
-          </property>
-          <property name="accessibleDescription">
-           <string>Ausgewählten Namen löschen</string>
+           <string>Ausgewählte Person entfernen</string>
           </property>
           <property name="text">
            <string>-</string>
@@ -632,16 +596,10 @@ unbekannt</string>
         <item row="4" column="5">
          <widget class="QPushButton" name="buttonServiceAdd">
           <property name="toolTip">
-           <string>Name hinzufügen</string>
+           <string>Person hinzufügen</string>
           </property>
           <property name="statusTip">
-           <string>Name hinzufügen</string>
-          </property>
-          <property name="whatsThis">
-           <string>Name hinzufügen</string>
-          </property>
-          <property name="accessibleDescription">
-           <string>Name hinzufügen</string>
+           <string>Person hinzufügen</string>
           </property>
           <property name="text">
            <string>+</string>
@@ -654,16 +612,10 @@ unbekannt</string>
            <bool>false</bool>
           </property>
           <property name="toolTip">
-           <string>Ausgewählten Namen löschen</string>
+           <string>Ausgewählte Person entfernen</string>
           </property>
           <property name="statusTip">
-           <string>Ausgewählten Namen löschen</string>
-          </property>
-          <property name="whatsThis">
-           <string>Ausgewählten Namen löschen</string>
-          </property>
-          <property name="accessibleDescription">
-           <string>Ausgewählten Namen löschen</string>
+           <string>Ausgewählte Person entfernen</string>
           </property>
           <property name="text">
            <string>-</string>
@@ -740,6 +692,12 @@ unbekannt</string>
             </property>
             <item row="0" column="0">
              <widget class="QPushButton" name="buttonAddReservierung">
+              <property name="toolTip">
+               <string>Reservierung hinzufügen</string>
+              </property>
+              <property name="statusTip">
+               <string>Reservierung hinzufügen</string>
+              </property>
               <property name="text">
                <string>+</string>
               </property>
@@ -747,6 +705,9 @@ unbekannt</string>
             </item>
             <item row="0" column="1">
              <widget class="QComboBox" name="comboAuswahlRes">
+              <property name="statusTip">
+               <string>Reservierungen nach Zug filtern</string>
+              </property>
               <property name="currentIndex">
                <number>0</number>
               </property>
@@ -792,6 +753,12 @@ unbekannt</string>
               <property name="enabled">
                <bool>false</bool>
               </property>
+              <property name="toolTip">
+               <string>Reservierung entfernen</string>
+              </property>
+              <property name="statusTip">
+               <string>Reservierung entfernen</string>
+              </property>
               <property name="text">
                <string>-</string>
               </property>
@@ -832,8 +799,11 @@ unbekannt</string>
             </property>
             <item row="0" column="1">
              <widget class="QLabel" name="labelKap">
+              <property name="statusTip">
+               <string>Kapazität der Klasse</string>
+              </property>
               <property name="text">
-               <string>Kapazität</string>
+               <string>Kap.</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -843,67 +813,73 @@ unbekannt</string>
             <item row="0" column="2">
              <widget class="QLabel" name="label2201">
               <property name="text">
-               <string>2201</string>
+               <string>01</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
             <item row="0" column="3">
              <widget class="QLabel" name="label2202">
               <property name="text">
-               <string>2202</string>
+               <string>02</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
             <item row="0" column="4">
              <widget class="QLabel" name="label2203">
               <property name="text">
-               <string>2203</string>
+               <string>03</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
             <item row="0" column="5">
              <widget class="QLabel" name="label2204">
               <property name="text">
-               <string>2204</string>
+               <string>04</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
             <item row="0" column="6">
              <widget class="QLabel" name="label2205">
               <property name="text">
-               <string>2205</string>
+               <string>05</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
             <item row="0" column="7">
              <widget class="QLabel" name="label2206">
               <property name="text">
-               <string>2206</string>
+               <string>06</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
             <item row="0" column="8">
              <widget class="QLabel" name="labelGesamt">
+              <property name="toolTip">
+               <string>Summe für Klasse</string>
+              </property>
+              <property name="statusTip">
+               <string>Summe für Klasse</string>
+              </property>
               <property name="text">
-               <string>Gesamt</string>
+               <string>Ges.</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1178,6 +1154,13 @@ unbekannt</string>
               </property>
              </widget>
             </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="labelZug">
+              <property name="text">
+               <string>Zug</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -1295,11 +1278,11 @@ unbekannt</string>
           </item>
           <item>
            <widget class="QToolBox" name="toolBox">
-            <widget class="QWidget" name="toolBoxPageFahrt1" native="true">
+            <widget class="QWidget" name="toolBoxPageFahrt1">
              <attribute name="label">
               <string>Fahrt 1</string>
              </attribute>
-             <layout class="QGridLayout" name="gridLayout_3">
+             <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1,1">
               <property name="topMargin">
                <number>6</number>
               </property>
@@ -1555,11 +1538,11 @@ unbekannt</string>
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="toolBoxPageFahrt2" native="true">
+            <widget class="QWidget" name="toolBoxPageFahrt2">
              <attribute name="label">
               <string>Fahrt 2 (optional)</string>
              </attribute>
-             <layout class="QGridLayout" name="gridLayout_4">
+             <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,1,1">
               <property name="topMargin">
                <number>6</number>
               </property>
