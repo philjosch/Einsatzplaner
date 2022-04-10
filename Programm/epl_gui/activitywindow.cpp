@@ -22,7 +22,7 @@ ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWind
 
     connect(ui->dateDatum, &QDateEdit::dateChanged, this, &ActivityWindow::changedDate);
     connect(ui->lineOrt, &QLineEdit::textChanged, this, &ActivityWindow::changedLocation);
-    connect(ui->lineAnlass, &QLineEdit::textChanged, this, &ActivityWindow::changedPurpose);
+    connect(ui->comboAnlass, &QComboBox::currentTextChanged, this, &ActivityWindow::changedPurpose);
     connect(ui->plainBeschreibung, &QPlainTextEdit::textChanged, this, &ActivityWindow::changedDescription);
 
     connect(ui->timeBeginn, &QTimeEdit::timeChanged, this, &ActivityWindow::changedTimeStart);
@@ -45,7 +45,7 @@ ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWind
     // Allgemeine Daten von AActivity
     ui->dateDatum->setDate(activity->getDatum());
     ui->lineOrt->setText(activity->getOrt());
-    ui->lineAnlass->setText(activity->getAnlass().replace("<br/>","\n"));
+    ui->comboAnlass->setCurrentText(activity->getAnlass().replace("<br/>","\n"));
     setPredefinedValue(activity->getAnlass().replace("<br/>","\n"));
     ui->plainBeschreibung->setPlainText(activity->getBemerkungen().replace("<br/>","\n"));
     ui->timeBeginn->setTime(activity->getZeitAnfang());

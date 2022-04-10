@@ -157,13 +157,6 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1" colspan="4">
-     <widget class="QLineEdit" name="lineAnlass">
-      <property name="placeholderText">
-       <string>Arbeitseinsatz</string>
-      </property>
-     </widget>
-    </item>
     <item row="3" column="3" rowspan="2">
      <widget class="QCheckBox" name="checkZeiten">
       <property name="text">
@@ -230,6 +223,54 @@ unbekannt</string>
       </property>
      </widget>
     </item>
+    <item row="2" column="1" colspan="4">
+     <widget class="QComboBox" name="comboAnlass">
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+      <property name="currentText">
+       <string>Arbeitseinsatz</string>
+      </property>
+      <property name="placeholderText">
+       <string>Arbeitseinsatz</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Infrastrukturarbeiten</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Streckenfahrt</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Vegetationsarbeiten</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>vlexx-Lehrgang</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Werkstattarbeiten</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Waggonarbeiten</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Zugvorbereitung</string>
+       </property>
+      </item>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -291,10 +332,12 @@ unbekannt</string>
  <tabstops>
   <tabstop>dateDatum</tabstop>
   <tabstop>lineOrt</tabstop>
-  <tabstop>lineAnlass</tabstop>
+  <tabstop>comboAnlass</tabstop>
   <tabstop>timeBeginn</tabstop>
   <tabstop>timeEnde</tabstop>
   <tabstop>checkZeiten</tabstop>
+  <tabstop>checkWichtig</tabstop>
+  <tabstop>checkAbgesagt</tabstop>
   <tabstop>plainBeschreibung</tabstop>
   <tabstop>buttonInsert</tabstop>
   <tabstop>buttonRemove</tabstop>
