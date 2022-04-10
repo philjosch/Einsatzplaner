@@ -327,8 +327,8 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
     for(Einsatz *e: liste) {
         l2.append(e->getPerson()->getName());
 
-        if (e->getBeginnAbweichend() == e->getVon().time() ) {
-            if (e->getEndeAbweichend() == e->getBis().time() ) {
+        if ( e->getBeginnAbweichend() != QTime(0,0) ) {
+            if ( e->getEndeAbweichend() != QTime(0,0) ) {
                 l2.append(tr("%1 bis %2").arg(
                           e->getBeginnAbweichend().toString("HH:mm"),
                           e->getEndeAbweichend().toString("HH:mm")));
@@ -336,7 +336,7 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
                 l2.append(tr("ab %1").arg(e->getBeginnAbweichend().toString("HH:mm")));
             }
         } else {
-            if (e->getEndeAbweichend() == e->getBis().time() ) {
+            if ( e->getEndeAbweichend() != QTime(0,0) ) {
                 l2.append(tr("bis %2").arg(e->getEndeAbweichend().toString("HH:mm")));
             }
         }
