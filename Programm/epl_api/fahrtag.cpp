@@ -265,7 +265,7 @@ QString Fahrtag::getHtmlForTableView() const
 
     // Tf, Tb
     QString beginnZelleBenoetigt = "<td>";
-    if (QDate::currentDate().addDays(10) >= datum && datum >= QDate::currentDate()) {
+    if (QDate::currentDate().addDays(10) >= datum && getVon() >= QDateTime::currentDateTime()) {
         beginnZelleBenoetigt = "<td bgcolor='#ff8888'>";
     }
     QString benoetigt = "<b>%1</b>";

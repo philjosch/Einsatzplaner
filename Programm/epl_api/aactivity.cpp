@@ -604,7 +604,7 @@ QString AActivity::getHtmlForTableView() const
     // Sonstiges
     bool zeilenUmbruch = false;
     if (getPersonalBenoetigt()) {
-        if (QDate::currentDate().addDays(10) >= datum && datum >= QDate::currentDate()) {
+        if (QDate::currentDate().addDays(10) >= datum && getVon() >= QDateTime::currentDateTime()) {
             html += "<td bgcolor='#ff8888'>";
         } else {
             html += "<td>";
