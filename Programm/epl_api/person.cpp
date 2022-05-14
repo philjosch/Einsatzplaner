@@ -14,7 +14,7 @@ const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";
 const QString Person::FARBE_STANDARD = "#ffffff";
 const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsdatum;Geschlecht;Anrede;Beruf;"
                                                "Eintritt;Status;Austritt;Beiragsart;IBAN;Bank;Kontoinhaber;"
-                                               "Beitrag;Nachzahlung"
+                                               "Beitrag;Nachzahlung;"
                                                "Tf;Zf;Rangierer;Tauglichkeit;BemerkungBetrieb;AusbildungSonst;"
                                                "Straße;PLZ;Ort;Strecke;Mail;Telefon;Telefon2;"
                                                "Zustimmung Mail;Zustimmung Telefon;"
@@ -33,6 +33,7 @@ QString Person::getKopfTabelleListeHtml(QSet<QString> data)
     QString kopf = "<h3>%1 – Stand %2</h3>"
                    "<table cellspacing='0' width='100%'><thead><tr>";
     if (data.contains("Nummer")
+            || data.contains("Status")
             || data.contains("Eintritt")
             || data.contains("Austritt") || data.isEmpty())
         kopf += "<th>Mitgliedsdaten</th>";
