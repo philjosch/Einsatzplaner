@@ -272,12 +272,17 @@ QString Reservierung::getHtmlForTable() const
     html += (klasse==1 ? "1. Klasse" :  "2./3.Klasse");
     html += "<br/>"+getStringFromPlaetze(sitzplatz)+"</td>";
     html += "<td>";
+    QList<QString> teilStrecken;
     for(int i = 0; i < zuege.length(); i=i+2) {
-        html +=  (zuege.at(i  ) == 0 ? "" : QString::number(zuege.at(i  )))+" "+(hps.at(i  ) == "-" ? "" : hps.at(i  ))
+        teilStrecken.append(
+                 (zuege.at(i  ) == 0 ? "" : QString::number(zuege.at(i  )))+" "+(hps.at(i  ) == "-" ? "" : hps.at(i  ))
                 +"&rarr; "
-                +(zuege.at(i+1) == 0 ? "" : QString::number(zuege.at(i+1)))+" "+(hps.at(i+1) == "-" ? "" : hps.at(i+1));
-        if (i+2 < zuege.length()) html += " und <br/>";
+                +(zuege.at(i+1) == 0 ? "" : QString::number(zuege.at(i+1)))+" "+(hps.at(i+1) == "-" ? "" : hps.at(i+1))
+                    );
     }
+    teilStrecken.removeAll(" &rarr;  ");
+    html += teilStrecken.join(" und <br/>");
+
     html += "</td>";
     html += (fahrrad ? "<td>Fahrrad!<br/>" : "<td>")+sonstiges+"</td></tr>";
     return html;
