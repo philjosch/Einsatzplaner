@@ -405,6 +405,7 @@ bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
                 list.swapItemsAt(pos, pos+1);
                 pos++;
             }
+            wagenZuRes.insert(999, list);
         }
     }
 
