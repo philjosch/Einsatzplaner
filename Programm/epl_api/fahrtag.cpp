@@ -231,7 +231,7 @@ QString Fahrtag::getHtmlForTableView() const
     html += "<b>"+QLocale().toString(datum, "dddd d.M.yyyy")+"</b><br/>";
     html += toString(art);
     if (anlass != "") {
-        html += ":<br/><i>"+QString(anlass).replace("\n", "<br/>")+"</i>";
+        html += ": <i>"+QString(anlass).replace("\n", "<br/>")+"</i>";
     }
 
     if (abgesagt) {
