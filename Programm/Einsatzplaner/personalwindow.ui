@@ -732,7 +732,7 @@
            <attribute name="title">
             <string>Konto</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,0,0,0">
+           <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1" columnstretch="0,0,0,0,1">
             <property name="leftMargin">
              <number>6</number>
             </property>
