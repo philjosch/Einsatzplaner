@@ -58,12 +58,6 @@
        <height>15</height>
       </size>
      </property>
-     <property name="autoFillBackground">
-      <bool>true</bool>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
      <property name="lineWidth">
       <number>0</number>
      </property>
@@ -74,7 +68,7 @@
       <bool>false</bool>
      </property>
      <property name="alignment">
-      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+      <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
      </property>
      <property name="margin">
       <number>0</number>
@@ -86,9 +80,6 @@
    </item>
    <item row="1" column="0" colspan="2">
     <widget class="QListWidget" name="listWidget">
-     <property name="autoFillBackground">
-      <bool>true</bool>
-     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -125,12 +116,6 @@
      </property>
      <property name="whatsThis">
       <string>Arbeitseinsatz hinzufügen</string>
-     </property>
-     <property name="autoFillBackground">
-      <bool>true</bool>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: none;</string>
      </property>
      <property name="text">
       <string notr="true">+</string>

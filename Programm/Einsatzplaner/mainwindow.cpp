@@ -237,22 +237,22 @@ void MainWindow::showPersonal()
 
 void MainWindow::showPreviousMonth()
 {
-    ui->dateSelector->setDate(ui->dateSelector->date().addMonths(-1));
+    ui->dateSelector->setDate(ui->dateSelector->date().addDays(-7));
     ui->dateSelector->repaint();
 }
 void MainWindow::showNextMonth()
 {
-    ui->dateSelector->setDate(ui->dateSelector->date().addMonths(1));
+    ui->dateSelector->setDate(ui->dateSelector->date().addDays(7));
     ui->dateSelector->repaint();
 }
 void MainWindow::showCurrentMonth()
 {
-    ui->dateSelector->setDate(QDate::currentDate());
+    ui->dateSelector->setDate(QDate::currentDate().addDays(-QDate::currentDate().day()+1));
     ui->dateSelector->repaint();
 }
 void MainWindow::showDate(QDate date)
 {
-    date = date.addDays(-date.day()+1); // Datum auf Monatsanfang setzen
+//    date = date.addDays(-date.day()+1); // Datum auf Monatsanfang setzen
     QDate akt = date.addDays(-date.dayOfWeek()+1);
 
     // Eintragen der Wochennummern
@@ -263,9 +263,11 @@ void MainWindow::showDate(QDate date)
     ui->number1_5->setText(QString::number(akt.addDays(28).weekNumber()));
     ui->number1_6->setText(QString::number(akt.addDays(35).weekNumber()));
 
+    int displayMonth = akt.month();
+    if (akt.daysInMonth() - akt.day() < 20) displayMonth = akt.addMonths(1).month();
     // Einstellen der einzelnen Tage
     for (int i = 0; i < tage.length(); i++) {
-        tage.at(i)->show(akt, akt.month() != date.month());
+        tage.at(i)->show(akt, akt.month() != displayMonth);
         akt = akt.addDays(1);
     }
 
@@ -314,7 +316,7 @@ void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
 int MainWindow::getPosInCalendar(QDate date)
 {
     QDate start = ui->dateSelector->date();
-    start = start.addDays(-start.day()+1); // Datum auf Monatsanfang setzen
+//    start = start.addDays(-start.day()+1); // Datum auf Monatsanfang setzen
     start = start.addDays(-start.dayOfWeek()+1);
 
     long long diff = start.daysTo(date);

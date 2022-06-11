@@ -17,23 +17,28 @@ CalendarDay::~CalendarDay()
 void CalendarDay::show(QDate datum, bool gray)
 {
     date = datum;
-    ui->label->setText(datum.toString("dd.  "));
+    ui->label->setText(datum.toString("d "));
+    if (date.day() == 1)
+        ui->label->setText(datum.toString("d. MMM "));
     ui->listWidget->clear();
     actToItem.clear();
 
-    ui->label->setEnabled(! gray);
-
     if (datum == QDate::currentDate()) {
         if (gray) {
-            ui->buttonAdd->setStyleSheet("border: none; background-color: rgba(255,128,128,0.5);");
-            ui->label->setStyleSheet("background-color: rgba(255,128,128,0.5);");
+            ui->buttonAdd->setStyleSheet("border: none; background-color: rgba(255,128,128,0.5); color: #888;");
+            ui->label->setStyleSheet("background-color: rgba(255,128,128,0.5); color: #888;");
         } else {
             ui->buttonAdd->setStyleSheet("border: none; background-color: #f00;");
             ui->label->setStyleSheet("background-color: #f00;");
         }
     } else {
-        ui->buttonAdd->setStyleSheet("border: none;");
-        ui->label->setStyleSheet("");
+        if (gray) {
+            ui->buttonAdd->setStyleSheet("border: none; background-color: palette(base); color: #888;");
+            ui->label->setStyleSheet("background-color: palette(base); color: #888;");
+        } else {
+            ui->buttonAdd->setStyleSheet("border: none; background-color: palette(base);");
+            ui->label->setStyleSheet("background-color: palette(base);");
+        }
     }
 }
 
