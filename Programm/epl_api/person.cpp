@@ -905,7 +905,7 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     if (anzeige.contains("Eintritt")) {
         zelleNutzen = true;
         anfuegen(&zelle, eintritt.toString("d.M.yyyy"));
-        if (anzeige.contains("Austritt") && isAusgetreten()) {
+        if (anzeige.contains("Austritt") && !austritt.isNull()) {
             zelle += austritt.toString("-d.M.yyyy");
         }
     } else if (anzeige.contains("Austritt")) {
