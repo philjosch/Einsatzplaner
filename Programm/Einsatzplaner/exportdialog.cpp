@@ -4,6 +4,7 @@
 #include "eplexception.h"
 
 #include <QMessageBox>
+#include <QPrintPreviewDialog>
 
 using namespace EplException;
 
@@ -36,6 +37,7 @@ ExportDialog::ExportDialog(Manager *m, FileSettings *settings, QWidget *parent) 
     connect(ui->comboVon, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::changedFrom);
     connect(ui->comboBis, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::changedTill);
 
+    connect(ui->pushPreview, &QPushButton::clicked, this, &ExportDialog::showPrintPreview);
     hardReload();
 }
 
@@ -63,22 +65,7 @@ void ExportDialog::hardReload()
 
 void ExportDialog::perfomExport()
 {
-    QList<AActivity*> liste = QList<AActivity*>();
-    for(AActivity *a: manager->getActivities()) {
-        switch (ui->buttonGroupExportArt->checkedId()) {
-        case 1:
-            if(!(actToList.value(a)->isSelected())) {
-                continue;
-            }
-        case 0:
-            if(! actToList.value(a)->isHidden()) {
-                liste.append(a);
-            }
-            break;
-        default:
-            continue;
-        }
-    }
+    QList<AActivity*> liste = getAActivityForExport();
 
     QPrinter *printer;
     if (ui->buttonGroupExportArt->checkedId() == 0) {
@@ -165,6 +152,24 @@ void ExportDialog::show()
     }
 }
 
+void ExportDialog::showPrintPreview()
+{
+    QList<AActivity*> liste = getAActivityForExport();
+
+    QPrintPreviewDialog *prev;
+    QPrinter *printer = new QPrinter();
+    if (ui->buttonGroupExportArt->checkedId() == 0) {
+        Export::preparePrinter(printer, QPageLayout::Orientation::Landscape);
+        prev = new QPrintPreviewDialog(printer, parentWidget());
+        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->printListenansicht(liste, print); } );
+    } else {
+        Export::preparePrinter(printer, QPageLayout::Orientation::Portrait);
+        prev = new QPrintPreviewDialog(printer, parentWidget());
+        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->printEinzelansichten(liste, print); } );
+    }
+    prev->exec(); // == QDialog::Accepted)
+}
+
 bool ExportDialog::testShow(AActivity *a)
 {
     QDate abD = ui->dateVon->date();
@@ -223,4 +228,25 @@ bool ExportDialog::testShow(AActivity *a)
         return ui->checkActivity->isChecked();
         // es ist kein fahrtag
     }
+}
+
+QList<AActivity *> ExportDialog::getAActivityForExport()
+{
+    QList<AActivity*> liste = QList<AActivity*>();
+    for(AActivity *a: manager->getActivities()) {
+        switch (ui->buttonGroupExportArt->checkedId()) {
+        case 1:
+            if(!(actToList.value(a)->isSelected())) {
+                continue;
+            }
+        case 0:
+            if(! actToList.value(a)->isHidden()) {
+                liste.append(a);
+            }
+            break;
+        default:
+            continue;
+        }
+    }
+    return liste;
 }

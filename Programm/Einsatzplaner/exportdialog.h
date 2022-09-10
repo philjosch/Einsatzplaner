@@ -29,6 +29,7 @@ private slots:
     void changedTill(int index);
 
     void show();
+    void showPrintPreview();
 
 private:
     Ui::ExportDialog *ui;
@@ -39,6 +40,7 @@ private:
     FileSettings *settings;
 
     bool testShow(AActivity *a);
+    QList<AActivity*> getAActivityForExport();
 };
 
 #endif // EXPORTDIALOG_H
