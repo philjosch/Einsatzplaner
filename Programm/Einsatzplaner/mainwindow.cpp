@@ -242,7 +242,8 @@ void MainWindow::showNextMonth()
 }
 void MainWindow::showCurrentMonth()
 {
-    ui->dateSelector->setDate(QDate::currentDate().addDays(-QDate::currentDate().day()+1));
+    QDate cur = QDate::currentDate();
+    ui->dateSelector->setDate(cur.addDays(-cur.day()+1));
     ui->dateSelector->repaint();
 }
 void MainWindow::showDate(QDate date)
