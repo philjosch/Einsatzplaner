@@ -2,7 +2,6 @@
 #define COREMAINWINDOW_H
 
 #include "aactivity.h"
-#include "eplexception.h"
 #include "eplfile.h"
 
 #include <QAction>

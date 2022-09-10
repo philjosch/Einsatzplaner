@@ -1,11 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "export.h"
 #include "exportdialog.h"
-#include "fileio.h"
-#include "coreapplication.h"
-#include "fahrtagwindow.h"
-#include "activitywindow.h"
 #include "eplexception.h"
 
 #include <QMessageBox>

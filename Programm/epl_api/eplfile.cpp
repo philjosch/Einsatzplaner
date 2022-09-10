@@ -2,7 +2,6 @@
 #include "eplfile.h"
 #include "fileio.h"
 #include "crypto.h"
-#include "basics.h"
 #include "einstellungen.h"
 #include "export.h"
 

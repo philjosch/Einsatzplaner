@@ -1,7 +1,6 @@
 #ifndef FILESETTINGSDIALOG_H
 #define FILESETTINGSDIALOG_H
 
-#include "filesettings.h"
 #include "eplfile.h"
 
 #include <QAbstractButton>

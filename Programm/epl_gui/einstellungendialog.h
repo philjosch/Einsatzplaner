@@ -1,8 +1,8 @@
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
 
-#include "coreapplication.h"
 
+#include "version.h"
 #include <QDialog>
 
 namespace Ui {

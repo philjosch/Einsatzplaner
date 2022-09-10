@@ -2,7 +2,6 @@
 #include "person.h"
 #include "ui_fahrtagwindow.h"
 #include "export.h"
-#include "coreapplication.h"
 #include "guihelper.h"
 #include "eplexception.h"
 

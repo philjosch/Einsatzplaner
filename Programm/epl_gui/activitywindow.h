@@ -3,7 +3,6 @@
 
 #include "aactivity.h"
 #include "coremainwindow.h"
-#include "guihelper.h"
 
 #include <QMainWindow>
 
