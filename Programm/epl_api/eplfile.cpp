@@ -27,6 +27,7 @@ EplFile::EplFile(QString dateiPfad)
     dateiEigenschaften = new FileSettings();
 
     currentDate = QDate::currentDate();
+    currentDate = currentDate.addDays(-currentDate.day()+1);
     positionKalender = FensterPosition{};
     positionPersonal = FensterPosition{};
 
