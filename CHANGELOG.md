@@ -1,5 +1,27 @@
 # EPL - Veränderungshistorie
-Stand: 06. Februar 2022
+Stand: 20. September 2022
+
+## Version 1.8.3 – 2022-09-20
+### Neu
+- Bei einem Arbeitseinsatz werden verschiedenen Anlässe vorgeschlagen
+- Im Kalender wird bei Fahrtagen der Anlass angezeigt
+- Druckvorschau für den Export eingefügt
+
+### Verbessert
+- Die automatische Kategorieerkennung wurde verbessert
+- Export als Listenansicht verbessert
+- Verschiedene Fenster verbessert
+- Diverse kleinere Verbesserungen
+
+### Fehlerbehebungen
+- Behebt einen Fehler durch den das Programm auf älteren Betriebsystemen nicht mehr lauffähig war
+- Daten wurden teilweise in Englisch angegeben
+- In der Reservierungsübersicht wurden unter Umständen Reservierungen nicht ausgegeben
+- Auch eine leere Teilstrecke der Reservierung wurde ausgegeben
+- Der Export der Mitgliederdaten als CSV oder PDF war eventuell falsch oder unvollständig
+- Individuelle Zeiten wurden eventuell beim Export falsch dargestellt
+- Diverse kleinere Fehlerbehebungen
+
 
 ## Version 1.8.2 – 2022-02-06
 ### Verbessert

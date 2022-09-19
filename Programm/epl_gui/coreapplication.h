@@ -1,9 +1,7 @@
 #ifndef COREAPPLICATION_H
 #define COREAPPLICATION_H
 
-#include "basics.h"
 #include "coremainwindow.h"
-#include "networking.h"
 
 #include <QApplication>
 

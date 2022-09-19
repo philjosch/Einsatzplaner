@@ -54,7 +54,6 @@ public:
      */
     static QString zeitStempel(bool seitenUmbruch = false);
 
-private:
     /**
      * @brief preparePrinter setzt die Raender des Druckers auf die Standardwerte bzw. anhand der Ausrichtung
      * @param p: Der Drucker
@@ -62,6 +61,7 @@ private:
      */
     static void preparePrinter(QPrinter *p, QPageLayout::Orientation orientation);
 
+private:
     /**
      * @brief newDefaultDocument Erzeugt ein neues Textdocument mit dem standard Stylesheet
      * @return Das neue Dokument

@@ -29,26 +29,26 @@ protected slots:
 
     //** Menueleiste
     // Bearbeiten
-    void on_actionAddPerson_triggered();
-    void on_actionAktualisieren_triggered();
-    void on_actionMindeststunden_triggered();
-    void on_actionMailListe_triggered();
-    void on_actionMitgliedsbeitraege_triggered();
+    void addPerson();
+    void refresh();
+    void editMinimumhours();
+    void sendMailList();
+    void editDues();
 
     // Export
-    void on_actionMitgliederEinzelListePDF_triggered();
-    void on_actionMitgliederEinzelListeDrucken_triggered();
+    void exportMemberDetailMultiplePdf();
+    void exportMemberDetailMultiplePrint();
 
-    void on_actionMitgliederListePDF_triggered();
-    void on_actionMitgliederListeDrucken_triggered();
-    void on_actionMitgliederListeCSV_triggered();
+    void exportMemberListPdf();
+    void exportMemberListPrint();
+    void exportMemberListCsv();
 
-    void on_actionBeitraegeRegulaerCSV_triggered();
-    void on_actionBeitraegeNachzahlungCSV_triggered();
+    void exportDuesRegularCsv();
+    void exportDuesAdditionalCsv();
 
     //** Fenster
-    void on_comboAnzeige_currentIndexChanged(int index);
-    void on_tabelleMitglieder_cellDoubleClicked(int row, int column);
+    void filterChanged(int index);
+    void showPersFromTable(int row, int column);
 
 protected:
     //** Hilfsmethoden
@@ -65,6 +65,6 @@ protected:
     QSet<QString> anzeige;
 
 private slots:
-    void on_listAnzeige_itemChanged(QListWidgetItem *item);
+    void viewShowColumFromItem(QListWidgetItem *item);
 };
 #endif // MAINWINDOWPERSONAL_H

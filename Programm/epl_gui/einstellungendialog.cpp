@@ -11,8 +11,12 @@ EinstellungenDialog::EinstellungenDialog(QWidget *parent) : QDialog(parent), ui(
     ui->setupUi(this);
     ui->buttonGroupSortierung->setId(ui->radioVorNach, Einstellungen::VornameNachname);
     ui->buttonGroupSortierung->setId(ui->radioNachVor, Einstellungen::NachnameVorname);
-    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(closeDialogOk()));
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &EinstellungenDialog::closeDialogOk);
     connect(ui->pushDownload, &QPushButton::clicked, this, [=]() { CoreApplication::oeffneDownloadSeite(); });
+
+    connect(ui->pushSearch, &QPushButton::clicked, this, &EinstellungenDialog::searchUpdate);
+    connect(ui->pushNotes, &QPushButton::clicked, this, &EinstellungenDialog::showNotes);
+
     ui->checkSearchAtStart->setChecked(Einstellungen::getAutoSearchUpdate());
     ui->checkAutoUpload->setChecked(Einstellungen::getUseAutoUpload());
     int index = Einstellungen::getAutoSave();
@@ -34,7 +38,7 @@ EinstellungenDialog::~EinstellungenDialog()
     delete ui;
 }
 
-void EinstellungenDialog::on_pushSearch_clicked()
+void EinstellungenDialog::searchUpdate()
 {
     if (Version::isUpdateVerfuegbar()) {
         online = Version::ladeNeusteVersion();
@@ -77,7 +81,7 @@ void EinstellungenDialog::saveSettings()
     Einstellungen::setReihenfolgeVorNach((Einstellungen::ReihenfolgeSortierung)ui->buttonGroupSortierung->checkedId());
 }
 
-void EinstellungenDialog::on_pushNotes_clicked()
+void EinstellungenDialog::showNotes()
 {
     QMessageBox::information(nullptr,
                              tr("Über Version %1").arg(online.toString()),

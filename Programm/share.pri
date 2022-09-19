@@ -8,13 +8,13 @@
 ###########
 # VERSION #
 ###########
-VERSION = 1.8.2
+VERSION = 1.8.3
 DEPLOYED = true
 
 ####################
 # QT EINSTELLUNGEN #
 ####################
-!versionAtLeast(QT_VERSION, 6.2.0):error("Qt version 6.2.0 is required for this project")
+#!versionAtLeast(QT_VERSION, 6.2.0):error("Qt version 6.2.0 is required for this project")
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.

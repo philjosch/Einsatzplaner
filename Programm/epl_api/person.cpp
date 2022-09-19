@@ -14,7 +14,7 @@ const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";
 const QString Person::FARBE_STANDARD = "#ffffff";
 const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsdatum;Geschlecht;Anrede;Beruf;"
                                                "Eintritt;Status;Austritt;Beiragsart;IBAN;Bank;Kontoinhaber;"
-                                               "Beitrag;Nachzahlung"
+                                               "Beitrag;Nachzahlung;"
                                                "Tf;Zf;Rangierer;Tauglichkeit;BemerkungBetrieb;AusbildungSonst;"
                                                "Straße;PLZ;Ort;Strecke;Mail;Telefon;Telefon2;"
                                                "Zustimmung Mail;Zustimmung Telefon;"
@@ -33,6 +33,7 @@ QString Person::getKopfTabelleListeHtml(QSet<QString> data)
     QString kopf = "<h3>%1 – Stand %2</h3>"
                    "<table cellspacing='0' width='100%'><thead><tr>";
     if (data.contains("Nummer")
+            || data.contains("Status")
             || data.contains("Eintritt")
             || data.contains("Austritt") || data.isEmpty())
         kopf += "<th>Mitgliedsdaten</th>";
@@ -847,7 +848,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
         for (Einsatz *e: getActivities()) {
-                html += "<tr><td>"+e->getActivity()->getDatum().toString("dd.MM.yyyy")+"<br/>"+e->getActivity()->getStringShort();
+                html += "<tr><td>"+QLocale().toString(e->getActivity()->getDatum(), "dd.MM.yyyy")+"<br/>"+e->getActivity()->getStringShort();
                 if (!e->getActivity()->getStringShort().contains(e->getActivity()->getAnlass()) && e->getActivity()->getAnlass() != "")
                     html += "<br/>"+e->getActivity()->getAnlass();
                 html +="</td><td>"
@@ -904,7 +905,7 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     if (anzeige.contains("Eintritt")) {
         zelleNutzen = true;
         anfuegen(&zelle, eintritt.toString("d.M.yyyy"));
-        if (anzeige.contains("Austritt") && isAusgetreten()) {
+        if (anzeige.contains("Austritt") && !austritt.isNull()) {
             zelle += austritt.toString("-d.M.yyyy");
         }
     } else if (anzeige.contains("Austritt")) {

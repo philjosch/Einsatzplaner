@@ -2,7 +2,6 @@
 #define COREMAINWINDOW_H
 
 #include "aactivity.h"
-#include "eplexception.h"
 #include "eplfile.h"
 
 #include <QAction>
@@ -32,24 +31,24 @@ public slots:
 protected slots:
     //** Datei Menue
     // Einsatzplaner
-    void on_actionPreferences_triggered();
-    void on_actionAboutQt_triggered();
-    void on_actionAboutApp_triggered();
-    void on_actionQuit_triggered();
+    void showPreferences();
+    void showAboutQt();
+    void showAboutApp();
+    void closeApp();
 
     // Datei
-    void on_actionNew_triggered();
-    void on_actionOpen_triggered();
+    void fileNew();
+    void fileOpen();
 
-    void on_menuRecentlyused_aboutToShow();
-    void on_actionClear_triggered();
+    void updateRecentlyused();
+    void clearRecentlyUsed();
 
-    void on_actionSave_triggered();
-    void on_actionSaveas_triggered();
-    void on_actionSavePersonal_triggered();
+    void fileSave();
+    void fileSaveAs();
+    void fileSavePersonal();
 
-    void on_actionSettings_triggered();
-    bool on_actionClose_triggered();
+    void showFileSettings();
+    bool fileClose();
 
 
     //** Dialog-Handling

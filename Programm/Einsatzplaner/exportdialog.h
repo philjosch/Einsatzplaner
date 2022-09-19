@@ -22,13 +22,14 @@ public:
     void hardReload();
 
 private slots:
-    void on_pushDrucken_clicked();
+    void perfomExport();
 
-    void on_comboVon_currentIndexChanged(int index);
+    void changedFrom(int index);
 
-    void on_comboBis_currentIndexChanged(int index);
+    void changedTill(int index);
 
     void show();
+    void showPrintPreview();
 
 private:
     Ui::ExportDialog *ui;
@@ -39,6 +40,7 @@ private:
     FileSettings *settings;
 
     bool testShow(AActivity *a);
+    QList<AActivity*> getAActivityForExport();
 };
 
 #endif // EXPORTDIALOG_H

@@ -16,71 +16,70 @@ public:
     explicit PersonWindow(CoreMainWindow *parent, Person *p);
     ~PersonWindow();
 
-
 private slots:
     // Menueleiste
     // Person
-    void on_actionMail_triggered();
+    void sendMail();
 
-    void on_actionLoeschen_triggered();
+    void deleteTriggered();
     // Export
-    void on_actionEinzelPDF_triggered();
-    void on_actionEinzelDrucken_triggered();
+    void exportSinglePdf();
+    void exportSinglePrint();
 
 
     // Felder Oberflaeche
-    void on_lineVorname_textChanged(const QString &arg1);
-    void on_lineNachname_textChanged(const QString &arg1);
+    void changedFirstname(const QString &arg1);
+    void changedFamilyname(const QString &arg1);
 
-    void on_lineID_textChanged(const QString &arg1);
-    void on_pushAutoID_clicked();
+    void changedID(const QString &arg1);
+    void autoID();
 
-    void on_dateGeburtstag_dateChanged(const QDate &date);
-    void on_checkGeburtstag_clicked(bool checked);
+    void changedBirthday(const QDate &date);
+    void changedBirthdayStatus(bool checked);
 
-    void on_dateEintritt_dateChanged(const QDate &date);
-    void on_checkEintritt_clicked(bool checked);
+    void changedJoiningDate(const QDate &date);
+    void changedJoiningStatus(bool checked);
 
-    void on_checkAktiv_clicked(bool checked);
+    void changedMembershipStatus(bool checked);
 
-    void on_spinKm_valueChanged(int arg1);
+    void changedDistance(int arg1);
 
-    void on_lineJob_textChanged(const QString &arg1);
+    void changedJob(const QString &arg1);
 
-    void on_lineStrasse_textChanged(const QString &arg1);
-    void on_linePLZ_textChanged(const QString &arg1);
-    void on_lineOrt_textChanged(const QString &arg1);
+    void changedStreet(const QString &arg1);
+    void changedPostalCode(const QString &arg1);
+    void changedPlace(const QString &arg1);
 
-    void on_linePhone_textChanged(const QString &arg1);
-    void on_checkPhone_clicked(bool checked);
+    void changedPhoneFirst(const QString &arg1);
+    void changedPhoneStatus(bool checked);
 
-    void on_lineMail_textChanged(const QString &arg1);
-    void on_checkMail_clicked(bool checked);
+    void changedMail(const QString &arg1);
+    void changedMailStatus(bool checked);
 
-    void on_checkTf_clicked(bool checked);
-    void on_checkZf_clicked(bool checked);
-    void on_checkRangierer_clicked(bool checked);
+    void changedTfStatus(bool checked);
+    void changedZfStatus(bool checked);
+    void changedRangiererStatus(bool checked);
 
-    void on_dateDienst_dateChanged(const QDate &date);
-    void on_checkDienst_clicked(bool checked);
+    void changedFitnessDate(const QDate &date);
+    void changedFitnessStatus(bool checked);
 
-    void on_plainBemerkung_textChanged();
+    void changedCommentsGeneral();
 
-    void on_checkAustritt_clicked(bool checked);
-    void on_dateAustritt_dateChanged(const QDate &date);
+    void changedResignationStatus(bool checked);
+    void changedResignationDate(const QDate &date);
 
-    void on_comboAnrede_currentTextChanged(const QString &arg1);
-    void on_buttonGeschlecht_idClicked(int button);
+    void changedTitle(const QString &arg1);
+    void changedGender(int button);
 
-    void on_comboBeitragsart_currentIndexChanged(int index);
-    void on_lineIBAN_textChanged(const QString &arg1);
-    void on_lineBank_textChanged(const QString &arg1);
-    void on_lineKontoinhaber_textChanged(const QString &arg1);
+    void changedContributionType(int index);
+    void changedIBAN(const QString &arg1);
+    void changedBank(const QString &arg1);
+    void changedDepositor(const QString &arg1);
 
-    void on_linePhone2_textChanged(const QString &arg1);
+    void changedPhoneSecond(const QString &arg1);
 
-    void on_plainBetrieb_textChanged();
-    void on_plainAusbildung_textChanged();
+    void changedCommentsOperation();
+    void changedCommentsEducation();
 
 signals:
     void loeschen(Person *);

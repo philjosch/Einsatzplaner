@@ -8,6 +8,8 @@ BeitraegeEditorDialog::BeitraegeEditorDialog(QWidget *parent, ManagerPersonal *m
     ui->setupUi(this);
     managerPersonal = manager;
 
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &BeitraegeEditorDialog::saveAndClose);
+
     ui->labelAktiv->setText(Person::toString(Person::AktivenBeitrag));
     ui->labelPassiv->setText(Person::toString(Person::FoerderBeitrag));
     ui->labelErmaessigt->setText(Person::toString(Person::Ermaessigt));
@@ -30,7 +32,7 @@ BeitraegeEditorDialog::~BeitraegeEditorDialog()
     delete ui;
 }
 
-void BeitraegeEditorDialog::on_buttonBox_accepted()
+void BeitraegeEditorDialog::saveAndClose()
 {
     managerPersonal->setBeitrag(Person::AktivenBeitrag, ui->doubleAktiv->value()*100);
     managerPersonal->setBeitrag(Person::FoerderBeitrag, ui->doublePassiv->value()*100);

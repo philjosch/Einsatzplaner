@@ -1,11 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "export.h"
 #include "exportdialog.h"
-#include "fileio.h"
-#include "coreapplication.h"
-#include "fahrtagwindow.h"
-#include "activitywindow.h"
 #include "eplexception.h"
 
 #include <QMessageBox>
@@ -28,28 +23,49 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
     listitem = QMap<AActivity*, QListWidgetItem*>();
     itemToList = QMap<QListWidgetItem*, AActivity*>();
 
+    connect(ui->actionPreferences, &QAction::triggered, this, &MainWindow::showPreferences);
+    connect(ui->actionAboutQt, &QAction::triggered, this, &MainWindow::showAboutQt);
+    connect(ui->actionAboutApp, &QAction::triggered, this, &MainWindow::showAboutApp);
+    connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::closeApp);
+
+    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::fileNew);
+    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::fileOpen);
+
+    connect(ui->menuRecentlyused, &QMenu::aboutToShow, this, &MainWindow::updateRecentlyused);
+    connect(ui->actionClear, &QAction::triggered, this, &MainWindow::clearRecentlyUsed);
+
+    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::fileSave);
+    connect(ui->actionSaveas, &QAction::triggered, this, &MainWindow::fileSaveAs);
+    connect(ui->actionSavePersonal, &QAction::triggered, this, &MainWindow::fileSavePersonal);
+
+    connect(ui->actionSettings, &QAction::triggered, this, &MainWindow::showFileSettings);
+    connect(ui->actionClose, &QAction::triggered, this, &MainWindow::fileClose);
+
+
+    connect(ui->actionExport, &QAction::triggered, this, &MainWindow::showExportDialog);
+    connect(ui->actionLoeschen, &QAction::triggered, this, &MainWindow::deleteSelectedInList);
+    connect(ui->actionPersonal, &QAction::triggered, this, &MainWindow::showPersonal);
+
+    connect(ui->buttonPrev, &QPushButton::clicked, this, &MainWindow::showPreviousMonth);
+    connect(ui->buttonToday, &QPushButton::clicked, this, &MainWindow::showCurrentMonth);
+    connect(ui->buttonNext, &QPushButton::clicked, this, &MainWindow::showNextMonth);
+
     connect(ui->actionNeuArbeitseinsatz, SIGNAL(triggered(bool)), this, SLOT(newActivity()));
     connect(ui->actionNeuFahrtag, SIGNAL(triggered(bool)), this, SLOT(newFahrtag()));
-    connect(ui->dateSelector, SIGNAL(dateChanged(QDate)), this, SLOT(showDate(QDate)));
+    connect(ui->dateSelector, &QDateEdit::dateChanged, this, &MainWindow::showDate);
     connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) { openAktivitaet(itemToList.value(item)); });
 
     // Setup fuer die Darstellung des Kalenders
     tage = QList<CalendarDay*>();
-    tage.append(ui->day1_1);    tage.append(ui->day2_1);    tage.append(ui->day3_1);    tage.append(ui->day4_1);
-    tage.append(ui->day5_1);    tage.append(ui->day6_1);    tage.append(ui->day7_1);
-    tage.append(ui->day1_2);    tage.append(ui->day2_2);    tage.append(ui->day3_2);    tage.append(ui->day4_2);
-    tage.append(ui->day5_2);    tage.append(ui->day6_2);    tage.append(ui->day7_2);
-    tage.append(ui->day1_3);    tage.append(ui->day2_3);    tage.append(ui->day3_3);    tage.append(ui->day4_3);
-    tage.append(ui->day5_3);    tage.append(ui->day6_3);    tage.append(ui->day7_3);
-    tage.append(ui->day1_4);    tage.append(ui->day2_4);    tage.append(ui->day3_4);    tage.append(ui->day4_4);
-    tage.append(ui->day5_4);    tage.append(ui->day6_4);    tage.append(ui->day7_4);
-    tage.append(ui->day1_5);    tage.append(ui->day2_5);    tage.append(ui->day3_5);    tage.append(ui->day4_5);
-    tage.append(ui->day5_5);    tage.append(ui->day6_5);    tage.append(ui->day7_5);
-    tage.append(ui->day1_6);    tage.append(ui->day2_6);    tage.append(ui->day3_6);    tage.append(ui->day4_6);
-    tage.append(ui->day5_6);    tage.append(ui->day6_6);    tage.append(ui->day7_6);
+    tage << ui->day1_1 << ui->day2_1 << ui->day3_1 << ui->day4_1 << ui->day5_1 << ui->day6_1 << ui->day7_1;
+    tage << ui->day1_2 << ui->day2_2 << ui->day3_2 << ui->day4_2 << ui->day5_2 << ui->day6_2 << ui->day7_2;
+    tage << ui->day1_3 << ui->day2_3 << ui->day3_3 << ui->day4_3 << ui->day5_3 << ui->day6_3 << ui->day7_3;
+    tage << ui->day1_4 << ui->day2_4 << ui->day3_4 << ui->day4_4 << ui->day5_4 << ui->day6_4 << ui->day7_4;
+    tage << ui->day1_5 << ui->day2_5 << ui->day3_5 << ui->day4_5 << ui->day5_5 << ui->day6_5 << ui->day7_5;
+    tage << ui->day1_6 << ui->day2_6 << ui->day3_6 << ui->day4_6 << ui->day5_6 << ui->day6_6 << ui->day7_6;
     for(CalendarDay *c: qAsConst(tage)) {
         connect(c, &CalendarDay::clickedItem, this, &MainWindow::openAktivitaet);
-        connect(c, SIGNAL(addActivity(QDate)), this, SLOT(newActivity(QDate)));
+        connect(c, &CalendarDay::addActivity, this, &MainWindow::newActivity);
     }
 
     if (datei->istSchreibgeschuetzt()) {
@@ -189,13 +205,13 @@ void MainWindow::onAktivitaetWurdeBearbeitet(AActivity *a, QDate altesDatum)
 }
 
 
-void MainWindow::on_actionExport_triggered()
+void MainWindow::showExportDialog()
 {
     exportDialog->hardReload();
     exportDialog->exec();
 }
 
-void MainWindow::on_actionLoeschen_triggered()
+void MainWindow::deleteSelectedInList()
 {
     QList<QListWidgetItem*> selected = ui->listWidget->selectedItems();
     if (! selected.isEmpty()) {
@@ -205,7 +221,7 @@ void MainWindow::on_actionLoeschen_triggered()
     }
 }
 
-void MainWindow::on_actionPersonal_triggered()
+void MainWindow::showPersonal()
 {
     personalfenster->show();
     personalfenster->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
@@ -214,24 +230,25 @@ void MainWindow::on_actionPersonal_triggered()
 }
 
 
-void MainWindow::on_buttonPrev_clicked()
+void MainWindow::showPreviousMonth()
 {
-    ui->dateSelector->setDate(ui->dateSelector->date().addMonths(-1));
+    ui->dateSelector->setDate(ui->dateSelector->date().addDays(-7));
     ui->dateSelector->repaint();
 }
-void MainWindow::on_buttonNext_clicked()
+void MainWindow::showNextMonth()
 {
-    ui->dateSelector->setDate(ui->dateSelector->date().addMonths(1));
+    ui->dateSelector->setDate(ui->dateSelector->date().addDays(7));
     ui->dateSelector->repaint();
 }
-void MainWindow::on_buttonToday_clicked()
+void MainWindow::showCurrentMonth()
 {
-    ui->dateSelector->setDate(QDate::currentDate());
+    QDate cur = QDate::currentDate();
+    ui->dateSelector->setDate(cur.addDays(-cur.day()+1));
     ui->dateSelector->repaint();
 }
 void MainWindow::showDate(QDate date)
 {
-    date = date.addDays(-date.day()+1); // Datum auf Monatsanfang setzen
+//    date = date.addDays(-date.day()+1); // Datum auf Monatsanfang setzen
     QDate akt = date.addDays(-date.dayOfWeek()+1);
 
     // Eintragen der Wochennummern
@@ -242,9 +259,11 @@ void MainWindow::showDate(QDate date)
     ui->number1_5->setText(QString::number(akt.addDays(28).weekNumber()));
     ui->number1_6->setText(QString::number(akt.addDays(35).weekNumber()));
 
+    int displayMonth = akt.month();
+    if (akt.daysInMonth() - akt.day() < 20) displayMonth = akt.addMonths(1).month();
     // Einstellen der einzelnen Tage
     for (int i = 0; i < tage.length(); i++) {
-        tage.at(i)->show(akt, akt.month() != date.month());
+        tage.at(i)->show(akt, akt.month() != displayMonth);
         akt = akt.addDays(1);
     }
 
@@ -285,8 +304,7 @@ void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
 {
     if (i == nullptr) return;
     i->setText(a->getString());
-    i->setToolTip(a->getAnlass().replace("<br/>","\n"));
-    i->setWhatsThis(a->getAnlass().replace("<br/>","\n"));
+    i->setToolTip(toString(a->getArt()));
     i->setBackground(QBrush(QColor(a->getFarbe())));
     i->setForeground(QBrush(QColor("black")));
 }
@@ -294,7 +312,7 @@ void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
 int MainWindow::getPosInCalendar(QDate date)
 {
     QDate start = ui->dateSelector->date();
-    start = start.addDays(-start.day()+1); // Datum auf Monatsanfang setzen
+//    start = start.addDays(-start.day()+1); // Datum auf Monatsanfang setzen
     start = start.addDays(-start.dayOfWeek()+1);
 
     long long diff = start.daysTo(date);

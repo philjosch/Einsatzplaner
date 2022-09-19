@@ -1,7 +1,7 @@
 #ifndef GUIHELPER_H
 #define GUIHELPER_H
 
-#include "aactivity.h"
+#include "einsatz.h"
 
 #include <QComboBox>
 #include <QListWidgetItem>

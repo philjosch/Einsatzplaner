@@ -17,7 +17,7 @@ public:
     ~BeitraegeEditorDialog();
 
 private slots:
-    void on_buttonBox_accepted();
+    void saveAndClose();
 
 private:
     Ui::BeitraegeEditorDialog *ui;

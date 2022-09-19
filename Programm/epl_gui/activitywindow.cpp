@@ -17,25 +17,48 @@ ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWind
 
     connect(this, &ActivityWindow::loeschen, parent, &CoreMainWindow::loeschenAktivitaet);
 
+    connect(ui->buttonInsert, &QPushButton::clicked, this, &ActivityWindow::insertPerson);
+    connect(ui->buttonRemove, &QPushButton::clicked, this, &ActivityWindow::removePerson);
+
+    connect(ui->dateDatum, &QDateEdit::dateChanged, this, &ActivityWindow::changedDate);
+    connect(ui->lineOrt, &QLineEdit::textChanged, this, &ActivityWindow::changedLocation);
+    connect(ui->comboAnlass, &QComboBox::currentTextChanged, this, &ActivityWindow::changedPurpose);
+    connect(ui->plainBeschreibung, &QPlainTextEdit::textChanged, this, &ActivityWindow::changedDescription);
+
+    connect(ui->timeBeginn, &QTimeEdit::timeChanged, this, &ActivityWindow::changedTimeStart);
+    connect(ui->timeEnde, &QTimeEdit::timeChanged, this, &ActivityWindow::changedTimeEnd);
+    connect(ui->checkZeiten, &QCheckBox::clicked, this, &ActivityWindow::changedTimeStatus);
+
+    connect(ui->checkWichtig, &QCheckBox::clicked, this, &ActivityWindow::changedImportant);
+    connect(ui->checkAbgesagt, &QCheckBox::clicked, this, &ActivityWindow::changedCancelled);
+
+    connect(ui->checkBoxBenoetigt, &QCheckBox::toggled, this, &ActivityWindow::changedRequired);
+
+    connect(ui->tablePersonen, &QTableWidget::cellChanged, this, &ActivityWindow::changedTableEntry);
+
+    connect(ui->actionPrint, &QAction::triggered, this, &ActivityWindow::exportPrint);
+    connect(ui->actionPdf, &QAction::triggered, this, &ActivityWindow::exportPdf);
+
+    connect(ui->actionDelete, &QAction::triggered, this, &ActivityWindow::deleteTriggered);
 
     nehme = false;
     // Allgemeine Daten von AActivity
     ui->dateDatum->setDate(activity->getDatum());
     ui->lineOrt->setText(activity->getOrt());
-    ui->lineAnlass->setText(activity->getAnlass().replace("<br/>","\n"));
+    ui->comboAnlass->setCurrentText(activity->getAnlass().replace("<br/>","\n"));
     setPredefinedValue(activity->getAnlass().replace("<br/>","\n"));
     ui->plainBeschreibung->setPlainText(activity->getBemerkungen().replace("<br/>","\n"));
     ui->timeBeginn->setTime(activity->getZeitAnfang());
     ui->timeEnde->setTime(activity->getZeitEnde());
     ui->checkZeiten->setChecked(activity->getZeitenUnbekannt());
-    on_checkZeiten_clicked(activity->getZeitenUnbekannt());
+    changedTimeStatus(activity->getZeitenUnbekannt());
     ui->checkWichtig->setChecked(activity->getWichtig());
     ui->checkAbgesagt->setChecked(activity->getAbgesagt());
     ui->checkBoxBenoetigt->setChecked(activity->getPersonalBenoetigt());
 
     // Tabelle laden und alles einfügen
     for(Einsatz *e: activity->getPersonen()) {
-        on_buttonInsert_clicked();
+        insertPerson();
 
         EinsatzTableWidgetItem *ptwi = dynamic_cast<EinsatzTableWidgetItem*>(ui->tablePersonen->item(0, 0));
         ptwi->setEinsatz(e);
@@ -59,7 +82,7 @@ ActivityWindow::~ActivityWindow()
     delete ui;
 }
 
-void ActivityWindow::on_dateDatum_dateChanged(const QDate &date)
+void ActivityWindow::changedDate(const QDate &date)
 {
     if (nehme) {
         activity->setDatum(date);
@@ -67,13 +90,13 @@ void ActivityWindow::on_dateDatum_dateChanged(const QDate &date)
     updateWindowTitle();
 }
 
-void ActivityWindow::on_lineOrt_textChanged(const QString &arg1)
+void ActivityWindow::changedLocation(const QString &arg1)
 {
     if (nehme)
         activity->setOrt(arg1);
 }
 
-void ActivityWindow::on_lineAnlass_textChanged(const QString &arg1)
+void ActivityWindow::changedPurpose(const QString &arg1)
 {
     QString n = arg1;
     n = n.replace("\n","<br/>");
@@ -83,23 +106,23 @@ void ActivityWindow::on_lineAnlass_textChanged(const QString &arg1)
     updateWindowTitle();
 }
 
-void ActivityWindow::on_plainBeschreibung_textChanged()
+void ActivityWindow::changedDescription()
 {
     if (nehme)
         activity->setBemerkungen(ui->plainBeschreibung->toPlainText().replace("\n","<br/>"));
 }
 
-void ActivityWindow::on_timeBeginn_timeChanged(const QTime &time)
+void ActivityWindow::changedTimeStart(const QTime &time)
 {
     if (nehme)
         activity->setZeitAnfang(time);
 }
-void ActivityWindow::on_timeEnde_timeChanged(const QTime &time)
+void ActivityWindow::changedTimeEnd(const QTime &time)
 {
     if (nehme)
         activity->setZeitEnde(time);
 }
-void ActivityWindow::on_checkZeiten_clicked(bool checked)
+void ActivityWindow::changedTimeStatus(bool checked)
 {
     ui->timeBeginn->setEnabled(!checked);
     ui->timeEnde->setEnabled(!checked);
@@ -107,25 +130,25 @@ void ActivityWindow::on_checkZeiten_clicked(bool checked)
         activity->setZeitenUnbekannt(checked);
 }
 
-void ActivityWindow::on_checkWichtig_clicked(bool checked)
+void ActivityWindow::changedImportant(bool checked)
 {
     if (nehme)
         activity->setWichtig(checked);
 }
 
-void ActivityWindow::on_checkAbgesagt_clicked(bool checked)
+void ActivityWindow::changedCancelled(bool checked)
 {
     if (nehme)
         activity->setAbgesagt(checked);
 }
 
-void ActivityWindow::on_checkBoxBenoetigt_toggled(bool checked)
+void ActivityWindow::changedRequired(bool checked)
 {
     if (nehme)
         activity->setPersonalBenoetigt(checked);
 }
 
-void ActivityWindow::on_buttonInsert_clicked()
+void ActivityWindow::insertPerson()
 {
     bool nehmeOld = nehme;
     nehme = false;
@@ -147,9 +170,9 @@ void ActivityWindow::on_buttonInsert_clicked()
 
     ui->tablePersonen->setItem(0, 4, new QTableWidgetItem(""));
 
-    connect(box, &QComboBox::currentTextChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 1); });
-    connect(beginn, &QTimeEdit::timeChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 2); });
-    connect(ende, &QTimeEdit::timeChanged, this, [=]() { if (nehme) on_tablePersonen_cellChanged(ui->tablePersonen->row(item), 3); });
+    connect(box, &QComboBox::currentTextChanged, this, [=]() { if (nehme) changedTableEntry(ui->tablePersonen->row(item), 1); });
+    connect(beginn, &QTimeEdit::timeChanged, this, [=]() { if (nehme) changedTableEntry(ui->tablePersonen->row(item), 2); });
+    connect(ende, &QTimeEdit::timeChanged, this, [=]() { if (nehme) changedTableEntry(ui->tablePersonen->row(item), 3); });
 
     ui->buttonRemove->setEnabled(true);
     ui->tablePersonen->repaint();
@@ -158,7 +181,7 @@ void ActivityWindow::on_buttonInsert_clicked()
     nehme = nehmeOld;
 }
 
-void ActivityWindow::on_buttonRemove_clicked()
+void ActivityWindow::removePerson()
 {
     int i = ui->tablePersonen->currentRow();
     if (i < 0) return;
@@ -170,7 +193,7 @@ void ActivityWindow::on_buttonRemove_clicked()
     ui->buttonRemove->setEnabled(ui->tablePersonen->rowCount() > 0);
 }
 
-void ActivityWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int column)
+void ActivityWindow::changedTableEntry(int row, [[maybe_unused]] int column)
 {
     // column 0: Name | 1: Aufgabe | 2: Beginn | 3: Ende | 4: Bemerkung
     // Wenn der Name geändert wurde, muss die Verknuepfung mit der alten Person aufgeloest werden
@@ -203,16 +226,16 @@ void ActivityWindow::on_tablePersonen_cellChanged(int row, [[maybe_unused]] int 
     }
 }
 
-void ActivityWindow::on_actionPrint_triggered()
+void ActivityWindow::exportPrint()
 {
     activity->print(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
-void ActivityWindow::on_actionPdf_triggered()
+void ActivityWindow::exportPdf()
 {
     activity->print(Export::getPrinterPDF(this, windowTitle(), QPageLayout::Orientation::Portrait));
 }
 
-void ActivityWindow::on_actionDelete_triggered()
+void ActivityWindow::deleteTriggered()
 {
     emit loeschen(activity);
 }
@@ -224,6 +247,7 @@ void ActivityWindow::setPredefinedValue(QString anlass)
             || anlass.contains(tr("Reinig"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::ZugVorbereiten;
     } else if (anlass.contains(tr("Werkstatt"), Qt::CaseInsensitive)
+               || anlass.contains(tr("Waggonarbeiten"), Qt::CaseInsensitive)
                || anlass.contains(tr("Innenausbau"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Werkstatt;
     } else if (anlass.contains(tr("Ausbildung"), Qt::CaseInsensitive)
@@ -241,5 +265,5 @@ void ActivityWindow::setPredefinedValue(QString anlass)
 
 void ActivityWindow::updateWindowTitle()
 {
-    setWindowTitle(tr("%1 am %2").arg(activity->getStringShort(), activity->getDatum().toString("dddd dd.MM. yyyy")));
+    setWindowTitle(tr("%1 am %2").arg(activity->getStringShort(), QLocale().toString(activity->getDatum(), "dddd dd.MM. yyyy")));
 }

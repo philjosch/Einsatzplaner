@@ -10,6 +10,12 @@ FileSettingsDialog::FileSettingsDialog(QWidget *parent, EplFile *dat) : QDialog(
 {
     datei = dat;
     ui->setupUi(this);
+
+    connect(ui->groupUpload, &QGroupBox::clicked, this, &FileSettingsDialog::autoUploadAktivieren);
+    connect(ui->buttonBox, &QDialogButtonBox::clicked, this, &FileSettingsDialog::dialogButtonClicked);
+    connect(ui->pushCheck, &QPushButton::clicked, this, &FileSettingsDialog::testeServer);
+    connect(ui->pushPwdChange, &QPushButton::clicked, this, &FileSettingsDialog::passwordAendern);
+
     loadSettings();
 }
 
@@ -46,7 +52,7 @@ void FileSettingsDialog::saveSettings()
     mngr->setAuswahl(Auswahl(ab, bis, ui->checkActivity->isChecked()));
 }
 
-void FileSettingsDialog::on_groupUpload_clicked(bool checked)
+void FileSettingsDialog::autoUploadAktivieren(bool checked)
 {
     ui->checkAuto->setEnabled(checked);
     ui->lineServer->setEnabled(checked);
@@ -59,7 +65,7 @@ void FileSettingsDialog::on_groupUpload_clicked(bool checked)
     ui->checkActivity->setEnabled(checked);
 }
 
-void FileSettingsDialog::on_buttonBox_clicked(QAbstractButton *button)
+void FileSettingsDialog::dialogButtonClicked(QAbstractButton *button)
 {
     if (ui->buttonBox->buttonRole(button) == QDialogButtonBox::ResetRole) {
         loadSettings();
@@ -68,7 +74,7 @@ void FileSettingsDialog::on_buttonBox_clicked(QAbstractButton *button)
     }
 }
 
-void FileSettingsDialog::on_pushCheck_clicked()
+void FileSettingsDialog::testeServer()
 {
     Networking::Server m2 = Networking::Server();
     m2.server = ui->lineServer->text();
@@ -121,12 +127,12 @@ void FileSettingsDialog::loadSettings()
         ui->comboTo->setCurrentIndex(3);
     }
     ui->checkActivity->setChecked(a.getActivities());
-    on_groupUpload_clicked(mngr->getEnabled());
+    autoUploadAktivieren(mngr->getEnabled());
 
     ui->linePwdAlt->setEnabled(datei->hatPasswort());
 }
 
-void FileSettingsDialog::on_pushPwdChange_clicked()
+void FileSettingsDialog::passwordAendern()
 {
     QString alt = ui->linePwdAlt->text();
     QString neu1 = ui->linePwdNeu1->text();

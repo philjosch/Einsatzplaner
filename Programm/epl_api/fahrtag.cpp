@@ -97,7 +97,7 @@ QString Fahrtag::getHtmlForSingleView() const
     // Überschrift
     html += "<h2 class='pb'>";
     html += toString(art);
-    html += " am " + datum.toString("dddd, dd.MM.yyyy");
+    html += " am " + QLocale().toString(datum, "dddd, dd.MM.yyyy");
     if (abgesagt)
         html += required.arg(" ABGESAGT!");
     if (wichtig)
@@ -228,10 +228,10 @@ QString Fahrtag::getHtmlForTableView() const
     } else {
         html += "<td>";
     }
-    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br/>";
+    html += "<b>"+QLocale().toString(datum, "dddd d.M.yyyy")+"</b><br/>";
     html += toString(art);
     if (anlass != "") {
-        html += ":<br/><i>"+QString(anlass).replace("\n", "<br/>")+"</i>";
+        html += ": <i>"+QString(anlass).replace("\n", "<br/>")+"</i>";
     }
 
     if (abgesagt) {
@@ -265,7 +265,7 @@ QString Fahrtag::getHtmlForTableView() const
 
     // Tf, Tb
     QString beginnZelleBenoetigt = "<td>";
-    if (QDate::currentDate().addDays(10) >= datum && datum >= QDate::currentDate()) {
+    if (QDate::currentDate().addDays(10) >= datum && getVon() >= QDateTime::currentDateTime()) {
         beginnZelleBenoetigt = "<td bgcolor='#ff8888'>";
     }
     QString benoetigt = "<b>%1</b>";
@@ -371,7 +371,7 @@ QString Fahrtag::getHtmlForTableView() const
 bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
 {
     QString a = "<h3>";
-    a += toString(art)+" am "+datum.toString("dddd dd. MM. yyyy");
+    a += toString(art)+" am "+QLocale().toString(datum, "dddd dd. MM. yyyy");
     a += " - Die Reservierungen</h3>";
     a += "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th> <th>Anzahl</th> <th>Sitzplätze</th> <th>Sonstiges</th></tr></thead><tbody>";
     // Sortieren der Daten nach Wagenreihung
@@ -405,6 +405,7 @@ bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
                 list.swapItemsAt(pos, pos+1);
                 pos++;
             }
+            wagenZuRes.insert(999, list);
         }
     }
 

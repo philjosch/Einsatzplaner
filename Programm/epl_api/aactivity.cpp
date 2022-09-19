@@ -327,8 +327,8 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
     for(Einsatz *e: liste) {
         l2.append(e->getPerson()->getName());
 
-        if (e->getBeginnAbweichend() == e->getVon().time() ) {
-            if (e->getEndeAbweichend() == e->getBis().time() ) {
+        if ( e->getBeginnAbweichend() != QTime(0,0) ) {
+            if ( e->getEndeAbweichend() != QTime(0,0) ) {
                 l2.append(tr("%1 bis %2").arg(
                           e->getBeginnAbweichend().toString("HH:mm"),
                           e->getEndeAbweichend().toString("HH:mm")));
@@ -336,7 +336,7 @@ QString AActivity::listToString(QString sep, QList<Einsatz*> liste, QString pref
                 l2.append(tr("ab %1").arg(e->getBeginnAbweichend().toString("HH:mm")));
             }
         } else {
-            if (e->getEndeAbweichend() == e->getBis().time() ) {
+            if ( e->getEndeAbweichend() != QTime(0,0) ) {
                 l2.append(tr("bis %2").arg(e->getEndeAbweichend().toString("HH:mm")));
             }
         }
@@ -444,7 +444,7 @@ QList<Einsatz*> AActivity::getPersonen() const
 QString AActivity::getStringShort() const
 {
     QString s = "";
-    if (art == Arbeitseinsatz && anlass != "")
+    if (anlass != "")
         s = anlass;
     else
         s = toString(art);
@@ -454,8 +454,8 @@ QString AActivity::getStringShort() const
 
 QString AActivity::getString() const
 {
-    QString s = datum.toString(QObject::tr("dddd dd.MM.yyyy"))+" – ";
-    if (art == Arbeitseinsatz && anlass != "")
+    QString s = QLocale().toString(datum, QObject::tr("dddd dd.MM.yyyy"))+" – ";
+    if (anlass != "")
         s += anlass;
     else
         s += toString(art);
@@ -478,7 +478,7 @@ QString AActivity::getHtmlForSingleView() const
         html += anlass;
     else
         html += "Arbeitseinsatz";
-    html += " am " + datum.toString("dddd, dd.MM.yyyy");
+    html += " am " + QLocale().toString(datum, "dddd, dd.MM.yyyy");
     if (abgesagt)
         html += required.arg(" ABGESAGT!");
     if (wichtig)
@@ -536,7 +536,7 @@ QString AActivity::getHtmlForTableView() const
     } else {
         html += "<td>";
     }
-    html += "<b>"+datum.toString("dddd d.M.yyyy")+"</b><br</>";
+    html += "<b>"+QLocale().toString(datum, QObject::tr("dddd d.M.yyyy"))+"</b><br</>";
     if (anlass != "") {
         html += anlass;
     } else {
@@ -604,7 +604,7 @@ QString AActivity::getHtmlForTableView() const
     // Sonstiges
     bool zeilenUmbruch = false;
     if (getPersonalBenoetigt()) {
-        if (QDate::currentDate().addDays(10) >= datum && datum >= QDate::currentDate()) {
+        if (QDate::currentDate().addDays(10) >= datum && getVon() >= QDateTime::currentDateTime()) {
             html += "<td bgcolor='#ff8888'>";
         } else {
             html += "<td>";

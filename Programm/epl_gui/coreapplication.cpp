@@ -1,6 +1,6 @@
 #include "coreapplication.h"
 #include "coremainwindow.h"
-#include "networking.h"
+#include "version.h"
 
 #include <QDesktopServices>
 #include <QMessageBox>

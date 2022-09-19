@@ -378,6 +378,13 @@
        </attribute>
       </widget>
      </item>
+     <item row="3" column="2">
+      <widget class="QPushButton" name="pushPreview">
+       <property name="text">
+        <string>Druckvorschau</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -396,6 +403,7 @@
   <tabstop>checkPDF</tabstop>
   <tabstop>checkAusdruck</tabstop>
   <tabstop>pushAbbruch</tabstop>
+  <tabstop>pushPreview</tabstop>
   <tabstop>pushDrucken</tabstop>
  </tabstops>
  <resources/>

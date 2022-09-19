@@ -1,7 +1,6 @@
 #ifndef FILESETTINGSDIALOG_H
 #define FILESETTINGSDIALOG_H
 
-#include "filesettings.h"
 #include "eplfile.h"
 
 #include <QAbstractButton>
@@ -22,13 +21,13 @@ public:
     void saveSettings();
 
 private slots:
-    void on_groupUpload_clicked(bool checked);
+    void autoUploadAktivieren(bool checked);
 
-    void on_buttonBox_clicked(QAbstractButton *button);
+    void dialogButtonClicked(QAbstractButton *button);
 
-    void on_pushCheck_clicked();
+    void testeServer();
 
-    void on_pushPwdChange_clicked();
+    void passwordAendern();
 
 private:
     Ui::FileSettingsDialog *ui;

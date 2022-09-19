@@ -4,6 +4,7 @@
 #include "eplexception.h"
 
 #include <QMessageBox>
+#include <QPrintPreviewDialog>
 
 using namespace EplException;
 
@@ -32,6 +33,11 @@ ExportDialog::ExportDialog(Manager *m, FileSettings *settings, QWidget *parent) 
     connect(ui->listAnzeige, &QListWidget::itemSelectionChanged, this, [=]() {
         ui->checkEinzel->setEnabled(! ui->listAnzeige->selectedItems().isEmpty()); });
 
+    connect(ui->pushDrucken, &QPushButton::clicked, this, &ExportDialog::perfomExport);
+    connect(ui->comboVon, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::changedFrom);
+    connect(ui->comboBis, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::changedTill);
+
+    connect(ui->pushPreview, &QPushButton::clicked, this, &ExportDialog::showPrintPreview);
     hardReload();
 }
 
@@ -57,24 +63,9 @@ void ExportDialog::hardReload()
     show();
 }
 
-void ExportDialog::on_pushDrucken_clicked()
+void ExportDialog::perfomExport()
 {
-    QList<AActivity*> liste = QList<AActivity*>();
-    for(AActivity *a: manager->getActivities()) {
-        switch (ui->buttonGroupExportArt->checkedId()) {
-        case 1:
-            if(!(actToList.value(a)->isSelected())) {
-                continue;
-            }
-        case 0:
-            if(! actToList.value(a)->isHidden()) {
-                liste.append(a);
-            }
-            break;
-        default:
-            continue;
-        }
-    }
+    QList<AActivity*> liste = getAActivityForExport();
 
     QPrinter *printer;
     if (ui->buttonGroupExportArt->checkedId() == 0) {
@@ -114,7 +105,7 @@ void ExportDialog::on_pushDrucken_clicked()
     }
 }
 
-void ExportDialog::on_comboVon_currentIndexChanged(int index)
+void ExportDialog::changedFrom(int index)
 {
     switch (index) {
     case 0: // Ab datum
@@ -131,7 +122,7 @@ void ExportDialog::on_comboVon_currentIndexChanged(int index)
     show();
 }
 
-void ExportDialog::on_comboBis_currentIndexChanged(int index)
+void ExportDialog::changedTill(int index)
 {
     switch (index) {
     case 0: // Bis datum
@@ -159,6 +150,24 @@ void ExportDialog::show()
             actToList.value(a)->setHidden(true);
         }
     }
+}
+
+void ExportDialog::showPrintPreview()
+{
+    QList<AActivity*> liste = getAActivityForExport();
+
+    QPrintPreviewDialog *prev;
+    QPrinter *printer = new QPrinter();
+    if (ui->buttonGroupExportArt->checkedId() == 0) {
+        Export::preparePrinter(printer, QPageLayout::Orientation::Landscape);
+        prev = new QPrintPreviewDialog(printer, parentWidget());
+        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->printListenansicht(liste, print); } );
+    } else {
+        Export::preparePrinter(printer, QPageLayout::Orientation::Portrait);
+        prev = new QPrintPreviewDialog(printer, parentWidget());
+        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->printEinzelansichten(liste, print); } );
+    }
+    prev->exec(); // == QDialog::Accepted)
 }
 
 bool ExportDialog::testShow(AActivity *a)
@@ -219,4 +228,25 @@ bool ExportDialog::testShow(AActivity *a)
         return ui->checkActivity->isChecked();
         // es ist kein fahrtag
     }
+}
+
+QList<AActivity *> ExportDialog::getAActivityForExport()
+{
+    QList<AActivity*> liste = QList<AActivity*>();
+    for(AActivity *a: manager->getActivities()) {
+        switch (ui->buttonGroupExportArt->checkedId()) {
+        case 1:
+            if(!(actToList.value(a)->isSelected())) {
+                continue;
+            }
+        case 0:
+            if(! actToList.value(a)->isHidden()) {
+                liste.append(a);
+            }
+            break;
+        default:
+            continue;
+        }
+    }
+    return liste;
 }

@@ -2,7 +2,6 @@
 #include "eplfile.h"
 #include "fileio.h"
 #include "crypto.h"
-#include "basics.h"
 #include "einstellungen.h"
 #include "export.h"
 
@@ -28,6 +27,7 @@ EplFile::EplFile(QString dateiPfad)
     dateiEigenschaften = new FileSettings();
 
     currentDate = QDate::currentDate();
+    currentDate = currentDate.addDays(-currentDate.day()+1);
     positionKalender = FensterPosition{};
     positionPersonal = FensterPosition{};
 

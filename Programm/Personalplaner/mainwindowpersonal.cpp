@@ -16,6 +16,46 @@ MainWindowPersonal::MainWindowPersonal(EplFile *file) :
 {
     ui->setupUi(this);
 
+    connect(ui->actionPreferences, &QAction::triggered, this, &MainWindowPersonal::showPreferences);
+    connect(ui->actionAboutQt, &QAction::triggered, this, &MainWindowPersonal::showAboutQt);
+    connect(ui->actionAboutApp, &QAction::triggered, this, &MainWindowPersonal::showAboutApp);
+    connect(ui->actionQuit, &QAction::triggered, this, &MainWindowPersonal::closeApp);
+
+    connect(ui->actionNew, &QAction::triggered, this, &MainWindowPersonal::fileNew);
+    connect(ui->actionOpen, &QAction::triggered, this, &MainWindowPersonal::fileOpen);
+
+    connect(ui->menuRecentlyused, &QMenu::aboutToShow, this, &MainWindowPersonal::updateRecentlyused);
+    connect(ui->actionClear, &QAction::triggered, this, &MainWindowPersonal::clearRecentlyUsed);
+
+    connect(ui->actionSave, &QAction::triggered, this, &MainWindowPersonal::fileSave);
+    connect(ui->actionSaveas, &QAction::triggered, this, &MainWindowPersonal::fileSaveAs);
+    connect(ui->actionSavePersonal, &QAction::triggered, this, &MainWindowPersonal::fileSavePersonal);
+
+    connect(ui->actionSettings, &QAction::triggered, this, &MainWindowPersonal::showFileSettings);
+    connect(ui->actionClose, &QAction::triggered, this, &MainWindowPersonal::fileClose);
+
+
+    connect(ui->actionAddPerson, &QAction::triggered, this, &MainWindowPersonal::addPerson);
+    connect(ui->actionAktualisieren, &QAction::triggered, this, &MainWindowPersonal::refresh);
+    connect(ui->actionMindeststunden, &QAction::triggered, this, &MainWindowPersonal::editMinimumhours);
+    connect(ui->actionMailListe, &QAction::triggered, this, &MainWindowPersonal::sendMailList);
+    connect(ui->actionMitgliedsbeitraege, &QAction::triggered, this, &MainWindowPersonal::editDues);
+
+    connect(ui->actionMitgliederEinzelListePDF, &QAction::triggered, this, &MainWindowPersonal::exportMemberDetailMultiplePdf);
+    connect(ui->actionMitgliederEinzelListeDrucken, &QAction::triggered, this, &MainWindowPersonal::exportMemberDetailMultiplePrint);
+
+    connect(ui->actionMitgliederListePDF, &QAction::triggered, this, &MainWindowPersonal::exportMemberListPdf);
+    connect(ui->actionMitgliederListeDrucken, &QAction::triggered, this, &MainWindowPersonal::exportMemberListPrint);
+    connect(ui->actionMitgliederListeCSV, &QAction::triggered, this, &MainWindowPersonal::exportMemberListCsv);
+
+    connect(ui->actionBeitraegeRegulaerCSV, &QAction::triggered, this, &MainWindowPersonal::exportDuesRegularCsv);
+    connect(ui->actionBeitraegeNachzahlungCSV, &QAction::triggered, this, &MainWindowPersonal::exportDuesAdditionalCsv);
+
+    connect(ui->comboAnzeige, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindowPersonal::filterChanged);
+    connect(ui->tabelleMitglieder, &QTableWidget::cellDoubleClicked, this, &MainWindowPersonal::showPersFromTable);
+
+    connect(ui->listAnzeige, &QListWidget::itemChanged, this, &MainWindowPersonal::viewShowColumFromItem);
+
     recentlyUsedMenu = ui->menuRecentlyused;
     recentlyUsedClear = ui->actionClear;
 
@@ -26,11 +66,11 @@ MainWindowPersonal::MainWindowPersonal(EplFile *file) :
 
     for(int i = 0; i < ui->listAnzeige->count(); ++i) {
         if (ui->listAnzeige->item(i)->checkState() == Qt::CheckState::Checked)
-            on_listAnzeige_itemChanged(ui->listAnzeige->item(i));
+            viewShowColumFromItem(ui->listAnzeige->item(i));
     }
 
     updateWindowHeaders();
-    on_actionAktualisieren_triggered();
+    refresh();
 }
 MainWindowPersonal::~MainWindowPersonal()
 {
@@ -58,13 +98,13 @@ void MainWindowPersonal::handlerOpen(QString path)
 }
 
 
-void MainWindowPersonal::on_actionAddPerson_triggered()
+void MainWindowPersonal::addPerson()
 {
     Person *neu = personal->newPerson();
     openPerson(neu);
-    on_actionAktualisieren_triggered();
+    refresh();
 }
-void MainWindowPersonal::on_actionAktualisieren_triggered()
+void MainWindowPersonal::refresh()
 {
     current = personal->getPersonen(filter);
 
@@ -215,11 +255,11 @@ void MainWindowPersonal::on_actionAktualisieren_triggered()
     ui->labelMitgliederAnzAusgetreten->setText(QString::number(personal->getAnzahlMitglieder(Status::Ausgetreten)));
     ui->labelMitgliederAnzErfasst->setText(QString::number(personal->getAnzahlMitglieder(Status::Registriert)));
 }
-void MainWindowPersonal::on_actionMindeststunden_triggered()
+void MainWindowPersonal::editMinimumhours()
 {
    MinimumHoursEditorDialog(personal, this).exec();
 }
-void MainWindowPersonal::on_actionMailListe_triggered()
+void MainWindowPersonal::sendMailList()
 {
     if (current.isEmpty()) return;
     QSet<QString> mails;
@@ -249,7 +289,10 @@ void MainWindowPersonal::on_actionMailListe_triggered()
     }
     if (keineMail.isEmpty()) return;
 
-    if (QMessageBox::question(this, tr("Personen ohne E-Mail gefunden"), tr("Für %1 Personen ist keine E-Mail-Adresse hinterlegt.\nMöchten Sie die Liste der Personen speichern?").arg(keineMail.size())) == QMessageBox::Yes) {
+    if (QMessageBox::question(this,
+                              tr("Personen ohne E-Mail gefunden"),
+                              tr("Für %1 %2 ist keine E-Mail-Adresse hinterlegt.\nMöchten Sie die Adressen dieser Personen speichern?").arg(keineMail.size()).arg(toString(filter)))
+            == QMessageBox::Yes) {
         QString s = "Name;Straße;PLZ;Ort\n";
         for(Person *p: keineMail) {
             s += p->getName() + ";"+p->getStrasse()+";"+p->getPLZ()+";"+p->getOrt()+"\n";
@@ -258,48 +301,48 @@ void MainWindowPersonal::on_actionMailListe_triggered()
         FileIO::saveToFile(path, s);
     }
 }
-void MainWindowPersonal::on_actionMitgliedsbeitraege_triggered()
+void MainWindowPersonal::editDues()
 {
     BeitraegeEditorDialog(this, personal).exec();
 }
 
-void MainWindowPersonal::on_actionMitgliederEinzelListePDF_triggered()
+void MainWindowPersonal::exportMemberDetailMultiplePdf()
 {
     personal->printMitgliederEinzel(getSortierteListe(), filter,
                         Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait));
 }
-void MainWindowPersonal::on_actionMitgliederEinzelListeDrucken_triggered()
+void MainWindowPersonal::exportMemberDetailMultiplePrint()
 {
     personal->printMitgliederEinzel(getSortierteListe(), filter,
                         Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
-void MainWindowPersonal::on_actionMitgliederListePDF_triggered()
+void MainWindowPersonal::exportMemberListPdf()
 {
     personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
                             Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Portrait));
 }
-void MainWindowPersonal::on_actionMitgliederListeDrucken_triggered()
+void MainWindowPersonal::exportMemberListPrint()
 {
     personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
                             Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape));
 }
-void MainWindowPersonal::on_actionMitgliederListeCSV_triggered()
+void MainWindowPersonal::exportMemberListCsv()
 {
     personal->saveMitgliederListeAlsCSV(current,
                                    FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV));
 }
 
-void MainWindowPersonal::on_actionBeitraegeRegulaerCSV_triggered()
+void MainWindowPersonal::exportDuesRegularCsv()
 {
     personal->saveBeitraegeRegulaerAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Regulaer", FileIO::DateiTyp::CSV));
 }
-void MainWindowPersonal::on_actionBeitraegeNachzahlungCSV_triggered()
+void MainWindowPersonal::exportDuesAdditionalCsv()
 {
     personal->saveBeitraegeNachzahlungAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Nachzahlung", FileIO::DateiTyp::CSV));
 }
 
-void MainWindowPersonal::on_comboAnzeige_currentIndexChanged(int index)
+void MainWindowPersonal::filterChanged(int index)
 {
     switch (index) {
     case 0: filter = AlleMitglieder; break;
@@ -311,10 +354,10 @@ void MainWindowPersonal::on_comboAnzeige_currentIndexChanged(int index)
     case 6: filter = Ausgetreten; break;
     default: filter = Registriert; break;
     }
-    on_actionAktualisieren_triggered();
+    refresh();
 }
 
-void MainWindowPersonal::on_tabelleMitglieder_cellDoubleClicked(int row, [[maybe_unused]] int column)
+void MainWindowPersonal::showPersFromTable(int row, [[maybe_unused]] int column)
 {
     PersonTableWidgetItem *clicked = dynamic_cast<PersonTableWidgetItem*>(ui->tabelleMitglieder->item(row, column));
     if (clicked != nullptr) {
@@ -334,12 +377,12 @@ QList<Person*> MainWindowPersonal::getSortierteListe()
     return liste;
 }
 
-void MainWindowPersonal::on_listAnzeige_itemChanged(QListWidgetItem *item)
+void MainWindowPersonal::viewShowColumFromItem(QListWidgetItem *item)
 {
     if (item->checkState() == Qt::CheckState::Checked) {
         anzeige.insert(item->text());
     } else {
         anzeige.remove(item->text());
     }
-    on_actionAktualisieren_triggered();
+    refresh();
 }
