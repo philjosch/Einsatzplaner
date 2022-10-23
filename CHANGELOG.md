@@ -1,5 +1,10 @@
 # EPL - Veränderungshistorie
-Stand: 20. September 2022
+Stand: 23. Oktober 2022
+
+## Version 1.8.4 – 2022-10-23
+### Fehlerbehebungen
+- Die Datei konnte eventuell nicht mehr geöffnet werden, wenn externe Personen als Vereinsmitglieder hinzugefügt wurden.
+- Vereinsmitglieder konnte nicht an einem Schnupperkurs teilnehmen. Dies ist nun möglich, jedoch werden die Stunden nicht angerechnet. 
 
 ## Version 1.8.3 – 2022-09-20
 ### Neu
