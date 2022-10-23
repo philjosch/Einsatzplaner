@@ -61,12 +61,14 @@ AActivity::AActivity(QJsonObject o, ManagerPersonal *p) : QObject()
     for(int i = 0; i < array.size(); i++) {
         QJsonObject aO = array.at(i).toObject();
 
-        Person *person;
+        Person *person = nullptr;
         if (aO.contains("id")) {
             person = p->getPersonFromID(aO.value("id").toString());
-        } else if (personal->personExists(aO.value("name").toString())) {
+        } else if (personal->personExists(aO.value("name").toString())
+                   && !isExtern(aO.value("bemerkung").toString())) {
             person = personal->getPerson(aO.value("name").toString());
-        } else {
+        }
+        if (person == nullptr) {
             person = new Person(aO.value("name").toString(), nullptr);
             person->setAusbildungTf(true);
             person->setAusbildungZf(true);
@@ -114,10 +116,10 @@ QJsonObject AActivity::toJson() const
     QJsonArray personenJSON;
     for(Einsatz *e: personen) {
         QJsonObject persJson;
-        if (personal->personExists(e->getPerson()->getName())) {
-            persJson.insert("id", e->getPerson()->getId());
-        } else {
+        if (personal->getPersonFromID(e->getPerson()->getId()) == nullptr) {
             persJson.insert("name", e->getPerson()->getName());
+        } else {
+            persJson.insert("id", e->getPerson()->getId());
         }
         persJson.insert("beginn", e->getBeginnAbweichend().toString("hh:mm"));
         persJson.insert("ende", e->getEndeAbweichend().toString("hh:mm"));
@@ -256,16 +258,18 @@ bool AActivity::removePerson(Einsatz *e)
 
 Einsatz *AActivity::addPerson(QString p, QString bemerkung, Category kat)
 {
-    Person *pers = personal->getPerson(p);
-    if (pers == nullptr) {
-        if (!isExtern(bemerkung)) {
-            throw PersonNichtGefundenException(p);
-        }
+    Person *pers = nullptr;
+    if (isExtern(bemerkung)) {
         if (kat == Category::Zub) kat = Category::Begleiter;
         pers = new Person(p, nullptr);
         pers->setAusbildungTf(true);
         pers->setAusbildungZf(true);
         pers->setAusbildungRangierer(true);
+    } else {
+        pers = personal->getPerson(p);
+        if (pers == nullptr) {
+            throw PersonNichtGefundenException(p);
+        }
     }
 
     /*
