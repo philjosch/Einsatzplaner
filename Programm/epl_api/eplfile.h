@@ -90,8 +90,13 @@ protected:
     FensterPosition positionKalender;
     FensterPosition positionPersonal;
 
-    QJsonObject generiereJson() const;
-    QJsonObject generiereJsonPersonal() const;
+    /**
+     * @brief Generiert ein QJsonObject, dass alle Daten enthaelt.
+     * @param staticOnly: Nur die statischen Angaben sollen ausgegebn werden,
+     * dynamsich sind die Aktivitaeten und zusaetzlichen Zeiten der Personen
+     * @return Die statischen Daten und die dynmaischen sofern staticOnly TRUE ist
+     */
+    QJsonObject generiereJson(bool staticOnly) const;
 
     bool schreibeJsonInDatei(QString pfad, QJsonObject obj) const;
 

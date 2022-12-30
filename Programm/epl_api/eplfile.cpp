@@ -146,7 +146,7 @@ void EplFile::speichern()
     if (pfad == "") throw  FilePathInvalidException();
     if (gespeichert) return;
 
-    QJsonObject json = generiereJson();
+    QJsonObject json = generiereJson(false);
     if (schreibeJsonInDatei(pfad, json)) {
         gespeichert = true;
         if (pfad != "") {
@@ -165,7 +165,7 @@ void EplFile::speichernUnter(QString path)
     if (! FileIO::Schreibschutz::pruefen(path).isEmpty())
         throw FileWriteProtectedException();
 
-    if (schreibeJsonInDatei(path, generiereJson())) {
+    if (schreibeJsonInDatei(path, generiereJson(false))) {
         FileIO::Schreibschutz::setzen(path);
         if (!schreibgeschuetzt) {
             FileIO::Schreibschutz::freigeben(pfad);
@@ -184,7 +184,7 @@ void EplFile::speichernPersonal(QString pfad)
         throw FilePathInvalidException();
     if (! FileIO::Schreibschutz::pruefen(pfad).isEmpty())
         throw FileWriteProtectedException();
-    if (schreibeJsonInDatei(pfad, generiereJsonPersonal())) {
+    if (schreibeJsonInDatei(pfad, generiereJson(true))) {
         FileIO::History::insert(pfad);
     } else {
         throw FileWriteException();
@@ -195,7 +195,7 @@ void EplFile::autoSave()
     if (schreibgeschuetzt) return;
     if (pfad == "") return;
     if (gespeichert) return;
-    schreibeJsonInDatei(pfad+FileIO::getSuffixVonTyp(FileIO::DateiTyp::EPLAutoSave), generiereJson());
+    schreibeJsonInDatei(pfad+FileIO::getSuffixVonTyp(FileIO::DateiTyp::EPLAutoSave), generiereJson(false));
 }
 
 void EplFile::autoUpload()
@@ -309,13 +309,7 @@ void EplFile::close()
 }
 
 
-QJsonObject EplFile::generiereJson() const
-{
-    QJsonObject json = generiereJsonPersonal();
-    json.insert("activities", manager->toJson());
-    return json;
-}
-QJsonObject EplFile::generiereJsonPersonal() const
+QJsonObject EplFile::generiereJson(bool staticOnly) const
 {
     QJsonObject viewJSON = geladen.value("view").toObject();
     viewJSON.insert("xMain", positionKalender.x);
@@ -334,11 +328,16 @@ QJsonObject EplFile::generiereJsonPersonal() const
     generalJSON.insert("version", Version::getProgrammVersion().toStringShort());
 
     QJsonObject object = QJsonObject();
-    object.insert("personal", personal->personalToJson());
     object.insert("view", viewJSON);
     object.insert("settings", dateiEigenschaften->toJson());
     object.insert("general", generalJSON);
 
+    if (staticOnly) {
+        object.insert("personal", personal->personalToJson());
+    } else {
+        object.insert("personal", personal->toJson());
+        object.insert("activities", manager->toJson());
+    }
     return object;
 }
 

@@ -1,5 +1,9 @@
 # EPL - Veränderungshistorie
-Stand: 23. Oktober 2022
+Stand: 30. Dezember 2022
+
+## Version 1.8.5 – 2022-12-30
+### Fehlerbehebungen
+- Behebt einen Fehler durch den die zusätzlichen Zeiten nicht gespeichert wurden.
 
 ## Version 1.8.4 – 2022-10-23
 ### Fehlerbehebungen
