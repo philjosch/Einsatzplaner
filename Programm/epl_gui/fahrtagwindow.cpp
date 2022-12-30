@@ -60,8 +60,8 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
 
     connect(ui->comboAuswahlRes, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &FahrtagWindow::resChangedFilter);
 
-    connect(ui->checkBoxAll, &QCheckBox::clicked, this, &FahrtagWindow::resChangedCheckAll);
-    connect(ui->buttonVerteile, &QPushButton::clicked, this, &FahrtagWindow::resDistribute);
+    connect(ui->actionVerteilenAll, &QAction::triggered, this, &FahrtagWindow::resChangedCheckAll);
+    connect(ui->actionVerteilen, &QAction::triggered, this, &FahrtagWindow::resDistribute);
 
     connect(ui->lineName, &QLineEdit::textChanged, this, &FahrtagWindow::resNameChanged);
     connect(ui->lineMail, &QLineEdit::textChanged, this, &FahrtagWindow::resMailChanged);
@@ -139,7 +139,7 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
     }
     ui->listRes->sortItems();
 
-    ui->checkBoxAll->setChecked(fahrtag->getCheckAll());
+    ui->actionVerteilenAll->setChecked(fahrtag->getCheckAll());
 
     /* Personal einfuegen */
 
@@ -204,8 +204,8 @@ void FahrtagWindow::changedType(int index)
     ui->checkZub->setEnabled(art != Schnupperkurs);
     ui->checkService->setEnabled(art != Schnupperkurs);
 
-    ui->checkBoxAll->setEnabled(Nikolauszug == art);
-    ui->buttonVerteile->setEnabled(Nikolauszug == art);
+    ui->actionVerteilenAll->setEnabled(Nikolauszug == art);
+    ui->actionVerteilen->setEnabled(Nikolauszug == art);
 
     updateWindowTitle();
 }
