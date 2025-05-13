@@ -47,6 +47,8 @@ QString Person::getKopfTabelleListeHtml(QSet<QString> data)
     if (data.contains("Beitragsart")
             || data.contains("IBAN")
             || data.contains("Bank")
+            || data.contains("Beitrag")
+            || data.contains("Beitrag (Nachzahlung)")
             || data.contains("Kontoinhaber") || data.isEmpty())
         kopf += "<th>Beitrag</th>";
     if (data.contains("Straße")
@@ -975,6 +977,14 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     if (anzeige.contains("Kontoinhaber")) {
         zelleNutzen = true;
         anfuegen(&zelle, getKontoinhaber());
+    }
+    if (anzeige.contains("Beitrag")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, QString("%1€").arg(getBeitrag()/100.f, 0, 'f', 2));
+    }
+    if (anzeige.contains("Beitrag (Nachzahlung)")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, QString("(+%1€)").arg(getBeitragNachzahlung()/100.f, 0, 'f', 2), anzeige.contains("Beitrag") ? " ": "<br/>");
     }
     if (zelleNutzen) {
         h += "<td>"+zelle+"</td>";
