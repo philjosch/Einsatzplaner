@@ -1,7 +1,7 @@
 #-------------------------------------------------
 #
 # Developers:
-# 2016-2022: Philipp Schepper
+# 2016-2025: Philipp Schepper
 #
 #-------------------------------------------------
 
@@ -14,7 +14,7 @@ DEPLOYED = true
 ####################
 # QT EINSTELLUNGEN #
 ####################
-#!versionAtLeast(QT_VERSION, 6.2.0):error("Qt version 6.2.0 is required for this project")
+!versionAtLeast(QT_VERSION, 6.9.0):error("Qt version 6.9.0 is required for this project")
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -69,7 +69,7 @@ win32 {
 
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
     QMAKE_TARGET_COMPANY = Philipp Schepper
-    QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2022
+    QMAKE_TARGET_COPYRIGHT = Entwicklung von Philipp Schepper 2016-2025
 
     QMAKE_TARGET_PRODUCT = $${TARGET}
     RC_ICONS = $$PWD/../Icon/$${TARGET}.ico

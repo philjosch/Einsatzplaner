@@ -35,6 +35,7 @@ qrc_*.cpp
 ui_*.h
 Makefile*
 *build-*
+Programm/build/*
 
 
 # Qt unit tests

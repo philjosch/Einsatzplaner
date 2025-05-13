@@ -1,7 +1,7 @@
 #-------------------------------------------------
 #
 # Developers:
-# 2016-2022: Philipp Schepper
+# 2016-2025: Philipp Schepper
 #
 #-------------------------------------------------
 TEMPLATE = lib
@@ -15,7 +15,7 @@ win32 {
 
 QT       += core printsupport network
 
-!versionAtLeast(QT_VERSION, 5.14.0):error("Qt version 5.14 is required for this project")
+!versionAtLeast(QT_VERSION, 6.9.0):error("Qt version 6.9 is required for this project")
 
 SOURCES += einstellungen.cpp \
     auswahl.cpp \
