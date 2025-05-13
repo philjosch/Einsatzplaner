@@ -318,7 +318,7 @@ bool ManagerPersonal::printZeitenListe(QList<Person *> personen, QSet<Category> 
     QMap<Category, int> sum;
     for(Person *p: personen) {
         a += p->getZeitenFuerListeAlsHTML(spalten);
-        for (Category cat: qAsConst(spalten)) {
+        for (Category cat: std::as_const(spalten)) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
     }

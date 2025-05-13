@@ -63,10 +63,10 @@ Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p)
 
 Fahrtag::~Fahrtag()
 {
-    for(Reservierung *r: qAsConst(reservierungen)) {
+    for(Reservierung *r : std::as_const(reservierungen)) {
         delete r;
     }
-    for(Wagen *w: qAsConst(wagen)) {
+    for(Wagen *w : std::as_const(wagen)) {
         delete w;
     }
 }
@@ -385,7 +385,7 @@ bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
     // Sortieren der Daten nach Wagenreihung
     QStringList wagen = wagenreihung.split(QRegularExpression("\\s*,\\s*"));
     QList<int> wagenNummern;
-    for(const QString &s: qAsConst(wagen))
+    for(const QString &s: std::as_const(wagen))
         wagenNummern.append(s.toInt());
 
     // Sortieren der Reservierungen
@@ -498,7 +498,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     QList<Wagen*> ersteKlasse = QList<Wagen*>();
     QList<Wagen*> andereKlasse = QList<Wagen*>();
     QStringList wagenR = wagenreihung.split(QRegularExpression("\\s*,\\s*"));
-    for(const QString &s: qAsConst(wagenR)) {
+    for(const QString &s: std::as_const(wagenR)) {
         int nummer = s.toInt();
         switch (Wagen::klasse(nummer)) {
         case 1: ersteKlasse.append(new Wagen(nummer)); break;
@@ -510,7 +510,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     // Aufteilen der Resevierungen auf die beiden gruppen
     QSet<Reservierung*> resErste = QSet<Reservierung*>();
     QSet<Reservierung*> resAndere = QSet<Reservierung*>();
-    for(Reservierung *r: qAsConst(reservierungen)) {
+    for(Reservierung *r: std::as_const(reservierungen)) {
         if (r->getKlasse() == 1)
             resErste.insert(r);
         else
@@ -538,7 +538,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     }
 
     // Die Sitzplätze zuweisen, sodass sie in den Wagen erscheinen.
-    for(Reservierung *r: qAsConst(reservierungen)) {
+    for(Reservierung *r: std::as_const(reservierungen)) {
         r->setSitzplatz(r->getSitzplatz());
     }
 
@@ -587,13 +587,13 @@ bool Fahrtag::removeReservierung(Reservierung *res)
 bool Fahrtag::createWagen()
 {
     QHash<int,Wagen*> wagenNummer;
-    for(Wagen *w: qAsConst(wagen)) {
+    for(Wagen *w: std::as_const(wagen)) {
         wagenNummer.insert(w->getNummer(), w);
     }
 
     QList<Wagen*> wagenNeu = QList<Wagen*>();
     QStringList wagenSplit = wagenreihung.split(QRegularExpression("\\s*,\\s*"));
-    for(const QString &s: qAsConst(wagenSplit)) {
+    for(const QString &s: std::as_const(wagenSplit)) {
         int nummer = s.toInt();
         Wagen *w;
         if (wagenNummer.contains(nummer)) {
@@ -615,7 +615,7 @@ bool Fahrtag::createWagen()
     }
     wagen = wagenNeu;
     nummerToWagen.clear();
-    for(Wagen *w: qAsConst(wagen)) {
+    for(Wagen *w: std::as_const(wagen)) {
         nummerToWagen.insert(w->getNummer(), w);
     }
     return true;

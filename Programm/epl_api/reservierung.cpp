@@ -48,13 +48,13 @@ QMap<int, QList<int> > Reservierung::getPlaetzeFromString(QString plaetze)
     }
     QStringList l1;
     l1 = plaetze.split(QRegularExpression("\\s*;\\s*"));
-    for (const QString &s1: qAsConst(l1)) {
+    for (const QString &s1: std::as_const(l1)) {
         QStringList l2a = s1.split(QRegularExpression("\\s*:\\s*"));
         int wagen = l2a.at(0).toInt();
         if (l2a.length() > 1) {
             QStringList l2 = l2a.at(1).split(QRegularExpression("\\s*,\\s*"));
             QList<int> l = *new QList<int>();
-            for (const QString &s2: qAsConst(l2)) {
+            for (const QString &s2: std::as_const(l2)) {
                 if (s2.contains(QRegularExpression("\\s*-\\s*"))) {
                     QStringList l3 = s2.split(QRegularExpression("\\s*-\\s*"));
                     for (int i = l3.at(0).toInt(); i <= l3.at(1).toInt(); i++) {
@@ -122,7 +122,7 @@ Reservierung::Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen)
     klasse = o.value("klasse").toInt();
     zuege = QList<int>();
     QJsonArray zuegeA = o.value("zuege").toArray();
-    for(const QJsonValue &val: qAsConst(zuegeA)) {
+    for(const QJsonValue &val: std::as_const(zuegeA)) {
         if (! val.isString()) {
             zuege.append(val.toInt());
         } else {
@@ -136,7 +136,7 @@ Reservierung::Reservierung(QJsonObject o, QMap<int, Wagen *> *wagen)
     }
     hps = QList<QString>();
     QJsonArray hpsA = o.value("hps").toArray();
-    for(const QJsonValue &val: qAsConst(hpsA)) {
+    for(const QJsonValue &val: std::as_const(hpsA)) {
         hps.append(val.toString());
     }
     this->wagen = wagen;

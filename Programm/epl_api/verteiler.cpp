@@ -17,10 +17,10 @@ Mistake Verteiler::verteile()
 {
     // berechne untere Schranke für die Güte dees ergebnisses
     int puffer = 0;
-    for (Wagen *w: qAsConst(wagen)) {
+    for (Wagen *w: std::as_const(wagen)) {
         puffer += w->getKapazitaet();
     }
-    for (Reservierung *r: qAsConst(reservierungen)) {
+    for (Reservierung *r: std::as_const(reservierungen)) {
         puffer -= r->getAnzahl();
     }
     if (puffer < 0) return Mistake::KapazitaetUeberlauf;
@@ -94,7 +94,7 @@ Mistake Verteiler::verteile()
 
 void Verteiler::weisePlaetzeZu()
 {
-    for(Wagen *w: qAsConst(wagen)) {
+    for(Wagen *w: std::as_const(wagen)) {
         w->weisePlaetzeZu();
     }
 }

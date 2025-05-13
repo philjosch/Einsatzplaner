@@ -125,7 +125,7 @@ void MainWindowPersonal::refresh()
     }
 
     QTableWidgetItem *i;
-    for (Person *p: qAsConst(current)) {
+    for (Person *p: std::as_const(current)) {
         clmn = 0;
         ui->tabelleMitglieder->insertRow(0);
 
@@ -264,7 +264,7 @@ void MainWindowPersonal::sendMailList()
     if (current.isEmpty()) return;
     QSet<QString> mails;
     QList<Person*> keineMail;
-    for (Person *p: qAsConst(current)) {
+    for (Person *p: std::as_const(current)) {
         if (p->getMail() != "") {
             mails.insert(p->getMail());
         } else {
