@@ -189,26 +189,34 @@ QString Fahrtag::getHtmlForSingleView() const
     // Reservierungen
     if (getAnzahlReservierungen() > 0) {
         html += "<p><b>Reservierungen:</b>";
-        QString helperRes = "<br/>Zug %1: %2 Plätze in 1.Klasse, %3 Plätze in 2./3.Klasse";
-        if (getBelegung(-1, 2201) > 0)
-            html += helperRes.arg(2201).arg(getBelegung(1, 2201)).arg(getBelegung(0, 2201));
-        if (getBelegung(-1, 2202) > 0)
-            html += helperRes.arg(2202).arg(getBelegung(1, 2202)).arg(getBelegung(0, 2202));
-        if (getBelegung(-1, 2203) > 0)
-            html += helperRes.arg(2203).arg(getBelegung(1, 2203)).arg(getBelegung(0, 2203));
-        if (getBelegung(-1, 2204) > 0)
-            html += helperRes.arg(2204).arg(getBelegung(1, 2204)).arg(getBelegung(0, 2204));
-        if (getBelegung(-1, 2205) > 0)
-            html += helperRes.arg(2205).arg(getBelegung(1, 2205)).arg(getBelegung(0, 2205));
-        if (getBelegung(-1, 2206) > 0)
-            html += helperRes.arg(2206).arg(getBelegung(1, 2206)).arg(getBelegung(0, 2206));
-        if (getBelegung(-1, 0) > 0)
-            html += QString("<br/>Gesamt: %1 Plätze 1.Klasse, %2 Plätze 2./3.Klasse <br/>").arg(getBelegung(1)).arg(getBelegung(0));
-        html += "</p>";
+        QString cellTemplateHeader = "<th align='right'>%1</th>";
+        QString rowHeader = cellTemplateHeader.arg("Zug");
+        QString rowFirstClass = cellTemplateHeader.arg("1.Klasse");
+        QString rowDefaultClass = cellTemplateHeader.arg("2./3.Klasse");
+        QString cellTemplate = "<td align='right'>%1</td>";
+        for (int trainNumber=2201; trainNumber <= 2206; ++trainNumber) {
+            if (getBelegung(-1, trainNumber) > 0) {
+                rowHeader += cellTemplateHeader.arg(QString::number(trainNumber));
+                rowFirstClass += cellTemplate.arg(QString::number(getBelegung(1, trainNumber)));
+                rowDefaultClass += cellTemplate.arg(QString::number(getBelegung(0, trainNumber)));
+            }
+        }
+        rowHeader += cellTemplateHeader.arg("Gesamt");
+        rowFirstClass += cellTemplate.arg(QString::number(getBelegung(1, 0)));
+        rowDefaultClass += cellTemplate.arg(QString::number(getBelegung(0, 0)));
+
+        html += "<table cellspacing='0'><thead>"
+                "<tr>" + rowHeader       + "</tr></thead><tbody>"
+                "<tr>" + rowFirstClass   + "</tr>"
+                "<tr>" + rowDefaultClass + "</tr>"
+                "</tbody><table></p>";
 
         if (art != Nikolauszug) {
             html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
-            for(Reservierung *r: reservierungen) {
+            QList<Reservierung*> list= QList(reservierungen.cbegin(),reservierungen.cend());
+            std::sort(list.begin(), list.end(), [](Reservierung* first, Reservierung* second) { return first->getName() < second->getName();});
+
+            for(Reservierung *r: list) {
                 html += r->getHtmlForTable();
             }
             html += "</tbody></table>";

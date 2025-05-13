@@ -267,8 +267,12 @@ void Reservierung::setSonstiges(const QString &value)
 
 QString Reservierung::getHtmlForTable() const
 {
-    QString html = "<tr><td>"+name+"<br/>"+telefon+"<br/>"+mail+"</td>";
-    html += "<td>"+QString::number(anzahl)+" Plätze in ";
+    QString html = "<tr><td>"+name.toHtmlEscaped();
+    if (! telefon.isEmpty())
+        html += "<br/>"+telefon.toHtmlEscaped();
+    if (! mail.isEmpty())
+        html += "<br/><tt>"+mail.toHtmlEscaped()+"</tt>";
+    html += "</td><td>"+QString::number(anzahl)+" Plätze in ";
     html += (klasse==1 ? "1. Klasse" :  "2./3.Klasse");
     html += "<br/>"+getStringFromPlaetze(sitzplatz)+"</td>";
     html += "<td>";
