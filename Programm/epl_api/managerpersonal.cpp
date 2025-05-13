@@ -79,7 +79,7 @@ QJsonObject ManagerPersonal::toJson() const
     QJsonArray keysMinimum;
     QJsonArray valuesMinimum;
     for(auto it = minimumHours.cbegin(); it != minimumHours.cend(); ++it) {
-        if (it.key() > 0) {
+        if (it.value() > 0) {
             keysMinimum.append(int(it.key()));
             valuesMinimum.append(it.value());
         }
