@@ -84,7 +84,7 @@ void Export::preparePrinter(QPrinter *p, QPageLayout::Orientation orientation)
 
 QString Export::zeitStempel(bool seitenUmbruch)
 {
-    QString s = QObject::tr("Erstellt am: %1").arg(QDateTime::currentDateTime().toString(QObject::tr("d.M.yyyy HH:mm")));
+    QString s = QObject::tr("Erstellt am: %1").arg(QDateTime::currentDateTime().toString(QObject::tr("dd.MM.yyyy HH:mm")));
     if (seitenUmbruch) {
         return "<p class='break'><small>"+s+"</small></p>";
      } else {

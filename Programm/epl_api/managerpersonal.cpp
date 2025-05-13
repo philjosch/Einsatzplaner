@@ -406,13 +406,13 @@ bool ManagerPersonal::printMitgliederEinzel(QList<Person *> liste, Status filter
 bool ManagerPersonal::printMitgliederListe(QList<Person*> liste, Status filter, QSet<QString> data, QPrinter *printer)
 {
     QString a = Person::getKopfTabelleListeHtml(data)
-            .arg(toString(filter), QLocale().toString(QDateTime::currentDateTime(), "d.M.yyyy"));
+            .arg(toString(filter), QLocale().toString(QDateTime::currentDateTime(), "dd.MM.yyyy"));
     for(Person *akt: liste) {
         a += akt->getPersonaldatenFuerListeAlsHTML(data);
     }
     a += Person::FUSS_TABELLE_LISTE_HTML;
     a += QObject::tr("<p><small>%1 Personen ausgegeben.</small><br/>").arg(liste.length());
-    a += QObject::tr("<small>Erstellt am: %1</small></p>").arg(QLocale().toString(QDateTime::currentDateTime(), "d.M.yyyy HH:mm"));
+    a += QObject::tr("<small>Erstellt am: %1</small></p>").arg(QLocale().toString(QDateTime::currentDateTime(), "dd.MM.yyyy HH:mm"));
 
     return Export::druckeHtml(a, printer);
 }

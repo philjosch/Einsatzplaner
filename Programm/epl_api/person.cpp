@@ -906,14 +906,14 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     }
     if (anzeige.contains("Eintritt")) {
         zelleNutzen = true;
-        anfuegen(&zelle, eintritt.toString("d.M.yyyy"));
+        anfuegen(&zelle, eintritt.toString("dd.MM.yyyy"));
         if (anzeige.contains("Austritt") && !austritt.isNull()) {
-            zelle += austritt.toString("-d.M.yyyy");
+            zelle += austritt.toString("-dd.MM.yyyy");
         }
     } else if (anzeige.contains("Austritt")) {
         if (!austritt.isNull()) {
             zelleNutzen = true;
-            anfuegen(&zelle, "Austritt zum: "+austritt.toString("d.M.yyyy"));
+            anfuegen(&zelle, "Austritt zum: "+austritt.toString("dd.MM.yyyy"));
         }
     }
     if (zelleNutzen) {
@@ -945,7 +945,7 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     }
     if (anzeige.contains("Geburtsdatum")) {
         zelleNutzen = true;
-        anfuegen(&zelle, geburtstag.toString("*d.M.yyyy"));
+        anfuegen(&zelle, geburtstag.toString("*dd.MM.yyyy"));
     }
     if (anzeige.contains("Beruf")) {
         zelleNutzen = true;
@@ -1054,7 +1054,7 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     }
     if (anzeige.contains("Tauglichkeit")) {
         zelleNutzen = true;
-        anfuegen(&zelle, tauglichkeit.toString("d.M.yyyy"));
+        anfuegen(&zelle, tauglichkeit.toString("dd.MM.yyyy"));
     }
     if (anzeige.contains("Bemerkung Betrieb.")) {
         zelleNutzen = true;
