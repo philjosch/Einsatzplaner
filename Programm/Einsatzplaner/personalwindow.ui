@@ -3,7 +3,7 @@
  <class>PersonalWindow</class>
  <widget class="QMainWindow" name="PersonalWindow">
   <property name="windowModality">
-   <enum>Qt::NonModal</enum>
+   <enum>Qt::WindowModality::NonModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -15,6 +15,9 @@
   </property>
   <property name="windowTitle">
    <string>Einsatzzeiten</string>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_16">
@@ -41,7 +44,7 @@
       <item row="0" column="4">
        <spacer name="horizontalSpacer_6">
         <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -74,7 +77,7 @@
       <item row="0" column="2">
        <spacer name="horizontalSpacer_10">
         <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -180,13 +183,13 @@
         <item row="0" column="0" colspan="2">
          <widget class="QTableWidget" name="tabelleGesamt">
           <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
+           <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
           </property>
           <property name="selectionMode">
-           <enum>QAbstractItemView::ExtendedSelection</enum>
+           <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
           </property>
           <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectRows</enum>
+           <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
           </property>
           <property name="sortingEnabled">
            <bool>true</bool>
@@ -360,10 +363,10 @@
           <item row="1" column="7">
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
+             <enum>QSizePolicy::Policy::Expanding</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -567,7 +570,7 @@
             <item row="1" column="1">
              <widget class="QDateEdit" name="dateDienst">
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="minimumDate">
                <date>
@@ -580,7 +583,7 @@
                <string>dd.MM.yyyy</string>
               </property>
               <property name="timeSpec">
-               <enum>Qt::UTC</enum>
+               <enum>Qt::TimeSpec::UTC</enum>
               </property>
               <property name="date">
                <date>
@@ -625,7 +628,7 @@
             <item row="0" column="4" rowspan="2">
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -681,22 +684,22 @@
             <item row="0" column="0">
              <widget class="QTableWidget" name="tabelle">
               <property name="frameShadow">
-               <enum>QFrame::Plain</enum>
+               <enum>QFrame::Shadow::Plain</enum>
               </property>
               <property name="lineWidth">
                <number>0</number>
               </property>
               <property name="editTriggers">
-               <set>QAbstractItemView::NoEditTriggers</set>
+               <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
               </property>
               <property name="alternatingRowColors">
                <bool>true</bool>
               </property>
               <property name="verticalScrollMode">
-               <enum>QAbstractItemView::ScrollPerPixel</enum>
+               <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
               </property>
               <property name="horizontalScrollMode">
-               <enum>QAbstractItemView::ScrollPerPixel</enum>
+               <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
               </property>
               <property name="sortingEnabled">
                <bool>true</bool>
@@ -763,7 +766,7 @@
                <number>7</number>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="clearButtonEnabled">
                <bool>false</bool>
@@ -783,7 +786,7 @@
                <string>Min</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -793,7 +796,7 @@
                <string>0 h</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -809,7 +812,7 @@
                <number>7</number>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="clearButtonEnabled">
                <bool>false</bool>
@@ -832,10 +835,10 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -851,7 +854,7 @@
                <number>7</number>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -861,14 +864,14 @@
                <string>0 h</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
             <item row="16" column="0" colspan="5">
              <spacer name="verticalSpacer_2">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -890,7 +893,7 @@
                <number>7</number>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="clearButtonEnabled">
                <bool>false</bool>
@@ -909,7 +912,7 @@
                <number>7</number>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="clearButtonEnabled">
                <bool>false</bool>
@@ -922,7 +925,7 @@
                <string>0 h</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -932,7 +935,7 @@
                <string>0 h</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -942,10 +945,10 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -958,7 +961,7 @@
                <string>0000:00</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="clearButtonEnabled">
                <bool>false</bool>
@@ -971,10 +974,10 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -984,10 +987,10 @@
                <string>0 km</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -997,7 +1000,7 @@
                <string>0 h</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1007,7 +1010,7 @@
                <string>0 h</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1017,10 +1020,10 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1040,10 +1043,10 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1053,7 +1056,7 @@
                <string>0 h</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1073,7 +1076,7 @@
                <string>0 h</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1083,7 +1086,7 @@
                <string>Summe</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -1106,7 +1109,7 @@
                <string>Zusätzlich</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -1146,10 +1149,10 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1159,7 +1162,7 @@
                <string>0 h</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1175,7 +1178,7 @@
                <number>7</number>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="clearButtonEnabled">
                <bool>false</bool>
@@ -1188,10 +1191,10 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1207,7 +1210,7 @@
                <number>7</number>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="clearButtonEnabled">
                <bool>false</bool>
@@ -1237,17 +1240,17 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
             <item row="4" column="4">
              <spacer name="horizontalSpacer">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -1263,17 +1266,17 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
             <item row="13" column="1">
              <widget class="QDoubleSpinBox" name="doubleAnzahl">
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="decimals">
                <number>0</number>
@@ -1289,7 +1292,7 @@
                <string>0 h</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1315,7 +1318,7 @@
                <number>7</number>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="clearButtonEnabled">
                <bool>false</bool>
@@ -1334,7 +1337,7 @@
                <number>7</number>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="clearButtonEnabled">
                <bool>false</bool>
@@ -1347,10 +1350,10 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1360,7 +1363,7 @@
                <string>0 h</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1370,10 +1373,10 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1383,7 +1386,7 @@
                <string>0 h</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1400,7 +1403,7 @@
             <item row="14" column="1">
              <widget class="QDoubleSpinBox" name="doubleKilometer">
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="suffix">
                <string> km</string>
@@ -1416,7 +1419,7 @@
             <item row="12" column="0" colspan="5">
              <widget class="Line" name="line_4">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
@@ -1426,10 +1429,10 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1439,10 +1442,10 @@
                <string>0 h</string>
               </property>
               <property name="textFormat">
-               <enum>Qt::PlainText</enum>
+               <enum>Qt::TextFormat::PlainText</enum>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -1458,7 +1461,7 @@
                <number>7</number>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="clearButtonEnabled">
                <bool>false</bool>
@@ -1492,7 +1495,7 @@
         <item row="2" column="2">
          <spacer name="horizontalSpacer_5">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1532,7 +1535,7 @@
      <x>0</x>
      <y>0</y>
      <width>655</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMitglieder">
@@ -1564,7 +1567,6 @@
      <addaction name="actionBeitraegeRegulaerCSV"/>
      <addaction name="actionBeitraegeNachzahlungCSV"/>
     </widget>
-    <action name=""/>
     <addaction name="actionPersonAdd"/>
     <addaction name="separator"/>
     <addaction name="menuMitgliederEinzel"/>
@@ -1609,6 +1611,9 @@
    </property>
   </action>
   <action name="actionPersonAdd">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ContactNew"/>
+   </property>
    <property name="text">
     <string>Person hinzufügen</string>
    </property>
@@ -1617,6 +1622,9 @@
    </property>
   </action>
   <action name="actionAktualisieren">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+   </property>
    <property name="text">
     <string>Aktualisieren</string>
    </property>
@@ -1630,11 +1638,17 @@
    </property>
   </action>
   <action name="actionZeitenListePDF">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentNew"/>
+   </property>
    <property name="text">
     <string>Gesamtübersicht als PDF speichern …</string>
    </property>
   </action>
   <action name="actionZeitenListeDrucken">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentPrint"/>
+   </property>
    <property name="text">
     <string>Gesamtübersicht drucken …</string>
    </property>
@@ -1790,8 +1804,8 @@
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>507</x>
-     <y>554</y>
+     <x>645</x>
+     <y>591</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -1806,8 +1820,8 @@
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>177</x>
-     <y>554</y>
+     <x>186</x>
+     <y>591</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -1822,8 +1836,8 @@
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>572</x>
-     <y>554</y>
+     <x>431</x>
+     <y>591</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>

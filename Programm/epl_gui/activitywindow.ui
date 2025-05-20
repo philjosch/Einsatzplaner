@@ -36,7 +36,10 @@
        <string>Datum</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
+      <property name="buddy">
+       <cstring>dateDatum</cstring>
       </property>
      </widget>
     </item>
@@ -46,7 +49,10 @@
        <string>Ort</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
+      <property name="buddy">
+       <cstring>lineOrt</cstring>
       </property>
      </widget>
     </item>
@@ -74,7 +80,10 @@
        <string>Beginn</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
+      <property name="buddy">
+       <cstring>timeBeginn</cstring>
       </property>
      </widget>
     </item>
@@ -95,7 +104,7 @@
     <item row="0" column="5" rowspan="5">
      <widget class="QPlainTextEdit" name="plainBeschreibung">
       <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+       <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContentsOnFirstShow</enum>
       </property>
       <property name="placeholderText">
        <string>Ausführliche Beschreibung</string>
@@ -136,14 +145,17 @@
        <string>Ende</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
+      <property name="buddy">
+       <cstring>timeEnde</cstring>
       </property>
      </widget>
     </item>
     <item row="0" column="1" colspan="4">
      <widget class="QDateEdit" name="dateDatum">
       <property name="displayFormat">
-       <string>dddd, dd. MMMM yyyy</string>
+       <string>dddd, dd.MM.yyyy</string>
       </property>
       <property name="calendarPopup">
        <bool>true</bool>
@@ -153,7 +165,7 @@
     <item row="5" column="0" colspan="6">
      <widget class="Line" name="line_2">
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
      </widget>
     </item>
@@ -171,7 +183,10 @@ unbekannt</string>
        <string>Anlass</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
+      <property name="buddy">
+       <cstring>comboAnlass</cstring>
       </property>
      </widget>
     </item>
@@ -278,8 +293,8 @@ unbekannt</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>500</width>
-     <height>22</height>
+     <width>510</width>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuArbeitseinsatz">
@@ -305,6 +320,9 @@ unbekannt</string>
    </property>
   </action>
   <action name="actionDelete">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ListRemove"/>
+   </property>
    <property name="text">
     <string>Löschen</string>
    </property>
@@ -313,6 +331,9 @@ unbekannt</string>
    </property>
   </action>
   <action name="actionPdf">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentNew"/>
+   </property>
    <property name="text">
     <string>Als PDF sichern …</string>
    </property>
@@ -321,6 +342,9 @@ unbekannt</string>
    </property>
   </action>
   <action name="actionPrint">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentPrint"/>
+   </property>
    <property name="text">
     <string>Drucken …</string>
    </property>

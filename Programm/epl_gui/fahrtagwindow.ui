@@ -7,11 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>676</width>
-    <height>603</height>
+    <height>605</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Fahrtag</string>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_7" rowstretch="0,1">
@@ -57,7 +60,7 @@
              <string>Triebfahrzeugführer (Tf), -begleiter (Tb)</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
             <property name="buddy">
              <cstring>listTf</cstring>
@@ -148,10 +151,10 @@
              </size>
             </property>
             <property name="verticalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
+             <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
             </property>
             <property name="horizontalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
+             <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -171,7 +174,7 @@
              <string>Zugführer (Zf)</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
             <property name="buddy">
              <cstring>listZf</cstring>
@@ -230,10 +233,10 @@
              </size>
             </property>
             <property name="verticalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
+             <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
             </property>
             <property name="horizontalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
+             <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -256,7 +259,7 @@
              <string>Begleitpersonal (Zub, Zs, Begl.o.b.A.)</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
             <property name="buddy">
              <cstring>listZub</cstring>
@@ -309,10 +312,10 @@
              <bool>true</bool>
             </property>
             <property name="verticalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
+             <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
             </property>
             <property name="horizontalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
+             <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -332,7 +335,7 @@
              <string>Service</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
             <property name="buddy">
              <cstring>listService</cstring>
@@ -385,10 +388,10 @@
              <bool>true</bool>
             </property>
             <property name="verticalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
+             <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
             </property>
             <property name="horizontalScrollMode">
-             <enum>QAbstractItemView::ScrollPerPixel</enum>
+             <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -509,7 +512,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -525,7 +528,7 @@
                <string>Ges.</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -535,7 +538,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -545,7 +548,7 @@
                <string>03</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -555,7 +558,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -565,7 +568,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -575,7 +578,7 @@
                <string>02</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -585,14 +588,14 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
             <item row="3" column="0" colspan="9">
              <widget class="Line" name="line_4">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
@@ -602,7 +605,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -612,7 +615,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -622,7 +625,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -632,7 +635,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -642,7 +645,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -659,7 +662,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -676,7 +679,7 @@
                <string>01</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -686,7 +689,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -696,7 +699,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -706,7 +709,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -716,7 +719,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -726,7 +729,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -743,7 +746,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -753,7 +756,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -763,7 +766,7 @@
                <string>05</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -773,7 +776,7 @@
                <string>04</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -783,7 +786,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -796,7 +799,7 @@
                <string>Kap.</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -813,7 +816,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -823,7 +826,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -833,7 +836,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -843,7 +846,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -853,7 +856,7 @@
                <string>0</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -863,7 +866,7 @@
                <string>06</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -881,7 +884,7 @@
                <bool>false</bool>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
               <property name="suffix">
                <string> Plätze</string>
@@ -950,10 +953,10 @@
                <bool>false</bool>
               </property>
               <property name="inputMethodHints">
-               <set>Qt::ImhDigitsOnly</set>
+               <set>Qt::InputMethodHint::ImhDigitsOnly</set>
               </property>
               <property name="echoMode">
-               <enum>QLineEdit::Normal</enum>
+               <enum>QLineEdit::EchoMode::Normal</enum>
               </property>
               <property name="placeholderText">
                <string>Telefon</string>
@@ -966,7 +969,7 @@
                <bool>false</bool>
               </property>
               <property name="inputMethodHints">
-               <set>Qt::ImhEmailCharactersOnly</set>
+               <set>Qt::InputMethodHint::ImhEmailCharactersOnly</set>
               </property>
               <property name="placeholderText">
                <string>E-Mail</string>
@@ -1250,7 +1253,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>346</width>
+               <width>347</width>
                <height>68</height>
               </rect>
              </property>
@@ -1591,7 +1594,7 @@
            <string>*abweichend zur Zeit oben</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
          </widget>
         </item>
@@ -1645,7 +1648,7 @@
          <string>Datum</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>dateDate</cstring>
@@ -1658,7 +1661,7 @@
          <bool>true</bool>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
         <property name="maximumDate">
          <date>
@@ -1675,7 +1678,7 @@
          </date>
         </property>
         <property name="displayFormat">
-         <string>dddd, dd. MM. yyyy</string>
+         <string>dddd, dd.MM.yyyy</string>
         </property>
         <property name="calendarPopup">
          <bool>true</bool>
@@ -1695,7 +1698,7 @@
          <string>Art</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>comboArt</cstring>
@@ -1708,7 +1711,7 @@
          <string>Beginn Tf</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>timeBeginnTf</cstring>
@@ -1748,7 +1751,7 @@ unbekannt</string>
          <string>Beginn</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>timeBeginn</cstring>
@@ -1764,7 +1767,7 @@ unbekannt</string>
          <string>Zug</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>comboWagenreihung</cstring>
@@ -1783,10 +1786,10 @@ unbekannt</string>
          <number>4</number>
         </property>
         <property name="insertPolicy">
-         <enum>QComboBox::InsertAlphabetically</enum>
+         <enum>QComboBox::InsertPolicy::InsertAlphabetically</enum>
         </property>
         <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToContents</enum>
+         <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
         </property>
         <item>
          <property name="text">
@@ -1843,7 +1846,7 @@ unbekannt</string>
          <string>Ende</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>timeEnde</cstring>
@@ -1936,7 +1939,7 @@ unbekannt</string>
          <string>Anlass</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTop|Qt::AlignmentFlag::AlignTrailing</set>
         </property>
         <property name="buddy">
          <cstring>lineAnlass</cstring>
@@ -1956,7 +1959,7 @@ unbekannt</string>
      <x>0</x>
      <y>0</y>
      <width>676</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFahrtag">
@@ -1993,6 +1996,9 @@ unbekannt</string>
    </property>
   </action>
   <action name="actionDelete">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ListRemove"/>
+   </property>
    <property name="text">
     <string>Löschen</string>
    </property>
@@ -2001,6 +2007,9 @@ unbekannt</string>
    </property>
   </action>
   <action name="actionPrint">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentPrint"/>
+   </property>
    <property name="text">
     <string>Drucken ...</string>
    </property>
@@ -2014,6 +2023,9 @@ unbekannt</string>
    </property>
   </action>
   <action name="actionPdf">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentNew"/>
+   </property>
    <property name="text">
     <string>Als PDF sichern ...</string>
    </property>
