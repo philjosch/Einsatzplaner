@@ -22,14 +22,16 @@ public:
     void hardReload();
 
 private slots:
-    void perfomExport();
-
     void changedFrom(int index);
 
     void changedTill(int index);
 
     void show();
     void showPrintPreview();
+
+    void exportUpload();
+    void exportPDF();
+    void exportPrint();
 
 private:
     Ui::ExportDialog *ui;
@@ -40,7 +42,7 @@ private:
     FileSettings *settings;
 
     bool testShow(AActivity *a);
-    QList<AActivity*> getAActivityForExport();
+    QList<AActivity*> getAActivityForExport(bool ignoreSelectionStatus = false);
 };
 
 #endif // EXPORTDIALOG_H
