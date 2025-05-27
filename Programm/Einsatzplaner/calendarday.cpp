@@ -19,25 +19,25 @@ void CalendarDay::show(QDate datum, bool gray)
     date = datum;
     ui->label->setText(datum.toString("d "));
     if (date.day() == 1)
-        ui->label->setText(datum.toString("d. MMM "));
+        ui->label->setText(QLocale::system().toString(datum, "d. MMM "));
     ui->listWidget->clear();
     actToItem.clear();
 
     if (datum == QDate::currentDate()) {
         if (gray) {
-            ui->buttonAdd->setStyleSheet("border: none; background-color: rgba(255,128,128,0.5); color: #888;");
-            ui->label->setStyleSheet("background-color: rgba(255,128,128,0.5); color: #888;");
+            ui->buttonAdd->setStyleSheet("background-color: rgba(255,128,128,0.5); color: #888; border: none; ");
+            ui->label->setStyleSheet(    "background-color: rgba(255,128,128,0.5); color: #888;");
         } else {
-            ui->buttonAdd->setStyleSheet("border: none; background-color: #f00;");
-            ui->label->setStyleSheet("background-color: #f00;");
+            ui->buttonAdd->setStyleSheet("background-color: palette(highlight); color: palette(highlighted-text); border: none; ");
+            ui->label->setStyleSheet(    "background-color: palette(highlight); color: palette(highlighted-text);");
         }
     } else {
         if (gray) {
-            ui->buttonAdd->setStyleSheet("border: none; background-color: palette(base); color: #888;");
-            ui->label->setStyleSheet("background-color: palette(base); color: #888;");
+            ui->buttonAdd->setStyleSheet("background-color: palette(base); color: #888; border: none; ");
+            ui->label->setStyleSheet(    "background-color: palette(base); color: #888;");
         } else {
-            ui->buttonAdd->setStyleSheet("border: none; background-color: palette(base);");
-            ui->label->setStyleSheet("background-color: palette(base);");
+            ui->buttonAdd->setStyleSheet("background-color: palette(base); color: palette(text); border: none; ");
+            ui->label->setStyleSheet(    "background-color: palette(base); color: palette(text);");
         }
     }
 }
@@ -54,13 +54,21 @@ void CalendarDay::remove(AActivity *a)
 
 void CalendarDay::insert(AActivity *a)
 {
+    QListWidgetItem* item = nullptr;
     if (actToItem.contains(a)) {
-        remove(a);
+        item = actToItem.value(a);
+    } else {
+        item = new QListWidgetItem();
+        actToItem.insert(a, item);
+        ui->listWidget->insertItem(ui->listWidget->count(), item);
     }
-    QListWidgetItem* item = new QListWidgetItem(a->getStringShort().replace("<br/>","\n"));
+
+    item->setText(a->getStringShort().replace("<br/>","\n"));
     item->setToolTip(toString(a->getArt()));
     item->setBackground(QBrush(QColor(a->getFarbe())));
     item->setForeground(QBrush(QColor("black")));
-    ui->listWidget->insertItem(ui->listWidget->count(), item);
-    actToItem.insert(a, item);
+    QFont font = item->font();
+    font.setStrikeOut(a->getAbgesagt());
+    font.setBold(a->getWichtig());
+    item->setFont(font);
 }
