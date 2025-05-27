@@ -22,13 +22,13 @@
      <number>6</number>
     </property>
     <property name="topMargin">
-     <number>0</number>
+     <number>6</number>
     </property>
     <property name="rightMargin">
      <number>6</number>
     </property>
     <property name="bottomMargin">
-     <number>0</number>
+     <number>6</number>
     </property>
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter">
@@ -747,7 +747,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>37</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -863,9 +863,6 @@
    <property name="shortcutContext">
     <enum>Qt::ShortcutContext::WindowShortcut</enum>
    </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionNeuArbeitseinsatz">
    <property name="icon">
@@ -881,11 +878,11 @@
    <property name="shortcutContext">
     <enum>Qt::ShortcutContext::WindowShortcut</enum>
    </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionNew">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentNew"/>
+   </property>
    <property name="text">
     <string>Neu</string>
    </property>
@@ -897,8 +894,11 @@
    </property>
   </action>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentOpen"/>
+   </property>
    <property name="text">
-    <string>Öffnen …</string>
+    <string>Öffnen…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -921,16 +921,13 @@
    <property name="shortcutContext">
     <enum>Qt::ShortcutContext::WindowShortcut</enum>
    </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionSaveas">
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::DocumentSaveAs"/>
    </property>
    <property name="text">
-    <string>Speichern unter …</string>
+    <string>Speichern unter…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
@@ -940,6 +937,9 @@
    </property>
   </action>
   <action name="actionClose">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::WindowClose"/>
+   </property>
    <property name="text">
     <string>Schließen</string>
    </property>
@@ -967,9 +967,6 @@
    <property name="shortcutContext">
     <enum>Qt::ShortcutContext::WindowShortcut</enum>
    </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionExport">
    <property name="icon">
@@ -977,19 +974,13 @@
      <normaloff>:/icon/upload.svg</normaloff>:/icon/upload.svg</iconset>
    </property>
    <property name="text">
-    <string>Export …</string>
-   </property>
-   <property name="toolTip">
-    <string>Export</string>
+    <string>Export…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ShortcutContext::ApplicationShortcut</enum>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
    </property>
   </action>
   <action name="actionHauptfenster">
@@ -1008,7 +999,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Einstellungen …</string>
+    <string>Einstellungen…</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ShortcutContext::ApplicationShortcut</enum>
@@ -1040,6 +1031,9 @@
    </property>
   </action>
   <action name="actionQuit">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ApplicationExit"/>
+   </property>
    <property name="text">
     <string>Einsatzplaner beenden</string>
    </property>
@@ -1063,15 +1057,12 @@
   </action>
   <action name="actionSavePersonal">
    <property name="text">
-    <string>Stammdaten sichern unter …</string>
-   </property>
-   <property name="toolTip">
-    <string>Stammdaten sichern unter</string>
+    <string>Stammdaten sichern unter…</string>
    </property>
   </action>
   <action name="actionSettings">
    <property name="text">
-    <string>Eigenschaften …</string>
+    <string>Eigenschaften…</string>
    </property>
   </action>
   <action name="actionLoeschen">
@@ -1081,9 +1072,6 @@
    </property>
    <property name="text">
     <string>Listeneintrag löschen</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
    </property>
   </action>
   <action name="actionToolbar">

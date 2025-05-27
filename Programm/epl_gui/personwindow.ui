@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>403</width>
-    <height>482</height>
+    <height>495</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -901,7 +901,7 @@ Ausbildung</string>
      <x>0</x>
      <y>0</y>
      <width>403</width>
-     <height>24</height>
+     <height>37</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPerson">
@@ -967,7 +967,7 @@ Ausbildung</string>
      <normaloff>:/icon/printer.svg</normaloff>:/icon/printer.svg</iconset>
    </property>
    <property name="text">
-    <string>Drucken …</string>
+    <string>Drucken…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
@@ -982,7 +982,7 @@ Ausbildung</string>
      <normaloff>:/icon/document.svg</normaloff>:/icon/document.svg</iconset>
    </property>
    <property name="text">
-    <string>Als PDF speichern …</string>
+    <string>Als PDF speichern…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+P</string>
@@ -1003,6 +1003,9 @@ Ausbildung</string>
    </property>
   </action>
   <action name="actionSchliessen">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::WindowClose"/>
+   </property>
    <property name="text">
     <string>Schließen</string>
    </property>

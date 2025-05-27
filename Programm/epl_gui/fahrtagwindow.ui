@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>676</width>
-    <height>605</height>
+    <height>618</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1641,7 +1641,7 @@
      </widget>
     </item>
     <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,1" columnstretch="0,0,0,0,0,0,1">
+     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,1" columnstretch="0,0,0,0,0,0,1" columnminimumwidth="0,90,90,0,0,0,0">
       <item row="0" column="0">
        <widget class="QLabel" name="labelDatum">
         <property name="text">
@@ -1676,6 +1676,9 @@
           <month>1</month>
           <day>1</day>
          </date>
+        </property>
+        <property name="currentSection">
+         <enum>QDateTimeEdit::Section::DaySection</enum>
         </property>
         <property name="displayFormat">
          <string>dddd, dd.MM.yyyy</string>
@@ -1959,7 +1962,7 @@ unbekannt</string>
      <x>0</x>
      <y>0</y>
      <width>676</width>
-     <height>24</height>
+     <height>37</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFahrtag">
@@ -1988,6 +1991,9 @@ unbekannt</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionClose">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::WindowClose"/>
+   </property>
    <property name="text">
     <string>Schließen</string>
    </property>
@@ -2011,15 +2017,10 @@ unbekannt</string>
     <iconset theme="QIcon::ThemeIcon::DocumentPrint"/>
    </property>
    <property name="text">
-    <string>Drucken ...</string>
+    <string>Drucken…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
-   </property>
-  </action>
-  <action name="actionTest">
-   <property name="text">
-    <string>Test</string>
    </property>
   </action>
   <action name="actionPdf">
@@ -2027,7 +2028,7 @@ unbekannt</string>
     <iconset theme="QIcon::ThemeIcon::DocumentNew"/>
    </property>
    <property name="text">
-    <string>Als PDF sichern ...</string>
+    <string>Als PDF sichern…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+P</string>
@@ -2035,12 +2036,12 @@ unbekannt</string>
   </action>
   <action name="actionResPrint">
    <property name="text">
-    <string>Reservierungen drucken …</string>
+    <string>Reservierungen drucken…</string>
    </property>
   </action>
   <action name="actionResPdf">
    <property name="text">
-    <string>Reservierungen als PDF sichern …</string>
+    <string>Reservierungen als PDF sichern…</string>
    </property>
   </action>
   <action name="actionVerteilen">

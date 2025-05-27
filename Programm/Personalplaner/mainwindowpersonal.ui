@@ -730,7 +730,7 @@
      <x>0</x>
      <y>0</y>
      <width>700</width>
-     <height>24</height>
+     <height>37</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -852,6 +852,9 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentNew"/>
+   </property>
    <property name="text">
     <string>Neu</string>
    </property>
@@ -861,16 +864,13 @@
    <property name="shortcutContext">
     <enum>Qt::ShortcutContext::ApplicationShortcut</enum>
    </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionOpen">
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::DocumentOpen"/>
    </property>
    <property name="text">
-    <string>Öffnen …</string>
+    <string>Öffnen…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -893,16 +893,13 @@
    <property name="shortcutContext">
     <enum>Qt::ShortcutContext::WindowShortcut</enum>
    </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionSaveas">
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::DocumentSaveAs"/>
    </property>
    <property name="text">
-    <string>Speichern unter …</string>
+    <string>Speichern unter…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
@@ -965,6 +962,9 @@
    </property>
   </action>
   <action name="actionQuit">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::ApplicationExit"/>
+   </property>
    <property name="text">
     <string>Personalplaner beenden</string>
    </property>
@@ -991,15 +991,12 @@
   </action>
   <action name="actionSavePersonal">
    <property name="text">
-    <string>Stammdaten sichern unter</string>
-   </property>
-   <property name="toolTip">
-    <string>Stammdaten sichern unter</string>
+    <string>Stammdaten sichern unter…</string>
    </property>
   </action>
   <action name="actionSettings">
    <property name="text">
-    <string>Eigenschaften</string>
+    <string>Eigenschaften…</string>
    </property>
   </action>
   <action name="actionAddPerson">
@@ -1013,9 +1010,6 @@
    <property name="shortcut">
     <string>Ctrl++</string>
    </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionAktualisieren">
    <property name="icon">
@@ -1028,38 +1022,26 @@
    <property name="shortcut">
     <string>Ctrl+R</string>
    </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionMindeststunden">
    <property name="text">
-    <string>Mindeststunden ...</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
+    <string>Mindeststunden…</string>
    </property>
   </action>
   <action name="actionMitgliederEinzelListeDrucken">
    <property name="text">
-    <string>Stammdatenblätter drucken …</string>
+    <string>Stammdatenblätter drucken…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+P</string>
    </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
   </action>
   <action name="actionMitgliederEinzelListePDF">
    <property name="text">
-    <string>Stammdatenblätter als PDF speichern …</string>
+    <string>Stammdatenblätter als PDF speichern…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+Shift+P</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
    </property>
   </action>
   <action name="actionMitgliederListeDrucken">
@@ -1068,13 +1050,10 @@
      <normaloff>:/icon/printer.svg</normaloff>:/icon/printer.svg</iconset>
    </property>
    <property name="text">
-    <string>Tabelle drucken …</string>
+    <string>Tabelle drucken…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
    </property>
   </action>
   <action name="actionMitgliederListePDF">
@@ -1083,13 +1062,10 @@
      <normaloff>:/icon/document.svg</normaloff>:/icon/document.svg</iconset>
    </property>
    <property name="text">
-    <string>Tabelle als PDF speichern …</string>
+    <string>Tabelle als PDF speichern…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+P</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
    </property>
   </action>
   <action name="actionMitgliederListeCSV">

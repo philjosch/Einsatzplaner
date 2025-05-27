@@ -294,7 +294,7 @@ unbekannt</string>
      <x>0</x>
      <y>0</y>
      <width>510</width>
-     <height>24</height>
+     <height>37</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuArbeitseinsatz">
@@ -312,6 +312,9 @@ unbekannt</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionClose">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::WindowClose"/>
+   </property>
    <property name="text">
     <string>Schließen</string>
    </property>
@@ -335,7 +338,10 @@ unbekannt</string>
     <iconset theme="QIcon::ThemeIcon::DocumentNew"/>
    </property>
    <property name="text">
-    <string>Als PDF sichern …</string>
+    <string>Als PDF sichern…</string>
+   </property>
+   <property name="toolTip">
+    <string>Als PDF sichern…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+P</string>
@@ -346,7 +352,7 @@ unbekannt</string>
     <iconset theme="QIcon::ThemeIcon::DocumentPrint"/>
    </property>
    <property name="text">
-    <string>Drucken …</string>
+    <string>Drucken…</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
