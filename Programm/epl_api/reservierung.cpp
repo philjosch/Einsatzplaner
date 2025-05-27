@@ -268,27 +268,49 @@ void Reservierung::setSonstiges(const QString &value)
 QString Reservierung::getHtmlForTable() const
 {
     QString html = "<tr><td>"+name.toHtmlEscaped();
-    if (! telefon.isEmpty())
-        html += "<br/>"+telefon.toHtmlEscaped();
-    if (! mail.isEmpty())
-        html += "<br/><tt>"+mail.toHtmlEscaped()+"</tt>";
-    html += "</td><td>"+QString::number(anzahl)+" Plätze in ";
-    html += (klasse==1 ? "1. Klasse" :  "2./3.Klasse");
-    html += "<br/>"+getStringFromPlaetze(sitzplatz)+"</td>";
-    html += "<td>";
+    html += "</td><td>";
+    if (sitzplatz.isEmpty()) {
+        html += tr("%1 Plätze in %2Klasse").arg(anzahl).arg(klasse==1 ? "1." :  "2./3.");
+    } else {
+        html += tr("%2 (=%1Pl)").arg(anzahl).arg(getStringFromPlaetze(sitzplatz));
+    }
+    html += "</td><td>";
     QList<QString> teilStrecken;
     for(int i = 0; i < zuege.length(); i=i+2) {
-        teilStrecken.append(
-                 (zuege.at(i  ) == 0 ? "" : QString::number(zuege.at(i  )))+" "+(hps.at(i  ) == "-" ? "" : hps.at(i  ))
-                +"&rarr; "
-                +(zuege.at(i+1) == 0 ? "" : QString::number(zuege.at(i+1)))+" "+(hps.at(i+1) == "-" ? "" : hps.at(i+1))
-                    );
+        QString hilfsString = "";
+        hilfsString += (zuege.at(i  ) == 0 ? "" : QString::number(zuege.at(i  ))+" ");
+        hilfsString += (hps.at(i  ) == "-" ? "" : hps.at(i  )+" ");
+        hilfsString += "&rarr;";
+        hilfsString += (zuege.at(i+1) == 0 ? "" : " "+QString::number(zuege.at(i+1)));
+        hilfsString += (hps.at(i+1) == "-" ? "" : " "+hps.at(i+1));
+        teilStrecken.append(hilfsString);
     }
-    teilStrecken.removeAll(" &rarr;  ");
+    teilStrecken.removeAll("&rarr;");
     html += teilStrecken.join(" und <br/>");
 
-    html += "</td>";
-    html += (fahrrad ? "<td>Fahrrad!<br/>" : "<td>")+sonstiges+"</td></tr>";
+    html += "</td><td>";
+    int lastGroup = 0;
+    if (fahrrad) {
+        html += "Mit Fahrrad";
+        lastGroup = 1;
+    }
+    if (! sonstiges.isEmpty()) {
+        if (lastGroup) html += "<br/>";
+        html += sonstiges.toHtmlEscaped();
+        lastGroup = 1;
+    }
+    if (! telefon.isEmpty()) {
+        if (lastGroup) html += "<br/><br/>";
+        html += "<small>"+telefon.toHtmlEscaped()+"</small>";
+        lastGroup = 2;
+    }
+    if (! mail.isEmpty()) {
+        if (lastGroup == 1) html += "<br/><br/>";
+        else if (lastGroup == 2) html += "<br/>";
+        html += "<small><tt>"+mail.toHtmlEscaped()+"</tt></small>";
+        // lineBreak = false;
+    }
+    html += "</td></tr>";
     return html;
 }
 
@@ -305,11 +327,11 @@ void Reservierung::removePlaetze()
 
 QString Reservierung::getHtmlForDetailTable() const
 {
-    QString html = "<tr><td>"+name;
+    QString html = "<tr><td>"+name.toHtmlEscaped();
     if (telefon != "")
-        html += "<br/>"+telefon;
+        html += "<br/><small>"+telefon.toHtmlEscaped()+"</small>";
     if (mail != "")
-        html += "<br/>"+mail;
+        html += "<br/><small><tt>"+mail.toHtmlEscaped()+"</tt></small>";
     html += "</td>";
     html += "<td>"+QString::number(anzahl)+" Plätze</td>";
     html += "<td>"+getStringFromPlaetze(sitzplatz)+"</td>";
@@ -319,7 +341,7 @@ QString Reservierung::getHtmlForDetailTable() const
     if (hps.at(1) != hps.at(0) && hps.at(1) != "-")
         html += tr("Ausstieg in ")+hps.at(1)+"<br/>";
     QString sonst = sonstiges;
-    html+=sonst.replace("\n", "<br/>")+"</td></tr>";
+    html+=sonst.replace("\n", "<br/>").toHtmlEscaped()+"</td></tr>";
     return html;
 }
 

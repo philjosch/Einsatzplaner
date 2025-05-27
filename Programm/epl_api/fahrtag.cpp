@@ -193,26 +193,30 @@ QString Fahrtag::getHtmlForSingleView() const
         QString rowHeader = cellTemplateHeader.arg("Zug");
         QString rowFirstClass = cellTemplateHeader.arg("1.Klasse");
         QString rowDefaultClass = cellTemplateHeader.arg("2./3.Klasse");
+        QString rowSum = cellTemplateHeader.arg("Summe");
         QString cellTemplate = "<td align='right'>%1</td>";
         for (int trainNumber=2201; trainNumber <= 2206; ++trainNumber) {
             if (getBelegung(-1, trainNumber) > 0) {
                 rowHeader += cellTemplateHeader.arg(QString::number(trainNumber));
                 rowFirstClass += cellTemplate.arg(QString::number(getBelegung(1, trainNumber)));
                 rowDefaultClass += cellTemplate.arg(QString::number(getBelegung(0, trainNumber)));
+                rowSum += cellTemplate.arg(QString::number(getBelegung(-1, trainNumber)));
             }
         }
         rowHeader += cellTemplateHeader.arg("Gesamt");
         rowFirstClass += cellTemplate.arg(QString::number(getBelegung(1, 0)));
         rowDefaultClass += cellTemplate.arg(QString::number(getBelegung(0, 0)));
+        rowSum += cellTemplate.arg(QString::number(getBelegung(-1, 0)));
 
         html += "<table cellspacing='0'><thead>"
                 "<tr>" + rowHeader       + "</tr></thead><tbody>"
                 "<tr>" + rowFirstClass   + "</tr>"
                 "<tr>" + rowDefaultClass + "</tr>"
+                "<tr>" + rowSum          + "</tr>"
                 "</tbody><table></p>";
 
         if (art != Nikolauszug) {
-            html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
+            html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Strecke</th><th>Sonstiges</th></tr></thead><tbody>";
             QList<Reservierung*> list= QList(reservierungen.cbegin(),reservierungen.cend());
             std::sort(list.begin(), list.end(), [](Reservierung* first, Reservierung* second) { return first->getName() < second->getName();});
 
