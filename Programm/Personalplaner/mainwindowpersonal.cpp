@@ -4,7 +4,6 @@
 #include "fileio.h"
 #include "minimumhourseditordialog.h"
 #include "export.h"
-#include "personwindow.h"
 #include "guihelper.h"
 #include "beitraegeeditordialog.h"
 

@@ -2,8 +2,6 @@
 #define MAINWINDOWPERSONAL_H
 
 #include "coremainwindow.h"
-#include "manager.h"
-#include "personwindow.h"
 
 #include <QListWidget>
 #include <QTableWidgetItem>

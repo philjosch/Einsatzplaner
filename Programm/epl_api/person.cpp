@@ -6,8 +6,6 @@
 
 #include <QJsonArray>
 #include <QRandomGenerator>
-#include <algorithm>
-#include <cmath>
 
 const QString Person::FARBE_FEHLENDE_STUNDEN = "#ff9999";
 const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";

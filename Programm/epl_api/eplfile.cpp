@@ -8,7 +8,6 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonDocument>
-#include <exception>
 
 using namespace EplException;
 using namespace Cryptography;

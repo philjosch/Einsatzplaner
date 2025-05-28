@@ -1,4 +1,3 @@
-#include "einstellungen.h"
 #include "export.h"
 #include "fileio.h"
 #include "networking.h"

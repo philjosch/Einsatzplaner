@@ -3,7 +3,6 @@
 
 #include "fahrtag.h"
 #include "managerpersonal.h"
-#include "filesettings.h"
 
 #include <QJsonObject>
 

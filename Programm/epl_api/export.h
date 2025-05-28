@@ -2,7 +2,7 @@
 #define EXPORT_H
 
 #include "aactivity.h"
-#include "filesettings.h"
+#include "networking.h"
 
 #include <QTextDocument>
 #include <QPrinter>

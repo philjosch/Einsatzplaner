@@ -3,6 +3,7 @@
 
 #include "manager.h"
 #include "managerpersonal.h"
+#include "filesettings.h"
 
 #include <QObject>
 
