@@ -491,7 +491,7 @@ int Fahrtag::getAnzahlReservierungen() const
     return reservierungen.size();
 }
 
-QSet<Reservierung *> Fahrtag::getReservierungen() const
+const QSet<Reservierung *> Fahrtag::getReservierungen() const
 {
     return reservierungen;
 }

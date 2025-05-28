@@ -33,7 +33,7 @@ public:
 
     int getAnzahlReservierungen() const;
 
-    QSet<Reservierung *> getReservierungen() const;
+    const QSet<Reservierung *> getReservierungen() const;
 
     bool getCheckAll() const;
     void setCheckAll(bool value);

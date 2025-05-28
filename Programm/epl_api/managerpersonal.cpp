@@ -223,16 +223,8 @@ int ManagerPersonal::getBeitrag(Person::Beitragsart art) const
 
 QList<Person *> ManagerPersonal::getPersonenSortiertNachNummer() const
 {
-    QList<Person *> l;
-    int i = 0;
-    for (Person *p: personen) {
-        l.append(p);
-        i = l.size()-1;
-        while(i > 0 && l.at(i-1)->getNummer() > l.at(i)->getNummer()) {
-            l.swapItemsAt(i, i-1);
-            i--;
-        }
-    }
+    QList<Person *> l = QList(personen);
+    std::sort(l.begin(), l.end(), Person::lessByNumber);
     return l;
 }
 
@@ -428,16 +420,22 @@ bool ManagerPersonal::saveMitgliederListeAlsCSV(QList<Person *> liste, QString p
 
 int ManagerPersonal::getAnzahlMitglieder(Status filter) const
 {
-    return getPersonen(filter).length();
+    int counter = 0;
+    for(Person *p: personen) {
+        if (p->pruefeFilter(filter))
+            ++counter;
+    }
+    return counter;
 }
 
 QList<Person *> ManagerPersonal::getPersonen(Status filter) const
 {
-    QList<Person *> current = QList<Person*>();
-    for(Person *p: getPersonenSortiertNachNummer()) {
+    QList<Person *> current;
+    for(Person *p: personen) {
         if (p->pruefeFilter(filter))
             current.append(p);
     }
+    std::sort(current.begin(), current.end(), Person::lessByNumber);
     return current;
 }
 

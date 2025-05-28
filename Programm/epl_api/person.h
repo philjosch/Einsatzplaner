@@ -36,6 +36,10 @@ public:
     Person(QString name, ManagerPersonal *man);
     Person(QJsonObject o, ManagerPersonal *man);
 
+    static bool lessByNumber(const Person * const &lhs, const Person * const &rhs);
+    static bool lessByName(const Person * const &lhs, const Person * const &rhs);
+    friend bool operator<(const Person &lhs, const Person &rhs) {return lessByName(&lhs, &rhs);};
+
     static const QString FARBE_FEHLENDE_STUNDEN;
     static const QString FARBE_GENUG_STUNDEN;
     static const QString FARBE_STANDARD;
@@ -85,6 +89,7 @@ public:
     bool setNachname(const QString &value);
 
     QString getName() const;
+    QString getFullCanonicalName() const;
     QString getNameSortierung() const;
 
     QDate getGeburtstag() const;

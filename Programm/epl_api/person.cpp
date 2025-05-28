@@ -499,6 +499,24 @@ void Person::setBemerkungen(const QString &value)
     emit changed();
 }
 
+bool Person::lessByNumber(const Person* const &lhs, const Person* const &rhs)
+{
+    return lhs->nummer < rhs->nummer;
+}
+
+bool Person::lessByName(const Person* const &lhs, const Person* const &rhs)
+{
+    if (lhs->getFullCanonicalName() < rhs->getFullCanonicalName())
+        return true;
+    if (lhs->getFullCanonicalName() > rhs->getFullCanonicalName())
+        return false;
+    if (lhs->getGeburtstag() < rhs->getGeburtstag())
+        return true;
+    if (lhs->getGeburtstag() > rhs->getGeburtstag())
+        return false;
+    return lessByNumber(lhs, rhs);
+}
+
 int Person::getNummer() const
 {
     return nummer;
@@ -728,6 +746,13 @@ const QList<Einsatz*> Person::getActivities() const
 QString Person::getName() const
 {
     if (vorname != "" && nachname != "") return vorname + " " + nachname;
+    else if (vorname != "") return vorname;
+    else return nachname;
+}
+
+QString Person::getFullCanonicalName() const
+{
+    if (vorname != "" && nachname != "") return nachname + ", " + vorname;
     else if (vorname != "") return vorname;
     else return nachname;
 }

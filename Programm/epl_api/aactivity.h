@@ -58,7 +58,7 @@ public:
 
     bool check(Auswahl aus) const;
 
-    QList<Einsatz*> getPersonen() const;
+    const QList<Einsatz*> getPersonen() const;
     Einsatz *addPerson(QString p, QString bemerkung, Category kat);
     bool removePerson(Einsatz *e);
 

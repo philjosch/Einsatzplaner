@@ -440,7 +440,7 @@ bool AActivity::check(Auswahl aus) const
     return true;
 }
 
-QList<Einsatz*> AActivity::getPersonen() const
+const QList<Einsatz*> AActivity::getPersonen() const
 {
     return personen;
 }
