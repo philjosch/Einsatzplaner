@@ -652,22 +652,24 @@ Status Person::pruefeStunden(Category cat) const
 
 int Person::getMinimumStunden(Category cat) const
 {
-    bool halb = (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 7);
-
+    if (! aktiv) return 0;
     if (isMinderjaehrig()) return 0;
     if (isAusgetreten()) return 0;
+
+    bool halb = (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 7);
+    int eintrittsDivisor = (halb ? 2 : 1);
     switch (cat) {
     case Tf:
         if (! isTauglich(Tf) ) return 0;
-        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
+        return manager->getMinimumHours(cat) / eintrittsDivisor;
     case Zf:
         if (! isTauglich(Zf)) return 0;
-        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
+        return manager->getMinimumHours(cat) / eintrittsDivisor;
     case Ausbildung:
         if ((! getAusbildungTf() && ! getAusbildungZf() && ! getAusbildungRangierer()) || !isTauglich()) return 0;
-        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
+        return manager->getMinimumHours(cat) / eintrittsDivisor;
     default:
-        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
+        return manager->getMinimumHours(cat) / eintrittsDivisor;
     }
 }
 
