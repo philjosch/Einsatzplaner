@@ -240,7 +240,7 @@ QString Fahrtag::getHtmlForTableView() const
     } else {
         html += "<td>";
     }
-    html += "<b>"+QLocale().toString(datum, "dddd, dd.MM.yyyy")+"</b><br/>";
+    html += "<b>"+QLocale().toString(datum, "ddd, dd.MM.yyyy")+"</b><br/>";
     html += toString(art);
     if (anlass != "") {
         html += ": <i>"+QString(anlass).replace("\n", "<br/>")+"</i>";
@@ -383,7 +383,7 @@ QString Fahrtag::getHtmlForTableView() const
 bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
 {
     QString a = "<h3>";
-    a += toString(art)+" am "+QLocale().toString(datum, "dddd dd. MM. yyyy");
+    a += toString(art)+" am "+QLocale().toString(datum, "dddd, dd.MM.yyyy");
     a += " - Die Reservierungen</h3>";
     a += "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th> <th>Anzahl</th> <th>Sitzplätze</th> <th>Sonstiges</th></tr></thead><tbody>";
     // Sortieren der Daten nach Wagenreihung
