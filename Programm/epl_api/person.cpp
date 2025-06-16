@@ -169,8 +169,8 @@ Person::Person(QString name, ManagerPersonal *man) : QObject()
     telefon = "";
     telefon2 = "";
 
-    mailOK = true;
-    telefonOK = true;
+    mailOK = false;
+    telefonOK = false;
     // Sonstiges
     bemerkungen = "";
 }

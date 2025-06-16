@@ -176,7 +176,7 @@ bool ManagerPersonal::personExists(QString vorname, QString nachname) const
 
 Person *ManagerPersonal::newPerson()
 {
-    QString name = tr("Unbekannt Unbenannt");
+    QString name = tr("Mitglied Nr.%1").arg(getNextNummer());
     if (personExists(name)) return nullptr;
     Person *neu = new Person(name, this);
     personen.append(neu);
