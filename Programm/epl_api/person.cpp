@@ -652,7 +652,7 @@ Status Person::pruefeStunden(Category cat) const
 
 int Person::getMinimumStunden(Category cat) const
 {
-    bool halb = (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 6);
+    bool halb = (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 7);
 
     if (isMinderjaehrig()) return 0;
     if (isAusgetreten()) return 0;
@@ -1345,7 +1345,7 @@ void Person::setBeitragsart(const Person::Beitragsart &value)
 }
 int Person::getBeitrag() const
 {
-    if (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 6) {
+    if (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 7) {
         return manager->getBeitrag(beitragsart) / 2;
     }
     return manager->getBeitrag(beitragsart);
@@ -1441,7 +1441,7 @@ int Person::getBeitragNachzahlung() const
 
     double prozent = 1.f - getZeiten(Gesamt) / (double)getMinimumStunden(Gesamt);
     int satz = manager->getBeitrag(Beitragsart::FoerderBeitrag);
-//    if (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 6) {
+//    if (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 7) {
 //        satz = satz / 2;
 //    }
     satz = satz - getBeitragRegulaerIndividuell();
