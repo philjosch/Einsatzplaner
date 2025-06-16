@@ -66,11 +66,6 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
 
     connect(ui->listWidget, &QListWidget::itemClicked, this, &PersonalWindow::persShowFromList);
 
-    connect(ui->lineVorname, &QLineEdit::textChanged, this, &PersonalWindow::persSetVorname);
-    connect(ui->lineNachname, &QLineEdit::textChanged, this, &PersonalWindow::persSetNachname);
-
-    connect(ui->checkAktiv, &QCheckBox::clicked, this, &PersonalWindow::persSetAktiv);
-
     connect(ui->checkTf, &QCheckBox::clicked, this, &PersonalWindow::persSetTf);
     connect(ui->checkZf, &QCheckBox::clicked, this, &PersonalWindow::persSetZf);
     connect(ui->checkRangierer, &QCheckBox::clicked, this, &PersonalWindow::persSetRangierer);
@@ -82,7 +77,7 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
     connect(ui->plainAusbildung, &QPlainTextEdit::textChanged, this, &PersonalWindow::persSetAusbildung);
     connect(ui->plainBetrieb, &QPlainTextEdit::textChanged, this, &PersonalWindow::persSetBetrieb);
 
-    connect(ui->pushDelete, &QPushButton::clicked, this, &PersonalWindow::persDelete);
+    // connect(ui->pushDelete, &QPushButton::clicked, this, &PersonalWindow::persDelete);
 
     connect(ui->pushPersonKomplett, &QPushButton::clicked, this, &PersonalWindow::persShowDetails);
 
@@ -271,6 +266,7 @@ void PersonalWindow::refreshEinzel()
         personToItem.insert(p, item);
     }
     ui->listWidget->sortItems();
+    showPerson(aktuellePerson);
 }
 
 void PersonalWindow::editMinimumhours()
@@ -562,6 +558,7 @@ void PersonalWindow::persSetAdditionalKilometer(double arg1)
 
 void PersonalWindow::showPerson(Person *p)
 {
+    if (p == nullptr) return;
     aktuellePerson = p;
 
     p->berechne();
@@ -570,13 +567,9 @@ void PersonalWindow::showPerson(Person *p)
     toggleFields(true);
 
     // ** Kopfzeile
-    ui->lineVorname->setText(p->getVorname());
-    ui->lineNachname->setText(p->getNachname());
+    ui->labelName->setText(p->getName());
 
     // ** Stammdaten
-    // Allgemein
-    ui->checkAktiv->setChecked(p->getAktiv());
-
     // Betriebsdienst
     ui->checkTf->setChecked(p->getAusbildungTf());
     ui->checkZf->setChecked(p->getAusbildungZf());
@@ -658,15 +651,10 @@ QList<Person*> PersonalWindow::getSortierteListe()
 
 void PersonalWindow::toggleFields(bool state)
 {
-    ui->lineVorname->setEnabled(state);
-    ui->lineNachname->setEnabled(state);
-    ui->checkAktiv->setEnabled(state);
     ui->pushMailEinzel->setEnabled(state);
 
     ui->tabWidgetEinzel->setEnabled(state);
-    ui->dateDienst->setEnabled(false);
 
-    ui->pushEinzelDrucken->setEnabled(state);
     ui->pushPersonKomplett->setEnabled(state);
 }
 
