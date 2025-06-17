@@ -14,9 +14,31 @@
 PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
 {
     ui->setupUi(this);
+    comboAnzeige = new QComboBox();
+    comboAnzeige->addItem(toString(Status::AlleMitglieder), QVariant(Status::AlleMitglieder));
+    comboAnzeige->addItem(toString(Status::Aktiv), QVariant(Status::Aktiv));
+    comboAnzeige->addItem(toString(Status::AktivMit), QVariant(Status::AktivMit));
+    comboAnzeige->addItem(toString(Status::AktivOhne), QVariant(Status::AktivOhne));
+    comboAnzeige->addItem(toString(Status::Passiv), QVariant(Status::Passiv));
+    comboAnzeige->addItem(toString(Status::PassivMit), QVariant(Status::PassivMit));
+    comboAnzeige->addItem(toString(Status::Ausgetreten), QVariant(Status::Ausgetreten));
+    comboAnzeige->addItem(toString(Status::Registriert), QVariant(Status::Registriert));
+    comboAnzeige->setMinimumSize(QSize(200, 0));
+    ui->toolBar->addWidget(comboAnzeige);
+    QWidget *strechWidget1 = new QWidget();
+    strechWidget1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    ui->toolBar->addWidget(strechWidget1);
+    ui->toolBar->addAction(ui->actionAktualisieren);
+    // QWidget *strechWidget2 = new QWidget();
+    // strechWidget2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    // ui->toolBar->addWidget(strechWidget2);
+    ui->toolBar->addAction(ui->actionMail);
+
     parentWindow = parent;
-    connect(ui->comboAnzeige, SIGNAL(currentIndexChanged(int)), this, SLOT(refresh()));
-    connect(ui->actionAktualisieren, SIGNAL(triggered()), this, SLOT(refresh()));
+
+
+    connect(comboAnzeige, &QComboBox::currentIndexChanged, this, &PersonalWindow::refresh);
+    connect(ui->actionAktualisieren, &QAction::triggered, this, &PersonalWindow::refresh);
 
     connect(ui->actionPersonAdd, &QAction::triggered, this, &PersonalWindow::addPerson);
     connect(ui->actionMindeststunden, &QAction::triggered, this, &PersonalWindow::editMinimumhours);
@@ -44,25 +66,15 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
     connect(ui->actionBeitraegeRegulaerCSV, &QAction::triggered, this, &PersonalWindow::exportDuesRegularCsv);
     connect(ui->actionBeitraegeNachzahlungCSV, &QAction::triggered, this, &PersonalWindow::exportDuesAdditionalCsv);
 
+    connect(ui->actionMail, &QAction::triggered, this, &PersonalWindow::sendMailList);
 
-    connect(ui->pushEmail, &QPushButton::clicked, this, &PersonalWindow::sendMailList);
 
+    connect(ui->treeCategorySelection,  &QTreeWidget::itemChanged, this, &PersonalWindow::updateTableBasedOnCategorySelection);
+    ui->treeCategorySelection->invisibleRootItem()->child(0)->setExpanded(true);
+    ui->treeCategorySelection->invisibleRootItem()->child(1)->setExpanded(true);
+    ui->treeCategorySelection->invisibleRootItem()->child(2)->setExpanded(true);
     connect(ui->tabelleGesamt, &QTableWidget::cellDoubleClicked, this, &PersonalWindow::persShowFromTable);
 
-    connect(ui->checkShowGesamt,        &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Gesamt,         b); });
-    connect(ui->checkShowAnzahl,        &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Anzahl,         b); });
-    connect(ui->checkShowTf,            &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Tf,             b); });
-    connect(ui->checkShowTb,            &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Tb,             b); });
-    connect(ui->checkShowZf,            &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Zf,             b); });
-    connect(ui->checkShowZub,           &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Zub,            b); });
-    connect(ui->checkShowService,       &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Service,        b); });
-    connect(ui->checkShowVorbereiten,   &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(ZugVorbereiten, b); });
-    connect(ui->checkShowWerkstatt,     &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Werkstatt,      b); });
-    connect(ui->checkShowBuero,         &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Buero,          b); });
-    connect(ui->checkShowAusbildung,    &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Ausbildung,     b); });
-    connect(ui->checkShowInfrastruktur, &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Infrastruktur,  b); });
-    connect(ui->checkShowSonstiges,     &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Sonstiges,      b); });
-    connect(ui->checkShowKilometer,     &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Kilometer,      b); });
 
     connect(ui->listWidget, &QListWidget::itemClicked, this, &PersonalWindow::persShowFromList);
 
@@ -76,8 +88,6 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
     connect(ui->plainBemerkung, &QPlainTextEdit::textChanged, this, &PersonalWindow::persSetBemerkung);
     connect(ui->plainAusbildung, &QPlainTextEdit::textChanged, this, &PersonalWindow::persSetAusbildung);
     connect(ui->plainBetrieb, &QPlainTextEdit::textChanged, this, &PersonalWindow::persSetBetrieb);
-
-    // connect(ui->pushDelete, &QPushButton::clicked, this, &PersonalWindow::persDelete);
 
     connect(ui->pushPersonKomplett, &QPushButton::clicked, this, &PersonalWindow::persShowDetails);
 
@@ -104,19 +114,16 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
     personToItem = QHash<Person*, QListWidgetItem*>();
     enabled = false;
 
+    aktuellePerson = nullptr;
+
     current = QList<Person*>();
     filter = Status::Aktiv;
-
     anzeige = QSet<Category>();
-    ui->checkShowGesamt->setChecked(true);
-    ui->checkShowAnzahl->setChecked(true);
-    ui->checkShowKilometer->setChecked(true);
-    toggleShowCategory(Gesamt, true);
-    toggleShowCategory(Anzahl, true);
-    toggleShowCategory(Kilometer, true);
-    ui->comboAnzeige->setCurrentIndex(1);
     ui->tabelleGesamt->sortItems(1);
-    aktuellePerson = nullptr;
+
+    comboAnzeige->setCurrentIndex(1);
+    ui->treeCategorySelection->invisibleRootItem()->child(0)->setCheckState(0, Qt::Checked);
+
     refresh();
 }
 
@@ -127,16 +134,7 @@ PersonalWindow::~PersonalWindow()
 
 void PersonalWindow::refresh()
 {
-    switch (ui->comboAnzeige->currentIndex()) {
-    case 0: filter = AlleMitglieder; break;
-    case 1: filter = Aktiv; break;
-    case 2: filter = Passiv; break;
-    case 3: filter = AktivMit; break;
-    case 4: filter = AktivOhne; break;
-    case 5: filter = PassivMit; break;
-    case 6: filter = Ausgetreten; break;
-    default: filter = Registriert; break;
-    }
+    filter = Status(comboAnzeige->currentData().toInt());
     current = manager->getPersonen(filter);
     // Aktualisiere die Ansichten
     refreshTabelle();
@@ -405,6 +403,22 @@ void PersonalWindow::persShowFromTable(int row, int column)
 
     showPerson(ptwi->getPerson());
     ui->tabWidgetMain->setCurrentIndex(1);
+}
+
+void PersonalWindow::updateTableBasedOnCategorySelection(QTreeWidgetItem *item, int column)
+{
+    if (item->checkState(column) == Qt::CheckState::PartiallyChecked) return;
+    if (item->childCount() > 0) {
+        for (int childCounter = 0 ; childCounter < item->childCount(); ++childCounter) {
+            item->child(childCounter)->setCheckState(column, item->checkState(column));
+        }
+        return;
+    } else {
+        if (item->parent() != ui->treeCategorySelection->invisibleRootItem()) {
+            item->parent()->setCheckState(column, Qt::CheckState::PartiallyChecked);
+        }
+    }
+    toggleShowCategory(getCategoryFromLocalizedString(item->text(column)), item->checkState(column) == Qt::CheckState::Checked);
 }
 
 void PersonalWindow::addPerson()

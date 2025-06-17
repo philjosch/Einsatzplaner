@@ -8,6 +8,7 @@
 #include <QPrinter>
 #include <QTableWidgetItem>
 #include <coremainwindow.h>
+#include <QTreeWidgetItem>
 
 namespace Ui {
 class PersonalWindow;
@@ -62,6 +63,8 @@ private slots:
 
     void persShowFromTable(int row, int column);
 
+    void updateTableBasedOnCategorySelection(QTreeWidgetItem *item, int column);
+
     // Fenster - Einzel
 
     void persShowFromList(QListWidgetItem *item);
@@ -97,6 +100,7 @@ private slots:
 
 private:
     Ui::PersonalWindow *ui;
+    QComboBox *comboAnzeige;
     ManagerPersonal *manager;
 
     CoreMainWindow *parentWindow;
