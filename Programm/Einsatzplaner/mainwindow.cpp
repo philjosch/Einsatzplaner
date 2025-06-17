@@ -90,10 +90,12 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
 
     //- Hier prüfen, ob Personalfenster angezeigt wurde und wiederherstellen der Fensterpositionen
     EplFile::FensterPosition kalender = datei->getPositionKalender();
-    this->setGeometry(kalender.x, kalender.y, kalender.width, kalender.height);
+    if (kalender.width + kalender.height > 0)
+        this->setGeometry(kalender.x, kalender.y, kalender.width, kalender.height);
     // Personalfenster
     EplFile::FensterPosition personal = datei->getPositionPersonal();
-    personalfenster->setGeometry(personal.x, personal.y, personal.width, personal.height);
+    if (personal.width + personal.height > 0)
+        personalfenster->setGeometry(personal.x, personal.y, personal.width, personal.height);
     personalfenster->hide();
 }
 MainWindow::~MainWindow()
