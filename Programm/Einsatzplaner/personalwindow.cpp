@@ -407,6 +407,7 @@ void PersonalWindow::persShowFromTable(int row, int column)
 
 void PersonalWindow::updateTableBasedOnCategorySelection(QTreeWidgetItem *item, int column)
 {
+    if (item->childCount() > 0) return;
     if (item->checkState(column) == Qt::CheckState::PartiallyChecked) return;
     if (item->childCount() > 0) {
         for (int childCounter = 0 ; childCounter < item->childCount(); ++childCounter) {
