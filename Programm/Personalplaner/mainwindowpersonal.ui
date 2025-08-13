@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>588</height>
+    <width>712</width>
+    <height>535</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,455 +17,55 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_3">
+   <layout class="QGridLayout" name="gridLayout_2">
     <property name="leftMargin">
      <number>6</number>
     </property>
     <property name="topMargin">
-     <number>0</number>
+     <number>6</number>
     </property>
     <property name="rightMargin">
      <number>6</number>
     </property>
     <property name="bottomMargin">
-     <number>0</number>
+     <number>6</number>
     </property>
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Orientation::Horizontal</enum>
       </property>
-      <widget class="QListWidget" name="listAnzeige">
+      <widget class="QTreeWidget" name="treeDisplaySelection">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
-         <width>175</width>
+         <width>300</width>
          <height>16777215</height>
         </size>
        </property>
-       <property name="showDropIndicator" stdset="0">
+       <attribute name="headerVisible">
         <bool>false</bool>
-       </property>
-       <property name="selectionMode">
-        <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
-       </property>
-       <property name="selectionRectVisible">
-        <bool>true</bool>
-       </property>
-       <item>
+       </attribute>
+       <column>
         <property name="text">
-         <string>Persönliches</string>
+         <string>Anzeige</string>
         </property>
-        <property name="flags">
-         <set>ItemIsEnabled</set>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Vorname</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Nachname</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Geburtsdatum</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Geschlecht</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Anrede</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Beruf</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Mitgliedschaft</string>
-        </property>
-        <property name="flags">
-         <set>ItemIsEnabled</set>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Nummer</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Eintritt</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Status</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Austritt</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Beitragsart</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>IBAN</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Bank</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Kontoinhaber</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Beitrag</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Beitrag (Nachzahlung)</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Adresse</string>
-        </property>
-        <property name="flags">
-         <set>ItemIsEnabled</set>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Straße</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>PLZ</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Ort</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Strecke</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Kontakt</string>
-        </property>
-        <property name="flags">
-         <set>ItemIsEnabled</set>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Mail</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Telefon</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Telefon2</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Betriebsdienst</string>
-        </property>
-        <property name="flags">
-         <set>ItemIsEnabled</set>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Tf</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Zf</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Zub</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-        <property name="flags">
-         <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Rangierer</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Tauglichkeit</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Bemerkung Betrieb.</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Sonst. Ausbildung</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Datenschutz</string>
-        </property>
-        <property name="flags">
-         <set>ItemIsEnabled</set>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Mail Zustimmung</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Telefon Zustimmung</string>
-        </property>
-        <property name="checkState">
-         <enum>Unchecked</enum>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Sonstiges</string>
-        </property>
-        <property name="flags">
-         <set>ItemIsEnabled</set>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Bemerkung</string>
-        </property>
-        <property name="checkState">
-         <enum>Checked</enum>
-        </property>
-       </item>
+       </column>
       </widget>
       <widget class="QWidget" name="layoutWidget">
-       <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,1,0" columnstretch="0,0,1">
-        <property name="bottomMargin">
-         <number>6</number>
-        </property>
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_25">
-          <property name="text">
-           <string>Anzeigen</string>
-          </property>
-          <property name="buddy">
-           <cstring>comboAnzeige</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QComboBox" name="comboAnzeige">
-          <property name="minimumSize">
-           <size>
-            <width>200</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="currentIndex">
-           <number>0</number>
-          </property>
-          <item>
-           <property name="text">
-            <string>Alle Mitglieder</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Aktiv</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Passiv</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Aktiv mit Stunden</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Aktiv ohne Stunden</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Passiv mit Stunden</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Ausgetreten</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Alle</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>167</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="0" colspan="3">
+       <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0" columnstretch="1,0,0,0,0,0,0,0,0,0,0,1">
+        <item row="0" column="0" colspan="12">
          <widget class="QTableWidget" name="tabelleMitglieder">
           <property name="editTriggers">
            <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
           </property>
-          <property name="selectionMode">
-           <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
           </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
@@ -489,234 +89,132 @@
             <string>Nachname</string>
            </property>
           </column>
-          <column>
-           <property name="text">
-            <string>Nr.</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Status</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Geburtsdatum</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Eintritt</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Austritt</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Beruf</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Straße</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>PLZ</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Ort</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Strecke</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>E-Mail</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>E-Mail veröff.</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Telefon</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Telefon veröff.</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Tf-Ausbildung</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Zf-Ausbildung</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Rangierer</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Tauglichkeit</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Bemerkung</string>
-           </property>
-          </column>
          </widget>
         </item>
-        <item row="2" column="0" colspan="3">
-         <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0,0,0,0,0,0,0,0,0,1">
-          <property name="verticalSpacing">
-           <number>6</number>
+        <item row="1" column="0">
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
-          <item row="0" column="0">
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>47</width>
-              <height>17</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="labelMitglieder">
-            <property name="text">
-             <string>Mitglieder</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="labelMitgliederAnzMitglieder">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="labelMitgliederAktiv">
-            <property name="text">
-             <string>Aktiv</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4">
-           <widget class="QLabel" name="labelMitgliederAnzAktiv">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="5" rowspan="2">
-           <widget class="Line" name="line">
-            <property name="orientation">
-             <enum>Qt::Orientation::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="6">
-           <widget class="QLabel" name="labelMitgliederAusgetreten">
-            <property name="text">
-             <string>Ausgetreten</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="7">
-           <widget class="QLabel" name="labelMitgliederAnzAusgetreten">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="8" rowspan="2">
-           <widget class="Line" name="line_2">
-            <property name="orientation">
-             <enum>Qt::Orientation::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="9">
-           <widget class="QLabel" name="labelMitgliederErfasst">
-            <property name="text">
-             <string>Erfasst</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="10">
-           <widget class="QLabel" name="labelMitgliederAnzErfasst">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="11">
-           <spacer name="horizontalSpacer_4">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>47</width>
-              <height>17</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLabel" name="labelMitgliederPassive">
-            <property name="text">
-             <string>Passiv</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4">
-           <widget class="QLabel" name="labelMitgliederAnzPassiv">
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>42</width>
+            <height>14</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="labelMitglieder">
+          <property name="text">
+           <string>Mitglieder</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="labelMitgliederAnzMitglieder">
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLabel" name="labelMitgliederAktiv">
+          <property name="text">
+           <string>Aktiv</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QLabel" name="labelMitgliederAnzAktiv">
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="5" rowspan="2">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="6">
+         <widget class="QLabel" name="labelMitgliederAusgetreten">
+          <property name="text">
+           <string>Ausgetreten</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="7">
+         <widget class="QLabel" name="labelMitgliederAnzAusgetreten">
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="8" rowspan="2">
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="9">
+         <widget class="QLabel" name="labelMitgliederErfasst">
+          <property name="text">
+           <string>Erfasst</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="10">
+         <widget class="QLabel" name="labelMitgliederAnzErfasst">
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="11">
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>41</width>
+            <height>14</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="3">
+         <widget class="QLabel" name="labelMitgliederPassive">
+          <property name="text">
+           <string>Passiv</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="4">
+         <widget class="QLabel" name="labelMitgliederAnzPassiv">
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -729,8 +227,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>700</width>
-     <height>37</height>
+     <width>712</width>
+     <height>24</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -799,17 +297,10 @@
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
-   <widget class="QMenu" name="menuAnzeige">
-    <property name="title">
-     <string>Anzeige</string>
-    </property>
-    <addaction name="actionToolbar"/>
-   </widget>
    <addaction name="menuApp"/>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
    <addaction name="menuDrucken"/>
-   <addaction name="menuAnzeige"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="contextMenuPolicy">
@@ -847,7 +338,6 @@
    <addaction name="separator"/>
    <addaction name="actionMitgliederListeDrucken"/>
    <addaction name="actionMitgliederListePDF"/>
-   <addaction name="separator"/>
    <addaction name="actionMailListe"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -1050,7 +540,10 @@
      <normaloff>:/icon/printer.svg</normaloff>:/icon/printer.svg</iconset>
    </property>
    <property name="text">
-    <string>Tabelle drucken…</string>
+    <string>Tabelle drucken …</string>
+   </property>
+   <property name="iconText">
+    <string>Drucken …</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
@@ -1063,6 +556,9 @@
    </property>
    <property name="text">
     <string>Tabelle als PDF speichern…</string>
+   </property>
+   <property name="iconText">
+    <string>PDF speichern</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+P</string>
@@ -1084,19 +580,14 @@
    <property name="text">
     <string>E-Mail an Liste senden</string>
    </property>
+   <property name="iconText">
+    <string>E-Mail senden</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
-   </property>
-  </action>
-  <action name="actionToolbar">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Toolbar anzeigen</string>
    </property>
   </action>
   <action name="actionMitgliedsbeitraege">
@@ -1119,38 +610,5 @@
   <include location="../icons/icons_rc.qrc"/>
   <include location="../icons/icons_rc.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>actionToolbar</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>mainToolBar</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>393</x>
-     <y>43</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mainToolBar</sender>
-   <signal>visibilityChanged(bool)</signal>
-   <receiver>actionToolbar</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>393</x>
-     <y>43</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

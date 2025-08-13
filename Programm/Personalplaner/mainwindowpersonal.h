@@ -5,6 +5,7 @@
 
 #include <QListWidget>
 #include <QTableWidgetItem>
+#include <QTreeWidgetItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindowPersonal; }
@@ -45,8 +46,9 @@ protected slots:
     void exportDuesAdditionalCsv();
 
     //** Fenster
-    void filterChanged(int index);
+    void filterChanged();
     void showPersFromTable(int row, int column);
+    void updateTableBasedOnCategorySelection(QTreeWidgetItem *item, int column);
 
 protected:
     //** Hilfsmethoden
@@ -56,6 +58,7 @@ protected:
 
     //** View
     Ui::MainWindowPersonal *ui;
+    QComboBox *comboAnzeige;
 
     //** Controller
     QList<Person*> current;
