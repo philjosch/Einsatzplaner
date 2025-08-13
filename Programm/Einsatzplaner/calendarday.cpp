@@ -24,22 +24,17 @@ void CalendarDay::show(QDate datum, bool gray)
     actToItem.clear();
 
     if (datum == QDate::currentDate()) {
-        if (gray) {
-            ui->buttonAdd->setStyleSheet("background-color: rgba(255,128,128,0.5); color: #888; border: none; ");
-            ui->label->setStyleSheet(    "background-color: rgba(255,128,128,0.5); color: #888;");
-        } else {
-            ui->buttonAdd->setStyleSheet("background-color: palette(highlight); color: palette(highlighted-text); border: none; ");
-            ui->label->setStyleSheet(    "background-color: palette(highlight); color: palette(highlighted-text);");
-        }
-    } else {
-        if (gray) {
-            ui->buttonAdd->setStyleSheet("background-color: palette(base); color: #888; border: none; ");
-            ui->label->setStyleSheet(    "background-color: palette(base); color: #888;");
-        } else {
-            ui->buttonAdd->setStyleSheet("background-color: palette(base); color: palette(text); border: none; ");
-            ui->label->setStyleSheet(    "background-color: palette(base); color: palette(text);");
-        }
+        ui->buttonAdd->setStyleSheet("background-color: #6B1B23; color: white; border: none; ");
+        ui->label->setStyleSheet(    "background-color: #6B1B23; color: white;");
+        return;
     }
+    if (gray) {
+        ui->buttonAdd->setStyleSheet("background-color: palette(base); color: #888; border: none; ");
+        ui->label->setStyleSheet(    "background-color: palette(base); color: #888;");
+        return;
+    }
+    ui->buttonAdd->setStyleSheet("background-color: palette(base); color: palette(text); border: none; ");
+    ui->label->setStyleSheet(    "background-color: palette(base); color: palette(text);");
 }
 
 void CalendarDay::remove(AActivity *a)

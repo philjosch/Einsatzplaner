@@ -137,12 +137,18 @@
         </item>
         <item row="1" column="0">
          <layout class="QGridLayout" name="gridKalender" rowstretch="0,1,1,1,1,1,1">
-          <property name="spacing">
+          <property name="horizontalSpacing">
            <number>0</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>2</number>
           </property>
           <item row="0" column="0">
            <layout class="QGridLayout" name="dayOfWeek">
-            <property name="spacing">
+            <property name="horizontalSpacing">
+             <number>2</number>
+            </property>
+            <property name="verticalSpacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -256,7 +262,10 @@
           </item>
           <item row="1" column="0">
            <layout class="QGridLayout" name="week_1" columnstretch="0,1,1,1,1,1,1,1">
-            <property name="spacing">
+            <property name="horizontalSpacing">
+             <number>2</number>
+            </property>
+            <property name="verticalSpacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -277,7 +286,7 @@
                <string>1</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
               </property>
              </widget>
             </item>
@@ -334,7 +343,10 @@
           </item>
           <item row="2" column="0">
            <layout class="QGridLayout" name="week_2" columnstretch="0,1,1,1,1,1,1,1">
-            <property name="spacing">
+            <property name="horizontalSpacing">
+             <number>2</number>
+            </property>
+            <property name="verticalSpacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -355,7 +367,7 @@
                <string>2</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
               </property>
              </widget>
             </item>
@@ -412,7 +424,10 @@
           </item>
           <item row="3" column="0">
            <layout class="QGridLayout" name="week_3" columnstretch="0,1,1,1,1,1,1,1">
-            <property name="spacing">
+            <property name="horizontalSpacing">
+             <number>2</number>
+            </property>
+            <property name="verticalSpacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -433,7 +448,7 @@
                <string>3</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
               </property>
              </widget>
             </item>
@@ -490,7 +505,10 @@
           </item>
           <item row="4" column="0">
            <layout class="QGridLayout" name="week_4" columnstretch="0,1,1,1,1,1,1,1">
-            <property name="spacing">
+            <property name="horizontalSpacing">
+             <number>2</number>
+            </property>
+            <property name="verticalSpacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -511,7 +529,7 @@
                <string>4</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
               </property>
              </widget>
             </item>
@@ -568,7 +586,10 @@
           </item>
           <item row="5" column="0">
            <layout class="QGridLayout" name="week_5" columnstretch="0,1,1,1,1,1,1,1">
-            <property name="spacing">
+            <property name="horizontalSpacing">
+             <number>2</number>
+            </property>
+            <property name="verticalSpacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -589,7 +610,7 @@
                <string>5</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
               </property>
              </widget>
             </item>
@@ -646,7 +667,10 @@
           </item>
           <item row="6" column="0">
            <layout class="QGridLayout" name="week_6" columnstretch="0,1,1,1,1,1,1,1">
-            <property name="spacing">
+            <property name="horizontalSpacing">
+             <number>2</number>
+            </property>
+            <property name="verticalSpacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -667,7 +691,7 @@
                <string>6</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
               </property>
              </widget>
             </item>
@@ -747,7 +771,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>37</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
