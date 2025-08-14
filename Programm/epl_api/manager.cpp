@@ -98,7 +98,7 @@ QList<AActivity *> Manager::getActivities() const
     return activities;
 }
 
-bool Manager::printListenansicht(QList<AActivity *> liste, QPrinter *printer)
+bool Manager::exportActivitiesListAsHtml(QList<AActivity *> liste, QPrinter *printer)
 {
     QString a = AActivity::KOPF_LISTE_HTML;
     for(AActivity *akt: liste) {
@@ -109,7 +109,7 @@ bool Manager::printListenansicht(QList<AActivity *> liste, QPrinter *printer)
     return Export::druckeHtml(a + Export::zeitStempel(), printer);
 }
 
-bool Manager::printEinzelansichten(QList<AActivity *> liste, QPrinter *printer)
+bool Manager::exportActivitiesDetailAsHtml(QList<AActivity *> liste, QPrinter *printer)
 {
     QString html = "";
     for(AActivity *a: liste) {

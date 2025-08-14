@@ -276,70 +276,70 @@ void PersonalWindow::editMinimumhours()
 
 void PersonalWindow::exportTimesDetailOnePdf()
 {
-    aktuellePerson->printZeiten(Export::getPrinterPDF(this, "Zeiten-"+aktuellePerson->getName(), QPageLayout::Orientation::Portrait));
+    aktuellePerson->exportTimesAsHtml(Export::getPrinterPDF(this, "Zeiten-"+aktuellePerson->getName(), QPageLayout::Orientation::Portrait));
 }
 void PersonalWindow::exportTimesDetailOnePrint()
 {
-    aktuellePerson->printZeiten(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
+    aktuellePerson->exportTimesAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 void PersonalWindow::exportTimesDetailMultiplePdf()
 {
-    manager->printZeitenEinzel(getSortierteListe(), filter,
+    manager->exportTimesSingleAsHtml(getSortierteListe(), filter,
                         Export::getPrinterPDF(this, "Zeiten", QPageLayout::Orientation::Portrait));
 }
 void PersonalWindow::exportTimesDetailMultiplePrint()
 {
-    manager->printZeitenEinzel(getSortierteListe(), filter,
+    manager->exportTimesSingleAsHtml(getSortierteListe(), filter,
                         Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 void PersonalWindow::exportTimesListPdf()
 {
-    manager->printZeitenListe(
+    manager->exportTimesListAsHtml(
                 getSortierteListe(), anzeige, filter,
                 Export::getPrinterPDF(this, "Einsatzzeiten", QPageLayout::Orientation::Landscape));
 }
 void PersonalWindow::exportTimesListPrint()
 {
-    manager->printZeitenListe(
+    manager->exportTimesListAsHtml(
                 getSortierteListe(), anzeige, filter,
                 Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape));
 }
 
 void PersonalWindow::exportMemberDetailOnePdf()
 {
-    aktuellePerson->printPersonaldaten(Export::getPrinterPDF(this, "Stammdaten-"+aktuellePerson->getName(), QPageLayout::Orientation::Portrait));
+    aktuellePerson->exportMemberdataAsHtml(Export::getPrinterPDF(this, "Stammdaten-"+aktuellePerson->getName(), QPageLayout::Orientation::Portrait));
 }
 void PersonalWindow::exportMemberDetailOnePrint()
 {
-    aktuellePerson->printPersonaldaten(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
+    aktuellePerson->exportMemberdataAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 void PersonalWindow::exportMemberDetailMultiplePdf()
 {
-    manager->printMitgliederEinzel(Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait),
+    manager->exportMembersSingleAsHtml(Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait),
                                    getSortierteListe(), filter);
 }
 void PersonalWindow::exportMemberDetailMultiplePrint()
 {
-    manager->printMitgliederEinzel(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait),
+    manager->exportMembersSingleAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait),
                                    getSortierteListe(), filter);
 }
 
 void PersonalWindow::exportMemberListPdf()
 {
-    manager->printMitgliederListe(Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Landscape),
+    manager->exportMembersListAsHtml(Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Landscape),
                                   getSortierteListe(), filter);
 }
 void PersonalWindow::exportMemberListPrint()
 {
-    manager->printMitgliederListe(Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape),
+    manager->exportMembersListAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape),
                                   getSortierteListe(), filter);
 }
 void PersonalWindow::exportMemberListCsv()
 {
-    manager->saveMitgliederListeAlsCSV(FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV),
+    manager->exportMembersListAsCsv(FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV),
                                        getSortierteListe());
 }
 

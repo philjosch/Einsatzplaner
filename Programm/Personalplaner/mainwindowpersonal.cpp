@@ -458,28 +458,28 @@ void MainWindowPersonal::editDues()
 
 void MainWindowPersonal::exportMemberDetailMultiplePdf()
 {
-    personal->printMitgliederEinzel(Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait),
+    personal->exportMembersSingleAsHtml(Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait),
                                     getSortierteListe(), filter);
 }
 void MainWindowPersonal::exportMemberDetailMultiplePrint()
 {
-    personal->printMitgliederEinzel(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait),
+    personal->exportMembersSingleAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait),
                                     getSortierteListe(), filter);
 }
 
 void MainWindowPersonal::exportMemberListPdf()
 {
-    personal->printMitgliederListe(Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Landscape),
+    personal->exportMembersListAsHtml(Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Landscape),
                                    getSortierteListe(), filter, anzeige);
 }
 void MainWindowPersonal::exportMemberListPrint()
 {
-    personal->printMitgliederListe(Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape),
+    personal->exportMembersListAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape),
                                    getSortierteListe(), filter, anzeige);
 }
 void MainWindowPersonal::exportMemberListCsv()
 {
-    personal->saveMitgliederListeAlsCSV(FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV),
+    personal->exportMembersListAsCsv(FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV),
                                         getSortierteListe(), anzeige);
 }
 

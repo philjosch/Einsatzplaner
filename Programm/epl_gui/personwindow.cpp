@@ -167,11 +167,11 @@ void PersonWindow::deleteTriggered()
 
 void PersonWindow::exportSinglePdf()
 {
-    person->printPersonaldaten(Export::getPrinterPDF(this, "Stammdaten-"+person->getName(), QPageLayout::Orientation::Portrait));
+    person->exportMemberdataAsHtml(Export::getPrinterPDF(this, "Stammdaten-"+person->getName(), QPageLayout::Orientation::Portrait));
 }
 void PersonWindow::exportSinglePrint()
 {
-    person->printPersonaldaten(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
+    person->exportMemberdataAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 

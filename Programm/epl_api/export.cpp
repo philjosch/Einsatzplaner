@@ -50,7 +50,7 @@ void Export::uploadToServer(QList<AActivity *> liste, Networking::Server server)
     p->setOutputFileName(localFile);
     preparePrinter(p, QPageLayout::Orientation::Landscape);
 
-    Manager::printListenansicht(liste, p);
+    Manager::exportActivitiesListAsHtml(liste, p);
 
     if (! Networking::ladeDateiHoch(server, &tempFile)) {
         throw NetworkingException();

@@ -801,7 +801,7 @@ bool Person::setNachname(const QString &value)
     return true;
 }
 
-QString Person::getZeitenFuerListeAlsHTML(QSet<Category> liste)
+QString Person::getZeitenFuerListeAlsHTML(QSet<Category> liste) const
 {
     QString zelle = "<td style='background-color: %1'>%2</td>";
     QString farbe = "";
@@ -834,7 +834,7 @@ QString Person::getZeitenFuerListeAlsHTML(QSet<Category> liste)
     return "<tr>" + html + "</tr>";
 }
 
-QString Person::getZeitenFuerEinzelAlsHTML()
+QString Person::getZeitenFuerEinzelAlsHTML() const
 {
     berechne();
     QString html = "<h2>"+vorname+" "+nachname+"</h2>";
@@ -897,7 +897,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
     return html;
 }
 
-bool Person::printZeiten(QPrinter *printer)
+bool Person::exportTimesAsHtml(QPrinter *printer) const
 {
     return Export::druckeHtml(getZeitenFuerEinzelAlsHTML() + Export::zeitStempel(false), printer);
 }
@@ -1221,7 +1221,7 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
     return h;
 }
 
-bool Person::printPersonaldaten(QPrinter *printer) const
+bool Person::exportMemberdataAsHtml(QPrinter *printer) const
 {
     return Export::druckeHtml(getPersonaldatenFuerEinzelAlsHTML() + Export::zeitStempel(), printer);
 }

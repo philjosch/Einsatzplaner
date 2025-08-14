@@ -256,7 +256,7 @@ bool ManagerPersonal::checkNummer(int neu) const
     return true;
 }
 
-bool ManagerPersonal::printZeitenEinzel(QList<Person *> liste, Status filter, QPrinter *printer) const
+bool ManagerPersonal::exportTimesSingleAsHtml(QList<Person *> liste, Status filter, QPrinter *printer) const
 {
     QString a = "";
     // Seite fuer jede Person einfuegen
@@ -290,7 +290,7 @@ bool ManagerPersonal::printZeitenEinzel(QList<Person *> liste, Status filter, QP
     return Export::druckeHtml(titelSeite+a, printer);
 }
 
-bool ManagerPersonal::printZeitenListe(QList<Person *> personen, QSet<Category> spalten, Status filter, QPrinter *printer)
+bool ManagerPersonal::exportTimesListAsHtml(QList<Person *> personen, QSet<Category> spalten, Status filter, QPrinter *printer)
 {
     QString a = "<h3>Einsatzzeiten: %1</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
@@ -333,7 +333,7 @@ bool ManagerPersonal::printZeitenListe(QList<Person *> personen, QSet<Category> 
     return Export::druckeHtml(a, printer);
 }
 
-bool ManagerPersonal::printMitgliederEinzel(QPrinter *printer, QList<Person *> liste, Status filter) const
+bool ManagerPersonal::exportMembersSingleAsHtml(QPrinter *printer, QList<Person *> liste, Status filter) const
 {
     QString a = "";
     // Seite fuer jede Person einfuegen
@@ -395,7 +395,7 @@ bool ManagerPersonal::printMitgliederEinzel(QPrinter *printer, QList<Person *> l
     return Export::druckeHtml(titelSeite+a, printer);
 }
 
-bool ManagerPersonal::printMitgliederListe(QPrinter *printer, QList<Person*> liste, Status filter, QSet<QString> attributesForExport)
+bool ManagerPersonal::exportMembersListAsHtml(QPrinter *printer, QList<Person*> liste, Status filter, QSet<QString> attributesForExport)
 {
     if (attributesForExport.isEmpty())
         attributesForExport = QSet<QString>(Person::ANZEIGE_PERSONALDATEN.begin(), Person::ANZEIGE_PERSONALDATEN.end());
@@ -412,7 +412,7 @@ bool ManagerPersonal::printMitgliederListe(QPrinter *printer, QList<Person*> lis
     return Export::druckeHtml(a, printer);
 }
 
-bool ManagerPersonal::saveMitgliederListeAlsCSV(QString pfad, QList<Person *> liste, QSet<QString> attributesForExport)
+bool ManagerPersonal::exportMembersListAsCsv(QString pfad, QList<Person *> liste, QSet<QString> attributesForExport)
 {
     QStringList orderedAttributes;
     if (attributesForExport.isEmpty()) {
@@ -461,7 +461,7 @@ bool ManagerPersonal::saveBeitraegeRegulaerAlsCSV(QString pfad) const
             personenFiltered.append(pers);
     }
     QSet<QString> data = {"Name", "Nummer", "IBAN", "Bank", "Kontoinhaber", "Beitragsart", "Beitrag"};
-    return saveMitgliederListeAlsCSV(pfad, personenFiltered, data);
+    return exportMembersListAsCsv(pfad, personenFiltered, data);
 }
 
 bool ManagerPersonal::saveBeitraegeNachzahlungAlsCSV(QString pfad) const
@@ -472,5 +472,5 @@ bool ManagerPersonal::saveBeitraegeNachzahlungAlsCSV(QString pfad) const
             personenFiltered.append(pers);
     }
     QSet<QString> data = {"Name", "Nummer", "IBAN", "Bank", "Kontoinhaber", "Beitragsart", "Beitrag (Nachzahlung)"};
-    return saveMitgliederListeAlsCSV(pfad, personenFiltered, data);
+    return exportMembersListAsCsv(pfad, personenFiltered, data);
 }

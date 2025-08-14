@@ -118,11 +118,11 @@ void ExportDialog::showPrintPreview()
     if (ui->buttonGroupExportArt->checkedId() == 0) {
         Export::preparePrinter(printer, QPageLayout::Orientation::Landscape);
         prev = new QPrintPreviewDialog(printer, parentWidget());
-        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->printListenansicht(liste, print); } );
+        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->exportActivitiesListAsHtml(liste, print); } );
     } else {
         Export::preparePrinter(printer, QPageLayout::Orientation::Portrait);
         prev = new QPrintPreviewDialog(printer, parentWidget());
-        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->printEinzelansichten(liste, print); } );
+        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->exportActivitiesDetailAsHtml(liste, print); } );
     }
     prev->exec(); // == QDialog::Accepted)
 }
@@ -223,10 +223,10 @@ void ExportDialog::exportPDF()
     QPrinter *printer;
     if (ui->buttonGroupExportArt->checkedId() == 0) {
         printer = Export::getPrinterPDF(parentWidget(), QDate::currentDate().toString(tr("'Listenansicht'-yyyy-MM-dd")), QPageLayout::Orientation::Landscape);
-        manager->printListenansicht(liste, printer);
+        manager->exportActivitiesListAsHtml(liste, printer);
     } else {
         printer = Export::getPrinterPDF(parentWidget(), QDate::currentDate().toString(tr("'Einzelansicht'-yyyy-MM-dd")), QPageLayout::Orientation::Portrait);
-        manager->printEinzelansichten(liste, printer);
+        manager->exportActivitiesDetailAsHtml(liste, printer);
     }
 }
 
@@ -237,9 +237,9 @@ void ExportDialog::exportPrint()
     QPrinter *printer;
     if (ui->buttonGroupExportArt->checkedId() == 0) {
         printer = Export::getPrinterPaper(parentWidget(), QPageLayout::Orientation::Landscape);
-        manager->printListenansicht(liste, printer);
+        manager->exportActivitiesListAsHtml(liste, printer);
     } else {
         printer = Export::getPrinterPaper(parentWidget(), QPageLayout::Orientation::Portrait);
-        manager->printEinzelansichten(liste, printer);
+        manager->exportActivitiesDetailAsHtml(liste, printer);
     }
 }

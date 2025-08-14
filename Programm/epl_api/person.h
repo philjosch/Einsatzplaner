@@ -66,14 +66,14 @@ public:
     const QList<Einsatz *> getActivities() const;
 
 
-    QString getZeitenFuerListeAlsHTML(QSet<Category> liste);
-    QString getZeitenFuerEinzelAlsHTML();
-    bool printZeiten(QPrinter *printer);
+    QString getZeitenFuerListeAlsHTML(QSet<Category> liste) const;
+    QString getZeitenFuerEinzelAlsHTML() const;
+    bool exportTimesAsHtml(QPrinter *printer) const;
 
     QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige = QSet<QString>()) const;
     QString getPersonaldatenFuerListeAlsCSV(QStringList attributesForExport = QStringList()) const;
     QString getPersonaldatenFuerEinzelAlsHTML() const;
-    bool printPersonaldaten(QPrinter *printer) const;
+    bool exportMemberdataAsHtml(QPrinter *printer) const;
 
     int getAdditional(Category cat) const;
     void setAdditional(Category cat, int value);

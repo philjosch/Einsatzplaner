@@ -43,12 +43,12 @@ public:
     int getNextNummer() const;
     bool checkNummer(int neu) const;
 
-    bool printZeitenEinzel(QList<Person*> liste, Status filter, QPrinter *printer) const;
-    static bool printZeitenListe(QList<Person *> personen, QSet<Category> spalten, Status filter, QPrinter *printer);
+    bool exportTimesSingleAsHtml(QList<Person*> liste, Status filter, QPrinter *printer) const;
+    static bool exportTimesListAsHtml(QList<Person *> personen, QSet<Category> spalten, Status filter, QPrinter *printer);
 
-    bool printMitgliederEinzel(QPrinter *printer, QList<Person*> liste, Status filter) const;
-    static bool printMitgliederListe(QPrinter *printer, QList<Person *> liste, Status filter, QSet<QString> attributesForExport = QSet<QString>());
-    static bool saveMitgliederListeAlsCSV(QString pfad, QList<Person *> liste, QSet<QString> attributesForExport = QSet<QString>());
+    bool exportMembersSingleAsHtml(QPrinter *printer, QList<Person*> liste, Status filter) const;
+    static bool exportMembersListAsHtml(QPrinter *printer, QList<Person *> liste, Status filter, QSet<QString> attributesForExport = QSet<QString>());
+    static bool exportMembersListAsCsv(QString pfad, QList<Person *> liste, QSet<QString> attributesForExport = QSet<QString>());
 
     void extracted(QList<Person *> &personenFiltered) const;
     bool saveBeitraegeRegulaerAlsCSV(QString pfad) const;

@@ -695,7 +695,7 @@ QString AActivity::getHtmlForTableView() const
     return html;
 }
 
-bool AActivity::print(QPrinter *printer)
+bool AActivity::exportAsHtml(QPrinter *printer)
 {
     return Export::druckeHtml(getHtmlForSingleView() + Export::zeitStempel(false), printer);
 }
