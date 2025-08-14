@@ -918,7 +918,7 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     }
     if (anzeige.contains("Status")) {
         zelleNutzen = true;
-        if (zelle != "") zelle += "<br/>";
+        if (zelle != "") zelle += " ";
         if (isAusgetreten())
             zelle += "Ehemals: ";
         zelle += (aktiv ? "Aktiv":"Passiv");

@@ -329,7 +329,7 @@ void PersonalWindow::exportMemberDetailMultiplePrint()
 
 void PersonalWindow::exportMemberListPdf()
 {
-    manager->printMitgliederListe(Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Portrait),
+    manager->printMitgliederListe(Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Landscape),
                                   getSortierteListe(), filter);
 }
 void PersonalWindow::exportMemberListPrint()
