@@ -23,7 +23,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>@SHORT_VERSION@</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Ein Programm, für den Arbeitskreis OstertalBahn e.V. (AkO) | Created by Qt/QMake</string>
+	<string>Ein Programm für den Arbeitskreis Ostertalbahn (AkO) e.V. | Created with Qt/QMake</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
