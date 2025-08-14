@@ -16,6 +16,9 @@
   <property name="windowTitle">
    <string>Einsatzzeiten</string>
   </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>true</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_16">
     <property name="leftMargin">

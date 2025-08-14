@@ -70,8 +70,8 @@ public:
     QString getZeitenFuerEinzelAlsHTML() const;
     bool exportTimesAsHtml(QPrinter *printer) const;
 
-    QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige = QSet<QString>()) const;
-    QString getPersonaldatenFuerListeAlsCSV(QStringList attributesForExport = QStringList()) const;
+    QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const;
+    QString getPersonaldatenFuerListeAlsCSV(QStringList attributesForExport) const;
     QString getPersonaldatenFuerEinzelAlsHTML() const;
     bool exportMemberdataAsHtml(QPrinter *printer) const;
 
