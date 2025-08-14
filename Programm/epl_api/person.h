@@ -36,10 +36,13 @@ public:
     Person(QString name, ManagerPersonal *man);
     Person(QJsonObject o, ManagerPersonal *man);
 
+    static bool lessByNumber(const Person * const &lhs, const Person * const &rhs);
+    static bool lessByName(const Person * const &lhs, const Person * const &rhs);
+    friend bool operator<(const Person &lhs, const Person &rhs) {return lessByName(&lhs, &rhs);};
+
     static const QString FARBE_FEHLENDE_STUNDEN;
     static const QString FARBE_GENUG_STUNDEN;
     static const QString FARBE_STANDARD;
-    static const QString KOPF_TABELLE_LISTE_CSV;
     static QString getKopfTabelleListeHtml(QSet<QString> data);
     static const QString FUSS_TABELLE_LISTE_HTML;
     static const QStringList ANZEIGE_PERSONALDATEN;
@@ -63,14 +66,14 @@ public:
     const QList<Einsatz *> getActivities() const;
 
 
-    QString getZeitenFuerListeAlsHTML(QSet<Category> liste);
-    QString getZeitenFuerEinzelAlsHTML();
-    bool printZeiten(QPrinter *printer);
+    QString getZeitenFuerListeAlsHTML(QSet<Category> liste) const;
+    QString getZeitenFuerEinzelAlsHTML() const;
+    bool exportTimesAsHtml(QPrinter *printer) const;
 
-    QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige = QSet<QString>()) const;
-    QString getPersonaldatenFuerListeAlsCSV() const;
+    QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const;
+    QString getPersonaldatenFuerListeAlsCSV(QStringList attributesForExport) const;
     QString getPersonaldatenFuerEinzelAlsHTML() const;
-    bool printPersonaldaten(QPrinter *printer) const;
+    bool exportMemberdataAsHtml(QPrinter *printer) const;
 
     int getAdditional(Category cat) const;
     void setAdditional(Category cat, int value);
@@ -85,6 +88,7 @@ public:
     bool setNachname(const QString &value);
 
     QString getName() const;
+    QString getFullCanonicalName() const;
     QString getNameSortierung() const;
 
     QDate getGeburtstag() const;
@@ -119,9 +123,11 @@ public:
     void setBeitragsart(const Beitragsart &value);
     int getBeitrag() const;
 
+    QString getIbanFinal() const;
     QString getIban() const;
     void setIban(const QString &value);
 
+    QString getBankFinal() const;
     QString getBank() const;
     void setBank(const QString &value);
 

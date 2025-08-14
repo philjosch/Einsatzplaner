@@ -1,5 +1,31 @@
 # EPL - Veränderungshistorie
-Stand: 30. Dezember 2022
+Stand: 14. August 2025
+
+## Version 1.8.6 - 2025-08-14
+### Neu
+- Export Personaldaten als CSV verbessert
+- Darstellung Reservierungen bei Export verbessert
+### Verbessert
+- Export Personaldaten verbessert
+- Personalfenster verbessert
+- Darstellung Kalender verbessert
+- Fenster Einsatzzeiten verbessert
+- Person-Fenster verbessert
+- Erstellung neuer Mitglieder verbessert
+- Datumsanzeige konsistenter gestaltet
+- Fenster für Einsatzzeiten verbessert
+- Ansicht Reservierungen im Export verbessert
+- Darstellung der Aktivitäten im Kalender verbessert
+- Export Dialog vereinfacht
+- Benutzeroberflächen verbessert
+### Fehlerbehebungen
+- Fenster teilweise zu klein geöffnet
+- Mindeststunden bei Fördermitgliedern abgeschafft
+- Falsche Berechnungen bei Eintritt im 2. Halbjahr
+- Konsistente Datumsanzeige hergestellt
+- Mindeststunden für Tf wurden nicht gespeichert
+- Fehlende Beiträge in Personalliste behoben
+
 
 ## Version 1.8.5 – 2022-12-30
 ### Fehlerbehebungen

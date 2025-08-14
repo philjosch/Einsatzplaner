@@ -14,9 +14,31 @@
 PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMainWindow(parent), ui(new Ui::PersonalWindow)
 {
     ui->setupUi(this);
+    comboAnzeige = new QComboBox();
+    comboAnzeige->addItem(toString(Status::AlleMitglieder), QVariant(Status::AlleMitglieder));
+    comboAnzeige->addItem(toString(Status::Aktiv), QVariant(Status::Aktiv));
+    comboAnzeige->addItem(toString(Status::AktivMit), QVariant(Status::AktivMit));
+    comboAnzeige->addItem(toString(Status::AktivOhne), QVariant(Status::AktivOhne));
+    comboAnzeige->addItem(toString(Status::Passiv), QVariant(Status::Passiv));
+    comboAnzeige->addItem(toString(Status::PassivMit), QVariant(Status::PassivMit));
+    comboAnzeige->addItem(toString(Status::Ausgetreten), QVariant(Status::Ausgetreten));
+    comboAnzeige->addItem(toString(Status::Registriert), QVariant(Status::Registriert));
+    comboAnzeige->setMinimumSize(QSize(200, 0));
+    ui->toolBar->addWidget(comboAnzeige);
+    QWidget *strechWidget1 = new QWidget();
+    strechWidget1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    ui->toolBar->addWidget(strechWidget1);
+    ui->toolBar->addAction(ui->actionAktualisieren);
+    // QWidget *strechWidget2 = new QWidget();
+    // strechWidget2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    // ui->toolBar->addWidget(strechWidget2);
+    ui->toolBar->addAction(ui->actionMail);
+
     parentWindow = parent;
-    connect(ui->comboAnzeige, SIGNAL(currentIndexChanged(int)), this, SLOT(refresh()));
-    connect(ui->actionAktualisieren, SIGNAL(triggered()), this, SLOT(refresh()));
+
+
+    connect(comboAnzeige, &QComboBox::currentIndexChanged, this, &PersonalWindow::refresh);
+    connect(ui->actionAktualisieren, &QAction::triggered, this, &PersonalWindow::refresh);
 
     connect(ui->actionPersonAdd, &QAction::triggered, this, &PersonalWindow::addPerson);
     connect(ui->actionMindeststunden, &QAction::triggered, this, &PersonalWindow::editMinimumhours);
@@ -44,32 +66,17 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
     connect(ui->actionBeitraegeRegulaerCSV, &QAction::triggered, this, &PersonalWindow::exportDuesRegularCsv);
     connect(ui->actionBeitraegeNachzahlungCSV, &QAction::triggered, this, &PersonalWindow::exportDuesAdditionalCsv);
 
+    connect(ui->actionMail, &QAction::triggered, this, &PersonalWindow::sendMailList);
 
-    connect(ui->pushEmail, &QPushButton::clicked, this, &PersonalWindow::sendMailList);
 
+    connect(ui->treeCategorySelection,  &QTreeWidget::itemChanged, this, &PersonalWindow::updateTableBasedOnCategorySelection);
+    ui->treeCategorySelection->invisibleRootItem()->child(0)->setExpanded(true);
+    ui->treeCategorySelection->invisibleRootItem()->child(1)->setExpanded(true);
+    ui->treeCategorySelection->invisibleRootItem()->child(2)->setExpanded(true);
     connect(ui->tabelleGesamt, &QTableWidget::cellDoubleClicked, this, &PersonalWindow::persShowFromTable);
 
-    connect(ui->checkShowGesamt,        &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Gesamt,         b); });
-    connect(ui->checkShowAnzahl,        &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Anzahl,         b); });
-    connect(ui->checkShowTf,            &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Tf,             b); });
-    connect(ui->checkShowTb,            &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Tb,             b); });
-    connect(ui->checkShowZf,            &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Zf,             b); });
-    connect(ui->checkShowZub,           &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Zub,            b); });
-    connect(ui->checkShowService,       &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Service,        b); });
-    connect(ui->checkShowVorbereiten,   &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(ZugVorbereiten, b); });
-    connect(ui->checkShowWerkstatt,     &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Werkstatt,      b); });
-    connect(ui->checkShowBuero,         &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Buero,          b); });
-    connect(ui->checkShowAusbildung,    &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Ausbildung,     b); });
-    connect(ui->checkShowInfrastruktur, &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Infrastruktur,  b); });
-    connect(ui->checkShowSonstiges,     &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Sonstiges,      b); });
-    connect(ui->checkShowKilometer,     &QCheckBox::clicked, this, [=] (bool b) { toggleShowCategory(Kilometer,      b); });
 
     connect(ui->listWidget, &QListWidget::itemClicked, this, &PersonalWindow::persShowFromList);
-
-    connect(ui->lineVorname, &QLineEdit::textChanged, this, &PersonalWindow::persSetVorname);
-    connect(ui->lineNachname, &QLineEdit::textChanged, this, &PersonalWindow::persSetNachname);
-
-    connect(ui->checkAktiv, &QCheckBox::clicked, this, &PersonalWindow::persSetAktiv);
 
     connect(ui->checkTf, &QCheckBox::clicked, this, &PersonalWindow::persSetTf);
     connect(ui->checkZf, &QCheckBox::clicked, this, &PersonalWindow::persSetZf);
@@ -81,8 +88,6 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
     connect(ui->plainBemerkung, &QPlainTextEdit::textChanged, this, &PersonalWindow::persSetBemerkung);
     connect(ui->plainAusbildung, &QPlainTextEdit::textChanged, this, &PersonalWindow::persSetAusbildung);
     connect(ui->plainBetrieb, &QPlainTextEdit::textChanged, this, &PersonalWindow::persSetBetrieb);
-
-    connect(ui->pushDelete, &QPushButton::clicked, this, &PersonalWindow::persDelete);
 
     connect(ui->pushPersonKomplett, &QPushButton::clicked, this, &PersonalWindow::persShowDetails);
 
@@ -109,19 +114,16 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
     personToItem = QHash<Person*, QListWidgetItem*>();
     enabled = false;
 
+    aktuellePerson = nullptr;
+
     current = QList<Person*>();
     filter = Status::Aktiv;
-
     anzeige = QSet<Category>();
-    ui->checkShowGesamt->setChecked(true);
-    ui->checkShowAnzahl->setChecked(true);
-    ui->checkShowKilometer->setChecked(true);
-    toggleShowCategory(Gesamt, true);
-    toggleShowCategory(Anzahl, true);
-    toggleShowCategory(Kilometer, true);
-    ui->comboAnzeige->setCurrentIndex(1);
     ui->tabelleGesamt->sortItems(1);
-    aktuellePerson = nullptr;
+
+    comboAnzeige->setCurrentIndex(1);
+    ui->treeCategorySelection->invisibleRootItem()->child(0)->setCheckState(0, Qt::Checked);
+
     refresh();
 }
 
@@ -132,16 +134,7 @@ PersonalWindow::~PersonalWindow()
 
 void PersonalWindow::refresh()
 {
-    switch (ui->comboAnzeige->currentIndex()) {
-    case 0: filter = AlleMitglieder; break;
-    case 1: filter = Aktiv; break;
-    case 2: filter = Passiv; break;
-    case 3: filter = AktivMit; break;
-    case 4: filter = AktivOhne; break;
-    case 5: filter = PassivMit; break;
-    case 6: filter = Ausgetreten; break;
-    default: filter = Registriert; break;
-    }
+    filter = Status(comboAnzeige->currentData().toInt());
     current = manager->getPersonen(filter);
     // Aktualisiere die Ansichten
     refreshTabelle();
@@ -177,7 +170,7 @@ void PersonalWindow::refreshTabelle()
     // Einzelne Personen einfuegen und Summe berechnen
     int pos;
     QMap<Category, int> sum;
-    for (Person *p: qAsConst(current)) {
+    for (Person *p: std::as_const(current)) {
         p->berechne();
         QString farbe = Person::FARBE_STANDARD;
         switch (p->pruefeStunden()) {
@@ -253,7 +246,7 @@ void PersonalWindow::refreshEinzel()
 {
     ui->listWidget->clear();
     personToItem.clear();
-    for (Person *p: qAsConst(current)) {
+    for (Person *p: std::as_const(current)) {
         QListWidgetItem *item = new PersonListWidgetItem(p, p->getNameSortierung());
         switch (p->pruefeStunden()) {
         case AktivOhne:
@@ -271,6 +264,7 @@ void PersonalWindow::refreshEinzel()
         personToItem.insert(p, item);
     }
     ui->listWidget->sortItems();
+    showPerson(aktuellePerson);
 }
 
 void PersonalWindow::editMinimumhours()
@@ -282,71 +276,71 @@ void PersonalWindow::editMinimumhours()
 
 void PersonalWindow::exportTimesDetailOnePdf()
 {
-    aktuellePerson->printZeiten(Export::getPrinterPDF(this, "Zeiten-"+aktuellePerson->getName(), QPageLayout::Orientation::Portrait));
+    aktuellePerson->exportTimesAsHtml(Export::getPrinterPDF(this, "Zeiten-"+aktuellePerson->getName(), QPageLayout::Orientation::Portrait));
 }
 void PersonalWindow::exportTimesDetailOnePrint()
 {
-    aktuellePerson->printZeiten(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
+    aktuellePerson->exportTimesAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 void PersonalWindow::exportTimesDetailMultiplePdf()
 {
-    manager->printZeitenEinzel(getSortierteListe(), filter,
+    manager->exportTimesSingleAsHtml(getSortierteListe(), filter,
                         Export::getPrinterPDF(this, "Zeiten", QPageLayout::Orientation::Portrait));
 }
 void PersonalWindow::exportTimesDetailMultiplePrint()
 {
-    manager->printZeitenEinzel(getSortierteListe(), filter,
+    manager->exportTimesSingleAsHtml(getSortierteListe(), filter,
                         Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 void PersonalWindow::exportTimesListPdf()
 {
-    manager->printZeitenListe(
+    manager->exportTimesListAsHtml(
                 getSortierteListe(), anzeige, filter,
                 Export::getPrinterPDF(this, "Einsatzzeiten", QPageLayout::Orientation::Landscape));
 }
 void PersonalWindow::exportTimesListPrint()
 {
-    manager->printZeitenListe(
+    manager->exportTimesListAsHtml(
                 getSortierteListe(), anzeige, filter,
                 Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape));
 }
 
 void PersonalWindow::exportMemberDetailOnePdf()
 {
-    aktuellePerson->printPersonaldaten(Export::getPrinterPDF(this, "Stammdaten-"+aktuellePerson->getName(), QPageLayout::Orientation::Portrait));
+    aktuellePerson->exportMemberdataAsHtml(Export::getPrinterPDF(this, "Stammdaten-"+aktuellePerson->getName(), QPageLayout::Orientation::Portrait));
 }
 void PersonalWindow::exportMemberDetailOnePrint()
 {
-    aktuellePerson->printPersonaldaten(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
+    aktuellePerson->exportMemberdataAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 
 void PersonalWindow::exportMemberDetailMultiplePdf()
 {
-    manager->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait));
+    manager->exportMembersSingleAsHtml(Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait),
+                                   getSortierteListe(), filter);
 }
 void PersonalWindow::exportMemberDetailMultiplePrint()
 {
-    manager->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
+    manager->exportMembersSingleAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait),
+                                   getSortierteListe(), filter);
 }
 
 void PersonalWindow::exportMemberListPdf()
 {
-    manager->printMitgliederListe(getSortierteListe(), filter, QSet<QString>(),
-                            Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Portrait));
+    manager->exportMembersListAsHtml(Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Landscape),
+                                  getSortierteListe(), filter);
 }
 void PersonalWindow::exportMemberListPrint()
 {
-    manager->printMitgliederListe(getSortierteListe(), filter, QSet<QString>(),
-                            Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape));
+    manager->exportMembersListAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape),
+                                  getSortierteListe(), filter);
 }
 void PersonalWindow::exportMemberListCsv()
 {
-    manager->saveMitgliederListeAlsCSV(current,
-                                  FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV));
+    manager->exportMembersListAsCsv(FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV),
+                                       getSortierteListe());
 }
 
 void PersonalWindow::exportDuesRegularCsv()
@@ -363,7 +357,7 @@ void PersonalWindow::sendMailList()
     if (current.isEmpty()) return;
     QSet<QString> mails;
     QList<Person*> keineMail;
-    for (Person *p: qAsConst(current)) {
+    for (Person *p: std::as_const(current)) {
         if (p->getMail() != "") {
             mails.insert(p->getMail());
         } else {
@@ -409,6 +403,23 @@ void PersonalWindow::persShowFromTable(int row, int column)
 
     showPerson(ptwi->getPerson());
     ui->tabWidgetMain->setCurrentIndex(1);
+}
+
+void PersonalWindow::updateTableBasedOnCategorySelection(QTreeWidgetItem *item, int column)
+{
+    if (item->childCount() > 0) return;
+    if (item->checkState(column) == Qt::CheckState::PartiallyChecked) return;
+    if (item->childCount() > 0) {
+        for (int childCounter = 0 ; childCounter < item->childCount(); ++childCounter) {
+            item->child(childCounter)->setCheckState(column, item->checkState(column));
+        }
+        return;
+    } else {
+        if (item->parent() != ui->treeCategorySelection->invisibleRootItem()) {
+            item->parent()->setCheckState(column, Qt::CheckState::PartiallyChecked);
+        }
+    }
+    toggleShowCategory(getCategoryFromLocalizedString(item->text(column)), item->checkState(column) == Qt::CheckState::Checked);
 }
 
 void PersonalWindow::addPerson()
@@ -562,6 +573,7 @@ void PersonalWindow::persSetAdditionalKilometer(double arg1)
 
 void PersonalWindow::showPerson(Person *p)
 {
+    if (p == nullptr) return;
     aktuellePerson = p;
 
     p->berechne();
@@ -570,13 +582,9 @@ void PersonalWindow::showPerson(Person *p)
     toggleFields(true);
 
     // ** Kopfzeile
-    ui->lineVorname->setText(p->getVorname());
-    ui->lineNachname->setText(p->getNachname());
+    ui->labelName->setText(p->getName());
 
     // ** Stammdaten
-    // Allgemein
-    ui->checkAktiv->setChecked(p->getAktiv());
-
     // Betriebsdienst
     ui->checkTf->setChecked(p->getAusbildungTf());
     ui->checkZf->setChecked(p->getAusbildungZf());
@@ -658,15 +666,10 @@ QList<Person*> PersonalWindow::getSortierteListe()
 
 void PersonalWindow::toggleFields(bool state)
 {
-    ui->lineVorname->setEnabled(state);
-    ui->lineNachname->setEnabled(state);
-    ui->checkAktiv->setEnabled(state);
     ui->pushMailEinzel->setEnabled(state);
 
     ui->tabWidgetEinzel->setEnabled(state);
-    ui->dateDienst->setEnabled(false);
 
-    ui->pushEinzelDrucken->setEnabled(state);
     ui->pushPersonKomplett->setEnabled(state);
 }
 

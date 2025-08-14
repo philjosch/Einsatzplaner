@@ -21,7 +21,7 @@ public:
     QString getHtmlForSingleView() const;
     QString getHtmlForTableView() const;
 
-    bool printReservierungsuebersicht(QPrinter *printer) const;
+    bool exportReservationsAsHtml(QPrinter *printer) const;
 
     void setArt(const Art &value);
 
@@ -33,7 +33,7 @@ public:
 
     int getAnzahlReservierungen() const;
 
-    QSet<Reservierung *> getReservierungen() const;
+    const QSet<Reservierung *> getReservierungen() const;
 
     bool getCheckAll() const;
     void setCheckAll(bool value);

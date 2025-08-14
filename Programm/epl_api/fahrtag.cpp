@@ -63,10 +63,10 @@ Fahrtag::Fahrtag(QJsonObject o, ManagerPersonal *p) : AActivity(o, p)
 
 Fahrtag::~Fahrtag()
 {
-    for(Reservierung *r: qAsConst(reservierungen)) {
+    for(Reservierung *r : std::as_const(reservierungen)) {
         delete r;
     }
-    for(Wagen *w: qAsConst(wagen)) {
+    for(Wagen *w : std::as_const(wagen)) {
         delete w;
     }
 }
@@ -189,26 +189,38 @@ QString Fahrtag::getHtmlForSingleView() const
     // Reservierungen
     if (getAnzahlReservierungen() > 0) {
         html += "<p><b>Reservierungen:</b>";
-        QString helperRes = "<br/>Zug %1: %2 Plätze in 1.Klasse, %3 Plätze in 2./3.Klasse";
-        if (getBelegung(-1, 2201) > 0)
-            html += helperRes.arg(2201).arg(getBelegung(1, 2201)).arg(getBelegung(0, 2201));
-        if (getBelegung(-1, 2202) > 0)
-            html += helperRes.arg(2202).arg(getBelegung(1, 2202)).arg(getBelegung(0, 2202));
-        if (getBelegung(-1, 2203) > 0)
-            html += helperRes.arg(2203).arg(getBelegung(1, 2203)).arg(getBelegung(0, 2203));
-        if (getBelegung(-1, 2204) > 0)
-            html += helperRes.arg(2204).arg(getBelegung(1, 2204)).arg(getBelegung(0, 2204));
-        if (getBelegung(-1, 2205) > 0)
-            html += helperRes.arg(2205).arg(getBelegung(1, 2205)).arg(getBelegung(0, 2205));
-        if (getBelegung(-1, 2206) > 0)
-            html += helperRes.arg(2206).arg(getBelegung(1, 2206)).arg(getBelegung(0, 2206));
-        if (getBelegung(-1, 0) > 0)
-            html += QString("<br/>Gesamt: %1 Plätze 1.Klasse, %2 Plätze 2./3.Klasse <br/>").arg(getBelegung(1)).arg(getBelegung(0));
-        html += "</p>";
+        QString cellTemplateHeader = "<th align='right'>%1</th>";
+        QString rowHeader = cellTemplateHeader.arg("Zug");
+        QString rowFirstClass = cellTemplateHeader.arg("1.Klasse");
+        QString rowDefaultClass = cellTemplateHeader.arg("2./3.Klasse");
+        QString rowSum = cellTemplateHeader.arg("Summe");
+        QString cellTemplate = "<td align='right'>%1</td>";
+        for (int trainNumber=2201; trainNumber <= 2206; ++trainNumber) {
+            if (getBelegung(-1, trainNumber) > 0) {
+                rowHeader += cellTemplateHeader.arg(QString::number(trainNumber));
+                rowFirstClass += cellTemplate.arg(QString::number(getBelegung(1, trainNumber)));
+                rowDefaultClass += cellTemplate.arg(QString::number(getBelegung(0, trainNumber)));
+                rowSum += cellTemplate.arg(QString::number(getBelegung(-1, trainNumber)));
+            }
+        }
+        rowHeader += cellTemplateHeader.arg("Gesamt");
+        rowFirstClass += cellTemplate.arg(QString::number(getBelegung(1, 0)));
+        rowDefaultClass += cellTemplate.arg(QString::number(getBelegung(0, 0)));
+        rowSum += cellTemplate.arg(QString::number(getBelegung(-1, 0)));
+
+        html += "<table cellspacing='0'><thead>"
+                "<tr>" + rowHeader       + "</tr></thead><tbody>"
+                "<tr>" + rowFirstClass   + "</tr>"
+                "<tr>" + rowDefaultClass + "</tr>"
+                "<tr>" + rowSum          + "</tr>"
+                "</tbody><table></p>";
 
         if (art != Nikolauszug) {
-            html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Ein- und Ausstieg</th><th>Sonstiges</th></tr></thead><tbody>";
-            for(Reservierung *r: reservierungen) {
+            html += "<table cellspacing='0' width='100%'><thead><tr><th>Kontakt</th><th>Sitzplätze</th><th>Strecke</th><th>Sonstiges</th></tr></thead><tbody>";
+            QList<Reservierung*> list= QList(reservierungen.cbegin(),reservierungen.cend());
+            std::sort(list.begin(), list.end(), [](Reservierung* first, Reservierung* second) { return first->getName() < second->getName();});
+
+            for(Reservierung *r: list) {
                 html += r->getHtmlForTable();
             }
             html += "</tbody></table>";
@@ -228,7 +240,7 @@ QString Fahrtag::getHtmlForTableView() const
     } else {
         html += "<td>";
     }
-    html += "<b>"+QLocale().toString(datum, "dddd d.M.yyyy")+"</b><br/>";
+    html += "<b>"+QLocale().toString(datum, "ddd, dd.MM.yyyy")+"</b><br/>";
     html += toString(art);
     if (anlass != "") {
         html += ": <i>"+QString(anlass).replace("\n", "<br/>")+"</i>";
@@ -368,16 +380,16 @@ QString Fahrtag::getHtmlForTableView() const
     return html;
 }
 
-bool Fahrtag::printReservierungsuebersicht(QPrinter *printer) const
+bool Fahrtag::exportReservationsAsHtml(QPrinter *printer) const
 {
     QString a = "<h3>";
-    a += toString(art)+" am "+QLocale().toString(datum, "dddd dd. MM. yyyy");
+    a += toString(art)+" am "+QLocale().toString(datum, "dddd, dd.MM.yyyy");
     a += " - Die Reservierungen</h3>";
     a += "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th> <th>Anzahl</th> <th>Sitzplätze</th> <th>Sonstiges</th></tr></thead><tbody>";
     // Sortieren der Daten nach Wagenreihung
     QStringList wagen = wagenreihung.split(QRegularExpression("\\s*,\\s*"));
     QList<int> wagenNummern;
-    for(const QString &s: qAsConst(wagen))
+    for(const QString &s: std::as_const(wagen))
         wagenNummern.append(s.toInt());
 
     // Sortieren der Reservierungen
@@ -479,7 +491,7 @@ int Fahrtag::getAnzahlReservierungen() const
     return reservierungen.size();
 }
 
-QSet<Reservierung *> Fahrtag::getReservierungen() const
+const QSet<Reservierung *> Fahrtag::getReservierungen() const
 {
     return reservierungen;
 }
@@ -490,7 +502,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     QList<Wagen*> ersteKlasse = QList<Wagen*>();
     QList<Wagen*> andereKlasse = QList<Wagen*>();
     QStringList wagenR = wagenreihung.split(QRegularExpression("\\s*,\\s*"));
-    for(const QString &s: qAsConst(wagenR)) {
+    for(const QString &s: std::as_const(wagenR)) {
         int nummer = s.toInt();
         switch (Wagen::klasse(nummer)) {
         case 1: ersteKlasse.append(new Wagen(nummer)); break;
@@ -502,7 +514,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     // Aufteilen der Resevierungen auf die beiden gruppen
     QSet<Reservierung*> resErste = QSet<Reservierung*>();
     QSet<Reservierung*> resAndere = QSet<Reservierung*>();
-    for(Reservierung *r: qAsConst(reservierungen)) {
+    for(Reservierung *r: std::as_const(reservierungen)) {
         if (r->getKlasse() == 1)
             resErste.insert(r);
         else
@@ -530,7 +542,7 @@ QList<Mistake> Fahrtag::verteileSitzplaetze()
     }
 
     // Die Sitzplätze zuweisen, sodass sie in den Wagen erscheinen.
-    for(Reservierung *r: qAsConst(reservierungen)) {
+    for(Reservierung *r: std::as_const(reservierungen)) {
         r->setSitzplatz(r->getSitzplatz());
     }
 
@@ -579,13 +591,13 @@ bool Fahrtag::removeReservierung(Reservierung *res)
 bool Fahrtag::createWagen()
 {
     QHash<int,Wagen*> wagenNummer;
-    for(Wagen *w: qAsConst(wagen)) {
+    for(Wagen *w: std::as_const(wagen)) {
         wagenNummer.insert(w->getNummer(), w);
     }
 
     QList<Wagen*> wagenNeu = QList<Wagen*>();
     QStringList wagenSplit = wagenreihung.split(QRegularExpression("\\s*,\\s*"));
-    for(const QString &s: qAsConst(wagenSplit)) {
+    for(const QString &s: std::as_const(wagenSplit)) {
         int nummer = s.toInt();
         Wagen *w;
         if (wagenNummer.contains(nummer)) {
@@ -607,7 +619,7 @@ bool Fahrtag::createWagen()
     }
     wagen = wagenNeu;
     nummerToWagen.clear();
-    for(Wagen *w: qAsConst(wagen)) {
+    for(Wagen *w: std::as_const(wagen)) {
         nummerToWagen.insert(w->getNummer(), w);
     }
     return true;

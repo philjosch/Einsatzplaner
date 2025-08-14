@@ -228,11 +228,11 @@ void ActivityWindow::changedTableEntry(int row, [[maybe_unused]] int column)
 
 void ActivityWindow::exportPrint()
 {
-    activity->print(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
+    activity->exportAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
 }
 void ActivityWindow::exportPdf()
 {
-    activity->print(Export::getPrinterPDF(this, windowTitle(), QPageLayout::Orientation::Portrait));
+    activity->exportAsHtml(Export::getPrinterPDF(this, windowTitle(), QPageLayout::Orientation::Portrait));
 }
 
 void ActivityWindow::deleteTriggered()
@@ -265,5 +265,5 @@ void ActivityWindow::setPredefinedValue(QString anlass)
 
 void ActivityWindow::updateWindowTitle()
 {
-    setWindowTitle(tr("%1 am %2").arg(activity->getStringShort(), QLocale().toString(activity->getDatum(), "dddd dd.MM. yyyy")));
+    setWindowTitle(tr("%1 am %2").arg(activity->getStringShort(), QLocale().toString(activity->getDatum(), "dddd, dd.MM.yyyy")));
 }

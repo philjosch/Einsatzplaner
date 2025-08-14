@@ -85,7 +85,7 @@ void CoreMainWindow::showAboutApp()
 {
     QMessageBox::about(this,
                        tr("Über %1").arg(QCoreApplication::applicationName()),
-                       tr("<h1>%1</h1><p>Ein Programm der EPL-Familie<br/>Version %2<br/>2016-2022 Philipp Schepper</p>")
+                       tr("<h1>%1</h1><p>Ein Programm der EPL-Familie<br/>Version %2<br/>2016-2025 Philipp Schepper</p>")
                        .arg(QCoreApplication::applicationName(), QCoreApplication::applicationVersion()));
 }
 void CoreMainWindow::closeApp()
@@ -114,7 +114,7 @@ void CoreMainWindow::updateRecentlyused()
             recentlyUsedMenu->removeAction(actions[i]);
         }
         recentlyUsedClear->setEnabled(true);
-        for (const QString &entry: qAsConst(list)) {
+        for (const QString &entry: std::as_const(list)) {
             QAction *a = new QAction(entry, this);
             connect(a, &QAction::triggered, this, [=]() { handlerOpen(entry); });
             recentlyUsedMenu->insertAction(nullptr, a);
@@ -355,14 +355,14 @@ void CoreMainWindow::updateWindowHeaders()
     bool mod = !datei->istGespeichert();
     setWindowModified(mod);
     QList<QMainWindow*> list = getChildWindows();
-    for(QMainWindow *m: qAsConst(list)) {
+    for(QMainWindow *m: std::as_const(list)) {
         m->setWindowModified(mod);
     }
 
     QString path = datei->getPfad();
     if (path != "") {
         setWindowFilePath(path);
-        for(QMainWindow *mw: qAsConst(list)) {
+        for(QMainWindow *mw: std::as_const(list)) {
             mw->setWindowFilePath(path);
         }
     }

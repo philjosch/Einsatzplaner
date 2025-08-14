@@ -3,13 +3,13 @@
  <class>ExportDialog</class>
  <widget class="QDialog" name="ExportDialog">
   <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
+   <enum>Qt::WindowModality::WindowModal</enum>
   </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>565</width>
+    <width>501</width>
     <height>578</height>
    </rect>
   </property>
@@ -32,6 +32,26 @@
    <property name="spacing">
     <number>6</number>
    </property>
+   <item row="2" column="3">
+    <widget class="QCheckBox" name="checkActivity">
+     <property name="text">
+      <string>Arbeitseinsätze</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Bis</string>
+     </property>
+     <property name="buddy">
+      <cstring>comboBis</cstring>
+     </property>
+    </widget>
+   </item>
    <item row="2" column="2">
     <widget class="QComboBox" name="comboFahrtag">
      <property name="currentIndex">
@@ -89,15 +109,18 @@
      </item>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Von:</string>
+   <item row="0" column="4">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
-     <property name="buddy">
-      <cstring>comboVon</cstring>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>123</width>
+       <height>27</height>
+      </size>
      </property>
-    </widget>
+    </spacer>
    </item>
    <item row="0" column="3">
     <widget class="QDateEdit" name="dateVon">
@@ -126,38 +149,18 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="4">
-    <spacer name="horizontalSpacer_2">
+   <item row="1" column="0">
+    <spacer name="horizontalSpacer_3">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>123</width>
-       <height>27</height>
+       <width>40</width>
+       <height>20</height>
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="2" column="3">
-    <widget class="QCheckBox" name="checkActivity">
-     <property name="text">
-      <string>Arbeitseinsätze</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Bis:</string>
-     </property>
-     <property name="buddy">
-      <cstring>comboBis</cstring>
-     </property>
-    </widget>
    </item>
    <item row="1" column="3">
     <widget class="QDateEdit" name="dateBis">
@@ -184,33 +187,6 @@
      <property name="calendarPopup">
       <bool>true</bool>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QComboBox" name="comboVon">
-     <property name="currentIndex">
-      <number>1</number>
-     </property>
-     <item>
-      <property name="text">
-       <string>Datum</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Jetzt</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Anfang des Jahres</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Alle vergangenen Termine</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item row="1" column="2">
@@ -243,110 +219,64 @@
    <item row="2" column="1">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Züge</string>
+      <string>Fahrtage</string>
      </property>
      <property name="buddy">
       <cstring>comboFahrtag</cstring>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <spacer name="horizontalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="0" column="2">
+    <widget class="QComboBox" name="comboVon">
+     <property name="currentIndex">
+      <number>1</number>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
+     <item>
+      <property name="text">
+       <string>Datum</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Jetzt</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Anfang des Jahres</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Alle vergangenen Termine</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Von</string>
      </property>
-    </spacer>
+     <property name="buddy">
+      <cstring>comboVon</cstring>
+     </property>
+    </widget>
    </item>
    <item row="3" column="0" colspan="5">
     <widget class="QListWidget" name="listAnzeige">
      <property name="selectionMode">
-      <enum>QAbstractItemView::MultiSelection</enum>
+      <enum>QAbstractItemView::SelectionMode::MultiSelection</enum>
      </property>
     </widget>
    </item>
    <item row="4" column="0" colspan="5">
-    <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0,0,1" columnminimumwidth="0,135,135,135,0">
-     <item row="1" column="4">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="3" column="3">
-      <widget class="QPushButton" name="pushDrucken">
-       <property name="text">
-        <string>Exportieren</string>
-       </property>
-      </widget>
-     </item>
+    <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0,0,0,1" columnminimumwidth="0,135,135,135,0,0">
      <item row="3" column="1">
       <widget class="QPushButton" name="pushAbbruch">
        <property name="text">
         <string>Schließen</string>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <spacer name="horizontalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="2" column="0" colspan="5">
-      <widget class="Line" name="line_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QRadioButton" name="checkUpload">
-       <property name="text">
-        <string>Upload (nur Liste)</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">buttonGroupExportFormat</string>
-       </attribute>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QRadioButton" name="checkPDF">
-       <property name="text">
-        <string>PDF-Datei</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">buttonGroupExportFormat</string>
-       </attribute>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QRadioButton" name="checkAusdruck">
-       <property name="text">
-        <string>Ausdruck</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">buttonGroupExportFormat</string>
-       </attribute>
       </widget>
      </item>
      <item row="0" column="2">
@@ -365,6 +295,13 @@
        </attribute>
       </widget>
      </item>
+     <item row="3" column="2">
+      <widget class="QPushButton" name="pushExportUpload">
+       <property name="text">
+        <string>Upload (nur Liste)</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="1">
       <widget class="QRadioButton" name="checkEinzel">
        <property name="enabled">
@@ -378,12 +315,59 @@
        </attribute>
       </widget>
      </item>
-     <item row="3" column="2">
+     <item row="3" column="3" colspan="2">
+      <widget class="QPushButton" name="pushExportPrint">
+       <property name="text">
+        <string>Drucken…</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3" colspan="2">
       <widget class="QPushButton" name="pushPreview">
        <property name="text">
         <string>Druckvorschau</string>
        </property>
       </widget>
+     </item>
+     <item row="2" column="3" colspan="2">
+      <widget class="QPushButton" name="pushExportPDF">
+       <property name="text">
+        <string>Als PDF speichern…</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="4">
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="5">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
@@ -399,12 +383,11 @@
   <tabstop>listAnzeige</tabstop>
   <tabstop>checkEinzel</tabstop>
   <tabstop>checkListe</tabstop>
-  <tabstop>checkUpload</tabstop>
-  <tabstop>checkPDF</tabstop>
-  <tabstop>checkAusdruck</tabstop>
-  <tabstop>pushAbbruch</tabstop>
   <tabstop>pushPreview</tabstop>
-  <tabstop>pushDrucken</tabstop>
+  <tabstop>pushExportPDF</tabstop>
+  <tabstop>pushAbbruch</tabstop>
+  <tabstop>pushExportUpload</tabstop>
+  <tabstop>pushExportPrint</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -415,8 +398,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>531</y>
+     <x>103</x>
+     <y>568</y>
     </hint>
     <hint type="destinationlabel">
      <x>282</x>
@@ -426,7 +409,6 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="buttonGroupExportFormat"/>
   <buttongroup name="buttonGroupExportArt"/>
  </buttongroups>
 </ui>

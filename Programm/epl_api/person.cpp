@@ -6,26 +6,18 @@
 
 #include <QJsonArray>
 #include <QRandomGenerator>
-#include <algorithm>
-#include <cmath>
 
 const QString Person::FARBE_FEHLENDE_STUNDEN = "#ff9999";
 const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";
 const QString Person::FARBE_STANDARD = "#ffffff";
-const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsdatum;Geschlecht;Anrede;Beruf;"
-                                               "Eintritt;Status;Austritt;Beiragsart;IBAN;Bank;Kontoinhaber;"
-                                               "Beitrag;Nachzahlung;"
-                                               "Tf;Zf;Rangierer;Tauglichkeit;BemerkungBetrieb;AusbildungSonst;"
-                                               "Straße;PLZ;Ort;Strecke;Mail;Telefon;Telefon2;"
-                                               "Zustimmung Mail;Zustimmung Telefon;"
-                                               "Bemerkung\n";
 const QString Person::FUSS_TABELLE_LISTE_HTML = "</tbody></table>";
 
-const QStringList Person::ANZEIGE_PERSONALDATEN = {"Vorname", "Nachname", "Geburtsdatum", "Geschlecht", "Anrede", "Beruf",
+const QStringList Person::ANZEIGE_PERSONALDATEN = {"Name", "Vorname", "Nachname", "Geburtsdatum", "Geschlecht", "Anrede", "Beruf",
                                                    "Nummer", "Eintritt", "Status", "Austritt", "Beitragsart", "IBAN", "Bank", "Kontoinhaber", "Beitrag", "Beitrag (Nachzahlung)",
-                                                   "Straße", "PLZ", "Ort", "Strecke", "Mail", "Telefon", "Telefon2",
+                                                   "Straße", "PLZ", "Ort", "Strecke",
+                                                   "Mail", "Mail Zustimmung",
+                                                   "Telefon", "Telefon2", "Telefon Zustimmung",
                                                    "Tf", "Zf", "Rangierer", "Tauglichkeit", "Bemerkung Betrieb.", "Sonst. Ausbildung",
-                                                   "Mail Zustimmung", "Telefon Zustimmung",
                                                    "Bemerkung"};
 
 QString Person::getKopfTabelleListeHtml(QSet<QString> data)
@@ -35,39 +27,41 @@ QString Person::getKopfTabelleListeHtml(QSet<QString> data)
     if (data.contains("Nummer")
             || data.contains("Status")
             || data.contains("Eintritt")
-            || data.contains("Austritt") || data.isEmpty())
+            || data.contains("Austritt"))
         kopf += "<th>Mitgliedsdaten</th>";
     if (data.contains("Vorname")
             || data.contains("Nachname")
             || data.contains("Geburtsdatum")
             || data.contains("Anrede")
             || data.contains("Geschlecht")
-            || data.contains("Beruf") || data.isEmpty())
+            || data.contains("Beruf"))
         kopf += "<th>Persönliches</th>";
     if (data.contains("Beitragsart")
             || data.contains("IBAN")
             || data.contains("Bank")
-            || data.contains("Kontoinhaber") || data.isEmpty())
+            || data.contains("Beitrag")
+            || data.contains("Beitrag (Nachzahlung)")
+            || data.contains("Kontoinhaber"))
         kopf += "<th>Beitrag</th>";
     if (data.contains("Straße")
             || data.contains("PLZ")
             || data.contains("Ort")
-            || data.contains("Strecke") || data.isEmpty())
+            || data.contains("Strecke"))
         kopf += "<th>Anschrift</th>";
     if (data.contains("Mail")
             || data.contains("Telefon")
-            || data.contains("Telefon2") || data.isEmpty())
+            || data.contains("Telefon2"))
         kopf += "<th>Kontakt</th>";
     if (data.contains("Tf")
             || data.contains("Zf")
             || data.contains("Rangierer")
             || data.contains("Tauglichkeit")
             || data.contains("Bemerkung Betrieb.")
-            || data.contains("Sonst. Ausbildung") || data.isEmpty())
+            || data.contains("Sonst. Ausbildung"))
         kopf += "<th>Ausbildung</th>";
     if (data.contains("Mail Zustimmung")
             || data.contains("Telefon Zustimmung")
-            || data.contains("Bemerkung") || data.isEmpty())
+            || data.contains("Bemerkung"))
         kopf += "<th>Sonstiges</th>";
     return kopf + "</tr></thead><tbody>";
 }
@@ -169,8 +163,8 @@ Person::Person(QString name, ManagerPersonal *man) : QObject()
     telefon = "";
     telefon2 = "";
 
-    mailOK = true;
-    telefonOK = true;
+    mailOK = false;
+    telefonOK = false;
     // Sonstiges
     bemerkungen = "";
 }
@@ -499,6 +493,24 @@ void Person::setBemerkungen(const QString &value)
     emit changed();
 }
 
+bool Person::lessByNumber(const Person* const &lhs, const Person* const &rhs)
+{
+    return lhs->nummer < rhs->nummer;
+}
+
+bool Person::lessByName(const Person* const &lhs, const Person* const &rhs)
+{
+    if (lhs->getFullCanonicalName() < rhs->getFullCanonicalName())
+        return true;
+    if (lhs->getFullCanonicalName() > rhs->getFullCanonicalName())
+        return false;
+    if (lhs->getGeburtstag() < rhs->getGeburtstag())
+        return true;
+    if (lhs->getGeburtstag() > rhs->getGeburtstag())
+        return false;
+    return lessByNumber(lhs, rhs);
+}
+
 int Person::getNummer() const
 {
     return nummer;
@@ -634,22 +646,24 @@ Status Person::pruefeStunden(Category cat) const
 
 int Person::getMinimumStunden(Category cat) const
 {
-    bool halb = (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 6);
-
+    if (! aktiv) return 0;
     if (isMinderjaehrig()) return 0;
     if (isAusgetreten()) return 0;
+
+    bool halb = (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 7);
+    int eintrittsDivisor = (halb ? 2 : 1);
     switch (cat) {
     case Tf:
         if (! isTauglich(Tf) ) return 0;
-        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
+        return manager->getMinimumHours(cat) / eintrittsDivisor;
     case Zf:
         if (! isTauglich(Zf)) return 0;
-        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
+        return manager->getMinimumHours(cat) / eintrittsDivisor;
     case Ausbildung:
         if ((! getAusbildungTf() && ! getAusbildungZf() && ! getAusbildungRangierer()) || !isTauglich()) return 0;
-        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
+        return manager->getMinimumHours(cat) / eintrittsDivisor;
     default:
-        return manager->getMinimumHours(cat) * (halb ? 0.5 : 1);
+        return manager->getMinimumHours(cat) / eintrittsDivisor;
     }
 }
 
@@ -732,6 +746,13 @@ QString Person::getName() const
     else return nachname;
 }
 
+QString Person::getFullCanonicalName() const
+{
+    if (vorname != "" && nachname != "") return nachname + ", " + vorname;
+    else if (vorname != "") return vorname;
+    else return nachname;
+}
+
 QString Person::getNameSortierung() const
 {
     switch (Einstellungen::getReihenfolgeVorNach()) {
@@ -780,7 +801,7 @@ bool Person::setNachname(const QString &value)
     return true;
 }
 
-QString Person::getZeitenFuerListeAlsHTML(QSet<Category> liste)
+QString Person::getZeitenFuerListeAlsHTML(QSet<Category> liste) const
 {
     QString zelle = "<td style='background-color: %1'>%2</td>";
     QString farbe = "";
@@ -813,7 +834,7 @@ QString Person::getZeitenFuerListeAlsHTML(QSet<Category> liste)
     return "<tr>" + html + "</tr>";
 }
 
-QString Person::getZeitenFuerEinzelAlsHTML()
+QString Person::getZeitenFuerEinzelAlsHTML() const
 {
     berechne();
     QString html = "<h2>"+vorname+" "+nachname+"</h2>";
@@ -876,7 +897,7 @@ QString Person::getZeitenFuerEinzelAlsHTML()
     return html;
 }
 
-bool Person::printZeiten(QPrinter *printer)
+bool Person::exportTimesAsHtml(QPrinter *printer) const
 {
     return Export::druckeHtml(getZeitenFuerEinzelAlsHTML() + Export::zeitStempel(false), printer);
 }
@@ -897,21 +918,21 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     }
     if (anzeige.contains("Status")) {
         zelleNutzen = true;
-        if (zelle != "") zelle += "<br/>";
+        if (zelle != "") zelle += " ";
         if (isAusgetreten())
             zelle += "Ehemals: ";
         zelle += (aktiv ? "Aktiv":"Passiv");
     }
     if (anzeige.contains("Eintritt")) {
         zelleNutzen = true;
-        anfuegen(&zelle, eintritt.toString("d.M.yyyy"));
+        anfuegen(&zelle, eintritt.toString("dd.MM.yyyy"));
         if (anzeige.contains("Austritt") && !austritt.isNull()) {
-            zelle += austritt.toString("-d.M.yyyy");
+            zelle += austritt.toString("-dd.MM.yyyy");
         }
     } else if (anzeige.contains("Austritt")) {
         if (!austritt.isNull()) {
             zelleNutzen = true;
-            anfuegen(&zelle, "Austritt zum: "+austritt.toString("d.M.yyyy"));
+            anfuegen(&zelle, "Austritt zum: "+austritt.toString("dd.MM.yyyy"));
         }
     }
     if (zelleNutzen) {
@@ -943,7 +964,7 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     }
     if (anzeige.contains("Geburtsdatum")) {
         zelleNutzen = true;
-        anfuegen(&zelle, geburtstag.toString("*d.M.yyyy"));
+        anfuegen(&zelle, geburtstag.toString("*dd.MM.yyyy"));
     }
     if (anzeige.contains("Beruf")) {
         zelleNutzen = true;
@@ -975,6 +996,14 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     if (anzeige.contains("Kontoinhaber")) {
         zelleNutzen = true;
         anfuegen(&zelle, getKontoinhaber());
+    }
+    if (anzeige.contains("Beitrag")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, QString("%1€").arg(getBeitrag()/100.f, 0, 'f', 2));
+    }
+    if (anzeige.contains("Beitrag (Nachzahlung)")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, QString("(+%1€)").arg(getBeitragNachzahlung()/100.f, 0, 'f', 2), anzeige.contains("Beitrag") ? " ": "<br/>");
     }
     if (zelleNutzen) {
         h += "<td>"+zelle+"</td>";
@@ -1044,7 +1073,7 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
     }
     if (anzeige.contains("Tauglichkeit")) {
         zelleNutzen = true;
-        anfuegen(&zelle, tauglichkeit.toString("d.M.yyyy"));
+        anfuegen(&zelle, tauglichkeit.toString("dd.MM.yyyy"));
     }
     if (anzeige.contains("Bemerkung Betrieb.")) {
         zelleNutzen = true;
@@ -1192,51 +1221,92 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
     return h;
 }
 
-bool Person::printPersonaldaten(QPrinter *printer) const
+bool Person::exportMemberdataAsHtml(QPrinter *printer) const
 {
     return Export::druckeHtml(getPersonaldatenFuerEinzelAlsHTML() + Export::zeitStempel(), printer);
 }
 
-QString Person::getPersonaldatenFuerListeAlsCSV() const
+QString Person::getPersonaldatenFuerListeAlsCSV(QStringList attributesForExport) const
 {
-    return QString::number(nummer)
-            +";"+nachname
-            +";"+vorname
-            +";"+geburtstag.toString("dd.MM.yyyy")
-            +";"+toString(geschlecht)
-            +";"+anrede
-            +";"+QString(beruf).replace(";", ",")
+    QStringList dataList;
+    for(QString descriptor: attributesForExport) {
+        if (descriptor == "Name")
+            dataList.append(getName());
+        else if (descriptor == "Vorname")
+            dataList.append(vorname);
+        else if (descriptor == "Nachname")
+            dataList.append(nachname);
+        else if (descriptor == "Geburtsdatum")
+            dataList.append(geburtstag.toString("yyyy-MM-dd"));
+        else if (descriptor == "Geschlecht")
+            dataList.append(toString(geschlecht));
+        else if (descriptor == "Anrede")
+            dataList.append(anrede);
+        else if (descriptor == "Beruf")
+            dataList.append(QString(beruf).replace(";", ","));
 
-            +";"+eintritt.toString("dd.MM.yyyy")
-            +";"+(aktiv?"Aktiv":"Passiv")
-            +";"+austritt.toString("dd.MM.yyyy")
-            +";"+toString(beitragsart)
-            +";"+iban
-            +";"+bank
-            +";"+getKontoinhaberFinal()
-            +";"+QString::number(getBeitrag()/100.f, 'f', 2).replace(".", ",")
-            +";"+QString::number(getBeitragNachzahlung()/100.f, 'f', 2).replace(".", ",")
+        else if (descriptor == "Nummer")
+            dataList.append(QString::number(nummer));
+        else if (descriptor == "Eintritt")
+            dataList.append(eintritt.toString("yyyy-MM-dd"));
+        else if (descriptor == "Status")
+            dataList.append(aktiv ? "Aktiv" : "Passiv");
+        else if (descriptor == "Austritt")
+            dataList.append(austritt.toString("yyyy-MM-dd"));
+        else if (descriptor == "Beitragsart")
+            dataList.append(toString(beitragsart));
+        else if (descriptor == "IBAN")
+            dataList.append(getIbanFinal().replace(" ", ""));
+        else if (descriptor == "Bank")
+            dataList.append(getBankFinal());
+        else if (descriptor == "Kontoinhaber")
+            dataList.append(getKontoinhaberFinal());
+        else if (descriptor == "Beitrag")
+            dataList.append(QString::number(getBeitrag()/100.f, 'f', 2).replace(".", ","));
+        else if (descriptor == "Beitrag (Nachzahlung)")
+            dataList.append(QString::number(getBeitragNachzahlung()/100.f, 'f', 2).replace(".", ","));
 
-            +";"+(ausbildungTf ? "WAHR":"FALSCH")
-            +";"+(ausbildungZf ? "WAHR":"FALSCH")
-            +";"+(ausbildungRangierer ? "WAHR":"FALSCH")
-            +";"+tauglichkeit.toString("dd.MM.yyyy")
-            +";"+QString(sonstigeBetrieblich).replace("\n","<br/>").replace(";", ",")
-            +";"+QString(sonstigeAusbildung).replace("\n","<br/>").replace(";", ",")
+        else if (descriptor == "Straße")
+            dataList.append(strasse);
+        else if (descriptor == "PLZ")
+            dataList.append(plz);
+        else if (descriptor == "Ort")
+            dataList.append(ort);
+        else if (descriptor == "Strecke")
+            dataList.append(QString::number(strecke));
 
-            +";"+strasse
-            +";"+plz
-            +";"+ort
-            +";"+QString::number(strecke)
-            +";"+mail
-            +";"+telefon
-            +";"+telefon2
+        else if (descriptor == "Mail")
+            dataList.append(mail);
+        else if (descriptor == "Mail Zustimmung")
+            dataList.append(mailOK ? "WAHR" : "FALSCH");
+        else if (descriptor == "Telefon")
+            dataList.append(telefon);
+        else if (descriptor == "Telefon2")
+            dataList.append(telefon2);
+        else if (descriptor == "Telefon Zustimmung")
+            dataList.append(telefonOK ? "WAHR" : "FALSCH");
 
-            +";"+(mailOK ? "WAHR" : "FALSCH")
-            +";"+(telefonOK ? "WAHR" : "FALSCH")
+        else if (descriptor == "Tf")
+            dataList.append(ausbildungTf ? "WAHR" : "");
+        else if (descriptor == "Zf")
+            dataList.append(ausbildungZf ? "WAHR" : "");
+        else if (descriptor == "Rangierer")
+            dataList.append(ausbildungRangierer ? "WAHR" : "");
+        else if (descriptor == "Tauglichkeit")
+            dataList.append(tauglichkeit.toString("yyyy-MM-dd"));
+        else if (descriptor == "Bemerkung Betrieb.")
+            dataList.append(QString(sonstigeBetrieblich).replace("\n","<br/>").replace(";", ","));
+        else if (descriptor == "Sonst. Ausbildung")
+            dataList.append(QString(sonstigeAusbildung).replace("\n","<br/>").replace(";", ","));
 
-            +";"+QString(bemerkungen).replace("\n","<br/>").replace(";", ",")
-            +"\n";
+        else if (descriptor == "Bemerkung")
+            dataList.append(QString(bemerkungen).replace("\n","<br/>").replace(";", ","));
+
+        else
+            dataList.append("");
+
+    }
+    return dataList.join(";")+"\n";
 }
 
 int Person::getAdditional(Category cat) const
@@ -1312,10 +1382,20 @@ void Person::setBeitragsart(const Person::Beitragsart &value)
 }
 int Person::getBeitrag() const
 {
-    if (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 6) {
+    if (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 7) {
         return manager->getBeitrag(beitragsart) / 2;
     }
     return manager->getBeitrag(beitragsart);
+}
+
+QString Person::getIbanFinal() const
+{
+    if (iban != "")
+        return iban;
+    Person *zahler = getKontoinhaberPerson();
+    if (zahler != nullptr)
+        return zahler->getIban();
+    return "";
 }
 
 QString Person::getIban() const
@@ -1326,6 +1406,16 @@ void Person::setIban(const QString &value)
 {
     iban = value;
     emit changed();
+}
+
+QString Person::getBankFinal() const
+{
+    if (bank != "")
+        return bank;
+    Person *zahler = getKontoinhaberPerson();
+    if (zahler != nullptr)
+        return getKontoinhaberPerson()->getBank();
+    return "";
 }
 
 QString Person::getBank() const
@@ -1408,7 +1498,7 @@ int Person::getBeitragNachzahlung() const
 
     double prozent = 1.f - getZeiten(Gesamt) / (double)getMinimumStunden(Gesamt);
     int satz = manager->getBeitrag(Beitragsart::FoerderBeitrag);
-//    if (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 6) {
+//    if (eintritt.year() == QDate::currentDate().year() && eintritt.month() >= 7) {
 //        satz = satz / 2;
 //    }
     satz = satz - getBeitragRegulaerIndividuell();

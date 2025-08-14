@@ -440,7 +440,7 @@ bool AActivity::check(Auswahl aus) const
     return true;
 }
 
-QList<Einsatz*> AActivity::getPersonen() const
+const QList<Einsatz*> AActivity::getPersonen() const
 {
     return personen;
 }
@@ -458,7 +458,7 @@ QString AActivity::getStringShort() const
 
 QString AActivity::getString() const
 {
-    QString s = QLocale().toString(datum, QObject::tr("dddd dd.MM.yyyy"))+" – ";
+    QString s = QLocale().toString(datum, QObject::tr("ddd, dd.MM.yyyy"))+" – ";
     if (anlass != "")
         s += anlass;
     else
@@ -540,7 +540,7 @@ QString AActivity::getHtmlForTableView() const
     } else {
         html += "<td>";
     }
-    html += "<b>"+QLocale().toString(datum, QObject::tr("dddd d.M.yyyy"))+"</b><br</>";
+    html += "<b>"+QLocale().toString(datum, QObject::tr("ddd, dd.MM.yyyy"))+"</b><br</>";
     if (anlass != "") {
         html += anlass;
     } else {
@@ -695,7 +695,7 @@ QString AActivity::getHtmlForTableView() const
     return html;
 }
 
-bool AActivity::print(QPrinter *printer)
+bool AActivity::exportAsHtml(QPrinter *printer)
 {
     return Export::druckeHtml(getHtmlForSingleView() + Export::zeitStempel(false), printer);
 }

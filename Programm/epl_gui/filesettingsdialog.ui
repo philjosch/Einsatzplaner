@@ -3,7 +3,15 @@
  <class>FileSettingsDialog</class>
  <widget class="QDialog" name="FileSettingsDialog">
   <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
+   <enum>Qt::WindowModality::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>569</width>
+    <height>438</height>
+   </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -12,10 +20,10 @@
    <item row="2" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Abort|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Abort|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>
@@ -34,7 +42,7 @@
       <item row="2" column="1">
        <widget class="QLineEdit" name="linePath">
         <property name="inputMethodHints">
-         <set>Qt::ImhUrlCharactersOnly</set>
+         <set>Qt::InputMethodHint::ImhUrlCharactersOnly</set>
         </property>
        </widget>
       </item>
@@ -51,7 +59,7 @@
          <string>ID</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -68,7 +76,7 @@
          <string>Pfad</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -85,7 +93,7 @@
       <item row="1" column="1" colspan="3">
        <widget class="QLineEdit" name="lineServer">
         <property name="inputMethodHints">
-         <set>Qt::ImhUrlCharactersOnly</set>
+         <set>Qt::InputMethodHint::ImhUrlCharactersOnly</set>
         </property>
        </widget>
       </item>
@@ -95,7 +103,7 @@
          <string>Keine Verbindungsdaten</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -105,7 +113,7 @@
          <string>Server</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -161,7 +169,7 @@
          <string>–</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -183,7 +191,7 @@
       <item row="1" column="0">
        <widget class="QLineEdit" name="linePwdAlt">
         <property name="echoMode">
-         <enum>QLineEdit::Password</enum>
+         <enum>QLineEdit::EchoMode::Password</enum>
         </property>
         <property name="placeholderText">
          <string>Bisheriges Passwort</string>
@@ -193,7 +201,7 @@
       <item row="2" column="0">
        <widget class="QLineEdit" name="linePwdNeu1">
         <property name="echoMode">
-         <enum>QLineEdit::Password</enum>
+         <enum>QLineEdit::EchoMode::Password</enum>
         </property>
         <property name="placeholderText">
          <string>Neues Passwort</string>
@@ -203,7 +211,7 @@
       <item row="2" column="1">
        <widget class="QLineEdit" name="linePwdNeu2">
         <property name="echoMode">
-         <enum>QLineEdit::Password</enum>
+         <enum>QLineEdit::EchoMode::Password</enum>
         </property>
         <property name="placeholderText">
          <string>Neues Passwort (wiederholen)</string>
@@ -224,7 +232,7 @@
 Feld für neues Passwort freilassen</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+         <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
         </property>
        </widget>
       </item>

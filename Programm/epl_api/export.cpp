@@ -1,4 +1,3 @@
-#include "einstellungen.h"
 #include "export.h"
 #include "fileio.h"
 #include "networking.h"
@@ -51,7 +50,7 @@ void Export::uploadToServer(QList<AActivity *> liste, Networking::Server server)
     p->setOutputFileName(localFile);
     preparePrinter(p, QPageLayout::Orientation::Landscape);
 
-    Manager::printListenansicht(liste, p);
+    Manager::exportActivitiesListAsHtml(liste, p);
 
     if (! Networking::ladeDateiHoch(server, &tempFile)) {
         throw NetworkingException();
@@ -84,7 +83,7 @@ void Export::preparePrinter(QPrinter *p, QPageLayout::Orientation orientation)
 
 QString Export::zeitStempel(bool seitenUmbruch)
 {
-    QString s = QObject::tr("Erstellt am: %1").arg(QDateTime::currentDateTime().toString(QObject::tr("d.M.yyyy HH:mm")));
+    QString s = QObject::tr("Erstellt am: %1").arg(QDateTime::currentDateTime().toString(QObject::tr("dd.MM.yyyy HH:mm")));
     if (seitenUmbruch) {
         return "<p class='break'><small>"+s+"</small></p>";
      } else {

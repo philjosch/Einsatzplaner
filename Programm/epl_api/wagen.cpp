@@ -212,7 +212,7 @@ bool Wagen::besetzePlaetze(Reservierung *r, QList<int> plaetze)
     // Umrechnen in interne Darstellung
     QList<int> intern = extToInt(plaetze);
     if (! test(intern, r)) return false;
-    for (int pos: qAsConst(intern)) {
+    for (int pos: std::as_const(intern)) {
         if (pos < 0 || pos > size)
             return false;
         verteilung.insert(pos, r);

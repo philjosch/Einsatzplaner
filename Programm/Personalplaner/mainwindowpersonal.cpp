@@ -4,17 +4,159 @@
 #include "fileio.h"
 #include "minimumhourseditordialog.h"
 #include "export.h"
-#include "personwindow.h"
 #include "guihelper.h"
 #include "beitraegeeditordialog.h"
 
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QTreeWidgetItem>
+#include <QTreeWidget>
 
 MainWindowPersonal::MainWindowPersonal(EplFile *file) :
     CoreMainWindow(file), ui(new Ui::MainWindowPersonal)
 {
     ui->setupUi(this);
+
+    comboAnzeige = new QComboBox();
+    comboAnzeige->addItem(toString(Status::AlleMitglieder), QVariant(Status::AlleMitglieder));
+    comboAnzeige->addItem(toString(Status::Aktiv), QVariant(Status::Aktiv));
+    comboAnzeige->addItem(toString(Status::AktivMit), QVariant(Status::AktivMit));
+    comboAnzeige->addItem(toString(Status::AktivOhne), QVariant(Status::AktivOhne));
+    comboAnzeige->addItem(toString(Status::Passiv), QVariant(Status::Passiv));
+    comboAnzeige->addItem(toString(Status::PassivMit), QVariant(Status::PassivMit));
+    comboAnzeige->addItem(toString(Status::Ausgetreten), QVariant(Status::Ausgetreten));
+    comboAnzeige->addItem(toString(Status::Registriert), QVariant(Status::Registriert));
+    comboAnzeige->setMinimumSize(QSize(150, 0));
+    ui->mainToolBar->insertWidget(ui->actionAktualisieren, comboAnzeige);
+    QWidget *strechWidget1 = new QWidget();
+    strechWidget1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    ui->mainToolBar->insertWidget(ui->actionMailListe, strechWidget1);
+
+
+    QTreeWidgetItem *__treeGeneral = new QTreeWidgetItem(ui->treeDisplaySelection);
+    __treeGeneral->setData(0, Qt::UserRole, QVariant());
+    __treeGeneral->setText(0, tr("Persönliches"));
+    QTreeWidgetItem *__treeGeneralFirstname = new QTreeWidgetItem(__treeGeneral);
+    __treeGeneralFirstname->setData(0, Qt::UserRole, QVariant("Vorname"));
+    __treeGeneralFirstname->setText(0, tr("Vorname"));
+    QTreeWidgetItem *__treeGeneralLastName = new QTreeWidgetItem(__treeGeneral);
+    __treeGeneralLastName->setData(0, Qt::UserRole, QVariant("Nachname"));
+    __treeGeneralLastName->setText(0, tr("Nachname"));
+    QTreeWidgetItem *__treeGeneralBirthdate = new QTreeWidgetItem(__treeGeneral);
+    __treeGeneralBirthdate->setData(0, Qt::UserRole, QVariant("Geburtsdatum"));
+    __treeGeneralBirthdate->setText(0, tr("Geburtstag"));
+    QTreeWidgetItem *__treeGeneralGender = new QTreeWidgetItem(__treeGeneral);
+    __treeGeneralGender->setData(0, Qt::UserRole, QVariant("Geschlecht"));
+    __treeGeneralGender->setText(0, tr("Geschlecht"));
+    QTreeWidgetItem *__treeGeneralGreeting = new QTreeWidgetItem(__treeGeneral);
+    __treeGeneralGreeting->setData(0, Qt::UserRole, QVariant("Anrede"));
+    __treeGeneralGreeting->setText(0, tr("Anrede"));
+    QTreeWidgetItem *__treeGeneralOccupation = new QTreeWidgetItem(__treeGeneral);
+    __treeGeneralOccupation->setData(0, Qt::UserRole, QVariant("Beruf"));
+    __treeGeneralOccupation->setText(0, tr("Beruf"));
+
+    QTreeWidgetItem *__treeMembership = new QTreeWidgetItem(ui->treeDisplaySelection);
+    __treeMembership->setData(0, Qt::UserRole, QVariant());
+    __treeMembership->setText(0, tr("Mitgliedschaft"));
+    QTreeWidgetItem *__treeMembershipNumber = new QTreeWidgetItem(__treeMembership);
+    __treeMembershipNumber->setData(0, Qt::UserRole, QVariant("Nummer"));
+    __treeMembershipNumber->setText(0, tr("Nummer"));
+    QTreeWidgetItem *__treeMembershipJoindate = new QTreeWidgetItem(__treeMembership);
+    __treeMembershipJoindate->setData(0, Qt::UserRole, QVariant("Eintritt"));
+    __treeMembershipJoindate->setText(0, tr("Eintritt"));
+    QTreeWidgetItem *__treeMembershipStatus = new QTreeWidgetItem(__treeMembership);
+    __treeMembershipStatus->setData(0, Qt::UserRole, QVariant("Status"));
+    __treeMembershipStatus->setText(0, tr("Status"));
+    QTreeWidgetItem *__treeMembershipLeavedate = new QTreeWidgetItem(__treeMembership);
+    __treeMembershipLeavedate->setData(0, Qt::UserRole, QVariant("Austritt"));
+    __treeMembershipLeavedate->setText(0, tr("Austritt"));
+    QTreeWidgetItem *__treeMembershipFeetype = new QTreeWidgetItem(__treeMembership);
+    __treeMembershipFeetype->setData(0, Qt::UserRole, QVariant("Beitragsart"));
+    __treeMembershipFeetype->setText(0, tr("Beitragsart"));
+    QTreeWidgetItem *__treeMembershipIban = new QTreeWidgetItem(__treeMembership);
+    __treeMembershipIban->setData(0, Qt::UserRole, QVariant("IBAN"));
+    __treeMembershipIban->setText(0, tr("IBAN"));
+    QTreeWidgetItem *__treeMembershipBank = new QTreeWidgetItem(__treeMembership);
+    __treeMembershipBank->setData(0, Qt::UserRole, QVariant("Bank"));
+    __treeMembershipBank->setText(0, tr("Bank"));
+    QTreeWidgetItem *__treeMembershipHolder = new QTreeWidgetItem(__treeMembership);
+    __treeMembershipHolder->setData(0, Qt::UserRole, QVariant("Kontoinhaber"));
+    __treeMembershipHolder->setText(0, tr("Kontoinhaber"));
+    QTreeWidgetItem *__treeMembershipFee = new QTreeWidgetItem(__treeMembership);
+    __treeMembershipFee->setData(0, Qt::UserRole, QVariant("Beitrag"));
+    __treeMembershipFee->setText(0, tr("Beitrag"));
+    QTreeWidgetItem *__treeMembershipFeeaditional = new QTreeWidgetItem(__treeMembership);
+    __treeMembershipFeeaditional->setData(0, Qt::UserRole, QVariant("Beitrag (Nachzahlung)"));
+    __treeMembershipFeeaditional->setText(0, tr("Beitrag (Nachzahlung)"));
+
+    QTreeWidgetItem *__treeAddress = new QTreeWidgetItem(ui->treeDisplaySelection);
+    __treeAddress->setData(0, Qt::UserRole, QVariant());
+    __treeAddress->setText(0, tr("Adresse"));
+    QTreeWidgetItem *__treeAddressStreet = new QTreeWidgetItem(__treeAddress);
+    __treeAddressStreet->setData(0, Qt::UserRole, QVariant("Straße"));
+    __treeAddressStreet->setText(0, tr("Straße"));
+    QTreeWidgetItem *__treeAddressPostalcode = new QTreeWidgetItem(__treeAddress);
+    __treeAddressPostalcode->setData(0, Qt::UserRole, QVariant("PLZ"));
+    __treeAddressPostalcode->setText(0, tr("PLZ"));
+    QTreeWidgetItem *__treeAddressCity = new QTreeWidgetItem(__treeAddress);
+    __treeAddressCity->setData(0, Qt::UserRole, QVariant("Ort"));
+    __treeAddressCity->setText(0, tr("Ort"));
+    QTreeWidgetItem *__treeAddressDistance = new QTreeWidgetItem(__treeAddress);
+    __treeAddressDistance->setData(0, Qt::UserRole, QVariant("Strecke"));
+    __treeAddressDistance->setText(0, tr("Strecke"));
+
+    QTreeWidgetItem *__treeContact = new QTreeWidgetItem(ui->treeDisplaySelection);
+    __treeContact->setData(0, Qt::UserRole, QVariant());
+    __treeContact->setText(0, tr("Kontakt"));
+    QTreeWidgetItem *__treeContactMail = new QTreeWidgetItem(__treeContact);
+    __treeContactMail->setData(0, Qt::UserRole, QVariant("Mail"));
+    __treeContactMail->setText(0, tr("E-Mail"));
+    QTreeWidgetItem *__treeContactMailpermission = new QTreeWidgetItem(__treeContact);
+    __treeContactMailpermission->setData(0, Qt::UserRole, QVariant("Mail Zustimmung"));
+    __treeContactMailpermission->setText(0, tr("Freigabe E-Mail"));
+    QTreeWidgetItem *__treeContactPhone = new QTreeWidgetItem(__treeContact);
+    __treeContactPhone->setData(0, Qt::UserRole, QVariant("Telefon"));
+    __treeContactPhone->setText(0, tr("Telefon"));
+    QTreeWidgetItem *__treeContactPhonetwo = new QTreeWidgetItem(__treeContact);
+    __treeContactPhonetwo->setData(0, Qt::UserRole, QVariant("Telefon2"));
+    __treeContactPhonetwo->setText(0, tr("2. Telefon"));
+    QTreeWidgetItem *__treeContactPhonepermission = new QTreeWidgetItem(__treeContact);
+    __treeContactPhonepermission->setData(0, Qt::UserRole, QVariant("Telefon Zustimmung"));
+    __treeContactPhonepermission->setText(0, tr("Freigabe Telefon"));
+
+    QTreeWidgetItem *__treeOperation = new QTreeWidgetItem(ui->treeDisplaySelection);
+    __treeOperation->setData(0, Qt::UserRole, QVariant());
+    __treeOperation->setText(0, tr("Betriebsdienst"));
+    QTreeWidgetItem *__treeOperationDriver = new QTreeWidgetItem(__treeOperation);
+    __treeOperationDriver->setData(0, Qt::UserRole, QVariant("Tf"));
+    __treeOperationDriver->setText(0, tr("Tf"));
+    QTreeWidgetItem *__treeOperationConductor = new QTreeWidgetItem(__treeOperation);
+    __treeOperationConductor->setData(0, Qt::UserRole, QVariant("Zf"));
+    __treeOperationConductor->setText(0, tr("Zf"));
+    QTreeWidgetItem *__treeOperationShunter = new QTreeWidgetItem(__treeOperation);
+    __treeOperationShunter->setData(0, Qt::UserRole, QVariant("Rangierer"));
+    __treeOperationShunter->setText(0, tr("Rangierer:in"));
+    QTreeWidgetItem *__treeOperationFitness = new QTreeWidgetItem(__treeOperation);
+    __treeOperationFitness->setData(0, Qt::UserRole, QVariant("Tauglichkeit"));
+    __treeOperationFitness->setText(0, tr("Tauglichkeit"));
+    QTreeWidgetItem *__treeOperationComments = new QTreeWidgetItem(__treeOperation);
+    __treeOperationComments->setData(0, Qt::UserRole, QVariant("Bemerkung Betrieb."));
+    __treeOperationComments->setText(0, tr("Betriebl. Bemerkungen"));
+    QTreeWidgetItem *__treeOperationAdditional = new QTreeWidgetItem(__treeOperation);
+    __treeOperationAdditional->setData(0, Qt::UserRole, QVariant("Sonst. Ausbildung"));
+    __treeOperationAdditional->setText(0, tr("Sonstige Ausbildung"));
+
+    QTreeWidgetItem *__treeComments = new QTreeWidgetItem(ui->treeDisplaySelection);
+    __treeComments->setData(0, Qt::UserRole, QVariant("Bemerkung"));
+    __treeComments->setText(0, tr("Bemerkungen"));
+
+    QTreeWidgetItemIterator treeIterator = QTreeWidgetItemIterator(ui->treeDisplaySelection);
+    while (*treeIterator) {
+        (*treeIterator)->setCheckState(0, Qt::Unchecked);
+        (*treeIterator)->setFlags(Qt::ItemIsUserCheckable|Qt::ItemIsEnabled|Qt::ItemIsAutoTristate);
+        (*treeIterator)->setExpanded(true);
+        treeIterator++;
+    }
 
     connect(ui->actionPreferences, &QAction::triggered, this, &MainWindowPersonal::showPreferences);
     connect(ui->actionAboutQt, &QAction::triggered, this, &MainWindowPersonal::showAboutQt);
@@ -51,10 +193,10 @@ MainWindowPersonal::MainWindowPersonal(EplFile *file) :
     connect(ui->actionBeitraegeRegulaerCSV, &QAction::triggered, this, &MainWindowPersonal::exportDuesRegularCsv);
     connect(ui->actionBeitraegeNachzahlungCSV, &QAction::triggered, this, &MainWindowPersonal::exportDuesAdditionalCsv);
 
-    connect(ui->comboAnzeige, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindowPersonal::filterChanged);
+    connect(comboAnzeige, &QComboBox::currentIndexChanged, this, &MainWindowPersonal::filterChanged);
     connect(ui->tabelleMitglieder, &QTableWidget::cellDoubleClicked, this, &MainWindowPersonal::showPersFromTable);
 
-    connect(ui->listAnzeige, &QListWidget::itemChanged, this, &MainWindowPersonal::viewShowColumFromItem);
+    connect(ui->treeDisplaySelection, &QTreeWidget::itemChanged, this, &MainWindowPersonal::updateTableBasedOnCategorySelection);
 
     recentlyUsedMenu = ui->menuRecentlyused;
     recentlyUsedClear = ui->actionClear;
@@ -64,10 +206,20 @@ MainWindowPersonal::MainWindowPersonal(EplFile *file) :
     anzeige = QSet<QString>();
 
 
-    for(int i = 0; i < ui->listAnzeige->count(); ++i) {
-        if (ui->listAnzeige->item(i)->checkState() == Qt::CheckState::Checked)
-            viewShowColumFromItem(ui->listAnzeige->item(i));
-    }
+    __treeGeneralFirstname->setCheckState(0, Qt::CheckState::Checked);
+    __treeGeneralLastName->setCheckState(0, Qt::CheckState::Checked);
+    __treeMembershipNumber->setCheckState(0, Qt::CheckState::Checked);
+    __treeMembershipJoindate->setCheckState(0, Qt::CheckState::Checked);
+    __treeMembershipStatus->setCheckState(0, Qt::CheckState::Checked);
+    __treeAddressStreet->setCheckState(0, Qt::CheckState::Checked);
+    __treeAddressPostalcode->setCheckState(0, Qt::CheckState::Checked);
+    __treeAddressCity->setCheckState(0, Qt::CheckState::Checked);
+    __treeContactMail->setCheckState(0, Qt::CheckState::Checked);
+    __treeContactPhone->setCheckState(0, Qt::CheckState::Checked);
+    __treeContactPhonetwo->setCheckState(0, Qt::CheckState::Checked);
+    __treeComments->setCheckState(0, Qt::CheckState::Checked);
+
+    comboAnzeige->setCurrentIndex(0);
 
     updateWindowHeaders();
     refresh();
@@ -125,7 +277,7 @@ void MainWindowPersonal::refresh()
     }
 
     QTableWidgetItem *i;
-    for (Person *p: qAsConst(current)) {
+    for (Person *p: std::as_const(current)) {
         clmn = 0;
         ui->tabelleMitglieder->insertRow(0);
 
@@ -212,10 +364,14 @@ void MainWindowPersonal::refresh()
 
         if (anzeige.contains("Mail"))
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getMail()));
+        if (anzeige.contains("Mail Zustimmung"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getMailOK() ? "Ja": "Nein"));
         if (anzeige.contains("Telefon"))
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getTelefon()));
         if (anzeige.contains("Telefon2"))
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getTelefon2()));
+        if (anzeige.contains("Telefon Zustimmung"))
+            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getTelefonOK() ? "Ja" : "Nein"));
 
 
         if (anzeige.contains("Tf"))
@@ -233,12 +389,6 @@ void MainWindowPersonal::refresh()
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getSonstigeBetrieblich().replace("<br/>","\n")));
         if (anzeige.contains("Sonst. Ausbildung"))
             ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getSonstigeAusbildung().replace("<br/>","\n")));
-
-
-        if (anzeige.contains("Mail Zustimmung"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getMailOK() ? "Ja": "Nein"));
-        if (anzeige.contains("Telefon Zustimmung"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getTelefonOK() ? "Ja" : "Nein"));
 
 
         if (anzeige.contains("Bemerkung"))
@@ -264,7 +414,7 @@ void MainWindowPersonal::sendMailList()
     if (current.isEmpty()) return;
     QSet<QString> mails;
     QList<Person*> keineMail;
-    for (Person *p: qAsConst(current)) {
+    for (Person *p: std::as_const(current)) {
         if (p->getMail() != "") {
             mails.insert(p->getMail());
         } else {
@@ -308,29 +458,29 @@ void MainWindowPersonal::editDues()
 
 void MainWindowPersonal::exportMemberDetailMultiplePdf()
 {
-    personal->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait));
+    personal->exportMembersSingleAsHtml(Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait),
+                                    getSortierteListe(), filter);
 }
 void MainWindowPersonal::exportMemberDetailMultiplePrint()
 {
-    personal->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
+    personal->exportMembersSingleAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait),
+                                    getSortierteListe(), filter);
 }
 
 void MainWindowPersonal::exportMemberListPdf()
 {
-    personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
-                            Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Portrait));
+    personal->exportMembersListAsHtml(Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Landscape),
+                                   getSortierteListe(), filter, anzeige);
 }
 void MainWindowPersonal::exportMemberListPrint()
 {
-    personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
-                            Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape));
+    personal->exportMembersListAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape),
+                                   getSortierteListe(), filter, anzeige);
 }
 void MainWindowPersonal::exportMemberListCsv()
 {
-    personal->saveMitgliederListeAlsCSV(current,
-                                   FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV));
+    personal->exportMembersListAsCsv(FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV),
+                                        getSortierteListe(), anzeige);
 }
 
 void MainWindowPersonal::exportDuesRegularCsv()
@@ -342,18 +492,9 @@ void MainWindowPersonal::exportDuesAdditionalCsv()
     personal->saveBeitraegeNachzahlungAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Nachzahlung", FileIO::DateiTyp::CSV));
 }
 
-void MainWindowPersonal::filterChanged(int index)
+void MainWindowPersonal::filterChanged()
 {
-    switch (index) {
-    case 0: filter = AlleMitglieder; break;
-    case 1: filter = Aktiv; break;
-    case 2: filter = Passiv; break;
-    case 3: filter = AktivMit; break;
-    case 4: filter = AktivOhne; break;
-    case 5: filter = PassivMit; break;
-    case 6: filter = Ausgetreten; break;
-    default: filter = Registriert; break;
-    }
+    filter = Status(comboAnzeige->currentData().toInt());
     refresh();
 }
 
@@ -365,24 +506,30 @@ void MainWindowPersonal::showPersFromTable(int row, [[maybe_unused]] int column)
     }
 }
 
+void MainWindowPersonal::updateTableBasedOnCategorySelection(QTreeWidgetItem *item, [[maybe_unused]] int column)
+{
+    if (item->childCount() > 0) return;
+    QString role = item->data(0, Qt::UserRole).toString();
+    if (role == "") return;
+    if (item->checkState(0) == Qt::CheckState::Checked)
+        anzeige.insert(role);
+    else
+        anzeige.remove(role);
+
+    refresh();
+}
+
 
 QList<Person*> MainWindowPersonal::getSortierteListe()
 {
     QList<Person*> liste = QList<Person*>();
     for(int i = 0; i < ui->tabelleMitglieder->rowCount(); i++) {
         PersonTableWidgetItem *ptwi = static_cast<PersonTableWidgetItem*>(ui->tabelleMitglieder->item(i, 0));
+        if (ptwi == nullptr)
+            continue;
         if (ptwi->getPerson() != nullptr)
             liste.append(ptwi->getPerson());
     }
     return liste;
 }
 
-void MainWindowPersonal::viewShowColumFromItem(QListWidgetItem *item)
-{
-    if (item->checkState() == Qt::CheckState::Checked) {
-        anzeige.insert(item->text());
-    } else {
-        anzeige.remove(item->text());
-    }
-    refresh();
-}

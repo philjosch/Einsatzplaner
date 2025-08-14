@@ -3,7 +3,7 @@
  <class>BeitraegeEditorDialog</class>
  <widget class="QDialog" name="BeitraegeEditorDialog">
   <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
+   <enum>Qt::WindowModality::WindowModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -33,7 +33,7 @@
    <item row="0" column="1">
     <widget class="QDoubleSpinBox" name="doubleAktiv">
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
      <property name="suffix">
       <string> €</string>
@@ -53,7 +53,7 @@
    <item row="1" column="1">
     <widget class="QDoubleSpinBox" name="doublePassiv">
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
      <property name="suffix">
       <string> €</string>
@@ -73,7 +73,7 @@
    <item row="2" column="1">
     <widget class="QDoubleSpinBox" name="doubleErmaessigt">
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
      <property name="suffix">
       <string> €</string>
@@ -93,7 +93,7 @@
    <item row="3" column="1">
     <widget class="QDoubleSpinBox" name="doubleFamilieZahler">
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
      <property name="suffix">
       <string> €</string>
@@ -113,7 +113,7 @@
    <item row="4" column="1">
     <widget class="QDoubleSpinBox" name="doubleFamilieNutzer">
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
      <property name="suffix">
       <string> €</string>
@@ -133,7 +133,7 @@
    <item row="5" column="1">
     <widget class="QDoubleSpinBox" name="doubleFrei">
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
      <property name="suffix">
       <string> €</string>
@@ -153,7 +153,7 @@
    <item row="6" column="1">
     <widget class="QDoubleSpinBox" name="doubleUnbekannt">
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
      <property name="suffix">
       <string> €</string>
@@ -166,10 +166,10 @@
    <item row="7" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>

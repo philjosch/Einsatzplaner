@@ -11,10 +11,6 @@ using namespace EplException;
 ExportDialog::ExportDialog(Manager *m, FileSettings *settings, QWidget *parent) : QDialog(parent), ui(new Ui::ExportDialog)
 {
     ui->setupUi(this);
-    ui->buttonGroupExportFormat->setId(ui->checkAusdruck, 0);
-    ui->buttonGroupExportFormat->setId(ui->checkPDF, 1);
-    ui->buttonGroupExportFormat->setId(ui->checkUpload, 2);
-    ui->checkAusdruck->click();
 
     ui->buttonGroupExportArt->setId(ui->checkListe, 0);
     ui->buttonGroupExportArt->setId(ui->checkEinzel, 1);
@@ -33,11 +29,14 @@ ExportDialog::ExportDialog(Manager *m, FileSettings *settings, QWidget *parent) 
     connect(ui->listAnzeige, &QListWidget::itemSelectionChanged, this, [=]() {
         ui->checkEinzel->setEnabled(! ui->listAnzeige->selectedItems().isEmpty()); });
 
-    connect(ui->pushDrucken, &QPushButton::clicked, this, &ExportDialog::perfomExport);
     connect(ui->comboVon, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::changedFrom);
     connect(ui->comboBis, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::changedTill);
 
     connect(ui->pushPreview, &QPushButton::clicked, this, &ExportDialog::showPrintPreview);
+    connect(ui->pushExportUpload, &QPushButton::clicked, this, &ExportDialog::exportUpload);
+    connect(ui->pushExportPDF, &QPushButton::clicked, this, &ExportDialog::exportPDF);
+    connect(ui->pushExportPrint, &QPushButton::clicked, this, &ExportDialog::exportPrint);
+
     hardReload();
 }
 
@@ -61,48 +60,6 @@ void ExportDialog::hardReload()
         actToList.insert(a, item);
     }
     show();
-}
-
-void ExportDialog::perfomExport()
-{
-    QList<AActivity*> liste = getAActivityForExport();
-
-    QPrinter *printer;
-    if (ui->buttonGroupExportArt->checkedId() == 0) {
-        switch (ui->buttonGroupExportFormat->checkedId()) {
-        case 0:
-            printer = Export::getPrinterPaper(parentWidget(), QPageLayout::Orientation::Landscape);
-            break;
-        case 1:
-            printer = Export::getPrinterPDF(parentWidget(), tr("Listenansicht-%1").arg(QDate::currentDate().toString("YYYY-MM-dd")), QPageLayout::Orientation::Landscape);
-            break;
-        case 2:
-            if (settings->getEnabled()) {
-                try {
-                    Export::uploadToServer(liste, settings->getServer());
-                    QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
-                }  catch (NetworkingException &e) {
-                    QMessageBox::information(parentWidget(), tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden!"));
-                }
-            }
-            return;
-        default:
-            return;
-        }
-        manager->printListenansicht(liste, printer);
-    } else {
-        switch (ui->buttonGroupExportFormat->checkedId()) {
-        case 0:
-            printer = Export::getPrinterPaper(parentWidget(), QPageLayout::Orientation::Portrait);
-            break;
-        case 1:
-            printer = Export::getPrinterPDF(parentWidget(), tr("Einzelansicht-%1").arg(QDate::currentDate().toString("YYYY-MM-dd")), QPageLayout::Orientation::Portrait);
-            break;
-        default:
-            return;
-        }
-        manager->printEinzelansichten(liste, printer);
-    }
 }
 
 void ExportDialog::changedFrom(int index)
@@ -161,11 +118,11 @@ void ExportDialog::showPrintPreview()
     if (ui->buttonGroupExportArt->checkedId() == 0) {
         Export::preparePrinter(printer, QPageLayout::Orientation::Landscape);
         prev = new QPrintPreviewDialog(printer, parentWidget());
-        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->printListenansicht(liste, print); } );
+        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->exportActivitiesListAsHtml(liste, print); } );
     } else {
         Export::preparePrinter(printer, QPageLayout::Orientation::Portrait);
         prev = new QPrintPreviewDialog(printer, parentWidget());
-        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->printEinzelansichten(liste, print); } );
+        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->exportActivitiesDetailAsHtml(liste, print); } );
     }
     prev->exec(); // == QDialog::Accepted)
 }
@@ -230,23 +187,59 @@ bool ExportDialog::testShow(AActivity *a)
     }
 }
 
-QList<AActivity *> ExportDialog::getAActivityForExport()
+QList<AActivity *> ExportDialog::getAActivityForExport(bool ignoreSelectionStatus)
 {
+    ignoreSelectionStatus = ignoreSelectionStatus || ui->buttonGroupExportArt->checkedId() == 0;
+
     QList<AActivity*> liste = QList<AActivity*>();
     for(AActivity *a: manager->getActivities()) {
-        switch (ui->buttonGroupExportArt->checkedId()) {
-        case 1:
-            if(!(actToList.value(a)->isSelected())) {
-                continue;
-            }
-        case 0:
+        if (actToList.value(a)->isSelected() || ignoreSelectionStatus) {
             if(! actToList.value(a)->isHidden()) {
                 liste.append(a);
             }
-            break;
-        default:
-            continue;
         }
     }
     return liste;
+}
+
+void ExportDialog::exportUpload()
+{
+    QList<AActivity*> liste = getAActivityForExport(true);
+
+    if (settings->getEnabled()) {
+        try {
+            Export::uploadToServer(liste, settings->getServer());
+            QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
+        }  catch (NetworkingException &e) {
+            QMessageBox::warning(parentWidget(), tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden!"));
+        }
+    }
+}
+
+void ExportDialog::exportPDF()
+{
+    QList<AActivity*> liste = getAActivityForExport();
+
+    QPrinter *printer;
+    if (ui->buttonGroupExportArt->checkedId() == 0) {
+        printer = Export::getPrinterPDF(parentWidget(), QDate::currentDate().toString(tr("'Listenansicht'-yyyy-MM-dd")), QPageLayout::Orientation::Landscape);
+        manager->exportActivitiesListAsHtml(liste, printer);
+    } else {
+        printer = Export::getPrinterPDF(parentWidget(), QDate::currentDate().toString(tr("'Einzelansicht'-yyyy-MM-dd")), QPageLayout::Orientation::Portrait);
+        manager->exportActivitiesDetailAsHtml(liste, printer);
+    }
+}
+
+void ExportDialog::exportPrint()
+{
+    QList<AActivity*> liste = getAActivityForExport();
+
+    QPrinter *printer;
+    if (ui->buttonGroupExportArt->checkedId() == 0) {
+        printer = Export::getPrinterPaper(parentWidget(), QPageLayout::Orientation::Landscape);
+        manager->exportActivitiesListAsHtml(liste, printer);
+    } else {
+        printer = Export::getPrinterPaper(parentWidget(), QPageLayout::Orientation::Portrait);
+        manager->exportActivitiesDetailAsHtml(liste, printer);
+    }
 }

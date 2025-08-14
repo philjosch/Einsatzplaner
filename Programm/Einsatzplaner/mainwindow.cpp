@@ -63,7 +63,7 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
     tage << ui->day1_4 << ui->day2_4 << ui->day3_4 << ui->day4_4 << ui->day5_4 << ui->day6_4 << ui->day7_4;
     tage << ui->day1_5 << ui->day2_5 << ui->day3_5 << ui->day4_5 << ui->day5_5 << ui->day6_5 << ui->day7_5;
     tage << ui->day1_6 << ui->day2_6 << ui->day3_6 << ui->day4_6 << ui->day5_6 << ui->day6_6 << ui->day7_6;
-    for(CalendarDay *c: qAsConst(tage)) {
+    for(CalendarDay *c: std::as_const(tage)) {
         connect(c, &CalendarDay::clickedItem, this, &MainWindow::openAktivitaet);
         connect(c, &CalendarDay::addActivity, this, &MainWindow::newActivity);
     }
@@ -90,10 +90,12 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
 
     //- Hier prüfen, ob Personalfenster angezeigt wurde und wiederherstellen der Fensterpositionen
     EplFile::FensterPosition kalender = datei->getPositionKalender();
-    this->setGeometry(kalender.x, kalender.y, kalender.width, kalender.height);
+    if (kalender.width + kalender.height > 0)
+        this->setGeometry(kalender.x, kalender.y, kalender.width, kalender.height);
     // Personalfenster
     EplFile::FensterPosition personal = datei->getPositionPersonal();
-    personalfenster->setGeometry(personal.x, personal.y, personal.width, personal.height);
+    if (personal.width + personal.height > 0)
+        personalfenster->setGeometry(personal.x, personal.y, personal.width, personal.height);
     personalfenster->hide();
 }
 MainWindow::~MainWindow()
@@ -215,7 +217,7 @@ void MainWindow::deleteSelectedInList()
 {
     QList<QListWidgetItem*> selected = ui->listWidget->selectedItems();
     if (! selected.isEmpty()) {
-        for(QListWidgetItem *item: qAsConst(selected)) {
+        for(QListWidgetItem *item: std::as_const(selected)) {
             loeschenAktivitaet(itemToList.value(item));
         }
     }
@@ -307,6 +309,10 @@ void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
     i->setToolTip(toString(a->getArt()));
     i->setBackground(QBrush(QColor(a->getFarbe())));
     i->setForeground(QBrush(QColor("black")));
+    QFont font = i->font();
+    font.setStrikeOut(a->getAbgesagt());
+    font.setBold(a->getWichtig());
+    i->setFont(font);
 }
 
 int MainWindow::getPosInCalendar(QDate date)

@@ -2,11 +2,10 @@
 #define MAINWINDOWPERSONAL_H
 
 #include "coremainwindow.h"
-#include "manager.h"
-#include "personwindow.h"
 
 #include <QListWidget>
 #include <QTableWidgetItem>
+#include <QTreeWidgetItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindowPersonal; }
@@ -47,8 +46,9 @@ protected slots:
     void exportDuesAdditionalCsv();
 
     //** Fenster
-    void filterChanged(int index);
+    void filterChanged();
     void showPersFromTable(int row, int column);
+    void updateTableBasedOnCategorySelection(QTreeWidgetItem *item, int column);
 
 protected:
     //** Hilfsmethoden
@@ -58,13 +58,12 @@ protected:
 
     //** View
     Ui::MainWindowPersonal *ui;
+    QComboBox *comboAnzeige;
 
     //** Controller
     QList<Person*> current;
     Status filter;
     QSet<QString> anzeige;
 
-private slots:
-    void viewShowColumFromItem(QListWidgetItem *item);
 };
 #endif // MAINWINDOWPERSONAL_H
