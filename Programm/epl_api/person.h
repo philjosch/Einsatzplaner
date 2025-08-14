@@ -43,7 +43,6 @@ public:
     static const QString FARBE_FEHLENDE_STUNDEN;
     static const QString FARBE_GENUG_STUNDEN;
     static const QString FARBE_STANDARD;
-    static const QString KOPF_TABELLE_LISTE_CSV;
     static QString getKopfTabelleListeHtml(QSet<QString> data);
     static const QString FUSS_TABELLE_LISTE_HTML;
     static const QStringList ANZEIGE_PERSONALDATEN;
@@ -72,7 +71,7 @@ public:
     bool printZeiten(QPrinter *printer);
 
     QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige = QSet<QString>()) const;
-    QString getPersonaldatenFuerListeAlsCSV() const;
+    QString getPersonaldatenFuerListeAlsCSV(QStringList attributesForExport = QStringList()) const;
     QString getPersonaldatenFuerEinzelAlsHTML() const;
     bool printPersonaldaten(QPrinter *printer) const;
 
@@ -124,9 +123,11 @@ public:
     void setBeitragsart(const Beitragsart &value);
     int getBeitrag() const;
 
+    QString getIbanFinal() const;
     QString getIban() const;
     void setIban(const QString &value);
 
+    QString getBankFinal() const;
     QString getBank() const;
     void setBank(const QString &value);
 

@@ -458,29 +458,29 @@ void MainWindowPersonal::editDues()
 
 void MainWindowPersonal::exportMemberDetailMultiplePdf()
 {
-    personal->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait));
+    personal->printMitgliederEinzel(Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait),
+                                    getSortierteListe(), filter);
 }
 void MainWindowPersonal::exportMemberDetailMultiplePrint()
 {
-    personal->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
+    personal->printMitgliederEinzel(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait),
+                                    getSortierteListe(), filter);
 }
 
 void MainWindowPersonal::exportMemberListPdf()
 {
-    personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
-                            Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Portrait));
+    personal->printMitgliederListe(Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Portrait),
+                                   getSortierteListe(), filter, anzeige);
 }
 void MainWindowPersonal::exportMemberListPrint()
 {
-    personal->printMitgliederListe(getSortierteListe(), filter, anzeige,
-                            Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape));
+    personal->printMitgliederListe(Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape),
+                                   getSortierteListe(), filter, anzeige);
 }
 void MainWindowPersonal::exportMemberListCsv()
 {
-    personal->saveMitgliederListeAlsCSV(current,
-                                   FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV));
+    personal->saveMitgliederListeAlsCSV(FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV),
+                                        getSortierteListe(), anzeige);
 }
 
 void MainWindowPersonal::exportDuesRegularCsv()
@@ -506,7 +506,7 @@ void MainWindowPersonal::showPersFromTable(int row, [[maybe_unused]] int column)
     }
 }
 
-void MainWindowPersonal::updateTableBasedOnCategorySelection(QTreeWidgetItem *item, int column)
+void MainWindowPersonal::updateTableBasedOnCategorySelection(QTreeWidgetItem *item, [[maybe_unused]] int column)
 {
     if (item->childCount() > 0) return;
     QString role = item->data(0, Qt::UserRole).toString();
@@ -525,18 +525,11 @@ QList<Person*> MainWindowPersonal::getSortierteListe()
     QList<Person*> liste = QList<Person*>();
     for(int i = 0; i < ui->tabelleMitglieder->rowCount(); i++) {
         PersonTableWidgetItem *ptwi = static_cast<PersonTableWidgetItem*>(ui->tabelleMitglieder->item(i, 0));
+        if (ptwi == nullptr)
+            continue;
         if (ptwi->getPerson() != nullptr)
             liste.append(ptwi->getPerson());
     }
     return liste;
 }
 
-void MainWindowPersonal::viewShowColumFromItem(QListWidgetItem *item)
-{
-    if (item->checkState() == Qt::CheckState::Checked) {
-        anzeige.insert(item->text());
-    } else {
-        anzeige.remove(item->text());
-    }
-    refresh();
-}

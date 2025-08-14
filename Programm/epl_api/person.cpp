@@ -10,20 +10,14 @@
 const QString Person::FARBE_FEHLENDE_STUNDEN = "#ff9999";
 const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";
 const QString Person::FARBE_STANDARD = "#ffffff";
-const QString Person::KOPF_TABELLE_LISTE_CSV = "Nummer;Nachname;Vorname;Geburtsdatum;Geschlecht;Anrede;Beruf;"
-                                               "Eintritt;Status;Austritt;Beiragsart;IBAN;Bank;Kontoinhaber;"
-                                               "Beitrag;Nachzahlung;"
-                                               "Tf;Zf;Rangierer;Tauglichkeit;BemerkungBetrieb;AusbildungSonst;"
-                                               "Straße;PLZ;Ort;Strecke;Mail;Telefon;Telefon2;"
-                                               "Zustimmung Mail;Zustimmung Telefon;"
-                                               "Bemerkung\n";
 const QString Person::FUSS_TABELLE_LISTE_HTML = "</tbody></table>";
 
-const QStringList Person::ANZEIGE_PERSONALDATEN = {"Vorname", "Nachname", "Geburtsdatum", "Geschlecht", "Anrede", "Beruf",
+const QStringList Person::ANZEIGE_PERSONALDATEN = {"Name", "Vorname", "Nachname", "Geburtsdatum", "Geschlecht", "Anrede", "Beruf",
                                                    "Nummer", "Eintritt", "Status", "Austritt", "Beitragsart", "IBAN", "Bank", "Kontoinhaber", "Beitrag", "Beitrag (Nachzahlung)",
-                                                   "Straße", "PLZ", "Ort", "Strecke", "Mail", "Telefon", "Telefon2",
+                                                   "Straße", "PLZ", "Ort", "Strecke",
+                                                   "Mail", "Mail Zustimmung",
+                                                   "Telefon", "Telefon2", "Telefon Zustimmung",
                                                    "Tf", "Zf", "Rangierer", "Tauglichkeit", "Bemerkung Betrieb.", "Sonst. Ausbildung",
-                                                   "Mail Zustimmung", "Telefon Zustimmung",
                                                    "Bemerkung"};
 
 QString Person::getKopfTabelleListeHtml(QSet<QString> data)
@@ -33,41 +27,41 @@ QString Person::getKopfTabelleListeHtml(QSet<QString> data)
     if (data.contains("Nummer")
             || data.contains("Status")
             || data.contains("Eintritt")
-            || data.contains("Austritt") || data.isEmpty())
+            || data.contains("Austritt"))
         kopf += "<th>Mitgliedsdaten</th>";
     if (data.contains("Vorname")
             || data.contains("Nachname")
             || data.contains("Geburtsdatum")
             || data.contains("Anrede")
             || data.contains("Geschlecht")
-            || data.contains("Beruf") || data.isEmpty())
+            || data.contains("Beruf"))
         kopf += "<th>Persönliches</th>";
     if (data.contains("Beitragsart")
             || data.contains("IBAN")
             || data.contains("Bank")
             || data.contains("Beitrag")
             || data.contains("Beitrag (Nachzahlung)")
-            || data.contains("Kontoinhaber") || data.isEmpty())
+            || data.contains("Kontoinhaber"))
         kopf += "<th>Beitrag</th>";
     if (data.contains("Straße")
             || data.contains("PLZ")
             || data.contains("Ort")
-            || data.contains("Strecke") || data.isEmpty())
+            || data.contains("Strecke"))
         kopf += "<th>Anschrift</th>";
     if (data.contains("Mail")
             || data.contains("Telefon")
-            || data.contains("Telefon2") || data.isEmpty())
+            || data.contains("Telefon2"))
         kopf += "<th>Kontakt</th>";
     if (data.contains("Tf")
             || data.contains("Zf")
             || data.contains("Rangierer")
             || data.contains("Tauglichkeit")
             || data.contains("Bemerkung Betrieb.")
-            || data.contains("Sonst. Ausbildung") || data.isEmpty())
+            || data.contains("Sonst. Ausbildung"))
         kopf += "<th>Ausbildung</th>";
     if (data.contains("Mail Zustimmung")
             || data.contains("Telefon Zustimmung")
-            || data.contains("Bemerkung") || data.isEmpty())
+            || data.contains("Bemerkung"))
         kopf += "<th>Sonstiges</th>";
     return kopf + "</tr></thead><tbody>";
 }
@@ -1232,46 +1226,87 @@ bool Person::printPersonaldaten(QPrinter *printer) const
     return Export::druckeHtml(getPersonaldatenFuerEinzelAlsHTML() + Export::zeitStempel(), printer);
 }
 
-QString Person::getPersonaldatenFuerListeAlsCSV() const
+QString Person::getPersonaldatenFuerListeAlsCSV(QStringList attributesForExport) const
 {
-    return QString::number(nummer)
-            +";"+nachname
-            +";"+vorname
-            +";"+geburtstag.toString("dd.MM.yyyy")
-            +";"+toString(geschlecht)
-            +";"+anrede
-            +";"+QString(beruf).replace(";", ",")
+    QStringList dataList;
+    for(QString descriptor: attributesForExport) {
+        if (descriptor == "Name")
+            dataList.append(getName());
+        else if (descriptor == "Vorname")
+            dataList.append(vorname);
+        else if (descriptor == "Nachname")
+            dataList.append(nachname);
+        else if (descriptor == "Geburtsdatum")
+            dataList.append(geburtstag.toString("yyyy-MM-dd"));
+        else if (descriptor == "Geschlecht")
+            dataList.append(toString(geschlecht));
+        else if (descriptor == "Anrede")
+            dataList.append(anrede);
+        else if (descriptor == "Beruf")
+            dataList.append(QString(beruf).replace(";", ","));
 
-            +";"+eintritt.toString("dd.MM.yyyy")
-            +";"+(aktiv?"Aktiv":"Passiv")
-            +";"+austritt.toString("dd.MM.yyyy")
-            +";"+toString(beitragsart)
-            +";"+iban
-            +";"+bank
-            +";"+getKontoinhaberFinal()
-            +";"+QString::number(getBeitrag()/100.f, 'f', 2).replace(".", ",")
-            +";"+QString::number(getBeitragNachzahlung()/100.f, 'f', 2).replace(".", ",")
+        else if (descriptor == "Nummer")
+            dataList.append(QString::number(nummer));
+        else if (descriptor == "Eintritt")
+            dataList.append(eintritt.toString("yyyy-MM-dd"));
+        else if (descriptor == "Status")
+            dataList.append(aktiv ? "Aktiv" : "Passiv");
+        else if (descriptor == "Austritt")
+            dataList.append(austritt.toString("yyyy-MM-dd"));
+        else if (descriptor == "Beitragsart")
+            dataList.append(toString(beitragsart));
+        else if (descriptor == "IBAN")
+            dataList.append(getIbanFinal().replace(" ", ""));
+        else if (descriptor == "Bank")
+            dataList.append(getBankFinal());
+        else if (descriptor == "Kontoinhaber")
+            dataList.append(getKontoinhaberFinal());
+        else if (descriptor == "Beitrag")
+            dataList.append(QString::number(getBeitrag()/100.f, 'f', 2).replace(".", ","));
+        else if (descriptor == "Beitrag (Nachzahlung)")
+            dataList.append(QString::number(getBeitragNachzahlung()/100.f, 'f', 2).replace(".", ","));
 
-            +";"+(ausbildungTf ? "WAHR":"FALSCH")
-            +";"+(ausbildungZf ? "WAHR":"FALSCH")
-            +";"+(ausbildungRangierer ? "WAHR":"FALSCH")
-            +";"+tauglichkeit.toString("dd.MM.yyyy")
-            +";"+QString(sonstigeBetrieblich).replace("\n","<br/>").replace(";", ",")
-            +";"+QString(sonstigeAusbildung).replace("\n","<br/>").replace(";", ",")
+        else if (descriptor == "Straße")
+            dataList.append(strasse);
+        else if (descriptor == "PLZ")
+            dataList.append(plz);
+        else if (descriptor == "Ort")
+            dataList.append(ort);
+        else if (descriptor == "Strecke")
+            dataList.append(QString::number(strecke));
 
-            +";"+strasse
-            +";"+plz
-            +";"+ort
-            +";"+QString::number(strecke)
-            +";"+mail
-            +";"+telefon
-            +";"+telefon2
+        else if (descriptor == "Mail")
+            dataList.append(mail);
+        else if (descriptor == "Mail Zustimmung")
+            dataList.append(mailOK ? "WAHR" : "FALSCH");
+        else if (descriptor == "Telefon")
+            dataList.append(telefon);
+        else if (descriptor == "Telefon2")
+            dataList.append(telefon2);
+        else if (descriptor == "Telefon Zustimmung")
+            dataList.append(telefonOK ? "WAHR" : "FALSCH");
 
-            +";"+(mailOK ? "WAHR" : "FALSCH")
-            +";"+(telefonOK ? "WAHR" : "FALSCH")
+        else if (descriptor == "Tf")
+            dataList.append(ausbildungTf ? "WAHR" : "");
+        else if (descriptor == "Zf")
+            dataList.append(ausbildungZf ? "WAHR" : "");
+        else if (descriptor == "Rangierer")
+            dataList.append(ausbildungRangierer ? "WAHR" : "");
+        else if (descriptor == "Tauglichkeit")
+            dataList.append(tauglichkeit.toString("yyyy-MM-dd"));
+        else if (descriptor == "Bemerkung Betrieb.")
+            dataList.append(QString(sonstigeBetrieblich).replace("\n","<br/>").replace(";", ","));
+        else if (descriptor == "Sonst. Ausbildung")
+            dataList.append(QString(sonstigeAusbildung).replace("\n","<br/>").replace(";", ","));
 
-            +";"+QString(bemerkungen).replace("\n","<br/>").replace(";", ",")
-            +"\n";
+        else if (descriptor == "Bemerkung")
+            dataList.append(QString(bemerkungen).replace("\n","<br/>").replace(";", ","));
+
+        else
+            dataList.append("");
+
+    }
+    return dataList.join(";")+"\n";
 }
 
 int Person::getAdditional(Category cat) const
@@ -1353,6 +1388,16 @@ int Person::getBeitrag() const
     return manager->getBeitrag(beitragsart);
 }
 
+QString Person::getIbanFinal() const
+{
+    if (iban != "")
+        return iban;
+    Person *zahler = getKontoinhaberPerson();
+    if (zahler != nullptr)
+        return zahler->getIban();
+    return "";
+}
+
 QString Person::getIban() const
 {
     return iban;
@@ -1361,6 +1406,16 @@ void Person::setIban(const QString &value)
 {
     iban = value;
     emit changed();
+}
+
+QString Person::getBankFinal() const
+{
+    if (bank != "")
+        return bank;
+    Person *zahler = getKontoinhaberPerson();
+    if (zahler != nullptr)
+        return getKontoinhaberPerson()->getBank();
+    return "";
 }
 
 QString Person::getBank() const

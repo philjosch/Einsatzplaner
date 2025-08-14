@@ -333,7 +333,7 @@ bool ManagerPersonal::printZeitenListe(QList<Person *> personen, QSet<Category> 
     return Export::druckeHtml(a, printer);
 }
 
-bool ManagerPersonal::printMitgliederEinzel(QList<Person *> liste, Status filter, QPrinter *printer) const
+bool ManagerPersonal::printMitgliederEinzel(QPrinter *printer, QList<Person *> liste, Status filter) const
 {
     QString a = "";
     // Seite fuer jede Person einfuegen
@@ -395,12 +395,15 @@ bool ManagerPersonal::printMitgliederEinzel(QList<Person *> liste, Status filter
     return Export::druckeHtml(titelSeite+a, printer);
 }
 
-bool ManagerPersonal::printMitgliederListe(QList<Person*> liste, Status filter, QSet<QString> data, QPrinter *printer)
+bool ManagerPersonal::printMitgliederListe(QPrinter *printer, QList<Person*> liste, Status filter, QSet<QString> attributesForExport)
 {
-    QString a = Person::getKopfTabelleListeHtml(data)
+    if (attributesForExport.isEmpty())
+        attributesForExport = QSet<QString>(Person::ANZEIGE_PERSONALDATEN.begin(), Person::ANZEIGE_PERSONALDATEN.end());
+
+    QString a = Person::getKopfTabelleListeHtml(attributesForExport)
             .arg(toString(filter), QLocale().toString(QDateTime::currentDateTime(), "dd.MM.yyyy"));
     for(Person *akt: liste) {
-        a += akt->getPersonaldatenFuerListeAlsHTML(data);
+        a += akt->getPersonaldatenFuerListeAlsHTML(attributesForExport);
     }
     a += Person::FUSS_TABELLE_LISTE_HTML;
     a += QObject::tr("<p><small>%1 Personen ausgegeben.</small><br/>").arg(liste.length());
@@ -409,13 +412,24 @@ bool ManagerPersonal::printMitgliederListe(QList<Person*> liste, Status filter, 
     return Export::druckeHtml(a, printer);
 }
 
-bool ManagerPersonal::saveMitgliederListeAlsCSV(QList<Person *> liste, QString pfad)
+bool ManagerPersonal::saveMitgliederListeAlsCSV(QString pfad, QList<Person *> liste, QSet<QString> attributesForExport)
 {
-    QString t = Person::KOPF_TABELLE_LISTE_CSV;
-    for(Person *akt: liste) {
-        t += akt->getPersonaldatenFuerListeAlsCSV();
+    QStringList orderedAttributes;
+    if (attributesForExport.isEmpty()) {
+        orderedAttributes = Person::ANZEIGE_PERSONALDATEN;
+    } else {
+        for (const QString &attribute: Person::ANZEIGE_PERSONALDATEN) {
+            if (attributesForExport.contains(attribute))
+                orderedAttributes.append(attribute);
+        }
     }
-    return FileIO::saveToFile(pfad, t);
+
+    QString csvData = orderedAttributes.join(";") + "\n";
+
+    for(Person *akt: liste) {
+        csvData += akt->getPersonaldatenFuerListeAlsCSV(orderedAttributes);
+    }
+    return FileIO::saveToFile(pfad, csvData);
 }
 
 int ManagerPersonal::getAnzahlMitglieder(Status filter) const
@@ -441,35 +455,22 @@ QList<Person *> ManagerPersonal::getPersonen(Status filter) const
 
 bool ManagerPersonal::saveBeitraegeRegulaerAlsCSV(QString pfad) const
 {
-    QString csv = "Name;Mitgliedsnummer;IBAN;Bank;Kontoinhaber;Beitragsart;Betrag\n";
-    for(Person *pers: getPersonen(Status::AlleMitglieder)) {
-        if (pers->getBeitrag() != 0) {
-            csv += QString("%1;%6;%2;%3;%4;%7;%5\n")
-                    .arg(pers->getName(), pers->getIban().replace(" ", ""), pers->getBank(), pers->getKontoinhaberFinal())
-                    .arg(QString::number(pers->getBeitrag()/100.f, 'f', 2).replace(".", ","))
-                    .arg(pers->getNummer())
-                    .arg(Person::toString(pers->getBeitragsart()));
-        }
+    QList<Person*> personenFiltered;
+    for (Person *pers: getPersonen(Status::AlleMitglieder)) {
+        if (pers->getBeitrag() != 0)
+            personenFiltered.append(pers);
     }
-    return FileIO::saveToFile(pfad, csv);
+    QSet<QString> data = {"Name", "Nummer", "IBAN", "Bank", "Kontoinhaber", "Beitragsart", "Beitrag"};
+    return saveMitgliederListeAlsCSV(pfad, personenFiltered, data);
 }
 
 bool ManagerPersonal::saveBeitraegeNachzahlungAlsCSV(QString pfad) const
 {
-    QString csv = "Name;Mitgliedsnummer;IBAN;Bank;Kontoinhaber;Beitragsart;Betrag\n";
-    for(Person *pers: getPersonen(Status::AlleMitglieder)) {
-        if (pers->getBeitragNachzahlung() != 0) {
-            Person *zahler = nullptr;
-            if (pers->getBeitragsart() == Person::Beitragsart::FamilienBeitragNutzer)
-                zahler = pers->getKontoinhaberPerson();
-            if (zahler == nullptr)
-                zahler = pers;
-            csv += QString("%1;%6;%2;%3;%4;%7;%5\n")
-                    .arg(pers->getName(), zahler->getIban().replace(" ", ""), zahler->getBank(), zahler->getKontoinhaberFinal())
-                    .arg(QString::number(pers->getBeitragNachzahlung()/100.f, 'f', 2).replace(".", ","))
-                    .arg(pers->getNummer())
-                    .arg(Person::toString(pers->getBeitragsart()));
-        }
+    QList<Person*> personenFiltered;
+    for (Person *pers: getPersonen(Status::AlleMitglieder)) {
+        if (pers->getBeitragNachzahlung() != 0)
+            personenFiltered.append(pers);
     }
-    return FileIO::saveToFile(pfad, csv);
+    QSet<QString> data = {"Name", "Nummer", "IBAN", "Bank", "Kontoinhaber", "Beitragsart", "Beitrag (Nachzahlung)"};
+    return saveMitgliederListeAlsCSV(pfad, personenFiltered, data);
 }

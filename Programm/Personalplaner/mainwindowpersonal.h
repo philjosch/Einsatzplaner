@@ -65,7 +65,5 @@ protected:
     Status filter;
     QSet<QString> anzeige;
 
-private slots:
-    void viewShowColumFromItem(QListWidgetItem *item);
 };
 #endif // MAINWINDOWPERSONAL_H

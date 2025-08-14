@@ -318,29 +318,29 @@ void PersonalWindow::exportMemberDetailOnePrint()
 
 void PersonalWindow::exportMemberDetailMultiplePdf()
 {
-    manager->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait));
+    manager->printMitgliederEinzel(Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait),
+                                   getSortierteListe(), filter);
 }
 void PersonalWindow::exportMemberDetailMultiplePrint()
 {
-    manager->printMitgliederEinzel(getSortierteListe(), filter,
-                        Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
+    manager->printMitgliederEinzel(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait),
+                                   getSortierteListe(), filter);
 }
 
 void PersonalWindow::exportMemberListPdf()
 {
-    manager->printMitgliederListe(getSortierteListe(), filter, QSet<QString>(),
-                            Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Portrait));
+    manager->printMitgliederListe(Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Portrait),
+                                  getSortierteListe(), filter);
 }
 void PersonalWindow::exportMemberListPrint()
 {
-    manager->printMitgliederListe(getSortierteListe(), filter, QSet<QString>(),
-                            Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape));
+    manager->printMitgliederListe(Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape),
+                                  getSortierteListe(), filter);
 }
 void PersonalWindow::exportMemberListCsv()
 {
-    manager->saveMitgliederListeAlsCSV(current,
-                                  FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV));
+    manager->saveMitgliederListeAlsCSV(FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV),
+                                       getSortierteListe());
 }
 
 void PersonalWindow::exportDuesRegularCsv()
