@@ -9,7 +9,7 @@
 # VERSION #
 ###########
 VERSION = 1.8.6
-DEPLOYED = true
+DEPLOYED = false
 
 ####################
 # QT EINSTELLUNGEN #
@@ -99,7 +99,7 @@ RESOURCES += \
 # TEMPORAERES #
 ###############
 macx {
-    CONFIG += sdk_no_version_check
+#    CONFIG += sdk_no_version_check
 }
 
 
