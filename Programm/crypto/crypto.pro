@@ -12,6 +12,9 @@ CONFIG += console
 win32 {
     CONFIG -= debug_and_release debug_and_release_target
 }
+macos {
+    QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
+}
 
 QT       += core
 

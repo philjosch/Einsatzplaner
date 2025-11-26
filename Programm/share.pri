@@ -8,7 +8,7 @@
 ###########
 # VERSION #
 ###########
-VERSION = 1.8.6
+VERSION = 1.8.7
 DEPLOYED = true
 
 ####################
@@ -75,7 +75,7 @@ win32 {
     RC_ICONS = $$PWD/../Icon/$${TARGET}.ico
     VERSION = $${VERSION}.1
 }
-macx {
+macos {
     QMAKE_INFO_PLIST = $$PWD/Info.plist
     ADDITIONAL_FILES.files = $$PWD/../Icon/EplDocIcon.icns $$PWD/../LICENSE
     ADDITIONAL_FILES.path = Contents/Resources
@@ -83,6 +83,8 @@ macx {
 
     BUNDLEID = de.philipp-schepper.$${TARGET_KLEIN}
     ICON = $$PWD/../Icon/$${TARGET}.icns
+
+    QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
 }
 
 
