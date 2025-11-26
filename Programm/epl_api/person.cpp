@@ -902,9 +902,11 @@ QString Person::getZeitenFuerEinzelAlsHTML() const
     return html;
 }
 
-bool Person::exportTimesAsHtml(QPrinter *printer) const
+bool Person::exportTimesAsHtml(Export *printer) const
 {
-    return Export::druckeHtml(getZeitenFuerEinzelAlsHTML() + Export::zeitStempel(false), printer);
+    if (printer == nullptr) return false;
+
+    return printer->exportHTML(getZeitenFuerEinzelAlsHTML() + Export::zeitStempel(false));
 }
 
 QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
@@ -1226,9 +1228,11 @@ QString Person::getPersonaldatenFuerEinzelAlsHTML() const
     return h;
 }
 
-bool Person::exportMemberdataAsHtml(QPrinter *printer) const
+bool Person::exportMemberdataAsHtml(Export *printer) const
 {
-    return Export::druckeHtml(getPersonaldatenFuerEinzelAlsHTML() + Export::zeitStempel(), printer);
+    if (printer == nullptr) return false;
+
+    return printer->exportHTML(getPersonaldatenFuerEinzelAlsHTML() + Export::zeitStempel());
 }
 
 QString Person::getPersonaldatenFuerListeAlsCSV(QStringList attributesForExport) const

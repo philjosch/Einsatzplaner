@@ -695,9 +695,11 @@ QString AActivity::getHtmlForTableView() const
     return html;
 }
 
-bool AActivity::exportAsHtml(QPrinter *printer)
+bool AActivity::exportAsHtml(Export *printer)
 {
-    return Export::druckeHtml(getHtmlForSingleView() + Export::zeitStempel(false), printer);
+    if (printer == nullptr) return false;
+
+    return printer->exportHTML(getHtmlForSingleView() + Export::zeitStempel(false));
 }
 
 QString AActivity::getFarbe() const

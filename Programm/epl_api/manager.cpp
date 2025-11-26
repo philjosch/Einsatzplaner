@@ -98,23 +98,25 @@ QList<AActivity *> Manager::getActivities() const
     return activities;
 }
 
-bool Manager::exportActivitiesListAsHtml(QList<AActivity *> liste, QPrinter *printer)
+bool Manager::exportActivitiesListAsHtml(QList<AActivity *> liste, Export *printer)
 {
+    if (printer == nullptr) return false;
     QString a = AActivity::KOPF_LISTE_HTML;
     for(AActivity *akt: liste) {
         a += akt->getHtmlForTableView();
     }
     a += AActivity::FUSS_LISTE_HTML;
 
-    return Export::druckeHtml(a + Export::zeitStempel(), printer);
+    return printer->exportHTML(a + Export::zeitStempel());
 }
 
-bool Manager::exportActivitiesDetailAsHtml(QList<AActivity *> liste, QPrinter *printer)
+bool Manager::exportActivitiesDetailAsHtml(QList<AActivity *> liste, Export *printer)
 {
+    if (printer == nullptr) return false;
     QString html = "";
     for(AActivity *a: liste) {
         html += a->getHtmlForSingleView();
         html += Export::zeitStempel(liste.last() != a);
     }
-    return Export::druckeHtml(html, printer);
+    return printer->exportHTML(html);
 }

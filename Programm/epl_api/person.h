@@ -2,9 +2,9 @@
 #define PERSON_H
 
 #include "einsatz.h"
+#include "export.h"
 
 #include <QMultiMap>
-#include <QPrinter>
 
 class ManagerPersonal;
 
@@ -68,12 +68,12 @@ public:
 
     QString getZeitenFuerListeAlsHTML(QSet<Category> liste) const;
     QString getZeitenFuerEinzelAlsHTML() const;
-    bool exportTimesAsHtml(QPrinter *printer) const;
+    bool exportTimesAsHtml(Export *printer) const;
 
     QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const;
     QString getPersonaldatenFuerListeAlsCSV(QStringList attributesForExport) const;
     QString getPersonaldatenFuerEinzelAlsHTML() const;
-    bool exportMemberdataAsHtml(QPrinter *printer) const;
+    bool exportMemberdataAsHtml(Export *printer) const;
 
     int getAdditional(Category cat) const;
     void setAdditional(Category cat, int value);

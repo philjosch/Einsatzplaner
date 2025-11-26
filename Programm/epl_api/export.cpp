@@ -2,7 +2,6 @@
 #include "fileio.h"
 #include "networking.h"
 #include "eplexception.h"
-#include "manager.h"
 
 #include <QTemporaryFile>
 #include <QPrintDialog>
@@ -19,49 +18,43 @@ const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td
                             "p.break { page-break-after: always; }";
 const QFont Export::DEFAULT_FONT = QFont("Arial", 11, QFont::Normal);
 
-QPrinter *Export::getPrinterPaper(QWidget *parent, QPageLayout::Orientation orientation)
+Export *Export::getPrinterPaper(QWidget *parent, QPageLayout::Orientation orientation)
 {
     QPrinter *p = new QPrinter();
     preparePrinter(p, orientation);
     if (QPrintDialog(p, parent).exec() == QDialog::Accepted)
-        return p;
+        return new Export(p);
     return nullptr;
 }
 
-QPrinter *Export::getPrinterPDF(QWidget *parent, QString path, QPageLayout::Orientation orientation)
+Export *Export::getPrinterPDF(QWidget *parent, QString fileName, QPageLayout::Orientation orientation)
 {
-    QString filePath = FileIO::getFilePathSave(parent, path, FileIO::DateiTyp::PDF);
+    QString filePath = FileIO::getFilePathSave(parent, fileName, FileIO::DateiTyp::PDF);
     if (filePath == "") return nullptr;
     QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
     p->setOutputFormat(QPrinter::PdfFormat);
     p->setOutputFileName(filePath);
     preparePrinter(p, orientation);
-    return p;
+    return new Export(p);
 }
 
-void Export::uploadToServer(QList<AActivity *> liste, Networking::Server server)
+ExportUpload *Export::getPrinterOnline(Networking::Server server, QPageLayout::Orientation orientation)
 {
-    /* ERSTELLEN DER DATEI */
-    QTemporaryFile tempFile;
-    tempFile.open();
-    QString localFile = tempFile.fileName();
     QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
-    p->setOutputFormat(QPrinter::PdfFormat);
-    p->setOutputFileName(localFile);
-    preparePrinter(p, QPageLayout::Orientation::Landscape);
-
-    Manager::exportActivitiesListAsHtml(liste, p);
-
-    if (! Networking::ladeDateiHoch(server, &tempFile)) {
-        throw NetworkingException();
-    }
+    preparePrinter(p, orientation);
+    return new ExportUpload(p, server);
 }
 
-bool Export::druckeHtml(QString text, QPrinter *printer)
+Export::Export(QPrinter *printer)
+{
+    this->printer = printer;
+}
+
+bool Export::exportHTML(QString htmlString)
 {
     if (printer == nullptr) return false;
     QTextDocument *d = newDefaultDocument();
-    d->setHtml(text);
+    d->setHtml(htmlString);
     d->print(printer);
     return true;
 }
@@ -100,3 +93,28 @@ QTextDocument *Export::newDefaultDocument()
     return d;
 }
 
+ExportUpload::ExportUpload(QPrinter *printer, Networking::Server server) : Export(printer)
+{
+    this->server = server;
+    printer->setOutputFormat(QPrinter::PdfFormat);
+}
+
+bool ExportUpload::exportHTML(QString htmlString)
+{
+    if (printer == nullptr) return false;
+
+    QTemporaryFile tempFile;
+    if (! tempFile.open()) {
+        throw FileWriteException();
+    }
+    QString localFile = tempFile.fileName();
+    printer->setOutputFileName(localFile);
+
+    QTextDocument *d = newDefaultDocument();
+    d->setHtml(htmlString);
+    d->print(printer);
+
+    bool status = Networking::ladeDateiHoch(server, &tempFile);
+    tempFile.close();
+    return status;
+}

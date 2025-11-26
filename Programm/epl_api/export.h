@@ -1,12 +1,12 @@
 #ifndef EXPORT_H
 #define EXPORT_H
 
-#include "aactivity.h"
 #include "networking.h"
 
 #include <QTextDocument>
 #include <QPrinter>
 
+class ExportUpload;
 /**
  * \class Export
  * Die Klasse mit der Logik für den Export von Daten.
@@ -16,12 +16,7 @@
 class Export
 {
 public:
-    /**
-     * @brief uploadToServer laedt die Listenansicht auf den angegebenen Server
-     * @param liste: Die Liste der Aktivitaeten
-     * @param server: Der EPL-Server, auf den die Datei hochgeladen werden soll
-     */
-    static void uploadToServer(QList<AActivity *> liste, Networking::Server server);
+    Export(QPrinter* printer);
 
     /**
      * @brief getPrinterPaper erzeugt mit Hilfe eines Dialogs einen echten Drucker fuer Papierausdrucke
@@ -29,23 +24,29 @@ public:
      * @param orientation: Die vorlaeufige Ausrichtung der Seite
      * @return Der fertig konfigurierte Drucker
      */
-    static QPrinter *getPrinterPaper(QWidget *parent, QPageLayout::Orientation orientation);
+    static Export *getPrinterPaper(QWidget *parent, QPageLayout::Orientation orientation);
     /**
      * @brief getPrinterPDF erzeugt mit Hilfe eines Dialogs einen virtuellen Drucker, der in eine PDF-Datei druckt
      * @param parent: Das Parentfensters fuer die benoetigten Dialoge
-     * @param path: Der vorgeschlagene Dateiname der PDF-Datei
+     * @param fileName: Der vorgeschlagene Dateiname der PDF-Datei
      * @param orientation: Die vorlaeufige Ausrichtung der Seite
      * @return Der fertig konfigurierte PDF-Drucker
      */
-    static QPrinter *getPrinterPDF(QWidget *parent, QString path, QPageLayout::Orientation orientation);
+    static Export *getPrinterPDF(QWidget *parent, QString fileName, QPageLayout::Orientation orientation);
+    /**
+     * @brief getPrinterOnline Erzeugt ein Exportobjekt das PDF-Dateien auf einem Server speichert
+     * @param server Der EPL-Server, auf den die Datei hochgeladen werden soll
+     * @param orientation Die Orientierung der Seiten
+     * @return Das Exportobjekt
+     */
+    static ExportUpload *getPrinterOnline(Networking::Server server, QPageLayout::Orientation orientation);
 
     /**
-     * @brief druckeHtml druckt den angegebenen HTML-Quelltext unter zuhilfename des Standard Stylesheets
-     * @param text: Der Quelltext fuer den Body
-     * @param printer: Der Drucker auf dem gedruckt werden soll
+     * @brief exportHTML druckt den angegebenen HTML-Quelltext unter zuhilfename des Standard Stylesheets
+     * @param htmlString: Der Quelltext fuer den Body
      * @return WAHR genau dann, wenn der Druck erfolgreich war
      */
-    static bool druckeHtml(QString text, QPrinter *printer);
+    virtual bool exportHTML(QString htmlString);
 
     /**
      * @brief Erzeugt ein HTML-Schnipsel, das die aktuelle Zeit enthaelt
@@ -61,7 +62,8 @@ public:
      */
     static void preparePrinter(QPrinter *p, QPageLayout::Orientation orientation);
 
-private:
+protected:
+    QPrinter *printer;
     /**
      * @brief newDefaultDocument Erzeugt ein neues Textdocument mit dem standard Stylesheet
      * @return Das neue Dokument
@@ -76,6 +78,22 @@ private:
      * @brief DEFAULT_FONT Speichert die standard Schriftart, die fuer den Ausdruck verwendet wird
      */
     static const QFont DEFAULT_FONT;
+};
+
+/**
+ * @brief ExportUpload ist eine Abwandlung von Export fuer den Export der Dateien auf einen Server
+ */
+class ExportUpload : public Export {
+public:
+    /**
+     * @brief ExportUpload erzeugt ein Exportobjekt, welches eine mit printer erzeugte Datei auf den Server hochlaedt
+     * @param printer Der Drucker zum Erzeugen der Datei
+     * @param server Der Server auf den die Daten hochgeladen werden
+     */
+    ExportUpload(QPrinter *printer, Networking::Server server);
+    bool exportHTML(QString htmlString) override;
+protected:
+    Networking::Server server;
 };
 
 #endif // EXPORT_H

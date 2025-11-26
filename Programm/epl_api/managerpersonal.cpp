@@ -256,8 +256,10 @@ bool ManagerPersonal::checkNummer(int neu) const
     return true;
 }
 
-bool ManagerPersonal::exportTimesSingleAsHtml(QList<Person *> liste, Status filter, QPrinter *printer) const
+bool ManagerPersonal::exportTimesSingleAsHtml(QList<Person *> liste, Status filter, Export *printer) const
 {
+    if (printer == nullptr) return false;
+
     QString a = "";
     // Seite fuer jede Person einfuegen
     QMap<Category, int> sum;
@@ -287,11 +289,13 @@ bool ManagerPersonal::exportTimesSingleAsHtml(QList<Person *> liste, Status filt
 
     titelSeite += Export::zeitStempel(true);
 
-    return Export::druckeHtml(titelSeite+a, printer);
+    return printer->exportHTML(titelSeite+a);
 }
 
-bool ManagerPersonal::exportTimesListAsHtml(QList<Person *> personen, QSet<Category> spalten, Status filter, QPrinter *printer)
+bool ManagerPersonal::exportTimesListAsHtml(QList<Person *> personen, QSet<Category> spalten, Status filter, Export *printer)
 {
+    if (printer == nullptr) return false;
+
     QString a = "<h3>Einsatzzeiten: %1</h3>"
                 "<table cellspacing='0' width='100%'><thead><tr> <th>Name</th>";
     a = a.arg(toString(filter));
@@ -330,11 +334,13 @@ bool ManagerPersonal::exportTimesListAsHtml(QList<Person *> personen, QSet<Categ
     a += "</tr></tfoot></table>";
     a += Export::zeitStempel(false);
 
-    return Export::druckeHtml(a, printer);
+    return printer->exportHTML(a);
 }
 
-bool ManagerPersonal::exportMembersSingleAsHtml(QPrinter *printer, QList<Person *> liste, Status filter) const
+bool ManagerPersonal::exportMembersSingleAsHtml(Export *printer, QList<Person *> liste, Status filter) const
 {
+    if (printer == nullptr) return false;
+
     QString a = "";
     // Seite fuer jede Person einfuegen
     QMap<Category, int> sum;
@@ -392,11 +398,13 @@ bool ManagerPersonal::exportMembersSingleAsHtml(QPrinter *printer, QList<Person 
     titelSeite += "</ul>";
     titelSeite += Export::zeitStempel(true);
 
-    return Export::druckeHtml(titelSeite+a, printer);
+    return printer->exportHTML(titelSeite+a);
 }
 
-bool ManagerPersonal::exportMembersListAsHtml(QPrinter *printer, QList<Person*> liste, Status filter, QSet<QString> attributesForExport)
+bool ManagerPersonal::exportMembersListAsHtml(Export *printer, QList<Person*> liste, Status filter, QSet<QString> attributesForExport)
 {
+    if (printer == nullptr) return false;
+
     if (attributesForExport.isEmpty())
         attributesForExport = QSet<QString>(Person::ANZEIGE_PERSONALDATEN.begin(), Person::ANZEIGE_PERSONALDATEN.end());
 
@@ -409,7 +417,7 @@ bool ManagerPersonal::exportMembersListAsHtml(QPrinter *printer, QList<Person*> 
     a += QObject::tr("<p><small>%1 Personen ausgegeben.</small><br/>").arg(liste.length());
     a += QObject::tr("<small>Erstellt am: %1</small></p>").arg(QLocale().toString(QDateTime::currentDateTime(), "dd.MM.yyyy HH:mm"));
 
-    return Export::druckeHtml(a, printer);
+    return printer->exportHTML(a);
 }
 
 bool ManagerPersonal::exportMembersListAsCsv(QString pfad, QList<Person *> liste, QSet<QString> attributesForExport)

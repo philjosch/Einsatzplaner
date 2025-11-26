@@ -380,8 +380,10 @@ QString Fahrtag::getHtmlForTableView() const
     return html;
 }
 
-bool Fahrtag::exportReservationsAsHtml(QPrinter *printer) const
+bool Fahrtag::exportReservationsAsHtml(Export *printer) const
 {
+    if (printer == nullptr) return false;
+
     QString a = "<h3>";
     a += toString(art)+" am "+QLocale().toString(datum, "dddd, dd.MM.yyyy");
     a += " - Die Reservierungen</h3>";
@@ -438,7 +440,7 @@ bool Fahrtag::exportReservationsAsHtml(QPrinter *printer) const
 
     a += "</tbody></table>";
 
-    return Export::druckeHtml(a + Export::zeitStempel(), printer);
+    return printer->exportHTML(a + Export::zeitStempel());
 }
 
 void Fahrtag::setArt(const Art &value)

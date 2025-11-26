@@ -5,7 +5,6 @@
 
 #include <QMainWindow>
 #include <QListWidgetItem>
-#include <QPrinter>
 #include <QTableWidgetItem>
 #include <coremainwindow.h>
 #include <QTreeWidgetItem>

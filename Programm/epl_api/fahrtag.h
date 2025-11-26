@@ -21,7 +21,7 @@ public:
     QString getHtmlForSingleView() const;
     QString getHtmlForTableView() const;
 
-    bool exportReservationsAsHtml(QPrinter *printer) const;
+    bool exportReservationsAsHtml(Export *printer) const;
 
     void setArt(const Art &value);
 

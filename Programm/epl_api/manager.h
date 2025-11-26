@@ -17,8 +17,8 @@ public:
 
     QList<AActivity *> getActivities() const;
 
-    static bool exportActivitiesListAsHtml(QList<AActivity *> liste, QPrinter *printer);
-    static bool exportActivitiesDetailAsHtml(QList<AActivity *> liste, QPrinter *printer);
+    static bool exportActivitiesListAsHtml(QList<AActivity *> liste, Export *printer);
+    static bool exportActivitiesDetailAsHtml(QList<AActivity *> liste, Export *printer);
 
     Fahrtag *newFahrtag(QDate datum);
     AActivity *newActivity(QDate datum);

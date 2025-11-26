@@ -118,11 +118,11 @@ void ExportDialog::showPrintPreview()
     if (ui->buttonGroupExportArt->checkedId() == 0) {
         Export::preparePrinter(printer, QPageLayout::Orientation::Landscape);
         prev = new QPrintPreviewDialog(printer, parentWidget());
-        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->exportActivitiesListAsHtml(liste, print); } );
+        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->exportActivitiesListAsHtml(liste, new Export(print)); } );
     } else {
         Export::preparePrinter(printer, QPageLayout::Orientation::Portrait);
         prev = new QPrintPreviewDialog(printer, parentWidget());
-        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->exportActivitiesDetailAsHtml(liste, print); } );
+        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->exportActivitiesDetailAsHtml(liste, new Export(print)); } );
     }
     prev->exec(); // == QDialog::Accepted)
 }
@@ -206,11 +206,12 @@ void ExportDialog::exportUpload()
 {
     QList<AActivity*> liste = getAActivityForExport(true);
 
+    Export *printer;
     if (settings->getEnabled()) {
-        try {
-            Export::uploadToServer(liste, settings->getServer());
+        printer = Export::getPrinterOnline(settings->getServer(), QPageLayout::Landscape);
+        if (manager->exportActivitiesListAsHtml(liste, printer)) {
             QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
-        }  catch (NetworkingException &e) {
+        } else {
             QMessageBox::warning(parentWidget(), tr("Fehler"), tr("Die Datei konnte nicht hochgeladen werden!"));
         }
     }
@@ -220,7 +221,7 @@ void ExportDialog::exportPDF()
 {
     QList<AActivity*> liste = getAActivityForExport();
 
-    QPrinter *printer;
+    Export *printer;
     if (ui->buttonGroupExportArt->checkedId() == 0) {
         printer = Export::getPrinterPDF(parentWidget(), QDate::currentDate().toString(tr("'Listenansicht'-yyyy-MM-dd")), QPageLayout::Orientation::Landscape);
         manager->exportActivitiesListAsHtml(liste, printer);
@@ -234,7 +235,7 @@ void ExportDialog::exportPrint()
 {
     QList<AActivity*> liste = getAActivityForExport();
 
-    QPrinter *printer;
+    Export *printer;
     if (ui->buttonGroupExportArt->checkedId() == 0) {
         printer = Export::getPrinterPaper(parentWidget(), QPageLayout::Orientation::Landscape);
         manager->exportActivitiesListAsHtml(liste, printer);

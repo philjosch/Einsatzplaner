@@ -208,8 +208,11 @@ void EplFile::autoUpload()
     if (! dateiEigenschaften->getServer().isSecure()) {
         throw UnsichereVerbindungException();
     }
-    Export::uploadToServer(manager->filter(dateiEigenschaften->getAuswahl()),
-                           dateiEigenschaften->getServer());
+    Export *printer = Export::getPrinterOnline(dateiEigenschaften->getServer(), QPageLayout::Landscape);
+    if (manager->exportActivitiesListAsHtml(manager->filter(dateiEigenschaften->getAuswahl()), printer)) {
+        return;
+    }
+    throw NetworkingException(tr("Der automatische Upload ist fehlgeschlagen. Bitte prüfen Sie die Einstellungen und Ihre Internetverbindung."));
 }
 
 void EplFile::open(QString passw)
