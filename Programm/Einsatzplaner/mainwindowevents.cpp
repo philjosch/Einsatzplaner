@@ -50,8 +50,8 @@ MainWindowEvents::MainWindowEvents(EplFile *file) : CoreMainWindow(file), ui(new
     connect(ui->buttonToday, &QPushButton::clicked, this, &MainWindowEvents::showCurrentMonth);
     connect(ui->buttonNext, &QPushButton::clicked, this, &MainWindowEvents::showNextMonth);
 
-    connect(ui->actionNeuArbeitseinsatz, SIGNAL(triggered(bool)), this, SLOT(newActivity()));
-    connect(ui->actionNeuFahrtag, SIGNAL(triggered(bool)), this, SLOT(newFahrtag()));
+    connect(ui->actionNeuArbeitseinsatz, &QAction::triggered, this, [=]() { newActivity(); });
+    connect(ui->actionNeuFahrtag, &QAction::triggered, this, [=]() { newFahrtag(); });
     connect(ui->dateSelector, &QDateEdit::dateChanged, this, &MainWindowEvents::showDate);
     connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) { openAktivitaet(itemToList.value(item)); });
 

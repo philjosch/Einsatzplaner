@@ -175,6 +175,7 @@ FahrtagWindow::FahrtagWindow(CoreMainWindow *parent, Fahrtag *f) : QMainWindow(p
         EinsatzTableWidgetItem *ptwi = addEinsatzToTable(e, block);
         item->setTableItem(ptwi);
     }
+    ui->tablePersonen->resizeColumnsToContents();
     nehme = true;
 
     resUpdateStatistics();

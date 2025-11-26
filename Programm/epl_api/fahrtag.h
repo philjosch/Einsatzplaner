@@ -16,10 +16,10 @@ public:
     Fahrtag(QJsonObject o, ManagerPersonal *p);
     ~Fahrtag();
 
-    QJsonObject toJson() const;
+    QJsonObject toJson() const override;
 
-    QString getHtmlForSingleView() const;
-    QString getHtmlForTableView() const;
+    QString getHtmlForSingleView() const override;
+    QString getHtmlForTableView() const override;
 
     bool exportReservationsAsHtml(Export *printer) const;
 

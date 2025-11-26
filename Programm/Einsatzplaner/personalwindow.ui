@@ -1519,6 +1519,9 @@
    </attribute>
   </widget>
   <action name="actionSchlie_en">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::WindowClose"/>
+   </property>
    <property name="text">
     <string>Schließen</string>
    </property>
@@ -1554,9 +1557,6 @@
    </property>
   </action>
   <action name="actionZeitenListePDF">
-   <property name="icon">
-    <iconset theme="QIcon::ThemeIcon::DocumentNew"/>
-   </property>
    <property name="text">
     <string>Gesamtübersicht als PDF speichern …</string>
    </property>
@@ -1573,6 +1573,9 @@
    </property>
   </action>
   <action name="actionZeitenEinzelEinzelDrucken">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentPrint"/>
+   </property>
    <property name="text">
     <string>Für aktuelle Person drucken ...</string>
    </property>
@@ -1586,6 +1589,9 @@
    </property>
   </action>
   <action name="actionZeitenEinzelListeDrucken">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentPrint"/>
+   </property>
    <property name="text">
     <string>Für alle drucken ...</string>
    </property>
@@ -1596,6 +1602,9 @@
    </property>
   </action>
   <action name="actionMitgliederEinzelEinzelDrucken">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentPrint"/>
+   </property>
    <property name="text">
     <string>Für aktuelle Person drucken …</string>
    </property>
@@ -1606,6 +1615,9 @@
    </property>
   </action>
   <action name="actionMitgliederEinzelListeDrucken">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentPrint"/>
+   </property>
    <property name="text">
     <string>Für alle drucken …</string>
    </property>
@@ -1616,6 +1628,9 @@
    </property>
   </action>
   <action name="actionMitgliederListeDrucken">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::DocumentPrint"/>
+   </property>
    <property name="text">
     <string>Drucken …</string>
    </property>

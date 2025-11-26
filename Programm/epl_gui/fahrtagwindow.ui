@@ -2024,9 +2024,6 @@ unbekannt</string>
    </property>
   </action>
   <action name="actionPdf">
-   <property name="icon">
-    <iconset theme="QIcon::ThemeIcon::DocumentNew"/>
-   </property>
    <property name="text">
     <string>Als PDF sichern…</string>
    </property>

@@ -261,7 +261,7 @@ Person::Person(QJsonObject o, ManagerPersonal *man) : QObject()
 
 QString Person::getRandomID()
 {
-    return QString::number(QDateTime::currentDateTime().toSecsSinceEpoch())+QString::number(QRandomGenerator::global()->bounded(1000000,9999999));
+    return QString::number(QDateTime::currentSecsSinceEpoch())+QString::number(QRandomGenerator::global()->bounded(1000000,9999999));
 }
 
 void Person::anfuegen(QString *zelle, QString appendix, QString seperator)

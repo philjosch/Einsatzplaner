@@ -984,7 +984,7 @@ Ausbildung</string>
   </action>
   <action name="actionEinzelPDF">
    <property name="icon">
-    <iconset theme="QIcon::ThemeIcon::DocumentNew" resource="../icons/icons_rc.qrc">
+    <iconset resource="../icons/icons_rc.qrc">
      <normaloff>:/icon/document.svg</normaloff>:/icon/document.svg</iconset>
    </property>
    <property name="text">

@@ -60,6 +60,7 @@ ActivityWindow::ActivityWindow(CoreMainWindow *parent, AActivity *a) : QMainWind
     for(Einsatz *e: activity->getPersonen()) {
         addEinsatzToTable(e);
     }
+    ui->tablePersonen->resizeColumnsToContents();
 
     updateWindowTitle();
     nehme = true;
