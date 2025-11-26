@@ -298,13 +298,11 @@ void EplFile::open(QString passw)
 
 void EplFile::close()
 {
-    if (pfad != "") {
-        QFile file (pfad+FileIO::getSuffixVonTyp(FileIO::DateiTyp::EPLAutoSave));
-        file.remove();
-    }
-    if (!schreibgeschuetzt) {
-        FileIO::Schreibschutz::freigeben(pfad);
-    }
+    if (schreibgeschuetzt) return;
+    if (pfad == "") return;
+    FileIO::Schreibschutz::freigeben(pfad);
+    QFile file (pfad+FileIO::getSuffixVonTyp(FileIO::DateiTyp::EPLAutoSave));
+    file.remove();
 }
 
 
