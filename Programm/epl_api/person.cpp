@@ -725,12 +725,17 @@ void Person::addActivity(Einsatz *e)
     activities.append(e);
     Einsatz::sort(&activities);
     valuesInvalid = true;
+    emit changed();
 }
 
 bool Person::removeActivity(Einsatz *e)
 {
     valuesInvalid = true;
-    return activities.removeAll(e);
+    if (activities.removeAll(e)) {
+        emit changed();
+        return true;
+    }
+    return false;
 }
 
 const QList<Einsatz*> Person::getActivities() const

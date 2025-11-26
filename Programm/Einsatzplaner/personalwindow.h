@@ -94,6 +94,7 @@ private slots:
 
 
     void showPerson(Person *p);
+    void tableEntryDoubleClicked(int row, int column);
 
     // Mitglieder
     void sendMailCurrent();

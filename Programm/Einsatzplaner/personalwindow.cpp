@@ -91,6 +91,8 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
 
     connect(ui->pushPersonKomplett, &QPushButton::clicked, this, &PersonalWindow::persShowDetails);
 
+    connect(ui->tabelle, &QTableWidget::cellDoubleClicked, this, &PersonalWindow::tableEntryDoubleClicked);
+
     connect(ui->lineTf,             &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Tf,             arg1); });
     connect(ui->lineTb,             &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Tb,             arg1); });
     connect(ui->lineZf,             &QLineEdit::textChanged, this, [=](const QString &arg1) { setZeitenNachVeraenderung(Zf,             arg1); });
@@ -109,6 +111,7 @@ PersonalWindow::PersonalWindow(CoreMainWindow *parent, ManagerPersonal *m) : QMa
 
     // Initalisieren der Statischen variablen
     manager = m;
+    connect(manager, &ManagerPersonal::personChanged, this, [=](Person* p) { if (p == aktuellePerson) showPerson(aktuellePerson); });
     //setWindowTitle(tr("Einsatzzeiten"));
 
     personToItem = QHash<Person*, QListWidgetItem*>();
@@ -602,12 +605,11 @@ void PersonalWindow::showPerson(Person *p)
     // ** Aktivitaeten
     while(ui->tabelle->rowCount() > 0) ui->tabelle->removeRow(0);
     const QList<Einsatz*> liste = p->getActivities();
-    bool sortingSaved = ui->tabelle->isSortingEnabled();
     ui->tabelle->setSortingEnabled(false);
     for(Einsatz* e: liste) {
             // Datum
             ui->tabelle->insertRow(0);
-            QTableWidgetItem *i0 = new QTableWidgetItem();
+            EinsatzTableWidgetItem *i0 = new EinsatzTableWidgetItem(e);
             i0->setData(Qt::EditRole, e->getActivity()->getDatum());
             ui->tabelle->setItem(0, 0, i0);
 
@@ -617,7 +619,7 @@ void PersonalWindow::showPerson(Person *p)
             i3->setToolTip(e->getActivity()->getBemerkungen());
             ui->tabelle->setItem(0, 3, i3);
     }
-    ui->tabelle->setSortingEnabled(sortingSaved);
+    ui->tabelle->setSortingEnabled(true);
     ui->tabelle->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     // ** Konto
@@ -651,6 +653,13 @@ void PersonalWindow::showPerson(Person *p)
     ui->labelMinGesamt->setText(minutesToHourString(p->getMinimumStunden(Gesamt)));
 
     enabled = true;
+}
+
+void PersonalWindow::tableEntryDoubleClicked(int row, [[maybe_unused]] int column)
+{
+    if (aktuellePerson == nullptr) return;
+    EinsatzTableWidgetItem *masterTableItem = static_cast<EinsatzTableWidgetItem*>(ui->tabelle->item(row, 0));
+    parentWindow->openAktivitaet(masterTableItem->getEinsatz()->getActivity());
 }
 
 QList<Person*> PersonalWindow::getSortierteListe()
