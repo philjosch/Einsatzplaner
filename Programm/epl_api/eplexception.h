@@ -68,13 +68,13 @@ public: PersonNichtGefundenException(QString name) : AActivityException(QObject:
 
 class NetworkingException : public EplException {
 public: NetworkingException(QString msg) : EplException(msg) {}
-    NetworkingException() : EplException("Es ist ein Fehler aufgetreten.\nPrüfen Sie Ihre Internetverbindung und versuchen es erneut!") {}
+    NetworkingException() : EplException(QObject::tr("Es ist ein Fehler aufgetreten.\nPrüfen Sie Ihre Internetverbindung und versuchen es erneut!")) {}
 };
-class UnsichereVerbindungException : public EplException {
-public: UnsichereVerbindungException() : EplException("Es konnte keine gesicherte Verbindung hergestellt werden. Der Vorgang wurde abgebrochen.") {}
+class UnsichereVerbindungException : public NetworkingException {
+public: UnsichereVerbindungException() : NetworkingException(QObject::tr("Es konnte keine gesicherte Verbindung hergestellt werden. Der Vorgang wurde abgebrochen.")) {}
 };
-class KeinAutoUploadException : public EplException {
-public: KeinAutoUploadException() : EplException("Der Vorgang wurde abgebrochen, da kein automatischer Upload aktiviert wurde.") {}
+class KeinAutoUploadException : public NetworkingException {
+public: KeinAutoUploadException() : NetworkingException(QObject::tr("Der Vorgang wurde abgebrochen, da kein automatischer Upload aktiviert wurde.")) {}
 };
 
 }
