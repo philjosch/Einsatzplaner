@@ -19,7 +19,7 @@ public:
     ~ActivityWindow();
 
 private slots:
-    void insertPerson();
+    void addEinsatzToTable(Einsatz *e=new Einsatz());
     void removePerson();
 
     void changedDate(const QDate &date);
@@ -36,7 +36,7 @@ private slots:
 
     void changedRequired(bool checked);
 
-    void changedTableEntry(int row, int column);
+    void changedTableCell(int row, int column);
 
     void exportPrint();
     void exportPdf();

@@ -14,6 +14,11 @@ public:
      */
     Einsatz();
     /**
+     * @brief Erstellt ein leeres Einsatz-Objekt
+     * @param kat: Die Kategorie welche standardmaessig vorausgewaehlt sein soll
+     */
+    Einsatz(Category kat);
+    /**
      * @brief Erstellt ein Einsatz-Objekt mit den angegebenen Werten
      * @param p: Die Person, die verknuepft werden soll
      * @param a: Die Aktivitaet, die verknuepft werden soll

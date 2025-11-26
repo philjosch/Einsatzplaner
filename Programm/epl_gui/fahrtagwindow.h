@@ -86,11 +86,9 @@ private slots:
 
     // Einsatzzeiten
     void changedRequired(bool checked);
+    EinsatzTableWidgetItem* addEinsatzToTable(Einsatz *e=new Einsatz(), bool block=false);
     void changedTableCell(int row, int column);
-
     void removePersonTabelle();
-    EinsatzTableWidgetItem *addRowToTable();
-    EinsatzTableWidgetItem *addToTable(Einsatz *e=nullptr, bool block=false);
 
     // Menue
     void deleteTriggered();

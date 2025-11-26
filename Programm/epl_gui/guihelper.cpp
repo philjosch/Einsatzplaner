@@ -18,13 +18,6 @@ QComboBox *generateNewCategoryComboBox()
     return box;
 }
 
-QTimeEdit *generateNewTimeEdit()
-{
-    QTimeEdit *edit = new QTimeEdit();
-    edit->setDisplayFormat("hh:mm");
-    return edit;
-}
-
 QString stringForDurationEditorFromMinutes(int m)
 {
     return QString("%1:%2").arg(int(m/60), 4, 10, QLatin1Char('0')).arg(m % 60, 2, 10,QLatin1Char('0'));

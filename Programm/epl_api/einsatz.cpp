@@ -11,6 +11,11 @@ Einsatz::Einsatz()
     ende = QTime(0,0);
     bemerkung = "";
 }
+Einsatz::Einsatz(Category kat)
+{
+    Einsatz();
+    kategorie = kat;
+}
 Einsatz::Einsatz(Person *p, AActivity *a, Category kat, QString bem, QTime von, QTime bis)
 {
     person = p;

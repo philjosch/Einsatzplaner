@@ -2,6 +2,7 @@
 #define GUIHELPER_H
 
 #include "einsatz.h"
+#include "person.h"
 
 #include <QComboBox>
 #include <QListWidgetItem>
@@ -9,7 +10,6 @@
 #include <QTimeEdit>
 
 QComboBox *generateNewCategoryComboBox();
-QTimeEdit *generateNewTimeEdit();
 
 QString stringForDurationEditorFromMinutes(int m);
 int minutesFromStringForDurationEditor(QString s);
@@ -20,9 +20,15 @@ public:
     EinsatzTableWidgetItem(QString s) : QTableWidgetItem(s)
     {
         einsatz = new Einsatz();
+        setText(s);
     }
     EinsatzTableWidgetItem(Einsatz *e) : QTableWidgetItem() {
         einsatz = e;
+        if (einsatz->getPerson() != nullptr) {
+            setText(einsatz->getPerson()->getName());
+        } else {
+            setText("");
+        }
     }
 
     Einsatz *getEinsatz() const
