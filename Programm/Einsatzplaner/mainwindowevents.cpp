@@ -1,5 +1,5 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "mainwindowevents.h"
+#include "ui_mainwindowevents.h"
 #include "exportdialog.h"
 #include "eplexception.h"
 
@@ -8,7 +8,7 @@
 
 using namespace EplException;
 
-MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWindow)
+MainWindowEvents::MainWindowEvents(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWindowEvents)
 {
     ui->setupUi(this);
     // Modell
@@ -23,36 +23,36 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
     listitem = QMap<AActivity*, QListWidgetItem*>();
     itemToList = QMap<QListWidgetItem*, AActivity*>();
 
-    connect(ui->actionPreferences, &QAction::triggered, this, &MainWindow::showPreferences);
-    connect(ui->actionAboutQt, &QAction::triggered, this, &MainWindow::showAboutQt);
-    connect(ui->actionAboutApp, &QAction::triggered, this, &MainWindow::showAboutApp);
-    connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::closeApp);
+    connect(ui->actionPreferences, &QAction::triggered, this, &MainWindowEvents::showPreferences);
+    connect(ui->actionAboutQt, &QAction::triggered, this, &MainWindowEvents::showAboutQt);
+    connect(ui->actionAboutApp, &QAction::triggered, this, &MainWindowEvents::showAboutApp);
+    connect(ui->actionQuit, &QAction::triggered, this, &MainWindowEvents::closeApp);
 
-    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::fileNew);
-    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::fileOpen);
+    connect(ui->actionNew, &QAction::triggered, this, &MainWindowEvents::fileNew);
+    connect(ui->actionOpen, &QAction::triggered, this, &MainWindowEvents::fileOpen);
 
-    connect(ui->menuRecentlyused, &QMenu::aboutToShow, this, &MainWindow::updateRecentlyused);
-    connect(ui->actionClear, &QAction::triggered, this, &MainWindow::clearRecentlyUsed);
+    connect(ui->menuRecentlyused, &QMenu::aboutToShow, this, &MainWindowEvents::updateRecentlyused);
+    connect(ui->actionClear, &QAction::triggered, this, &MainWindowEvents::clearRecentlyUsed);
 
-    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::fileSave);
-    connect(ui->actionSaveas, &QAction::triggered, this, &MainWindow::fileSaveAs);
-    connect(ui->actionSavePersonal, &QAction::triggered, this, &MainWindow::fileSavePersonal);
+    connect(ui->actionSave, &QAction::triggered, this, &MainWindowEvents::fileSave);
+    connect(ui->actionSaveas, &QAction::triggered, this, &MainWindowEvents::fileSaveAs);
+    connect(ui->actionSavePersonal, &QAction::triggered, this, &MainWindowEvents::fileSavePersonal);
 
-    connect(ui->actionSettings, &QAction::triggered, this, &MainWindow::showFileSettings);
-    connect(ui->actionClose, &QAction::triggered, this, &MainWindow::fileClose);
+    connect(ui->actionSettings, &QAction::triggered, this, &MainWindowEvents::showFileSettings);
+    connect(ui->actionClose, &QAction::triggered, this, &MainWindowEvents::fileClose);
 
 
-    connect(ui->actionExport, &QAction::triggered, this, &MainWindow::showExportDialog);
-    connect(ui->actionLoeschen, &QAction::triggered, this, &MainWindow::deleteSelectedInList);
-    connect(ui->actionPersonal, &QAction::triggered, this, &MainWindow::showPersonal);
+    connect(ui->actionExport, &QAction::triggered, this, &MainWindowEvents::showExportDialog);
+    connect(ui->actionLoeschen, &QAction::triggered, this, &MainWindowEvents::deleteSelectedInList);
+    connect(ui->actionPersonal, &QAction::triggered, this, &MainWindowEvents::showPersonal);
 
-    connect(ui->buttonPrev, &QPushButton::clicked, this, &MainWindow::showPreviousMonth);
-    connect(ui->buttonToday, &QPushButton::clicked, this, &MainWindow::showCurrentMonth);
-    connect(ui->buttonNext, &QPushButton::clicked, this, &MainWindow::showNextMonth);
+    connect(ui->buttonPrev, &QPushButton::clicked, this, &MainWindowEvents::showPreviousMonth);
+    connect(ui->buttonToday, &QPushButton::clicked, this, &MainWindowEvents::showCurrentMonth);
+    connect(ui->buttonNext, &QPushButton::clicked, this, &MainWindowEvents::showNextMonth);
 
     connect(ui->actionNeuArbeitseinsatz, SIGNAL(triggered(bool)), this, SLOT(newActivity()));
     connect(ui->actionNeuFahrtag, SIGNAL(triggered(bool)), this, SLOT(newFahrtag()));
-    connect(ui->dateSelector, &QDateEdit::dateChanged, this, &MainWindow::showDate);
+    connect(ui->dateSelector, &QDateEdit::dateChanged, this, &MainWindowEvents::showDate);
     connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) { openAktivitaet(itemToList.value(item)); });
 
     // Setup fuer die Darstellung des Kalenders
@@ -64,8 +64,8 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
     tage << ui->day1_5 << ui->day2_5 << ui->day3_5 << ui->day4_5 << ui->day5_5 << ui->day6_5 << ui->day7_5;
     tage << ui->day1_6 << ui->day2_6 << ui->day3_6 << ui->day4_6 << ui->day5_6 << ui->day6_6 << ui->day7_6;
     for(CalendarDay *c: std::as_const(tage)) {
-        connect(c, &CalendarDay::clickedItem, this, &MainWindow::openAktivitaet);
-        connect(c, &CalendarDay::addActivity, this, &MainWindow::newActivity);
+        connect(c, &CalendarDay::clickedItem, this, &MainWindowEvents::openAktivitaet);
+        connect(c, &CalendarDay::addActivity, this, &MainWindowEvents::newActivity);
     }
 
     if (datei->istSchreibgeschuetzt()) {
@@ -98,32 +98,32 @@ MainWindow::MainWindow(EplFile *file) : CoreMainWindow(file), ui(new Ui::MainWin
         personalfenster->setGeometry(personal.x, personal.y, personal.width, personal.height);
     personalfenster->hide();
 }
-MainWindow::~MainWindow()
+MainWindowEvents::~MainWindowEvents()
 {
     delete ui;
 }
 
-bool MainWindow::open(QString path)
+bool MainWindowEvents::open(QString path)
 {
     EplFile* datei = getDateiVonPfad(path);
     if (datei == nullptr) return false;
 
-    CoreMainWindow *mw = new MainWindow(datei);
+    CoreMainWindow *mw = new MainWindowEvents(datei);
     mw->show();
     return true;
 }
 
 
-CoreMainWindow* MainWindow::handlerNew()
+CoreMainWindow* MainWindowEvents::handlerNew()
 {
-    return new MainWindow();
+    return new MainWindowEvents();
 }
-void MainWindow::handlerOpen(QString path)
+void MainWindowEvents::handlerOpen(QString path)
 {
     open(path);
 }
 
-void MainWindow::onDateiWirdGespeichertWerden()
+void MainWindowEvents::onDateiWirdGespeichertWerden()
 {
     CoreMainWindow::onDateiWirdGespeichertWerden();
 
@@ -135,7 +135,7 @@ void MainWindow::onDateiWirdGespeichertWerden()
                                           personalfenster->height() });
     datei->setAnzeigeDatum(ui->dateSelector->date());
 }
-void MainWindow::onDateiWurdeErfolgreichGespeichert()
+void MainWindowEvents::onDateiWurdeErfolgreichGespeichert()
 {
     CoreMainWindow::onDateiWurdeErfolgreichGespeichert();
     try {
@@ -148,7 +148,7 @@ void MainWindow::onDateiWurdeErfolgreichGespeichert()
     }
 }
 
-void MainWindow::onAktivitaetWirdEntferntWerden(AActivity *a)
+void MainWindowEvents::onAktivitaetWirdEntferntWerden(AActivity *a)
 {
     CoreMainWindow::onAktivitaetWirdEntferntWerden(a);
 
@@ -160,7 +160,7 @@ void MainWindow::onAktivitaetWirdEntferntWerden(AActivity *a)
         tage.at(pos)->remove(a);
 
 }
-void MainWindow::onAktivitaetWurdeBearbeitet(AActivity *a, QDate altesDatum)
+void MainWindowEvents::onAktivitaetWurdeBearbeitet(AActivity *a, QDate altesDatum)
 {
     CoreMainWindow::onAktivitaetWurdeBearbeitet(a, altesDatum);
 
@@ -207,13 +207,13 @@ void MainWindow::onAktivitaetWurdeBearbeitet(AActivity *a, QDate altesDatum)
 }
 
 
-void MainWindow::showExportDialog()
+void MainWindowEvents::showExportDialog()
 {
     exportDialog->hardReload();
     exportDialog->exec();
 }
 
-void MainWindow::deleteSelectedInList()
+void MainWindowEvents::deleteSelectedInList()
 {
     QList<QListWidgetItem*> selected = ui->listWidget->selectedItems();
     if (! selected.isEmpty()) {
@@ -223,7 +223,7 @@ void MainWindow::deleteSelectedInList()
     }
 }
 
-void MainWindow::showPersonal()
+void MainWindowEvents::showPersonal()
 {
     personalfenster->show();
     personalfenster->setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
@@ -232,23 +232,23 @@ void MainWindow::showPersonal()
 }
 
 
-void MainWindow::showPreviousMonth()
+void MainWindowEvents::showPreviousMonth()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addDays(-7));
     ui->dateSelector->repaint();
 }
-void MainWindow::showNextMonth()
+void MainWindowEvents::showNextMonth()
 {
     ui->dateSelector->setDate(ui->dateSelector->date().addDays(7));
     ui->dateSelector->repaint();
 }
-void MainWindow::showCurrentMonth()
+void MainWindowEvents::showCurrentMonth()
 {
     QDate cur = QDate::currentDate();
     ui->dateSelector->setDate(cur.addDays(-cur.day()+1));
     ui->dateSelector->repaint();
 }
-void MainWindow::showDate(QDate date)
+void MainWindowEvents::showDate(QDate date)
 {
 //    date = date.addDays(-date.day()+1); // Datum auf Monatsanfang setzen
     QDate akt = date.addDays(-date.dayOfWeek()+1);
@@ -278,19 +278,19 @@ void MainWindow::showDate(QDate date)
 }
 
 
-void MainWindow::newFahrtag(QDate d)
+void MainWindowEvents::newFahrtag(QDate d)
 {
     Fahrtag *f = manager->newFahrtag(d);
     newAActivityHandler(f);
     openAktivitaet(f);
 }
-void MainWindow::newActivity(QDate d)
+void MainWindowEvents::newActivity(QDate d)
 {
     AActivity *a = manager->newActivity(d);
     newAActivityHandler(a);
     openAktivitaet(a);
 }
-void MainWindow::newAActivityHandler(AActivity *a)
+void MainWindowEvents::newAActivityHandler(AActivity *a)
 {
     // Einfügen in die Seitenliste
     ui->listWidget->insertItem(ui->listWidget->count(), a->getString());
@@ -302,7 +302,7 @@ void MainWindow::newAActivityHandler(AActivity *a)
 }
 
 
-void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
+void MainWindowEvents::setListItem(QListWidgetItem *i, AActivity *a)
 {
     if (i == nullptr) return;
     i->setText(a->getString());
@@ -315,7 +315,7 @@ void MainWindow::setListItem(QListWidgetItem *i, AActivity *a)
     i->setFont(font);
 }
 
-int MainWindow::getPosInCalendar(QDate date)
+int MainWindowEvents::getPosInCalendar(QDate date)
 {
     QDate start = ui->dateSelector->date();
 //    start = start.addDays(-start.day()+1); // Datum auf Monatsanfang setzen

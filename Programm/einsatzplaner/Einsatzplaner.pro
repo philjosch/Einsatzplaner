@@ -13,17 +13,19 @@ include(../share.pri)
 
 
 SOURCES += main.cpp\
-    mainwindow.cpp \
+    mainwindowevents.cpp \
     personalwindow.cpp \
     calendarday.cpp \
     exportdialog.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
+    mainwindowevents.h \
     personalwindow.h \
     calendarday.h \
     exportdialog.h
 
-FORMS    += mainwindow.ui \
+FORMS    += \
+    mainwindowevents.ui \
     personalwindow.ui \
     calendarday.ui \
     exportdialog.ui

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>MainWindowEvents</class>
+ <widget class="QMainWindow" name="MainWindowEvents">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -137,18 +137,12 @@
         </item>
         <item row="1" column="0">
          <layout class="QGridLayout" name="gridKalender" rowstretch="0,1,1,1,1,1,1">
-          <property name="horizontalSpacing">
+          <property name="spacing">
            <number>0</number>
-          </property>
-          <property name="verticalSpacing">
-           <number>2</number>
           </property>
           <item row="0" column="0">
            <layout class="QGridLayout" name="dayOfWeek">
-            <property name="horizontalSpacing">
-             <number>2</number>
-            </property>
-            <property name="verticalSpacing">
+            <property name="spacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -262,10 +256,7 @@
           </item>
           <item row="1" column="0">
            <layout class="QGridLayout" name="week_1" columnstretch="0,1,1,1,1,1,1,1">
-            <property name="horizontalSpacing">
-             <number>2</number>
-            </property>
-            <property name="verticalSpacing">
+            <property name="spacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -343,10 +334,7 @@
           </item>
           <item row="2" column="0">
            <layout class="QGridLayout" name="week_2" columnstretch="0,1,1,1,1,1,1,1">
-            <property name="horizontalSpacing">
-             <number>2</number>
-            </property>
-            <property name="verticalSpacing">
+            <property name="spacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -424,10 +412,7 @@
           </item>
           <item row="3" column="0">
            <layout class="QGridLayout" name="week_3" columnstretch="0,1,1,1,1,1,1,1">
-            <property name="horizontalSpacing">
-             <number>2</number>
-            </property>
-            <property name="verticalSpacing">
+            <property name="spacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -505,10 +490,7 @@
           </item>
           <item row="4" column="0">
            <layout class="QGridLayout" name="week_4" columnstretch="0,1,1,1,1,1,1,1">
-            <property name="horizontalSpacing">
-             <number>2</number>
-            </property>
-            <property name="verticalSpacing">
+            <property name="spacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -586,10 +568,7 @@
           </item>
           <item row="5" column="0">
            <layout class="QGridLayout" name="week_5" columnstretch="0,1,1,1,1,1,1,1">
-            <property name="horizontalSpacing">
-             <number>2</number>
-            </property>
-            <property name="verticalSpacing">
+            <property name="spacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -667,10 +646,7 @@
           </item>
           <item row="6" column="0">
            <layout class="QGridLayout" name="week_6" columnstretch="0,1,1,1,1,1,1,1">
-            <property name="horizontalSpacing">
-             <number>2</number>
-            </property>
-            <property name="verticalSpacing">
+            <property name="spacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -771,7 +747,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>30</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -1019,9 +995,6 @@
    </property>
   </action>
   <action name="actionPreferences">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
    <property name="text">
     <string>Einstellungen…</string>
    </property>

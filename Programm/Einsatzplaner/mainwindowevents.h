@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAINWINDOWEVENTS_H
+#define MAINWINDOWEVENTS_H
 
 #include "coremainwindow.h"
 #include "aactivity.h"
@@ -8,16 +8,16 @@
 #include "personalwindow.h"
 
 namespace Ui {
-class MainWindow;
+class MainWindowEvents;
 }
 
-class MainWindow : public CoreMainWindow
+class MainWindowEvents : public CoreMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(EplFile *file = new EplFile());
-    ~MainWindow();
+    MainWindowEvents(EplFile *file = new EplFile());
+    ~MainWindowEvents();
 
     static bool open(QString path);
 
@@ -62,7 +62,7 @@ protected:
     //** Modell
 
     //** View
-    Ui::MainWindow *ui;
+    Ui::MainWindowEvents *ui;
     QList<CalendarDay*> tage;
 
     PersonalWindow *personalfenster;
@@ -73,4 +73,4 @@ protected:
     QMap<QListWidgetItem*, AActivity*> itemToList;
 };
 
-#endif // MAINWINDOW_H
+#endif // MAINWINDOWEVENTS_H
