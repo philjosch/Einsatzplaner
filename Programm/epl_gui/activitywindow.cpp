@@ -244,18 +244,24 @@ void ActivityWindow::setPredefinedValue(QString anlass)
 {
     if (anlass.contains(tr("Vorbereiten"), Qt::CaseInsensitive)
             || anlass.contains(tr("Vorbereitung"), Qt::CaseInsensitive)
+            || anlass.contains(tr("Dekorieren"), Qt::CaseInsensitive)
             || anlass.contains(tr("Reinig"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::ZugVorbereiten;
     } else if (anlass.contains(tr("Werkstatt"), Qt::CaseInsensitive)
                || anlass.contains(tr("Waggonarbeiten"), Qt::CaseInsensitive)
+               || anlass.contains(tr("Wartung"), Qt::CaseInsensitive)
                || anlass.contains(tr("Innenausbau"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Werkstatt;
     } else if (anlass.contains(tr("Ausbildung"), Qt::CaseInsensitive)
+               || anlass.contains(tr("Unterricht"), Qt::CaseInsensitive)
+               || anlass.contains(tr("Prüfung"), Qt::CaseInsensitive)
                || anlass.contains(tr("RFU"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Ausbildung;
     } else if (anlass.contains(tr("Büro"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Buero;
     } else if (anlass.contains(tr("Vegetation"), Qt::CaseInsensitive)
+               || anlass.contains(tr("Infrastruktur"), Qt::CaseInsensitive)
+               || anlass.contains(tr("Strecke"), Qt::CaseInsensitive)
                || anlass.contains(tr("Kontrollfahrt"), Qt::CaseInsensitive)) {
         predefinedValueForTable = Category::Infrastruktur;
     } else {
