@@ -21,7 +21,7 @@ public:
     QString getHtmlForSingleView() const override;
     QString getHtmlForTableView() const override;
 
-    bool exportReservationsAsHtml(Export *printer) const;
+    bool exportReservationsAsHtml(ExportHtml *printer) const;
 
     void setArt(const Art &value);
 

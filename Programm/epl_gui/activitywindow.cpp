@@ -229,11 +229,11 @@ void ActivityWindow::changedTableCell(int row, [[maybe_unused]] int column)
 
 void ActivityWindow::exportPrint()
 {
-    activity->exportAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait));
+    activity->exportAsHtml(ExportHtmlPaper::generate(this, QPageLayout::Orientation::Portrait));
 }
 void ActivityWindow::exportPdf()
 {
-    activity->exportAsHtml(Export::getPrinterPDF(this, windowTitle(), QPageLayout::Orientation::Portrait));
+    activity->exportAsHtml(ExportHtmlPdf::generate(this, windowTitle(), QPageLayout::Orientation::Portrait));
 }
 
 void ActivityWindow::deleteTriggered()

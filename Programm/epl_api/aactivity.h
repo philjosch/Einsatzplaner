@@ -74,7 +74,7 @@ public:
 
     virtual QString getHtmlForSingleView() const;
     virtual QString getHtmlForTableView() const;
-    virtual bool exportAsHtml(Export *printer);
+    virtual bool exportAsHtml(ExportHtml *printer);
 
     virtual QString getFarbe() const;
 

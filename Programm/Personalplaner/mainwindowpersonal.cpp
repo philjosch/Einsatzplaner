@@ -458,38 +458,38 @@ void MainWindowPersonal::editDues()
 
 void MainWindowPersonal::exportMemberDetailMultiplePdf()
 {
-    personal->exportMembersSingleAsHtml(Export::getPrinterPDF(this, "Stammdaten", QPageLayout::Orientation::Portrait),
+    personal->exportMembersSingleAsHtml(ExportHtmlPdf::generate(this, "Stammdaten", QPageLayout::Orientation::Portrait),
                                     getSortierteListe(), filter);
 }
 void MainWindowPersonal::exportMemberDetailMultiplePrint()
 {
-    personal->exportMembersSingleAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Portrait),
+    personal->exportMembersSingleAsHtml(ExportHtmlPaper::generate(this, QPageLayout::Orientation::Portrait),
                                     getSortierteListe(), filter);
 }
 
 void MainWindowPersonal::exportMemberListPdf()
 {
-    personal->exportMembersListAsHtml(Export::getPrinterPDF(this, "Mitgliederliste", QPageLayout::Orientation::Landscape),
+    personal->exportMembersListAsHtml(ExportHtmlPdf::generate(this, "Mitgliederliste", QPageLayout::Orientation::Landscape),
                                    getSortierteListe(), filter, anzeige);
 }
 void MainWindowPersonal::exportMemberListPrint()
 {
-    personal->exportMembersListAsHtml(Export::getPrinterPaper(this, QPageLayout::Orientation::Landscape),
+    personal->exportMembersListAsHtml(ExportHtmlPaper::generate(this, QPageLayout::Orientation::Landscape),
                                    getSortierteListe(), filter, anzeige);
 }
 void MainWindowPersonal::exportMemberListCsv()
 {
-    personal->exportMembersListAsCsv(FileIO::getFilePathSave(this, "Mitgliederliste", FileIO::DateiTyp::CSV),
+    personal->exportMembersListAsCsv(ExportCsvFile::generate(this, "Mitgliederliste"),
                                         getSortierteListe(), anzeige);
 }
 
 void MainWindowPersonal::exportDuesRegularCsv()
 {
-    personal->saveBeitraegeRegulaerAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Regulaer", FileIO::DateiTyp::CSV));
+    personal->saveBeitraegeRegulaerAlsCSV(ExportCsvFile::generate(this, "Beitraege-Regulaer"));
 }
 void MainWindowPersonal::exportDuesAdditionalCsv()
 {
-    personal->saveBeitraegeNachzahlungAlsCSV(FileIO::getFilePathSave(this, "Beitraege-Nachzahlung", FileIO::DateiTyp::CSV));
+    personal->saveBeitraegeNachzahlungAlsCSV(ExportCsvFile::generate(this, "Beitraege-Nachzahlung"));
 }
 
 void MainWindowPersonal::filterChanged()

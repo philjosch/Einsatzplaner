@@ -380,7 +380,7 @@ QString Fahrtag::getHtmlForTableView() const
     return html;
 }
 
-bool Fahrtag::exportReservationsAsHtml(Export *printer) const
+bool Fahrtag::exportReservationsAsHtml(ExportHtml *printer) const
 {
     if (printer == nullptr) return false;
 
@@ -440,7 +440,7 @@ bool Fahrtag::exportReservationsAsHtml(Export *printer) const
 
     a += "</tbody></table>";
 
-    return printer->exportHTML(a + Export::zeitStempel());
+    return printer->exportData(a + printer->timeStamp());
 }
 
 void Fahrtag::setArt(const Art &value)

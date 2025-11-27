@@ -68,12 +68,12 @@ public:
 
     QString getZeitenFuerListeAlsHTML(QSet<Category> liste) const;
     QString getZeitenFuerEinzelAlsHTML() const;
-    bool exportTimesAsHtml(Export *printer) const;
+    bool exportTimesAsHtml(ExportHtml *printer) const;
 
     QString getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const;
     QString getPersonaldatenFuerListeAlsCSV(QStringList attributesForExport) const;
     QString getPersonaldatenFuerEinzelAlsHTML() const;
-    bool exportMemberdataAsHtml(Export *printer) const;
+    bool exportMemberdataAsHtml(ExportHtml *printer) const;
 
     int getAdditional(Category cat) const;
     void setAdditional(Category cat, int value);

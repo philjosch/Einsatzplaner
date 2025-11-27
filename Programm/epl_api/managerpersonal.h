@@ -43,16 +43,16 @@ public:
     int getNextNummer() const;
     bool checkNummer(int neu) const;
 
-    bool exportTimesSingleAsHtml(QList<Person*> liste, Status filter, Export *printer) const;
-    static bool exportTimesListAsHtml(QList<Person *> personen, QSet<Category> spalten, Status filter, Export *printer);
+    bool exportTimesSingleAsHtml(QList<Person*> liste, Status filter, ExportHtml *printer) const;
+    static bool exportTimesListAsHtml(QList<Person *> personen, QSet<Category> spalten, Status filter, ExportHtml *printer);
 
-    bool exportMembersSingleAsHtml(Export *printer, QList<Person*> liste, Status filter) const;
-    static bool exportMembersListAsHtml(Export *printer, QList<Person *> liste, Status filter, QSet<QString> attributesForExport = QSet<QString>());
-    static bool exportMembersListAsCsv(QString pfad, QList<Person *> liste, QSet<QString> attributesForExport = QSet<QString>());
+    bool exportMembersSingleAsHtml(ExportHtml *printer, QList<Person*> liste, Status filter) const;
+    static bool exportMembersListAsHtml(ExportHtml *printer, QList<Person *> liste, Status filter, QSet<QString> attributesForExport = QSet<QString>());
+    static bool exportMembersListAsCsv(ExportCsv *printer, QList<Person *> liste, QSet<QString> attributesForExport = QSet<QString>());
 
     void extracted(QList<Person *> &personenFiltered) const;
-    bool saveBeitraegeRegulaerAlsCSV(QString pfad) const;
-    bool saveBeitraegeNachzahlungAlsCSV(QString pfad) const;
+    bool saveBeitraegeRegulaerAlsCSV(ExportCsv *printer) const;
+    bool saveBeitraegeNachzahlungAlsCSV(ExportCsv *printer) const;
 
     int getAnzahlMitglieder(Status filter) const;
     QList<Person *> getPersonen(Status filter) const;

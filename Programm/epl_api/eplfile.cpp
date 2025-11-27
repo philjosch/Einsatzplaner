@@ -208,7 +208,7 @@ void EplFile::autoUpload()
     if (! dateiEigenschaften->getServer().isSecure()) {
         throw UnsichereVerbindungException();
     }
-    Export *printer = Export::getPrinterOnline(dateiEigenschaften->getServer(), QPageLayout::Landscape);
+    ExportHtml *printer = new ExportHtmlUpload(dateiEigenschaften->getServer(), QPageLayout::Landscape);
     if (manager->exportActivitiesListAsHtml(manager->filter(dateiEigenschaften->getAuswahl()), printer)) {
         return;
     }

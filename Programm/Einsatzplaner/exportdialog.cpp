@@ -1,12 +1,9 @@
 #include "exportdialog.h"
 #include "ui_exportdialog.h"
 #include "export.h"
-#include "eplexception.h"
 
 #include <QMessageBox>
 #include <QPrintPreviewDialog>
-
-using namespace EplException;
 
 ExportDialog::ExportDialog(Manager *m, FileSettings *settings, QWidget *parent) : QDialog(parent), ui(new Ui::ExportDialog)
 {
@@ -116,13 +113,13 @@ void ExportDialog::showPrintPreview()
     QPrintPreviewDialog *prev;
     QPrinter *printer = new QPrinter();
     if (ui->buttonGroupExportArt->checkedId() == 0) {
-        Export::preparePrinter(printer, QPageLayout::Orientation::Landscape);
+        Export::prepareLayout(printer, QPageLayout::Orientation::Landscape);
         prev = new QPrintPreviewDialog(printer, parentWidget());
-        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->exportActivitiesListAsHtml(liste, new Export(print)); } );
+        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->exportActivitiesListAsHtml(liste, new ExportHtmlPaper(print)); } );
     } else {
-        Export::preparePrinter(printer, QPageLayout::Orientation::Portrait);
+        Export::prepareLayout(printer, QPageLayout::Orientation::Portrait);
         prev = new QPrintPreviewDialog(printer, parentWidget());
-        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->exportActivitiesDetailAsHtml(liste, new Export(print)); } );
+        connect(prev, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter * print) { manager->exportActivitiesDetailAsHtml(liste, new ExportHtmlPaper(print)); } );
     }
     prev->exec(); // == QDialog::Accepted)
 }
@@ -206,9 +203,9 @@ void ExportDialog::exportUpload()
 {
     QList<AActivity*> liste = getAActivityForExport(true);
 
-    Export *printer;
+    ExportHtml *printer;
     if (settings->getEnabled()) {
-        printer = Export::getPrinterOnline(settings->getServer(), QPageLayout::Landscape);
+        printer = new ExportHtmlUpload(settings->getServer(), QPageLayout::Landscape);
         if (manager->exportActivitiesListAsHtml(liste, printer)) {
             QMessageBox::information(parentWidget(), tr("Erfolg"), tr("Datei wurde erfolgreich hochgeladen!"));
         } else {
@@ -221,12 +218,12 @@ void ExportDialog::exportPDF()
 {
     QList<AActivity*> liste = getAActivityForExport();
 
-    Export *printer;
+    ExportHtml *printer;
     if (ui->buttonGroupExportArt->checkedId() == 0) {
-        printer = Export::getPrinterPDF(parentWidget(), QDate::currentDate().toString(tr("'Listenansicht'-yyyy-MM-dd")), QPageLayout::Orientation::Landscape);
+        printer = ExportHtmlPdf::generate(parentWidget(), QDate::currentDate().toString(tr("'Listenansicht'-yyyy-MM-dd")), QPageLayout::Orientation::Landscape);
         manager->exportActivitiesListAsHtml(liste, printer);
     } else {
-        printer = Export::getPrinterPDF(parentWidget(), QDate::currentDate().toString(tr("'Einzelansicht'-yyyy-MM-dd")), QPageLayout::Orientation::Portrait);
+        printer = ExportHtmlPdf::generate(parentWidget(), QDate::currentDate().toString(tr("'Einzelansicht'-yyyy-MM-dd")), QPageLayout::Orientation::Portrait);
         manager->exportActivitiesDetailAsHtml(liste, printer);
     }
 }
@@ -235,12 +232,12 @@ void ExportDialog::exportPrint()
 {
     QList<AActivity*> liste = getAActivityForExport();
 
-    Export *printer;
+    ExportHtml *printer;
     if (ui->buttonGroupExportArt->checkedId() == 0) {
-        printer = Export::getPrinterPaper(parentWidget(), QPageLayout::Orientation::Landscape);
+        printer = ExportHtmlPaper::generate(parentWidget(), QPageLayout::Orientation::Landscape);
         manager->exportActivitiesListAsHtml(liste, printer);
     } else {
-        printer = Export::getPrinterPaper(parentWidget(), QPageLayout::Orientation::Portrait);
+        printer = ExportHtmlPaper::generate(parentWidget(), QPageLayout::Orientation::Portrait);
         manager->exportActivitiesDetailAsHtml(liste, printer);
     }
 }

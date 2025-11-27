@@ -1,90 +1,64 @@
 #include "export.h"
 #include "fileio.h"
 #include "networking.h"
-#include "eplexception.h"
 
 #include <QTemporaryFile>
 #include <QPrintDialog>
+#include <QPdfWriter>
 
-using namespace EplException;
-
-const QString Export::DEFAULT_STYLESHEET = "body {float: none;} body, tr, th, td, p { font-size: 11px; font-weight: normal;}"
+const QString ExportHtml::DEFAULT_STYLESHEET =
+                            "body {float: none;} body, tr, th, td, p { font-size: 11pt; font-weight: normal;}"
                             "table { border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
                             "table th, table td { border-width: 1px; padding: 1px; border-style: solid; border-color: black; border-collapse: collapse;}"
                             "table tr, table td { page-break-inside: avoid; }"
                             "table tfoot tr, table tfoot td { border-width: 1px; }"
                             "ul { -qt-list-indent: 0; margin-top: 0px !important; margin-bottom: 0px !important }"
-                            "li { text-indent: 6px; margin-top: 0px !important; margin-bottom: 0px !important; }"
+                            "li { margin-left: 6px; margin-top: 0px !important; margin-bottom: 0px !important; }"
                             "p.break { page-break-after: always; }";
-const QFont Export::DEFAULT_FONT = QFont("Arial", 11, QFont::Normal);
+const QFont ExportHtml::DEFAULT_FONT = QFont("Arial", 11, QFont::Normal);
 
-Export *Export::getPrinterPaper(QWidget *parent, QPageLayout::Orientation orientation)
+
+void Export::prepareLayout(QPagedPaintDevice *device, QPageLayout::Orientation orientation)
+{
+    if (device == nullptr) return;
+    QPageLayout l = device->pageLayout();
+    l.setMode(QPageLayout::Mode::FullPageMode);
+    l.setUnits(QPageLayout::Millimeter);
+    l.setOrientation(orientation);
+    switch (orientation) {
+    case QPageLayout::Orientation::Portrait:
+        l.setMargins(QMarginsF(20, 15, 15, 15));
+        break;
+    case QPageLayout::Orientation::Landscape:
+        l.setMargins(QMarginsF(15, 20, 15, 15));
+        break;
+    }
+    device->setPageLayout(l);
+}
+
+QPrinter *Export::generatePrinter(QWidget *parent, QPageLayout::Orientation orientation)
 {
     QPrinter *p = new QPrinter();
-    preparePrinter(p, orientation);
+    prepareLayout(p, orientation);
     if (QPrintDialog(p, parent).exec() == QDialog::Accepted)
-        return new Export(p);
+        return p;
     return nullptr;
 }
 
-Export *Export::getPrinterPDF(QWidget *parent, QString fileName, QPageLayout::Orientation orientation)
+ExportHtml::ExportHtml()
 {
-    QString filePath = FileIO::getFilePathSave(parent, fileName, FileIO::DateiTyp::PDF);
-    if (filePath == "") return nullptr;
-    QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
-    p->setOutputFormat(QPrinter::PdfFormat);
-    p->setOutputFileName(filePath);
-    preparePrinter(p, orientation);
-    return new Export(p);
+    format = Export::HTML;
 }
-
-ExportUpload *Export::getPrinterOnline(Networking::Server server, QPageLayout::Orientation orientation)
-{
-    QPrinter *p = new QPrinter(QPrinter::PrinterResolution);
-    preparePrinter(p, orientation);
-    return new ExportUpload(p, server);
-}
-
-Export::Export(QPrinter *printer)
-{
-    this->printer = printer;
-}
-
-bool Export::exportHTML(QString htmlString)
-{
-    if (printer == nullptr) return false;
-    QTextDocument *d = newDefaultDocument();
-    d->setHtml(htmlString);
-    d->print(printer);
-    return true;
-}
-
-void Export::preparePrinter(QPrinter *p, QPageLayout::Orientation orientation)
-{
-    if (p == nullptr) return;
-    p->setFullPage(true);
-    switch (orientation) {
-    case QPageLayout::Orientation::Portrait:
-        p->setPageMargins(QMarginsF(20, 15, 15, 15), QPageLayout::Millimeter);
-        break;
-    case QPageLayout::Orientation::Landscape:
-        p->setPageMargins(QMarginsF(15, 20, 15, 15), QPageLayout::Millimeter);
-        break;
-    }
-    p->setPageOrientation(orientation);
-}
-
-QString Export::zeitStempel(bool seitenUmbruch)
+QString ExportHtml::timeStamp(bool pageBreak)
 {
     QString s = QObject::tr("Erstellt am: %1").arg(QDateTime::currentDateTime().toString(QObject::tr("dd.MM.yyyy HH:mm")));
-    if (seitenUmbruch) {
+    if (pageBreak) {
         return "<p class='break'><small>"+s+"</small></p>";
-     } else {
+    } else {
         return "<p><small>"+s+"</small></p>";
     }
 }
-
-QTextDocument *Export::newDefaultDocument()
+QTextDocument *ExportHtml::newDefaultDocument()
 {
     QTextDocument *d = new QTextDocument();
     d->setDefaultStyleSheet(DEFAULT_STYLESHEET);
@@ -93,28 +67,92 @@ QTextDocument *Export::newDefaultDocument()
     return d;
 }
 
-ExportUpload::ExportUpload(QPrinter *printer, Networking::Server server) : Export(printer)
-{
-    this->server = server;
-    printer->setOutputFormat(QPrinter::PdfFormat);
-}
 
-bool ExportUpload::exportHTML(QString htmlString)
+ExportHtmlPaper::ExportHtmlPaper(QPrinter *printer) : ExportHtml()
+{
+    this->printer = printer;
+}
+ExportHtmlPaper *ExportHtmlPaper::generate(QWidget *parent, QPageLayout::Orientation orientation)
+{
+    QPrinter *p = generatePrinter(parent, orientation);
+    if (p == nullptr)
+        return nullptr;
+    return new ExportHtmlPaper(p);
+}
+bool ExportHtmlPaper::exportData(QString data)
 {
     if (printer == nullptr) return false;
-
-    QTemporaryFile tempFile;
-    if (! tempFile.open()) {
-        throw FileWriteException();
-    }
-    QString localFile = tempFile.fileName();
-    printer->setOutputFileName(localFile);
-
     QTextDocument *d = newDefaultDocument();
-    d->setHtml(htmlString);
+    d->setHtml(data);
     d->print(printer);
+    return true;
+}
 
-    bool status = Networking::ladeDateiHoch(server, &tempFile);
-    tempFile.close();
-    return status;
+
+ExportHtmlPdf::ExportHtmlPdf(QString filePath, QPageLayout::Orientation orientation) : ExportHtml()
+{
+    if (filePath == "") {
+        printer = nullptr;
+        return;
+    }
+    printer = new QPdfWriter(filePath);
+    Export::prepareLayout(printer, orientation);
+}
+ExportHtmlPdf *ExportHtmlPdf::generate(QWidget *parent, QString fileName, QPageLayout::Orientation orientation)
+{
+    QString filePath = FileIO::getFilePathSave(parent, fileName, FileIO::DateiTyp::PDF);
+    if (filePath == "") return nullptr;
+    return new ExportHtmlPdf(filePath, orientation);
+}
+bool ExportHtmlPdf::exportData(QString data)
+{
+    if (printer == nullptr) return false;
+    QTextDocument *d = newDefaultDocument();
+    d->setDefaultStyleSheet(d->defaultStyleSheet() + "li { margin-left: 120px; }" );
+    d->setHtml(data);
+    d->print(printer);
+    return true;
+}
+
+
+ExportHtmlUpload::ExportHtmlUpload(Networking::Server server, QPageLayout::Orientation orientation) : ExportHtml()
+{
+    this->server = server;
+    tempFile = new QTemporaryFile();
+    if (! tempFile->open()) {
+        printer = nullptr;
+        return;
+    }
+    printer = new ExportHtmlPdf(tempFile->fileName(), orientation);
+}
+ExportHtmlUpload *ExportHtmlUpload::generate(Networking::Server server, QPageLayout::Orientation orientation)
+{
+    return new ExportHtmlUpload(server, orientation);
+}
+bool ExportHtmlUpload::exportData(QString data)
+{
+    if (printer == nullptr) return false;
+    printer->exportData(data);
+    return Networking::ladeDateiHoch(server, tempFile);
+}
+
+
+ExportCsv::ExportCsv()
+{
+    format = Export::CSV;
+}
+
+ExportCsvFile::ExportCsvFile(QString path) : ExportCsv()
+{
+    filePath = path;
+}
+ExportCsvFile *ExportCsvFile::generate(QWidget *parent, QString fileName)
+{
+    QString filePath = FileIO::getFilePathSave(parent, fileName, FileIO::DateiTyp::CSV);
+    if (filePath == "") return nullptr;
+    return new ExportCsvFile(filePath);
+}
+bool ExportCsvFile::exportData(QString data)
+{
+    return FileIO::saveToFile(filePath, data);
 }

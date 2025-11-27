@@ -256,7 +256,7 @@ bool ManagerPersonal::checkNummer(int neu) const
     return true;
 }
 
-bool ManagerPersonal::exportTimesSingleAsHtml(QList<Person *> liste, Status filter, Export *printer) const
+bool ManagerPersonal::exportTimesSingleAsHtml(QList<Person *> liste, Status filter, ExportHtml *printer) const
 {
     if (printer == nullptr) return false;
 
@@ -265,7 +265,7 @@ bool ManagerPersonal::exportTimesSingleAsHtml(QList<Person *> liste, Status filt
     QMap<Category, int> sum;
     for(Person *p: liste) {
         a += p->getZeitenFuerEinzelAlsHTML();
-        a += Export::zeitStempel(p != liste.last());
+        a += printer->timeStamp(p != liste.last());
         for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
@@ -287,12 +287,12 @@ bool ManagerPersonal::exportTimesSingleAsHtml(QList<Person *> liste, Status filt
     }
     titelSeite += "</ul>";
 
-    titelSeite += Export::zeitStempel(true);
+    titelSeite += printer->timeStamp(true);
 
-    return printer->exportHTML(titelSeite+a);
+    return printer->exportData(titelSeite+a);
 }
 
-bool ManagerPersonal::exportTimesListAsHtml(QList<Person *> personen, QSet<Category> spalten, Status filter, Export *printer)
+bool ManagerPersonal::exportTimesListAsHtml(QList<Person *> personen, QSet<Category> spalten, Status filter, ExportHtml *printer)
 {
     if (printer == nullptr) return false;
 
@@ -332,12 +332,12 @@ bool ManagerPersonal::exportTimesListAsHtml(QList<Person *> personen, QSet<Categ
         }
     }
     a += "</tr></tfoot></table>";
-    a += Export::zeitStempel(false);
+    a += printer->timeStamp(false);
 
-    return printer->exportHTML(a);
+    return printer->exportData(a);
 }
 
-bool ManagerPersonal::exportMembersSingleAsHtml(Export *printer, QList<Person *> liste, Status filter) const
+bool ManagerPersonal::exportMembersSingleAsHtml(ExportHtml *printer, QList<Person *> liste, Status filter) const
 {
     if (printer == nullptr) return false;
 
@@ -346,7 +346,7 @@ bool ManagerPersonal::exportMembersSingleAsHtml(Export *printer, QList<Person *>
     QMap<Category, int> sum;
     for(Person *p: liste) {
         a += p->getPersonaldatenFuerEinzelAlsHTML();
-        a += Export::zeitStempel(p != liste.last());
+        a += printer->timeStamp(p != liste.last());
         for (Category cat: ANZEIGEREIHENFOLGEGESAMT) {
             sum.insert(cat, sum.value(cat,0)+p->getZeiten(cat));
         }
@@ -396,12 +396,12 @@ bool ManagerPersonal::exportMembersSingleAsHtml(Export *printer, QList<Person *>
             titelSeite += help.arg(Person::toString(it.key())).arg(it.value()/100.f, 0, 'f', 2);
     }
     titelSeite += "</ul>";
-    titelSeite += Export::zeitStempel(true);
+    titelSeite += printer->timeStamp(true);
 
-    return printer->exportHTML(titelSeite+a);
+    return printer->exportData(titelSeite+a);
 }
 
-bool ManagerPersonal::exportMembersListAsHtml(Export *printer, QList<Person*> liste, Status filter, QSet<QString> attributesForExport)
+bool ManagerPersonal::exportMembersListAsHtml(ExportHtml *printer, QList<Person*> liste, Status filter, QSet<QString> attributesForExport)
 {
     if (printer == nullptr) return false;
 
@@ -417,10 +417,10 @@ bool ManagerPersonal::exportMembersListAsHtml(Export *printer, QList<Person*> li
     a += QObject::tr("<p><small>%1 Personen ausgegeben.</small><br/>").arg(liste.length());
     a += QObject::tr("<small>Erstellt am: %1</small></p>").arg(QLocale().toString(QDateTime::currentDateTime(), "dd.MM.yyyy HH:mm"));
 
-    return printer->exportHTML(a);
+    return printer->exportData(a);
 }
 
-bool ManagerPersonal::exportMembersListAsCsv(QString pfad, QList<Person *> liste, QSet<QString> attributesForExport)
+bool ManagerPersonal::exportMembersListAsCsv(ExportCsv *printer, QList<Person *> liste, QSet<QString> attributesForExport)
 {
     QStringList orderedAttributes;
     if (attributesForExport.isEmpty()) {
@@ -437,7 +437,7 @@ bool ManagerPersonal::exportMembersListAsCsv(QString pfad, QList<Person *> liste
     for(Person *akt: liste) {
         csvData += akt->getPersonaldatenFuerListeAlsCSV(orderedAttributes);
     }
-    return FileIO::saveToFile(pfad, csvData);
+    return printer->exportData(csvData);
 }
 
 int ManagerPersonal::getAnzahlMitglieder(Status filter) const
@@ -461,7 +461,7 @@ QList<Person *> ManagerPersonal::getPersonen(Status filter) const
     return current;
 }
 
-bool ManagerPersonal::saveBeitraegeRegulaerAlsCSV(QString pfad) const
+bool ManagerPersonal::saveBeitraegeRegulaerAlsCSV(ExportCsv *printer) const
 {
     QList<Person*> personenFiltered;
     for (Person *pers: getPersonen(Status::AlleMitglieder)) {
@@ -469,10 +469,10 @@ bool ManagerPersonal::saveBeitraegeRegulaerAlsCSV(QString pfad) const
             personenFiltered.append(pers);
     }
     QSet<QString> data = {"Name", "Nummer", "IBAN", "Bank", "Kontoinhaber", "Beitragsart", "Beitrag"};
-    return exportMembersListAsCsv(pfad, personenFiltered, data);
+    return exportMembersListAsCsv(printer, personenFiltered, data);
 }
 
-bool ManagerPersonal::saveBeitraegeNachzahlungAlsCSV(QString pfad) const
+bool ManagerPersonal::saveBeitraegeNachzahlungAlsCSV(ExportCsv *printer) const
 {
     QList<Person*> personenFiltered;
     for (Person *pers: getPersonen(Status::AlleMitglieder)) {
@@ -480,5 +480,5 @@ bool ManagerPersonal::saveBeitraegeNachzahlungAlsCSV(QString pfad) const
             personenFiltered.append(pers);
     }
     QSet<QString> data = {"Name", "Nummer", "IBAN", "Bank", "Kontoinhaber", "Beitragsart", "Beitrag (Nachzahlung)"};
-    return exportMembersListAsCsv(pfad, personenFiltered, data);
+    return exportMembersListAsCsv(printer, personenFiltered, data);
 }
