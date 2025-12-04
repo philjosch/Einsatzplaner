@@ -1,14 +1,19 @@
 <RCC>
-    <qresource prefix="/appIcon">
-        <file>Einsatzplaner.icns</file>
-        <file>Einsatzplaner.ico</file>
-        <file>Einsatzplaner.png</file>
-        <file>EPL.icns</file>
-        <file>EPL.ico</file>
-        <file>EPL.png</file>
+    <qresource prefix="/">
+        <file>Einsatzplaner/Assets.car</file>
+        <file>Einsatzplaner/Einsatzplaner.icns</file>
+        <file>Einsatzplaner/Einsatzplaner.ico</file>
+        <file>Einsatzplaner/Einsatzplaner.png</file>
+        <file>Personalplaner/Assets.car</file>
+        <file>Personalplaner/Personalplaner.icns</file>
+        <file>Personalplaner/Personalplaner.ico</file>
+        <file>Personalplaner/Personalplaner.png</file>
+        <file>EPL/Assets.car</file>
+        <file>EPL/EPL.icns</file>
+        <file>EPL/EPL.ico</file>
+        <file>EPL/EPL.png</file>
         <file>EplDocIcon.icns</file>
-        <file>Personalplaner.icns</file>
-        <file>Personalplaner.ico</file>
-        <file>Personalplaner.png</file>
+        <file>EplDocIcon.ico</file>
+        <file>EplDocIcon.png</file>
     </qresource>
 </RCC>

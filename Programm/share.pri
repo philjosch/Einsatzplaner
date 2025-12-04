@@ -77,12 +77,15 @@ win32 {
 }
 macos {
     QMAKE_INFO_PLIST = $$PWD/Info.plist
-    ADDITIONAL_FILES.files = $$PWD/../Icon/EplDocIcon.icns $$PWD/../LICENSE
+    ADDITIONAL_FILES.files = \
+            $$PWD/../Icon/EplDocIcon.icns \
+            $$PWD/../LICENSE \
+            $$PWD/../Icon/$${TARGET}/Assets.car
     ADDITIONAL_FILES.path = Contents/Resources
     QMAKE_BUNDLE_DATA += ADDITIONAL_FILES
 
     BUNDLEID = de.philipp-schepper.$${TARGET_KLEIN}
-    ICON = $$PWD/../Icon/$${TARGET}.icns
+    ICON = $$PWD/../Icon/$${TARGET}/$${TARGET}.icns
 
     QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
 }

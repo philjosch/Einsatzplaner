@@ -35,7 +35,7 @@ CoreApplication* CoreApplication::generateApp(int argc, char *argv[], QString na
 
     QCoreApplication::setApplicationName(name);
 
-    QIcon icon(QString(":/appIcon/%1.icns").arg(name));
+    QIcon icon(QString(":/%1/%1.icns").arg(name));
     a->setWindowIcon(icon);
 
 //    QTranslator qtTranslator;
