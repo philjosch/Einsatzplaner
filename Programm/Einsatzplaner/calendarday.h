@@ -2,6 +2,8 @@
 #define CALENDARDAY_H
 
 #include "aactivity.h"
+#include "activityfiltermodel.h"
+#include "activitymodel.h"
 
 #include <QListWidgetItem>
 
@@ -17,15 +19,16 @@ public:
     explicit CalendarDay(QWidget *parent);
     ~CalendarDay();
     void show(QDate datum, bool gray);
-    void remove(AActivity *a);
-    void insert(AActivity *a);
+
+    void setModel(ActivityModel *sourceModel);
+
 signals:
-    void clickedItem(AActivity *);
+    void clickedItem(QModelIndex);
     void addActivity(QDate);
 private:
     Ui::CalendarDay *ui;
     QDate date;
-    QMap<AActivity*, QListWidgetItem*> actToItem;
+    ActivityFilterModel *model;
 };
 
 #endif // CALENDARDAY_H

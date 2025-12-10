@@ -21,6 +21,8 @@ QT       += core printsupport network
 !versionAtLeast(QT_VERSION, 6.9.0):error("Qt version 6.9 is required for this project")
 
 SOURCES += einstellungen.cpp \
+    activityfiltermodel.cpp \
+    activitymodel.cpp \
     auswahl.cpp \
     einsatz.cpp \
     eplfile.cpp \
@@ -40,6 +42,8 @@ SOURCES += einstellungen.cpp \
     filesettings.cpp
 
 HEADERS  += einstellungen.h \
+    activityfiltermodel.h \
+    activitymodel.h \
     auswahl.h \
     einsatz.h \
     eplexception.h \

@@ -263,13 +263,6 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="5">
-    <widget class="QListWidget" name="listAnzeige">
-     <property name="selectionMode">
-      <enum>QAbstractItemView::SelectionMode::MultiSelection</enum>
-     </property>
-    </widget>
-   </item>
    <item row="4" column="0" colspan="5">
     <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0,0,0,1" columnminimumwidth="0,135,135,135,0,0">
      <item row="3" column="1">
@@ -281,9 +274,6 @@
      </item>
      <item row="0" column="2">
       <widget class="QRadioButton" name="checkListe">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="text">
         <string>Listenansicht</string>
        </property>
@@ -304,9 +294,6 @@
      </item>
      <item row="0" column="1">
       <widget class="QRadioButton" name="checkEinzel">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="text">
         <string>Einzelansichten</string>
        </property>
@@ -370,6 +357,13 @@
       </spacer>
      </item>
     </layout>
+   </item>
+   <item row="3" column="0" colspan="5">
+    <widget class="QListView" name="listAnzeige">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SelectionMode::MultiSelection</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

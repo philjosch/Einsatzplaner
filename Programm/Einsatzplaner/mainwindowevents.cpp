@@ -1,4 +1,6 @@
 #include "mainwindowevents.h"
+#include "activityfiltermodel.h"
+#include "activitymodel.h"
 #include "ui_mainwindowevents.h"
 #include "exportdialog.h"
 #include "eplexception.h"
@@ -12,6 +14,10 @@ MainWindowEvents::MainWindowEvents(EplFile *file) : CoreMainWindow(file), ui(new
 {
     ui->setupUi(this);
     // Modell
+    model = new ActivityModel(manager);
+    ui->listView->setModel(model);
+    ui->listView->setModelColumn(3);
+    ui->listView->show();
 
     // Views
     personalfenster = new PersonalWindow(this, personal);
@@ -20,9 +26,6 @@ MainWindowEvents::MainWindowEvents(EplFile *file) : CoreMainWindow(file), ui(new
     recentlyUsedClear = ui->actionClear;
 
     // Controller
-    listitem = QMap<AActivity*, QListWidgetItem*>();
-    itemToList = QMap<QListWidgetItem*, AActivity*>();
-
     connect(ui->actionPreferences, &QAction::triggered, this, &MainWindowEvents::showPreferences);
     connect(ui->actionAboutQt, &QAction::triggered, this, &MainWindowEvents::showAboutQt);
     connect(ui->actionAboutApp, &QAction::triggered, this, &MainWindowEvents::showAboutApp);
@@ -53,7 +56,8 @@ MainWindowEvents::MainWindowEvents(EplFile *file) : CoreMainWindow(file), ui(new
     connect(ui->actionNeuArbeitseinsatz, &QAction::triggered, this, [=]() { newActivity(); });
     connect(ui->actionNeuFahrtag, &QAction::triggered, this, [=]() { newFahrtag(); });
     connect(ui->dateSelector, &QDateEdit::dateChanged, this, &MainWindowEvents::showDate);
-    connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) { openAktivitaet(itemToList.value(item)); });
+    connect(ui->listView, &QListView::doubleClicked, this, [=](QModelIndex index) { openAktivitaet(manager->getActivities().at(index.row())); });
+    // connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) { openAktivitaet(itemToList.value(item)); });
 
     // Setup fuer die Darstellung des Kalenders
     tage = QList<CalendarDay*>();
@@ -64,23 +68,19 @@ MainWindowEvents::MainWindowEvents(EplFile *file) : CoreMainWindow(file), ui(new
     tage << ui->day1_5 << ui->day2_5 << ui->day3_5 << ui->day4_5 << ui->day5_5 << ui->day6_5 << ui->day7_5;
     tage << ui->day1_6 << ui->day2_6 << ui->day3_6 << ui->day4_6 << ui->day5_6 << ui->day6_6 << ui->day7_6;
     for(CalendarDay *c: std::as_const(tage)) {
-        connect(c, &CalendarDay::clickedItem, this, &MainWindowEvents::openAktivitaet);
+        c->setModel(model);
+        connect(c, &CalendarDay::clickedItem, this, [=](QModelIndex index) {
+                MainWindowEvents::openAktivitaet(model->getData(index));
+        });
         connect(c, &CalendarDay::addActivity, this, &MainWindowEvents::newActivity);
     }
+
 
     if (datei->istSchreibgeschuetzt()) {
         setWindowTitle(tr("Übersicht - Schreibgeschützt"));
     }
 
     QDate currentDate = datei->getAnzeigeDatum();
-    // Alle aktivitäten in die seitenleiste eintragen
-    for(AActivity *a: manager->getActivities()) {
-        QListWidgetItem *i = new QListWidgetItem("");
-        setListItem(i, a);
-        ui->listWidget->insertItem(ui->listWidget->count(), i);
-        listitem.insert(a, i);
-        itemToList.insert(i, a);
-    }
     // an das gespeicherte Datum gehen
     ui->dateSelector->setDate(currentDate);
     ui->dateSelector->repaint();
@@ -151,75 +151,23 @@ void MainWindowEvents::onDateiWurdeErfolgreichGespeichert()
 void MainWindowEvents::onAktivitaetWirdEntferntWerden(AActivity *a)
 {
     CoreMainWindow::onAktivitaetWirdEntferntWerden(a);
-
-    ui->listWidget->takeItem(ui->listWidget->row(listitem.value(a)));
-    itemToList.remove(listitem.value(a));
-    listitem.remove(a);
-    int pos = getPosInCalendar(a->getDatum());
-    if (pos >= 0)
-        tage.at(pos)->remove(a);
-
 }
 void MainWindowEvents::onAktivitaetWurdeBearbeitet(AActivity *a, QDate altesDatum)
 {
     CoreMainWindow::onAktivitaetWurdeBearbeitet(a, altesDatum);
-
-    int oldPos = -1;
-    if (altesDatum.isValid())
-        oldPos = getPosInCalendar(altesDatum);
-
-    if (oldPos < 42 && oldPos >= 0) {
-        tage.at(oldPos)->remove(a);
-    }
-
-    // Richtiges Anzeigen im Kalender
-    int pos = getPosInCalendar(a->getDatum());
-    if (pos < 42 && pos >= 0) {
-        tage.at(pos)->insert(a);
-    }
-
-    // Richtiges Anzeigen in der Übersichts liste
-    setListItem(listitem.value(a), a);
-
-    // Prüfen, ob das element weitgenug vorne (oben) ist
-    int i = ui->listWidget->row(listitem.value(a));
-    AActivity *ref;
-    while (i > 0) {
-        ref = itemToList.value(ui->listWidget->item(i-1));
-        if (*a < *ref) {
-            ui->listWidget->insertItem(i-1, ui->listWidget->takeItem(i));
-            i--;
-        } else {
-            break;
-        }
-    }
-
-    // Prüfen, ob das element weit genug hinten (unten) ist
-    while (i < ui->listWidget->count()-1) {
-        ref = itemToList.value(ui->listWidget->item(i+1));
-        if (*ref < *a) {
-            ui->listWidget->insertItem(i, ui->listWidget->takeItem(i+1));
-            i++;
-        } else {
-            break;
-        }
-    }
 }
 
 
 void MainWindowEvents::showExportDialog()
 {
-    exportDialog->hardReload();
     exportDialog->exec();
 }
 
 void MainWindowEvents::deleteSelectedInList()
 {
-    QList<QListWidgetItem*> selected = ui->listWidget->selectedItems();
-    if (! selected.isEmpty()) {
-        for(QListWidgetItem *item: std::as_const(selected)) {
-            loeschenAktivitaet(itemToList.value(item));
-        }
+    QModelIndexList indexList = ui->listView->selectionModel()->selection().indexes();
+    for(QModelIndex index: std::as_const(indexList)) {
+        loeschenAktivitaet(model->getData(index));
     }
 }
 
@@ -268,13 +216,6 @@ void MainWindowEvents::showDate(QDate date)
         tage.at(i)->show(akt, akt.month() != displayMonth);
         akt = akt.addDays(1);
     }
-
-    for (AActivity *a: manager->getActivities()) {
-        int pos = getPosInCalendar(a->getDatum());
-        if (pos != -1) {
-            tage.at(pos)->insert(a);
-        }
-    }
 }
 
 
@@ -292,38 +233,5 @@ void MainWindowEvents::newActivity(QDate d)
 }
 void MainWindowEvents::newAActivityHandler(AActivity *a)
 {
-    // Einfügen in die Seitenliste
-    ui->listWidget->insertItem(ui->listWidget->count(), a->getString());
-    QListWidgetItem *i = ui->listWidget->item(ui->listWidget->count()-1);
-    listitem.insert(a, i);
-    itemToList.insert(i, a);
-
     onAktivitaetWurdeBearbeitet(a);
-}
-
-
-void MainWindowEvents::setListItem(QListWidgetItem *i, AActivity *a)
-{
-    if (i == nullptr) return;
-    i->setText(a->getString());
-    i->setToolTip(toString(a->getArt()));
-    i->setBackground(QBrush(QColor(a->getFarbe())));
-    i->setForeground(QBrush(QColor("black")));
-    QFont font = i->font();
-    font.setStrikeOut(a->getAbgesagt());
-    font.setBold(a->getWichtig());
-    i->setFont(font);
-}
-
-int MainWindowEvents::getPosInCalendar(QDate date)
-{
-    QDate start = ui->dateSelector->date();
-//    start = start.addDays(-start.day()+1); // Datum auf Monatsanfang setzen
-    start = start.addDays(-start.dayOfWeek()+1);
-
-    long long diff = start.daysTo(date);
-    if (diff < 0 || diff >= tage.length()) {
-        return -1;
-    }
-    return static_cast<int>(diff);
 }

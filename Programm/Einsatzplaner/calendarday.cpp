@@ -4,8 +4,9 @@
 CalendarDay::CalendarDay(QWidget *parent) : QFrame(parent), ui(new Ui::CalendarDay)
 {
     ui->setupUi(this);
-    actToItem = QMap<AActivity*, QListWidgetItem*>();
-    connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) {emit clickedItem(actToItem.key(item)); });
+    connect(ui->listView, &QListView::doubleClicked, this, [=](QModelIndex index) {
+        emit clickedItem(model->mapToSource(index));
+    });
     connect(ui->buttonAdd, &QToolButton::clicked, this, [=]() { emit addActivity(date); });
 }
 
@@ -18,10 +19,10 @@ void CalendarDay::show(QDate datum, bool gray)
 {
     date = datum;
     ui->label->setText(datum.toString("d "));
+    model->setDateStart(datum.startOfDay());
+    model->setDateEnd(date.endOfDay());
     if (date.day() == 1)
         ui->label->setText(QLocale::system().toString(datum, "d. MMM "));
-    ui->listWidget->clear();
-    actToItem.clear();
 
     if (datum == QDate::currentDate()) {
         ui->buttonAdd->setStyleSheet("background-color: #6B1B23; color: white; border: none; ");
@@ -37,33 +38,13 @@ void CalendarDay::show(QDate datum, bool gray)
     ui->label->setStyleSheet(    "background-color: palette(base); color: palette(text);");
 }
 
-void CalendarDay::remove(AActivity *a)
+void CalendarDay::setModel(ActivityModel *sourceModel)
 {
-    if (! actToItem.contains(a)) return;
-    QListWidgetItem *item = actToItem.value(a);
-    actToItem.remove(a);
-    int row = ui->listWidget->row(item);
-    ui->listWidget->takeItem(row);
-    delete item;
-}
-
-void CalendarDay::insert(AActivity *a)
-{
-    QListWidgetItem* item = nullptr;
-    if (actToItem.contains(a)) {
-        item = actToItem.value(a);
-    } else {
-        item = new QListWidgetItem();
-        actToItem.insert(a, item);
-        ui->listWidget->insertItem(ui->listWidget->count(), item);
-    }
-
-    item->setText(a->getStringShort().replace("<br/>","\n"));
-    item->setToolTip(toString(a->getArt()));
-    item->setBackground(QBrush(QColor(a->getFarbe())));
-    item->setForeground(QBrush(QColor("black")));
-    QFont font = item->font();
-    font.setStrikeOut(a->getAbgesagt());
-    font.setBold(a->getWichtig());
-    item->setFont(font);
+    model = new ActivityFilterModel();
+    model->setDynamicSortFilter(true);
+    model->setSource(sourceModel);
+    model->setIgnoreTypes();
+    ui->listView->setModel(model);
+    ui->listView->setModelColumn(2);
+    ui->listView->show();
 }

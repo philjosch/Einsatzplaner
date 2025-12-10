@@ -726,7 +726,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QListWidget" name="listWidget">
+      <widget class="QListView" name="listView">
        <property name="minimumSize">
         <size>
          <width>205</width>
@@ -1094,7 +1094,7 @@
   <tabstop>dateSelector</tabstop>
   <tabstop>buttonToday</tabstop>
   <tabstop>buttonNext</tabstop>
-  <tabstop>listWidget</tabstop>
+  <tabstop>listView</tabstop>
  </tabstops>
  <resources>
   <include location="../icons/icons_rc.qrc"/>

@@ -1,6 +1,7 @@
 #ifndef EXPORTDIALOG_H
 #define EXPORTDIALOG_H
 
+#include "activityfiltermodel.h"
 #include "manager.h"
 #include "filesettings.h"
 
@@ -19,14 +20,11 @@ public:
     explicit ExportDialog(Manager *m, FileSettings *settings, QWidget *parent);
     ~ExportDialog();
 
-    void hardReload();
-
 private slots:
-    void changedFrom(int index);
+    void changedFrom();
+    void changedTill();
+    void changedType();
 
-    void changedTill(int index);
-
-    void show();
     void showPrintPreview();
 
     void exportUpload();
@@ -37,11 +35,10 @@ private:
     Ui::ExportDialog *ui;
     QWidget *p;
     Manager *manager;
+    ActivityFilterModel *filterModel;
 
-    QMap<AActivity*, QListWidgetItem*> actToList;
     FileSettings *settings;
 
-    bool testShow(AActivity *a);
     QList<AActivity*> getAActivityForExport(bool ignoreSelectionStatus = false);
 };
 

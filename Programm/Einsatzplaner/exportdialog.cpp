@@ -1,4 +1,5 @@
 #include "exportdialog.h"
+#include "activitymodel.h"
 #include "ui_exportdialog.h"
 #include "export.h"
 
@@ -18,23 +19,30 @@ ExportDialog::ExportDialog(Manager *m, FileSettings *settings, QWidget *parent) 
     ui->dateVon->setDate(QDate::currentDate());
     ui->dateBis->setDate(QDate::currentDate().addDays(60)); // Anzeige für zwei Monate in der Zukunft
     manager = m;
+    ActivityModel *model = new ActivityModel(manager);
+    filterModel = new ActivityFilterModel();
+    filterModel->setSource(model);
+    ui->listAnzeige->setModel(filterModel);
+    ui->listAnzeige->setModelColumn(3);
+    ui->listAnzeige->show();
 
-    connect(ui->dateVon, &QDateEdit::dateChanged, this, &ExportDialog::show);
-    connect(ui->dateBis, &QDateEdit::dateChanged, this, &ExportDialog::show);
-    connect(ui->comboFahrtag, &QComboBox::currentTextChanged, this, &ExportDialog::show);
-    connect(ui->checkActivity, &QCheckBox::clicked, this, &ExportDialog::show);
-    connect(ui->listAnzeige, &QListWidget::itemSelectionChanged, this, [=]() {
-        ui->checkEinzel->setEnabled(! ui->listAnzeige->selectedItems().isEmpty()); });
+    connect(ui->dateVon, &QDateEdit::dateChanged, this, &ExportDialog::changedFrom);
+    connect(ui->comboVon, &QComboBox::currentIndexChanged, this, &ExportDialog::changedFrom);
 
-    connect(ui->comboVon, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::changedFrom);
-    connect(ui->comboBis, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportDialog::changedTill);
+    connect(ui->dateBis, &QDateEdit::dateChanged, this, &ExportDialog::changedTill);
+    connect(ui->comboBis, &QComboBox::currentIndexChanged, this, &ExportDialog::changedTill);
+
+    connect(ui->comboFahrtag, &QComboBox::currentTextChanged, this, &ExportDialog::changedType);
+    connect(ui->checkActivity, &QCheckBox::clicked, this, &ExportDialog::changedType);
 
     connect(ui->pushPreview, &QPushButton::clicked, this, &ExportDialog::showPrintPreview);
     connect(ui->pushExportUpload, &QPushButton::clicked, this, &ExportDialog::exportUpload);
     connect(ui->pushExportPDF, &QPushButton::clicked, this, &ExportDialog::exportPDF);
     connect(ui->pushExportPrint, &QPushButton::clicked, this, &ExportDialog::exportPrint);
 
-    hardReload();
+    changedFrom();
+    changedTill();
+    changedType();
 }
 
 ExportDialog::~ExportDialog()
@@ -42,68 +50,87 @@ ExportDialog::~ExportDialog()
     delete ui;
 }
 
-void ExportDialog::hardReload()
+void ExportDialog::changedFrom()
 {
-    actToList = QMap<AActivity*, QListWidgetItem*>();
-
-    ui->listAnzeige->clear();
-    for(AActivity *a: manager->getActivities()) {
-        QString farbe = a->getFarbe();
-        QListWidgetItem *item = new QListWidgetItem(a->getString());
-        item->setBackground(QBrush(QColor(farbe)));
-        item->setForeground(QBrush(QColor("black")));
-        item->setToolTip(a->getAnlass().replace("<br/>","\n"));
-        ui->listAnzeige->insertItem(ui->listAnzeige->count(), item);
-        actToList.insert(a, item);
-    }
-    show();
-}
-
-void ExportDialog::changedFrom(int index)
-{
-    switch (index) {
-    case 0: // Ab datum
+    QDate ref = QDate::currentDate();
+    QDateTime startTime;
+    switch (ui->comboVon->currentIndex()) {
+    case 0: // From given date on
+        startTime = ui->dateVon->date().startOfDay();
         ui->dateVon->setEnabled(true);
         break;
-    case 1: // Ab jetzt
-    case 2: // Ab beginn des Jahres
-    case 3: // Ab egal
+    case 1: // From now on
+        startTime = QDateTime::currentDateTime();
+        ui->dateVon->setEnabled(false);
+        break;
+    case 2: // From start of this year
+        startTime = QDate(ref.year(), 1, 1).startOfDay();
+        ui->dateVon->setEnabled(false);
+        break;
+    case 3: // All past events
+        startTime = QDate(1900, 1, 1).startOfDay();
         ui->dateVon->setEnabled(false);
         break;
     default:
+        // From today on
+        startTime = ref.startOfDay();
         ui->dateVon->setEnabled(true);
+        break;
     }
-    show();
+    filterModel->setDateStart(startTime);
 }
 
-void ExportDialog::changedTill(int index)
+void ExportDialog::changedTill()
 {
-    switch (index) {
-    case 0: // Bis datum
+    QDate ref = QDate::currentDate();
+    QDateTime endTime;
+    switch (ui->comboBis->currentIndex()) {
+    case 0: // Until given date
+        endTime = ui->dateBis->date().endOfDay();
         ui->dateBis->setEnabled(true);
         break;
-    case 1: // Bis heute
-    case 2: // Bis Ende das Jahres
-    case 3: // Bis egal egal
+    case 1: // Until today
+        endTime = ref.endOfDay();
+        ui->dateBis->setEnabled(false);
+        break;
+    case 2: // Until the end of this year
+        endTime = QDate(ref.year(), 12, 31).endOfDay();
+        ui->dateBis->setEnabled(false);
+        break;
+    case 3: // All future events
+        endTime = QDate(9999, 12, 31).endOfDay();
         ui->dateBis->setEnabled(false);
         break;
     default:
+        endTime = ref.endOfDay();
         ui->dateBis->setEnabled(true);
+        break;
     }
-    show();
+
+    filterModel->setDateEnd(endTime);
 }
 
-void ExportDialog::show()
+void ExportDialog::changedType()
 {
-    ui->checkListe->setEnabled(false);
-    for(AActivity *a: manager->getActivities()) {
-        if(testShow(a)) {
-            actToList.value(a)->setHidden(false);
-            ui->checkListe->setEnabled(true);
-        } else {
-            actToList.value(a)->setHidden(true);
-        }
+    int i = ui->comboFahrtag->currentIndex();
+    QSet<Art> filter = {};
+    if (i == 9) {
+    } else if (i == 8) {
+        filter << Museumszug
+               << Sonderzug
+               << Gesellschaftssonderzug
+               << Nikolauszug
+               << ELFundMuseumszug
+               << Schnupperkurs
+               << Bahnhofsfest
+               << SonstigerFahrtag;
+    } else {
+        filter.insert((Art)i);
     }
+    if (ui->checkActivity->isChecked()) {
+        filter << Arbeitseinsatz;
+    }
+    filterModel->setAcceptedTypes(filter);
 }
 
 void ExportDialog::showPrintPreview()
@@ -124,78 +151,23 @@ void ExportDialog::showPrintPreview()
     prev->exec(); // == QDialog::Accepted)
 }
 
-bool ExportDialog::testShow(AActivity *a)
-{
-    QDate abD = ui->dateVon->date();
-    Auswahl::AnfangBedingung ab = Auswahl::AbAlle;
-    // Prüfen bei den Einträgen, ob das Datum stimmt
-    switch (ui->comboVon->currentIndex()) {
-    case 0: // Ab datum
-        ab = Auswahl::AbDatum;
-        break;
-    case 1: // Ab jetzt
-        ab = Auswahl::AbJetzt;
-        break;
-    case 2: // Ab beginn des Jahres
-        ab = Auswahl::AbAnfangDesJahres;
-        break;
-    case 3: // Ab egal
-        ab = Auswahl::AbAlle;
-        break;
-    default:
-        break;
-    }
-
-    QDate bisD = ui->dateBis->date();
-    Auswahl::EndeBedingung bis = Auswahl::BisEndeDesJahres;
-    switch (ui->comboBis->currentIndex()) {
-    case 0: // Bis datum
-        bis = Auswahl::BisDatum;
-        break;
-    case 1: // Bis heute
-        bis = Auswahl::BisHeute;
-        break;
-    case 2: // Bis Ende des Jahres
-        bis = Auswahl::BisEndeDesJahres;
-        break;
-    case 3: // Bis egal
-        bis = Auswahl::BisAlle;
-        break;
-    default:
-        break;
-    }
-    if (! a->check(Auswahl(ab, abD, bis, bisD)))
-        return false;
-
-    // Prüfen, ob die Art stimmt (Fahrtag, Arbeitseinsatz)
-    if ((a->getArt() != Art::Arbeitseinsatz)) {
-        int i = ui->comboFahrtag->currentIndex();
-        if (i == 9) return false;
-        if (i != 8) {
-            if (i != a->getArt()) {
-                return false;
-            }
-        }
-        return true;
-        // es ist ein fahrtag
-    } else {
-        return ui->checkActivity->isChecked();
-        // es ist kein fahrtag
-    }
-}
-
 QList<AActivity *> ExportDialog::getAActivityForExport(bool ignoreSelectionStatus)
 {
-    ignoreSelectionStatus = ignoreSelectionStatus || ui->buttonGroupExportArt->checkedId() == 0;
+    QModelIndexList indexList;
+    if (ignoreSelectionStatus || ui->buttonGroupExportArt->checkedId() == 0) {
+        for (int i = 0; i < filterModel->rowCount(); ++i) {
+            indexList.append(filterModel->index(i, 0));
+        }
+    } else {
+        indexList = ui->listAnzeige->selectionModel()->selection().indexes();
+    }
 
     QList<AActivity*> liste = QList<AActivity*>();
-    for(AActivity *a: manager->getActivities()) {
-        if (actToList.value(a)->isSelected() || ignoreSelectionStatus) {
-            if(! actToList.value(a)->isHidden()) {
-                liste.append(a);
-            }
-        }
+    for(QModelIndex index: indexList) {
+        QModelIndex indexSource = filterModel->mapToSource(index);
+        liste.append(filterModel->sourceModel()->getData(indexSource));
     }
+    AActivity::sort(&liste);
     return liste;
 }
 

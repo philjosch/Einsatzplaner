@@ -1,6 +1,7 @@
 #ifndef MAINWINDOWEVENTS_H
 #define MAINWINDOWEVENTS_H
 
+#include "activitymodel.h"
 #include "coremainwindow.h"
 #include "aactivity.h"
 #include "calendarday.h"
@@ -52,14 +53,12 @@ protected slots:
     void newActivity(QDate d = QDate::currentDate());
     void newAActivityHandler(AActivity *a);
 
-    // Liste der Aktivitäten
-    void setListItem(QListWidgetItem *i, AActivity *a);
-
 protected:
     //** Hilfsmethoden
     int getPosInCalendar(QDate date);
 
     //** Modell
+    ActivityModel* model;
 
     //** View
     Ui::MainWindowEvents *ui;
@@ -68,9 +67,6 @@ protected:
     PersonalWindow *personalfenster;
     ExportDialog *exportDialog;
 
-    //** Controller
-    QMap<AActivity*, QListWidgetItem*> listitem; // Gibt an, welcher Aktivität welches Listenelement in der gesamtListe zugeordnet ist
-    QMap<QListWidgetItem*, AActivity*> itemToList;
 };
 
 #endif // MAINWINDOWEVENTS_H
