@@ -38,10 +38,9 @@ void CalendarDay::show(QDate datum, bool gray)
     ui->label->setStyleSheet(    "background-color: palette(base); color: palette(text);");
 }
 
-void CalendarDay::setModel(ActivityModel *sourceModel)
+void CalendarDay::setModel(Manager *sourceModel)
 {
     model = new ActivityFilterModel();
-    model->setDynamicSortFilter(true);
     model->setSource(sourceModel);
     model->setIgnoreTypes();
     ui->listView->setModel(model);

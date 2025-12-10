@@ -1,6 +1,4 @@
 #include "mainwindowevents.h"
-#include "activityfiltermodel.h"
-#include "activitymodel.h"
 #include "ui_mainwindowevents.h"
 #include "exportdialog.h"
 #include "eplexception.h"
@@ -14,8 +12,7 @@ MainWindowEvents::MainWindowEvents(EplFile *file) : CoreMainWindow(file), ui(new
 {
     ui->setupUi(this);
     // Modell
-    model = new ActivityModel(manager);
-    ui->listView->setModel(model);
+    ui->listView->setModel(manager);
     ui->listView->setModelColumn(3);
     ui->listView->show();
 
@@ -57,7 +54,6 @@ MainWindowEvents::MainWindowEvents(EplFile *file) : CoreMainWindow(file), ui(new
     connect(ui->actionNeuFahrtag, &QAction::triggered, this, [=]() { newFahrtag(); });
     connect(ui->dateSelector, &QDateEdit::dateChanged, this, &MainWindowEvents::showDate);
     connect(ui->listView, &QListView::doubleClicked, this, [=](QModelIndex index) { openAktivitaet(manager->getActivities().at(index.row())); });
-    // connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, [=](QListWidgetItem *item) { openAktivitaet(itemToList.value(item)); });
 
     // Setup fuer die Darstellung des Kalenders
     tage = QList<CalendarDay*>();
@@ -68,9 +64,9 @@ MainWindowEvents::MainWindowEvents(EplFile *file) : CoreMainWindow(file), ui(new
     tage << ui->day1_5 << ui->day2_5 << ui->day3_5 << ui->day4_5 << ui->day5_5 << ui->day6_5 << ui->day7_5;
     tage << ui->day1_6 << ui->day2_6 << ui->day3_6 << ui->day4_6 << ui->day5_6 << ui->day6_6 << ui->day7_6;
     for(CalendarDay *c: std::as_const(tage)) {
-        c->setModel(model);
+        c->setModel(manager);
         connect(c, &CalendarDay::clickedItem, this, [=](QModelIndex index) {
-                MainWindowEvents::openAktivitaet(model->getData(index));
+                MainWindowEvents::openAktivitaet(manager->getData(index));
         });
         connect(c, &CalendarDay::addActivity, this, &MainWindowEvents::newActivity);
     }
@@ -167,7 +163,7 @@ void MainWindowEvents::deleteSelectedInList()
 {
     QModelIndexList indexList = ui->listView->selectionModel()->selection().indexes();
     for(QModelIndex index: std::as_const(indexList)) {
-        loeschenAktivitaet(model->getData(index));
+        loeschenAktivitaet(manager->getData(index));
     }
 }
 

@@ -1,5 +1,4 @@
 #include "exportdialog.h"
-#include "activitymodel.h"
 #include "ui_exportdialog.h"
 #include "export.h"
 
@@ -14,16 +13,15 @@ ExportDialog::ExportDialog(Manager *m, FileSettings *settings, QWidget *parent) 
     ui->buttonGroupExportArt->setId(ui->checkEinzel, 1);
     ui->checkListe->click();
 
-    p = parent;
+    manager = m;
+    filterModel = new ActivityFilterModel();
+    filterModel->setSource(manager);
+    ui->listAnzeige->setModel(filterModel);
+    ui->listAnzeige->setModelColumn(3);
+
     this->settings = settings;
     ui->dateVon->setDate(QDate::currentDate());
     ui->dateBis->setDate(QDate::currentDate().addDays(60)); // Anzeige für zwei Monate in der Zukunft
-    manager = m;
-    ActivityModel *model = new ActivityModel(manager);
-    filterModel = new ActivityFilterModel();
-    filterModel->setSource(model);
-    ui->listAnzeige->setModel(filterModel);
-    ui->listAnzeige->setModelColumn(3);
     ui->listAnzeige->show();
 
     connect(ui->dateVon, &QDateEdit::dateChanged, this, &ExportDialog::changedFrom);
@@ -159,7 +157,7 @@ QList<AActivity *> ExportDialog::getAActivityForExport(bool ignoreSelectionStatu
             indexList.append(filterModel->index(i, 0));
         }
     } else {
-        indexList = ui->listAnzeige->selectionModel()->selection().indexes();
+        indexList = ui->listAnzeige->selectionModel()->selectedIndexes();
     }
 
     QList<AActivity*> liste = QList<AActivity*>();

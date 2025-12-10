@@ -1,7 +1,6 @@
 #ifndef MAINWINDOWEVENTS_H
 #define MAINWINDOWEVENTS_H
 
-#include "activitymodel.h"
 #include "coremainwindow.h"
 #include "aactivity.h"
 #include "calendarday.h"
@@ -58,7 +57,6 @@ protected:
     int getPosInCalendar(QDate date);
 
     //** Modell
-    ActivityModel* model;
 
     //** View
     Ui::MainWindowEvents *ui;

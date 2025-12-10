@@ -3,7 +3,6 @@
 
 #include "aactivity.h"
 #include "activityfiltermodel.h"
-#include "activitymodel.h"
 
 #include <QListWidgetItem>
 
@@ -20,7 +19,7 @@ public:
     ~CalendarDay();
     void show(QDate datum, bool gray);
 
-    void setModel(ActivityModel *sourceModel);
+    void setModel(Manager *sourceModel);
 
 signals:
     void clickedItem(QModelIndex);

@@ -46,7 +46,7 @@ void ActivityFilterModel::setIgnoreTypes()
 
 bool ActivityFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    AActivity *curr = source->getData(sourceModel()->index(sourceRow, 1, sourceParent));
+    AActivity *curr = source->getData(source->index(sourceRow, 1, sourceParent));
     if (curr == nullptr)
         return false;
     if (curr->getBis() < dateStart)
@@ -56,13 +56,13 @@ bool ActivityFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sou
     return (acceptedTypes.contains(curr->getArt()));
 }
 
-void ActivityFilterModel::setSource(ActivityModel *model)
+void ActivityFilterModel::setSource(Manager *model)
 {
     setSourceModel(model);
     source = model;
 }
 
-ActivityModel *ActivityFilterModel::sourceModel() const
+Manager *ActivityFilterModel::sourceModel() const
 {
     return source;
 }

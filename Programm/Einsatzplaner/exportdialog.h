@@ -1,8 +1,8 @@
 #ifndef EXPORTDIALOG_H
 #define EXPORTDIALOG_H
 
-#include "activityfiltermodel.h"
 #include "manager.h"
+#include "activityfiltermodel.h"
 #include "filesettings.h"
 
 #include <QDialog>
@@ -33,7 +33,6 @@ private slots:
 
 private:
     Ui::ExportDialog *ui;
-    QWidget *p;
     Manager *manager;
     ActivityFilterModel *filterModel;
 

@@ -22,7 +22,6 @@ QT       += core printsupport network
 
 SOURCES += einstellungen.cpp \
     activityfiltermodel.cpp \
-    activitymodel.cpp \
     auswahl.cpp \
     einsatz.cpp \
     eplfile.cpp \
@@ -43,7 +42,6 @@ SOURCES += einstellungen.cpp \
 
 HEADERS  += einstellungen.h \
     activityfiltermodel.h \
-    activitymodel.h \
     auswahl.h \
     einsatz.h \
     eplexception.h \

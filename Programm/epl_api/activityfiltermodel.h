@@ -1,8 +1,8 @@
 #ifndef ACTIVITYFILTERMODEL_H
 #define ACTIVITYFILTERMODEL_H
 
-#include "activitymodel.h"
 #include "basics.h"
+#include "manager.h"
 #include <QSortFilterProxyModel>
 
 class ActivityFilterModel : public QSortFilterProxyModel
@@ -17,11 +17,11 @@ public:
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
-    void setSource(ActivityModel *model);
-    ActivityModel *sourceModel() const;
+    void setSource(Manager *model);
+    Manager *sourceModel() const;
 
 protected:
-    ActivityModel *source;
+    Manager *source;
     QDateTime dateStart;
     QDateTime dateEnd;
 
