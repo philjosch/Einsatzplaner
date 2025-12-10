@@ -16,6 +16,11 @@
     <height>80</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>20</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Frame</string>
   </property>
@@ -24,6 +29,9 @@
   </property>
   <property name="frameShadow">
    <enum>QFrame::Shadow::Plain</enum>
+  </property>
+  <property name="lineWidth">
+   <number>0</number>
   </property>
   <layout class="QGridLayout" name="gridLayout" rowstretch="0,1" columnstretch="0,1">
    <property name="leftMargin">
@@ -55,10 +63,16 @@
        <height>15</height>
       </size>
      </property>
-     <property name="autoFillBackground">
-      <bool>true</bool>
+     <property name="frameShape">
+      <enum>QFrame::Shape::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Plain</enum>
      </property>
      <property name="lineWidth">
+      <number>0</number>
+     </property>
+     <property name="midLineWidth">
       <number>0</number>
      </property>
      <property name="text">
@@ -92,6 +106,11 @@
        <height>15</height>
       </size>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
      <property name="toolTip">
       <string>Arbeitseinsatz hinzufügen</string>
      </property>
@@ -100,9 +119,6 @@
      </property>
      <property name="whatsThis">
       <string>Arbeitseinsatz hinzufügen</string>
-     </property>
-     <property name="autoFillBackground">
-      <bool>true</bool>
      </property>
      <property name="text">
       <string notr="true">+</string>
