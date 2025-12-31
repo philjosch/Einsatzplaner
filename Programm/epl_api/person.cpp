@@ -873,14 +873,27 @@ QString Person::getZeitenFuerEinzelAlsHTML() const
     if (activities.size() > 0) {
         html += "<table cellspacing='0' width='100%'><thead>";
         html += "<tr><th>Datum, Anlass</th><th>Dienstzeiten</th><th>Aufgabe</th><th>Bemerkung</th></tr></thead><tbody>";
+        AActivity *previous = nullptr;
         for (Einsatz *e: getActivities()) {
-                html += "<tr><td>"+QLocale().toString(e->getActivity()->getDatum(), "dd.MM.yyyy")+"<br/>"+e->getActivity()->getStringShort();
+            html += "<tr>";
+            if (e->getActivity() == previous) {
+                html += "<td></td>";
+            } else {
+                html += "<td>"+QLocale().toString(e->getActivity()->getDatum(), "dd.MM.yyyy")+"<br/>"+e->getActivity()->getStringShort();
                 if (!e->getActivity()->getStringShort().contains(e->getActivity()->getAnlass()) && e->getActivity()->getAnlass() != "")
                     html += "<br/>"+e->getActivity()->getAnlass();
-                html +="</td><td>"
-                     + e->getVon().toString("HH:mm")+"-"+e->getBis().toString("HH:mm")+"</td><td>"
-                     + ::toString(e->getKategorie()) + "</td><td>"
-                     + e->getBemerkung() + "</td></tr>";
+                html +="</td>";
+            }
+                if (e->getActivity()->getAbgesagt()) {
+                    html += "<td>&ndash;</td>";
+                } else if (! e->getAnrechnen()) {
+                    html += "<td>(" + e->getVon().toString("HH:mm")+"-"+e->getBis().toString("HH:mm")+")</td>";
+                } else {
+                    html += "<td>" + e->getVon().toString("HH:mm")+"-"+e->getBis().toString("HH:mm")+"</td>";
+                }
+                html += "<td>" + ::toString(e->getKategorie()) + "</td>";
+                html += "<td>" + e->getBemerkung() + "</td></tr>";
+            previous = e->getActivity();
         }
         html += "</tbody></table>";
     } else {
