@@ -1,6 +1,7 @@
 #include "einsatz.h"
 
 #include "aactivity.h"
+#include <algorithm>
 
 Einsatz::Einsatz()
 {
@@ -117,7 +118,8 @@ void Einsatz::setEndeAbweichend(const QTime &value)
 
 bool Einsatz::getAnrechnen() const
 {
-    return (activity->getDatum() <= QDate::currentDate() && !activity->getAbgesagt());
+    if (activity->getAbgesagt()) return false;
+    return (getBis() <= QDateTime::currentDateTime());
 }
 
 int Einsatz::getDauer() const
