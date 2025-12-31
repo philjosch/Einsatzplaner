@@ -13,8 +13,12 @@ Einsatz::Einsatz()
 }
 Einsatz::Einsatz(Category kat)
 {
-    Einsatz();
+    person = nullptr;
+    activity = nullptr;
     kategorie = kat;
+    beginn = QTime(0,0);
+    ende = QTime(0,0);
+    bemerkung = "";
 }
 Einsatz::Einsatz(Person *p, AActivity *a, Category kat, QString bem, QTime von, QTime bis)
 {
@@ -78,7 +82,7 @@ void Einsatz::setBemerkung(const QString &value)
 QDateTime Einsatz::getVon() const
 {
     QDateTime zeit = activity->getVon(kategorie);
-    if (beginn != QTime(0,0)) {
+    if (beginn.isValid() && beginn != QTime(0,0)) {
         zeit.setTime(beginn);
     }
     return zeit;
@@ -96,7 +100,7 @@ void Einsatz::setBeginnAbweichend(const QTime &value)
 QDateTime Einsatz::getBis() const
 {
     QDateTime zeit = activity->getBis(kategorie);
-    if (ende != QTime(0,0)) {
+    if (ende.isValid() && ende != QTime(0,0)) {
         zeit.setTime(ende);
     }
     return zeit;
