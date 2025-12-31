@@ -7,6 +7,50 @@
 #include <QJsonArray>
 #include <QRandomGenerator>
 
+QValidator::State IbanValidator::validate(QString &input, int &pos) const
+{
+    QString iban = input.simplified().split(" ").join("").toUpper();
+    if (iban.size() > 34)
+        return QValidator::Invalid; // too long
+
+    if (iban.size() < 2)
+        return QValidator::Intermediate; // sanity check for a too short iban to avoid problems
+
+    QString country = iban.sliced(0, 2);
+    if (! ( country.at(0).isLetter() && country.at(1).isLetter() ) )
+        return QValidator::Invalid; // countrycode must consist of two letters
+
+    if (iban.size() < 4)
+        return QValidator::Intermediate; // sanity check for a too short iban to avoid problems
+
+    QString checksum = iban.sliced(2, 2);
+    if (! ( checksum.at(0).isDigit() && checksum.at(1).isDigit() ) )
+        return QValidator::Invalid; // checksum must consist of two digits
+    QString bban = iban.sliced(4);
+
+    QString combined = bban + country + checksum;
+    for(int i = 0; i < 26; ++i) {
+        combined = combined.replace(QChar(i+65), QString::number(i+10));
+    }
+    int length = combined.size();
+    int sum = 0;
+    int multiplier = 1;
+    for (int i = 0; i < length; ++i) {
+        // calculations for this round
+        QString element = combined.last(1);
+        if (!(element.at(0).isLetter() || element.at(0).isDigit()))
+            return QValidator::Invalid; // if not letter or digit, the iban is invalid
+        sum = (sum + element.toInt() * multiplier) % 97;
+        // prepare for the next round
+        multiplier = (multiplier * 10) % 97;
+        combined.chop(1);
+    }
+    if (sum == 1) {
+        return QValidator::State::Acceptable;
+    }
+    return QValidator::State::Intermediate;
+}
+
 const QString Person::FARBE_FEHLENDE_STUNDEN = "#ff9999";
 const QString Person::FARBE_GENUG_STUNDEN = "#99ff99";
 const QString Person::FARBE_STANDARD = "#ffffff";

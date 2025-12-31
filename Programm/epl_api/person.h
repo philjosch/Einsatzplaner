@@ -5,8 +5,17 @@
 #include "export.h"
 
 #include <QMultiMap>
+#include <QValidator>
 
 class ManagerPersonal;
+
+class IbanValidator : public QValidator {
+
+public:
+    IbanValidator() {};
+
+    QValidator::State validate(QString &input, int &pos) const;
+};
 
 class Person : public QObject
 {

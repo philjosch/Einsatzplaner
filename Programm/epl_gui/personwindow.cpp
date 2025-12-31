@@ -71,6 +71,8 @@ PersonWindow::PersonWindow(CoreMainWindow *parent, Person *p) :
     connect(ui->lineIBAN, &QLineEdit::textChanged, this, &PersonWindow::changedIBAN);
     connect(ui->lineBank, &QLineEdit::textChanged, this, &PersonWindow::changedBank);
     connect(ui->lineKontoinhaber, &QLineEdit::textChanged, this, &PersonWindow::changedDepositor);
+    QValidator *ibanvalidator = new IbanValidator();
+    ui->lineIBAN->setValidator(ibanvalidator);
 
     connect(ui->plainBetrieb, &QPlainTextEdit::textChanged, this, &PersonWindow::changedCommentsOperation);
     connect(ui->plainAusbildung, &QPlainTextEdit::textChanged, this, &PersonWindow::changedCommentsEducation);
@@ -427,8 +429,14 @@ void PersonWindow::changedContributionType(int index)
 
 void PersonWindow::changedIBAN(const QString &arg1)
 {
-    if (enabled)
+    if (enabled) {
         person->setIban(arg1);
+        if (ui->lineIBAN->hasAcceptableInput()) {
+            ui->lineIBAN->setStyleSheet("QLineEdit { border: 2px solid #68ce29; background-color: #a8ce90; }");
+        } else {
+            ui->lineIBAN->setStyleSheet("QLineEdit { border: 2px solid #cc2833; background-color: #cc8e92; } ");
+        }
+    }
 }
 
 void PersonWindow::changedBank(const QString &arg1)
