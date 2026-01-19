@@ -255,7 +255,6 @@ void MainWindowPersonal::addPerson()
 }
 void MainWindowPersonal::refresh()
 {
-
     model->setFilter(Status(comboAnzeige->currentData().toInt()));
 
     ui->tabelleMitglieder->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);

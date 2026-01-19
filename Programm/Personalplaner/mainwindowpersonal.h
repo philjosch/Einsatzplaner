@@ -2,6 +2,7 @@
 #define MAINWINDOWPERSONAL_H
 
 #include "coremainwindow.h"
+#include "personenfilter.h"
 
 #include <QListWidget>
 #include <QTableWidgetItem>
@@ -55,6 +56,7 @@ protected:
     QList<Person*> getSortierteListe();
 
     //** Modell
+    PersonenFilter *model;
 
     //** View
     Ui::MainWindowPersonal *ui;
