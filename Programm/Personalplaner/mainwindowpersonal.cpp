@@ -193,18 +193,17 @@ MainWindowPersonal::MainWindowPersonal(EplFile *file) :
     connect(ui->actionBeitraegeRegulaerCSV, &QAction::triggered, this, &MainWindowPersonal::exportDuesRegularCsv);
     connect(ui->actionBeitraegeNachzahlungCSV, &QAction::triggered, this, &MainWindowPersonal::exportDuesAdditionalCsv);
 
-    connect(comboAnzeige, &QComboBox::currentIndexChanged, this, &MainWindowPersonal::filterChanged);
-    connect(ui->tabelleMitglieder, &QTableWidget::cellDoubleClicked, this, &MainWindowPersonal::showPersFromTable);
+    connect(comboAnzeige, &QComboBox::currentIndexChanged, this, &MainWindowPersonal::comboAnzeigeChanged);
+    connect(ui->tabelleMitglieder, &QTableView::doubleClicked, this, &MainWindowPersonal::showPersFromTable);
 
-    connect(ui->treeDisplaySelection, &QTreeWidget::itemChanged, this, &MainWindowPersonal::updateTableBasedOnCategorySelection);
+    connect(ui->treeDisplaySelection, &QTreeWidget::itemChanged, this, &MainWindowPersonal::categorySelectionChanged);
 
     recentlyUsedMenu = ui->menuRecentlyused;
     recentlyUsedClear = ui->actionClear;
 
-    current = QList<Person*>();
-    filter = Status::AlleMitglieder;
-    anzeige = QSet<QString>();
-
+    model = new PersonenFilter();
+    model->setModel(personal);
+    ui->tabelleMitglieder->setModel(model);
 
     __treeGeneralFirstname->setCheckState(0, Qt::CheckState::Checked);
     __treeGeneralLastName->setCheckState(0, Qt::CheckState::Checked);
@@ -222,7 +221,6 @@ MainWindowPersonal::MainWindowPersonal(EplFile *file) :
     comboAnzeige->setCurrentIndex(0);
 
     updateWindowHeaders();
-    refresh();
 }
 MainWindowPersonal::~MainWindowPersonal()
 {
@@ -254,150 +252,13 @@ void MainWindowPersonal::addPerson()
 {
     Person *neu = personal->newPerson();
     openPerson(neu);
-    refresh();
 }
 void MainWindowPersonal::refresh()
 {
-    current = personal->getPersonen(filter);
 
+    model->setFilter(Status(comboAnzeige->currentData().toInt()));
 
-    // Tabelle leeren
-    ui->tabelleMitglieder->setRowCount(0);
-    ui->tabelleMitglieder->setSortingEnabled(false);
-
-    // Setup columns
-    int clmn = 0;
-    ui->tabelleMitglieder->setColumnCount(0);
-
-    foreach (QString s, Person::ANZEIGE_PERSONALDATEN) {
-        if (anzeige.contains(s)) {
-            ui->tabelleMitglieder->insertColumn(clmn);
-            ui->tabelleMitglieder->setHorizontalHeaderItem(clmn++, new QTableWidgetItem(s));
-        }
-    }
-
-    QTableWidgetItem *i;
-    for (Person *p: std::as_const(current)) {
-        clmn = 0;
-        ui->tabelleMitglieder->insertRow(0);
-
-        if (anzeige.contains("Vorname"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getVorname()));
-        if (anzeige.contains("Nachname"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getNachname()));
-        if (anzeige.contains("Geburtsdatum")) {
-            i = new PersonTableWidgetItem(p);
-            i->setData(0, p->getGeburtstag());
-            ui->tabelleMitglieder->setItem(0, clmn++, i);
-        }
-        if (anzeige.contains("Geschlecht"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, Person::toString(p->getGeschlecht())));
-        if (anzeige.contains("Anrede"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getAnrede()));
-        if (anzeige.contains("Beruf"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getBeruf()));
-
-
-        if (anzeige.contains("Nummer")) {
-            i = new PersonTableWidgetItem(p);
-            i->setData(0, p->getNummer());
-            ui->tabelleMitglieder->setItem(0, clmn++, i);
-        }
-        if (anzeige.contains("Eintritt")) {
-            i = new PersonTableWidgetItem(p);
-            i->setData(0, p->getEintritt());
-            ui->tabelleMitglieder->setItem(0, clmn++, i);
-        }
-        if (anzeige.contains("Status")) {
-            i = new PersonTableWidgetItem(p,
-                        QString("%1%2")
-                        .arg((p->isAusgetreten() ? "Ehemals ": ""),
-                             (p->getAktiv() ? "Aktiv" : "Passiv")));
-            ui->tabelleMitglieder->setItem(0, clmn++, i);
-        }
-        if (anzeige.contains("Austritt")) {
-            if (p->isAusgetreten() || p->getAustritt().isValid()) {
-                i = new PersonTableWidgetItem(p);
-                i->setData(0, p->getAustritt());
-                ui->tabelleMitglieder->setItem(0, clmn++, i);
-            } else {
-                clmn++;
-            }
-        }
-        if (anzeige.contains("Beitragsart"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, Person::toString(p->getBeitragsart())));
-        if (anzeige.contains("IBAN"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getIban()));
-        if (anzeige.contains("Bank"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getBank()));
-        if (anzeige.contains("Kontoinhaber"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getKontoinhaber()));
-        if (anzeige.contains("Beitrag")) {
-            i = new PersonTableWidgetItem(p);
-            if (p->getBeitrag() != 0)
-                i->setData(0, p->getBeitrag()/100.f);
-            ui->tabelleMitglieder->setItem(0, clmn++, i);
-        }
-        if (anzeige.contains("Beitrag (Nachzahlung)")) {
-            i = new PersonTableWidgetItem(p);
-            if (p->getBeitragNachzahlung() != 0)
-                i->setData(0, p->getBeitragNachzahlung()/100.f);
-            ui->tabelleMitglieder->setItem(0, clmn++, i);
-        }
-
-
-        if (anzeige.contains("Straße"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getStrasse()));
-        if (anzeige.contains("PLZ")) {
-            i = new PersonTableWidgetItem(p);
-            i->setData(0, p->getPLZ());
-            ui->tabelleMitglieder->setItem(0, clmn++, i);
-        }
-        if (anzeige.contains("Ort"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getOrt()));
-        if (anzeige.contains("Strecke")) {
-            i = new PersonTableWidgetItem(p);
-            i->setData(0, p->getStrecke());
-            ui->tabelleMitglieder->setItem(0, clmn++, i);
-        }
-
-
-        if (anzeige.contains("Mail"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getMail()));
-        if (anzeige.contains("Mail Zustimmung"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getMailOK() ? "Ja": "Nein"));
-        if (anzeige.contains("Telefon"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getTelefon()));
-        if (anzeige.contains("Telefon2"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getTelefon2()));
-        if (anzeige.contains("Telefon Zustimmung"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getTelefonOK() ? "Ja" : "Nein"));
-
-
-        if (anzeige.contains("Tf"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getAusbildungTf() ? "Ja" : ""));
-        if (anzeige.contains("Zf"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getAusbildungZf() ? "Ja" : ""));
-        if (anzeige.contains("Rangierer"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getAusbildungRangierer() ? "Ja" : ""));
-        if (anzeige.contains("Tauglichkeit")) {
-            i = new PersonTableWidgetItem(p);
-            i->setData(0, p->getTauglichkeit());
-            ui->tabelleMitglieder->setItem(0, clmn++, i);
-        }
-        if (anzeige.contains("Bemerkung Betrieb."))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getSonstigeBetrieblich().replace("<br/>","\n")));
-        if (anzeige.contains("Sonst. Ausbildung"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getSonstigeAusbildung().replace("<br/>","\n")));
-
-
-        if (anzeige.contains("Bemerkung"))
-            ui->tabelleMitglieder->setItem(0, clmn++, new PersonTableWidgetItem(p, p->getBemerkungen().replace("<br/>","\n")));
-    }
-
-    ui->tabelleMitglieder->setSortingEnabled(true);
     ui->tabelleMitglieder->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
 
     ui->labelMitgliederAnzMitglieder->setText(QString::number(personal->getAnzahlMitglieder(Status::AlleMitglieder)));
     ui->labelMitgliederAnzAktiv->setText(QString::number(personal->getAnzahlMitglieder(Status::Aktiv)));
@@ -411,10 +272,10 @@ void MainWindowPersonal::editMinimumhours()
 }
 void MainWindowPersonal::sendMailList()
 {
-    if (current.isEmpty()) return;
+    if (model->rowCount() == 0) return;
     QSet<QString> mails;
     QList<Person*> keineMail;
-    for (Person *p: std::as_const(current)) {
+    for (Person *p: getSortierteListe()) {
         if (p->getMail() != "") {
             mails.insert(p->getMail());
         } else {
@@ -423,11 +284,11 @@ void MainWindowPersonal::sendMailList()
     }
     if (! mails.isEmpty()) {
         QString betreff = "&subject=[%1]";
-        if (filter == Status::AlleMitglieder) {
+        if (model->getFilter() == Status::AlleMitglieder) {
             betreff = betreff.arg(tr("AkO-Alle"));
-        } else if (filter == Status::Aktiv) {
+        } else if (model->getFilter() == Status::Aktiv) {
             betreff = betreff.arg(tr("AkO-Aktive"));
-        } else if (filter == Status::Passiv) {
+        } else if (model->getFilter() == Status::Passiv) {
             betreff = betreff.arg(tr("AkO-Passive"));
         } else {
             betreff = "";
@@ -441,7 +302,7 @@ void MainWindowPersonal::sendMailList()
 
     if (QMessageBox::question(this,
                               tr("Personen ohne E-Mail gefunden"),
-                              tr("Für %1 %2 ist keine E-Mail-Adresse hinterlegt.\nMöchten Sie die Adressen dieser Personen speichern?").arg(keineMail.size()).arg(toString(filter)))
+                              tr("Für %1 %2 ist keine E-Mail-Adresse hinterlegt.\nMöchten Sie die Adressen dieser Personen speichern?").arg(keineMail.size()).arg(toString(model->getFilter())))
             == QMessageBox::Yes) {
         QString s = "Name;Straße;PLZ;Ort\n";
         for(Person *p: keineMail) {
@@ -459,28 +320,28 @@ void MainWindowPersonal::editDues()
 void MainWindowPersonal::exportMemberDetailMultiplePdf()
 {
     personal->exportMembersSingleAsHtml(ExportHtmlPdf::generate(this, "Stammdaten", QPageLayout::Orientation::Portrait),
-                                    getSortierteListe(), filter);
+                                    getSortierteListe(), model->getFilter());
 }
 void MainWindowPersonal::exportMemberDetailMultiplePrint()
 {
     personal->exportMembersSingleAsHtml(ExportHtmlPaper::generate(this, QPageLayout::Orientation::Portrait),
-                                    getSortierteListe(), filter);
+                                    getSortierteListe(), model->getFilter());
 }
 
 void MainWindowPersonal::exportMemberListPdf()
 {
     personal->exportMembersListAsHtml(ExportHtmlPdf::generate(this, "Mitgliederliste", QPageLayout::Orientation::Landscape),
-                                   getSortierteListe(), filter, anzeige);
+                                   getSortierteListe(), model->getFilter(), model->getVisibleAttributes());
 }
 void MainWindowPersonal::exportMemberListPrint()
 {
     personal->exportMembersListAsHtml(ExportHtmlPaper::generate(this, QPageLayout::Orientation::Landscape),
-                                   getSortierteListe(), filter, anzeige);
+                                   getSortierteListe(), model->getFilter(), model->getVisibleAttributes());
 }
 void MainWindowPersonal::exportMemberListCsv()
 {
     personal->exportMembersListAsCsv(ExportCsvFile::generate(this, "Mitgliederliste"),
-                                        getSortierteListe(), anzeige);
+                                        getSortierteListe(), model->getVisibleAttributes());
 }
 
 void MainWindowPersonal::exportDuesRegularCsv()
@@ -492,43 +353,31 @@ void MainWindowPersonal::exportDuesAdditionalCsv()
     personal->saveBeitraegeNachzahlungAlsCSV(ExportCsvFile::generate(this, "Beitraege-Nachzahlung"));
 }
 
-void MainWindowPersonal::filterChanged()
+void MainWindowPersonal::comboAnzeigeChanged(int newIndex)
 {
-    filter = Status(comboAnzeige->currentData().toInt());
-    refresh();
+    model->setFilter(Status(comboAnzeige->itemData(newIndex).toInt()));
 }
 
-void MainWindowPersonal::showPersFromTable(int row, [[maybe_unused]] int column)
+void MainWindowPersonal::showPersFromTable(QModelIndex index)
 {
-    PersonTableWidgetItem *clicked = dynamic_cast<PersonTableWidgetItem*>(ui->tabelleMitglieder->item(row, column));
-    if (clicked != nullptr) {
-        openPerson(clicked->getPerson());
-    }
+    openPerson(personal->getData(model->mapToSource(index)));
 }
 
-void MainWindowPersonal::updateTableBasedOnCategorySelection(QTreeWidgetItem *item, [[maybe_unused]] int column)
+void MainWindowPersonal::categorySelectionChanged(QTreeWidgetItem *item, [[maybe_unused]] int column)
 {
     if (item->childCount() > 0) return;
     QString role = item->data(0, Qt::UserRole).toString();
     if (role == "") return;
-    if (item->checkState(0) == Qt::CheckState::Checked)
-        anzeige.insert(role);
-    else
-        anzeige.remove(role);
-
-    refresh();
+    model->setAttributeVisibility(role, item->checkState(0) == Qt::CheckState::Checked);
 }
 
 
 QList<Person*> MainWindowPersonal::getSortierteListe()
 {
     QList<Person*> liste = QList<Person*>();
-    for(int i = 0; i < ui->tabelleMitglieder->rowCount(); i++) {
-        PersonTableWidgetItem *ptwi = static_cast<PersonTableWidgetItem*>(ui->tabelleMitglieder->item(i, 0));
-        if (ptwi == nullptr)
-            continue;
-        if (ptwi->getPerson() != nullptr)
-            liste.append(ptwi->getPerson());
+    QModelIndexList filterModelIndexList;
+    for (int i = 0; i < model->rowCount(); ++i) {
+        liste.append(model->getData(model->index(i, 0)));
     }
     return liste;
 }

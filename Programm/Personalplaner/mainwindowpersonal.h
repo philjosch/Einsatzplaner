@@ -46,9 +46,9 @@ protected slots:
     void exportDuesAdditionalCsv();
 
     //** Fenster
-    void filterChanged();
-    void showPersFromTable(int row, int column);
-    void updateTableBasedOnCategorySelection(QTreeWidgetItem *item, int column);
+    void comboAnzeigeChanged(int newIndex);
+    void showPersFromTable(QModelIndex index);
+    void categorySelectionChanged(QTreeWidgetItem *item, int column);
 
 protected:
     //** Hilfsmethoden
@@ -61,9 +61,6 @@ protected:
     QComboBox *comboAnzeige;
 
     //** Controller
-    QList<Person*> current;
-    Status filter;
-    QSet<QString> anzeige;
 
 };
 #endif // MAINWINDOWPERSONAL_H

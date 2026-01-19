@@ -15,14 +15,14 @@ const QMap<Person::Beitragsart, int> ManagerPersonal::BEITRAEGE_DEFAULT {{Person
                                                                          {Person::Ermaessigt, 1500},
                                                                         };
 
-ManagerPersonal::ManagerPersonal()
+ManagerPersonal::ManagerPersonal() : QAbstractTableModel()
 {
     personen = QList<Person*>();
     minimumHours = MINIMUM_HOURS_DEFAULT;
     beitraege = BEITRAEGE_DEFAULT;
 }
 
-ManagerPersonal::ManagerPersonal(QJsonObject o)
+ManagerPersonal::ManagerPersonal(QJsonObject o) : QAbstractTableModel()
 {
     personen = QList<Person*>();
     minimumHours = QMap<Category, int>();
@@ -138,6 +138,148 @@ QJsonObject ManagerPersonal::personalToJson() const
     return o;
 }
 
+int ManagerPersonal::rowCount(const QModelIndex &parent) const
+{
+    return personen.length();
+}
+
+int ManagerPersonal::columnCount(const QModelIndex &parent) const
+{
+    return Person::ANZEIGE_PERSONALDATEN.length();
+}
+
+QVariant ManagerPersonal::data(const QModelIndex &index, int role) const
+{
+    if (role != Qt::EditRole && role != Qt::DisplayRole)
+        return QVariant();
+
+    Person *p = getData(index);
+    if (p == nullptr)
+        return QVariant();
+
+
+    QString anzeige = Person::ANZEIGE_PERSONALDATEN.at(index.column());
+
+    if (anzeige.contains("Name"))
+        return p->getNameSortierung();
+    if (anzeige.contains("Vorname"))
+        return p->getVorname();
+    if (anzeige.contains("Nachname"))
+        return p->getNachname();
+    if (anzeige.contains("Geburtsdatum")) {
+        return p->getGeburtstag();
+    }
+    if (anzeige.contains("Geschlecht"))
+        return Person::toString(p->getGeschlecht());
+    if (anzeige.contains("Anrede"))
+        return p->getAnrede();
+    if (anzeige.contains("Beruf"))
+        return p->getBeruf();
+
+
+    if (anzeige.contains("Nummer")) {
+        return p->getNummer();
+    }
+    if (anzeige.contains("Eintritt")) {
+        return p->getEintritt();
+    }
+    if (anzeige.contains("Status")) {
+        return QString("%1%2")
+            .arg((p->isAusgetreten() ? tr("Ehemals "): ""),
+                 (p->getAktiv() ? tr("Aktiv") : tr("Passiv")));
+    }
+    if (anzeige.contains("Austritt")) {
+        if (p->isAusgetreten() || p->getAustritt().isValid()) {
+            return p->getAustritt();
+        }
+        return QVariant();
+    }
+    if (anzeige.contains("Beitragsart"))
+        return Person::toString(p->getBeitragsart());
+    if (anzeige.contains("IBAN"))
+        return p->getIban();
+    if (anzeige.contains("Bank"))
+        return p->getBank();
+    if (anzeige.contains("Kontoinhaber"))
+        return p->getKontoinhaber();
+    if (anzeige.contains("Beitrag")) {
+        if (p->getBeitrag() != 0)
+            return p->getBeitrag()/100.f;
+        return QVariant();
+    }
+    if (anzeige.contains("Beitrag (Nachzahlung)")) {
+        if (p->getBeitragNachzahlung() != 0)
+            return p->getBeitragNachzahlung()/100.f;
+        return QVariant();
+    }
+
+
+    if (anzeige.contains("Straße"))
+        return p->getStrasse();
+    if (anzeige.contains("PLZ")) {
+        return p->getPLZ();
+    }
+    if (anzeige.contains("Ort"))
+        return p->getOrt();
+    if (anzeige.contains("Strecke")) {
+        return p->getStrecke();
+    }
+
+
+    if (anzeige.contains("Mail"))
+        return p->getMail();
+    if (anzeige.contains("Mail Zustimmung"))
+        return (p->getMailOK() ? tr("Ja") : tr("Nein"));
+    if (anzeige.contains("Telefon"))
+        return p->getTelefon();
+    if (anzeige.contains("Telefon2"))
+        return p->getTelefon2();
+    if (anzeige.contains("Telefon Zustimmung"))
+        return (p->getTelefonOK() ? tr("Ja") : tr("Nein"));
+
+
+    if (anzeige.contains("Tf"))
+        return (p->getAusbildungTf() ? tr("Ja") : "");
+    if (anzeige.contains("Zf"))
+        return (p->getAusbildungZf() ? tr("Ja") : "");
+    if (anzeige.contains("Rangierer"))
+        return (p->getAusbildungRangierer() ? tr("Ja") : "");
+    if (anzeige.contains("Tauglichkeit")) {
+        return p->getTauglichkeit();
+    }
+    if (anzeige.contains("Bemerkung Betrieb."))
+        return p->getSonstigeBetrieblich().replace("<br/>","\n");
+    if (anzeige.contains("Sonst. Ausbildung"))
+        return p->getSonstigeAusbildung().replace("<br/>","\n");
+
+
+    if (anzeige.contains("Bemerkung"))
+        return p->getBemerkungen().replace("<br/>","\n");
+
+
+    return QVariant();
+
+}
+
+Person *ManagerPersonal::getData(const QModelIndex &index) const
+{
+    if (! index.isValid())
+        return nullptr;
+
+    return personen.at(index.row());
+}
+
+QVariant ManagerPersonal::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role != Qt::DisplayRole)
+        return QVariant();
+    if (orientation == Qt::Orientation::Horizontal) {
+        return Person::ANZEIGE_PERSONALDATEN.at(section);
+    } else {
+        return data(index(section, 0), role);
+    }
+}
+
 Person *ManagerPersonal::getPersonFromID(QString id) const
 {
     for(Person *p: personen) {
@@ -179,7 +321,9 @@ Person *ManagerPersonal::newPerson()
     QString name = tr("Mitglied Nr.%1").arg(getNextNummer());
     if (personExists(name)) return nullptr;
     Person *neu = new Person(name, this);
+    beginInsertRows(QModelIndex(), personen.length(), personen.length());
     personen.append(neu);
+    endInsertRows();
     connect(neu, &Person::changed, this, [=]() { emit personChanged(neu); });
     connect(neu, &Person::changed, this, [=]() { emit changed();});
     emit changed();
@@ -189,7 +333,9 @@ Person *ManagerPersonal::newPerson()
 bool ManagerPersonal::removePerson(Person *p)
 {
     if (personen.contains(p)) {
+        beginRemoveRows(QModelIndex(), personen.indexOf(p), personen.indexOf(p));
         personen.removeAll(p);
+        endRemoveRows();
         emit changed();
         return true;
     }

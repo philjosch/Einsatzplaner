@@ -28,6 +28,7 @@ SOURCES += einstellungen.cpp \
     networking.cpp \
     person.cpp \
     managerpersonal.cpp \
+    personenfilter.cpp \
     reservierung.cpp \
     manager.cpp \
     fahrtag.cpp \
@@ -49,6 +50,7 @@ HEADERS  += einstellungen.h \
     networking.h \
     person.h \
     managerpersonal.h \
+    personenfilter.h \
     reservierung.h \
     manager.h \
     fahrtag.h \

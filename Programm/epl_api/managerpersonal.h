@@ -1,6 +1,7 @@
 #ifndef MANAGERPERSONAL_H
 #define MANAGERPERSONAL_H
 
+#include <QAbstractTableModel>
 #include <QJsonObject>
 #include <QObject>
 #include <QSet>
@@ -9,7 +10,7 @@
 #include "export.h"
 #include "person.h"
 
-class ManagerPersonal :  public QObject
+class ManagerPersonal :  public QAbstractTableModel
 {
     Q_OBJECT
 
@@ -20,6 +21,12 @@ public:
 
     QJsonObject toJson() const;
     QJsonObject personalToJson() const;
+
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    Person *getData(const QModelIndex &index) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
     Person *getPersonFromID(QString id) const;
     Person *getPerson(QString name) const;
