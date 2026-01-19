@@ -132,7 +132,7 @@ QString Person::toString(Person::Beitragsart b)
     case BeitragUnbekannt:
         return tr("Unbekannt");
     case Beitragsfrei:
-        return tr("beitragsbefreit");
+        return tr("Beitragsbefreit");
     case AktivenBeitrag:
         return tr("Beitrag Aktive");
     case FoerderBeitrag:
@@ -1081,12 +1081,12 @@ QString Person::getPersonaldatenFuerListeAlsHTML(QSet<QString> anzeige) const
         zelleNutzen = true;
         anfuegen(&zelle, strasse);
     }
-    if (anzeige.contains("PLZ")) {
+    if (anzeige.contains("PLZ") && anzeige.contains("Ort")) {
+        zelleNutzen = true;
+        anfuegen(&zelle, plz + " " + ort);
+    } else if (anzeige.contains("PLZ")) {
         zelleNutzen = true;
         anfuegen(&zelle, plz);
-        if (anzeige.contains("Ort")) {
-            anfuegen(&zelle, ort, " ");
-        }
     } else if (anzeige.contains("Ort")) {
         zelleNutzen = true;
         anfuegen(&zelle, ort);
