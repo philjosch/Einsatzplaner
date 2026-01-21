@@ -190,6 +190,7 @@ void ActivityWindow::removePerson()
 
 void ActivityWindow::changedTableCell(int row, [[maybe_unused]] int column)
 {
+    ui->tablePersonen->resizeColumnsToContents();
     // column 0: Name | 1: Aufgabe | 2: Beginn | 3: Ende | 4: Bemerkung
     // Wenn der Name geändert wurde, muss die Verknuepfung mit der alten Person aufgeloest werden
     // Dies ist auch erforderlich bei Aenderung der Kategorie oder bemerkung, um eventuelle Kompetenzen zu pruefen.

@@ -497,6 +497,7 @@ EinsatzTableWidgetItem *FahrtagWindow::addEinsatzToTable(Einsatz *e, bool block)
 
 void FahrtagWindow::changedTableCell(int row, int column)
 {
+    ui->tablePersonen->resizeColumnsToContents();
     if (!nehme) return;
     nehme = false;
 
