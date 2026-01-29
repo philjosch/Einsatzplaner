@@ -8,6 +8,7 @@ jobs:
         uses: actions/checkout@v6
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v4
+        working-directory: ./Dokumentation/src
         with:
           root_file: Dokumentation/src/anleitung.tex
 #      - name: Upload PDF file
