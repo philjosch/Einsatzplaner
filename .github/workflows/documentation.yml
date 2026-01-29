@@ -9,7 +9,7 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v4
         with:
-          working-directory: ./Dokumentation/src
+          working_directory: ./Dokumentation/src
           root_file: anleitung.tex
 #      - name: Upload PDF file
 #        uses: actions/upload-artifact@v6
