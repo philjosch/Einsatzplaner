@@ -1,0 +1,17 @@
+name: Build manual from LaTeX source
+on: [push]
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v6
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: Dokumentation/src/anleitung.tex
+#      - name: Upload PDF file
+#        uses: actions/upload-artifact@v6
+#        with:
+#          name: Manual-PDF
+#          path: Dokumentation/src/anleitung.pdf
