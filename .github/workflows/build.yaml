@@ -11,7 +11,7 @@ defaults:
 
 jobs:
   mac:
-    runs-on: macos-26
+    runs-on: macos-15-intel
     env:
       CMAKE_BUILD_PARALLEL_LEVEL: 3
     timeout-minutes: 15
@@ -28,18 +28,18 @@ jobs:
           arch: 'clang_64'
           version: '6.10.2'
           host: 'mac'
-          aqtversion: '>=3.2.0' # 3.2.0+ required for Qt 6.8+ support; https://github.com/miurahr/aqtinstall/issues/843
+          aqtversion: '==3.3.*'
       - name: Upload aqtinstall log file
         if: failure()
         uses: actions/upload-artifact@v6
         with:
-          name: aqtinstall-log-macos-26-clang-6.10.2
+          name: aqtinstall-log-macos-15-clang-6.10.2
           path: aqtinstall.log
           if-no-files-found: error
       - name: Build
         id: build
         env:
-          PROJECT_BUILD_ID: "${{ github.run_number }}.macos-26.clang.qt-6.10.2"
+          PROJECT_BUILD_ID: "${{ github.run_number }}.macos-15.clang.qt-6.10.2"
         run: |
           qmake Programm/epl.pro;
           make;
