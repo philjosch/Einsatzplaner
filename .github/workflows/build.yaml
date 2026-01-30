@@ -25,7 +25,7 @@ jobs:
           email: ${{ secrets.QT_EMAIL }}
           pw: ${{ secrets.QT_PW }}
           target: desktop
-          arch: macos
+          arch: mac_x64
           version: '6.10.3'
           aqtversion: '>=3.2.0' # 3.2.0+ required for Qt 6.8+ support; https://github.com/miurahr/aqtinstall/issues/843
       - name: Upload aqtinstall log file
