@@ -1,0 +1,55 @@
+name: Build and Test
+
+on: [ push, pull_request ]
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  mac:
+    runs-on: macos-26
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: 3
+    timeout-minutes: 15
+    steps:
+      - name: Set up Git repo
+        uses: actions/checkout@v6
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.10.3'
+          aqtversion: '>=3.2.0' # 3.2.0+ required for Qt 6.8+ support; https://github.com/miurahr/aqtinstall/issues/843
+      - name: Upload aqtinstall log file
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: aqtinstall-log-macos-26-clang-6.10.3
+          path: aqtinstall.log
+          if-no-files-found: error
+      - name: Build
+        id: build
+        env:
+          PROJECT_BUILD_ID: "${{ github.run_number }}.macos-26.clang.qt-6.10.3"
+        run: |
+          qmake Programm/epl.pro;
+          make;
+      - name: Make app bundles
+        run: |
+            macdeployqt "Einsatzplaner/Einsatzplaner.app" -verbose=2
+            macdeployqt "Personalplaner/Personalplaner.app" -verbose=2
+      - name: Make dmg
+        run: |
+            mkdir EPL
+            cp -r Einsatzplaner/Einsatzplaner.app EPL
+            cp -r Personalplaner/Personalplaner.app EPL
+            hdiutil create -srcfolder EPL EPL.dmg
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: EPL
+          path: EPL.dmg
+          if-no-files-found: error
