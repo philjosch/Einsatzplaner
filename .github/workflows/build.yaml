@@ -23,13 +23,15 @@ jobs:
           name=$(git --no-pager tag --sort=creatordate --merged ${GITHUB_REF}^ | tail -1)
           echo "previousTag: $name"
           echo "previousTag=$name" >> $GITHUB_ENV
-      - name: Generate Changelog
-        uses: janheinrichmerker/action-github-changelog-generator@v2.3
-        with:
-          token: ${{ github.token }}
-          sinceTag: ${{ env.previousTag }}
-          output: release.txt
-          headerLabel: Version ${{ github.ref_name }}
+      - name: Generate CHANGELOG
+        run: |
+          echo "\#\# Version ${{ github.ref_name }} - $(date +'%Y-%m-%d')" > release.txt
+          echo "\#\#\# Neu" >> release.txt
+          git log --format="- %s" --grep="\[[F|f]eature\].*" ${{ env.previousTag }}..${{ github.ref_name }} | sed 's/\[[F|f]eature\]:* //g' >> release.txt
+          echo "\#\#\# Verbessert" >> release.txt
+          git log --format="- %s" --grep="\[[I|i]mprovement\].*" ${{ env.previousTag }}..${{ github.ref_name }} | sed 's/\[[I|i]mprovement\]:* //g' >> release.txt
+          echo "\#\#\# Fehlerbehebungen" >> release.txt
+          git log --format="- %s" --grep="\[[B|b]ugfix\].*" ${{ env.previousTag }}..${{ github.ref_name }} | sed 's/\[[B|b]ugfix\]:* //g' >> release.txt
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
         with:
