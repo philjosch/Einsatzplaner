@@ -18,6 +18,17 @@ jobs:
     steps:
       - name: Set up Git repo
         uses: actions/checkout@v6
+      - name: Generate Changelog
+        uses: janheinrichmerker/action-github-changelog-generator@v2.3
+        with:
+          output: release.txt
+          headerLabel: \#\# Version ${{ github.ref_name }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: changelog
+          path: release.txt
+          if-no-files-found: error
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
