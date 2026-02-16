@@ -60,7 +60,7 @@ jobs:
     runs-on: macos-15-intel
     env:
       CMAKE_BUILD_PARALLEL_LEVEL: 3
-      EPL_IMAGE: EPL-${{ github.ref_name }}-macos-intel
+      EPL_IMAGE_NAME: EPL-${{ github.ref_name }}-macos-intel
     timeout-minutes: 15
     steps:
       - name: Set up Git repo
