@@ -23,15 +23,12 @@ jobs:
           name=$(git --no-pager tag --sort=creatordate --merged ${GITHUB_REF}^ | tail -1)
           echo "previousTag: $name"
           echo "previousTag=$name" >> $GITHUB_ENV
-      - name: Update CHANGELOG
-        id: changelog
-        uses: requarks/changelog-action@v1
+      - name: Generate Changelog
+        uses: janheinrichmerker/action-github-changelog-generator@v2.3
         with:
-          token: ${{ github.token }}
-          fromTag: ${{ github.ref_name }}
-          toTag: ${{ env.previousTag }}
-          writeToFile: true
-          changelogFilePath: release.txt
+          sinceTag: ${{ env.previousTag }}
+          output: release.txt
+          headerLabel: Version ${{ github.ref_name }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
         with:
