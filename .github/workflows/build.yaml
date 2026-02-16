@@ -28,7 +28,7 @@ jobs:
         uses: requarks/changelog-action@v1
         with:
           token: ${{ github.token }}
-          fromTag: ${{ env.GITHUB_REF }}
+          fromTag: ${{ github.ref_name }}
           toTag: ${{ env.previousTag }}
           writeToFile: true
           changelogFilePath: release.txt
@@ -40,6 +40,7 @@ jobs:
           if-no-files-found: error
 
   build:
+    if: false
     runs-on: macos-15-intel
     env:
       CMAKE_BUILD_PARALLEL_LEVEL: 3
