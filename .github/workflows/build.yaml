@@ -25,12 +25,12 @@ jobs:
           echo "previousTag=$name" >> $GITHUB_ENV
       - name: Generate CHANGELOG
         run: |
-          echo "\#\# Version ${{ github.ref_name }} - $(date +'%Y-%m-%d')" > release.txt
-          echo "\#\#\# Neu" >> release.txt
+          echo "## Version ${{ github.ref_name }} - $(date +'%Y-%m-%d')" > release.txt
+          echo "### Neu" >> release.txt
           git log --format="- %s" --grep="\[[F|f]eature\].*" ${{ env.previousTag }}..${{ github.ref_name }} | sed 's/\[[F|f]eature\]:* //g' >> release.txt
-          echo "\#\#\# Verbessert" >> release.txt
+          echo "### Verbessert" >> release.txt
           git log --format="- %s" --grep="\[[I|i]mprovement\].*" ${{ env.previousTag }}..${{ github.ref_name }} | sed 's/\[[I|i]mprovement\]:* //g' >> release.txt
-          echo "\#\#\# Fehlerbehebungen" >> release.txt
+          echo "### Fehlerbehebungen" >> release.txt
           git log --format="- %s" --grep="\[[B|b]ugfix\].*" ${{ env.previousTag }}..${{ github.ref_name }} | sed 's/\[[B|b]ugfix\]:* //g' >> release.txt
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
