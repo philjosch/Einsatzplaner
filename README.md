@@ -1,6 +1,10 @@
 # EPL
 Ein Programmpaket, um den Einsatzplan und das Personal einer Museumseisenbahn zu verwalten.
 
+[![Build and Release](https://github.com/philjosch/Einsatzplaner/actions/workflows/build.yaml/badge.svg)](https://github.com/philjosch/Einsatzplaner/actions/workflows/build.yaml)
+[![Build manual from LaTeX source](https://github.com/philjosch/Einsatzplaner/actions/workflows/documentation.yml/badge.svg)](https://github.com/philjosch/Einsatzplaner/actions/workflows/documentation.yml)
+
+
 Weitere Informationen unter [epl.philipp-schepper.de](http://epl.philipp-schepper.de "Offizielle Webseite von EPL")
 
 - in `Dokumentation` finden Sie die Dokumentation für Benutzer und Entwickler
