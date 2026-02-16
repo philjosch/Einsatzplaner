@@ -26,6 +26,7 @@ jobs:
       - name: Generate Changelog
         uses: janheinrichmerker/action-github-changelog-generator@v2.3
         with:
+          token: ${{ github.token }}
           sinceTag: ${{ env.previousTag }}
           output: release.txt
           headerLabel: Version ${{ github.ref_name }}
