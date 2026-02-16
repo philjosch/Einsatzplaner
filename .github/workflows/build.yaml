@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          persist-credentials: true
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v4
         with:
@@ -43,6 +44,19 @@ jobs:
           git log --format="- %s" --grep="\[[I|i]mprovement\].*" ${{ env.previousTag }}..${{ github.ref_name }} | sed 's/\[[I|i]mprovement\]:* //g' >> release.txt
           echo "### Fehlerbehebungen" >> release.txt
           git log --format="- %s" --grep="\[[B|b]ugfix\].*" ${{ env.previousTag }}..${{ github.ref_name }} | sed 's/\[[B|b]ugfix\]:* //g' >> release.txt
+          echo "\n" >> release.txt
+          cat release.txt >> CHANGELOG.md
+      - name: Commit changed Changelog
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: Automated update of Changelog
+          file_pattern: './CHANGELOG.md'
+      - name: Update tag
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          create_git_tag_only: true
+          tag_name: ${{ github.ref_name }}
+          push_options: '-f --tags'
 #      - name: Upload artifacts
 #        uses: actions/upload-artifact@v6
 #        with:
