@@ -96,19 +96,19 @@ jobs:
       - name: Create disk image
         run: |
             mkdir ${{ EPL_IMAGE_NAME }}
-            cp -r Einsatzplaner/Einsatzplaner.app ${{ EPL_IMAGE_NAME }}
-            cp -r Personalplaner/Personalplaner.app ${{ EPL_IMAGE_NAME }}
-            hdiutil create -srcfolder ${{ EPL_IMAGE_NAME }} ${{ EPL_IMAGE_NAME }}.dmg
+            cp -r Einsatzplaner/Einsatzplaner.app ${{ env.EPL_IMAGE_NAME }}
+            cp -r Personalplaner/Personalplaner.app ${{ env.EPL_IMAGE_NAME }}
+            hdiutil create -srcfolder ${{ env.EPL_IMAGE_NAME }} ${{ env.EPL_IMAGE_NAME }}.dmg
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
         if: github.ref_type != 'tag'
         with:
-          name: ${{ EPL_IMAGE_NAME }}
-          path: ${{ EPL_IMAGE_NAME }}.dmg
+          name: ${{ env.EPL_IMAGE_NAME }}
+          path: ${{ env.EPL_IMAGE_NAME }}.dmg
           if-no-files-found: error
       - name: Upload release assets
         uses: softprops/action-gh-release@v2
         if: github.ref_type == 'tag'
         with:
           files: |
-            ${{ EPL_IMAGE_NAME }}.dmg
+            ${{ env.EPL_IMAGE_NAME }}.dmg
