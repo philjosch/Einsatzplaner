@@ -18,6 +18,7 @@ jobs:
       - name: Generate Changelog
         uses: janheinrichmerker/action-github-changelog-generator@v2.3
         with:
+          onlyLastTag: true
           output: release.txt
           headerLabel: \#\# Version ${{ github.ref_name }}
       - name: Upload artifacts
