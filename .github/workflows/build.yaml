@@ -95,7 +95,7 @@ jobs:
             macdeployqt "Personalplaner/Personalplaner.app" -verbose=2
       - name: Create disk image
         run: |
-            mkdir ${{ EPL_IMAGE_NAME }}
+            mkdir ${{ env.EPL_IMAGE_NAME }}
             cp -r Einsatzplaner/Einsatzplaner.app ${{ env.EPL_IMAGE_NAME }}
             cp -r Personalplaner/Personalplaner.app ${{ env.EPL_IMAGE_NAME }}
             hdiutil create -srcfolder ${{ env.EPL_IMAGE_NAME }} ${{ env.EPL_IMAGE_NAME }}.dmg
