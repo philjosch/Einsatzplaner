@@ -1,5 +1,9 @@
 name: Build manual from LaTeX source
-on: [push, workflow_dispatch]
+on:
+  push:
+    paths:
+      - Dokumentation/src/**
+    
 jobs:
   build_latex:
     runs-on: ubuntu-latest

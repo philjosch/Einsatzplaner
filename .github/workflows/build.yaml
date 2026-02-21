@@ -1,0 +1,131 @@
+name: Build and Release
+
+on: [ push, pull_request ]
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  doc_and_release:
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v4
+        with:
+          working_directory: ./Dokumentation/src
+          root_file: anleitung.tex
+#      - name: Upload PDF file
+#        uses: actions/upload-artifact@v6
+#        with:
+#          name: Anleitung
+#          path: Dokumentation/src/anleitung.pdf
+      - name: Get previous tag
+        id: previousTag
+        run: |
+          name=$(git --no-pager tag --sort=creatordate --merged ${GITHUB_REF}^ | tail -1)
+          echo "previousTag: $name"
+          echo "previousTag=$name" >> $GITHUB_ENV
+      - name: Generate CHANGELOG
+        run: |
+          echo "## Version ${{ github.ref_name }} - $(date +'%Y-%m-%d')" > release.txt
+          echo "### Neu" >> release.txt
+          git log --format="- %s" --grep="\[[F|f]eature\].*" ${{ env.previousTag }}..${{ github.ref_name }} | sed 's/\[[F|f]eature\]:* //g' >> release.txt
+          echo "### Verbessert" >> release.txt
+          git log --format="- %s" --grep="\[[I|i]mprovement\].*" ${{ env.previousTag }}..${{ github.ref_name }} | sed 's/\[[I|i]mprovement\]:* //g' >> release.txt
+          echo "### Fehlerbehebungen" >> release.txt
+          git log --format="- %s" --grep="\[[B|b]ugfix\].*" ${{ env.previousTag }}..${{ github.ref_name }} | sed 's/\[[B|b]ugfix\]:* //g' >> release.txt
+          echo "\n" >> release.txt
+          cat release.txt >> CHANGELOG.md
+      - name: Commit changed Changelog
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: Automated update of Changelog
+          file_pattern: './CHANGELOG.md'
+      - name: Update tag
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          create_git_tag_only: true
+          tag_name: ${{ github.ref_name }}
+          push_options: '-f --tags'
+#      - name: Upload artifacts
+#        uses: actions/upload-artifact@v6
+#        with:
+#          name: changelog
+#          path: release.txt
+#          if-no-files-found: error
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release.txt
+          files: |
+            Dokumentation/src/anleitung.pdf
+
+  build:
+    runs-on: macos-15-intel
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: 3
+    timeout-minutes: 15
+    steps:
+      - name: Define Image Path
+        run: |
+          CLEANED=$(echo "${{ github.ref_name }}" | tr '[:upper:]' '[:lower:]' | tr '/' '-' | tr '@' '-')
+          echo "EPL_IMAGE_NAME=EPL-$CLEANED-macos-intel" >> $GITHUB_ENV
+      - name: Set up Git repo
+        uses: actions/checkout@v6
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          use-official: true
+          email: ${{ secrets.QT_EMAIL }}
+          pw: ${{ secrets.QT_PW }}
+          target: 'desktop'
+          arch: 'clang_64'
+          version: '6.10.2'
+          host: 'mac'
+          aqtversion: '==3.3.*'
+      - name: Upload aqtinstall log file
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: aqtinstall-log-macos-15-clang-6.10.2
+          path: aqtinstall.log
+          if-no-files-found: error
+      - name: Build
+        env:
+          PROJECT_BUILD_ID: "${{ github.run_number }}.macos-15.clang.qt-6.10.2"
+        run: |
+          qmake Programm/epl.pro
+          make -j8
+      - name: Create app bundles
+        run: |
+            macdeployqt "Einsatzplaner/Einsatzplaner.app" -verbose=2
+            macdeployqt "Personalplaner/Personalplaner.app" -verbose=2
+      - name: Create disk image
+        run: |
+            mkdir ${{ env.EPL_IMAGE_NAME }}
+            cp -r Einsatzplaner/Einsatzplaner.app ${{ env.EPL_IMAGE_NAME }}
+            cp -r Personalplaner/Personalplaner.app ${{ env.EPL_IMAGE_NAME }}
+            hdiutil create -srcfolder ${{ env.EPL_IMAGE_NAME }} ${{ env.EPL_IMAGE_NAME }}.dmg
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        if: github.ref_type != 'tag'
+        with:
+          name: ${{ env.EPL_IMAGE_NAME }}
+          path: ${{ env.EPL_IMAGE_NAME }}.dmg
+          if-no-files-found: error
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          files: |
+            ${{ env.EPL_IMAGE_NAME }}.dmg
