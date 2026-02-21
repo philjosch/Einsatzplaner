@@ -74,9 +74,12 @@ jobs:
     runs-on: macos-15-intel
     env:
       CMAKE_BUILD_PARALLEL_LEVEL: 3
-      EPL_IMAGE_NAME: EPL-${{ github.ref_name }}-macos-intel
     timeout-minutes: 15
     steps:
+      - name: Define Image Path
+        run: |
+          CLEANED=$(echo "${{ gthub.ref_name }}" | tr '[:upper:]' '[:lower:]' | tr '/' '-' | tr '@' '-')
+          echo "EPL_IMAGE_NAME=EPL-$CLEANED-macos-intel" >> $GITHUB_ENV
       - name: Set up Git repo
         uses: actions/checkout@v6
       - name: Install Qt
