@@ -85,7 +85,7 @@ void CoreMainWindow::showAboutApp()
 {
     QMessageBox::about(this,
                        tr("Über %1").arg(QCoreApplication::applicationName()),
-                       tr("<h1>%1</h1><p>Ein Programm der EPL-Familie<br/>Version %2<br/>2016-2025 Philipp Schepper</p>")
+                       tr("<h1>%1</h1><p>Ein Programm der EPL-Familie<br/>Version %2<br/>2016-2026 Philipp Schepper</p>")
                        .arg(QCoreApplication::applicationName(), QCoreApplication::applicationVersion()));
 }
 void CoreMainWindow::closeApp()

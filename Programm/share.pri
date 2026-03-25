@@ -1,7 +1,7 @@
 #-------------------------------------------------
 #
 # Developers:
-# 2016-2025: Philipp Schepper
+# 2016-2026: Philipp Schepper
 #
 #-------------------------------------------------
 
@@ -9,7 +9,7 @@
 # VERSION #
 ###########
 VERSION = 1.8.7
-DEPLOYED = true
+DEPLOYED = false
 
 ####################
 # QT EINSTELLUNGEN #
@@ -69,7 +69,7 @@ win32 {
 
     QMAKE_TARGET_DESCRIPTION = Ein Programm fuer Museumseisenbahnen
     QMAKE_TARGET_COMPANY = Philipp Schepper
-    QMAKE_TARGET_COPYRIGHT = Developed by Philipp Schepper 2016-2025
+    QMAKE_TARGET_COPYRIGHT = Developed by Philipp Schepper 2016-2026
 
     QMAKE_TARGET_PRODUCT = $${TARGET}
     RC_ICONS = $$PWD/../Icon/$${TARGET}.ico
